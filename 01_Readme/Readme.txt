@@ -104,14 +104,14 @@ It has no natively recurrent model, means it only uses ownlags as a regular inpu
 The used Python version is 3.6.2
 
 Except the regular packages you need to install:
-sklearn-pandas
-hyperopt
-scikit-learn (or sklearn)
-openpyxl
-pyforms
-remi (this is the GUI)
+sklearn-pandas 			(https://github.com/scikit-learn-contrib/sklearn-pandas)
+hyperopt 			(http://hyperopt.github.io/hyperopt-sklearn/)
+scikit-learn (or sklearn) 	(http://hyperopt.github.io/hyperopt-sklearn/)
+openpyxl 			(https://openpyxl.readthedocs.io/en/stable/)
+pyforms 			(https://pyforms.readthedocs.io/en/v3.0/)
+remi (this is the GUI)		(https://github.com/dddomodossola/remi)
 -Possible necessities:
-	-networkx = 1.11
+	-networkx = 1.11	(https://networkx.github.io/)
 	
 
 The program is built like the mainconcept, take it as guideline.

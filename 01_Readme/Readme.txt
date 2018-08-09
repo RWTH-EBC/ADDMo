@@ -17,7 +17,7 @@ Preprocessing:
 no scaling.
 
 Period selection:
--Time series plotting: Visualization of the signalís time series
+-Time series plotting: Visualization of the signal‚Äôs time series
 for detecting extraordinary patterns or mistakes in the data
 via matplotlib.
 -Custom period selection*
@@ -25,14 +25,16 @@ via matplotlib.
 Feature creation:
 -Cross-, cloud- and autocorrelation plotting: Visualization
 of correlations for detecting influential lags and gathering
-insight into the systemís dependencies via matplotlib.
+insight into the system‚Äôs dependencies via matplotlib.
 -Creation of differences*: Creation of feature derivatives.
 -Custom featurelag creation*
 -Automatic featurelag creation*: Wrapper for automatic creation
 of the best lag per feature within a custom lag range.
 Each lag is only created if beneficial. The BBOM is based
 on the assumption that only one lag per feature has real
-informative value.
+informative value. 
+(Random Forest is used by default as wrapper, 
+desired implement another model in the script)
 -Custom ownlag creation*
 -Automated time series ownlag creation*: Wrapper for creating
 the optimal number of time series ownlags. Ownlags
@@ -40,6 +42,8 @@ are added as long as they improve the score. The selection
 is based on the assumption that the score is monotonically
 increasing with the number of ownlags, till it reaches the
 global optimum.
+(Random Forest is used by default as wrapper, 
+desired implement another model in the script)
 
 Feature selection:
 -Low variance filter: Deletes features with low variance.
@@ -51,18 +55,24 @@ univariate filters.
 -Embedded recursive feature selection: Embedded multivariate
 feature selection, see scikit-learn.org for further information. Number
 of features can be both found automatically or set manually.
+(Random Forest is used by default as embedded model, 
+desired implement another model in the script)
 -Embedded feature selection by threshold: Univariate feature
 selection by a custom threshold of importance.
+(Random Forest is used by default as embedded model, 
+desired implement another model in the script)
 -Wrapper recursive feature selection*: Multivariate wrapper
 which iteratively deletes the worst feature of the respective
 feature subset as long as it improves the score.
+(Random Forest is used by default as wrapper, 
+desired implement another model in the script)
 
 Sample processing:
--Individual model ìhourlyî*: One model per hour of the day.
--Individual model ìweekday & weekendî*: One model for
+-Individual model ‚Äúhourly‚Äù*: One model per hour of the day.
+-Individual model ‚Äúweekday & weekend‚Äù*: One model for
 weekdays and one for weekends.
--Individual model ìby featureî*: One model for all samples
-with the featureís values below and one for values above a
+-Individual model ‚Äúby feature‚Äù*: One model for all samples
+with the feature‚Äôs values below and one for values above a
 certain threshold. The respective feature is user-defined.
 -Shuffle: Random shuffle of samples.
 
@@ -78,13 +88,13 @@ features.
 
 All those methods are applied sequentially while each method
 is optional, thus ensuring that any combination can be selected.
-The implemented models are ìmulti layer perceptronî
-(ANN), ìepsilon support vector regressionî (SVR), ìrandom
-forestî (RF), ìgradient tree boostingî (GB) and ìlassoî. The
+The implemented models are ‚Äúmulti layer perceptron‚Äù
+(ANN), ‚Äúepsilon support vector regression‚Äù (SVR), ‚Äúrandom
+forest‚Äù (RF), ‚Äúgradient tree boosting‚Äù (GB) and ‚Äúlasso‚Äù. The
 methodology of train & test set differentiation, hyperparameter
 tuning and cross-validation is depicted in "ModelTuningFlowchart.vsdx". Moreover,
-the figure illustrates, how ìindividual modelî and ìsample
-shuffleî are implemented. The implementation includes a
+the figure illustrates, how ‚Äúindividual model‚Äù and ‚Äúsample
+shuffle‚Äù are implemented. The implementation includes a
 comprehensive documentation of all settings and results via
 tables and plots. Additionally, it enables insight to all changes
 conducted, while tuning the data, by documenting the data set
@@ -118,7 +128,7 @@ The program is built like the mainconcept, take it as guideline.
 Read the comments in the code or the GUI to get more information.
 
 After reading the below instructions, check all documents in this Readme folder as supplemental documents.
--MainConcept - Verkn¸pfung : Here the theoretical concept of the program is depicted
+-MainConcept - Verkn√ºpfung : Here the theoretical concept of the program is depicted
 -ProgramFlowchart.vsdx : Here you can see which methods are available in the program and in which section they are executed
 -MethodDescription.doc : This is a list of all methods plus their Input/Output, the theoretical function and their practical function
 -DetailedMethodsDescription_CodingPointOfView.xlsx : This is a list of all methods with their attributes and their meaning, and a more detailed description of each method
@@ -187,10 +197,10 @@ Set a name of the data and a name of the experiment in order to save your docume
 This allows to go back to this final input data whenever you want. 
 
 Advises on how to understand the entry section in SharedVariables:
-Per Method you¥ll find:
+Per Method you¬¥ll find:
 1.Line: A comment about what the method is or does
 2.Line: A variable that decides whether this method will be used or not. (possible entries are: True or False)
 Following lines: Only if additional attributes need to be set: The respective attributes, read the comments to understand which entries are valid.
 Empty lines separate the methods
 
-Check for the order of how the methods are executed, as each method¥s input is the output of the method conducted before!
+Check for the order of how the methods are executed, as each method¬¥s input is the output of the method conducted before!

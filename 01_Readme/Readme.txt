@@ -203,4 +203,7 @@ Per Method you´ll find:
 Following lines: Only if additional attributes need to be set: The respective attributes, read the comments to understand which entries are valid.
 Empty lines separate the methods
 
-Check for the order of how the methods are executed, as each method´s input is the output of the method conducted before!
+Check for the order of how the methods are executed, as each method´s input is the output of the method conducted before
+
+P.s.
+1. The multithreading of the hyperopt package doesn`t work if called from the GUI. The corresponding warning message is only an information that multithreading is turned off, still the script works properly. If multi thread is desired it can be applied via the script without the GUI. 

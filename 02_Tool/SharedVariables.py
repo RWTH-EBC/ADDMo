@@ -76,7 +76,7 @@ if True: #if True for neat appearance
     TimeSeriesPlot = False
 
     # Manual Period Selection
-    ManSelect = True
+    ManSelect = False
     StartDate = '2016-06-02 00:00'  # start day of data set
     EndDate = '2016-06-16 00:00'  # end day of data set
 
@@ -155,10 +155,10 @@ if True: #if True for neat appearance
     #Variables for "ModelTuning.py" (necessary for
     #User Input
     NameOfSubTest = "FinalBaye"
-    StartTraining = '2016-06-02 00:00'
-    EndTraining = "2016-06-09 00:00"
-    StartTesting = "2016-06-09 00:00"
-    EndTesting = "2016-06-12 05:00"
+    StartTraining = '2016-08-01 00:00'
+    EndTraining = "2016-08-13 00:00"
+    StartTesting = "2016-08-13 00:00"
+    EndTesting = "2016-08-16 23:30:00"
     # Set global variables, those variables are for the BlackBox models themselves not for the final bayesian optimization
     GlobalMaxEval_HyParaTuning = 2  # sets the number of evaluations done by the bayesian optimization for each "tuned training" to find the best Hyperparameter, each evaluation is training and testing with cross-validation for one hyperparameter setting
     GlobalCV_MT = 3  # Enter any crossvalidationn method from scikit-learn or any self defined or from elsewhere.
@@ -289,6 +289,31 @@ def post_scaler(Data, StandardScaling, RobustScaling):
             Scaled_Data = mapper.fit_transform(array)  # train it and scale the data
         Scaled_Data = pd.DataFrame(Scaled_Data,index=Data.index)
         return Scaled_Data
+
+def reshape(series):
+    '''
+    Can reshape pandas series and numpy.array
+
+    :param series:
+    :type series: pandas.series or mumpy.ndarray
+    :return: two dimensional array with one column (like a series)
+    :rtype: ndarray
+    '''
+
+    if isinstance(series, pd.Series):
+        array = series.values.reshape(-1,1)
+    if isinstance(series, pd.DataFrame):
+        array = series.values.reshape(-1,1)
+    elif isinstance(series, np.ndarray):
+        array = series.reshape(-1,1)
+    elif isinstance(series, list):
+        array = np.array(series).reshape(-1,1)
+    else:
+        print("reshape could not been done, unsupported data type{}".format(type(series)))
+
+    return array
+
+
 
 #Documents all settings used in the section Data Tuning
 def documentation_DataTuning(timestart, timeend):

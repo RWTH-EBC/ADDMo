@@ -39,8 +39,8 @@ def visualization_documentation(NameOfPredictor, Y_Predicted, Y_test, Indexer, Y
     if os.path.isfile("%s\\ScalerTracker.save" % (SV.ResultsFolder)): #if scaler was used
         ScaleTracker_Signal = joblib.load("%s\\ScalerTracker.save" % (SV.ResultsFolder)) #load used scaler
         #Scale Results back to normal; maybe inside the Blackboxes
-        Y_Predicted= ScaleTracker_Signal.inverse_transform(Y_Predicted.reshape(-1,1))
-        Y_test = ScaleTracker_Signal.inverse_transform(Y_test.values.reshape(-1,1))
+        Y_Predicted= ScaleTracker_Signal.inverse_transform(SV.reshape(Y_Predicted))
+        Y_test = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_test))
         # convert arrays to data frames(Series) for further use
         Y_test = pd.DataFrame(index=Indexer, data=Y_test, columns=["Measure"])
         Y_test = Y_test["Measure"]
@@ -108,8 +108,8 @@ def getscore(Y_Predicted, Y_test, Indexer):
     if os.path.isfile("%s\\ScalerTracker.save" % (SV.ResultsFolder)): #if scaler was used
         ScaleTracker_Signal = joblib.load("%s\\ScalerTracker.save" % (SV.ResultsFolder)) #load used scaler
         #Scale Results back to normal; maybe inside the Blackboxes
-        Y_Predicted= ScaleTracker_Signal.inverse_transform(Y_Predicted.reshape(-1,1))
-        Y_test = ScaleTracker_Signal.inverse_transform(Y_test.values.reshape(-1,1))
+        Y_Predicted= ScaleTracker_Signal.inverse_transform(SV.reshape(Y_Predicted))
+        Y_test = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_test))
         # convert arrays to data frames(Series) for further use
         Y_test = pd.DataFrame(index=Indexer, data=Y_test, columns=["Measure"])
         Y_test = Y_test["Measure"]
@@ -568,8 +568,8 @@ def iterative_evaluation(TestData, Model, horizon, NameOfPredictor): #horizon= a
         Fold = TestData_X[(horizon*i):(horizon*(i+1))]
         predicted_fold, Nothing = Model(NameOfPredictor,Fold) #predict on that fold
         #rescale
-        predicted_fold = ScaleTracker_Signal.inverse_transform(predicted_fold.reshape(-1,1))
-        measured_fold = ScaleTracker_Signal.inverse_transform(measured_fold.values.reshape(-1,1))
+        predicted_fold = ScaleTracker_Signal.inverse_transform(SV.reshape(predicted_fold))
+        measured_fold = ScaleTracker_Signal.inverse_transform(SV.reshape(measured_fold))
 
         fold_list.append([measured_fold, predicted_fold])
     return fold_list

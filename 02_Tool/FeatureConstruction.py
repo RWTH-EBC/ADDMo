@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 
 #from GlobalVariables import *
 import SharedVariables as SV
-
+import os
 
 #Todo: get the resolution of the data
 

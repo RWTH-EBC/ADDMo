@@ -17,7 +17,7 @@
 # Output-Files #
 ########################
 /02_Tool/Results/
-/02_Tool/Data/GUI_Uploads/
+/02_Tool/Data/GUI_Uploads/*
 
 #Eclipse Settings #
 #####################
@@ -36,7 +36,7 @@
 #Unit tests #
 #####################
 .cache/
-__pycache__/
+*/__pycache__/
 .coverage
 .pytest_cache
 

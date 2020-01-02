@@ -76,7 +76,7 @@ if True: #if True for neat appearance
     TimeSeriesPlot = False
 
     # Manual Period Selection
-    ManSelect = True
+    ManSelect = False
     StartDate = '2016-06-02 00:00'  # start day of data set
     EndDate = '2016-06-16 00:00'  # end day of data set
 

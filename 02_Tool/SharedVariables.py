@@ -290,6 +290,31 @@ def post_scaler(Data, StandardScaling, RobustScaling):
         Scaled_Data = pd.DataFrame(Scaled_Data,index=Data.index)
         return Scaled_Data
 
+def reshape(series):
+    '''
+    Can reshape pandas series and numpy.array
+
+    :param series:
+    :type series: pandas.series or mumpy.ndarray
+    :return: two dimensional array with one column (like a series)
+    :rtype: ndarray
+    '''
+
+    if isinstance(series, pd.Series):
+        array = series.values.reshape(-1,1)
+    if isinstance(series, pd.DataFrame):
+        array = series.values.reshape(-1,1)
+    elif isinstance(series, np.ndarray):
+        array = series.reshape(-1,1)
+    elif isinstance(series, list):
+        array = np.array(series).reshape(-1,1)
+    else:
+        print("reshape could not been done, unsupported data type{}".format(type(series)))
+
+    return array
+
+
+
 #Documents all settings used in the section Data Tuning
 def documentation_DataTuning(timestart, timeend):
     print("Documentation")

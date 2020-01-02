@@ -155,10 +155,10 @@ if True: #if True for neat appearance
     #Variables for "ModelTuning.py" (necessary for
     #User Input
     NameOfSubTest = "FinalBaye"
-    StartTraining = '2016-06-02 00:00'
-    EndTraining = "2016-06-09 00:00"
-    StartTesting = "2016-06-09 00:00"
-    EndTesting = "2016-06-12 05:00"
+    StartTraining = '2016-08-01 00:00'
+    EndTraining = "2016-08-13 00:00"
+    StartTesting = "2016-08-13 00:00"
+    EndTesting = "2016-08-16 23:30:00"
     # Set global variables, those variables are for the BlackBox models themselves not for the final bayesian optimization
     GlobalMaxEval_HyParaTuning = 2  # sets the number of evaluations done by the bayesian optimization for each "tuned training" to find the best Hyperparameter, each evaluation is training and testing with cross-validation for one hyperparameter setting
     GlobalCV_MT = 3  # Enter any crossvalidationn method from scikit-learn or any self defined or from elsewhere.

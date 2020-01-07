@@ -1025,7 +1025,7 @@ temperature as signal. """)
 
     #dialog executions
     def exec_dialog_periodOL_FB(self, widget, newValue):
-        if newValue == "true": #only if the checkbox is ticked
+        if newValue == True: #only if the checkbox is ticked
             try:# make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_periodOL.show(self) #works if the dialog window already exists(function is not called the first time)
             except: #dialog does not exist, hence it is called the first time. The dialog is created below
@@ -1047,7 +1047,7 @@ that.''',
             pass
 
     def exec_dialog_featurelag_FB(self, widget, newValue):
-        if newValue == "true":
+        if newValue == True:
             try:
                 self.dialog_featurelag.show(self)
             except:
@@ -1087,7 +1087,7 @@ that.''',
             pass
 
     def exec_dialog_validationperiod_PO(self, widget, newValue):
-        if newValue == "true":
+        if newValue == True:
             try:
                 self.dialog_validationperiod.show(self)
             except:
@@ -1105,7 +1105,7 @@ that.''',
             pass
 
     def exec_dialog_Resample(self, widget, Value):
-        if Value == "true":  # only if the checkbox is ticked
+        if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_Resample.show(self)  # works if the dialog window already exists(function is not called the first time)
             except:  # dialog does not exist, hence it is called the first time. The dialog is created below
@@ -1129,7 +1129,7 @@ that.''',
             pass
 
     def exec_dialog_InitManFeatureSelect(self, widget, Value):
-        if Value == "true":  # only if the checkbox is ticked
+        if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_InitManFeatureSelect.show(
                     self)  # works if the dialog window already exists(function is not called the first time)
@@ -1153,7 +1153,7 @@ that.''',
             pass
 
     def exec_dialog_ManPeriodSelectionDT(self, widget, Value):
-        if Value == "true":  # only if the checkbox is ticked
+        if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_ManPeriodSelectionDT.show(
                     self)  # works if the dialog window already exists(function is not called the first time)
@@ -1178,7 +1178,7 @@ that.''',
             pass
 
     def exec_dialog_CrossAutoPlot(self, widget, Value):
-        if Value == "true":  # only if the checkbox is ticked
+        if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_CrossAutoPlot.show(
                     self)  # works if the dialog window already exists(function is not called the first time)
@@ -1194,7 +1194,7 @@ that.''',
             pass
 
     def exec_dialog_DifferenceDT(self, widget, Value):
-        if Value == "true":  # only if the checkbox is ticked
+        if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_DifferenceDT.show(self)  # works if the dialog window already exists(function is not called the first time)
             except:  # dialog does not exist, hence it is called the first time. The dialog is created below
@@ -1208,7 +1208,7 @@ that.''',
             pass
 
     def exec_dialog_ManOwnLagDT(self, widget, Value):
-        if Value == "true":  # only if the checkbox is ticked
+        if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_ManOwnLagDT.show(
                     self)  # works if the dialog window already exists(function is not called the first time)
@@ -1222,7 +1222,7 @@ that.''',
             pass
 
     def exec_dialog_AutoFeatureLagDT(self, widget, newValue):
-        if newValue == "true":
+        if newValue == True:
             try:
                 self.dialog_featurelag_DT.show(self)
             except:
@@ -1238,7 +1238,7 @@ that.''',
             pass
 
     def exec_dialog_ManFeatureLagDT(self, widget, Value):
-        if Value == "true":  # only if the checkbox is ticked
+        if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_ManFeatureLagDT.show(self)  # works if the dialog window already exists(function is not called the first time)
             except:  # dialog does not exist, hence it is called the first time. The dialog is created below
@@ -1251,7 +1251,7 @@ that.''',
             pass
 
     def exec_dialog_ManFeatureSelectDT(self, widget, Value):
-        if Value == "true":  # only if the checkbox is ticked
+        if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_ManFeatureSelectDT.show(
                     self)  # works if the dialog window already exists(function is not called the first time)
@@ -1266,7 +1266,7 @@ that.''',
             pass
 
     def exec_dialog_LowVarFilterDT(self, widget, Value):
-        if Value == "true":  # only if the checkbox is ticked
+        if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_LowVarFilterDT.show(
                     self)  # works if the dialog window already exists(function is not called the first time)
@@ -1281,7 +1281,7 @@ that.''',
             pass
 
     def exec_dialog_UnivariateEmbeddedDT(self, widget, Value):
-        if Value == "true":  # only if the checkbox is ticked
+        if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_UnivariateEmbeddedDT.show(self)  # works if the dialog window already exists(function is not called the first time)
             except:  # dialog does not exist, hence it is called the first time. The dialog is created below
@@ -1296,7 +1296,7 @@ that.''',
             pass
 
     def exec_dialog_UnivariateFilterDT(self, widget, Value):
-        if Value == "true":  # only if the checkbox is ticked
+        if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_UnivariateFilterDT.show(self)  # works if the dialog window already exists(function is not called the first time)
             except:  # dialog does not exist, hence it is called the first time. The dialog is created below
@@ -1321,7 +1321,7 @@ that.''',
             pass
 
     def exec_dialog_MultivariateEmbeddedDT(self, widget, Value):
-        if Value == "true":  # only if the checkbox is ticked
+        if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_MultivariateEmbeddedDT.show(
                     self)  # works if the dialog window already exists(function is not called the first time)
@@ -1362,7 +1362,7 @@ that.''',
     #template
     '''
     def exec_dialog_$(self, widget, Value):
-        if Value == "true": #only if the checkbox is ticked
+        if Value == True: #only if the checkbox is ticked
             try:# make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_$.show(self) #works if the dialog window already exists(function is not called the first time)
             except: #dialog does not exist, hence it is called the first time. The dialog is created below

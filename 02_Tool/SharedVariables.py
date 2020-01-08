@@ -313,7 +313,9 @@ def reshape(series):
 
     return array
 
-
+def del_unsupported_os_characters(str):
+    str =  str.replace("/", "").replace("\\", "").replace(":", "").replace("?", "").replace("*", "").replace("\"", "").replace("<", "").replace(">", "").replace("|", "")
+    return str
 
 #Documents all settings used in the section Data Tuning
 def documentation_DataTuning(timestart, timeend):

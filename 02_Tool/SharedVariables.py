@@ -279,7 +279,7 @@ def post_scaler(Data, StandardScaling, RobustScaling):
             Data = pd.DataFrame(Scaled_Data, index=Data.index, columns=Data.columns)
         return Data
     except: #for data series
-        array=Data.reshape(-1, 1)
+        array=Data.values.reshape(-1, 1)
         if StandardScaling == True:
             mapper = StandardScaler()  # create the actually used scaler
             Scaled_Data = mapper.fit_transform(array)  # train it and scale the data

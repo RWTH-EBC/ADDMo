@@ -4,7 +4,7 @@ The used Python version is 3.6.2
 Except the regular packages you need to install:
 sklearn-pandas 			(https://github.com/scikit-learn-contrib/sklearn-pandas)
 hyperopt 			(http://hyperopt.github.io/hyperopt-sklearn/)
-scikit-learn (or sklearn) 	(http://hyperopt.github.io/hyperopt-sklearn/)
+scikit-learn (or sklearn) 	(https://scikit-learn.org/stable/install.html)
 openpyxl 			(https://openpyxl.readthedocs.io/en/stable/)
 pyforms 			(https://pyforms.readthedocs.io/en/v3.0/)
 remi (this is the GUI)		(https://github.com/dddomodossola/remi)

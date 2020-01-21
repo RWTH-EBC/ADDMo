@@ -7,7 +7,8 @@ hyperopt 			(http://hyperopt.github.io/hyperopt-sklearn/)
 scikit-learn (or sklearn) 	(https://scikit-learn.org/stable/install.html)
 openpyxl 			(https://openpyxl.readthedocs.io/en/stable/)
 pyforms 			(https://pyforms.readthedocs.io/en/v3.0/)
-remi (this is the GUI)		(https://github.com/dddomodossola/remi)
+remi 2019.4 (this is the GUI)		(https://github.com/dddomodossola/remi)
+statsmodels
 -Possible necessities:
 	-networkx = 1.11	(https://networkx.github.io/)
 	

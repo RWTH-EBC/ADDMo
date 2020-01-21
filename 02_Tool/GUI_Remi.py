@@ -125,14 +125,14 @@ class AutomatedTraining(App):
 
 
             #Creating subcontainer containing the entrywidget and a respective label
-            subContainerNameOfData, self.NameOfDataFB = text("Name of data (results)", self.info_NameOfData, "AHU1").do()
+            subContainerNameOfData, self.NameOfDataFB = text("Name of data (results)", self.info_NameOfData, "TrialInput").do()
 
             subContainerNameOfSubTest = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
                                                    margin='0px',
                                                    style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             self.lbl_NameOfSubTest = gui.Label("Name of subtest (results)", width="40%", height=20, margin="10px")
             self.txt_NameOfSubTest = gui.TextInput(width="50%", height=20, margin='10px')
-            self.txt_NameOfSubTest.set_text('AutomaticTraining_January')
+            self.txt_NameOfSubTest.set_text('AutoML')
             self.lbl_NameOfSubTest.set_on_click_listener(self.info_NameOfSubTest)
             subContainerNameOfSubTest.append([self.lbl_NameOfSubTest, self.txt_NameOfSubTest])
 
@@ -141,7 +141,7 @@ class AutomatedTraining(App):
                                                        style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             self.lbl_StartDateTraining = gui.Label("Start of training", width="40%", height=20, margin="10px")
             self.txt_StartDateTraining = gui.TextInput(width="50%", height=20, margin='10px')
-            self.txt_StartDateTraining.set_text('2016-06-02 00:00')
+            self.txt_StartDateTraining.set_text('2016-08-01 00:00')
             self.lbl_StartDateTraining.set_on_click_listener(self.info_StartDateTraining)
             subContainerStartDateTraining.append([self.lbl_StartDateTraining, self.txt_StartDateTraining])
 
@@ -150,7 +150,7 @@ class AutomatedTraining(App):
                                                      style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             self.lbl_EndDateTraining = gui.Label("End of training", width="40%", height=20, margin="10px")
             self.txt_EndDateTraining = gui.TextInput(width="50%", height=20, margin='10px')
-            self.txt_EndDateTraining.set_text('2016-06-16 23:45')
+            self.txt_EndDateTraining.set_text('2016-08-14 23:45')
             self.lbl_EndDateTraining.set_on_click_listener(self.info_EndDateTraining)
             subContainerEndDateTraining.append([self.lbl_EndDateTraining, self.txt_EndDateTraining])
 
@@ -159,7 +159,7 @@ class AutomatedTraining(App):
                                                       style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             self.lbl_StartDateTesting = gui.Label("Start of testing", width="40%", height=20, margin="10px")
             self.txt_StartDateTesting = gui.TextInput(width="50%", height=20, margin='10px')
-            self.txt_StartDateTesting.set_text('2016-06-17 00:00')
+            self.txt_StartDateTesting.set_text('2016-08-15 00:00')
             self.lbl_StartDateTesting.set_on_click_listener(self.info_StartDateTesting)
             subContainerStartDateTesting.append([self.lbl_StartDateTesting, self.txt_StartDateTesting])
 
@@ -168,7 +168,7 @@ class AutomatedTraining(App):
                                                     style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             self.lbl_EndDateTesting = gui.Label("End of testing", width="40%", height=20, margin="10px")
             self.txt_EndDateTesting = gui.TextInput(width="50%", height=20, margin='10px')
-            self.txt_EndDateTesting.set_text('2016-06-20 23:45')
+            self.txt_EndDateTesting.set_text('2016-08-16 23:45')
             self.lbl_EndDateTesting.set_on_click_listener(self.info_EndDateTesting)
             subContainerEndDateTesting.append([self.lbl_EndDateTesting, self.txt_EndDateTesting])
 
@@ -259,7 +259,7 @@ class AutomatedTraining(App):
 
             self.InfoDT = gui.Label(self.initialinfoboxtext, width="100%", height="auto", margin='0px')
 
-            ContDT_NameOfData, self.NameOfDataDT = text("Name of data (results)", self.info_NameOfData, "AHU1").do()
+            ContDT_NameOfData, self.NameOfDataDT = text("Name of data (results)", self.info_NameOfData, "TrialInput").do()
             ContDT_NameOfExperiment, self.NameOfExperimentDT = text("Name of experiment (results)", self.info_NameOfExperiment, "Manual_Selection").do()
             ContDT_ColumnOfSignal, self.ColumnOfSignalDT = spinbox("Column of signal", self.info_ColumnOfSignal, 0,0,float("inf")).do()
 
@@ -358,13 +358,13 @@ class AutomatedTraining(App):
             self.InfoMT = gui.Label(self.initialinfoboxtext,
                 width="100%", height="auto", margin='0px')
 
-            ContMT_NameOfData, self.NameOfDataMT = text("Name of data (as input)", self.info_NameOfData, "AHU1").do()
-            ContMT_NameOfExperiment, self.NameOfExperimentMT = text("Name of experiment (as input)", self.info_NameOfExperiment, "Manual_Selection").do()
-            ContMT_NameOfSubTest, self.NameOfSubTestMT = text("Name of subtest (results)", self.info_NameOfSubTest, "2016Train_2017Predict").do()
-            ContMT_StartTraining, self.StartTrainingMT = text("Start of training", self.info_StartDateTraining, '2016-06-02 00:00').do()
-            ContMT_EndTraining, self.EndTrainingMT = text("End of training", self.info_EndDateTraining, '2016-06-12 00:00').do()
-            ContMT_StartTesting, self.StartTestingMT = text("Start of testing", self.info_StartDateTesting, '2016-06-02 00:00').do()
-            ContMT_EndTesting, self.EndTestingMT = text("End of testing", self.info_EndDateTesting, '2016-06-12 00:00').do()
+            ContMT_NameOfData, self.NameOfDataMT = text("Name of data (as input)", self.info_NameOfData, "TrialInput").do()
+            ContMT_NameOfExperiment, self.NameOfExperimentMT = text("Name of experiment (as input)", self.info_NameOfExperiment, "TrialTunedData").do()
+            ContMT_NameOfSubTest, self.NameOfSubTestMT = text("Name of subtest (results)", self.info_NameOfSubTest, "ModelTuning").do()
+            ContMT_StartTraining, self.StartTrainingMT = text("Start of training", self.info_StartDateTraining, '2016-08-01 00:00').do()
+            ContMT_EndTraining, self.EndTrainingMT = text("End of training", self.info_EndDateTraining, '2016-08-14 23:45').do()
+            ContMT_StartTesting, self.StartTestingMT = text("Start of testing", self.info_StartDateTesting, '2016-08-15 00:00').do()
+            ContMT_EndTesting, self.EndTestingMT = text("End of testing", self.info_EndDateTesting, '2016-08-16 23:45').do()
             ContMT_HyperBayesEval, self.HyperBayesEvalMT = spinbox("Bayes eval hyperparameter", self.info_HyperBayesEval, 100, 1, 10000).do()
 
             ContMT_CV = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,

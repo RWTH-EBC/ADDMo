@@ -302,7 +302,7 @@ def reshape(series):
 
     if isinstance(series, pd.Series):
         array = series.values.reshape(-1,1)
-    if isinstance(series, pd.DataFrame):
+    elif isinstance(series, pd.DataFrame):
         array = series.values.reshape(-1,1)
     elif isinstance(series, np.ndarray):
         array = series.reshape(-1,1)

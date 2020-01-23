@@ -148,18 +148,23 @@ def svr_grid_search_predictor(Features_train, Signal_train, Features_test, Signa
     #gridsearch through
     svr = GridSearchCV(SVR(cache_size = 1500), HyperparameterGrid, cv=CV, scoring="r2")
     Best_trained_model = svr.fit(Features_train, Signal_train)
-    if Recursive == False:
-        predicted = Best_trained_model.predict(Features_test)
-    elif Recursive == True:
-        Features_test_i = recursive(Features_test, Best_trained_model)
-        predicted = Best_trained_model.predict(Features_test_i)
+    if not Features_test.empty:
+        if Recursive == False:
+            predicted = Best_trained_model.predict(Features_test)
+        elif Recursive == True:
+            Features_test_i = recursive(Features_test, Best_trained_model)
+            predicted = Best_trained_model.predict(Features_test_i)
+        score = Best_trained_model.score(Features_test, Signal_test)
+    else:
+        predicted = []
+        score = "empty"
 
     #print section
     #print("The Score svr: %s" %Best_trained_model.score(Features_test, Signal_test))
     #print("Best Hyperparameters: %s" %svr.best_params_)
     timeend = time.time()
     #print("SVR took %s seconds" %(timeend-timestart))
-    return {"score" : Best_trained_model.score(Features_test, Signal_test),
+    return {"score" : score,
             "best_params" : svr.best_params_,
             "prediction" : predicted,
             "ComputationTime" : (timeend-timestart),
@@ -190,11 +195,16 @@ def svr_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
     trials = Trials() #this is for tracking the bayesian optimization
     BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals, trials=trials) #do the bayesian optimization
     Best_trained_model = SVR(**BestParams).fit(Features_train, Signal_train)    #set the best hyperparameter to the SVR machine
-    if Recursive == False:
-        predicted = Best_trained_model.predict(Features_test)
-    elif Recursive == True:
-        Features_test_i = recursive(Features_test, Best_trained_model)
-        predicted = Best_trained_model.predict(Features_test_i)
+    if not Features_test.empty:
+        if Recursive == False:
+            predicted = Best_trained_model.predict(Features_test)
+        elif Recursive == True:
+            Features_test_i = recursive(Features_test, Best_trained_model)
+            predicted = Best_trained_model.predict(Features_test_i)
+        score = Best_trained_model.score(Features_test, Signal_test)
+    else:
+        predicted = []
+        score = "empty"
 
     #print section
     #print("Bayesian Optimization Parameters")
@@ -207,7 +217,7 @@ def svr_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
     #print("Best Hyperparameters: %s" %BestParams)
     timeend = time.time()
     #print("SVR took %s seconds" %(timeend-timestart))
-    return {"score" : Best_trained_model.score(Features_test, Signal_test),
+    return {"score" : score,
             "best_params" : BestParams,
             "prediction" : predicted,
             "ComputationTime" : (timeend-timestart),
@@ -263,11 +273,16 @@ def gradientboost_gridsearch(Features_train, Signal_train, Features_test, Signal
     bestgb = GradientBoostingRegressor()
     bestgb = bestgb.set_params(**gb.best_params_)
     Best_trained_model = bestgb.fit(Features_train, Signal_train)
-    if Recursive == False:
-        predicted = Best_trained_model.predict(Features_test)
-    elif Recursive == True:
-        Features_test_i = recursive(Features_test, Best_trained_model)
-        predicted = Best_trained_model.predict(Features_test_i)
+    if not Features_test.empty:
+        if Recursive == False:
+            predicted = Best_trained_model.predict(Features_test)
+        elif Recursive == True:
+            Features_test_i = recursive(Features_test, Best_trained_model)
+            predicted = Best_trained_model.predict(Features_test_i)
+        score = Best_trained_model.score(Features_test, Signal_test)
+    else:
+        predicted = []
+        score = "empty"
 
     #print section
     #print("The Score gb: %s" %Best_trained_model.score(Features_test, Signal_test))
@@ -275,7 +290,7 @@ def gradientboost_gridsearch(Features_train, Signal_train, Features_test, Signal
     #print("best_params: %s" %gb.best_params_)
     timeend = time.time()
     #print("gb took %s seconds" %(timeend-timestart))
-    return {"score": Best_trained_model.score(Features_test, Signal_test),
+    return {"score": score,
             "best_params": gb.best_params_,
             "feature_importance": Best_trained_model.feature_importances_,
             "prediction": predicted,
@@ -322,11 +337,16 @@ def gradientboost_bayesian(Features_train, Signal_train, Features_test, Signal_t
     BestParams = {'learning_rate': learning_rate, 'loss': loss, 'max_depth': max_depth, 'n_estimators': n_estimators}
 
     Best_trained_model = GradientBoostingRegressor(**BestParams).fit(Features_train, Signal_train)    #set the best hyperparameter to the SVR machine
-    if Recursive == False:
-        predicted = Best_trained_model.predict(Features_test)
-    elif Recursive == True:
-        Features_test_i = recursive(Features_test, Best_trained_model)
-        predicted = Best_trained_model.predict(Features_test_i)
+    if not Features_test.empty:
+        if Recursive == False:
+            predicted = Best_trained_model.predict(Features_test)
+        elif Recursive == True:
+            Features_test_i = recursive(Features_test, Best_trained_model)
+            predicted = Best_trained_model.predict(Features_test_i)
+        score = Best_trained_model.score(Features_test, Signal_test)
+    else:
+        predicted = []
+        score = "empty"
 
     #print section
     #print("Bayesian Optimization Parameters")
@@ -339,7 +359,7 @@ def gradientboost_bayesian(Features_train, Signal_train, Features_test, Signal_t
     #print("Best Hyperparameters: %s" %BestParams)
     timeend = time.time()
     #print("GB took %s seconds" %(timeend-timestart))
-    return {"score" : Best_trained_model.score(Features_test, Signal_test),
+    return {"score" : score,
             "feature_importance": Best_trained_model.feature_importances_,
             "best_params" : BestParams,
             "prediction" : predicted,
@@ -360,11 +380,17 @@ def lasso_grid_search_predictor(Features_train, Signal_train, Features_test, Sig
     bestlasso = linear_model.Lasso(max_iter=1000000)
     bestlasso = bestlasso.set_params(**lasso.best_params_)
     Best_trained_model = bestlasso.fit(Features_train, Signal_train)
-    if Recursive == False:
-        predicted = Best_trained_model.predict(Features_test)
-    elif Recursive == True:
-        Features_test_i = recursive(Features_test, Best_trained_model)
-        predicted = Best_trained_model.predict(Features_test_i)
+    if not Features_test.empty:
+        if Recursive == False:
+            predicted = Best_trained_model.predict(Features_test)
+        elif Recursive == True:
+            Features_test_i = recursive(Features_test, Best_trained_model)
+            predicted = Best_trained_model.predict(Features_test_i)
+        score = Best_trained_model.score(Features_test, Signal_test)
+    else:
+        predicted = []
+        score = "empty"
+
 
     #print section
     timeend = time.time()
@@ -373,7 +399,7 @@ def lasso_grid_search_predictor(Features_train, Signal_train, Features_test, Sig
     #print("Lasso coef: %s" % Best_trained_model.coef_)
     #print("Lasso took %s seconds" %(timeend-timestart))
 
-    return {"score": Best_trained_model.score(Features_test, Signal_test),
+    return {"score": score,
             "best_params": lasso.best_params_,
             "feature_importance": Best_trained_model.coef_,
             "prediction": predicted,
@@ -405,11 +431,16 @@ def lasso_bayesian(Features_train, Signal_train, Features_test, Signal_test, Hyp
     trials = Trials() #this is for tracking the bayesian optimization
     BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals, trials=trials) #do the bayesian optimization
     Best_trained_model = linear_model.Lasso(**BestParams, max_iter=1000000).fit(Features_train, Signal_train)    #set the best hyperparameter to the SVR machine
-    if Recursive == False:
-        predicted = Best_trained_model.predict(Features_test)
-    elif Recursive == True:
-        Features_test_i = recursive(Features_test, Best_trained_model)
-        predicted = Best_trained_model.predict(Features_test_i)
+    if not Features_test.empty:
+        if Recursive == False:
+            predicted = Best_trained_model.predict(Features_test)
+        elif Recursive == True:
+            Features_test_i = recursive(Features_test, Best_trained_model)
+            predicted = Best_trained_model.predict(Features_test_i)
+        score = Best_trained_model.score(Features_test, Signal_test)
+    else:
+        predicted = []
+        score = "empty"
 
     #print section
     #print("Bayesian Optimization Parameters")
@@ -422,7 +453,7 @@ def lasso_bayesian(Features_train, Signal_train, Features_test, Signal_test, Hyp
     #print("Best Hyperparameters: %s" %BestParams)
     timeend = time.time()
     #print("Lasso took %s seconds" %(timeend-timestart))
-    return {"score" : Best_trained_model.score(Features_test, Signal_test),
+    return {"score" : score,
             "feature_importance": Best_trained_model.coef_,
             "best_params" : BestParams,
             "prediction" : predicted,
@@ -438,11 +469,16 @@ def ann_grid_search_predictor(Features_train, Signal_train, Features_test, Signa
     #gridsearch with MLP
     ann = GridSearchCV(MLPRegressor(max_iter = 1000000), HyperparameterGrid, cv=CV)
     Best_trained_model = ann.fit(Features_train, Signal_train)
-    if Recursive == False:
-        predicted = Best_trained_model.predict(Features_test)
-    elif Recursive == True:
-        Features_test_i = recursive(Features_test, Best_trained_model)
-        predicted = Best_trained_model.predict(Features_test_i)
+    if not Features_test.empty:
+        if Recursive == False:
+            predicted = Best_trained_model.predict(Features_test)
+        elif Recursive == True:
+            Features_test_i = recursive(Features_test, Best_trained_model)
+            predicted = Best_trained_model.predict(Features_test_i)
+        score = Best_trained_model.score(Features_test, Signal_test)
+    else:
+        predicted = []
+        score = "empty"
 
     timeend = time.time()
     #print section
@@ -450,7 +486,7 @@ def ann_grid_search_predictor(Features_train, Signal_train, Features_test, Signa
     #print("Best Hyperparameters: %s" %ann.best_params_)
     #print("ANN took %s seconds" %(timeend-timestart))
 
-    return {"score" : Best_trained_model.score(Features_test, Signal_test),
+    return {"score" : score,
             "best_params" : ann.best_params_,
             "prediction" : predicted,
             "ComputationTime" : (timeend-timestart),
@@ -510,11 +546,16 @@ def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
     BestParams = {"hidden_layer_sizes": Z} #set params so that it fits the estimators attribute style
     Ann_best = MLPRegressor(**BestParams)    #set the best hyperparameter to the SVR machine
     Best_trained_model = Ann_best.fit(Features_train, Signal_train)
-    if Recursive == False:
-        predicted = Best_trained_model.predict(Features_test)
-    elif Recursive == True:
-        Features_test_i = recursive(Features_test, Best_trained_model)
-        predicted = Best_trained_model.predict(Features_test_i)
+    if not Features_test.empty:
+        if Recursive == False:
+            predicted = Best_trained_model.predict(Features_test)
+        elif Recursive == True:
+            Features_test_i = recursive(Features_test, Best_trained_model)
+            predicted = Best_trained_model.predict(Features_test_i)
+        score = Ann_best.score(Features_test, Signal_test) #Todo: Ann_best or should it be Best_trained_model?
+    else:
+        predicted = []
+        score = "empty"
 
     #print section
     #print("Bayesian Optimization Parameters")
@@ -527,7 +568,7 @@ def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
     #print("Best Hyperparameters: %s" %BestParams)
     timeend = time.time()
     #print("ANN took %s seconds" %(timeend-timestart))
-    return {"score" : Ann_best.score(Features_test, Signal_test),
+    return {"score" : score,
             "best_params" : BestParams,
             "prediction" : predicted,
             "ComputationTime" : (timeend-timestart),
@@ -639,7 +680,6 @@ class indiv_model():
                     print("Start computing")
                 else:
                     sys.exit("Code stopped by user or invalid user input. Valid is Yes, yes, y and Y.")
-            #Todo: if not Dic[key][3].empty:  # to avoid a crash if not all individual models are called in the test data range #TODO: makes the model not train for times where no test period is available, if telling to train it crashes because i
             _dic = self.Estimator(Features_train=Dic[key][0], Signal_train=Dic[key][1], Features_test=Dic[key][2],
                              Signal_test=Dic[key][3], HyperparameterGrid=self.HyperparameterGrid, CV=self.CV, Max_evals=self.Max_evals,
                              Recursive=False)  # train and predict for the given data #recursive has to be turned of (doesnt work with individual model), it is done later in this function for individual models

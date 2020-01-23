@@ -1,4 +1,23 @@
-﻿#How to use it:
+﻿#Install requirements:
+﻿
+﻿Via setup.py:
+﻿Install Anaconda (conda version: 4.8.0)
+﻿
+﻿Open command line and create an python 3.6 environment via:
+﻿$ conda create --name ADDMo python=3.6 
+﻿
+﻿Type y for accepting to install first packages
+﻿$ y
+﻿
+﻿Activate environment
+﻿$ conda activate ADDMo
+﻿
+﻿Install required packages via:
+﻿$ pip install -e <Path to your local ADDMo repo>
+﻿
+﻿Set the conda environment "ADDMo" as interpreter for e.g. in PyCharm
+
+Via pip by your own:
 The used Python version is 3.6.2
 
 Except the regular packages you need to install:
@@ -12,8 +31,8 @@ statsmodels
 -Possible necessities:
 	-networkx = 1.11	(https://networkx.github.io/)
 	
-
-The program is built like the mainconcept, take it as guideline.
+-------------------------------------------------------------------------------
+The program is built like the mainconcept (file in the readme folder), take it as guideline.
 Read the comments in the code or the GUI to get more information.
 
 After reading the below instructions, check all documents in this Readme folder as supplemental documents.

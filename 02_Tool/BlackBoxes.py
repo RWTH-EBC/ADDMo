@@ -23,6 +23,7 @@ import numpy as np
 from hyperopt.pyll import scope
 import hyperopt.pyll.stochastic
 from sklearn.externals import joblib
+import os
 
 
 ########################################################################################################################
@@ -675,7 +676,7 @@ class indiv_model():
         for key in Dic:
             if Dic[key][0].empty:
                 Answer = input(
-                    "Attention your train period does not contain data to train all individual models. Proceed anyways?")
+                    "Attention your train period does not contain data to train all individual models. An Error is very probable. Proceed anyways?")
                 if Answer == "yes" or Answer == "Yes" or Answer == "y" or Answer == "Y":
                     print("Start computing")
                 else:
@@ -769,7 +770,7 @@ class indiv_model_onlypredict():
             Y = pd.DataFrame(index=self.Features_test.index)
             for key in Dic:
                 if not Dic[key].empty:  # to avoid a crash if not all individual models are called in the test data range
-                    Predictor = joblib.load("%s\\BestModels\\%s_%s.save" % (self.ResultsFolderSubTest, key, self.NameOfPredictor))
+                    Predictor = joblib.load(os.path.join(self.ResultsFolderSubTest, "BestModels", "%s_%s.save" %(key, self.NameOfPredictor)))
                     Y_i = Predictor.predict(Dic[key])  # predict
                     Index = Dic[key]
                     Y_i = pd.DataFrame(index=Index.index, data=Y_i)  # reset the index to datetime convention
@@ -793,7 +794,7 @@ class indiv_model_onlypredict():
                 for key in Dic:  # loop through all dictionary entries
                     if not Dic[key].empty:  # to avoid a crash if not all individual models are called in the test data range
                         if i in Dic[key].set_index("TrackIndex").index:  # checks whether the line i is in the data for the data of the respective key
-                            Predictor = joblib.load("%s\\BestModels\\%s_%s.save" % (self.ResultsFolderSubTest, key, self.NameOfPredictor))  # load the respective model
+                            Predictor = joblib.load(os.path.join(self.ResultsFolderSubTest, "BestModels", "%s_%s.save"%(key, self.NameOfPredictor)))  # load the respective model
                             OwnLag = Predictor.predict(vector_i)  # do a one one timestep prediction with the model of the respective key
 
                 Booleans = Features_test_i.columns.str.contains("_lag_")  # create a Boolean list for with all columns, true for lagged signals, false for other(important: for lagged features it is only "_lag"
@@ -816,7 +817,7 @@ class indiv_model_onlypredict():
             i = 1
             for key in Dic:
                 if not Dic[key].empty:  # to avoid a crash if not all individual models are called in the test data range
-                    Predictor = joblib.load("%s\\BestModels\\%s_%s.save" % (self.ResultsFolderSubTest, key, self.NameOfPredictor))  # load the respective model
+                    Predictor = joblib.load(os.path.join(self.ResultsFolderSubTest, "BestModels", "%s_%s.save"%(key, self.NameOfPredictor)))  # load the respective model
                     Y_i = Predictor.predict(Dic[key])
                     Index = Dic[key]
                     Y_i = pd.DataFrame(index=Index.index, data=Y_i)  # reset the index to datetime convention

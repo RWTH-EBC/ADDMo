@@ -209,7 +209,7 @@ class AutomatedTraining(App):
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             self.lbl_UploadFile = gui.Label("Upload the input data", width="40%", height=30, margin="10px")
-            self.bt_UploadFile = gui.FileUploader(os.path.join(os.getcwd(), 'Data/GUI_Uploads/'), width="50%", height=30, margin='10px')
+            self.bt_UploadFile = gui.FileUploader(os.path.join(os.getcwd(), "Data", "GUI_Uploads"), width="50%", height=30, margin='10px')
             self.bt_UploadFile.set_on_success_listener(self.fileupload_on_success)
             self.bt_UploadFile.set_on_failed_listener(self.fileupload_on_failed)
             self.lbl_UploadFile.set_on_click_listener(self.info_UploadFile)

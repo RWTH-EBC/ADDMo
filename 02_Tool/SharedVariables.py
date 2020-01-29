@@ -321,7 +321,7 @@ def del_unsupported_os_characters(str):
 def documentation_DataTuning(timestart, timeend):
     print("Documentation")
     # dump the name of signal in the resultsfolder, so that i can always be pulled whenever you want to come back to that specific "Final Input Data"
-    joblib.dump(NameOfSignal, "%s\\NameOfSignal.save" % (ResultsFolder))
+    joblib.dump(NameOfSignal, os.path.join(ResultsFolder, "NameOfSignal.save"))
 
     ######saving the methodology of creating FinalInputData in the ExcelFile "Settings"#####################################
     DfMethodology = pd.DataFrame(index=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
@@ -404,7 +404,7 @@ def documentation_DataTuning(timestart, timeend):
             DfMethodology.at[16, "FeatureSelection"] = "CrossValidation= None"
 
     # save this dataframe in an excel
-    ExcelFile = "%s\\Settings_%s.xlsx" % (ResultsFolder, NameOfExperiment)
+    ExcelFile = os.path.join(ResultsFolder, "Settings_%s.xlsx"%(NameOfExperiment))
     writer = pd.ExcelWriter(ExcelFile, engine="openpyxl")
     DfMethodology.to_excel(writer, sheet_name="Methodology")
     writer.save()

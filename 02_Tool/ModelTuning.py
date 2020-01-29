@@ -36,8 +36,8 @@ def visualization_documentation(NameOfPredictor, Y_Predicted, Y_test, Indexer, Y
                                 ResultsFolderSubTest, HyperparameterGrid=None, Bestparams=None, CV=3, Max_eval=None,
                                 Recursive=False, IndividualModel=False, Shuffle=SV.GlobalShuffle,
                                 FeatureImportance="Not available"):
-    if os.path.isfile("%s\\ScalerTracker.save" % (SV.ResultsFolder)): #if scaler was used
-        ScaleTracker_Signal = joblib.load("%s\\ScalerTracker.save" % (SV.ResultsFolder)) #load used scaler
+    if os.path.isfile(os.path.join(SV.ResultsFolder, "ScalerTracker.save")): #if scaler was used
+        ScaleTracker_Signal = joblib.load(os.path.join(SV.ResultsFolder, "ScalerTracker.save")) #load used scaler
         #Scale Results back to normal; maybe inside the Blackboxes
         Y_Predicted= ScaleTracker_Signal.inverse_transform(SV.reshape(Y_Predicted))
         Y_test = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_test))
@@ -92,21 +92,21 @@ def visualization_documentation(NameOfPredictor, Y_Predicted, Y_test, Indexer, Y
     dfSummary['Computation Time'] = "%.2f seconds" %ComputationTime
     dfSummary = dfSummary.T
     # write summary of setup and evaluation in excel File
-    SummaryFile = "%s/Summary_%s_%s.xlsx" % (ResultsFolderSubTest, NameOfPredictor, SV.NameOfSubTest)
+    SummaryFile = os.path.join(ResultsFolderSubTest, "Summary_%s_%s.xlsx"%(NameOfPredictor, SV.NameOfSubTest))
     writer = pd.ExcelWriter(SummaryFile)
     dfSummary.to_excel(writer, float_format='%.6f')
     writer.save()
 
     # export prediction to Excel
-    SaveFileName_excel = "%s/Prediction_%s_%s.xlsx" % (ResultsFolderSubTest, NameOfPredictor, SV.NameOfSubTest)
+    SaveFileName_excel = os.path.join(ResultsFolderSubTest ,"Prediction_%s_%s.xlsx" %(NameOfPredictor, SV.NameOfSubTest))
     Y_Predicted.to_frame(name=SV.NameOfSignal).to_excel(SaveFileName_excel)
 
     #return Score for modelselection
     return R2
 
 def getscore(Y_Predicted, Y_test, Indexer):
-    if os.path.isfile("%s\\ScalerTracker.save" % (SV.ResultsFolder)): #if scaler was used
-        ScaleTracker_Signal = joblib.load("%s\\ScalerTracker.save" % (SV.ResultsFolder)) #load used scaler
+    if os.path.isfile(os.path.join(SV.ResultsFolder, "ScalerTracker.save")): #if scaler was used
+        ScaleTracker_Signal = joblib.load(os.path.join(SV.ResultsFolder , "ScalerTracker.save")) #load used scaler
         #Scale Results back to normal; maybe inside the Blackboxes
         Y_Predicted= ScaleTracker_Signal.inverse_transform(SV.reshape(Y_Predicted))
         Y_test = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_test))
@@ -125,44 +125,44 @@ def getscore(Y_Predicted, Y_test, Indexer):
 
 #saves the BestModels in a folder "BestModels", also capable of saving individual models
 def model_saver(Result_dic, ResultsFolderSubTest, NameOfPredictor, IndividualModel):
-    if os.path.isdir("%s\\BestModels" % (ResultsFolderSubTest)) == True:
+    if os.path.isdir(os.path.join(ResultsFolderSubTest,"BestModels")) == True:
         pass
     else:
-        os.makedirs("%s\\BestModels" % (ResultsFolderSubTest))
+        os.makedirs(os.path.join(ResultsFolderSubTest, "BestModels"))
 
     if IndividualModel=="week_weekend":
-        joblib.dump(Result_dic["Best_trained_model"]["weekday"], "%s\\BestModels\\weekday_%s.save" % (ResultsFolderSubTest,NameOfPredictor))  # dump the best trained model in a file to reuse it for different predictions
-        joblib.dump(Result_dic["Best_trained_model"]["weekend"], "%s\\BestModels\\weekend_%s.save" % (ResultsFolderSubTest,NameOfPredictor))  # dump the best trained model in a file to reuse it for different predictions
+        joblib.dump(Result_dic["Best_trained_model"]["weekday"], os.path.join(ResultsFolderSubTest, "BestModels", "weekday_%s.save" % (NameOfPredictor)))  # dump the best trained model in a file to reuse it for different predictions
+        joblib.dump(Result_dic["Best_trained_model"]["weekend"], os.path.join(ResultsFolderSubTest, "BestModels", "weekend_%s.save" % (NameOfPredictor)))  # dump the best trained model in a file to reuse it for different predictions
     elif IndividualModel=="hourly":
-        joblib.dump(Result_dic["Best_trained_model"][0], "%s\\BestModels\\0_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][1], "%s\\BestModels\\1_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][2], "%s\\BestModels\\2_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][3], "%s\\BestModels\\3_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][4], "%s\\BestModels\\4_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][5], "%s\\BestModels\\5_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][6], "%s\\BestModels\\6_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][7], "%s\\BestModels\\7_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][8], "%s\\BestModels\\8_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][9], "%s\\BestModels\\9_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][10], "%s\\BestModels\\10_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][11], "%s\\BestModels\\11_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][12], "%s\\BestModels\\12_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][13], "%s\\BestModels\\13_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][14], "%s\\BestModels\\14_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][15], "%s\\BestModels\\15_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][16], "%s\\BestModels\\16_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][17], "%s\\BestModels\\17_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][18], "%s\\BestModels\\18_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][19], "%s\\BestModels\\19_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][20], "%s\\BestModels\\20_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][21], "%s\\BestModels\\21_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][22], "%s\\BestModels\\22_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"][23], "%s\\BestModels\\23_%s.save" % (ResultsFolderSubTest, NameOfPredictor))
+        joblib.dump(Result_dic["Best_trained_model"][0], os.path.join(ResultsFolderSubTest, "BestModels", "0_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][1], os.path.join(ResultsFolderSubTest, "BestModels", "1_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][2], os.path.join(ResultsFolderSubTest, "BestModels", "2_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][3], os.path.join(ResultsFolderSubTest, "BestModels", "3_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][4], os.path.join(ResultsFolderSubTest, "BestModels", "4_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][5], os.path.join(ResultsFolderSubTest, "BestModels", "5_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][6], os.path.join(ResultsFolderSubTest, "BestModels", "6_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][7], os.path.join(ResultsFolderSubTest, "BestModels", "7_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][8], os.path.join(ResultsFolderSubTest, "BestModels", "8_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][9], os.path.join(ResultsFolderSubTest, "BestModels", "9_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][10], os.path.join(ResultsFolderSubTest, "BestModels", "10_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][11], os.path.join(ResultsFolderSubTest, "BestModels", "11_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][12], os.path.join(ResultsFolderSubTest, "BestModels", "12_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][13], os.path.join(ResultsFolderSubTest, "BestModels", "13_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][14], os.path.join(ResultsFolderSubTest, "BestModels", "14_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][15], os.path.join(ResultsFolderSubTest, "BestModels", "15_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][16], os.path.join(ResultsFolderSubTest, "BestModels", "16_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][17], os.path.join(ResultsFolderSubTest, "BestModels", "17_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][18], os.path.join(ResultsFolderSubTest, "BestModels", "18_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][19], os.path.join(ResultsFolderSubTest, "BestModels", "19_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][20], os.path.join(ResultsFolderSubTest, "BestModels", "20_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][21], os.path.join(ResultsFolderSubTest, "BestModels", "21_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][22], os.path.join(ResultsFolderSubTest, "BestModels", "22_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][23], os.path.join(ResultsFolderSubTest, "BestModels", "23_%s.save" % (NameOfPredictor)))
     elif IndividualModel == "byFeature":
-        joblib.dump(Result_dic["Best_trained_model"]["above"], "%s\\BestModels\\above_%s.save" % (ResultsFolderSubTest,NameOfPredictor))
-        joblib.dump(Result_dic["Best_trained_model"]["below"], "%s\\BestModels\\below_%s.save" % (ResultsFolderSubTest,NameOfPredictor))
+        joblib.dump(Result_dic["Best_trained_model"]["above"], os.path.join(ResultsFolderSubTest, "BestModels", "above_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"]["below"], os.path.join(ResultsFolderSubTest, "BestModels", "below_%s.save" % (NameOfPredictor)))
     else:
-        joblib.dump(Result_dic["Best_trained_model"], "%s\\BestModels\\%s.save" % (ResultsFolderSubTest,NameOfPredictor))
+        joblib.dump(Result_dic["Best_trained_model"], os.path.join(ResultsFolderSubTest, "BestModels", "%s.save" % (NameOfPredictor)))
 
 #-----------------------------------------------------------------------------------------------------------------------
 #Section BlackBoxes
@@ -293,7 +293,7 @@ def modelselection(_X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError",
         __BestModel = "Lasso"
 
     #state best model in txt file
-    f = open(SV.ResultsFolderSubTest+"\\BestModel.txt", "w+")
+    f = open(os.path.join(SV.ResultsFolderSubTest, "BestModel.txt"), "w+")
     f.write("The best model is %s with an accuracy of %s" %(__BestModel, BestScore))
     f.close()
     return BestScore
@@ -372,49 +372,49 @@ def all_models(Model, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerErro
 
 def pre_handling(OnlyPredict):
     #define path to data source files '.xls' & '.pickle'
-    RootDir = os.path.dirname(os.path.realpath(__file__)) + '\\'
-    PathToData = RootDir + 'Data\\'
+    RootDir = os.getcwd()
+    PathToData = os.path.join(RootDir, 'Data')
 
     #Set Folder for Results
-    ResultsFolder = RootDir + "Results\\" + SV.NameOfData + "\\" + SV.NameOfExperiment
-    PathToPickles = ResultsFolder + "\\Pickles\\"
+    ResultsFolder = os.path.join(RootDir, "Results", SV.NameOfData, SV.NameOfExperiment)
+    PathToPickles = os.path.join(ResultsFolder, "Pickles")
 
     SV.RootDir = RootDir
     SV.PathToData = PathToData
     SV.ResultsFolder = ResultsFolder
     SV.PathToPickles = PathToPickles
 
-    ResultsFolderSubTest = SV.ResultsFolder + '\\Predictions\\' + SV.NameOfSubTest
+    ResultsFolderSubTest = os.path.join(SV.ResultsFolder, 'Predictions', SV.NameOfSubTest)
     SV.ResultsFolderSubTest = ResultsFolderSubTest
 
     #check if experiment folder is present
-    if os.path.isdir((SV.ResultsFolder)) == False:
+    if os.path.isdir(SV.ResultsFolder) == False:
         sys.exit("Set a valid experiment folder via NameOfData and NameOfExperiment")
 
     #check if test results are safed in the right folder:
     if OnlyPredict != True:
-        if os.path.isdir("%s" % (SV.ResultsFolderSubTest)) == True:
+        if os.path.isdir(SV.ResultsFolderSubTest) == True:
             Answer = input("Are you sure you want to overwrite the data in %s: " % SV.ResultsFolderSubTest)
             if Answer == "yes" or Answer == "Yes" or Answer == "y" or Answer == "Y":
                 print("Start computing")
             else:
                 sys.exit("Code stopped by user or invalid user input. Valid is Yes, yes, y and Y.")
         else:
-            os.makedirs("%s" % (SV.ResultsFolderSubTest))
+            os.makedirs(SV.ResultsFolderSubTest)
 
     #Take Tuned data, build Train and Test Sets, and split them into signal and features
-    NameOfSignal = joblib.load("%s\\NameOfSignal.save" % (SV.ResultsFolder))
+    NameOfSignal = joblib.load(os.path.join(SV.ResultsFolder, "NameOfSignal.save"))
     SV.NameOfSignal = NameOfSignal #Todo: check whether NameOfSignal fits with GUI (maybe one wants to define it by himself)
 
     # Take FinalInputData, build Train and Test Sets, and split them into signal and features
     if OnlyPredict == True:
-        ImportBaye = os.path.isfile(SV.ResultsFolderSubTest + "/" + "BestData_%s.xlsx"%SV.NameOfSubTest) #is True if FinalBayes was used, this implies that we want to load the data that was produced by finalbayes
+        ImportBaye = os.path.isfile(os.path.join(SV.ResultsFolderSubTest, "BestData_%s.xlsx"%(SV.NameOfSubTest))) #is True if FinalBayes was used, this implies that we want to load the data that was produced by finalbayes
     else:
         ImportBaye = False #if onlypredict isn´t used we (up to now) don´t want to load from finalbayes
     if  ImportBaye == False:
-        Data = pd.read_pickle(SV.PathToPickles + "ThePickle_from_FeatureSelection" + '.pickle') #import from data tuning
+        Data = pd.read_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_FeatureSelection" + '.pickle')) #import from data tuning
     if ImportBaye == True:
-        Data = pd.read_pickle(SV.PathToPickles + "ThePickle_from_%s" % SV.NameOfSubTest + '.pickle') #import the data set produced by "final bayesian optimization"
+        Data = pd.read_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_%s" %SV.NameOfSubTest + '.pickle')) #import the data set produced by "final bayesian optimization"
 
     (Data_Train, Data_Test) = manual_train_test_period_select(Data=Data, StartDateTrain=SV.StartTraining, EndDateTrain= SV.EndTraining, StartDateTest=SV.StartTesting, EndDateTest=SV.EndTesting)
 
@@ -537,18 +537,18 @@ def Bayes(Model,_X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
     dfSummary['Computation Time in seconds'] = str((Totaltimeend-Totaltimestart))
     dfSummary = dfSummary.T
     # write summary of setup and evaluation in excel File
-    SummaryFile = "%s/Summary_FinalBayes_%s.xlsx" % (SV.ResultsFolderSubTest, SV.NameOfSubTest)
+    SummaryFile = os.path.join(SV.ResultsFolderSubTest, "Summary_FinalBayes_%s.xlsx"%(SV.NameOfSubTest))
     writer = pd.ExcelWriter(SummaryFile)
     dfSummary.to_excel(writer, float_format='%.6f')
     writer.save()
 
     #export BestData to Excel
     BestData = Data[list(BestData)] #make sure BestData contains the whole available period(not only the period used for training and prediction)
-    SaveFileName_excel = "%s/BestData_%s.xlsx" % (SV.ResultsFolderSubTest, SV.NameOfSubTest)
+    SaveFileName_excel = os.path.join(SV.ResultsFolderSubTest, "BestData_%s.xlsx"%(SV.NameOfSubTest))
     BestData.to_excel(SaveFileName_excel)
 
     #save dataframe in an pickle
-    BestData.to_pickle((SV.PathToPickles + "ThePickle_from_%s"%SV.NameOfSubTest + '.pickle'))
+    BestData.to_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_%s.pickle"%SV.NameOfSubTest))
 
 #OnlyPredict functions
 def iterative_evaluation(TestData, Model, horizon, NameOfPredictor): #horizon= amount of samples to predict in the future
@@ -559,8 +559,8 @@ def iterative_evaluation(TestData, Model, horizon, NameOfPredictor): #horizon= a
     #TunedData.index = range(len(TunedData)) #give them dataframe an counter index
     (TestData_X, TestData_Y) = SV.split_signal_and_features(TestData)
 
-    if os.path.isfile("%s\\ScalerTracker.save" % (SV.ResultsFolder)): #if scaler was used
-        ScaleTracker_Signal = joblib.load("%s\\ScalerTracker.save" % (SV.ResultsFolder)) #load used scaler
+    if os.path.isfile(os.path.join(SV.ResultsFolder, "ScalerTracker.save")): #if scaler was used
+        ScaleTracker_Signal = joblib.load(os.path.join(SV.ResultsFolder, "ScalerTracker.save")) #load used scaler
 
     fold_list=[]
     for i in range(n_folds):
@@ -586,25 +586,25 @@ def mean_scoring(fold_list, errormetric): #processes the list of scores from "it
 
 def predict(NameOfPredictor,_X_test):
     'Loads trained models from previous trainings and does a prediction for the respective period of _X_test. Individual models are regarded.'
-    if os.path.isfile("%s\\BestModels\\%s.save" % (SV.ResultsFolderSubTest, NameOfPredictor)): #to find out which indivmodel was used
-        Predictor = joblib.load("%s\\BestModels\\%s.save" % (SV.ResultsFolderSubTest, NameOfPredictor)) #load the best and trained model from previous tuning and training
+    if os.path.isfile(os.path.join(SV.ResultsFolderSubTest, "BestModels", "%s.save"%(NameOfPredictor))): #to find out which indivmodel was used
+        Predictor = joblib.load(os.path.join(SV.ResultsFolderSubTest, "BestModels", "%s.save" %(NameOfPredictor))) #load the best and trained model from previous tuning and training
         if SV.OnlyPredictRecursive == False:
             Predicted = Predictor.predict(_X_test)
         elif SV.OnlyPredictRecursive == True:
             Features_test_i = recursive(_X_test, Predictor)
             Predicted = Predictor.predict(Features_test_i)
         IndividualModel = "None"
-    elif os.path.isfile("%s\\BestModels\\23_%s.save" % (SV.ResultsFolderSubTest, NameOfPredictor)): #for hourly models
+    elif os.path.isfile(os.path.join(SV.ResultsFolderSubTest, "BestModels", "23_%s.save"%(NameOfPredictor))): #for hourly models
         indiv_predictor = indiv_model_onlypredict(indiv_splitter_instance=indiv_splitter(hourly_splitter), Features_test=_X_test, ResultsFolderSubTest=SV.ResultsFolderSubTest, NameOfPredictor=NameOfPredictor, Recursive=SV.OnlyPredictRecursive)
         Predicted = indiv_predictor.main()
         IndividualModel = "hourly"
         #Predicted = individual_model_per_hour_onlypredict(_X_test, ResultsFolderSubTest, NameOfPredictor, OnlyPredictRecursive)
-    elif os.path.isfile("%s\\BestModels\\weekday_%s.save" % (SV.ResultsFolderSubTest, NameOfPredictor)): #for weekday_weekend models
+    elif os.path.isfile(os.path.join(SV.ResultsFolderSubTest, "BestModels", "weekday_%s.save"%(NameOfPredictor))): #for weekday_weekend models
         indiv_predictor = indiv_model_onlypredict(indiv_splitter_instance=indiv_splitter(week_weekend_splitter), Features_test=_X_test, ResultsFolderSubTest=SV.ResultsFolderSubTest, NameOfPredictor=NameOfPredictor, Recursive=SV.OnlyPredictRecursive)
         Predicted = indiv_predictor.main()
         IndividualModel = "weekend/weekday"
         #Predicted = individual_model_week_weekend_onlypredict(_X_test, ResultsFolderSubTest, NameOfPredictor, OnlyPredictRecursive)
-    elif os.path.isfile("%s\\BestModels\\above_%s.save" % (SV.ResultsFolderSubTest, NameOfPredictor)): #for byFeature models
+    elif os.path.isfile(os.path.join(SV.ResultsFolderSubTest, "BestModels", "above_%s.save"%(NameOfPredictor))): #for byFeature models
         byFeaturesplitter = byfeature_splitter(IndivThreshold,IndivFeature,_X_test)
         indiv_predictor = indiv_model_onlypredict(indiv_splitter_instance=indiv_splitter(byFeaturesplitter.splitter),
                                                   Features_test=_X_test, ResultsFolderSubTest=SV.ResultsFolderSubTest,
@@ -630,7 +630,7 @@ def only_predict(NameOfPredictor, _X_test, _Y_test, Indexer, Data):
     def documenation_iterative_evaluation(mean_score, SD_score, errorlist, errormetric):
         errorlist = np.around(errorlist,3)
         # save results of iterative evaluation in the summary file
-        ExcelFile = "%s/Summary_%s_%s.xlsx" % (SV.OnlyPredictFolder, NameOfPredictor, SV.NameOfSubTest)
+        ExcelFile = os.path.join(SV.OnlyPredictFolder, "Summary_%s_%s.xlsx"%(NameOfPredictor, SV.NameOfSubTest))
         Excel = pd.read_excel(ExcelFile)
         book = load_workbook(ExcelFile)
         writer = pd.ExcelWriter(ExcelFile, engine="openpyxl")
@@ -704,7 +704,7 @@ def main_OnlyPredict():
     print("Start only predicting: %s/%s/%s" % (SV.NameOfData, SV.NameOfExperiment, SV.NameOfSubTest))
     _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = pre_handling(True)
 
-    OnlyPredictFolder = SV.ResultsFolderSubTest+"\\OnlyPredict\\"+ SV.NameOfOnlyPredict
+    OnlyPredictFolder = os.path.join(SV.ResultsFolderSubTest, "OnlyPredict", SV.NameOfOnlyPredict)
     SV.OnlyPredictFolder = OnlyPredictFolder
     #check if predict results are safed in the right folder:
     if os.path.isdir("%s" % (SV.OnlyPredictFolder)) == True:
@@ -730,13 +730,14 @@ def main_OnlyPredict():
 
 
 if __name__ == '__main__':
+    #Todo: The following is done in ModelTuning and DataTuning, isn´t it better once in SV?
     #define path to data source files '.xls' & '.pickle'
-    RootDir = os.path.dirname(os.path.realpath(__file__)) + '\\'
-    PathToData = RootDir + 'Data\\'
+    RootDir = os.getcwd()
+    PathToData = os.path.join(RootDir, 'Data')
 
     #Set Folder for Results
-    ResultsFolder = RootDir + "Results\\" + SV.NameOfData + "\\" + SV.NameOfExperiment
-    PathToPickles = ResultsFolder + "\\Pickles\\"
+    ResultsFolder = os.path.join(RootDir, "Results", SV.NameOfData, SV.NameOfExperiment)
+    PathToPickles = os.path.join(ResultsFolder, "Pickles")
 
     #Set the found Variables in "SharedVariables"
     SV.RootDir = RootDir

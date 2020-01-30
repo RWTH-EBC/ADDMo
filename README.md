@@ -123,9 +123,11 @@ $docker image build -t addmo .
 $docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeling:/ADDMo --name addmocontainer addmo
 ```
 
-open your browser and enter the URL: http://127.0.0.1:8081/ \
-The GUI should open up; use the tool; interact with ADDMo via the CMD\
-If a script runs into an error you have to restart the container \
+open your browser and enter the URL: [http://127.0.0.1:8081/]
+1. The GUI should open up
+2. use the tool
+3. interact with ADDMo via the CMD
+4. If a script runs into an error you have to restart the container 
 
 To restart the container in cmd:\
 "strg+c" for stopping the program

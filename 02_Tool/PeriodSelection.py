@@ -28,12 +28,12 @@ def timeseries_plotting(Data, Scaled):
 #Main---------------------------------------------------------------------------
 def main():
     print("PeriodSelection")
-    Data = pd.read_pickle((SV.PathToPickles + "ThePickle_from_Preprocessing" + '.pickle'))
+    Data = pd.read_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_Preprocessing" + '.pickle'))
 
     if SV.TimeSeriesPlot == True:
-        if os.path.isfile("%s\\ScalerTracker.save" % (SV.ResultsFolder)): #check if a scaler is used, if a scaler is used the file "ScalerTracker" was created
+        if os.path.isfile(os.path.join(SV.ResultsFolder, "ScalerTracker.save")): #check if a scaler is used, if a scaler is used the file "ScalerTracker" was created
             timeseries_plotting(Data, True)  # plot scaled data
-            timeseries_plotting(pd.read_pickle((SV.PathToPickles + "ThePickle_from_ImportData" + '.pickle')), False) #plot raw data
+            timeseries_plotting(pd.read_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_ImportData" + '.pickle')), False) #plot raw data
         else:
             timeseries_plotting(Data, False)
     if SV.ManSelect == True:
@@ -42,10 +42,10 @@ def main():
 
     ##############################################
     #save dataframe to pickle
-    Data.to_pickle((SV.PathToPickles + "ThePickle_from_PeriodSelection" + '.pickle'))
+    Data.to_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_PeriodSelection" + '.pickle'))
 
     # save dataframe in the ProcessedInputData excel file
-    ExcelFile = "%s\\ProcessedInputData_%s.xlsx" % (SV.ResultsFolder,SV.NameOfExperiment)
+    ExcelFile = os.path.join(SV.ResultsFolder, "ProcessedInputData_%s.xlsx"%(SV.NameOfExperiment))
     book = load_workbook(ExcelFile)
     writer = pd.ExcelWriter(ExcelFile, engine="openpyxl")
     writer.book = book

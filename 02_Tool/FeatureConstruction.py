@@ -149,8 +149,8 @@ def auto_featurelag_constructor(Data, Data_AllSamples, MinFeatureLag, MaxFeature
 def main():
     print("FeatureConstruction")
 
-    Data = pd.read_pickle((SV.PathToPickles + "ThePickle_from_PeriodSelection" + '.pickle'))
-    Data_AllSamples = pd.read_pickle((SV.PathToPickles + "ThePickle_from_Preprocessing" + '.pickle'))
+    Data = pd.read_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_PeriodSelection" + '.pickle'))
+    Data_AllSamples = pd.read_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_Preprocessing" + '.pickle'))
 
 
     Datas=[Data] #also for not making e.g. featurelagcreate create lags of differences; Data needs to be in for the case no feature construction is done
@@ -172,10 +172,10 @@ def main():
     DataF = pd.concat(Datas, axis=1, join="inner")  #joining the datas produced by all feature construction methods
 
     #Save dataframe to pickle
-    DataF.to_pickle((SV.PathToPickles + "ThePickle_from_FeatureConstruction" + '.pickle'))
+    DataF.to_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_FeatureConstruction" + '.pickle'))
 
     # save dataframe in the ProcessedInputData excel file
-    ExcelFile = "%s\\ProcessedInputData_%s.xlsx" % (SV.ResultsFolder,SV.NameOfExperiment)
+    ExcelFile = os.path.join(SV.ResultsFolder, "ProcessedInputData_%s.xlsx"%(SV.NameOfExperiment))
     book = load_workbook(ExcelFile)
     writer = pd.ExcelWriter(ExcelFile, engine="openpyxl")
     writer.book = book

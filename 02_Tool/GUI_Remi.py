@@ -1,4 +1,5 @@
 import remi.gui as gui
+import os
 from remi import start, App
 from BlackBoxes import (rf_predictor, RandomForestRegressor)
 from sklearn.feature_selection import mutual_info_regression, f_regression
@@ -208,7 +209,7 @@ class AutomatedTraining(App):
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             self.lbl_UploadFile = gui.Label("Upload the input data", width="40%", height=30, margin="10px")
-            self.bt_UploadFile = gui.FileUploader('./Data/GUI_Uploads/', width="50%", height=30, margin='10px')
+            self.bt_UploadFile = gui.FileUploader(os.path.join(os.path.dirname(os.path.realpath(__file__)), "Data", "GUI_Uploads"), width="50%", height=30, margin='10px')
             self.bt_UploadFile.set_on_success_listener(self.fileupload_on_success)
             self.bt_UploadFile.set_on_failed_listener(self.fileupload_on_failed)
             self.lbl_UploadFile.set_on_click_listener(self.info_UploadFile)
@@ -260,7 +261,7 @@ class AutomatedTraining(App):
             self.InfoDT = gui.Label(self.initialinfoboxtext, width="100%", height="auto", margin='0px')
 
             ContDT_NameOfData, self.NameOfDataDT = text("Name of data (results)", self.info_NameOfData, "TrialInput").do()
-            ContDT_NameOfExperiment, self.NameOfExperimentDT = text("Name of experiment (results)", self.info_NameOfExperiment, "Manual_Selection").do()
+            ContDT_NameOfExperiment, self.NameOfExperimentDT = text("Name of experiment (results)", self.info_NameOfExperiment, "TrialTunedData").do()
             ContDT_ColumnOfSignal, self.ColumnOfSignalDT = spinbox("Column of signal", self.info_ColumnOfSignal, 0,0,float("inf")).do()
 
             ContDT_FileUpload = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
@@ -360,7 +361,7 @@ class AutomatedTraining(App):
 
             ContMT_NameOfData, self.NameOfDataMT = text("Name of data (as input)", self.info_NameOfData, "TrialInput").do()
             ContMT_NameOfExperiment, self.NameOfExperimentMT = text("Name of experiment (as input)", self.info_NameOfExperiment, "TrialTunedData").do()
-            ContMT_NameOfSubTest, self.NameOfSubTestMT = text("Name of subtest (results)", self.info_NameOfSubTest, "ModelTuning").do()
+            ContMT_NameOfSubTest, self.NameOfSubTestMT = text("Name of subtest (results)", self.info_NameOfSubTest, "TrialTunedModel").do()
             ContMT_StartTraining, self.StartTrainingMT = text("Start of training", self.info_StartDateTraining, '2016-08-01 00:00').do()
             ContMT_EndTraining, self.EndTrainingMT = text("End of training", self.info_EndDateTraining, '2016-08-14 23:45').do()
             ContMT_StartTesting, self.StartTestingMT = text("Start of testing", self.info_StartDateTesting, '2016-08-15 00:00').do()
@@ -418,14 +419,14 @@ class AutomatedTraining(App):
             self.InfoPO = gui.Label(self.initialinfoboxtext,
                 width="100%", height="auto", margin='0px')
 
-            ContPO_NameOfData, self.NameOfDataPO = text("Name of data (as input)", self.info_NameOfData, "AHU1").do()
+            ContPO_NameOfData, self.NameOfDataPO = text("Name of data (as input)", self.info_NameOfData, "TrialInput").do()
             ContPO_NameOfExperiment, self.NameOfExperimentPO = text("Name of experiment (as input)", self.info_NameOfExperiment,
-                                                                    "Manual_Selection").do()
-            ContPO_NameOfSubTest, self.NameOfSubTestPO = text("Name of subtest (as input)", self.info_NameOfSubTest, "2016Train_2017Predict").do()
-            ContPO_NameOfOnlyPredict, self.NameOfOnlyPredictPO = text("Name of prediction (results)", self.info_NameOfOnlyPredict, "01.06-16.06").do()
+                                                                    "TrialTunedData").do()
+            ContPO_NameOfSubTest, self.NameOfSubTestPO = text("Name of subtest (as input)", self.info_NameOfSubTest, "TrialTunedModel").do()
+            ContPO_NameOfOnlyPredict, self.NameOfOnlyPredictPO = text("Name of prediction (results)", self.info_NameOfOnlyPredict, "TrialOnlyPredict").do()
             ContPO_StartTesting, self.StartTestingPO = text("Start of testing", self.info_StartDateTesting,
-                                                            '2016-06-02 00:00').do()
-            ContPO_EndTesting, self.EndTestingPO = text("End of testing", self.info_EndDateTesting, '2016-06-12 00:00').do()
+                                                            '2016-08-01 00:00').do()
+            ContPO_EndTesting, self.EndTestingPO = text("End of testing", self.info_EndDateTesting, '2016-08-16 23:45').do()
 
             ContPO_Recursive, self.RecursivePO = checkbox("Recursive prediction", self.info_Recursive, False, False).do()
             ContPO_ValidationPeriod, self.ValidationPeriodPO = checkbox("Custom validation period", self.info_ValidationPeriodPO, False, self.exec_dialog_validationperiod_PO).do()
@@ -1387,5 +1388,5 @@ that.''',
     '''
 
 
-start(AutomatedTraining, address='127.0.0.1', port=8081, multiple_instance=True, enable_file_cache=True, update_interval=0.9, start_browser=True)
-
+start(AutomatedTraining, address='0.0.0.0', port=8081, multiple_instance=True, enable_file_cache=True, update_interval=0.9, start_browser=True)
+#Todo: if docker address = 0.0.0.1 if normal = 127.0.0.1

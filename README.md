@@ -6,9 +6,12 @@ Ways of usage:
 #install docker - make sure it works properly
 
 #open CMD
+```
 $cd <Path to ADDMo Repo>
 $docker image build -t addmo .
 $docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeling:/ADDMo --name addmocontainer addmo
+```
+
 
 #open your browser and enter the URL: http://127.0.0.1:8081/
 #The GUI should open up; use the tool; interact with ADDMo via the CMD
@@ -16,9 +19,12 @@ $docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeli
 
 #To restart the container in cmd:
 "strg+c" for stopping the program
+```
 $docker container stop addmocontainer
 $docker container rm addmocontainer
 $docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeling:/ADDMo --name addmocontainer addmo
+```
+
 
 2. Python + Editor
 #Install requirements:
@@ -27,16 +33,16 @@ Via setup.py:
 Install Anaconda (conda version: 4.8.0)
 
 Open command line and create an python 3.6 environment via:
-$ conda create --name ADDMo python=3.6 
+`$ conda create --name ADDMo python=3.6 `
 
 Type y for accepting to install first packages
-$ y
+`$ y`
 
 Activate environment
-$ conda activate ADDMo
+`$ conda activate ADDMo`
 
 Install required packages via:
-$ pip install -e <Path to your local ADDMo repo>
+`$ pip install -e <Path to your local ADDMo repo>`
 
 Set the conda environment "ADDMo" as interpreter for e.g. in PyCharm
 

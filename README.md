@@ -234,7 +234,7 @@ Check for the order of how the methods are executed, as each method´s input is 
 
 -------------------------------------------
 
-__Information about the required input shape:__\
+__Information about the required input shape:__
 - Input ExcelFile has to be named: "InputData" and saved in the Folder "Data"
 - Sheet to read in must be the first sheet, with time as first column and all signals and features thereafter (one per column)
 - The time must be in the format of "pandas.datetimeindex"
@@ -243,10 +243,8 @@ __Information about the required input shape:__\
 - The index should be continuously counting(no missing steps)
 
 __Understanding the handling of saving the results:__\
-A folder called results is created within the directory of the python files.\
-Within that folder a four layered folder system is used, the next layer is a subfolder of the respective previous layer.\
-The folder are created by the program, only their names must be defined:\
-- Layer0: "Results", general folder for all results)\
+A folder called results is created within the directory of the python files. Within that folder a four layered folder system is used, the next layer is a subfolder of the respective previous layer. The folder are created by the program, only their names must be defined:
+- Layer0: "Results", general folder for all results)
 - Layer1: "NameOfData", name of the folder used to declare which input data is used for the results within.
 - Layer2: "NameOfExperiment", name of the folder in which the results of "DataTuning" are saved, including the "tuned data" which will be the input for model tuning.
 - Layer3: "NameOfSubTest", name of the folder in which the results of "ModelTuning" are saved, including the trained models which will be the input for only predicting.
@@ -254,32 +252,14 @@ The folder are created by the program, only their names must be defined:\
 
 
 
-# How is the program built up and how do i retrieve results:
+# Scheme of ADDMo:
 
-The program is built like the mainconcept (file in the readme folder), take it as guideline.\
-Read the comments in the code or the GUI to get more information.\
+The program is built like the mainconcept (file in the readme folder), take it as guideline. Read the comments in the code or the GUI to get more information.
 
-After reading the below instructions, check all documents in the Readme-folder as supplemental documents.\
+After reading the above instructions, check all documents in the readme-folder as supplemental documents.
 - MainConcept - Verknüpfung : Here the theoretical concept of the program is depicted.
 - ProgramFlowchart.vsdx : Here you can see which methods are available in the program and in which section they are executed.
 - MethodDescription.doc : This is a list of all methods plus their Input/Output, the theoretical function and their practical function.
 - DetailedMethodsDescription_CodingPointOfView.xlsx : This is a list of all methods with their attributes and their meaning, and a more detailed description of each method
 
-*Understanding the handling of saving the results:*\
-A folder called results is created within the directory of the python files.\
-Within that folder a four layered folder system is used, the next layer is a subfolder of the respective previous layer.\
-The folder are created by the program, only their names must be defined:\
-- Layer0: "Results", general folder for all results)\
-- Layer1: "NameOfData", name of the folder used to declare which input data is used for the results within.
-- Layer2: "NameOfExperiment", name of the folder in which the results of "DataTuning" are saved, including the "tuned data" which will be the input for model tuning.
-- Layer3: "NameOfSubTest", name of the folder in which the results of "ModelTuning" are saved, including the trained models which will be the input for only predicting.
-- Layer4: "NameOfOnlyPredict", name of the folder in which the results of "OnlyPredict" are saved.
-
-*Information about the required Input shape:*\
-- Input ExcelFile has to be named: "InputData" and saved in the Folder "Data"
-- Sheet to read in must be the first sheet, with time as first column and all signals and features thereafter (one per column)
-- The time must be in the format of "pandas.datetimeindex"
-- Columns must have different names
-- Each columns has to have a unit, which should be written like: [kwh] if no unit is available write []
-- The index should be continuously counting(no missing steps)
 

@@ -1,6 +1,6 @@
-import pandas as pd
 from matplotlib import style
 import matplotlib.pyplot as plt
+plt.switch_backend('agg')
 import statsmodels.api as sm
 import numpy as np
 import SharedVariables as SV
@@ -10,7 +10,7 @@ style.use('fivethirtyeight')
 
 def plot_TimeSeries(df, unitOfMeasure, savePath, Scaled, column):
     column = SV.del_unsupported_os_characters(column)
-    fig = plt.figure()
+    #fig = plt.figure()
     ax1 = plt.subplot2grid((1, 1), (0, 0))
     df.plot(ax=ax1, color='k', label=df.name, lw=0.5)
     plt.xlabel('time')
@@ -31,7 +31,7 @@ def plot_TimeSeries(df, unitOfMeasure, savePath, Scaled, column):
 
 
 def plot_x_y(x, y, savePath, xlim=False, ylim=False):
-    fig = plt.figure()
+    #fig = plt.figure()
     ax1 = plt.subplot2grid((1, 1), (0, 0))
     ax1.plot(x.values, y.values, marker='o', linestyle='None', label=y.name + 'vs' + x.name)
     if xlim:
@@ -50,7 +50,7 @@ def plot_x_y(x, y, savePath, xlim=False, ylim=False):
 
 
 def plot_crosscorr(x, y, savePath, xlim=False, ylim=False, lags=50, level=0.5):
-    fig = plt.figure()
+    #fig = plt.figure()
     ax1 = plt.subplot2grid((1, 1), (0, 0))
     ax1.xcorr(x, y, usevlines=True, maxlags=lags, normed=True, lw=0.5)  # marker = 'o', markersize = 5)
     #    ax1.vlines(lags, [0], ax1.line2d[0].get_ydata())
@@ -71,7 +71,7 @@ def plot_crosscorr(x, y, savePath, xlim=False, ylim=False, lags=50, level=0.5):
 
 
 def plot_acf(x, savePath, lags=50):
-    fig = plt.figure()
+    #fig = plt.figure()
     ax1 = plt.subplot2grid((1, 1), (0, 0))
     sm.graphics.tsa.plot_acf(x, lags=lags, ax=ax1)
     label = "Autocorrelation: " + x.name
@@ -87,7 +87,7 @@ def plot_acf(x, savePath, lags=50):
 
 
 def plot_acf_diff(x, savePath, lags=50):
-    fig = plt.figure()
+    #fig = plt.figure()
     ax1 = plt.subplot2grid((1, 1), (0, 0))
     sm.graphics.tsa.plot_acf(np.diff(x), lags=lags, ax=ax1)
     label = "Autocorrelation: diff(" + x.name + ")"
@@ -173,7 +173,7 @@ def plot_predict_measured(prediction, measurement, MAE, R2, StartDatePredict, Sa
               'xtick.labelsize': 'small',
               'ytick.labelsize': 'small'}
     pylab.rcParams.update(params)
-    fig = plt.figure()
+    #fig = plt.figure()
     ax1 = plt.subplot2grid((1, 1), (0, 0))
     measurement.plot(ax=ax1, color='k', label='Measurement', lw=0.5)
     labelX = 'Prediction(MAE = %.3f; Score = %.2f)' %(MAE, R2)

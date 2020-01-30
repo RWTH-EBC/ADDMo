@@ -1,5 +1,7 @@
 # ADDMo functional overview
 
+__ADDMo is an automated machine learning tool for regression tasks__
+
 __ADDMo faces the following challenges:__
 
 - Preprocessing of initial data (in some extent)
@@ -111,7 +113,7 @@ It has no natively recurrent model, means it only uses ownlags as a regular inpu
 1. using exclusively the GUI via docker container 
 2. full spectrum via your python environment and editor (suggested) 
 
-__1: Docker__\
+__1: Docker__
 install docker - make sure it works properly
 
 open CMD
@@ -134,7 +136,7 @@ $docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeli
 ```
 
 
-__2: Python + Editor__\
+__2: Python + Editor__
 
 Via setup.py:\
 Install Anaconda (conda version: 4.8.0)
@@ -169,7 +171,7 @@ xlrd            ==  1.2.0, \
 pillow          == 6.0.0, \
 matplotlib      == 2.2.2, \
 pandas        == 0.25.3,  \
-networkx        ==   1.11       (https://networkx.github.io/) \
+networkx        ==   1.11       (https://networkx.github.io/) 
 
 
 
@@ -178,9 +180,9 @@ networkx        ==   1.11       (https://networkx.github.io/) \
 1. via the GUI
 2. accessing the python files and run them directly 
 
-__Using the GUI:__\
+__Using the GUI:__
 
-Run GUI_remi.py and see the information within the GUI\
+Run GUI_remi.py and see the information within the GUI
 
 Select the respective "tool" via the tabs:
 
@@ -212,34 +214,41 @@ Necessary steps "Predict only":\
 
 __Running the scripts directly via the python console:__
 
+*Executive scripts are:*\
+- DataTuning.py for tuning the data (achieving the tuned data)
+- ModelTuning.py for tuning the model (with the tuned data as input). 
+In the final lines of ModelTuning.py one can define via commmenting and uncommenting, whether the automatic procedure (final bayes: training the model while automatically selecting the best: 
+		"Model", "Individual Model", "Features" and "Hyperparameters of the model"), the regular procedure (optimizing the hyperparameter of the model), or the procedure for using previously trained models to only predict.
 
-All variables are defined in SharedVariables.py\
-Executive scripts are:\
-	-DataTuning.py for tuning the data (achieving the tuned data)\
-	-ModelTuning.py for tuning the model (with the tuned data as input)\
-		In the final lines of ModelTuning.py one can define via commmenting and uncommenting,\
-		whether the automatic procedure (final bayes: training the model while automatically selecting the best: 
-		"Model", "Individual Model", "Features" and "Hyperparameters of the model"), \
-		the regular procedure (optimizing the hyperparameter of the model),\
-		or the procedure for using previously trained models to only predict.
-
-Information about the required Input shape:\
-Input ExcelFile has to be named: "InputData" and saved in the Folder "Data"\
-Sheet to read in must be the first sheet, with time as first column and all signals and features thereafter (one per column)\
-The time must be in the format of "pandas.datetimeindex"\
-Columns must have different names\
-Each columns has to have a unit, which should be written like: [kwh] if no unit is available write []\
-The index should be continuously counting(no missing steps)\
 
 Set a name of the data and a name of the experiment in order to save your documentation and results (final input data) in a folder named as the data and a subfolder named as the name of experiment. This allows to go back to this final input data whenever you want. 
 
+*Define all variables in SharedVariables.py:*\
 Advises on how to understand the entry section in SharedVariables, per Method you´ll find:\
-1.Line: A comment about what the method is or does\
-2.Line: A variable that decides whether this method will be used or not. (possible entries are: True or False)\
+1st Line: A comment about what the method is or does\
+2st Line: A variable that decides whether this method will be used or not. (possible entries are: True or False)\
 Following lines: Only if additional attributes need to be set: The respective attributes, read the comments to understand which entries are valid. 
 Empty lines separate the methods
 
 Check for the order of how the methods are executed, as each method´s input is the output of the method conducted before.
+-------------------------------------------
+__Information about the required input shape:__\
+- Input ExcelFile has to be named: "InputData" and saved in the Folder "Data"
+- Sheet to read in must be the first sheet, with time as first column and all signals and features thereafter (one per column)
+- The time must be in the format of "pandas.datetimeindex"
+- Columns must have different names
+- Each columns has to have a unit, which should be written like: [kwh] if no unit is available write []
+- The index should be continuously counting(no missing steps)
+
+__Understanding the handling of saving the results:__\
+A folder called results is created within the directory of the python files.\
+Within that folder a four layered folder system is used, the next layer is a subfolder of the respective previous layer.\
+The folder are created by the program, only their names must be defined:\
+- Layer0: "Results", general folder for all results)\
+- Layer1: "NameOfData", name of the folder used to declare which input data is used for the results within.
+- Layer2: "NameOfExperiment", name of the folder in which the results of "DataTuning" are saved, including the "tuned data" which will be the input for model tuning.
+- Layer3: "NameOfSubTest", name of the folder in which the results of "ModelTuning" are saved, including the trained models which will be the input for only predicting.
+- Layer4: "NameOfOnlyPredict", name of the folder in which the results of "OnlyPredict" are saved.
 
 
 
@@ -249,19 +258,26 @@ The program is built like the mainconcept (file in the readme folder), take it a
 Read the comments in the code or the GUI to get more information.\
 
 After reading the below instructions, check all documents in the Readme-folder as supplemental documents.\
-- MainConcept - Verknüpfung : Here the theoretical concept of the program is depicted\
-- ProgramFlowchart.vsdx : Here you can see which methods are available in the program and in which section they are executed\
-- MethodDescription.doc : This is a list of all methods plus their Input/Output, the theoretical function and their practical function\
+- MainConcept - Verknüpfung : Here the theoretical concept of the program is depicted.
+- ProgramFlowchart.vsdx : Here you can see which methods are available in the program and in which section they are executed.
+- MethodDescription.doc : This is a list of all methods plus their Input/Output, the theoretical function and their practical function.
 - DetailedMethodsDescription_CodingPointOfView.xlsx : This is a list of all methods with their attributes and their meaning, and a more detailed description of each method
 
-Understanding the handling of saving the results:\
+*Understanding the handling of saving the results:*\
 A folder called results is created within the directory of the python files.\
 Within that folder a four layered folder system is used, the next layer is a subfolder of the respective previous layer.\
 The folder are created by the program, only their names must be defined:\
 - Layer0: "Results", general folder for all results)\
-- Layer1: "NameOfData", name of the folder used to declare which input data is used for the results within.\
-- Layer2: "NameOfExperiment", name of the folder in which the results of "DataTuning" are saved, including the "tuned data" which will be the input for model tuning\
-- Layer3: "NameOfSubTest", name of the folder in which the results of "ModelTuning" are saved, including the trained models which will be the input for only predicting\
+- Layer1: "NameOfData", name of the folder used to declare which input data is used for the results within.
+- Layer2: "NameOfExperiment", name of the folder in which the results of "DataTuning" are saved, including the "tuned data" which will be the input for model tuning.
+- Layer3: "NameOfSubTest", name of the folder in which the results of "ModelTuning" are saved, including the trained models which will be the input for only predicting.
 - Layer4: "NameOfOnlyPredict", name of the folder in which the results of "OnlyPredict" are saved.
 
+*Information about the required Input shape:*\
+- Input ExcelFile has to be named: "InputData" and saved in the Folder "Data"
+- Sheet to read in must be the first sheet, with time as first column and all signals and features thereafter (one per column)
+- The time must be in the format of "pandas.datetimeindex"
+- Columns must have different names
+- Each columns has to have a unit, which should be written like: [kwh] if no unit is available write []
+- The index should be continuously counting(no missing steps)
 

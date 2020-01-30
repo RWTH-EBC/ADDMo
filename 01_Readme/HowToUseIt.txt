@@ -1,36 +1,64 @@
-﻿#Install requirements:
-﻿
-﻿Via setup.py:
-﻿Install Anaconda (conda version: 4.8.0)
-﻿
-﻿Open command line and create an python 3.6 environment via:
-﻿$ conda create --name ADDMo python=3.6 
-﻿
-﻿Type y for accepting to install first packages
-﻿$ y
-﻿
-﻿Activate environment
-﻿$ conda activate ADDMo
-﻿
-﻿Install required packages via:
-﻿$ pip install -e <Path to your local ADDMo repo>
-﻿
-﻿Set the conda environment "ADDMo" as interpreter for e.g. in PyCharm
+Ways of usage:
+1. using exclusively the GUI via docker container 
+2. full spectrum via your python environment and editor (suggested) 
+
+1. Docker
+#install docker - make sure it works properly
+
+#open CMD
+$cd <Path to ADDMo Repo>
+$docker image build -t addmo .
+$docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeling:/ADDMo --name addmocontainer addmo
+
+#open your browser and enter the URL: http://127.0.0.1:8081/
+#The GUI should open up; use the tool; interact with ADDMo via the CMD
+#If a script runs into an error you have to restart the container 
+
+#To restart the container in cmd:
+"strg+c" for stopping the program
+$docker container stop addmocontainer
+$docker container rm addmocontainer
+$docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeling:/ADDMo --name addmocontainer addmo
+
+2. Python + Editor
+#Install requirements:
+
+Via setup.py:
+Install Anaconda (conda version: 4.8.0)
+
+Open command line and create an python 3.6 environment via:
+$ conda create --name ADDMo python=3.6 
+
+Type y for accepting to install first packages
+$ y
+
+Activate environment
+$ conda activate ADDMo
+
+Install required packages via:
+$ pip install -e <Path to your local ADDMo repo>
+
+Set the conda environment "ADDMo" as interpreter for e.g. in PyCharm
 
 Via pip by your own:
 The used Python version is 3.6.2
 
 Except the regular packages you need to install:
-sklearn-pandas 			(https://github.com/scikit-learn-contrib/sklearn-pandas)
-hyperopt 			(http://hyperopt.github.io/hyperopt-sklearn/)
-scikit-learn (or sklearn) 	(https://scikit-learn.org/stable/install.html)
-openpyxl 			(https://openpyxl.readthedocs.io/en/stable/)
-pyforms 			(https://pyforms.readthedocs.io/en/v3.0/)
-remi 2019.4 (this is the GUI)		(https://github.com/dddomodossola/remi)
-statsmodels
--Possible necessities:
-	-networkx = 1.11	(https://networkx.github.io/)
-	
+sklearn-pandas   ==  1.8.0,     (https://github.com/scikit-learn-contrib/sklearn-pandas)
+hyperopt         ==  0.1.2,     (http://hyperopt.github.io/hyperopt-sklearn/)
+scikit-learn     ==  0.20.0,    (https://scikit-learn.org/stable/install.html)
+openpyxl         ==  2.5.4,     (https://openpyxl.readthedocs.io/en/stable/)
+PyForms          ==  4.0.3,     (https://pyforms.readthedocs.io/en/v3.0/)
+remi             == 2019.4,     (https://github.com/dddomodossola/remi)
+statsmodels      ==  0.11.0,
+numpy             == 1.15.4,
+xlrd            ==  1.2.0,
+pillow          == 6.0.0,
+matplotlib      == 2.2.2,
+pandas        == 0.25.3, 
+networkx        ==   1.11       (https://networkx.github.io/)
+
+
 -------------------------------------------------------------------------------
 The program is built like the mainconcept (file in the readme folder), take it as guideline.
 Read the comments in the code or the GUI to get more information.

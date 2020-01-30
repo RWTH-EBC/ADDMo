@@ -1,4 +1,5 @@
 import remi.gui as gui
+import os
 from remi import start, App
 from BlackBoxes import (rf_predictor, RandomForestRegressor)
 from sklearn.feature_selection import mutual_info_regression, f_regression
@@ -208,7 +209,7 @@ class AutomatedTraining(App):
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             self.lbl_UploadFile = gui.Label("Upload the input data", width="40%", height=30, margin="10px")
-            self.bt_UploadFile = gui.FileUploader('./Data/GUI_Uploads/', width="50%", height=30, margin='10px')
+            self.bt_UploadFile = gui.FileUploader(os.path.join(os.path.dirname(os.path.realpath(__file__)), "Data", "GUI_Uploads"), width="50%", height=30, margin='10px')
             self.bt_UploadFile.set_on_success_listener(self.fileupload_on_success)
             self.bt_UploadFile.set_on_failed_listener(self.fileupload_on_failed)
             self.lbl_UploadFile.set_on_click_listener(self.info_UploadFile)
@@ -1387,5 +1388,5 @@ that.''',
     '''
 
 
-start(AutomatedTraining, address='127.0.0.1', port=8081, multiple_instance=True, enable_file_cache=True, update_interval=0.9, start_browser=True)
-
+start(AutomatedTraining, address='0.0.0.0', port=8081, multiple_instance=True, enable_file_cache=True, update_interval=0.9, start_browser=True)
+#Todo: if docker address = 0.0.0.1 if normal = 127.0.0.1

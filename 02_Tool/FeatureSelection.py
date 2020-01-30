@@ -112,7 +112,7 @@ def main():
     print("FeatureSelection")
 
     #read in the pickle produced by "FeatureConstruction"
-    Data = pd.read_pickle((SV.PathToPickles + "ThePickle_from_FeatureConstruction" + '.pickle'))
+    Data = pd.read_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_FeatureConstruction" + '.pickle'))
 
     if SV.ManFeatureSelect == True:
         Data = man_feature_select(SV.FeatureSelect, Data)
@@ -129,13 +129,13 @@ def main():
     if SV.WrapperRecursiveFeatureSelection == True:
         Data = wrapper__recursive_feature_selection(Data=Data, Estimator=SV.EstimatorWrapper, params=SV.WrapperParams, MinIncrease=SV.MinIncrease)
     if SV.AutomaticTimeSeriesOwnlagConstruct == True: #method from FeatureConstruction
-        Data = automatic_timeseries_ownlag_constructor(Data=Data, Data_AllSamples=pd.read_pickle((SV.PathToPickles + "ThePickle_from_Preprocessing" + '.pickle')), MinOwnLag=SV.MinOwnLag, Estimator=SV.EstimatorWrapper, params=SV.WrapperParams, MinIncrease=SV.MinIncrease)
+        Data = automatic_timeseries_ownlag_constructor(Data=Data, Data_AllSamples=pd.read_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_Preprocessing" + '.pickle')), MinOwnLag=SV.MinOwnLag, Estimator=SV.EstimatorWrapper, params=SV.WrapperParams, MinIncrease=SV.MinIncrease)
 
     #  save dataframe in an pickle
-    Data.to_pickle((SV.PathToPickles + "ThePickle_from_FeatureSelection" + '.pickle'))
+    Data.to_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_FeatureSelection" + '.pickle'))
 
     # save dataframe in the ProcessedInputData excel file
-    ExcelFile = "%s\\ProcessedInputData_%s.xlsx" % (SV.ResultsFolder,SV.NameOfExperiment)
+    ExcelFile = os.path.join(SV.ResultsFolder, "ProcessedInputData_%s.xlsx"%(SV.NameOfExperiment))
     book = load_workbook(ExcelFile)
     writer = pd.ExcelWriter(ExcelFile, engine="openpyxl")
     writer.book = book

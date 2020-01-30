@@ -7,6 +7,7 @@ from sklearn_pandas import DataFrameMapper
 import sys
 from sklearn.externals import joblib
 import numpy as np
+import os
 
 import SharedVariables as SV
 ##################################################################
@@ -50,7 +51,7 @@ def Scaling(StandardScaling,RobustScaling,NoScaling, Data):
     if StandardScaling == True:
         ScaleTracker_Signal = StandardScaler()
         ScaleTracker_Signal.fit(Data[SV.NameOfSignal].values.reshape(-1,1))  # fit a scaler which is used to rescale afterwards
-        joblib.dump(ScaleTracker_Signal, "%s\\ScalerTracker.save" % (SV.ResultsFolder)) #dump this scaler in a file in the respective folder
+        joblib.dump(ScaleTracker_Signal, os.path.join(SV.ResultsFolder, "ScalerTracker.save")) #dump this scaler in a file in the respective folder
         mapper = DataFrameMapper([(Data.columns, StandardScaler())]) #create the actually used scaler
         Scaled_Data = mapper.fit_transform(Data.copy()) #train it and scale the data
         Data = pd.DataFrame(Scaled_Data, index=Data.index, columns=Data.columns)
@@ -58,7 +59,7 @@ def Scaling(StandardScaling,RobustScaling,NoScaling, Data):
     if RobustScaling == True:
         ScaleTracker_Signal = RobustScaler()
         ScaleTracker_Signal.fit(Data[SV.NameOfSignal].values.reshape(-1,1))  # fit a scaler which is used to rescale afterwards
-        joblib.dump(ScaleTracker_Signal, "%s\\ScalerTracker.save" % (SV.ResultsFolder)) #dump this scaler in a file in the respective folder
+        joblib.dump(ScaleTracker_Signal, os.path.join(SV.ResultsFolder, "ScalerTracker.save")) #dump this scaler in a file in the respective folder
         mapper = DataFrameMapper([(Data.columns, RobustScaler())]) #create the actually used scaler
         Scaled_Data = mapper.fit_transform(Data.copy()) #train it and scale the data
         Data = pd.DataFrame(Scaled_Data, index=Data.index, columns=Data.columns)
@@ -86,7 +87,7 @@ def main():
     print("Preprocessing")
 
     #read dataframe from pickle
-    Data = pd.read_pickle((SV.PathToPickles + "ThePickle_from_ImportData" + '.pickle'))
+    Data = pd.read_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_ImportData" + '.pickle'))
 
     #Execute functions if selected
     if True:
@@ -99,10 +100,10 @@ def main():
         Data = Scaling(SV.StandardScaling, SV.RobustScaling, SV.NoScaling, Data)
 
     #save dataframe to pickle
-    Data.to_pickle((SV.PathToPickles + "ThePickle_from_Preprocessing" + '.pickle'))
+    Data.to_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_Preprocessing" + '.pickle'))
 
     # save dataframe in the ProcessedInputData excel file
-    ExcelFile = "%s\\ProcessedInputData_%s.xlsx" % (SV.ResultsFolder, SV.NameOfExperiment)
+    ExcelFile = os.path.join(SV.ResultsFolder, "ProcessedInputData_%s.xlsx"%(SV.NameOfExperiment))
     book = load_workbook(ExcelFile)
     writer = pd.ExcelWriter(ExcelFile, engine="openpyxl")
     writer.book = book

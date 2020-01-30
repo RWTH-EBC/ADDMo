@@ -231,7 +231,9 @@ Following lines: Only if additional attributes need to be set: The respective at
 Empty lines separate the methods
 
 Check for the order of how the methods are executed, as each method´s input is the output of the method conducted before.
+
 -------------------------------------------
+
 __Information about the required input shape:__\
 - Input ExcelFile has to be named: "InputData" and saved in the Folder "Data"
 - Sheet to read in must be the first sheet, with time as first column and all signals and features thereafter (one per column)

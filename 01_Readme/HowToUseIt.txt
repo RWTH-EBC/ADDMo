@@ -1,3 +1,26 @@
+Ways of usage:
+1. using exclusively the GUI via docker container 
+2. full spectrum via your python environment and editor (suggested) 
+
+1. Docker
+#install docker - make sure it works properly
+
+#open CMD
+$cd <Path to ADDMo Repo>
+$docker image build -t addmo .
+$docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeling:/ADDMo --name addmocontainer addmo
+
+#open your browser and enter the URL: http://127.0.0.1:8081/
+#The GUI should open up; use the tool; interact with ADDMo via the CMD
+#If a script runs into an error you have to restart the container 
+
+#To restart the container in cmd:
+"strg+c" for stopping the program
+$docker container stop addmocontainer
+$docker container rm addmocontainer
+$docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeling:/ADDMo --name addmocontainer addmo
+
+2. Python + Editor
 ﻿#Install requirements:
 ﻿
 ﻿Via setup.py:

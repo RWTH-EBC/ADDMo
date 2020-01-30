@@ -16,7 +16,7 @@ print("Module Import Section Done")
 
 def main():
     #define path to data source files '.xls' & '.pickle'
-    RootDir = os.getcwd()
+    RootDir = os.path.dirname(os.path.realpath(__file__))
     PathToData = os.path.join(RootDir, 'Data')
 
     #Set Folder for Results

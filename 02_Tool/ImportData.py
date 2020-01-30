@@ -20,7 +20,7 @@ import SharedVariables as SV
 #define clear (clean up) function to remove files that block the run
 def clear():
     if os.path.isfile(os.path.join(SV.ResultsFolder, "ProcessedInputData_%s.xlsx"%(SV.NameOfExperiment))) == True: #check if path already exists
-        Answer = input("Are you sure you want to delete or overwrite the data in %s: " %SV.ResultsFolder)
+        Answer = input("Are you sure you want to delete or overwrite the data in %s: "%(SV.ResultsFolder))
         if Answer == "yes" or Answer == "Yes" or Answer == "y" or Answer == "Y":
             os.remove(os.path.join(SV.ResultsFolder, "ProcessedInputData_%s.xlsx"%(SV.NameOfExperiment))) #if it exists delete ProcessedInputData
             for FileName in os.listdir(SV.PathToPickles): #loop through all files in the directory and check if they are pickle files, if yes: delete them

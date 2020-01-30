@@ -372,7 +372,7 @@ def all_models(Model, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerErro
 
 def pre_handling(OnlyPredict):
     #define path to data source files '.xls' & '.pickle'
-    RootDir = os.getcwd()
+    RootDir = os.path.dirname(os.path.realpath(__file__))
     PathToData = os.path.join(RootDir, 'Data')
 
     #Set Folder for Results
@@ -732,7 +732,7 @@ def main_OnlyPredict():
 if __name__ == '__main__':
     #Todo: The following is done in ModelTuning and DataTuning, isn´t it better once in SV?
     #define path to data source files '.xls' & '.pickle'
-    RootDir = os.getcwd()
+    RootDir = os.path.dirname(os.path.realpath(__file__))
     PathToData = os.path.join(RootDir, 'Data')
 
     #Set Folder for Results

@@ -114,28 +114,29 @@ It has no natively recurrent model, means it only uses ownlags as a regular inpu
 2. full spectrum via your python environment and editor (suggested) 
 
 __1: Docker__
-install docker - make sure it works properly
 
-open CMD
-```
-$cd <Path to ADDMo Repo>
-$docker image build -t addmo .
-$docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeling:/ADDMo --name addmocontainer addmo
-```
+Install docker - make sure it works properly
 
-open your browser and enter the URL: [http://127.0.0.1:8081/]
+Open CMD
+
+`$cd <Path to ADDMo Repo>`\
+`$docker image build -t addmo .`\
+`$docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeling:/ADDMo --name addmocontainer addmo`
+
+
+Open your browser and enter the URL: [http://127.0.0.1:8081/]
 1. The GUI should open up
-2. use the tool
-3. interact with ADDMo via the CMD
+2. Use the tool
+3. Interact with ADDMo via the CMD
 4. If a script runs into an error you have to restart the container 
 
 To restart the container in cmd:\
 "strg+c" for stopping the program
-```
-$docker container stop addmocontainer
-$docker container rm addmocontainer
-$docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeling:/ADDMo --name addmocontainer addmo
-```
+
+`$ docker container stop addmocontainer` \
+`$ docker container rm addmocontainer` \
+`$ docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeling:/ADDMo --name addmocontainer addmo `
+
 
 
 __2: Python + Editor__

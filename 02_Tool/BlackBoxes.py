@@ -24,6 +24,10 @@ from hyperopt.pyll import scope
 import hyperopt.pyll.stochastic
 from sklearn.externals import joblib
 import os
+import warnings
+
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 
 ########################################################################################################################

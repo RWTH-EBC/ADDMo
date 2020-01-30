@@ -1,8 +1,8 @@
-__How to set it up - two options:__
+# How to set it up - two options:
 1. using exclusively the GUI via docker container 
 2. full spectrum via your python environment and editor (suggested) 
 
-*1: Docker*\
+__1: Docker__\
 install docker - make sure it works properly
 
 open CMD
@@ -25,7 +25,7 @@ $docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeli
 ```
 
 
-*2: Python + Editor*\
+__2: Python + Editor__\
 
 Via setup.py:\
 Install Anaconda (conda version: 4.8.0)
@@ -64,12 +64,12 @@ networkx        ==   1.11       (https://networkx.github.io/) \
 
 
 -----------------------------------------------------------------------------------------------------------------------
-__How to use it- two options:__
+# How to use it- two options:
 
 1. via the GUI
 2. accessing the python files and run them directly 
 
-*Using the GUI:*\
+__Using the GUI:__\
 
 Run GUI_remi.py and see the information within the GUI\
 
@@ -101,7 +101,7 @@ Necessary steps "Predict only":\
 	3.Run
 
 
-*Running the scripts directly via the python console:*
+__Running the scripts directly via the python console:__
 
 
 All variables are defined in SharedVariables.py\
@@ -133,9 +133,9 @@ Empty lines separate the methods
 Check for the order of how the methods are executed, as each method´s input is the output of the method conducted before.
 
 ---------------------------------------------------------------------------------
-__ADDMo functional overview__\
+# ADDMo functional overview\
 
-*ADDMo faces the following challenges:*
+__ADDMo faces the following challenges:__
 
 - Preprocessing of initial data (in some extent)
 - Selection of proper training and test data periods 
@@ -144,7 +144,7 @@ __ADDMo functional overview__\
 - Hyperparameter tuning 
 - Overfitting & underfitting 
 
-*The used methods for facing those challenges are:*
+__The used methods for facing those challenges are:__
 
 Preprocessing:
 - Resampling* to the desired resolution.
@@ -242,7 +242,7 @@ The tool is single output only (no MIMO).
 It has no natively recurrent model, means it only uses ownlags as a regular input for regression analysis (A native recurrent model would be e.g. long short term memory neural networks)
 
 -------------------------------------------------------------------------------
-__How is the program built up and how do i retrieve results:__
+# How is the program built up and how do i retrieve results:
 
 The program is built like the mainconcept (file in the readme folder), take it as guideline.\
 Read the comments in the code or the GUI to get more information.\

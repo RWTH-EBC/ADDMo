@@ -265,4 +265,14 @@ After reading the above instructions, check all documents in the readme-folder a
 - MethodDescription.doc : This is a list of all methods plus their Input/Output, the theoretical function and their practical function.
 - DetailedMethodsDescription_CodingPointOfView.xlsx : This is a list of all methods with their attributes and their meaning, and a more detailed description of each method
 
+# Cite ADDMo:
 
+If you use ADDMo in scientific publication, we would appreciate citations to the following paper:
+
+Automated data-driven modeling of building energy systems via machine learning algorithms, Rätz et al., Energy and Buildings, Volume 202, 2019.
+
+Published at Energy&Buildings Journal:
+[Link to article](https://doi.org/10.1016/j.enbuild.2019.109384)
+
+If you are not granted access to the paper, you may find the pre-print at:
+[Link to pre-print article at researchgate](https://www.researchgate.net/publication/335424562_Automated_Data-driven_Modeling_of_Building_Energy_Systems_via_Machine_Learning_Algorithms)

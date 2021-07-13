@@ -19,7 +19,7 @@ NameOfExperiment = "NoOL"
 # User Input Section Data Tuning #######################################################################################
 if True: #if True for neat appearance
     # -----------------------Input Section general variables--------------------------
-    # The name of the column where the signal in question is safed; count up from 0 in the first column after the index(1st column after index = 0)
+    # The name of the column where the signal in question (target feature) is saved; count up from 0 in the first column after the index(1st column after index = 0) better: The first column has value 0.
     ColumnOfSignal = 1
 
     # Set Estimator which shall be used in all Wrapper Methods, should be the one used for the final forecast(just copy paste into WrapperParams)
@@ -50,8 +50,7 @@ if True: #if True for neat appearance
     Resample = False
     # If Resample is True the following resolution is required
     Resolution = "60min"  # e.g. "60min" means into buckets of 60minutes, "30s" to seconds
-    WayOfResampling = [np.mean, np.mean,
-                       np.mean]  # e.g. for a 3 column data set(index not counted):[np.sum, np.mean, np.mean] first column will be summed up all other will be meaned
+    WayOfResampling = [np.mean, np.mean,np.mean]  # e.g. for a 3 column data set(index not counted):[np.sum, np.mean, np.mean] first column will be summed up all other will be meaned
     # Define way of resampling per column, available: Resample to larger interval: np.sum, np.mean, np.median or a selfdefined aggregation method
 
 
@@ -216,7 +215,7 @@ if True: #if True for neat appearance
 
 ########################################################################################################################
 #Some variables that are set automatically by "DataTuning" or "ModelTuning"
-NameOfSignal = "Empty" #is set through both or GUI
+NameOfSignal = "Empty" #is set through both or GUI (???? dont see this in GUI)
 RootDir = "Empty" #by DataTuning
 PathToData = "Empty" #by DataTuning
 ResultsFolder = "Empty" #by DataTuning
@@ -335,7 +334,6 @@ def documentation_DataTuning(timestart, timeend):
     DfMethodology.at[5, "GlobalVariables"] = "Parameter used for Wrappers = %s" % WrapperParams
     DfMethodology.at[6, "GlobalVariables"] = "MinIncrease for Wrappers = %s" % MinIncrease
     DfMethodology.at[7, "GlobalVariables"] = "Pipeline took %s seconds" % (timeend - timestart)
-
 
     DfMethodology.at[1, "Preprocessing"] = "How to deal NaN´s = %s" % NaNDealing
     DfMethodology.at[2, "Preprocessing"] = "Initial feature select = %s" % InitManFeatureSelect

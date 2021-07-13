@@ -71,7 +71,7 @@ def main(DT_Setup_object):
     timeend = time.time()
 
     # DataTuningSetup
-    DTS.set_data(DT_Setup_object)
+    DTS.dump_data(DT_Setup_object)
     DTRR.store_results(DT_RR_object)
 
     # Documentation

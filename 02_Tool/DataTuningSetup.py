@@ -9,7 +9,7 @@ from sklearn.externals import joblib
 from sklearn.feature_selection import mutual_info_regression, f_regression
 
 
-def set_data(DTS_object):
+def dump_data(DTS_object):
 
     print("Saving Data Tuning Setup class Object as a pickle in path: '%s'" % os.path.join(SV.ResultsFolder, "DataTuningSetup.save"))
 
@@ -23,6 +23,7 @@ class DataTuningSetup:
     # or should we go for the default constructor and assign hardcoded default values? (done)
     # use kwargs today (done, dont see any use of args or kwargs as we do not send anything to the object as a parameter) (done)
 
+    # todo: think more about args
     def __init__(self, *args, **kwargs):
 
         # Global Variables

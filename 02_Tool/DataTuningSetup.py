@@ -10,14 +10,8 @@ from sklearn.feature_selection import mutual_info_regression, f_regression
 
 
 class DataTuningSetup:
-    # ****** first we need to set setup data from SV, coz GUI sets all variables in SV, if SV has to be eliminated even GUI file must be changed. ex: compute_DT() (done)
-    # scaler and execution time are the runtime results (done)
-    # Is it recommended to write a parameterized __init__ if there are so many variables (to set default values)? (done)
-    # or should we go for the default constructor and assign hardcoded default values? (done)
-    # use kwargs today (done, dont see any use of args or kwargs as we do not send anything to the object as a parameter) (done)
 
-    # todo: think more about args
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         # Global Variables
         ####################################
         self.NameOfData = "AHU Data1"
@@ -25,8 +19,8 @@ class DataTuningSetup:
         self.NameOfSignal = "Empty"
 
         # Wrapper variables
-        self.WrapperModel = SV.WrapperModels  # should this class be made independent of SV, if yes, why?
-        self.WrapperParams = SV.WrapperParams  # should this class be made independent of SV, if yes, why?
+        self.EstimatorWrapper = SV.EstimatorWrapper  # todo: should this class be made independent of SV, if yes, why?
+        self.WrapperParams = SV.WrapperParams  # todo: should this class be made independent of SV, if yes, why?
         self.MinIncrease = 0.005
 
         self.ExecutionTime = 0
@@ -89,8 +83,7 @@ class DataTuningSetup:
         self.Threshold_embedded = "median"
 
     def dump_data(self):
-        print("Saving Data Tuning Setup class Object as a pickle in path: '%s'" % os.path.join(
-            SV.ResultsFolder, "DataTuningSetup.save"))
+        print("Saving Data Tuning Setup class Object as a pickle in path: '%s'" % os.path.join(SV.ResultsFolder, "DataTuningSetup.save"))
 
         # Save the object as a pickle for reuse
         joblib.dump(self, os.path.join(SV.ResultsFolder, "DataTuningSetup.save"))

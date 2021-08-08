@@ -9,15 +9,8 @@ from sklearn.externals import joblib
 from sklearn.feature_selection import mutual_info_regression, f_regression
 
 
-def dump_data(DTS_object):
-
-    print("Saving Data Tuning Setup class Object as a pickle in path: '%s'" % os.path.join(SV.ResultsFolder, "DataTuningSetup.save"))
-
-    # Save the object as a pickle for reuse
-    joblib.dump(DTS_object, os.path.join(SV.ResultsFolder, "DataTuningSetup.save"))
-
 class DataTuningSetup:
-    #****** first we need to set setup data from SV, coz GUI sets all variables in SV, if SV has to be eliminated even GUI file must be changed. ex: compute_DT() (done)
+    # ****** first we need to set setup data from SV, coz GUI sets all variables in SV, if SV has to be eliminated even GUI file must be changed. ex: compute_DT() (done)
     # scaler and execution time are the runtime results (done)
     # Is it recommended to write a parameterized __init__ if there are so many variables (to set default values)? (done)
     # or should we go for the default constructor and assign hardcoded default values? (done)
@@ -25,7 +18,6 @@ class DataTuningSetup:
 
     # todo: think more about args
     def __init__(self, *args, **kwargs):
-
         # Global Variables
         ####################################
         self.NameOfData = "AHU Data1"
@@ -51,12 +43,11 @@ class DataTuningSetup:
         self.RobustScaling = True
         self.NoScaling = False
         self.Resample = False
-        self.Resolution = "60min"                    # e.g. "60min" means into buckets of 60minutes, "30s" to seconds
+        self.Resolution = "60min"  # e.g. "60min" means into buckets of 60minutes, "30s" to seconds
         self.WayOfResampling = [np.mean, np.mean, np.mean]
         # e.g. for a 3 column data set(index not counted):[np.sum,np.mean, np.mean] first column will be summed up
         # all other will be meant Define way of resampling per column, available: Resample to larger interval:
         # np.sum, np.mean, np.median or a redefined aggregation method
-
 
         # PeriodSelection Variables
         #############################################################
@@ -96,3 +87,10 @@ class DataTuningSetup:
         self.N_feature_to_select_RFE = 18
         self.CV_DT = TimeSeriesSplit(n_splits=3)
         self.Threshold_embedded = "median"
+
+    def dump_data(self):
+        print("Saving Data Tuning Setup class Object as a pickle in path: '%s'" % os.path.join(
+            self.ResultsFolder, "DataTuningSetup.save"))
+
+        # Save the object as a pickle for reuse
+        joblib.dump(self, os.path.join(SV.ResultsFolder, "DataTuningSetup.save"))

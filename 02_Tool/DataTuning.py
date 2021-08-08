@@ -12,8 +12,7 @@ import PeriodSelection
 import FeatureConstruction
 import FeatureSelection
 import DataTuningSetup as DTS
-import DataTuningRuntimeResults as DTRR
-from DataTuningRuntimeResults import DataTuningRuntimeResults
+from DataTuningRuntimeResults import DataTuningRuntimeResults as DTRR
 
 print("Module Import Section Done")  # imported all necessary files for data tuning
 #create objects datasetup and datarunt
@@ -24,8 +23,10 @@ def main(DT_Setup_object):
     PathToData = os.path.join(RootDir, 'Data')
 
     # Set Folder for Results
-    ResultsFolder = os.path.join(RootDir, "Results", SV.NameOfData, DT_Setup_object.NameOfExperiment)
+    ResultsFolder = os.path.join(RootDir, "Results", DT_Setup_object.NameOfData, DT_Setup_object.NameOfExperiment)
     PathToPickles = os.path.join(ResultsFolder, "Pickles")
+    DT_Setup_object.ResultsFolder = ResultsFolder
+    DT_Setup_object.PathToPickles = PathToPickles
     if not os.path.exists(ResultsFolder):
         os.makedirs(ResultsFolder)
         os.makedirs(PathToPickles)
@@ -44,7 +45,7 @@ def main(DT_Setup_object):
 
     ImportData.clear()  # make sure the selected folder is unused
 
-    DT_RR_object = DataTuningRuntimeResults()
+    DT_RR_object = DTRR()
 
     timestart = time.time()
 
@@ -71,14 +72,14 @@ def main(DT_Setup_object):
     timeend = time.time()
 
     # DataTuningSetup
-    DTS.dump_data(DT_Setup_object)
-    DTRR.store_results(DT_RR_object)
+    DT_Setup_object.dump_data()
+    DT_RR_object.store_results()
 
     # Documentation
-    #SV.documentation_DataTuning( endTime_FeatureSelection)
+    # SV.documentation_DataTuning( endTime_FeatureSelection)
 
     print("Tuning the data took: %s seconds" % (timeend - timestart))
-    print("End data tuning: %s/%s" % (SV.NameOfData, DT_Setup_object.NameOfExperiment))
+    print("End data tuning: %s/%s" % (DT_Setup_object.NameOfData, DT_Setup_object.NameOfExperiment))
     print("________________________________________________________________________\n")
 
 

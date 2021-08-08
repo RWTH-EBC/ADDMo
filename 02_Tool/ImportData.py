@@ -20,20 +20,18 @@ import SharedVariables as SV
 # Sometimes the first row with the name of columns isn´t found as header; add a new header line, copy paste and delete the old one.
 # -------------------------------------
 # define clear (clean up) function to remove files that block the run
-def clear():
-    if os.path.isfile(os.path.join(SV.ResultsFolder, "ProcessedInputData_%s.xlsx" % (
-    SV.NameOfExperiment))) == True:  # check if path already exists
-        Answer = input("Are you sure you want to delete or overwrite the data in %s: " % (SV.ResultsFolder))
+def clear(DT_Setup_object):
+    if os.path.isfile(os.path.join(DT_Setup_object.ResultsFolder, "ProcessedInputData_%s.xlsx" % (DT_Setup_object.NameOfExperiment))) == True:  # check if path already exists
+        Answer = input("Are you sure you want to delete or overwrite the data in %s: " % (DT_Setup_object.ResultsFolder))
         if Answer == "yes" or Answer == "Yes" or Answer == "y" or Answer == "Y":
-            os.remove(os.path.join(SV.ResultsFolder, "ProcessedInputData_%s.xlsx" % (
-                SV.NameOfExperiment)))  # if it exists delete ProcessedInputData
+            os.remove(os.path.join(DT_Setup_object.ResultsFolder, "ProcessedInputData_%s.xlsx" % (
+                DT_Setup_object.NameOfExperiment)))  # if it exists delete ProcessedInputData
             for FileName in os.listdir(
-                    SV.PathToPickles):  # loop through all files in the directory and check if they are pickle files, if yes: delete them
+                    DT_Setup_object.PathToPickles):  # loop through all files in the directory and check if they are pickle files, if yes: delete them
                 if FileName.endswith(".pickle"):
-                    os.remove(os.path.join(SV.PathToPickles, FileName))
-            if os.path.isfile(os.path.join(SV.ResultsFolder, "Settings_%s.xlsx" % (
-            SV.NameOfExperiment))) == True:  # check if there is a settings file, if yes delete it
-                os.remove(os.path.join(SV.ResultsFolder, "Settings_%s.xlsx" % (SV.NameOfExperiment)))
+                    os.remove(os.path.join(DT_Setup_object.PathToPickles, FileName))
+            if os.path.isfile(os.path.join(DT_Setup_object.ResultsFolder, "Settings_%s.xlsx" % (DT_Setup_object.NameOfExperiment))) == True:  # check if there is a settings file, if yes delete it
+                os.remove(os.path.join(DT_Setup_object.ResultsFolder, "Settings_%s.xlsx" % (DT_Setup_object.NameOfExperiment)))
             print("Files Deleted")
 
         else:
@@ -42,14 +40,14 @@ def clear():
 
 # imports 1st Sheet ( in the ProcessedInputData_* ) as a dataframe and saves it as "ThePickle_from_ImportData"
 def import_data(DT_Setup_object, DT_RR_object):
-    Path = SV.InputData
+    Path = DT_Setup_object.InputData
     Data = pd.read_excel(io=Path, index_col=0)  # Column 0 has to be the Index Column; reads the excel file
 
     DT_RR_object.df_import_data = Data  # saving data to DataTuningRuntimeResults object
-    Data.to_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_ImportData" + '.pickle'))  # saves Data into a pickle
+    Data.to_pickle(os.path.join(DT_Setup_object.PathToPickles, "ThePickle_from_ImportData" + '.pickle'))  # saves Data into a pickle
 
     # save dataframe in an excel file
-    ExcelFile = os.path.join(SV.ResultsFolder, "ProcessedInputData_%s.xlsx" % DT_Setup_object.NameOfExperiment)
+    ExcelFile = os.path.join(DT_Setup_object.ResultsFolder, "ProcessedInputData_%s.xlsx" % DT_Setup_object.NameOfExperiment)
     writer = pd.ExcelWriter(ExcelFile)
     Data.to_excel(writer, sheet_name="ImportData")
     writer.save()

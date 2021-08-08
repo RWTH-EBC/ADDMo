@@ -90,7 +90,7 @@ class DataTuningSetup:
 
     def dump_data(self):
         print("Saving Data Tuning Setup class Object as a pickle in path: '%s'" % os.path.join(
-            self.ResultsFolder, "DataTuningSetup.save"))
+            SV.ResultsFolder, "DataTuningSetup.save"))
 
         # Save the object as a pickle for reuse
         joblib.dump(self, os.path.join(SV.ResultsFolder, "DataTuningSetup.save"))

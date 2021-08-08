@@ -11,11 +11,12 @@ import Preprocessing
 import PeriodSelection
 import FeatureConstruction
 import FeatureSelection
-import DataTuningSetup as DTS
 from DataTuningRuntimeResults import DataTuningRuntimeResults as DTRR
 
 print("Module Import Section Done")  # imported all necessary files for data tuning
-#create objects datasetup and datarunt
+
+
+# create objects datasetup and datarunt
 
 def main(DT_Setup_object):
     # define path to data source files '.xls' & '.pickle'
@@ -25,27 +26,27 @@ def main(DT_Setup_object):
     # Set Folder for Results
     ResultsFolder = os.path.join(RootDir, "Results", DT_Setup_object.NameOfData, DT_Setup_object.NameOfExperiment)
     PathToPickles = os.path.join(ResultsFolder, "Pickles")
-    DT_Setup_object.ResultsFolder = ResultsFolder
-    DT_Setup_object.PathToPickles = PathToPickles
+
     if not os.path.exists(ResultsFolder):
         os.makedirs(ResultsFolder)
         os.makedirs(PathToPickles)
 
-    if DT_Setup_object.FixImport:  # makes sure that the GUI can rename the directory and name of the inputdata if necessary(without Gui the data imported from the fixed place)
+    # makes sure that the GUI can rename the directory and name of the inputdata if necessary(without Gui the data imported from the fixed place)
+    if DT_Setup_object.FixImport:
         InputData = os.path.join(PathToData, "InputData" + '.xlsx')
     else:
         InputData = os.path.join(PathToData, "GUI_Uploads", SV.GUI_Filename)
 
-    # Set the found Variables in "SharedVariables"
-    SV.RootDir = RootDir
-    SV.PathToData = PathToData
-    SV.ResultsFolder = ResultsFolder
-    SV.PathToPickles = PathToPickles
-    SV.InputData = InputData # todo: find out if it can be included in DT setup
+    # Save all the folder paths in the DTS object
+    DT_Setup_object.RootDir = RootDir
+    DT_Setup_object.PathToData = PathToData
+    DT_Setup_object.ResultsFolder = ResultsFolder
+    DT_Setup_object.PathToPickles = PathToPickles
+    DT_Setup_object.InputData = InputData
 
-    ImportData.clear()  # make sure the selected folder is unused
+    ImportData.clear(DT_Setup_object)  # make sure the selected folder is unused
 
-    DT_RR_object = DTRR()
+    DT_RR_object = DTRR()  # create the DataTuningRuntimeResults object
 
     timestart = time.time()
 

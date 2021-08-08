@@ -55,8 +55,8 @@ def main(DT_Setup_object):
 
     # Get the DataFrame produced by ImportData, this is a private variable
     __Data = pd.read_pickle(os.path.join(PathToPickles, "ThePickle_from_ImportData" + '.pickle'))
-    NameOfSignal = list(__Data)[SV.ColumnOfSignal]
-    SV.NameOfSignal = NameOfSignal  # set Variable in "SharedVariables"
+    NameOfSignal = list(__Data)[DT_Setup_object.ColumnOfSignal]
+    DT_Setup_object.NameOfSignal = NameOfSignal  # save the variable in DTS object
 
     # Preprocessing
     Preprocessing.main(DT_Setup_object, DT_RR_object)

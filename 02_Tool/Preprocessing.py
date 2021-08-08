@@ -13,23 +13,22 @@ import os
 
 
 # Manual Selection of Features (By the columns of the "FeatureConstruction" Excel Table)
-def init_man_feature_select(DT_Setup_object, FeatureSelect, Data):
-    if not DT_Setup_object.ColumnOfSignal in FeatureSelect:  # keep the column of signal (Check if the ColumnOfSignal is among the selected features)
-        FeatureSelect = np.append(FeatureSelect,
-                                  DT_Setup_object.ColumnOfSignal)  # add the column of signal to the features which shall be kept
+def init_man_feature_select(DT_Setup_object, Data):
+    if not DT_Setup_object.ColumnOfSignal in DT_Setup_object.FeatureSelect:  # keep the column of signal (Check if the ColumnOfSignal is among the selected features)
+        FeatureSelect = np.append(DT_Setup_object.FeatureSelect, DT_Setup_object.ColumnOfSignal)  # add the column of signal to the features which shall be kept
     Data = Data[Data.columns[FeatureSelect]]  # select only those columns which shall be kept
     return (Data)
 
 
 # Deal with NaN´s
-def NaNDealing(Data, NaNDealing):
-    if NaNDealing == "ffill":
+def NaNDealing(DT_Setup_object, Data):
+    if DT_Setup_object.NaNDealing == "ffill":
         Data = Data.ffill()  # fills NaN Values with the value before the NaN
-    elif NaNDealing == "bfill":
+    elif DT_Setup_object.NaNDealing == "bfill":
         Data = Data.bfill()  # fills NaN Values with the value after NaN
-    elif NaNDealing == "dropna":
+    elif DT_Setup_object.NaNDealing == "dropna":
         Data = Data.dropna()  # deletes every entire row(sample) with at least one NaN Value
-    elif NaNDealing == "None":
+    elif DT_Setup_object.NaNDealing == "None":
         Data = Data
     else:
         print("Define a way how to deal NaN´s, if you don´t want to fill or delete NaN´s enter \"None\". "
@@ -40,13 +39,13 @@ def NaNDealing(Data, NaNDealing):
 
 
 # Scaling################################################################################################################
-def Scaling(DT_Setup_object, DT_RR_object, StandardScaling, RobustScaling, NoScaling, Data):
-    if sum(map(bool, [StandardScaling, RobustScaling, NoScaling])) != 1:  # Checking, that exactly one scaler is in use
+def Scaling(DT_Setup_object, DT_RR_object, Data):
+    if sum(map(bool, [DT_Setup_object.StandardScaling, DT_Setup_object.RobustScaling, DT_Setup_object.NoScaling])) != 1:  # Checking, that exactly one scaler is in use
         print("Please specify exactly 1 scaler for preprocessing!")  # for GUI usage
         sys.exit("Please specify exactly 1 scaler for preprocessing!")
 
     # Doing "StandardScaler"
-    if StandardScaling == True:
+    if DT_Setup_object.StandardScaling == True:
         ScaleTracker_Signal = StandardScaler()
         ScaleTracker_Signal.fit(
             Data[DT_Setup_object.NameOfSignal].values.reshape(-1, 1))  # fit a scaler which is used to rescale afterwards
@@ -57,7 +56,7 @@ def Scaling(DT_Setup_object, DT_RR_object, StandardScaling, RobustScaling, NoSca
         Scaled_Data = mapper.fit_transform(Data.copy())  # train it and scale the data
         Data = pd.DataFrame(Scaled_Data, index=Data.index, columns=Data.columns)
     # Doing "RobustScaler"
-    if RobustScaling == True:
+    if DT_Setup_object.RobustScaling == True:
         ScaleTracker_Signal = RobustScaler()
         ScaleTracker_Signal.fit(
             Data[DT_Setup_object.NameOfSignal].values.reshape(-1, 1))  # fit a scaler which is used to rescale afterwards
@@ -72,14 +71,14 @@ def Scaling(DT_Setup_object, DT_RR_object, StandardScaling, RobustScaling, NoSca
     # Resampling Procedure
 
 
-def resample(Data, Resolution, WayOfResampling):
-    if not len(list(Data)) == len(WayOfResampling):
+def resample(DT_Setup_object, Data):
+    if not len(list(Data)) == len(DT_Setup_object.WayOfResampling):
         print("WayOfResampling array must have same amount of entries as columns of InputData")  # for GUI usage
         sys.exit("WayOfResampling array must have same amount of entries as columns of InputData")
-    AggParameter = {list(Data)[0]: WayOfResampling[0]}  # create the dictionary for the .agg function
-    for x in range(0, len(WayOfResampling)):
-        AggParameter.update({list(Data)[x]: WayOfResampling[x]})  # add as many keys with resampling method as columns
-    Data = Data.resample(Resolution).agg(AggParameter)  # Resamples data to a defined time frequence
+    AggParameter = {list(Data)[0]: DT_Setup_object.WayOfResampling[0]}  # create the dictionary for the .agg function
+    for x in range(0, len(DT_Setup_object.WayOfResampling)):
+        AggParameter.update({list(Data)[x]: DT_Setup_object.WayOfResampling[x]})  # add as many keys with resampling method as columns
+    Data = Data.resample(DT_Setup_object.Resolution).agg(AggParameter)  # Resamples data to a defined time frequence
     return Data
 
     # Todo: Rounding
@@ -100,15 +99,13 @@ def main(DT_Setup_object, DT_RR_object):
 
     # Execute functions if selected
     if True:
-        Data = NaNDealing(Data, DT_Setup_object.NaNDealing)
+        Data = NaNDealing(DT_Setup_object, Data)
     if DT_Setup_object.Resample == True:
-        Data = resample(Data, DT_Setup_object.Resolution,
-                        DT_Setup_object.WayOfResampling)  # Todo: review (Resample wurde von import data hier rüber kopiert, Resample was copied over here from import data)
+        Data = resample(DT_Setup_object, Data)  # Todo: review (Resample wurde von import data hier rüber kopiert, Resample was copied over here from import data)
     if DT_Setup_object.InitManFeatureSelect == True:
-        Data = init_man_feature_select(DT_Setup_object, DT_Setup_object.InitFeatures, Data)
+        Data = init_man_feature_select(DT_Setup_object, Data)
     if True:
-        Data = Scaling(DT_Setup_object, DT_RR_object, DT_Setup_object.StandardScaling, DT_Setup_object.RobustScaling,
-                       DT_Setup_object.NoScaling, Data)
+        Data = Scaling(DT_Setup_object, DT_RR_object, Data)
 
     endTime = time.time()
     DT_RR_object.preprocessing_time = endTime - startTime  # execution time

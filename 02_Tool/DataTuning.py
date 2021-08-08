@@ -15,9 +15,6 @@ from DataTuningRuntimeResults import DataTuningRuntimeResults as DTRR
 
 print("Module Import Section Done")  # imported all necessary files for data tuning
 
-
-# create objects datasetup and datarunt
-
 def main(DT_Setup_object):
     # define path to data source files '.xls' & '.pickle'
     RootDir = os.path.dirname(os.path.realpath(__file__))
@@ -72,12 +69,10 @@ def main(DT_Setup_object):
 
     timeend = time.time()
 
-    # DataTuningSetup
-    DT_Setup_object.dump_data()
+    # Storing object data
+    DT_Setup_object.dump_object()
     DT_RR_object.store_results()
 
-    # Documentation
-    # SV.documentation_DataTuning( endTime_FeatureSelection)
 
     print("Tuning the data took: %s seconds" % (timeend - timestart))
     print("End data tuning: %s/%s" % (DT_Setup_object.NameOfData, DT_Setup_object.NameOfExperiment))

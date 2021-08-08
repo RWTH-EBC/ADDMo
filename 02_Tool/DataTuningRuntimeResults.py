@@ -1,17 +1,13 @@
-
-# DT and MT classes replace SV (DT class now almost replaces SV, todo: InputData + NameOfSignal + global variables in general ,decide their scope, scope will be  clear when MT is handled)
 import os
 
 import pandas as pd
+from sklearn.externals import joblib
 
 import SharedVariables as SV
 
-from sklearn.externals import joblib
-
-
 class DataTuningRuntimeResults:
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
 
         self.df_import_data = pd.DataFrame
         self.df_preprocessing_data = pd.DataFrame

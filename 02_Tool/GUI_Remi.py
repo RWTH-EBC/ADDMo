@@ -5,7 +5,6 @@ from BlackBoxes import (rf_predictor, RandomForestRegressor)
 from sklearn.feature_selection import mutual_info_regression, f_regression
 import DataTuning
 import ModelTuning
-import ModelTuning  # error: imported twice
 import SharedVariables as SV
 from SharedVariables import Hyperparametergrids, WrapperModels
 import numpy as np

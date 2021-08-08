@@ -1,19 +1,15 @@
 import time
+import sys
+import os
 
 import pandas as pd
 
 from openpyxl import load_workbook
 from Functions.PlotFcn import *
-import sys
 from sklearn.model_selection import train_test_split
-
-# from GlobalVariables import *
 import SharedVariables as SV
-import os
-
 
 # Todo: get the resolution of the data
-
 
 # Cross, Cloud and Autocorrelation plots
 def cross_auto_cloud_correlation_plotting(DT_Setup_object, Data):

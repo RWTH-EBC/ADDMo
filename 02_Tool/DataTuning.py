@@ -50,8 +50,8 @@ def main(DT_Setup_object):
     # Import the data
     ImportData.main(DT_Setup_object, DT_RR_object)
 
-    # Get the DataFrame produced by ImportData, this is a private variable
-    __Data = pd.read_pickle(os.path.join(PathToPickles, "ThePickle_from_ImportData" + '.pickle'))
+    # Get the DataFrame produced by ImportData from DTRR object
+    __Data = DT_RR_object.df_import_data
     NameOfSignal = list(__Data)[DT_Setup_object.ColumnOfSignal]
     DT_Setup_object.NameOfSignal = NameOfSignal  # save the variable in DTS object
 

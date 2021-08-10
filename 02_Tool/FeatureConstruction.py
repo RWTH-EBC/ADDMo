@@ -159,10 +159,12 @@ def auto_featurelag_constructor(DT_Setup_object, Data, Data_AllSamples):
 
 # Main
 def main(DT_Setup_object, DT_RR_object):
+
     print("FeatureConstruction")
     startTime = time.time()
-    Data = pd.read_pickle(os.path.join(DT_Setup_object.PathToPickles, "ThePickle_from_PeriodSelection" + '.pickle'))
-    Data_AllSamples = pd.read_pickle(os.path.join(DT_Setup_object.PathToPickles, "ThePickle_from_Preprocessing" + '.pickle'))
+
+    Data = DT_RR_object.df_period_selection_data
+    Data_AllSamples = DT_RR_object.df_preprocessing_data
 
     Datas = [Data]  # also for not making e.g. featurelagcreate create lags of differences; Data needs to be in for the case no feature construction is done
     if DT_Setup_object.Cross_auto_cloud_correlation_plotting == True:

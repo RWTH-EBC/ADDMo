@@ -94,8 +94,8 @@ def main(DT_Setup_object, DT_RR_object):
     print("Preprocessing")
     startTime = time.time()
 
-    # read dataframe from pickle
-    Data = pd.read_pickle(os.path.join(DT_Setup_object.PathToPickles, "ThePickle_from_ImportData" + '.pickle'))
+    # read import dataframe from DTRR object
+    Data = DT_RR_object.df_import_data
 
     # Execute functions if selected
     if True:

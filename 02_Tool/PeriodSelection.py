@@ -31,8 +31,8 @@ def main(DT_Setup_object, DT_RR_object):
     print("PeriodSelection")
     startTime = time.time()
 
-    dataScaled = pd.read_pickle(os.path.join(DT_Setup_object.PathToPickles, "ThePickle_from_Preprocessing" + '.pickle'))
-    dataRaw = pd.read_pickle(os.path.join(DT_Setup_object.PathToPickles, "ThePickle_from_ImportData" + '.pickle'))
+    dataScaled = DT_Setup_object.df_preprocessing_data
+    dataRaw = DT_Setup_object.df_import_data
 
     if DT_Setup_object.TimeSeriesPlot == True:
         if os.path.isfile(os.path.join(DT_Setup_object.ResultsFolder,"ScalerTracker.save")):  # check if a scaler is used, if a scaler is used the file "ScalerTracker" was created

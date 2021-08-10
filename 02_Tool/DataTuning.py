@@ -71,8 +71,10 @@ def main(DT_Setup_object):
 
     # Storing object data
     DT_Setup_object.dump_object()
-    DT_RR_object.store_results()
+    DT_RR_object.store_results(DT_Setup_object)
 
+    # Documentation
+    DT_Setup_object.documentation_DataTuning(timestart, timeend)
 
     print("Tuning the data took: %s seconds" % (timeend - timestart))
     print("End data tuning: %s/%s" % (DT_Setup_object.NameOfData, DT_Setup_object.NameOfExperiment))

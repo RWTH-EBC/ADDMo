@@ -243,13 +243,13 @@ class DataTuningSetup:
         rf = RandomForestRegressor(max_depth=10e17, random_state=0)
 
         self.EstimatorEmbedded = rf
+        self.RecursiveFeatureSelection = False
         self.N_feature_to_select_RFE = 18
         self.CV_DT = TimeSeriesSplit(n_splits=3)
+        self.EmbeddedFeatureSelectionThreshold = False
         self.Threshold_embedded = "median"
 
-        self.EmbeddedFeatureSelectionThreshold = False
         self.WrapperRecursiveFeatureSelection = False
-        self.RecursiveFeatureSelection = False
 
     def dump_object(self):
         print("Saving Data Tuning Setup class Object as a pickle in path: '%s'" % os.path.join(self.ResultsFolder,
@@ -260,10 +260,10 @@ class DataTuningSetup:
     def documentation_DataTuning(self, timestart, timeend):
 
         print("Documentation")
-        # dump the name of signal in the resultsfolder, so that i can always be pulled whenever you want to come back to that specific "Final Input Data"
+        # dump the name of signal in the resultsfolder, so that you can always be pulled whenever you want to come back to that specific "Final Input Data"
         joblib.dump(self.NameOfSignal, os.path.join(self.ResultsFolder, "NameOfSignal.save"))
 
-        ######saving the methodology of creating FinalInputData in the ExcelFile "Settings"#####################################
+        # saving the methodology of creating FinalInputData in the ExcelFile "Settings"
         DfMethodology = pd.DataFrame(index=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
                                      columns=["GlobalVariables", "ImportData", "Preprocessing", "PeriodSelection",
                                               "FeatureConstruction", "FeatureSelection"])

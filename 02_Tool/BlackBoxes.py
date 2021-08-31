@@ -33,7 +33,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 ########################################################################################################################
 #Hyperparameter Tuning Information:
 #Define a Train/Test area where Crossvalidation shall be performed, define also a predict area
-#where an additional prediction is evaluated with the in the Train/Test area found hyperparameters and training wheights.
+#where an additional prediction is evaluated within the Train/Test area found hyperparameters and training weights.
 #The model with the tuned hyperparameter is after all trained on the whole Train/Test data set.
 
 #See below each function a example for how to pull which result from the function (A dictionary is used as return value)
@@ -234,7 +234,8 @@ def rf_predictor(Features_train, Signal_train, Features_test, Signal_test, Hyper
     timestart = time.time()
 
     Signal_test = Signal_test.values.ravel()
-    #Features_test = Features_test.values.ravel() #this one not in order to have recursive still working fine
+    #Features_test = RandomForestRegressor
+    #Features_test.values.ravel() #this one not in order to have recursive still working fine
     Signal_train = Signal_train.values.ravel()
     Features_train = Features_train.values
 
@@ -756,7 +757,7 @@ class indiv_model():
                 }
 
 class indiv_model_onlypredict():
-    'Loads a beforehand safed (individual) model and does a prediction'
+    'Loads a beforehand saved (individual) model and does a prediction'
     def __init__(self, indiv_splitter_instance, Features_test, ResultsFolderSubTest, NameOfPredictor, Recursive):
         self.indiv_splitter_instance = indiv_splitter_instance
         self.Features_test = Features_test

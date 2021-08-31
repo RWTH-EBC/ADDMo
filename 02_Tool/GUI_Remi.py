@@ -6,11 +6,13 @@ from sklearn.feature_selection import mutual_info_regression, f_regression
 import DataTuning
 import ModelTuning
 import SharedVariables as SV
-from SharedVariables import Hyperparametergrids, WrapperModels
+
 import numpy as np
 from multiprocessing import Process
 from sklearn.model_selection import KFold, TimeSeriesSplit
 from DataTuningSetup import DataTuningSetup
+from ModelTuningSetup import ModelTuningSetup
+
 print("Import in GUI_Remi.py done")
 
 
@@ -844,87 +846,102 @@ temperature as signal. """)
         """
 
     # executive functions
-    #Final Bayes
+    # Final Bayes
     def compute_FB(self, widget):
+        DT_Setup_Object_AFB = DataTuningSetup()
+        MT_Setup_Object_AFB = ModelTuningSetup()
+
         def saveCallbackFB(OwnlagType):
             'save entries in the "SharedVariables.py" file which will be loaded from the executive scripts "DataTuning" and "ModelTuning"'
             # Values DataTuning
-            SV.FixImport = False
-            SV.EstimatorWrapper = rf_predictor
-            SV.MinIncrease = 0.005
-            SV.Resample = False
-            SV.InitManFeatureSelect = False
-            SV.StandardScaling = False
-            SV.RobustScaling = True
-            SV.NoScaling = False
-            SV.TimeSeriesPlot = False
-            SV.ManSelect = False
-            SV.Cross_auto_cloud_correlation_plotting = False
-            SV.DifferenceCreate = self.checkbox_Difference.get_value()
-            SV.FeaturesDifference = True
-            SV.ManFeaturelagCreate = False
-            SV.AutoFeaturelagCreate = self.checkbox_FeatureLag.get_value()
-            if SV.AutoFeaturelagCreate == True:
-                SV.MinFeatureLag = int(self.dialog_featurelag.get_field('minFeatureLag').get_value())
-                SV.MaxFeatureLag = int(self.dialog_featurelag.get_field('maxFeatureLag').get_value())
-            SV.ManFeatureSelect = False
-            SV.LowVarianceFilter = False
-            SV.ICA = False
-            SV.UnivariateFilter = False
+            DT_Setup_Object_AFB.FixImport = False
+            DT_Setup_Object_AFB.EstimatorWrapper = rf_predictor
+            DT_Setup_Object_AFB.MinIncrease = 0.005
+            DT_Setup_Object_AFB.Resample = False
+            DT_Setup_Object_AFB.InitManFeatureSelect = False
+            DT_Setup_Object_AFB.StandardScaling = False
+            DT_Setup_Object_AFB.RobustScaling = True
+            DT_Setup_Object_AFB.NoScaling = False
+            DT_Setup_Object_AFB.TimeSeriesPlot = False
+            DT_Setup_Object_AFB.ManSelect = False
+            DT_Setup_Object_AFB.Cross_auto_cloud_correlation_plotting = False
+            DT_Setup_Object_AFB.DifferenceCreate = self.checkbox_Difference.get_value()
+            DT_Setup_Object_AFB.FeaturesDifference = True
+            DT_Setup_Object_AFB.ManFeaturelagCreate = False
+            DT_Setup_Object_AFB.AutoFeaturelagCreate = self.checkbox_FeatureLag.get_value()
+            if DT_Setup_Object_AFB.AutoFeaturelagCreate == True:
+                DT_Setup_Object_AFB.MinFeatureLag = int(self.dialog_featurelag.get_field('minFeatureLag').get_value())
+                DT_Setup_Object_AFB.MaxFeatureLag = int(self.dialog_featurelag.get_field('maxFeatureLag').get_value())
+            DT_Setup_Object_AFB.ManFeatureSelect = False
+            DT_Setup_Object_AFB.LowVarianceFilter = False
+            DT_Setup_Object_AFB.ICA = False
+            DT_Setup_Object_AFB.UnivariateFilter = False
             rf = RandomForestRegressor(max_depth=10e17, random_state=0)
-            SV.EstimatorEmbedded = rf
-            SV.EmbeddedFeatureSelectionThreshold = False
-            SV.RecursiveFeatureSelection = False
-            SV.WrapperRecursiveFeatureSelection = False
+            DT_Setup_Object_AFB.EstimatorEmbedded = rf
+            DT_Setup_Object_AFB.EmbeddedFeatureSelectionThreshold = False
+            DT_Setup_Object_AFB.RecursiveFeatureSelection = False
+            DT_Setup_Object_AFB.WrapperRecursiveFeatureSelection = False
 
             # Values ModelTuning
-            SV.NameOfSubTest = self.txt_NameOfSubTest.get_value()
-            SV.StartTraining = self.txt_StartDateTraining.get_value()
-            SV.EndTraining = self.txt_EndDateTraining.get_value()
-            SV.StartTesting = self.txt_StartDateTesting.get_value()
-            SV.EndTesting = self.txt_EndDateTesting.get_value()
-            SV.GlobalMaxEval_HyParaTuning = int(self.txt_HyperBayesEval.get_value())
-            SV.GlobalCV_MT = 3
-            SV.GlobalShuffle = False
-            SV.MaxEval_Bayes = int(self.txt_FinalBayesEval.get_value())
-            SV.Model_Bayes = "Baye"
-            SV.EstimatorEmbedded_FinalBaye = RandomForestRegressor(max_depth=10e17, random_state=0)
+            MT_Setup_Object_AFB.NameOfSubTest = self.txt_NameOfSubTest.get_value()
+            MT_Setup_Object_AFB.StartTraining = self.txt_StartDateTraining.get_value()
+            MT_Setup_Object_AFB.EndTraining = self.txt_EndDateTraining.get_value()
+            MT_Setup_Object_AFB.StartTesting = self.txt_StartDateTesting.get_value()
+            MT_Setup_Object_AFB.EndTesting = self.txt_EndDateTesting.get_value()
+            MT_Setup_Object_AFB.GlobalMaxEval_HyParaTuning = int(self.txt_HyperBayesEval.get_value())
+            MT_Setup_Object_AFB.GlobalCV_MT = 3
+            MT_Setup_Object_AFB.GlobalShuffle = False
+            MT_Setup_Object_AFB.MaxEval_Bayes = int(self.txt_FinalBayesEval.get_value())
+            MT_Setup_Object_AFB.Model_Bayes = "Baye"
+            MT_Setup_Object_AFB.EstimatorEmbedded_FinalBaye = RandomForestRegressor(max_depth=10e17, random_state=0)
 
             # Overall variables
-            SV.NameOfData = self.NameOfDataFB.get_value()
-            SV.ColumnOfSignal = int(self.txt_ColumnOfSignal.get_value())
+            DT_Setup_Object_AFB.NameOfData = self.NameOfDataFB.get_value()
+            DT_Setup_Object_AFB.ColumnOfSignal = int(self.txt_ColumnOfSignal.get_value())
 
             if OwnlagType == "NoOL":
-                SV.NameOfExperiment = "NoOL"
-                SV.WrapperParams = [None, None, None, False]
-                SV.ManOwnlagCreate = False
-                SV.AutomaticTimeSeriesOwnlagConstruct = False
-                SV.GlobalRecu = False
+                DT_Setup_Object_AFB.NameOfExperiment = "NoOL"
+                DT_Setup_Object_AFB.WrapperParams = [None, None, None, False]
+                DT_Setup_Object_AFB.ManOwnlagCreate = False
+                DT_Setup_Object_AFB.AutomaticTimeSeriesOwnlagConstruct = False
+                MT_Setup_Object_AFB.GlobalRecu = False
             if OwnlagType == "TSOL":
-                SV.NameOfExperiment = "TSOL"
-                SV.WrapperParams = [None, None, None, True]
-                SV.ManOwnlagCreate = False
-                SV.AutomaticTimeSeriesOwnlagConstruct = True
-                SV.GlobalRecu = True
+                DT_Setup_Object_AFB.NameOfExperiment = "TSOL"
+                DT_Setup_Object_AFB.WrapperParams = [None, None, None, True]
+                DT_Setup_Object_AFB.ManOwnlagCreate = False
+                DT_Setup_Object_AFB.AutomaticTimeSeriesOwnlagConstruct = True
+                MT_Setup_Object_AFB.GlobalRecu = True
             if OwnlagType == "InertiaOL":
-                SV.NameOfExperiment = "InertiaOL"
-                SV.WrapperParams = [None, None, None, True]
-                SV.ManOwnlagCreate = True
-                SV.OwnLag = [1]
-                SV.AutomaticTimeSeriesOwnlagConstruct = False
-                SV.GlobalRecu = True
+                DT_Setup_Object_AFB.NameOfExperiment = "InertiaOL"
+                DT_Setup_Object_AFB.WrapperParams = [None, None, None, True]
+                DT_Setup_Object_AFB.ManOwnlagCreate = True
+                DT_Setup_Object_AFB.OwnLag = [1]
+                DT_Setup_Object_AFB.AutomaticTimeSeriesOwnlagConstruct = False
+                MT_Setup_Object_AFB.GlobalRecu = True
             if OwnlagType == "PeriodOL":
-                SV.NameOfExperiment = "PeriodOL"
-                SV.WrapperParams = [None, None, None, True]
-                SV.ManOwnlagCreate = True
-                SV.OwnLag = [int(self.dialog_periodOL.get_field('periodOL').get_value())]
-                SV.AutomaticTimeSeriesOwnlagConstruct = False
-                SV.GlobalRecu = True
+                DT_Setup_Object_AFB.NameOfExperiment = "PeriodOL"
+                DT_Setup_Object_AFB.WrapperParams = [None, None, None, True]
+                DT_Setup_Object_AFB.ManOwnlagCreate = True
+                DT_Setup_Object_AFB.OwnLag = [int(self.dialog_periodOL.get_field('periodOL').get_value())]
+                DT_Setup_Object_AFB.AutomaticTimeSeriesOwnlagConstruct = False
+                MT_Setup_Object_AFB.GlobalRecu = True
 
         def exec():
             'executes the two executive scripts'
-            DataTuning.main()
-            ModelTuning.main_FinalBayes()
+            DataTuning.main(DT_Setup_Object_AFB)
+
+            # Copying Global Variables set in Data Tuning to the Model Tuning Setup Object using Data Tuning Setup Object
+
+            MT_Setup_Object_AFB.NameOfData = DT_Setup_Object_AFB.NameOfData
+            MT_Setup_Object_AFB.NameOfExperiment = DT_Setup_Object_AFB.NameOfExperiment
+            MT_Setup_Object_AFB.NameOfSignal = DT_Setup_Object_AFB.NameOfSignal
+            MT_Setup_Object_AFB.RootDir = DT_Setup_Object_AFB.RootDir
+            MT_Setup_Object_AFB.PathToData = DT_Setup_Object_AFB.PathToData
+            MT_Setup_Object_AFB.ResultsFolder = DT_Setup_Object_AFB.ResultsFolder
+            MT_Setup_Object_AFB.PathToPickles = DT_Setup_Object_AFB.PathToPickles
+            MT_Setup_Object_AFB.ColumnOfSignal = DT_Setup_Object_AFB.ColumnOfSignal
+
+            ModelTuning.main_FinalBayes(MT_Setup_Object_AFB)
 
         def save_and_execute(OwnlagType):
             saveCallbackFB(OwnlagType=OwnlagType)
@@ -954,137 +971,147 @@ temperature as signal. """)
             p3.join()
             p4.join()'''  # Todo: Multiprocessing was tried. But it seems that there is a problem with launching multiple processes from a GUI
 
-    #Data Tuning
+    # Data Tuning
     def compute_DT(self, widget):
-        DT_Setup_object = DataTuningSetup()  # creating Data Tuning Setup object
+        DT_Setup_Object = DataTuningSetup()  # creating Data Tuning Setup object
+
         def saveCallbackDT():
             'save entries in the "SharedVariables.py" file which will be loaded from the executive scripts "DataTuning"'
             'new def: save entries in the DT_Setup class object will be passed to executive scripts in "DataTuning"'
             # Values DataTuning
 
-
             # General variables
-            DT_Setup_object.FixImport = False
-            DT_Setup_object.NameOfData = self.NameOfDataDT.get_value()
-            DT_Setup_object.NameOfExperiment = self.NameOfExperimentDT.get_value()
-            DT_Setup_object.ColumnOfSignal = int(self.ColumnOfSignalDT.get_value())
+            DT_Setup_Object.FixImport = False
+            DT_Setup_Object.NameOfData = self.NameOfDataDT.get_value()
+            DT_Setup_Object.NameOfExperiment = self.NameOfExperimentDT.get_value()
+            DT_Setup_Object.ColumnOfSignal = int(self.ColumnOfSignalDT.get_value())
 
             # Preprocessing
-            DT_Setup_object.NaNDealing = self.NaNDealing.get_key()
-            DT_Setup_object.Resample = self.ResampleDT.get_value()
-            if DT_Setup_object.Resample == True:
-                DT_Setup_object.Resolution = self.ResolutionDT.get_value()
+            DT_Setup_Object.NaNDealing = self.NaNDealing.get_key()
+            DT_Setup_Object.Resample = self.ResampleDT.get_value()
+            if DT_Setup_Object.Resample == True:
+                DT_Setup_Object.Resolution = self.ResolutionDT.get_value()
                 operatordic = {"mean": np.mean, "sum": np.sum, "median": np.median}  # define the operators here
-                DT_Setup_object.WayOfResampling = convert_string_to_list(self.WayOfResamplingDT.get_value(), operatordic)
-            DT_Setup_object.InitManFeatureSelect = self.InitManFeatureSelectDT.get_value()
-            if DT_Setup_object.InitManFeatureSelect == True:
-                DT_Setup_object.InitFeatures = convert_string_to_list(self.InitFeatures.get_text(), int)
+                DT_Setup_Object.WayOfResampling = convert_string_to_list(self.WayOfResamplingDT.get_value(),
+                                                                         operatordic)
+            DT_Setup_Object.InitManFeatureSelect = self.InitManFeatureSelectDT.get_value()
+            if DT_Setup_Object.InitManFeatureSelect == True:
+                DT_Setup_Object.InitFeatures = convert_string_to_list(self.InitFeatures.get_text(), int)
 
             def scalerconvert(key):
-                DT_Setup_object.StandardScaling = False  # set all false
-                DT_Setup_object.RobustScaling = False
-                DT_Setup_object.NoScaling = False
+                DT_Setup_Object.StandardScaling = False  # set all false
+                DT_Setup_Object.RobustScaling = False
+                DT_Setup_Object.NoScaling = False
                 if "Standard" == key:
-                    DT_Setup_object.StandardScaling = True
+                    DT_Setup_Object.StandardScaling = True
                 if "Robust" == key:
-                    DT_Setup_object.RobustScaling = True
+                    DT_Setup_Object.RobustScaling = True
                 if "No" == key:
-                    DT_Setup_object.NoScaling = True
+                    DT_Setup_Object.NoScaling = True
 
             scalerconvert(self.Scaler.get_key())
             # Period selection
-            DT_Setup_object.TimeSeriesPlot = self.TimeSeriesPlotDT.get_value()
-            DT_Setup_object.ManSelect = self.ManPeriodSelectionDT.get_value()
-            if DT_Setup_object.ManSelect == True:
-                DT_Setup_object.StartDate = self.StartDateDT.get_value()
-                DT_Setup_object.EndDate = self.EndDateDT.get_value()
+            DT_Setup_Object.TimeSeriesPlot = self.TimeSeriesPlotDT.get_value()
+            DT_Setup_Object.ManSelect = self.ManPeriodSelectionDT.get_value()
+            if DT_Setup_Object.ManSelect == True:
+                DT_Setup_Object.StartDate = self.StartDateDT.get_value()
+                DT_Setup_Object.EndDate = self.EndDateDT.get_value()
             # Feature construction
-            DT_Setup_object.Cross_auto_cloud_correlation_plotting = self.CrossAutoPlotDT.get_value()
-            if DT_Setup_object.Cross_auto_cloud_correlation_plotting == True:
-                DT_Setup_object.LagsToBePlotted = int(self.CrossAutoPlotLagsDT.get_value())
-            DT_Setup_object.DifferenceCreate = self.DifferenceDT.get_value()
-            if DT_Setup_object.DifferenceCreate == True:
-                DT_Setup_object.FeaturesDifference = self.FeaturesDifferenceAllDT.get_value()
-                if DT_Setup_object.FeaturesDifference != True:
-                    DT_Setup_object.FeaturesDifference = convert_string_to_list(self.FeaturesDifferenceDT.get_value(), int)
-            DT_Setup_object.ManOwnlagCreate = self.ManOwnLagDT.get_value()
-            if DT_Setup_object.ManOwnlagCreate == True:
-                DT_Setup_object.OwnLag = convert_string_to_list(self.OwnLagsDT.get_value(), int)
-            DT_Setup_object.AutomaticTimeSeriesOwnlagConstruct = self.AutoOwnLagDT.get_value()
-            DT_Setup_object.ManFeaturelagCreate = self.ManFeatureLagDT.get_value()
-            if DT_Setup_object.ManFeaturelagCreate == True:
+            DT_Setup_Object.Cross_auto_cloud_correlation_plotting = self.CrossAutoPlotDT.get_value()
+            if DT_Setup_Object.Cross_auto_cloud_correlation_plotting == True:
+                DT_Setup_Object.LagsToBePlotted = int(self.CrossAutoPlotLagsDT.get_value())
+            DT_Setup_Object.DifferenceCreate = self.DifferenceDT.get_value()
+            if DT_Setup_Object.DifferenceCreate == True:
+                DT_Setup_Object.FeaturesDifference = self.FeaturesDifferenceAllDT.get_value()
+                if DT_Setup_Object.FeaturesDifference != True:
+                    DT_Setup_Object.FeaturesDifference = convert_string_to_list(self.FeaturesDifferenceDT.get_value(),
+                                                                                int)
+            DT_Setup_Object.ManOwnlagCreate = self.ManOwnLagDT.get_value()
+            if DT_Setup_Object.ManOwnlagCreate == True:
+                DT_Setup_Object.OwnLag = convert_string_to_list(self.OwnLagsDT.get_value(), int)
+            DT_Setup_Object.AutomaticTimeSeriesOwnlagConstruct = self.AutoOwnLagDT.get_value()
+            DT_Setup_Object.ManFeaturelagCreate = self.ManFeatureLagDT.get_value()
+            if DT_Setup_Object.ManFeaturelagCreate == True:
                 ListOfLists = []
                 ListOfStrings = convert_string_to_list(self.ManFeatureLagFeaturesDT.get_value(), str, ";")
                 for x in ListOfStrings:
                     ListPerFeature = convert_string_to_list(x, int)
                     ListOfLists.append(ListPerFeature)
-                DT_Setup_object.FeatureLag = ListOfLists
-            DT_Setup_object.AutoFeaturelagCreate = self.AutoFeatureLagDT.get_value()
-            if DT_Setup_object.AutoFeaturelagCreate == True:
-                DT_Setup_object.MinFeatureLag = int(self.MinFeatureLagDT.get_value())
-                DT_Setup_object.MaxFeatureLag = int(self.MaxFeatureLagDT.get_value())
+                DT_Setup_Object.FeatureLag = ListOfLists
+            DT_Setup_Object.AutoFeaturelagCreate = self.AutoFeatureLagDT.get_value()
+            if DT_Setup_Object.AutoFeaturelagCreate == True:
+                DT_Setup_Object.MinFeatureLag = int(self.MinFeatureLagDT.get_value())
+                DT_Setup_Object.MaxFeatureLag = int(self.MaxFeatureLagDT.get_value())
 
             # Todo: überlegen was ich mit wrapper model und embedded model mache (rf einfach festsetzen?)
-            DT_Setup_object.ManFeatureSelect = self.ManFeatureSelectDT.get_value()
-            if DT_Setup_object.ManFeatureSelect == True:
-                DT_Setup_object.FeatureSelect = convert_string_to_list(self.ManFeatureSelectFeaturesDT.get_value(), int)
-            DT_Setup_object.LowVarianceFilter = self.LowVarFilterDT.get_value()
-            if DT_Setup_object.LowVarianceFilter == True:
-                DT_Setup_object.Threshold_LowVarianceFilter = float(self.VarianceDT.get_value())
-            DT_Setup_object.ICA = self.ICADT.get_value()
-            DT_Setup_object.UnivariateFilter = self.UnivariateFilterDT.get_value()
-            if DT_Setup_object.UnivariateFilter == True:
-                DT_Setup_object.Score_func = self.UniFilterScorFuncDT.get_key()
-                DT_Setup_object.SearchMode = self.UniFilterSearchStratDT.get_key()
-                DT_Setup_object.Param_univariate_filter = float(
+            DT_Setup_Object.ManFeatureSelect = self.ManFeatureSelectDT.get_value()
+            if DT_Setup_Object.ManFeatureSelect == True:
+                DT_Setup_Object.FeatureSelect = convert_string_to_list(self.ManFeatureSelectFeaturesDT.get_value(), int)
+            DT_Setup_Object.LowVarianceFilter = self.LowVarFilterDT.get_value()
+            if DT_Setup_Object.LowVarianceFilter == True:
+                DT_Setup_Object.Threshold_LowVarianceFilter = float(self.VarianceDT.get_value())
+            DT_Setup_Object.ICA = self.ICADT.get_value()
+            DT_Setup_Object.UnivariateFilter = self.UnivariateFilterDT.get_value()
+            if DT_Setup_Object.UnivariateFilter == True:
+                DT_Setup_Object.Score_func = self.UniFilterScorFuncDT.get_key()
+                DT_Setup_Object.SearchMode = self.UniFilterSearchStratDT.get_key()
+                DT_Setup_Object.Param_univariate_filter = float(
                     self.UniFilterParamDT.get_value())  # Todo: review if float works with number of features which is int
-            DT_Setup_object.EmbeddedFeatureSelectionThreshold = self.UnivariateEmbeddedDT.get_value()
-            if DT_Setup_object.EmbeddedFeatureSelectionThreshold == True:
-                DT_Setup_object.Threshold_embedded = float(self.Threshold_embeddedDT.get_value())
-            DT_Setup_object.RecursiveFeatureSelection = self.MultivariateEmbeddedDT.get_value()
-            if DT_Setup_object.RecursiveFeatureSelection == True:
-                DT_Setup_object.N_feature_to_select_RFE = self.FeaturesRFEDT.get_value()
-                if DT_Setup_object.N_feature_to_select_RFE != "automatic":
-                    DT_Setup_object.N_feature_to_select_RFE = int(self.FeaturesRFEDT.get_value())
+            DT_Setup_Object.EmbeddedFeatureSelectionThreshold = self.UnivariateEmbeddedDT.get_value()
+            if DT_Setup_Object.EmbeddedFeatureSelectionThreshold == True:
+                DT_Setup_Object.Threshold_embedded = float(self.Threshold_embeddedDT.get_value())
+            DT_Setup_Object.RecursiveFeatureSelection = self.MultivariateEmbeddedDT.get_value()
+            if DT_Setup_Object.RecursiveFeatureSelection == True:
+                DT_Setup_Object.N_feature_to_select_RFE = self.FeaturesRFEDT.get_value()
+                if DT_Setup_Object.N_feature_to_select_RFE != "automatic":
+                    DT_Setup_Object.N_feature_to_select_RFE = int(self.FeaturesRFEDT.get_value())
                 # convert string type keys into functions to be passed to SharedVariables
                 DicCVTypes = {"KFold": KFold, "TimeSeriesSplit": TimeSeriesSplit}
                 for key in DicCVTypes:
                     if key == self.RFE_CV_DT.get_key():
-                        DT_Setup_object.CV_DT = DicCVTypes[key]((int(self.RFE_CVFolds_DT.get_value())))
-            DT_Setup_object.WrapperRecursiveFeatureSelection = self.WrapperRecursiveDT.get_value()
+                        DT_Setup_Object.CV_DT = DicCVTypes[key]((int(self.RFE_CVFolds_DT.get_value())))
+            DT_Setup_Object.WrapperRecursiveFeatureSelection = self.WrapperRecursiveDT.get_value()
 
             # Set RF as model for embedded and wrapper methods
             rf = RandomForestRegressor(max_depth=10e10, random_state=0)
-            DT_Setup_object.EstimatorEmbedded = rf
-            DT_Setup_object.EstimatorWrapper = SV.WrapperModels["RF"]
-            DT_Setup_object.WrapperParams = [Hyperparametergrids["RF"], None, None, False]
-            DT_Setup_object.MinIncrease = 0
+            DT_Setup_Object.EstimatorEmbedded = rf
+            DT_Setup_Object.EstimatorWrapper = SV.WrapperModels["RF"]
+            DT_Setup_Object.WrapperParams = [SV.Hyperparametergrids["RF"], None, None, False]
+            DT_Setup_Object.MinIncrease = 0
 
         self.InfoMT.set_text('Check out the python console!')
         saveCallbackDT()
-        DataTuning.main(DT_Setup_object)
+        DataTuning.main(DT_Setup_Object)
 
     # Model Tuning
     def compute_MT(self, widget):
+        MT_Setup_Object = ModelTuningSetup()  # creating Model Tuning Setup object
+
         def saveCallbackMT():
             'save entries in the "SharedVariables.py" file which will be loaded from the executive script "ModelTuning"'
             # Values ModelTuning
-            SV.NameOfData = self.NameOfDataMT.get_value()
-            SV.NameOfExperiment = self.NameOfExperimentMT.get_value()
-            SV.NameOfSubTest = self.NameOfSubTestMT.get_value()
-            SV.StartTraining = self.StartTrainingMT.get_value()
-            SV.EndTraining = self.EndTrainingMT.get_value()
-            SV.StartTesting = self.StartTestingMT.get_value()
-            SV.EndTesting = self.EndTestingMT.get_value()
-            SV.GlobalMaxEval_HyParaTuning = int(self.HyperBayesEvalMT.get_value())
-            SV.GlobalRecu = self.RecursiveMT.get_value()
-            SV.GlobalShuffle = self.ShuffleMT.get_value()
+            MT_Setup_Object.NameOfData = self.NameOfDataMT.get_value()
+            MT_Setup_Object.NameOfExperiment = self.NameOfExperimentMT.get_value()
+            MT_Setup_Object.NameOfSubTest = self.NameOfSubTestMT.get_value()
+            MT_Setup_Object.StartTraining = self.StartTrainingMT.get_value()
+            MT_Setup_Object.EndTraining = self.EndTrainingMT.get_value()
+            MT_Setup_Object.StartTesting = self.StartTestingMT.get_value()
+            MT_Setup_Object.EndTesting = self.EndTestingMT.get_value()
+            MT_Setup_Object.GlobalMaxEval_HyParaTuning = int(self.HyperBayesEvalMT.get_value())
 
             # convert string type keys into functions to be passed to SharedVariables
             DicCVTypes = {"KFold": KFold, "TimeSeriesSplit": TimeSeriesSplit}
             for key in DicCVTypes:
                 if key == self.CVTypeMT.get_key():
-                    SV.GlobalCV_MT = DicCVTypes[key]((int(self.CVFoldsMT.get_value())))
+                    MT_Setup_Object.GlobalCV_MT = DicCVTypes[key]((int(self.CVFoldsMT.get_value())))
+
+            MT_Setup_Object.GlobalRecu = self.RecursiveMT.get_value()
+            MT_Setup_Object.GlobalShuffle = self.ShuffleMT.get_value()
+
+            MT_Setup_Object.GlobalIndivModel = self.IndivModelMT.get_key()
+            if MT_Setup_Object.GlobalIndivModel == "byfeature":
+                MT_Setup_Object.IndivFeature = self.indivfeature.get_value()
+                MT_Setup_Object.IndivThreshold = float(self.indivfeaturethreshold.get_value())
 
             # convert all ticked checkboxes into an array with the respective model "keys" to be passed to SharedVariables
             Models = []
@@ -1095,34 +1122,37 @@ temperature as signal. """)
             for checkboxes in CheckBoxDic:
                 if checkboxes.get_value() == True:
                     Models.append(CheckBoxDic[checkboxes])
-            SV.OnlyHyPara_Models = Models
-            SV.GlobalIndivModel = self.IndivModelMT.get_key()
-            if SV.GlobalIndivModel == "byfeature":
-                SV.IndivFeature = self.indivfeature.get_value()
-                SV.IndivThreshold = float(self.indivfeaturethreshold.get_value())
+            MT_Setup_Object.OnlyHyPara_Models = Models
 
         self.InfoMT.set_text('Check out the python console!')
         saveCallbackMT()
-        ModelTuning.main_OnlyHyParaOpti()
+        ModelTuning.main_OnlyHyParaOpti(MT_Setup_Object)
 
-    #Predict only
+    # Predict only
     def compute_PO(self, widget):
+        MT_Setup_Object_PO = ModelTuningSetup()
+
         def saveCallbackPO():
-            SV.NameOfData = self.NameOfDataPO.get_value()
-            SV.NameOfExperiment = self.NameOfExperimentPO.get_value()
-            SV.NameOfSubTest = self.NameOfSubTestPO.get_value()
-            SV.NameOfOnlyPredict = self.NameOfOnlyPredictPO.get_value()
-            SV.StartTesting = self.StartTestingPO.get_value()
-            SV.EndTesting = self.EndTestingPO.get_value()
-            SV.OnlyPredictRecursive = self.RecursivePO.get_value()
-            SV.ValidationPeriod = self.ValidationPeriodPO.get_value()
-            if SV.ValidationPeriod == True:
-                SV.StartTest_onlypredict = self.dialog_validationperiod.get_field('StartValidationPeriod').get_value()
-                SV.EndTest_onlypredict = self.dialog_validationperiod.get_field('EndValidationPeriod').get_value()
+            MT_Setup_Object_PO.NameOfData = self.NameOfDataPO.get_value()
+            MT_Setup_Object_PO.NameOfExperiment = self.NameOfExperimentPO.get_value()
+            MT_Setup_Object_PO.NameOfSubTest = self.NameOfSubTestPO.get_value()
+
+            MT_Setup_Object_PO.NameOfOnlyPredict = self.NameOfOnlyPredictPO.get_value()
+
+            MT_Setup_Object_PO.StartTesting = self.StartTestingPO.get_value()
+            MT_Setup_Object_PO.EndTesting = self.EndTestingPO.get_value()
+
+            MT_Setup_Object_PO.OnlyPredictRecursive = self.RecursivePO.get_value()
+            MT_Setup_Object_PO.ValidationPeriod = self.ValidationPeriodPO.get_value()
+            if MT_Setup_Object_PO.ValidationPeriod == True:
+                MT_Setup_Object_PO.StartTest_onlypredict = self.dialog_validationperiod.get_field(
+                    'StartValidationPeriod').get_value()
+                MT_Setup_Object_PO.EndTest_onlypredict = self.dialog_validationperiod.get_field(
+                    'EndValidationPeriod').get_value()
 
         self.InfoPO.set_text('Check out the python console!')
         saveCallbackPO()
-        ModelTuning.main_OnlyPredict()
+        ModelTuning.main_OnlyPredict(MT_Setup_Object_PO)
 
     # dialog executions
     def exec_dialog_periodOL_FB(self, widget, newValue):

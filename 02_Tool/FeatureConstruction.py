@@ -77,9 +77,9 @@ def man_ownlag_create(DT_Setup_object, Data, Data_AllSamples):
 # Automatic creation of difference data through building the delta value of t - (t-1)
 def difference_create(DT_Setup_object, Data):
     if DT_Setup_object.FeaturesDifference == True:  # for all features a derivative series should be constructed
-        (X, Y) = SV.split_signal_and_features(Data)
+        (X, Y) = SV.split_signal_and_features(DT_Setup_object.NameOfSignal, Data)
     else:  # if certain features are selected
-        (X, Y) = SV.split_signal_and_features(Data)
+        (X, Y) = SV.split_signal_and_features(DT_Setup_object.NameOfSignal, Data)
         X = X[X.columns[DT_Setup_object.FeaturesDifference]]  # select only those columns of which a difference shall be created
     for column in X:  # loop through all columns
         DifferenceName = "Delta_" + column  # construct a new name for the difference data
@@ -93,7 +93,7 @@ def difference_create(DT_Setup_object, Data):
 def automatic_timeseries_ownlag_constructor(DT_Setup_object, Data, Data_AllSamples):
     print("Auto timeseries-ownlag constructor START")
     Xauto = Data_AllSamples[DT_Setup_object.NameOfSignal]  # copy of Y to use for shifting
-    (X, Y) = DT_Setup_object.split_signal_and_features(Data)
+    (X, Y) = SV.split_signal_and_features(DT_Setup_object.NameOfSignal, Data)
     X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25)
     Result_dic = DT_Setup_object.EstimatorWrapper(X_train, y_train, X_test, y_test,
                            *DT_Setup_object.WrapperParams)  # score will be done over hold out 0.25 percent of data
@@ -107,7 +107,7 @@ def automatic_timeseries_ownlag_constructor(DT_Setup_object, Data, Data_AllSampl
         DataShift = Xauto.shift(periods=i).fillna(method='bfill')  # shift with the lag to be considered
         Data = pd.concat([Data, DataShift.rename(OwnLagName)], axis=1,
                          join="inner")  # joining the dataframes just for the selected period
-        (X, Y) = SV.split_signal_and_features(Data)
+        (X, Y) = SV.split_signal_and_features(DT_Setup_object.NameOfSignal, Data)
         X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25)
         Result_dic = DT_Setup_object.EstimatorWrapper(X_train, y_train, X_test, y_test,
                                *DT_Setup_object.WrapperParams)  # score will be done over hold out 0.25 percent of data
@@ -121,7 +121,7 @@ def automatic_timeseries_ownlag_constructor(DT_Setup_object, Data, Data_AllSampl
 def auto_featurelag_constructor(DT_Setup_object, Data, Data_AllSamples):
     print("auto featurelag constructor START")
     # wrapper gets default accuracy
-    (X, Y) = SV.split_signal_and_features(Data)
+    (X, Y) = SV.split_signal_and_features(DT_Setup_object.NameOfSignal, Data)
     X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25)
     Result_dic = DT_Setup_object.EstimatorWrapper(X_train, y_train, X_test, y_test, *DT_Setup_object.WrapperParams)  # score will be done over hold out 0.25 percent of data
     Score = Result_dic["score"]  # get the score  #get initial score
@@ -140,7 +140,7 @@ def auto_featurelag_constructor(DT_Setup_object, Data, Data_AllSamples):
                 Data_i = pd.concat([Data_c, DataShift.rename(FeatureLagName)], axis=1,
                                    join="inner")  # joining the dataframes just for the selected period
                 # wrapper gets accuracy with respective feature lag
-                (X_i, Y) = DT_Setup_object.split_signal_and_features(Data_i)
+                (X_i, Y) = SV.split_signal_and_features(DT_Setup_object.NameOfSignal, Data_i)
                 X_train_i, X_test_i, y_train, y_test = train_test_split(X_i, Y, test_size=0.25)
                 Result_dic = DT_Setup_object.EstimatorWrapper(X_train_i, y_train, X_test_i, y_test, *DT_Setup_object.WrapperParams)  # score will be done over hold out 0.25 percent of data
                 Score_2 = Result_dic["score"]  # get the score with the additional featurelag

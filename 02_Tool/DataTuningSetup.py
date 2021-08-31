@@ -5,7 +5,7 @@ from math import log
 
 from BlackBoxes import *
 
-
+import SharedVariables as SV
 
 class DataTuningSetup:
     """
@@ -20,9 +20,11 @@ class DataTuningSetup:
     PathToData = "Empty"  # Path to the file that has the data
     ResultsFolder = "Empty" # Path to the folder where the results will be stored
     PathToPickles = "Empty" # Path to the folder where the pickles will be stored
+    ColumnOfSignal = 1
 
     # -----------------------Wrapper Variables-------------------------------
 
+    <!-- Defined in SharedVariables.py
     Hyperparametergrids = {"ANN":hp.choice("number_of_layers",
                             [
                             {"1layer": scope.int(hp.qloguniform("1.1", log(1), log(1000), 1))},
@@ -34,8 +36,10 @@ class DataTuningSetup:
                            "Lasso":{"alpha": hp.loguniform("alpha", log(1e-10), log(1e6))},
                            "RF":None}
     WrapperModels = {"ANN":ann_bayesian_predictor,"GB":gradientboost_bayesian,"Lasso":lasso_bayesian,"SVR":svr_bayesian_predictor,"RF":rf_predictor}
-    EstimatorWrapper = WrapperModels["RF"]  # state one blackbox model from "BlackBoxes.py", without parenthesis, e.g. <rf_predictor>
-    WrapperParams = [Hyperparametergrids["RF"], None, None, False]  # state the parameters that the model should have . Eg. [None, None, None, False] or [HyperparameterGrid, TimeSeriesSplit(n_splits=3), 30, False]
+    -->
+
+    EstimatorWrapper = SV.WrapperModels["RF"]  # state one blackbox model from "BlackBoxes.py", without parenthesis, e.g. <rf_predictor>
+    WrapperParams = [SV.Hyperparametergrids["RF"], None, None, False]  # state the parameters that the model should have . Eg. [None, None, None, False] or [HyperparameterGrid, TimeSeriesSplit(n_splits=3), 30, False]
 
     # 1st entry = hyperparametergrid
     # 2nd= crossvalidation
@@ -163,32 +167,12 @@ class DataTuningSetup:
         self.PathToData = "Empty"
         self.ResultsFolder = "Empty"
         self.PathToPickles = "Empty"
+        self.ColumnOfSignal = 1
 
         # -----------------------Wrapper Variables-------------------------------
-        Hyperparametergrids = {"ANN": hp.choice("number_of_layers",
-                                            [
-                                                {"1layer": scope.int(hp.qloguniform("1.1", log(1), log(1000), 1))},
-                                                {"2layer": [scope.int(hp.qloguniform("1.2", log(1), log(1000), 1)),scope.int(hp.qloguniform("2.2", log(1), log(1000), 1))]},
-                                                {"3layer": [scope.int(hp.qloguniform("1.3", log(1), log(1000), 1)),scope.int(hp.qloguniform("2.3", log(1), log(1000), 1)),scope.int(hp.qloguniform("3.3", log(1), log(1000), 1))]}
-                                            ]),
 
-                               "SVR": {"C": hp.loguniform("C", log(1e-4), log(1e4)),
-                                       "gamma": hp.loguniform("gamma", log(1e-3), log(1e4)),
-                                       "epsilon": hp.loguniform("epsilon", log(1e-4), log(1))},
-
-                               "GB": {"n_estimators": scope.int(hp.qloguniform("n_estimators", log(1), log(1e3), 1)),
-                                      "max_depth": scope.int(hp.qloguniform("max_depth", log(1), log(100), 1)),
-                                      "learning_rate": hp.loguniform("learning_rate", log(1e-2), log(1)),
-                                      "loss": hp.choice("loss", ["ls", "lad", "huber", "quantile"])},
-
-                               "Lasso": {"alpha": hp.loguniform("alpha", log(1e-10), log(1e6))},
-
-                               "RF": None}
-        WrapperModels = {"ANN": ann_bayesian_predictor, "GB": gradientboost_bayesian, "Lasso": lasso_bayesian,
-                         "SVR": svr_bayesian_predictor, "RF": rf_predictor}
-
-        self.EstimatorWrapper = WrapperModels["RF"]
-        self.WrapperParams = [Hyperparametergrids["RF"], None, None, False]
+        self.EstimatorWrapper = SV.WrapperModels["RF"]
+        self.WrapperParams = [SV.Hyperparametergrids["RF"], None, None, False]
         self.MinIncrease = 0.005
 
         # -----------------------ImportData Variables-------------------------------

@@ -40,7 +40,7 @@ class ModelTuningSetup:
 
     GlobalIndivModel = "hourly"  # "week_weekend"; "hourly"; "No"; "byFeature"
     if GlobalIndivModel == "byFeature":
-        IndivFeature = "schedule[]"  # copy the name of feature here
+        F = "schedule[]"  # copy the name of feature here
         IndivThreshold = 0.5  # state the threshold at which value of that feature the data frame shall be split
 
     # -----------------------Only Predict Variables-------------------------------

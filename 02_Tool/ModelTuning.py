@@ -326,7 +326,7 @@ HyperparameterGridString9 = """{"alpha": hp.loguniform("alpha", log(1e-10), log(
 BB9 = BB(lasso_bayesian, HyperparameterGrid9, str(HyperparameterGridString9))
 
 
-def modelselection(_X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError", IndividualModel="Error",
+def modelselection(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError", IndividualModel="Error",
                    Documentation=False):
     # Trains and tests all (bayesian) models and returns the best of them, also saves it in an txtfile.
     Score_RF = BB3.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
@@ -358,7 +358,7 @@ def modelselection(_X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError",
         __BestModel = "Lasso"
 
     # state best model in txt file
-    f = open(os.path.join(SV.ResultsFolderSubTest, "BestModel.txt"), "w+")
+    f = open(os.path.join(MT_Setup_Object.ResultsFolderSubTest, "BestModel.txt"), "w+")
     f.write("The best model is %s with an accuracy of %s" % (__BestModel, BestScore))
     f.close()
     return BestScore

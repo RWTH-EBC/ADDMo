@@ -329,11 +329,11 @@ BB9 = BB(lasso_bayesian, HyperparameterGrid9, str(HyperparameterGridString9))
 def modelselection(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError", IndividualModel="Error",
                    Documentation=False):
     # Trains and tests all (bayesian) models and returns the best of them, also saves it in an txtfile.
-    Score_RF = BB3.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
-    Score_ANN = BB5.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
-    Score_GB = BB7.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
-    Score_Lasso = BB9.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
-    Score_SVR = BB2.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+    Score_RF = BB3.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+    Score_ANN = BB5.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+    Score_GB = BB7.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+    Score_Lasso = BB9.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+    Score_SVR = BB2.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
 
     Score_list = [0, 1, 2, 3, 4]
     Score_list[0] = Score_SVR
@@ -650,17 +650,17 @@ def Bayes(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
 
 
 # OnlyPredict functions
-def iterative_evaluation(MT_Setup_Object, TestData, Model, horizon,
+def iterative_evaluation(MT_Setup_Object_PO, TestData, Model, horizon,
                          NameOfPredictor):  # horizon= amount of samples to predict in the future
     'Does an special evaluation which iteratively scores a period with the length of horizon in the whole period of TunedData. It returns the list of scores'
     # Todo: think of inserting this "iterative evaluation" to the regular scoring while training and testing(not only for onlypredict)
     n_folds = len(TestData) / horizon  # get how many times the horizon fits into the data
     n_folds = int(n_folds)  # cut of incomplete horizons
     # TunedData.index = range(len(TunedData)) #give them dataframe an counter index
-    (TestData_X, TestData_Y) = SV.split_signal_and_features(MT_Setup_Object.NameOfSignal, TestData)
+    (TestData_X, TestData_Y) = SV.split_signal_and_features(MT_Setup_Object_PO.NameOfSignal, TestData)
 
-    if os.path.isfile(os.path.join(MT_Setup_Object.ResultsFolder, "ScalerTracker.save")):  # if scaler was used
-        ScaleTracker_Signal = joblib.load(os.path.join(MT_Setup_Object.ResultsFolder, "ScalerTracker.save"))  # load used scaler
+    if os.path.isfile(os.path.join(MT_Setup_Object_PO.ResultsFolder, "ScalerTracker.save")):  # if scaler was used
+        ScaleTracker_Signal = joblib.load(os.path.join(MT_Setup_Object_PO.ResultsFolder, "ScalerTracker.save"))  # load used scaler
 
     fold_list = []
     for i in range(n_folds):
@@ -791,7 +791,7 @@ def only_predict(MT_Setup_object_PO, NameOfPredictor, _X_test, _Y_test, Indexer,
         MeanErrorData = Data[MT_Setup_object_PO.StartTest_onlypredict:MT_Setup_object_PO.EndTest_onlypredict]
     else:
         MeanErrorData = Data
-    fold_list = iterative_evaluation(MT_Setup_Object, TestData=MeanErrorData, Model=predict, horizon=horizon,NameOfPredictor=NameOfPredictor)
+    fold_list = iterative_evaluation(MT_Setup_object_PO, TestData=MeanErrorData, Model=predict, horizon=horizon,NameOfPredictor=NameOfPredictor)
 
     mean_score, SD_score, errorlist, errormetric = mean_scoring(fold_list=fold_list, errormetric=r2_score)
     documenation_iterative_evaluation(mean_score, SD_score, errorlist, "R2")

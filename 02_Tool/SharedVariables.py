@@ -10,71 +10,85 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import RobustScaler
 from math import log
 
+GUI_Filename = "Empty"
 
 Hyperparametergrids = {"ANN": hp.choice("number_of_layers",
-                                            [
-                                                {"1layer": scope.int(hp.qloguniform("1.1", log(1), log(1000), 1))},
-                                                {"2layer": [scope.int(hp.qloguniform("1.2", log(1), log(1000), 1)),scope.int(hp.qloguniform("2.2", log(1), log(1000), 1))]},
-                                                {"3layer": [scope.int(hp.qloguniform("1.3", log(1), log(1000), 1)),scope.int(hp.qloguniform("2.3", log(1), log(1000), 1)),scope.int(hp.qloguniform("3.3", log(1), log(1000), 1))]}
-                                            ]),
+                                        [
+                                            {"1layer": scope.int(hp.qloguniform("1.1", log(1), log(1000), 1))},
+                                            {"2layer": [scope.int(hp.qloguniform("1.2", log(1), log(1000), 1)),
+                                                        scope.int(hp.qloguniform("2.2", log(1), log(1000), 1))]},
+                                            {"3layer": [scope.int(hp.qloguniform("1.3", log(1), log(1000), 1)),
+                                                        scope.int(hp.qloguniform("2.3", log(1), log(1000), 1)),
+                                                        scope.int(hp.qloguniform("3.3", log(1), log(1000), 1))]}
+                                        ]),
 
-                               "SVR": {"C": hp.loguniform("C", log(1e-4), log(1e4)),
-                                       "gamma": hp.loguniform("gamma", log(1e-3), log(1e4)),
-                                       "epsilon": hp.loguniform("epsilon", log(1e-4), log(1))},
+                       "SVR": {"C": hp.loguniform("C", log(1e-4), log(1e4)),
+                               "gamma": hp.loguniform("gamma", log(1e-3), log(1e4)),
+                               "epsilon": hp.loguniform("epsilon", log(1e-4), log(1))},
 
-                               "GB": {"n_estimators": scope.int(hp.qloguniform("n_estimators", log(1), log(1e3), 1)),
-                                      "max_depth": scope.int(hp.qloguniform("max_depth", log(1), log(100), 1)),
-                                      "learning_rate": hp.loguniform("learning_rate", log(1e-2), log(1)),
-                                      "loss": hp.choice("loss", ["ls", "lad", "huber", "quantile"])},
+                       "GB": {"n_estimators": scope.int(hp.qloguniform("n_estimators", log(1), log(1e3), 1)),
+                              "max_depth": scope.int(hp.qloguniform("max_depth", log(1), log(100), 1)),
+                              "learning_rate": hp.loguniform("learning_rate", log(1e-2), log(1)),
+                              "loss": hp.choice("loss", ["ls", "lad", "huber", "quantile"])},
 
-                               "Lasso": {"alpha": hp.loguniform("alpha", log(1e-10), log(1e6))},
+                       "Lasso": {"alpha": hp.loguniform("alpha", log(1e-10), log(1e6))},
 
-                               "RF": None}
+                       "RF": None}
 WrapperModels = {"ANN": ann_bayesian_predictor, "GB": gradientboost_bayesian, "Lasso": lasso_bayesian,
-                         "SVR": svr_bayesian_predictor, "RF": rf_predictor}
+                 "SVR": svr_bayesian_predictor, "RF": rf_predictor}
 
-rf = RandomForestRegressor(max_depth=10e17, random_state=0)  #have to be defined so that they return "feature_importance", more implementation have to be developed
+rf = RandomForestRegressor(max_depth=10e17,
+                           random_state=0)  # have to be defined so that they return "feature_importance", more implementation have to be developed
 
-#Some functions used in many modules:
-#get the unit of the meter in question (counted from 0 = first column after index), unit has to be in brackets e.g. [Kwh]
+
+# Some functions used in many modules:
+# get the unit of the meter in question (counted from 0 = first column after index), unit has to be in brackets e.g. [Kwh]
 def get_unit_of_meter(Data, ColumnOfMeter):
     UoM = list(Data)[ColumnOfMeter].split("[")[1].split("]")[0]
     return UoM
 
-#get the name of the respective Meter
+
+# get the name of the respective Meter
 def nameofmeter(Data, ColumnOfMeter):
     Name = list(Data)[ColumnOfMeter]
     return Name
 
-#split signal from feature for the use in an estimator
+
+# split signal from feature for the use in an estimator
 def split_signal_and_features(NameOfSignal, Data):
     X = Data.drop(NameOfSignal, axis=1)
     Y = Data[NameOfSignal]
     return (X, Y)
 
-#merge after an embedded operator modified the datasets
+
+# merge after an embedded operator modified the datasets
 def merge_signal_and_features_embedded(NameOfSignal, X_Data, Y_Data, support, X_Data_transformed):
     columns = X_Data.columns
     rows = X_Data.index
-    labels = [columns[x] for x in support if x>=0] #get the columns which shall be kept by the transformer(the selected features)
-    Features = pd.DataFrame(X_Data_transformed, columns=labels, index=rows) #creates a dataframe reassigning the names of the features as column header and the index as index
-    Signal = pd.DataFrame(Y_Data, columns=[NameOfSignal]) #create dataframe of y
+    labels = [columns[x] for x in support if
+              x >= 0]  # get the columns which shall be kept by the transformer(the selected features)
+    Features = pd.DataFrame(X_Data_transformed, columns=labels,
+                            index=rows)  # creates a dataframe reassigning the names of the features as column header and the index as index
+    Signal = pd.DataFrame(Y_Data, columns=[NameOfSignal])  # create dataframe of y
     Data = pd.concat([Signal, Features], axis=1)
     return Data
 
-#regular merge
+
+# regular merge
 def merge_signal_and_features(NameOfSignal, X_Data, Y_Data, X_Data_transformed):
     columns = X_Data.columns
     rows = X_Data.index
-    Features = pd.DataFrame(X_Data_transformed, columns=columns, index=rows) #creates a dataframe reassigning the names of the features as column header and the index as index
-    Signal = pd.DataFrame(Y_Data, columns=[NameOfSignal]) #create dataframe of y
+    Features = pd.DataFrame(X_Data_transformed, columns=columns,
+                            index=rows)  # creates a dataframe reassigning the names of the features as column header and the index as index
+    Signal = pd.DataFrame(Y_Data, columns=[NameOfSignal])  # create dataframe of y
     Data = pd.concat([Signal, Features], axis=1)
     return Data
 
-#scaling; used if new "unscaled" features were created throughout Feature Construction
+
+# scaling; used if new "unscaled" features were created throughout Feature Construction
 def post_scaler(Data, StandardScaling, RobustScaling):
     # Doing "StandardScaler"
-    try: #works only for dataframes not Series
+    try:  # works only for dataframes not Series
         if StandardScaling == True:
             mapper = DataFrameMapper([(Data.columns, StandardScaler())])  # create the actually used scaler
             Scaled_Data = mapper.fit_transform(Data.copy())  # train it and scale the data
@@ -85,8 +99,8 @@ def post_scaler(Data, StandardScaling, RobustScaling):
             Scaled_Data = mapper.fit_transform(Data.copy())  # train it and scale the data
             Data = pd.DataFrame(Scaled_Data, index=Data.index, columns=Data.columns)
         return Data
-    except: #for data series
-        array=Data.values.reshape(-1, 1)
+    except:  # for data series
+        array = Data.values.reshape(-1, 1)
         if StandardScaling == True:
             mapper = StandardScaler()  # create the actually used scaler
             Scaled_Data = mapper.fit_transform(array)  # train it and scale the data
@@ -94,8 +108,9 @@ def post_scaler(Data, StandardScaling, RobustScaling):
         if RobustScaling == True:
             mapper = RobustScaler()  # create the actually used scaler
             Scaled_Data = mapper.fit_transform(array)  # train it and scale the data
-        Scaled_Data = pd.DataFrame(Scaled_Data,index=Data.index)
+        Scaled_Data = pd.DataFrame(Scaled_Data, index=Data.index)
         return Scaled_Data
+
 
 def reshape(series):
     '''
@@ -108,18 +123,21 @@ def reshape(series):
     '''
 
     if isinstance(series, pd.Series):
-        array = series.values.reshape(-1,1)
+        array = series.values.reshape(-1, 1)
     elif isinstance(series, pd.DataFrame):
-        array = series.values.reshape(-1,1)
+        array = series.values.reshape(-1, 1)
     elif isinstance(series, np.ndarray):
-        array = series.reshape(-1,1)
+        array = series.reshape(-1, 1)
     elif isinstance(series, list):
-        array = np.array(series).reshape(-1,1)
+        array = np.array(series).reshape(-1, 1)
     else:
         print("reshape could not been done, unsupported data type{}".format(type(series)))
 
     return array
 
+
 def del_unsupported_os_characters(str):
-    str =  str.replace("/", "").replace("\\", "").replace(":", "").replace("?", "").replace("*", "").replace("\"", "").replace("<", "").replace(">", "").replace("|", "")
+    str = str.replace("/", "").replace("\\", "").replace(":", "").replace("?", "").replace("*", "").replace("\"",
+                                                                                                            "").replace(
+        "<", "").replace(">", "").replace("|", "")
     return str

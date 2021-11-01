@@ -37,14 +37,14 @@ def manual_train_test_period_select(Data, StartDateTrain, EndDateTrain, StartDat
     return (Data_TrainTest, Data_Test)
 
 
-def visualization_documentation(MT_Setup_Object_PO, NameOfPredictor, Y_Predicted, Y_test, Indexer, Y_train,
+def visualization_documentation(MT_Setup_Object, NameOfPredictor, Y_Predicted, Y_test, Indexer, Y_train,
                                 ComputationTime, Shuffle,
                                 ResultsFolderSubTest, HyperparameterGrid=None, Bestparams=None, CV=3, Max_eval=None,
                                 Recursive=False, IndividualModel=False,
                                 FeatureImportance="Not available"):
-    if os.path.isfile(os.path.join(MT_Setup_Object_PO.ResultsFolder, "ScalerTracker.save")):  # if scaler was used
+    if os.path.isfile(os.path.join(MT_Setup_Object.ResultsFolder, "ScalerTracker.save")):  # if scaler was used
 
-        ScaleTracker_Signal = joblib.load(os.path.join(MT_Setup_Object_PO.ResultsFolder, "ScalerTracker.save"))  # load used scaler
+        ScaleTracker_Signal = joblib.load(os.path.join(MT_Setup_Object.ResultsFolder, "ScalerTracker.save"))  # load used scaler
         # Scale Results back to normal; maybe inside the Blackboxes
         Y_Predicted = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_Predicted))
         Y_test = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_test))
@@ -61,22 +61,22 @@ def visualization_documentation(MT_Setup_Object_PO, NameOfPredictor, Y_Predicted
 
     # Plot Results
     plot_predict_measured(prediction=Y_Predicted, measurement=Y_test, MAE=MAE, R2=R2,
-                          StartDatePredict=MT_Setup_Object_PO.StartTesting,
-                          SavePath=ResultsFolderSubTest, nameOfSignal=MT_Setup_Object_PO.NameOfSignal,
+                          StartDatePredict=MT_Setup_Object.StartTesting,
+                          SavePath=ResultsFolderSubTest, nameOfSignal=MT_Setup_Object.NameOfSignal,
                           BlackBox=NameOfPredictor,
-                          NameOfSubTest=MT_Setup_Object_PO.NameOfSubTest)
+                          NameOfSubTest=MT_Setup_Object.NameOfSubTest)
     plot_Residues(prediction=Y_Predicted, measurement=Y_test, MAE=MAE, R2=R2, SavePath=ResultsFolderSubTest,
-                  nameOfSignal=MT_Setup_Object_PO.NameOfSignal, BlackBox=NameOfPredictor,
-                  NameOfSubTest=MT_Setup_Object_PO.NameOfSubTest)
+                  nameOfSignal=MT_Setup_Object.NameOfSignal, BlackBox=NameOfPredictor,
+                  NameOfSubTest=MT_Setup_Object.NameOfSubTest)
 
     # save summary of setup and evaluation
     dfSummary = pd.DataFrame(index=[0])
     dfSummary['Estimator'] = NameOfPredictor
     if Y_train is not None:  # don´t document this if "onlypredict" is used
-        dfSummary['Start_date_Fit'] = MT_Setup_Object_PO.StartTraining
-        dfSummary['End_date_Fit'] = MT_Setup_Object_PO.EndTraining
-    dfSummary['Start_date_Predict'] = MT_Setup_Object_PO.StartTesting
-    dfSummary['End_date_Predict'] = MT_Setup_Object_PO.EndTesting
+        dfSummary['Start_date_Fit'] = MT_Setup_Object.StartTraining
+        dfSummary['End_date_Fit'] = MT_Setup_Object.EndTraining
+    dfSummary['Start_date_Predict'] = MT_Setup_Object.StartTesting
+    dfSummary['End_date_Predict'] = MT_Setup_Object.EndTesting
     if Y_train is not None:  # don´t document this if "onlypredict" is used
         dfSummary['Total Train Samples'] = len(Y_train.index)
     dfSummary['Test Samples'] = len(Y_test.index)
@@ -91,8 +91,8 @@ def visualization_documentation(MT_Setup_Object_PO, NameOfPredictor, Y_Predicted
     dfSummary["Feature importance"] = str(FeatureImportance)
     dfSummary['Individual model'] = IndividualModel
     if IndividualModel == "byFeature":
-        dfSummary['IndivFeature'] = MT_Setup_Object_PO.IndivFeature
-        dfSummary['IndivThreshold'] = MT_Setup_Object_PO.IndivThreshold
+        dfSummary['IndivFeature'] = MT_Setup_Object.IndivFeature
+        dfSummary['IndivThreshold'] = MT_Setup_Object.IndivThreshold
     dfSummary['Eval_R2'] = R2
     dfSummary['Eval_RMSE'] = RMSE
     dfSummary['Eval_MAPE'] = MAPE
@@ -102,15 +102,15 @@ def visualization_documentation(MT_Setup_Object_PO, NameOfPredictor, Y_Predicted
     dfSummary = dfSummary.T
     # write summary of setup and evaluation in excel File
     SummaryFile = os.path.join(ResultsFolderSubTest,
-                               "Summary_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_Object_PO.NameOfSubTest))
+                               "Summary_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_Object.NameOfSubTest))
     writer = pd.ExcelWriter(SummaryFile)
     dfSummary.to_excel(writer, float_format='%.6f')
     writer.save()
 
     # export prediction to Excel
     SaveFileName_excel = os.path.join(ResultsFolderSubTest,
-                                      "Prediction_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_Object_PO.NameOfSubTest))
-    Y_Predicted.to_frame(name=MT_Setup_Object_PO.NameOfSignal).to_excel(SaveFileName_excel)
+                                      "Prediction_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_Object.NameOfSubTest))
+    Y_Predicted.to_frame(name=MT_Setup_Object.NameOfSignal).to_excel(SaveFileName_excel)
 
     # return Score for modelselection
     return R2
@@ -390,6 +390,7 @@ def embedded__recursive_feature_selection(MT_Setup_Object, _X_train, _Y_train, _
                                                                  Features_transformed_test)
     else:
         selector = RFE(estimator=Estimator, n_features_to_select=N_features_to_select, step=1)
+        print(_X_train,"lol", _Y_train)
         selector = selector.fit(_X_train, _Y_train)
         print("Ranks of all Features %s" % selector.ranking_)
         Features_transformed = selector.transform(_X_train)
@@ -516,9 +517,9 @@ def pre_handling(MT_Setup_object, OnlyPredict):
 
 
 # Final Bayes function
-def Bayes(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
+def Bayes(MT_Setup_Object_AFB, _X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
     # Here the final bayesian optimization is done
-    Model = MT_Setup_Object.Model_Bayes
+    Model = MT_Setup_Object_AFB.Model_Bayes
     Totaltimestart = time.time()
     if Model == "Baye":  # set the bayesian parameter space
         params = {"IndivModel": hp.choice("IndivModel",
@@ -572,10 +573,10 @@ def Bayes(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
 
         EstimatorEmbedded = SV.rf  # rf is a shared variable defined in SharedVariables.py
 
-        (XTr, YTr, XTe, YTe) = embedded__recursive_feature_selection(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test,
+        (XTr, YTr, XTe, YTe) = embedded__recursive_feature_selection(MT_Setup_Object_AFB, _X_train, _Y_train, _X_test, _Y_test,
                                                                      EstimatorEmbedded, params["n_F"],
-                                                                     MT_Setup_Object.GlobalCV_MT)  # create the specific train and test data
-        Score = all_models(MT_Setup_Object, _Model, XTr, YTr, XTe, YTe, Indexer, str(params["IndivModel"]["IndivModel_baye"]), False)
+                                                                     MT_Setup_Object_AFB.GlobalCV_MT)  # create the specific train and test data
+        Score = all_models(MT_Setup_Object_AFB, _Model, XTr, YTr, XTe, YTe, Indexer, str(params["IndivModel"]["IndivModel_baye"]), False)
         t_end = time.time()
         print("Params per iteration: %s \ with the Score score %.3f, took %.2fseconds" % (
         params, Score, (t_end - t_start)))
@@ -588,7 +589,7 @@ def Bayes(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
 
     # do the actual bayesian optimization
     trials = Trials()  # not used at the moment, only for tracking the intrinsic parameters of the bayesian optimization
-    BestParams = fmin(f, params, algo=tpe.suggest, max_evals=MT_Setup_Object.MaxEval_Bayes,
+    BestParams = fmin(f, params, algo=tpe.suggest, max_evals=MT_Setup_Object_AFB.MaxEval_Bayes,
                       trials=trials)  # Do the optimization to find the best settings(parameters)
     print(BestParams)
 
@@ -612,19 +613,19 @@ def Bayes(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
 
     EstimatorEmbedded = SV.rf
 
-    (XTr, YTr, XTe, YTe, BestData) = embedded__recursive_feature_selection(_X_train, _Y_train, _X_test, _Y_test,
+    (XTr, YTr, XTe, YTe, BestData) = embedded__recursive_feature_selection(MT_Setup_Object_AFB, _X_train, _Y_train, _X_test, _Y_test,
                                                                            EstimatorEmbedded, BestParams["n_F"],
-                                                                           MT_Setup_Object.GlobalCV_MT, True)
+                                                                           MT_Setup_Object_AFB.GlobalCV_MT, True)
 
     # Todo: Here you could use higher Max_eval for the last final training with best settings(Add specific max eval hyparatuning to the functions)
-    Score = all_models(MT_Setup_Object, _Model, XTr, YTr, XTe, YTe, Indexer, str(BestParams["IndivModel"]["IndivModel_baye"]), True)
+    Score = all_models(MT_Setup_Object_AFB, _Model, XTr, YTr, XTe, YTe, Indexer, str(BestParams["IndivModel"]["IndivModel_baye"]), True)
 
     # Document the Results and settings of the final bayesian optimization
     Totaltimeend = time.time()
     # save summary of setup and evaluation
     dfSummary = pd.DataFrame(index=[0])
     dfSummary['Chosen Model'] = Model
-    dfSummary['Max evaluations'] = MT_Setup_Object.MaxEval_Bayes
+    dfSummary['Max evaluations'] = MT_Setup_Object_AFB.MaxEval_Bayes
     if Model == "Baye":
         dfSummary['Best Model'] = _Model
     dfSummary['Best individual model type'] = Best_IndivModel
@@ -634,7 +635,7 @@ def Bayes(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
     dfSummary['Computation Time in seconds'] = str((Totaltimeend - Totaltimestart))
     dfSummary = dfSummary.T
     # write summary of setup and evaluation in excel File
-    SummaryFile = os.path.join(MT_Setup_Object.ResultsFolderSubTest, "Summary_FinalBayes_%s.xlsx" % (MT_Setup_Object.NameOfSubTest))
+    SummaryFile = os.path.join(MT_Setup_Object_AFB.ResultsFolderSubTest, "Summary_FinalBayes_%s.xlsx" % (MT_Setup_Object_AFB.NameOfSubTest))
     writer = pd.ExcelWriter(SummaryFile)
     dfSummary.to_excel(writer, float_format='%.6f')
     writer.save()
@@ -642,11 +643,11 @@ def Bayes(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
     # export BestData to Excel
     BestData = Data[list(
         BestData)]  # make sure BestData contains the whole available period(not only the period used for training and prediction)
-    SaveFileName_excel = os.path.join(MT_Setup_Object.ResultsFolderSubTest, "BestData_%s.xlsx" % (MT_Setup_Object.NameOfSubTest))
+    SaveFileName_excel = os.path.join(MT_Setup_Object_AFB.ResultsFolderSubTest, "BestData_%s.xlsx" % (MT_Setup_Object_AFB.NameOfSubTest))
     BestData.to_excel(SaveFileName_excel)
 
     # save dataframe in an pickle
-    BestData.to_pickle(os.path.join(MT_Setup_Object.PathToPickles, "ThePickle_from_%s.pickle" % MT_Setup_Object.NameOfSubTest))
+    BestData.to_pickle(os.path.join(MT_Setup_Object_AFB.PathToPickles, "ThePickle_from_%s.pickle" % MT_Setup_Object_AFB.NameOfSubTest))
 
 
 # OnlyPredict functions
@@ -805,17 +806,17 @@ def only_predict(MT_Setup_object_PO, NameOfPredictor, _X_test, _Y_test, Indexer,
 
 # -----------------------------------------------------------------------------------------------------------------------
 # Executive functions
-def main_FinalBayes(MT_Setup_Object):
+def main_FinalBayes(MT_Setup_Object_AFB):
     # The automatic procedure for model tuning and parts of data tuning
-    print("Start FinalBayesOpt: %s/%s/%s" % (MT_Setup_Object.NameOfData, MT_Setup_Object.NameOfExperiment, MT_Setup_Object.NameOfSubTest))
+    print("Start FinalBayesOpt: %s/%s/%s" % (MT_Setup_Object_AFB.NameOfData, MT_Setup_Object_AFB.NameOfExperiment, MT_Setup_Object_AFB.NameOfSubTest))
 
-    _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = pre_handling(MT_Setup_Object, False)
+    _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = pre_handling(MT_Setup_Object_AFB, False)
 
     # Do the bayesian optimization
-    Bayes(MT_Setup_Object, _X_train=_X_train, _Y_train=_Y_train, _X_test=_X_test, _Y_test=_Y_test, Indexer=Indexer,
+    Bayes(MT_Setup_Object_AFB, _X_train=_X_train, _Y_train=_Y_train, _X_test=_X_test, _Y_test=_Y_test, Indexer=Indexer,
           Data=Data)
 
-    print("Finish FinalBayesOpt: %s/%s/%s" % (MT_Setup_Object.NameOfData, MT_Setup_Object.NameOfExperiment, MT_Setup_Object.NameOfSubTest))
+    print("Finish FinalBayesOpt: %s/%s/%s" % (MT_Setup_Object_AFB.NameOfData, MT_Setup_Object_AFB.NameOfExperiment, MT_Setup_Object_AFB.NameOfSubTest))
     print("________________________________________________________________________\n")
     print("________________________________________________________________________\n")
 

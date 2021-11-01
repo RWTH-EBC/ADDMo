@@ -667,7 +667,7 @@ def iterative_evaluation(MT_Setup_Object_PO, TestData, Model, horizon,
     for i in range(n_folds):
         measured_fold = TestData_Y[(horizon * i):(horizon * (i + 1))]
         Fold = TestData_X[(horizon * i):(horizon * (i + 1))]
-        predicted_fold, Nothing = Model(NameOfPredictor, Fold)  # predict on that fold
+        predicted_fold, Nothing = Model(MT_Setup_Object_PO, NameOfPredictor, Fold)  # predict on that fold
         # rescale
         predicted_fold = ScaleTracker_Signal.inverse_transform(SV.reshape(predicted_fold))
         measured_fold = ScaleTracker_Signal.inverse_transform(SV.reshape(measured_fold))

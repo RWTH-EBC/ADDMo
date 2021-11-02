@@ -241,7 +241,7 @@ def visualization_documentation(MT_Setup_Object, MT_RR_object, NameOfPredictor, 
         MT_RR_object.svr_grid_standard_deviation = STD
         MT_RR_object.svr_grid_computation_time = "%.2f seconds" % ComputationTime
 
-    #MT_RR_object.store_results(MT_Setup_Object)
+    MT_RR_object.store_results(MT_Setup_Object)
     # return Score for modelselection
     return R2
 

@@ -26,6 +26,7 @@ from Functions.PlotFcn import *
 
 import SharedVariables as SV
 from ModelTuningSetup import ModelTuningSetup as MTS
+from ModelTuningRuntimeResults import ModelTuningRuntimeResults as MTRR
 
 print("Start")
 
@@ -37,7 +38,7 @@ def manual_train_test_period_select(Data, StartDateTrain, EndDateTrain, StartDat
     return (Data_TrainTest, Data_Test)
 
 
-def visualization_documentation(MT_Setup_Object, NameOfPredictor, Y_Predicted, Y_test, Indexer, Y_train,
+def visualization_documentation(MT_Setup_Object, MT_RR_object, NameOfPredictor, Y_Predicted, Y_test, Indexer, Y_train,
                                 ComputationTime, Shuffle,
                                 ResultsFolderSubTest, HyperparameterGrid=None, Bestparams=None, CV=3, Max_eval=None,
                                 Recursive=False, IndividualModel=False,
@@ -112,6 +113,135 @@ def visualization_documentation(MT_Setup_Object, NameOfPredictor, Y_Predicted, Y
                                       "Prediction_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_Object.NameOfSubTest))
     Y_Predicted.to_frame(name=MT_Setup_Object.NameOfSignal).to_excel(SaveFileName_excel)
 
+    # save model tuning runtime results in ModelTuningRuntimeResults class object
+
+    if NameOfPredictor == "ann_bayesian_predictor":
+        if Y_train is not None:
+            MT_RR_object.ann_total_train_samples = len(Y_train.index)
+        MT_RR_object.ann_test_samples = len(Y_test.index)
+        if HyperparameterGrid is not None:
+            MT_RR_object.ann_best_hyperparameter = str(Bestparams)
+        MT_RR_object.ann_feature_importance = str(FeatureImportance)
+        MT_RR_object.ann_eval_R2 = R2
+        MT_RR_object.ann_eval_RMSE = RMSE
+        MT_RR_object.ann_eval_MAPE = MAPE
+        MT_RR_object.ann_eval_MAPE = MAE
+        MT_RR_object.ann_standard_deviation = STD
+        MT_RR_object.ann_computation_time = "%.2f seconds" % ComputationTime
+
+    elif NameOfPredictor == "ann_grid_search_predictor":
+        if Y_train is not None:
+            MT_RR_object.ann_grid_total_train_samples = len(Y_train.index)
+        MT_RR_object.ann_grid_test_samples = len(Y_test.index)
+        if HyperparameterGrid is not None:
+            MT_RR_object.ann_grid_best_hyperparameter = str(Bestparams)
+        MT_RR_object.ann_grid_feature_importance = str(FeatureImportance)
+        MT_RR_object.ann_grid_eval_R2 = R2
+        MT_RR_object.ann_grid_eval_RMSE = RMSE
+        MT_RR_object.ann_grid_eval_MAPE = MAPE
+        MT_RR_object.ann_grid_eval_MAPE = MAE
+        MT_RR_object.ann_grid_standard_deviation = STD
+        MT_RR_object.ann_grid_computation_time = "%.2f seconds" % ComputationTime
+
+    elif NameOfPredictor == "gradientboost_bayesian":
+        if Y_train is not None:
+            MT_RR_object.gradient_total_train_samples = len(Y_train.index)
+        MT_RR_object.gradient_test_samples = len(Y_test.index)
+        if HyperparameterGrid is not None:
+            MT_RR_object.gradient_best_hyperparameter = str(Bestparams)
+        MT_RR_object.gradient_feature_importance = str(FeatureImportance)
+        MT_RR_object.gradient_eval_R2 = R2
+        MT_RR_object.gradient_eval_RMSE = RMSE
+        MT_RR_object.gradient_eval_MAPE = MAPE
+        MT_RR_object.gradient_eval_MAPE = MAE
+        MT_RR_object.gradient_standard_deviation = STD
+        MT_RR_object.gradient_computation_time = "%.2f seconds" % ComputationTime
+
+    elif NameOfPredictor == "gradientboost_gridsearch":
+        if Y_train is not None:
+            MT_RR_object.gradient_grid_total_train_samples = len(Y_train.index)
+        MT_RR_object.gradient_grid_test_samples = len(Y_test.index)
+        if HyperparameterGrid is not None:
+            MT_RR_object.gradient_grid_best_hyperparameter = str(Bestparams)
+        MT_RR_object.gradient_grid_feature_importance = str(FeatureImportance)
+        MT_RR_object.gradient_grid_eval_R2 = R2
+        MT_RR_object.gradient_grid_eval_RMSE = RMSE
+        MT_RR_object.gradient_grid_eval_MAPE = MAPE
+        MT_RR_object.gradient_grid_eval_MAPE = MAE
+        MT_RR_object.gradient_grid_standard_deviation = STD
+        MT_RR_object.gradient_grid_computation_time = "%.2f seconds" % ComputationTime
+
+    elif NameOfPredictor == "lasso_bayesian":
+        if Y_train is not None:
+            MT_RR_object.lasso_total_train_samples = len(Y_train.index)
+        MT_RR_object.lasso_test_samples = len(Y_test.index)
+        if HyperparameterGrid is not None:
+            MT_RR_object.lasso_best_hyperparameter = str(Bestparams)
+        MT_RR_object.lasso_feature_importance = str(FeatureImportance)
+        MT_RR_object.lasso_eval_R2 = R2
+        MT_RR_object.lasso_eval_RMSE = RMSE
+        MT_RR_object.lasso_eval_MAPE = MAPE
+        MT_RR_object.lasso_eval_MAPE = MAE
+        MT_RR_object.lasso_standard_deviation = STD
+        MT_RR_object.lasso_computation_time = "%.2f seconds" % ComputationTime
+
+    elif NameOfPredictor == "lasso_grid_search_predictor":
+        if Y_train is not None:
+            MT_RR_object.lasso_grid_total_train_samples = len(Y_train.index)
+        MT_RR_object.lasso_grid_test_samples = len(Y_test.index)
+        if HyperparameterGrid is not None:
+            MT_RR_object.lasso_grid_best_hyperparameter = str(Bestparams)
+        MT_RR_object.lasso_grid_feature_importance = str(FeatureImportance)
+        MT_RR_object.lasso_grid_eval_R2 = R2
+        MT_RR_object.lasso_grid_eval_RMSE = RMSE
+        MT_RR_object.lasso_grid_eval_MAPE = MAPE
+        MT_RR_object.lasso_grid_eval_MAPE = MAE
+        MT_RR_object.lasso_grid_standard_deviation = STD
+        MT_RR_object.lasso_grid_computation_time = "%.2f seconds" % ComputationTime
+
+    elif NameOfPredictor == "rf_predictor":
+        if Y_train is not None:
+            MT_RR_object.rf_total_train_samples = len(Y_train.index)
+        MT_RR_object.rf_test_samples = len(Y_test.index)
+        if HyperparameterGrid is not None:
+            MT_RR_object.rf_best_hyperparameter = str(Bestparams)
+        MT_RR_object.rf_feature_importance = str(FeatureImportance)
+        MT_RR_object.rf_eval_R2 = R2
+        MT_RR_object.rf_eval_RMSE = RMSE
+        MT_RR_object.rf_eval_MAPE = MAPE
+        MT_RR_object.rf_eval_MAPE = MAE
+        MT_RR_object.rf_standard_deviation = STD
+        MT_RR_object.rf_computation_time = "%.2f seconds" % ComputationTime
+
+    elif NameOfPredictor == "svr_bayesian_predictor":
+        if Y_train is not None:
+            MT_RR_object.svr_total_train_samples = len(Y_train.index)
+        MT_RR_object.svr_test_samples = len(Y_test.index)
+        if HyperparameterGrid is not None:
+            MT_RR_object.svr_best_hyperparameter = str(Bestparams)
+        MT_RR_object.svr_feature_importance = str(FeatureImportance)
+        MT_RR_object.svr_eval_R2 = R2
+        MT_RR_object.svr_eval_RMSE = RMSE
+        MT_RR_object.svr_eval_MAPE = MAPE
+        MT_RR_object.svr_eval_MAPE = MAE
+        MT_RR_object.svr_standard_deviation = STD
+        MT_RR_object.svr_computation_time = "%.2f seconds" % ComputationTime
+
+    elif NameOfPredictor == "svr_grid_search_predictor":
+        if Y_train is not None:
+            MT_RR_object.svr_grid_total_train_samples = len(Y_train.index)
+        MT_RR_object.svr_grid_test_samples = len(Y_test.index)
+        if HyperparameterGrid is not None:
+            MT_RR_object.svr_grid_best_hyperparameter = str(Bestparams)
+        MT_RR_object.svr_grid_feature_importance = str(FeatureImportance)
+        MT_RR_object.svr_grid_eval_R2 = R2
+        MT_RR_object.svr_grid_eval_RMSE = RMSE
+        MT_RR_object.svr_grid_eval_MAPE = MAPE
+        MT_RR_object.svr_grid_eval_MAPE = MAE
+        MT_RR_object.svr_grid_standard_deviation = STD
+        MT_RR_object.svr_grid_computation_time = "%.2f seconds" % ComputationTime
+
+    #MT_RR_object.store_results(MT_Setup_Object)
     # return Score for modelselection
     return R2
 
@@ -255,7 +385,8 @@ class BB():
         ComputationTime = Result_dic["ComputationTime"]
         FeatureImportance = Result_dic["feature_importance"]
         if Documentation == True:  # only do documentation if Documentation is wished(Documentation is False from beginning, and only in the end set True)
-            Score = visualization_documentation(MT_Setup_Object, NameOfPredictor, Predicted, _Y_test, Indexer, _Y_train, ComputationTime, MT_Setup_Object.GlobalShuffle,
+            MT_RR_object = MTRR()
+            Score = visualization_documentation(MT_Setup_Object, MT_RR_object, NameOfPredictor, Predicted, _Y_test, Indexer, _Y_train, ComputationTime, MT_Setup_Object.GlobalShuffle,
                                                 MT_Setup_Object.ResultsFolderSubTest,self.HyperparameterGridString, Bestparams, MT_Setup_Object.GlobalCV_MT,
                                                 MT_Setup_Object.GlobalMaxEval_HyParaTuning, MT_Setup_Object.GlobalRecu, IndividualModel, FeatureImportance)
             # only dump if it´s the last best one(marked by Documentation=True)
@@ -746,7 +877,8 @@ def only_predict(MT_Setup_object_PO, NameOfPredictor, _X_test, _Y_test, Indexer,
         return
     timeend = time.time()
     ComputationTime = (timeend - timestart)
-    visualization_documentation(MT_Setup_object_PO, NameOfPredictor, Predicted, _Y_test, Indexer, None, ComputationTime, None,
+    MT_RR_object_PO = MTRR()
+    visualization_documentation(MT_Setup_object_PO, MT_RR_object_PO, NameOfPredictor, Predicted, _Y_test, Indexer, None, ComputationTime, None,
                                 MT_Setup_object_PO.OnlyPredictFolder,
                                 None, None, None, None, MT_Setup_object_PO.OnlyPredictRecursive, IndividualModel,
                                 None)

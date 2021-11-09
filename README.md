@@ -213,6 +213,7 @@ Necessary steps "Predict only":\
 	1.Define the folder from which the trained models (and their respective tuned data) shall be imported\
 	2.Define settings\
 	3.Run
+Note: If you want to use "only predict" upon a new data set, make sure it has the same feature set and is scaled exactly equal to the data set used for training.
 
 
 __Running the scripts directly via the python console:__

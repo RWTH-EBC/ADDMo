@@ -264,7 +264,7 @@ def merge_signal_and_features(X_Data, Y_Data, X_Data_transformed):
     Data = pd.concat([Signal, Features], axis=1)
     return Data
 
-#scaling; used if new "unscaled" features where created throughout Feature Construction
+#scaling; used if new "unscaled" features were created throughout Feature Construction
 def post_scaler(Data, StandardScaling, RobustScaling):
     # Doing "StandardScaler"
     try: #works only for dataframes not Series

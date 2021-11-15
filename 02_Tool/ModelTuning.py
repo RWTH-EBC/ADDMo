@@ -38,14 +38,15 @@ def manual_train_test_period_select(Data, StartDateTrain, EndDateTrain, StartDat
     return (Data_TrainTest, Data_Test)
 
 
-def visualization_documentation(MT_Setup_Object, MT_RR_object, NameOfPredictor, Y_Predicted, Y_test, Indexer, Y_train,
+def visualization_documentation(MT_Setup_Object, MT_RR_object, RR_Model_Summary, NameOfPredictor, Y_Predicted, Y_test, Indexer, Y_train,
                                 ComputationTime, Shuffle,
                                 ResultsFolderSubTest, HyperparameterGrid=None, Bestparams=None, CV=3, Max_eval=None,
-                                Recursive=False, IndividualModel=False,
+                                Recursive=False, IndividualModel="",
                                 FeatureImportance="Not available"):
     if os.path.isfile(os.path.join(MT_Setup_Object.ResultsFolder, "ScalerTracker.save")):  # if scaler was used
 
-        ScaleTracker_Signal = joblib.load(os.path.join(MT_Setup_Object.ResultsFolder, "ScalerTracker.save"))  # load used scaler
+        ScaleTracker_Signal = joblib.load(
+            os.path.join(MT_Setup_Object.ResultsFolder, "ScalerTracker.save"))  # load used scaler
         # Scale Results back to normal; maybe inside the Blackboxes
         Y_Predicted = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_Predicted))
         Y_test = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_test))
@@ -115,140 +116,28 @@ def visualization_documentation(MT_Setup_Object, MT_RR_object, NameOfPredictor, 
 
     # save model tuning runtime results in ModelTuningRuntimeResults class object
 
-    if NameOfPredictor == "ann_bayesian_predictor":
-        if Y_train is not None:
-            MT_RR_object.ann_total_train_samples = len(Y_train.index)
-        MT_RR_object.ann_test_samples = len(Y_test.index)
-        if HyperparameterGrid is not None:
-            MT_RR_object.ann_best_hyperparameter = str(Bestparams)
-        MT_RR_object.ann_feature_importance = str(FeatureImportance)
-        MT_RR_object.ann_eval_R2 = R2
-        MT_RR_object.ann_eval_RMSE = RMSE
-        MT_RR_object.ann_eval_MAPE = MAPE
-        MT_RR_object.ann_eval_MAPE = MAE
-        MT_RR_object.ann_standard_deviation = STD
-        MT_RR_object.ann_computation_time = "%.2f seconds" % ComputationTime
+    RR_Model_Summary.model_name = NameOfPredictor
+    if Y_train is not None:
+        RR_Model_Summary.total_train_samples = len(Y_train.index)
+    RR_Model_Summary.test_samples = len(Y_test.index)
+    if HyperparameterGrid is not None:
+        RR_Model_Summary.best_hyperparameter = str(Bestparams)
+    RR_Model_Summary.feature_importance = str(FeatureImportance)
+    RR_Model_Summary.eval_R2 = R2
+    RR_Model_Summary.eval_RMSE = RMSE
+    RR_Model_Summary.eval_MAPE = MAPE
+    RR_Model_Summary.eval_MAE = MAE
+    RR_Model_Summary.standard_deviation = STD
+    RR_Model_Summary.computation_time = "%.2f seconds" % ComputationTime
 
-    elif NameOfPredictor == "ann_grid_search_predictor":
-        if Y_train is not None:
-            MT_RR_object.ann_grid_total_train_samples = len(Y_train.index)
-        MT_RR_object.ann_grid_test_samples = len(Y_test.index)
-        if HyperparameterGrid is not None:
-            MT_RR_object.ann_grid_best_hyperparameter = str(Bestparams)
-        MT_RR_object.ann_grid_feature_importance = str(FeatureImportance)
-        MT_RR_object.ann_grid_eval_R2 = R2
-        MT_RR_object.ann_grid_eval_RMSE = RMSE
-        MT_RR_object.ann_grid_eval_MAPE = MAPE
-        MT_RR_object.ann_grid_eval_MAPE = MAE
-        MT_RR_object.ann_grid_standard_deviation = STD
-        MT_RR_object.ann_grid_computation_time = "%.2f seconds" % ComputationTime
-
-    elif NameOfPredictor == "gradientboost_bayesian":
-        if Y_train is not None:
-            MT_RR_object.gradient_total_train_samples = len(Y_train.index)
-        MT_RR_object.gradient_test_samples = len(Y_test.index)
-        if HyperparameterGrid is not None:
-            MT_RR_object.gradient_best_hyperparameter = str(Bestparams)
-        MT_RR_object.gradient_feature_importance = str(FeatureImportance)
-        MT_RR_object.gradient_eval_R2 = R2
-        MT_RR_object.gradient_eval_RMSE = RMSE
-        MT_RR_object.gradient_eval_MAPE = MAPE
-        MT_RR_object.gradient_eval_MAPE = MAE
-        MT_RR_object.gradient_standard_deviation = STD
-        MT_RR_object.gradient_computation_time = "%.2f seconds" % ComputationTime
-
-    elif NameOfPredictor == "gradientboost_gridsearch":
-        if Y_train is not None:
-            MT_RR_object.gradient_grid_total_train_samples = len(Y_train.index)
-        MT_RR_object.gradient_grid_test_samples = len(Y_test.index)
-        if HyperparameterGrid is not None:
-            MT_RR_object.gradient_grid_best_hyperparameter = str(Bestparams)
-        MT_RR_object.gradient_grid_feature_importance = str(FeatureImportance)
-        MT_RR_object.gradient_grid_eval_R2 = R2
-        MT_RR_object.gradient_grid_eval_RMSE = RMSE
-        MT_RR_object.gradient_grid_eval_MAPE = MAPE
-        MT_RR_object.gradient_grid_eval_MAPE = MAE
-        MT_RR_object.gradient_grid_standard_deviation = STD
-        MT_RR_object.gradient_grid_computation_time = "%.2f seconds" % ComputationTime
-
-    elif NameOfPredictor == "lasso_bayesian":
-        if Y_train is not None:
-            MT_RR_object.lasso_total_train_samples = len(Y_train.index)
-        MT_RR_object.lasso_test_samples = len(Y_test.index)
-        if HyperparameterGrid is not None:
-            MT_RR_object.lasso_best_hyperparameter = str(Bestparams)
-        MT_RR_object.lasso_feature_importance = str(FeatureImportance)
-        MT_RR_object.lasso_eval_R2 = R2
-        MT_RR_object.lasso_eval_RMSE = RMSE
-        MT_RR_object.lasso_eval_MAPE = MAPE
-        MT_RR_object.lasso_eval_MAPE = MAE
-        MT_RR_object.lasso_standard_deviation = STD
-        MT_RR_object.lasso_computation_time = "%.2f seconds" % ComputationTime
-
-    elif NameOfPredictor == "lasso_grid_search_predictor":
-        if Y_train is not None:
-            MT_RR_object.lasso_grid_total_train_samples = len(Y_train.index)
-        MT_RR_object.lasso_grid_test_samples = len(Y_test.index)
-        if HyperparameterGrid is not None:
-            MT_RR_object.lasso_grid_best_hyperparameter = str(Bestparams)
-        MT_RR_object.lasso_grid_feature_importance = str(FeatureImportance)
-        MT_RR_object.lasso_grid_eval_R2 = R2
-        MT_RR_object.lasso_grid_eval_RMSE = RMSE
-        MT_RR_object.lasso_grid_eval_MAPE = MAPE
-        MT_RR_object.lasso_grid_eval_MAPE = MAE
-        MT_RR_object.lasso_grid_standard_deviation = STD
-        MT_RR_object.lasso_grid_computation_time = "%.2f seconds" % ComputationTime
-
-    elif NameOfPredictor == "rf_predictor":
-        if Y_train is not None:
-            MT_RR_object.rf_total_train_samples = len(Y_train.index)
-        MT_RR_object.rf_test_samples = len(Y_test.index)
-        if HyperparameterGrid is not None:
-            MT_RR_object.rf_best_hyperparameter = str(Bestparams)
-        MT_RR_object.rf_feature_importance = str(FeatureImportance)
-        MT_RR_object.rf_eval_R2 = R2
-        MT_RR_object.rf_eval_RMSE = RMSE
-        MT_RR_object.rf_eval_MAPE = MAPE
-        MT_RR_object.rf_eval_MAPE = MAE
-        MT_RR_object.rf_standard_deviation = STD
-        MT_RR_object.rf_computation_time = "%.2f seconds" % ComputationTime
-
-    elif NameOfPredictor == "svr_bayesian_predictor":
-        if Y_train is not None:
-            MT_RR_object.svr_total_train_samples = len(Y_train.index)
-        MT_RR_object.svr_test_samples = len(Y_test.index)
-        if HyperparameterGrid is not None:
-            MT_RR_object.svr_best_hyperparameter = str(Bestparams)
-        MT_RR_object.svr_feature_importance = str(FeatureImportance)
-        MT_RR_object.svr_eval_R2 = R2
-        MT_RR_object.svr_eval_RMSE = RMSE
-        MT_RR_object.svr_eval_MAPE = MAPE
-        MT_RR_object.svr_eval_MAPE = MAE
-        MT_RR_object.svr_standard_deviation = STD
-        MT_RR_object.svr_computation_time = "%.2f seconds" % ComputationTime
-
-    elif NameOfPredictor == "svr_grid_search_predictor":
-        if Y_train is not None:
-            MT_RR_object.svr_grid_total_train_samples = len(Y_train.index)
-        MT_RR_object.svr_grid_test_samples = len(Y_test.index)
-        if HyperparameterGrid is not None:
-            MT_RR_object.svr_grid_best_hyperparameter = str(Bestparams)
-        MT_RR_object.svr_grid_feature_importance = str(FeatureImportance)
-        MT_RR_object.svr_grid_eval_R2 = R2
-        MT_RR_object.svr_grid_eval_RMSE = RMSE
-        MT_RR_object.svr_grid_eval_MAPE = MAPE
-        MT_RR_object.svr_grid_eval_MAPE = MAE
-        MT_RR_object.svr_grid_standard_deviation = STD
-        MT_RR_object.svr_grid_computation_time = "%.2f seconds" % ComputationTime
-
-    MT_RR_object.store_results(MT_Setup_Object)
     # return Score for modelselection
     return R2
 
 
 def getscore(MT_Setup_Object_PO, Y_Predicted, Y_test, Indexer):
     if os.path.isfile(os.path.join(MT_Setup_Object_PO.ResultsFolder, "ScalerTracker.save")):  # if scaler was used
-        ScaleTracker_Signal = joblib.load(os.path.join(MT_Setup_Object_PO.ResultsFolder, "ScalerTracker.save"))  # load used scaler
+        ScaleTracker_Signal = joblib.load(
+            os.path.join(MT_Setup_Object_PO.ResultsFolder, "ScalerTracker.save"))  # load used scaler
         # Scale Results back to normal; maybe inside the Blackboxes
         Y_Predicted = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_Predicted))
         Y_test = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_test))
@@ -349,7 +238,8 @@ class BB():
         self.HyperparameterGrid = HyperparameterGrid
         self.HyperparameterGridString = HyperparameterGridString
 
-    def train_predict(self, MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError", IndividualModel="Error", Documentation=False):
+    def train_predict(self, MT_Setup_Object, MT_RR_object, RR_Model_Summary, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError",
+                      IndividualModel="Error", Documentation=False):
 
         NameOfPredictor = self.Estimator.__name__
         if IndividualModel == "week_weekend":
@@ -357,42 +247,50 @@ class BB():
                                            Estimator=self.Estimator, Features_train=_X_train, Signal_train=_Y_train,
                                            Features_test=_X_test, Signal_test=_Y_test,
                                            HyperparameterGrid=self.HyperparameterGrid, CV=MT_Setup_Object.GlobalCV_MT,
-                                           Max_evals=MT_Setup_Object.GlobalMaxEval_HyParaTuning, Recursive=MT_Setup_Object.GlobalRecu)
+                                           Max_evals=MT_Setup_Object.GlobalMaxEval_HyParaTuning,
+                                           Recursive=MT_Setup_Object.GlobalRecu)
             Result_dic = indivweekweekend.main()
         elif IndividualModel == "hourly":
             indivhourly = indiv_model(indiv_splitter_instance=indiv_splitter(hourly_splitter),
                                       Estimator=self.Estimator, Features_train=_X_train, Signal_train=_Y_train,
                                       Features_test=_X_test, Signal_test=_Y_test,
                                       HyperparameterGrid=self.HyperparameterGrid, CV=MT_Setup_Object.GlobalCV_MT,
-                                      Max_evals=MT_Setup_Object.GlobalMaxEval_HyParaTuning, Recursive=MT_Setup_Object.GlobalRecu)
+                                      Max_evals=MT_Setup_Object.GlobalMaxEval_HyParaTuning,
+                                      Recursive=MT_Setup_Object.GlobalRecu)
             Result_dic = indivhourly.main()
         elif IndividualModel == "byFeature":
-            byFeaturesplitter = byfeature_splitter(MT_Setup_Object.IndivThreshold, MT_Setup_Object.IndivFeature, _X_test, _X_train)
+            byFeaturesplitter = byfeature_splitter(MT_Setup_Object.IndivThreshold, MT_Setup_Object.IndivFeature,
+                                                   _X_test, _X_train)
             indivbyfeature = indiv_model(indiv_splitter_instance=indiv_splitter(byFeaturesplitter.splitter),
                                          Estimator=self.Estimator, Features_train=_X_train, Signal_train=_Y_train,
                                          Features_test=_X_test, Signal_test=_Y_test,
                                          HyperparameterGrid=self.HyperparameterGrid, CV=MT_Setup_Object.GlobalCV_MT,
-                                         Max_evals=MT_Setup_Object.GlobalMaxEval_HyParaTuning, Recursive=MT_Setup_Object.GlobalRecu)
+                                         Max_evals=MT_Setup_Object.GlobalMaxEval_HyParaTuning,
+                                         Recursive=MT_Setup_Object.GlobalRecu)
             Result_dic = indivbyfeature.main()
         else:
             Result_dic = self.Estimator(Features_train=_X_train, Signal_train=_Y_train, Features_test=_X_test,
                                         Signal_test=_Y_test, HyperparameterGrid=self.HyperparameterGrid,
                                         CV=MT_Setup_Object.GlobalCV_MT,
-                                        Max_evals=MT_Setup_Object.GlobalMaxEval_HyParaTuning, Recursive=MT_Setup_Object.GlobalRecu)
+                                        Max_evals=MT_Setup_Object.GlobalMaxEval_HyParaTuning,
+                                        Recursive=MT_Setup_Object.GlobalRecu)
 
         Predicted = Result_dic["prediction"]
         Bestparams = Result_dic["best_params"]
         ComputationTime = Result_dic["ComputationTime"]
         FeatureImportance = Result_dic["feature_importance"]
         if Documentation == True:  # only do documentation if Documentation is wished(Documentation is False from beginning, and only in the end set True)
-            MT_RR_object = MTRR()
-            Score = visualization_documentation(MT_Setup_Object, MT_RR_object, NameOfPredictor, Predicted, _Y_test, Indexer, _Y_train, ComputationTime, MT_Setup_Object.GlobalShuffle,
-                                                MT_Setup_Object.ResultsFolderSubTest,self.HyperparameterGridString, Bestparams, MT_Setup_Object.GlobalCV_MT,
-                                                MT_Setup_Object.GlobalMaxEval_HyParaTuning, MT_Setup_Object.GlobalRecu, IndividualModel, FeatureImportance)
+            Score = visualization_documentation(MT_Setup_Object, MT_RR_object, RR_Model_Summary, NameOfPredictor, Predicted, _Y_test,
+                                                Indexer, _Y_train, ComputationTime, MT_Setup_Object.GlobalShuffle,
+                                                MT_Setup_Object.ResultsFolderSubTest, self.HyperparameterGridString,
+                                                Bestparams, MT_Setup_Object.GlobalCV_MT,
+                                                MT_Setup_Object.GlobalMaxEval_HyParaTuning, MT_Setup_Object.GlobalRecu,
+                                                IndividualModel, FeatureImportance)
             # only dump if it´s the last best one(marked by Documentation=True)
             model_saver(Result_dic, MT_Setup_Object.ResultsFolderSubTest, NameOfPredictor, IndividualModel)
         else:
-            Score = getscore(MT_Setup_Object, Predicted, _Y_test, Indexer)  # Todo: Make possible to set scoring function by yourself
+            Score = getscore(MT_Setup_Object, Predicted, _Y_test,
+                             Indexer)  # Todo: Make possible to set scoring function by yourself
         return Score
 
 
@@ -457,14 +355,20 @@ HyperparameterGridString9 = """{"alpha": hp.loguniform("alpha", log(1e-10), log(
 BB9 = BB(lasso_bayesian, HyperparameterGrid9, str(HyperparameterGridString9))
 
 
-def modelselection(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError", IndividualModel="Error",
+def modelselection(MT_Setup_Object, MT_RR_object, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError",
+                   IndividualModel="Error",
                    Documentation=False):
     # Trains and tests all (bayesian) models and returns the best of them, also saves it in an txtfile.
-    Score_RF = BB3.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
-    Score_ANN = BB5.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
-    Score_GB = BB7.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
-    Score_Lasso = BB9.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
-    Score_SVR = BB2.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+    Score_RF = BB3.train_predict(MT_Setup_Object, MT_RR_object, MT_RR_object.RF_Summary, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel,
+                                 Documentation)
+    Score_ANN = BB5.train_predict(MT_Setup_Object, MT_RR_object, MT_RR_object.ANN_Summary, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel,
+                                  Documentation)
+    Score_GB = BB7.train_predict(MT_Setup_Object, MT_RR_object, MT_RR_object.GB_Summary, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel,
+                                 Documentation)
+    Score_Lasso = BB9.train_predict(MT_Setup_Object, MT_RR_object, MT_RR_object.Lasso_Summary, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel,
+                                    Documentation)
+    Score_SVR = BB2.train_predict(MT_Setup_Object, MT_RR_object, MT_RR_object.SVR_Summary, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel,
+                                  Documentation)
 
     Score_list = [0, 1, 2, 3, 4]
     Score_list[0] = Score_SVR
@@ -496,7 +400,8 @@ def modelselection(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexe
 
 
 # -----------------------------------------------------------------------------------------------------------------------
-def embedded__recursive_feature_selection(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Estimator, N_features_to_select, CV,
+def embedded__recursive_feature_selection(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Estimator,
+                                          N_features_to_select, CV,
                                           Documentation=False):
     # Special feature selection method for the feature selection within the final bayesian optimization (def Bayes())
     def index_column_keeper(X_Data, Y_Data, support, X_Data_transformed):
@@ -521,7 +426,7 @@ def embedded__recursive_feature_selection(MT_Setup_Object, _X_train, _Y_train, _
                                                                  Features_transformed_test)
     else:
         selector = RFE(estimator=Estimator, n_features_to_select=N_features_to_select, step=1)
-        print(_X_train,"lol", _Y_train)
+        print(_X_train, "lol", _Y_train)
         selector = selector.fit(_X_train, _Y_train)
         print("Ranks of all Features %s" % selector.ranking_)
         Features_transformed = selector.transform(_X_train)
@@ -554,29 +459,40 @@ def embedded__recursive_feature_selection(MT_Setup_Object, _X_train, _Y_train, _
         return Features_transformed, _Y_train, Features_transformed_test, _Y_test, BestData
 
 
-def all_models(MT_Setup_Object, Model, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError", IndividualModel="Error",
+def all_models(MT_Setup_Object, MT_RR_object, Model, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError",
+               IndividualModel="Error",
                Documentation=False):
     # This function is just to "centralize" the train and predict operations so that additional options can be added easier
     if Model == "SVR":
-        Score = BB2.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+        Score = BB2.train_predict(MT_Setup_Object, MT_RR_object, MT_RR_object.SVR_Summary, _X_train, _Y_train, _X_test, _Y_test,
+                                  Indexer, IndividualModel, Documentation)
     if Model == "RF":
-        Score = BB3.train_predict(MT_Setup_Object,_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+        Score = BB3.train_predict(MT_Setup_Object, MT_RR_object, MT_RR_object.RF_Summary, _X_train, _Y_train, _X_test, _Y_test,
+                                  Indexer, IndividualModel, Documentation)
     if Model == "ANN":
-        Score = BB5.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+        Score = BB5.train_predict(MT_Setup_Object, MT_RR_object, MT_RR_object.ANN_Summary, _X_train, _Y_train, _X_test, _Y_test,
+                                  Indexer, IndividualModel, Documentation)
     if Model == "GB":
-        Score = BB7.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+        Score = BB7.train_predict(MT_Setup_Object, MT_RR_object, MT_RR_object.GB_Summary, _X_train, _Y_train, _X_test, _Y_test,
+                                  Indexer, IndividualModel, Documentation)
     if Model == "Lasso":
-        Score = BB9.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+        Score = BB9.train_predict(MT_Setup_Object, MT_RR_object, MT_RR_object.Lasso_Summary, _X_train, _Y_train, _X_test, _Y_test,
+                                  Indexer, IndividualModel, Documentation)
     if Model == "ModelSelection":
-        Score = modelselection(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+        Score = modelselection(MT_Setup_Object, MT_RR_object, _X_train, _Y_train, _X_test,
+                               _Y_test, Indexer, IndividualModel, Documentation)
     if Model == "SVR_grid":
-        Score = BB1.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+        Score = BB1.train_predict(MT_Setup_Object, MT_RR_object, MT_RR_object.SVR_grid_Summary, _X_train, _Y_train, _X_test, _Y_test,
+                                  Indexer, IndividualModel, Documentation)
     if Model == "ANN_grid":
-        Score = BB4.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+        Score = BB4.train_predict(MT_Setup_Object, MT_RR_object, MT_RR_object.ANN_grid_Summary, _X_train, _Y_train, _X_test, _Y_test,
+                                  Indexer, IndividualModel, Documentation)
     if Model == "GB_grid":
-        Score = BB6.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+        Score = BB6.train_predict(MT_Setup_Object, MT_RR_object, MT_RR_object.GB_grid_Summary, _X_train, _Y_train, _X_test, _Y_test,
+                                  Indexer, IndividualModel, Documentation)
     if Model == "Lasso_grid":
-        Score = BB8.train_predict(MT_Setup_Object, _X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+        Score = BB8.train_predict(MT_Setup_Object, MT_RR_object, MT_RR_object.Lasso_grid_Summary, _X_train, _Y_train, _X_test,
+                                  _Y_test, Indexer, IndividualModel, Documentation)
     return Score
 
 
@@ -648,7 +564,7 @@ def pre_handling(MT_Setup_object, OnlyPredict):
 
 
 # Final Bayes function
-def Bayes(MT_Setup_Object_AFB, _X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
+def Bayes(MT_Setup_Object_AFB, MT_RR_object_AFB, _X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
     # Here the final bayesian optimization is done
     Model = MT_Setup_Object_AFB.Model_Bayes
     Totaltimestart = time.time()
@@ -704,13 +620,15 @@ def Bayes(MT_Setup_Object_AFB, _X_train, _Y_train, _X_test, _Y_test, Indexer, Da
 
         EstimatorEmbedded = SV.rf  # rf is a shared variable defined in SharedVariables.py
 
-        (XTr, YTr, XTe, YTe) = embedded__recursive_feature_selection(MT_Setup_Object_AFB, _X_train, _Y_train, _X_test, _Y_test,
+        (XTr, YTr, XTe, YTe) = embedded__recursive_feature_selection(MT_Setup_Object_AFB, _X_train, _Y_train, _X_test,
+                                                                     _Y_test,
                                                                      EstimatorEmbedded, params["n_F"],
                                                                      MT_Setup_Object_AFB.GlobalCV_MT)  # create the specific train and test data
-        Score = all_models(MT_Setup_Object_AFB, _Model, XTr, YTr, XTe, YTe, Indexer, str(params["IndivModel"]["IndivModel_baye"]), False)
+        Score = all_models(MT_Setup_Object_AFB, MT_RR_object_AFB, _Model, XTr, YTr, XTe, YTe, Indexer,
+                           str(params["IndivModel"]["IndivModel_baye"]), False)
         t_end = time.time()
         print("Params per iteration: %s \ with the Score score %.3f, took %.2fseconds" % (
-        params, Score, (t_end - t_start)))
+            params, Score, (t_end - t_start)))
         return Score
 
     def f(params):
@@ -744,12 +662,15 @@ def Bayes(MT_Setup_Object_AFB, _X_train, _Y_train, _X_test, _Y_test, Indexer, Da
 
     EstimatorEmbedded = SV.rf
 
-    (XTr, YTr, XTe, YTe, BestData) = embedded__recursive_feature_selection(MT_Setup_Object_AFB, _X_train, _Y_train, _X_test, _Y_test,
+    (XTr, YTr, XTe, YTe, BestData) = embedded__recursive_feature_selection(MT_Setup_Object_AFB, _X_train, _Y_train,
+                                                                           _X_test, _Y_test,
                                                                            EstimatorEmbedded, BestParams["n_F"],
                                                                            MT_Setup_Object_AFB.GlobalCV_MT, True)
 
     # Todo: Here you could use higher Max_eval for the last final training with best settings(Add specific max eval hyparatuning to the functions)
-    Score = all_models(MT_Setup_Object_AFB, _Model, XTr, YTr, XTe, YTe, Indexer, str(BestParams["IndivModel"]["IndivModel_baye"]), True)
+
+    Score = all_models(MT_Setup_Object_AFB, MT_RR_object_AFB, _Model, XTr, YTr, XTe, YTe, Indexer,
+                       str(BestParams["IndivModel"]["IndivModel_baye"]), True)
 
     # Document the Results and settings of the final bayesian optimization
     Totaltimeend = time.time()
@@ -766,7 +687,8 @@ def Bayes(MT_Setup_Object_AFB, _X_train, _Y_train, _X_test, _Y_test, Indexer, Da
     dfSummary['Computation Time in seconds'] = str((Totaltimeend - Totaltimestart))
     dfSummary = dfSummary.T
     # write summary of setup and evaluation in excel File
-    SummaryFile = os.path.join(MT_Setup_Object_AFB.ResultsFolderSubTest, "Summary_FinalBayes_%s.xlsx" % (MT_Setup_Object_AFB.NameOfSubTest))
+    SummaryFile = os.path.join(MT_Setup_Object_AFB.ResultsFolderSubTest,
+                               "Summary_FinalBayes_%s.xlsx" % (MT_Setup_Object_AFB.NameOfSubTest))
     writer = pd.ExcelWriter(SummaryFile)
     dfSummary.to_excel(writer, float_format='%.6f')
     writer.save()
@@ -774,11 +696,13 @@ def Bayes(MT_Setup_Object_AFB, _X_train, _Y_train, _X_test, _Y_test, Indexer, Da
     # export BestData to Excel
     BestData = Data[list(
         BestData)]  # make sure BestData contains the whole available period(not only the period used for training and prediction)
-    SaveFileName_excel = os.path.join(MT_Setup_Object_AFB.ResultsFolderSubTest, "BestData_%s.xlsx" % (MT_Setup_Object_AFB.NameOfSubTest))
+    SaveFileName_excel = os.path.join(MT_Setup_Object_AFB.ResultsFolderSubTest,
+                                      "BestData_%s.xlsx" % (MT_Setup_Object_AFB.NameOfSubTest))
     BestData.to_excel(SaveFileName_excel)
 
     # save dataframe in an pickle
-    BestData.to_pickle(os.path.join(MT_Setup_Object_AFB.PathToPickles, "ThePickle_from_%s.pickle" % MT_Setup_Object_AFB.NameOfSubTest))
+    BestData.to_pickle(
+        os.path.join(MT_Setup_Object_AFB.PathToPickles, "ThePickle_from_%s.pickle" % MT_Setup_Object_AFB.NameOfSubTest))
 
 
 # OnlyPredict functions
@@ -792,7 +716,8 @@ def iterative_evaluation(MT_Setup_Object_PO, TestData, Model, horizon,
     (TestData_X, TestData_Y) = SV.split_signal_and_features(MT_Setup_Object_PO.NameOfSignal, TestData)
 
     if os.path.isfile(os.path.join(MT_Setup_Object_PO.ResultsFolder, "ScalerTracker.save")):  # if scaler was used
-        ScaleTracker_Signal = joblib.load(os.path.join(MT_Setup_Object_PO.ResultsFolder, "ScalerTracker.save"))  # load used scaler
+        ScaleTracker_Signal = joblib.load(
+            os.path.join(MT_Setup_Object_PO.ResultsFolder, "ScalerTracker.save"))  # load used scaler
 
     fold_list = []
     for i in range(n_folds):
@@ -867,7 +792,8 @@ def predict(MT_Setup_object_PO, NameOfPredictor, _X_test):
 
     return Predicted, IndividualModel
 
-def only_predict(MT_Setup_object_PO, NameOfPredictor, _X_test, _Y_test, Indexer, Data):
+
+def only_predict(MT_Setup_object_PO, MT_RR_object_PO, RR_Model_Summary, NameOfPredictor, _X_test, _Y_test, Indexer, Data):
     timestart = time.time()
     Predicted, IndividualModel = predict(MT_Setup_object_PO, NameOfPredictor, _X_test)
     if type(Predicted) == bool:
@@ -877,8 +803,9 @@ def only_predict(MT_Setup_object_PO, NameOfPredictor, _X_test, _Y_test, Indexer,
         return
     timeend = time.time()
     ComputationTime = (timeend - timestart)
-    MT_RR_object_PO = MTRR()
-    visualization_documentation(MT_Setup_object_PO, MT_RR_object_PO, NameOfPredictor, Predicted, _Y_test, Indexer, None, ComputationTime, None,
+
+    visualization_documentation(MT_Setup_object_PO, MT_RR_object_PO, RR_Model_Summary, NameOfPredictor, Predicted, _Y_test, Indexer, None,
+                                ComputationTime, None,
                                 MT_Setup_object_PO.OnlyPredictFolder,
                                 None, None, None, None, MT_Setup_object_PO.OnlyPredictRecursive, IndividualModel,
                                 None)
@@ -897,7 +824,8 @@ def only_predict(MT_Setup_object_PO, NameOfPredictor, _X_test, _Y_test, Indexer,
         ErrorDF = pd.DataFrame(index=[0])
         ErrorDF['________'] = "_________________________________"
         if MT_Setup_object_PO.ValidationPeriod == True:
-            ErrorDF['Test Data'] = "Interpretation of error measures of the data from %s till %s, per error metric" % (MT_Setup_object_PO.StartTest_onlypredict, MT_Setup_object_PO.EndTest_onlypredict)
+            ErrorDF['Test Data'] = "Interpretation of error measures of the data from %s till %s, per error metric" % (
+            MT_Setup_object_PO.StartTest_onlypredict, MT_Setup_object_PO.EndTest_onlypredict)
         else:
             ErrorDF['Test Data'] = "Interpretation of error measures regarding the whole data set per error metric"
         ErrorDF['Used error metric'] = str(errormetric)
@@ -924,7 +852,8 @@ def only_predict(MT_Setup_object_PO, NameOfPredictor, _X_test, _Y_test, Indexer,
         MeanErrorData = Data[MT_Setup_object_PO.StartTest_onlypredict:MT_Setup_object_PO.EndTest_onlypredict]
     else:
         MeanErrorData = Data
-    fold_list = iterative_evaluation(MT_Setup_object_PO, TestData=MeanErrorData, Model=predict, horizon=horizon,NameOfPredictor=NameOfPredictor)
+    fold_list = iterative_evaluation(MT_Setup_object_PO, TestData=MeanErrorData, Model=predict, horizon=horizon,
+                                     NameOfPredictor=NameOfPredictor)
 
     mean_score, SD_score, errorlist, errormetric = mean_scoring(fold_list=fold_list, errormetric=r2_score)
     documenation_iterative_evaluation(mean_score, SD_score, errorlist, "R2")
@@ -932,7 +861,8 @@ def only_predict(MT_Setup_object_PO, NameOfPredictor, _X_test, _Y_test, Indexer,
     mean_score, SD_score, errorlist, errormetric = mean_scoring(fold_list=fold_list, errormetric=mean_absolute_error)
     documenation_iterative_evaluation(mean_score, SD_score, errorlist, "MAE")
 
-    mean_score, SD_score, errorlist, errormetric = mean_scoring(fold_list=fold_list,errormetric=mean_absolute_percentage_error)
+    mean_score, SD_score, errorlist, errormetric = mean_scoring(fold_list=fold_list,
+                                                                errormetric=mean_absolute_percentage_error)
     documenation_iterative_evaluation(mean_score, SD_score, errorlist, "MAPE")
 
 
@@ -940,38 +870,48 @@ def only_predict(MT_Setup_object_PO, NameOfPredictor, _X_test, _Y_test, Indexer,
 # Executive functions
 def main_FinalBayes(MT_Setup_Object_AFB):
     # The automatic procedure for model tuning and parts of data tuning
-    print("Start FinalBayesOpt: %s/%s/%s" % (MT_Setup_Object_AFB.NameOfData, MT_Setup_Object_AFB.NameOfExperiment, MT_Setup_Object_AFB.NameOfSubTest))
+    print("Start FinalBayesOpt: %s/%s/%s" % (
+    MT_Setup_Object_AFB.NameOfData, MT_Setup_Object_AFB.NameOfExperiment, MT_Setup_Object_AFB.NameOfSubTest))
 
     _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = pre_handling(MT_Setup_Object_AFB, False)
 
+    MT_RR_object_AFB = MTRR()
+
     # Do the bayesian optimization
-    Bayes(MT_Setup_Object_AFB, _X_train=_X_train, _Y_train=_Y_train, _X_test=_X_test, _Y_test=_Y_test, Indexer=Indexer,
+    Bayes(MT_Setup_Object_AFB, MT_RR_object_AFB, _X_train=_X_train, _Y_train=_Y_train, _X_test=_X_test, _Y_test=_Y_test, Indexer=Indexer,
           Data=Data)
 
-    print("Finish FinalBayesOpt: %s/%s/%s" % (MT_Setup_Object_AFB.NameOfData, MT_Setup_Object_AFB.NameOfExperiment, MT_Setup_Object_AFB.NameOfSubTest))
+    print("Finish FinalBayesOpt: %s/%s/%s" % (
+    MT_Setup_Object_AFB.NameOfData, MT_Setup_Object_AFB.NameOfExperiment, MT_Setup_Object_AFB.NameOfSubTest))
     print("________________________________________________________________________\n")
     print("________________________________________________________________________\n")
-
+    MT_RR_object_AFB.store_results(MT_Setup_Object_AFB)
 
 def main_OnlyHyParaOpti(MT_Setup_Object):
     print("Start training and testing with only optimizing the hyperparameters: %s/%s/%s" % (
         MT_Setup_Object.NameOfData, MT_Setup_Object.NameOfExperiment, MT_Setup_Object.NameOfSubTest))
     _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = pre_handling(MT_Setup_Object, False)
 
+    MT_RR_object = MTRR()
+
     for Model in MT_Setup_Object.OnlyHyPara_Models:
-        all_models(MT_Setup_Object, Model, _X_train, _Y_train, _X_test, _Y_test, Indexer, MT_Setup_Object.GlobalIndivModel, True)
+        all_models(MT_Setup_Object, MT_RR_object, Model, _X_train, _Y_train, _X_test, _Y_test, Indexer,
+                   MT_Setup_Object.GlobalIndivModel, True)
 
     print("Finish training and testing with only optimizing the hyperparameters : %s/%s/%s" % (
         MT_Setup_Object.NameOfData, MT_Setup_Object.NameOfExperiment, MT_Setup_Object.NameOfSubTest))
     print("________________________________________________________________________\n")
     print("________________________________________________________________________\n")
+    MT_RR_object.store_results(MT_Setup_Object)
 
 
 def main_OnlyPredict(MT_Setup_object_PO):
-    print("Start only predicting: %s/%s/%s" % (MT_Setup_object_PO.NameOfData, MT_Setup_object_PO.NameOfExperiment, MT_Setup_object_PO.NameOfSubTest))
+    print("Start only predicting: %s/%s/%s" % (
+    MT_Setup_object_PO.NameOfData, MT_Setup_object_PO.NameOfExperiment, MT_Setup_object_PO.NameOfSubTest))
     _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = pre_handling(MT_Setup_object_PO, True)
 
-    OnlyPredictFolder = os.path.join(MT_Setup_object_PO.ResultsFolderSubTest, "OnlyPredict", MT_Setup_object_PO.NameOfOnlyPredict)
+    OnlyPredictFolder = os.path.join(MT_Setup_object_PO.ResultsFolderSubTest, "OnlyPredict",
+                                     MT_Setup_object_PO.NameOfOnlyPredict)
     MT_Setup_object_PO.OnlyPredictFolder = OnlyPredictFolder
 
     # check if predict results are safed in the right folder:
@@ -989,13 +929,21 @@ def main_OnlyPredict(MT_Setup_object_PO):
                            "gradientboost_gridsearch", "lasso_grid_search_predictor",
                            "ann_grid_search_predictor"]
 
+    MT_RR_object_PO = MTRR()
+    ModelSummaryObjectList = [MT_RR_object_PO.SVR_Summary, MT_RR_object_PO.RF_Summary, MT_RR_object_PO.ANN_Summary,
+                              MT_RR_object_PO.GB_Summary, MT_RR_object_PO.Lasso_Summary, MT_RR_object_PO.SVR_grid_Summary,
+                              MT_RR_object_PO.GB_grid_Summary, MT_RR_object_PO.Lasso_grid_Summary,
+                              MT_RR_object_PO.ANN_grid_Summary]
+
     for NameOfPredictor in AvailablePredictors:
-        only_predict(MT_Setup_object_PO, NameOfPredictor, _X_test, _Y_test, Indexer, Data)
+        for ModelSummaryObject in ModelSummaryObjectList:
+            only_predict(MT_Setup_object_PO, MT_RR_object_PO, ModelSummaryObject, NameOfPredictor, _X_test, _Y_test, Indexer, Data)
 
-    print("Finish only predicting : %s/%s/%s" % (MT_Setup_object_PO.NameOfData, MT_Setup_object_PO.NameOfExperiment, MT_Setup_object_PO.NameOfSubTest))
+    print("Finish only predicting : %s/%s/%s" % (
+    MT_Setup_object_PO.NameOfData, MT_Setup_object_PO.NameOfExperiment, MT_Setup_object_PO.NameOfSubTest))
     print("________________________________________________________________________\n")
     print("________________________________________________________________________\n")
-
+    MT_RR_object_PO.store_results(MT_Setup_object_PO)
 
 if __name__ == '__main__':
     # Todo: The following is done in ModelTuning and DataTuning, isn´t it better once in SV?

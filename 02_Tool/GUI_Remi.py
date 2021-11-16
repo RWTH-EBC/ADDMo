@@ -6,6 +6,8 @@ from sklearn.feature_selection import mutual_info_regression, f_regression
 import DataTuning
 import ModelTuning
 import SharedVariables as SV
+import AutoFinalBayes
+import OnlyPredict
 
 import numpy as np
 from multiprocessing import Process
@@ -941,7 +943,7 @@ temperature as signal. """)
             MT_Setup_Object_AFB.PathToPickles = DT_Setup_Object_AFB.PathToPickles
             MT_Setup_Object_AFB.ColumnOfSignal = DT_Setup_Object_AFB.ColumnOfSignal
 
-            ModelTuning.main_FinalBayes(MT_Setup_Object_AFB)
+            AutoFinalBayes.main_FinalBayes(MT_Setup_Object_AFB)
 
         def save_and_execute(OwnlagType):
             saveCallbackFB(OwnlagType=OwnlagType)
@@ -1152,7 +1154,7 @@ temperature as signal. """)
 
         self.InfoPO.set_text('Check out the python console!')
         saveCallbackPO()
-        ModelTuning.main_OnlyPredict(MT_Setup_Object_PO)
+        OnlyPredict.main_OnlyPredict(MT_Setup_Object_PO)
 
     # dialog executions
     def exec_dialog_periodOL_FB(self, widget, newValue):

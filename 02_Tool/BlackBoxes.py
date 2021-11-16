@@ -1,4 +1,5 @@
 from __future__ import print_function
+from math import log
 from sklearn.svm import SVR
 import sys
 import numpy as np
@@ -121,7 +122,6 @@ def svr_bayesian_predictor(Features_train, Signal_train, HyperparameterGrid, CV_
 #Trial end---------------------------------------------------------------------------------'''
 
 
-
 #a recursive plugin which can be used in every BB Model in order to create a recursive behavior
 def recursive(Features_test, Best_trained_model):
     Features_test_i = Features_test.copy(deep=True)
@@ -138,6 +138,8 @@ def recursive(Features_test, Best_trained_model):
                 Features_test_i = Features_test_i.set_value(value=OwnLag, index=line, col=Features_test_i.columns.str.contains("_lag_%s" % lag)) #set the predicted signal as input for future predictions
     return Features_test_i
 
+#--------------------------------------------------------------------------------------------------------------------------------
+# Predictor definitions
 def svr_grid_search_predictor(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid, CV, Max_evals=NotImplemented, Recursive=False):
     #print("Cell GridSearchSVR start---------------------------------------------------------")
     timestart = time.time()
@@ -581,7 +583,11 @@ def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
             "Best_trained_model": Best_trained_model,
             "feature_importance": "Not available for that model"}
 
-#Individual Models------------------------------------------------------------------------------------------------------
+# End of Predictor Definitions
+#-----------------------------------------------------------------------------------------------------------------------
+
+#----------------------------------------------------------------------------------------------------------------------
+#Individual Models
 #Splitter functions
 def week_weekend_splitter(Dataseries):
     # Datetimeindex format is necessary for individual model methods
@@ -831,6 +837,12 @@ class indiv_model_onlypredict():
                     i += 1
             predicted = Y.sum(axis=1)  # add all columns together, since each timestamp has only 1 column with a value this is the same as rearranging all the results back to a chronological timeline
         return predicted
+
+# End of Individual Models
 #-----------------------------------------------------------------------------------------------------------------------
+
+
+
+
 
 

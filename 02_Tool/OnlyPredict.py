@@ -61,10 +61,8 @@ def main_OnlyPredict(MT_Setup_object_PO):
                               MT_RR_object_PO.GB_grid_Summary, MT_RR_object_PO.Lasso_grid_Summary,
                               MT_RR_object_PO.ANN_grid_Summary]
 
-    for NameOfPredictor in AvailablePredictors:
-        for ModelSummaryObject in ModelSummaryObjectList:
+    for NameOfPredictor, ModelSummaryObject in zip(AvailablePredictors, ModelSummaryObjectList):
             only_predict(MT_Setup_object_PO, ModelSummaryObject, NameOfPredictor, _X_test, _Y_test, Indexer, Data)
-            break
 
     print("Finish only predicting : %s/%s/%s" % (
         MT_Setup_object_PO.NameOfData, MT_Setup_object_PO.NameOfExperiment, MT_Setup_object_PO.NameOfSubTest))

@@ -63,8 +63,8 @@ def main_OnlyPredict(MT_Setup_object_PO):
 
     for NameOfPredictor in AvailablePredictors:
         for ModelSummaryObject in ModelSummaryObjectList:
-            only_predict(MT_Setup_object_PO, ModelSummaryObject, NameOfPredictor, _X_test, _Y_test,
-                         Indexer, Data)
+            only_predict(MT_Setup_object_PO, ModelSummaryObject, NameOfPredictor, _X_test, _Y_test, Indexer, Data)
+            break
 
     print("Finish only predicting : %s/%s/%s" % (
         MT_Setup_object_PO.NameOfData, MT_Setup_object_PO.NameOfExperiment, MT_Setup_object_PO.NameOfSubTest))
@@ -86,7 +86,7 @@ def only_predict(MT_Setup_object_PO, RR_Model_Summary, NameOfPredictor, _X_test,
 
     MT.visualization_documentation(MT_Setup_object_PO, RR_Model_Summary, NameOfPredictor, Predicted,
                                 _Y_test, Indexer, None, ComputationTime, None, MT_Setup_object_PO.OnlyPredictFolder,
-                                None, None, None, None, MT_Setup_object_PO.OnlyPredictRecursive, IndividualModel,
+                                 None, None, None, None, MT_Setup_object_PO.OnlyPredictRecursive, IndividualModel,
                                 None)
 
     def documenation_iterative_evaluation(mean_score, SD_score, errorlist, errormetric):

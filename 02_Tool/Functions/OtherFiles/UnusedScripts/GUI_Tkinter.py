@@ -1,10 +1,9 @@
 from tkinter import *
-import os
-import importlib
 
 import DataTuning
 import SharedVariables as SV
 import FinalBayesOpt
+
 print("Import in GUI_Tkinter.py done")
 master = Tk()
 

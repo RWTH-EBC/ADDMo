@@ -1,4 +1,5 @@
 from __future__ import print_function
+from math import log
 from sklearn.svm import SVR
 import sys
 import numpy as np
@@ -33,7 +34,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 ########################################################################################################################
 #Hyperparameter Tuning Information:
 #Define a Train/Test area where Crossvalidation shall be performed, define also a predict area
-#where an additional prediction is evaluated with the in the Train/Test area found hyperparameters and training wheights.
+#where an additional prediction is evaluated within the Train/Test area found hyperparameters and training weights.
 #The model with the tuned hyperparameter is after all trained on the whole Train/Test data set.
 
 #See below each function a example for how to pull which result from the function (A dictionary is used as return value)
@@ -121,7 +122,6 @@ def svr_bayesian_predictor(Features_train, Signal_train, HyperparameterGrid, CV_
 #Trial end---------------------------------------------------------------------------------'''
 
 
-
 #a recursive plugin which can be used in every BB Model in order to create a recursive behavior
 def recursive(Features_test, Best_trained_model):
     Features_test_i = Features_test.copy(deep=True)
@@ -138,6 +138,8 @@ def recursive(Features_test, Best_trained_model):
                 Features_test_i = Features_test_i.set_value(value=OwnLag, index=line, col=Features_test_i.columns.str.contains("_lag_%s" % lag)) #set the predicted signal as input for future predictions
     return Features_test_i
 
+#--------------------------------------------------------------------------------------------------------------------------------
+# Predictor definitions
 def svr_grid_search_predictor(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid, CV, Max_evals=NotImplemented, Recursive=False):
     #print("Cell GridSearchSVR start---------------------------------------------------------")
     timestart = time.time()
@@ -234,7 +236,8 @@ def rf_predictor(Features_train, Signal_train, Features_test, Signal_test, Hyper
     timestart = time.time()
 
     Signal_test = Signal_test.values.ravel()
-    #Features_test = Features_test.values.ravel() #this one not in order to have recursive still working fine
+    #Features_test = RandomForestRegressor
+    #Features_test.values.ravel() #this one not in order to have recursive still working fine
     Signal_train = Signal_train.values.ravel()
     Features_train = Features_train.values
 
@@ -580,7 +583,11 @@ def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
             "Best_trained_model": Best_trained_model,
             "feature_importance": "Not available for that model"}
 
-#Individual Models------------------------------------------------------------------------------------------------------
+# End of Predictor Definitions
+#-----------------------------------------------------------------------------------------------------------------------
+
+#----------------------------------------------------------------------------------------------------------------------
+#Individual Models
 #Splitter functions
 def week_weekend_splitter(Dataseries):
     # Datetimeindex format is necessary for individual model methods
@@ -756,7 +763,7 @@ class indiv_model():
                 }
 
 class indiv_model_onlypredict():
-    'Loads a beforehand safed (individual) model and does a prediction'
+    'Loads a beforehand saved (individual) model and does a prediction'
     def __init__(self, indiv_splitter_instance, Features_test, ResultsFolderSubTest, NameOfPredictor, Recursive):
         self.indiv_splitter_instance = indiv_splitter_instance
         self.Features_test = Features_test
@@ -830,6 +837,12 @@ class indiv_model_onlypredict():
                     i += 1
             predicted = Y.sum(axis=1)  # add all columns together, since each timestamp has only 1 column with a value this is the same as rearranging all the results back to a chronological timeline
         return predicted
+
+# End of Individual Models
 #-----------------------------------------------------------------------------------------------------------------------
+
+
+
+
 
 

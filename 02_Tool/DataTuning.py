@@ -1,10 +1,10 @@
-print("DataTuning")
-# Package imports
+'''
+Executable to perform data tuning.
+'''
+
 import os
-import pandas as pd
 import time
 
-# Pythonfiles Imports
 import SharedVariables as SV
 import ImportData
 import Preprocessing
@@ -13,9 +13,8 @@ import FeatureConstruction
 import FeatureSelection
 from DataTuningRuntimeResults import DataTuningRuntimeResults as DTRR
 
-print("Module Import Section Done")  # imported all necessary files for data tuning
-
 def main(DT_Setup_object):
+    print("DataTuning")
     # define path to data source files '.xls' & '.pickle'
     RootDir = os.path.dirname(os.path.realpath(__file__))
     PathToData = os.path.join(RootDir, 'Data')

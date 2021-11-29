@@ -1,10 +1,13 @@
+'''This Module contains classes for storing runtime results'''
+
 import os
 
-import pandas as pd
 from sklearn.externals import joblib
 
-
 class RRSummary:
+    '''
+    Stores runtime results for one algorithm.
+    '''
 
     def __init__(self, **kwargs):
         self.model_name = "model"
@@ -21,7 +24,8 @@ class RRSummary:
 
 class ModelTuningRuntimeResults:
     """
-    Object that stores all the runtime results of Model Tuning
+    Stores all runtime results of ModelTuning.py, AutoFinalBayes.py, OnlyPredict.py per used algorithm.
+
 
     Stores the following summary:
 

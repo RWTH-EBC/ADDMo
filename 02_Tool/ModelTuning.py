@@ -562,5 +562,5 @@ if __name__ == '__main__':
 
     # Define which part shall be computed (parameters are set in SharedVariables)
     # main_FinalBayes()
-    # main_OnlyHyParaOpti()
+    main_OnlyHyParaOpti(MT_Setup_Object)
     # main_OnlyPredict()

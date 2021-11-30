@@ -40,14 +40,7 @@ def main_OnlyPredict(MT_Setup_object_PO):
     MT_Setup_object_PO.OnlyPredictFolder = OnlyPredictFolder
 
     # check if predict results are safed in the right folder:
-    if os.path.isdir("%s" % (MT_Setup_object_PO.OnlyPredictFolder)) == True:
-        Answer = input("Are you sure you want to overwrite the data in %s: " % MT_Setup_object_PO.OnlyPredictFolder)
-        if Answer == "yes" or Answer == "Yes" or Answer == "y" or Answer == "Y":
-            print("Start computing")
-        else:
-            sys.exit("Code stopped by user or invalid user input. Valid is Yes, yes, y and Y.")
-    else:
-        os.makedirs("%s" % (MT_Setup_object_PO.OnlyPredictFolder))
+    SV.delete_and_create_folder(MT_Setup_object_PO.OnlyPredictFolder)
 
     AvailablePredictors = ["svr_bayesian_predictor", "rf_predictor", "ann_bayesian_predictor",
                            "gradientboost_bayesian", "lasso_bayesian", "svr_grid_search_predictor",

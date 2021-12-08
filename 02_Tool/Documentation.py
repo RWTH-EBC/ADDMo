@@ -18,21 +18,8 @@ import SharedVariablesFunctions as SVF
 
 def documentation(MT_Setup_Object, RR_Model_Summary, NameOfPredictor, Y_Predicted, Y_test, Y_train,
                   ComputationTime, Scores, HyperparameterGrid=None, Bestparams=None, IndividualModel="",
-                  FeatureImportance="Not available",):
-
+                  FeatureImportance="Not available", ):
     (R2, STD, RMSE, MAPE, MAE) = Scores
-
-    # Plot Results
-    plot_predict_measured(prediction=Y_Predicted, measurement=Y_test, MAE=MAE, R2=R2,
-                          StartDatePredict=MT_Setup_Object.StartTesting,
-                          SavePath=MT_Setup_Object.ResultsFolderSubTest, nameOfSignal=MT_Setup_Object.NameOfSignal,
-                          BlackBox=NameOfPredictor,
-                          NameOfSubTest=MT_Setup_Object.NameOfSubTest)
-
-    plot_Residues(prediction=Y_Predicted, measurement=Y_test, MAE=MAE, R2=R2,
-                  SavePath=MT_Setup_Object.ResultsFolderSubTest,
-                  nameOfSignal=MT_Setup_Object.NameOfSignal, BlackBox=NameOfPredictor,
-                  NameOfSubTest=MT_Setup_Object.NameOfSubTest)
 
     # save summary of setup and evaluation
     dfSummary = pd.DataFrame(index=[0])
@@ -96,8 +83,8 @@ def documentation(MT_Setup_Object, RR_Model_Summary, NameOfPredictor, Y_Predicte
     # return Score for modelselection
     return R2
 
-def visualization(MT_Setup_Object, NameOfPredictor, prediction, measurement, Scores):
 
+def visualization(MT_Setup_Object, NameOfPredictor, prediction, measurement, Scores):
     (R2, STD, RMSE, MAPE, MAE) = Scores
 
     plot_predict_measured(prediction,
@@ -116,6 +103,7 @@ def visualization(MT_Setup_Object, NameOfPredictor, prediction, measurement, Sco
                   nameOfSignal=MT_Setup_Object.NameOfSignal,
                   BlackBox=NameOfPredictor,
                   NameOfSubTest=MT_Setup_Object.NameOfSubTest)
+
 
 # saves the BestModels in a folder "BestModels", also capable of saving individual models
 def model_saver(Result_dic, ResultsFolderSubTest, NameOfPredictor, IndividualModel):
@@ -188,6 +176,3 @@ def model_saver(Result_dic, ResultsFolderSubTest, NameOfPredictor, IndividualMod
     else:
         joblib.dump(Result_dic["Best_trained_model"],
                     os.path.join(ResultsFolderSubTest, "BestModels", "%s.save" % (NameOfPredictor)))
-
-
-

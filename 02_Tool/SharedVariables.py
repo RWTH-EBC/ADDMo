@@ -4,12 +4,15 @@ import pandas as pd
 import numpy as np
 import sys
 from sklearn_pandas import DataFrameMapper
-from BlackBoxes import *
+from Functions.ErrorMetrics import *
+from Functions.PlotFcn import *
 from sklearn.feature_selection import mutual_info_regression, f_regression
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import RobustScaler
 from math import log
+
+from BlackBoxes import *
 
 GUI_Filename = "Empty"
 
@@ -48,16 +51,19 @@ def get_unit_of_meter(Data, ColumnOfMeter):
     UoM = list(Data)[ColumnOfMeter].split("[")[1].split("]")[0]
     return UoM
 
+
 # get the name of the respective Meter
 def nameofmeter(Data, ColumnOfMeter):
     Name = list(Data)[ColumnOfMeter]
     return Name
+
 
 # split signal from feature for the use in an estimator
 def split_signal_and_features(NameOfSignal, Data):
     X = Data.drop(NameOfSignal, axis=1)
     Y = Data[NameOfSignal]
     return (X, Y)
+
 
 # merge after an embedded operator modified the datasets
 def merge_signal_and_features_embedded(NameOfSignal, X_Data, Y_Data, support, X_Data_transformed):
@@ -71,6 +77,7 @@ def merge_signal_and_features_embedded(NameOfSignal, X_Data, Y_Data, support, X_
     Data = pd.concat([Signal, Features], axis=1)
     return Data
 
+
 # regular merge
 def merge_signal_and_features(NameOfSignal, X_Data, Y_Data, X_Data_transformed):
     columns = X_Data.columns
@@ -80,6 +87,7 @@ def merge_signal_and_features(NameOfSignal, X_Data, Y_Data, X_Data_transformed):
     Signal = pd.DataFrame(Y_Data, columns=[NameOfSignal])  # create dataframe of y
     Data = pd.concat([Signal, Features], axis=1)
     return Data
+
 
 # scaling; used if new "unscaled" features were created throughout Feature Construction
 def post_scaler(Data, StandardScaling, RobustScaling):
@@ -107,6 +115,7 @@ def post_scaler(Data, StandardScaling, RobustScaling):
         Scaled_Data = pd.DataFrame(Scaled_Data, index=Data.index)
         return Scaled_Data
 
+
 def reshape(series):
     '''
     Can reshape pandas series and numpy.array
@@ -130,12 +139,108 @@ def reshape(series):
 
     return array
 
+
 def del_unsupported_os_characters(str):
     str = str.replace("/", "").replace("\\", "").replace(":", "").replace("?", "").replace("*", "").replace("\"",
                                                                                                             "").replace(
         "<", "").replace(">", "").replace("|", "")
     return str
 
+def visualization_documentation(MT_Setup_Object, RR_Model_Summary, NameOfPredictor, Y_Predicted, Y_test, Indexer,
+                                Y_train,
+                                ComputationTime, Shuffle,
+                                ResultsFolderSubTest, HyperparameterGrid=None, Bestparams=None, CV=3, Max_eval=None,
+                                Recursive=False, IndividualModel="",
+                                FeatureImportance="Not available"):
+    if os.path.isfile(os.path.join(MT_Setup_Object.ResultsFolder, "ScalerTracker.save")):  # if scaler was used
+
+        ScaleTracker_Signal = joblib.load(
+            os.path.join(MT_Setup_Object.ResultsFolder, "ScalerTracker.save"))  # load used scaler
+        # Scale Results back to normal; maybe inside the Blackboxes
+        Y_Predicted = ScaleTracker_Signal.inverse_transform(reshape(Y_Predicted))
+        Y_test = ScaleTracker_Signal.inverse_transform(reshape(Y_test))
+        # convert arrays to data frames(Series) for further use
+        Y_test = pd.DataFrame(index=Indexer, data=Y_test, columns=["Measure"])
+        Y_test = Y_test["Measure"]
+
+    # convert arrays to data frames(Series) for further use
+    Y_Predicted = pd.DataFrame(index=Indexer, data=Y_Predicted, columns=["Prediction"])
+    Y_Predicted = Y_Predicted["Prediction"]
+
+    # evaluate results with more error metrics
+    (R2, STD, RMSE, MAPE, MAE) = evaluation(Y_test, Y_Predicted)
+
+    # Plot Results
+    plot_predict_measured(prediction=Y_Predicted, measurement=Y_test, MAE=MAE, R2=R2,
+                          StartDatePredict=MT_Setup_Object.StartTesting,
+                          SavePath=ResultsFolderSubTest, nameOfSignal=MT_Setup_Object.NameOfSignal,
+                          BlackBox=NameOfPredictor,
+                          NameOfSubTest=MT_Setup_Object.NameOfSubTest)
+    plot_Residues(prediction=Y_Predicted, measurement=Y_test, MAE=MAE, R2=R2, SavePath=ResultsFolderSubTest,
+                  nameOfSignal=MT_Setup_Object.NameOfSignal, BlackBox=NameOfPredictor,
+                  NameOfSubTest=MT_Setup_Object.NameOfSubTest)
+
+    # save summary of setup and evaluation
+    dfSummary = pd.DataFrame(index=[0])
+    dfSummary['Estimator'] = NameOfPredictor
+    if Y_train is not None:  # don´t document this if "onlypredict" is used
+        dfSummary['Start_date_Fit'] = MT_Setup_Object.StartTraining
+        dfSummary['End_date_Fit'] = MT_Setup_Object.EndTraining
+    dfSummary['Start_date_Predict'] = MT_Setup_Object.StartTesting
+    dfSummary['End_date_Predict'] = MT_Setup_Object.EndTesting
+    if Y_train is not None:  # don´t document this if "onlypredict" is used
+        dfSummary['Total Train Samples'] = len(Y_train.index)
+    dfSummary['Test Samples'] = len(Y_test.index)
+    dfSummary['Recursive'] = Recursive
+    dfSummary['Shuffle'] = Shuffle
+    if HyperparameterGrid is not None:
+        dfSummary['Range Hyperparameter'] = str(HyperparameterGrid)
+        dfSummary['CrossValidation'] = str(CV)
+        dfSummary['Best Hyperparameter'] = str(Bestparams)
+        if Max_eval is not None:
+            dfSummary['Max Bayesian Evaluations'] = str(Max_eval)
+    dfSummary["Feature importance"] = str(FeatureImportance)
+    dfSummary['Individual model'] = IndividualModel
+    if IndividualModel == "byFeature":
+        dfSummary['IndivFeature'] = MT_Setup_Object.IndivFeature
+        dfSummary['IndivThreshold'] = MT_Setup_Object.IndivThreshold
+    dfSummary['Eval_R2'] = R2
+    dfSummary['Eval_RMSE'] = RMSE
+    dfSummary['Eval_MAPE'] = MAPE
+    dfSummary['Eval_MAE'] = MAE
+    dfSummary['Standard deviation'] = STD
+    dfSummary['Computation Time'] = "%.2f seconds" % ComputationTime
+    dfSummary = dfSummary.T
+    # write summary of setup and evaluation in excel File
+    SummaryFile = os.path.join(ResultsFolderSubTest,
+                               "Summary_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_Object.NameOfSubTest))
+    writer = pd.ExcelWriter(SummaryFile)
+    dfSummary.to_excel(writer, float_format='%.6f')
+    writer.save()
+
+    # export prediction to Excel
+    SaveFileName_excel = os.path.join(ResultsFolderSubTest,
+                                      "Prediction_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_Object.NameOfSubTest))
+    Y_Predicted.to_frame(name=MT_Setup_Object.NameOfSignal).to_excel(SaveFileName_excel)
+
+    # save model tuning runtime results in ModelTuningRuntimeResults class object
+
+    RR_Model_Summary.model_name = NameOfPredictor
+    if Y_train is not None:
+        RR_Model_Summary.total_train_samples = len(Y_train.index)
+    RR_Model_Summary.test_samples = len(Y_test.index)
+    if HyperparameterGrid is not None:
+        RR_Model_Summary.best_hyperparameter = str(Bestparams)
+    RR_Model_Summary.feature_importance = str(FeatureImportance)
+    RR_Model_Summary.eval_R2 = R2
+    RR_Model_Summary.eval_RMSE = RMSE
+    RR_Model_Summary.eval_MAPE = MAPE
+    RR_Model_Summary.eval_MAE = MAE
+    RR_Model_Summary.standard_deviation = STD
+    RR_Model_Summary.computation_time = "%.2f seconds" % ComputationTime
+
+    # return Score for modelselection
+    return R2
 def delete_and_create_folder(path):
     '''Make sure not to accidentally overwrite data.'''
 

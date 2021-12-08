@@ -21,10 +21,11 @@ from sklearn.feature_selection import VarianceThreshold
 from sklearn.model_selection import train_test_split
 
 from BlackBoxes import *
+from PredictorDefinitions import *
 from Functions.ErrorMetrics import *
 from Functions.PlotFcn import *
 
-import SharedVariables as SV
+import SharedVariablesFunctions as SVF
 from ModelTuningSetup import ModelTuningSetup as MTS
 import ModelTuning as MT
 from ModelTuningRuntimeResults import ModelTuningRuntimeResults as MTRR
@@ -40,7 +41,7 @@ def main_OnlyPredict(MT_Setup_object_PO):
     MT_Setup_object_PO.OnlyPredictFolder = OnlyPredictFolder
 
     # check if predict results are safed in the right folder:
-    SV.delete_and_create_folder(MT_Setup_object_PO.OnlyPredictFolder)
+    SVF.delete_and_create_folder(MT_Setup_object_PO.OnlyPredictFolder)
 
     AvailablePredictors = ["svr_bayesian_predictor", "rf_predictor", "ann_bayesian_predictor",
                            "gradientboost_bayesian", "lasso_bayesian", "svr_grid_search_predictor",
@@ -191,7 +192,7 @@ def iterative_evaluation(MT_Setup_Object_PO, TestData, Model, horizon,
     n_folds = len(TestData) / horizon  # get how many times the horizon fits into the data
     n_folds = int(n_folds)  # cut of incomplete horizons
     # TunedData.index = range(len(TunedData)) #give them dataframe an counter index
-    (TestData_X, TestData_Y) = SV.split_signal_and_features(MT_Setup_Object_PO.NameOfSignal, TestData)
+    (TestData_X, TestData_Y) = SVF.split_signal_and_features(MT_Setup_Object_PO.NameOfSignal, TestData)
 
     if os.path.isfile(os.path.join(MT_Setup_Object_PO.ResultsFolder, "ScalerTracker.save")):  # if scaler was used
         ScaleTracker_Signal = joblib.load(
@@ -203,8 +204,8 @@ def iterative_evaluation(MT_Setup_Object_PO, TestData, Model, horizon,
         Fold = TestData_X[(horizon * i):(horizon * (i + 1))]
         predicted_fold, Nothing = Model(MT_Setup_Object_PO, NameOfPredictor, Fold)  # predict on that fold
         # rescale
-        predicted_fold = ScaleTracker_Signal.inverse_transform(SV.reshape(predicted_fold))
-        measured_fold = ScaleTracker_Signal.inverse_transform(SV.reshape(measured_fold))
+        predicted_fold = ScaleTracker_Signal.inverse_transform(SVF.reshape(predicted_fold))
+        measured_fold = ScaleTracker_Signal.inverse_transform(SVF.reshape(measured_fold))
 
         fold_list.append([measured_fold, predicted_fold])
     return fold_list

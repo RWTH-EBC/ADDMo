@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 plt.switch_backend('agg')
 import statsmodels.api as sm
 import numpy as np
-import SharedVariables as SV
+import SharedVariablesFunctions as SVF
 
 style.use('fivethirtyeight')
 
 
 def plot_TimeSeries(df, unitOfMeasure, savePath, Scaled, column):
-    column = SV.del_unsupported_os_characters(column)
+    column = SVF.del_unsupported_os_characters(column)
     #fig = plt.figure()
     ax1 = plt.subplot2grid((1, 1), (0, 0))
     df.plot(ax=ax1, color='k', label=df.name, lw=0.5)
@@ -42,8 +42,8 @@ def plot_x_y(x, y, savePath, xlim=False, ylim=False):
     plt.ylabel(y.name)
     plt.legend(loc='best')
     plt.tight_layout()
-    SavePath_pdf = "%s/CloudPlot_%s.pdf" % (savePath, SV.del_unsupported_os_characters(x.name))
-    SavePath_jpg = "%s/CloudPlot_%s.jpg" % (savePath, SV.del_unsupported_os_characters(x.name))
+    SavePath_pdf = "%s/CloudPlot_%s.pdf" % (savePath, SVF.del_unsupported_os_characters(x.name))
+    SavePath_jpg = "%s/CloudPlot_%s.jpg" % (savePath, SVF.del_unsupported_os_characters(x.name))
     plt.savefig(SavePath_pdf)
     plt.savefig(SavePath_jpg)
     plt.close()
@@ -63,8 +63,8 @@ def plot_crosscorr(x, y, savePath, xlim=False, ylim=False, lags=50, level=0.5):
     plt.xlabel('lags')
     plt.ylabel('coefficient value')
     #plt.tight_layout()
-    SavePath_pdf = "%s/Crosscorelation_%s.pdf" % (savePath, SV.del_unsupported_os_characters(y.name))
-    SavePath_jpg = "%s/Crosscorelation_%s.jpg" % (savePath, SV.del_unsupported_os_characters(y.name))
+    SavePath_pdf = "%s/Crosscorelation_%s.pdf" % (savePath, SVF.del_unsupported_os_characters(y.name))
+    SavePath_jpg = "%s/Crosscorelation_%s.jpg" % (savePath, SVF.del_unsupported_os_characters(y.name))
     plt.savefig(SavePath_pdf)
     plt.savefig(SavePath_jpg)
     plt.close()

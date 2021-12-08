@@ -52,8 +52,8 @@ def recursive(Features_test, Best_trained_model):
     return Features_test_i
 
 
-# ----------------------------------------------------------------------------------------------------
-# Predictor definitions
+# -------------------------------------- Predictor definitions ------------------------------------------------------
+
 def svr_grid_search_predictor(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid, CV,
                               Max_evals=NotImplemented, Recursive=False):
     # print("Cell GridSearchSVR start---------------------------------------------------------")

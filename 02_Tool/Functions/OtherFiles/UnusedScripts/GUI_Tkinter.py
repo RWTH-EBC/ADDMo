@@ -16,8 +16,8 @@ def saveCallback2(OwnlagType): #save entries in an txt file which will be loaded
 
 
     #Variables for Data Tuning
-    #SV.ColumnOfSignal = ColumnSignal.get()
-    #SV.AutoFeatureLagLags = AutoFeatureLagLags.get()
+    #SVF.ColumnOfSignal = ColumnSignal.get()
+    #SVF.AutoFeatureLagLags = AutoFeatureLagLags.get()
 
     #Variables for Model Tuning
     SV.NameOfSubTest = NameOfSubTest.get()

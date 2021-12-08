@@ -2,11 +2,11 @@ from math import log
 from sklearn.feature_selection import RFE
 from sklearn.feature_selection import RFECV
 
-from BlackBoxes import *
+from PredictorDefinitions import *
 from Functions.ErrorMetrics import *
 
 import ModelTuning as MT
-import SharedVariables as SV
+import SharedVariablesFunctions as SVF
 from ModelTuningRuntimeResults import ModelTuningRuntimeResults as MTRR
 
 
@@ -85,7 +85,7 @@ def Bayes(MT_Setup_Object_AFB, MT_RR_object_AFB, _X_train, _Y_train, _X_test, _Y
         else:
             _Model = Model
 
-        EstimatorEmbedded = SV.rf  # rf is a shared variable defined in SharedVariables.py
+        EstimatorEmbedded = SVF.rf  # rf is a shared variable defined in SharedVariables.py
 
         (XTr, YTr, XTe, YTe) = embedded__recursive_feature_selection(MT_Setup_Object_AFB, _X_train, _Y_train, _X_test,
                                                                      _Y_test,
@@ -127,7 +127,7 @@ def Bayes(MT_Setup_Object_AFB, MT_RR_object_AFB, _X_train, _Y_train, _X_test, _Y
     else:
         _Model = Model
 
-    EstimatorEmbedded = SV.rf
+    EstimatorEmbedded = SVF.rf
 
     (XTr, YTr, XTe, YTe, BestData) = embedded__recursive_feature_selection(MT_Setup_Object_AFB, _X_train, _Y_train,
                                                                            _X_test, _Y_test,

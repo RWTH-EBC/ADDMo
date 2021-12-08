@@ -5,7 +5,7 @@ from math import log
 
 from BlackBoxes import *
 
-import SharedVariables as SV
+import SharedVariablesFunctions as SVF
 
 class DataTuningSetup:
     """
@@ -38,8 +38,8 @@ class DataTuningSetup:
     WrapperModels = {"ANN":ann_bayesian_predictor,"GB":gradientboost_bayesian,"Lasso":lasso_bayesian,"SVR":svr_bayesian_predictor,"RF":rf_predictor}
     -->
 
-    EstimatorWrapper = SV.WrapperModels["RF"]  # state one blackbox model from "BlackBoxes.py", without parenthesis, e.g. <rf_predictor>
-    WrapperParams = [SV.Hyperparametergrids["RF"], None, None, False]  # state the parameters that the model should have . Eg. [None, None, None, False] or [HyperparameterGrid, TimeSeriesSplit(n_splits=3), 30, False]
+    EstimatorWrapper = SVF.WrapperModels["RF"]  # state one blackbox model from "BlackBoxes.py", without parenthesis, e.g. <rf_predictor>
+    WrapperParams = [SVF.Hyperparametergrids["RF"], None, None, False]  # state the parameters that the model should have . Eg. [None, None, None, False] or [HyperparameterGrid, TimeSeriesSplit(n_splits=3), 30, False]
 
     # 1st entry = hyperparametergrid
     # 2nd= crossvalidation
@@ -171,8 +171,8 @@ class DataTuningSetup:
 
         # -----------------------Wrapper Variables-------------------------------
 
-        self.EstimatorWrapper = SV.WrapperModels["RF"]
-        self.WrapperParams = [SV.Hyperparametergrids["RF"], None, None, False]
+        self.EstimatorWrapper = SVF.WrapperModels["RF"]
+        self.WrapperParams = [SVF.Hyperparametergrids["RF"], None, None, False]
         self.MinIncrease = 0.005
 
         # -----------------------ImportData Variables-------------------------------

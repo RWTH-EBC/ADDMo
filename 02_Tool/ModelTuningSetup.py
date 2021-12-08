@@ -2,7 +2,7 @@ import os
 
 from sklearn.externals import joblib
 
-import SharedVariables as SV
+import SharedVariablesFunctions as SVF
 
 class ModelTuningSetup:
     """
@@ -133,7 +133,7 @@ class ModelTuningSetup:
 
         self.MaxEval_Bayes = 5
         self.Model_Bayes = "Baye"
-        self.EstimatorEmbedded_FinalBaye = SV.rf
+        self.EstimatorEmbedded_FinalBaye = SVF.rf
 
     def dump_object(self):
         print("Saving Model Tuning Setup class Object as a pickle in path: '%s'" % os.path.join(self.ResultsFolder,

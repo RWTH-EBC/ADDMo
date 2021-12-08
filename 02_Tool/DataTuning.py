@@ -5,7 +5,7 @@ Executable to perform data tuning.
 import os
 import time
 
-import SharedVariables as SV
+import SharedVariablesFunctions as SVF
 import ImportData
 import Preprocessing
 import PeriodSelection
@@ -27,7 +27,7 @@ def main(DT_Setup_object):
     if DT_Setup_object.FixImport:
         path_input_data = os.path.join(PathToData, "InputData" + '.xlsx') #Todo: should be set in the setup class (either by default or by GUI) - delete all fiximport occurances - make GUI define the correct path
     else:
-        path_input_data = os.path.join(PathToData, "GUI_Uploads", SV.GUI_Filename)
+        path_input_data = os.path.join(PathToData, "GUI_Uploads", SVF.GUI_Filename)
 
     # Save all the folder paths in the DTS object
     DT_Setup_object.RootDir = RootDir
@@ -37,7 +37,7 @@ def main(DT_Setup_object):
     DT_Setup_object.InputData = path_input_data
 
     # create required folder structure for saving results
-    SV.delete_and_create_folder(DT_Setup_object.ResultsFolder)
+    SVF.delete_and_create_folder(DT_Setup_object.ResultsFolder)
     os.makedirs(PathToPickles)
 
     DT_RR_object = DTRR()  # create the DataTuningRuntimeResults object

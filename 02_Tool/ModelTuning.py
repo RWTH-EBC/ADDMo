@@ -21,118 +21,20 @@ from sklearn.feature_selection import VarianceThreshold
 from sklearn.model_selection import train_test_split
 
 from BlackBoxes import *
-from BlackBoxes_mkm import *
+from PredictorDefinitions import *
 from Functions.ErrorMetrics import *
 from Functions.PlotFcn import *
 
-import SharedVariables as SV
+import SharedVariablesFunctions as SVF
 from ModelTuningSetup import ModelTuningSetup as MTS
 from ModelTuningRuntimeResults import ModelTuningRuntimeResults as MTRR
 
-print("Start")
-
-
-# -------------------------------------------------------------------------------------------------------------------
-
-# saves the BestModels in a folder "BestModels", also capable of saving individual models
-def model_saver(Result_dic, ResultsFolderSubTest, NameOfPredictor, IndividualModel):
-    if os.path.isdir(os.path.join(ResultsFolderSubTest, "BestModels")) == True:
-        pass
-    else:
-        os.makedirs(os.path.join(ResultsFolderSubTest, "BestModels"))
-
-    if IndividualModel == "week_weekend":
-        joblib.dump(Result_dic["Best_trained_model"]["weekday"], os.path.join(ResultsFolderSubTest, "BestModels",
-                                                                              "weekday_%s.save" % (
-                                                                                  NameOfPredictor)))  # dump the best trained model in a file to reuse it for different predictions
-        joblib.dump(Result_dic["Best_trained_model"]["weekend"], os.path.join(ResultsFolderSubTest, "BestModels",
-                                                                              "weekend_%s.save" % (
-                                                                                  NameOfPredictor)))  # dump the best trained model in a file to reuse it for different predictions
-    elif IndividualModel == "hourly":
-        joblib.dump(Result_dic["Best_trained_model"][0],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "0_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][1],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "1_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][2],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "2_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][3],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "3_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][4],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "4_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][5],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "5_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][6],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "6_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][7],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "7_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][8],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "8_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][9],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "9_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][10],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "10_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][11],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "11_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][12],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "12_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][13],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "13_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][14],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "14_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][15],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "15_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][16],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "16_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][17],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "17_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][18],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "18_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][19],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "19_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][20],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "20_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][21],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "21_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][22],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "22_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][23],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "23_%s.save" % (NameOfPredictor)))
-    elif IndividualModel == "byFeature":
-        joblib.dump(Result_dic["Best_trained_model"]["above"],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "above_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"]["below"],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "below_%s.save" % (NameOfPredictor)))
-    else:
-        joblib.dump(Result_dic["Best_trained_model"],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "%s.save" % (NameOfPredictor)))
-
-
-def getscore(MT_Setup_Object_PO, Y_Predicted, Y_test, Indexer):
-    if os.path.isfile(os.path.join(MT_Setup_Object_PO.ResultsFolder, "ScalerTracker.save")):  # if scaler was used
-        ScaleTracker_Signal = joblib.load(
-            os.path.join(MT_Setup_Object_PO.ResultsFolder, "ScalerTracker.save"))  # load used scaler
-        # Scale Results back to normal; maybe inside the Blackboxes
-        Y_Predicted = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_Predicted))
-        Y_test = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_test))
-        # convert arrays to data frames(Series) for further use
-        Y_test = pd.DataFrame(index=Indexer, data=Y_test, columns=["Measure"])
-        Y_test = Y_test["Measure"]
-
-    # convert arrays to data frames(Series) for further use
-    Y_Predicted = pd.DataFrame(index=Indexer, data=Y_Predicted, columns=["Prediction"])
-    Y_Predicted = Y_Predicted["Prediction"]
-
-    # evaluate results
-    R2 = r2_score(Y_test, Y_Predicted)
-    # return Score for modelselection
-    return R2
-
-#-----------------------------------------------------------------------------------------------------------------------
+print("Model Tuning Started")
 
 # --------------------------------------------- Model Tuning Section --------------------------------------------------
 
-# Function used by Hyperopt, OnlyPredict and AFB (hence MT_Setup_Object is in-fact MT_Setup_Object_X, where X refers
-# to Hyperopt/PO/AFB)
+# Function used by Hyperopt, OnlyPredict and AFB (hence the parameter MT_Setup_Object is generically used for
+# MT_Setup_Object_X type objects, where X refers to Hyperopt/PO/AFB based on the function call)
 
 def pre_handling(MT_Setup_object, OnlyPredict):
     # define path to data source files '.xls' & '.pickle'
@@ -157,7 +59,7 @@ def pre_handling(MT_Setup_object, OnlyPredict):
 
     # check if test results are saved in the right folder:
     if OnlyPredict != True:
-        SV.delete_and_create_folder(MT_Setup_object.ResultsFolderSubTest)
+        SVF.delete_and_create_folder(MT_Setup_object.ResultsFolderSubTest)
 
     # Take Tuned data, build Train and Test Sets, and split them into signal and features
     NameOfSignal = joblib.load(os.path.join(MT_Setup_object.ResultsFolder, "NameOfSignal.save"))
@@ -186,8 +88,8 @@ def pre_handling(MT_Setup_object, OnlyPredict):
         Data_Train = shuffle(Data_Train)
         # Data_Test = shuffle(Data_Test) #not necessary since experiments showed that the order of test samples does not affect the >prediction<
 
-    (_X_train, _Y_train) = SV.split_signal_and_features(MT_Setup_object.NameOfSignal, Data_Train)
-    (_X_test, _Y_test) = SV.split_signal_and_features(MT_Setup_object.NameOfSignal, Data_Test)
+    (_X_train, _Y_train) = SVF.split_signal_and_features(MT_Setup_object.NameOfSignal, Data_Train)
+    (_X_test, _Y_test) = SVF.split_signal_and_features(MT_Setup_object.NameOfSignal, Data_Test)
     Indexer = _X_test.index  # for tracking the orignal index(timestamps) of the test data
 
     return _X_train, _Y_train, _X_test, _Y_test, Indexer, Data
@@ -202,16 +104,12 @@ def manual_train_test_period_select(Data, StartDateTrain, EndDateTrain, StartDat
 def main_OnlyHyParaOpti(MT_Setup_Object):
     print("Start training and testing with only optimizing the hyperparameters: %s/%s/%s" % (
         MT_Setup_Object.NameOfData, MT_Setup_Object.NameOfExperiment, MT_Setup_Object.NameOfSubTest))
-    _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = pre_handling(MT_Setup_Object, False)
+    _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = pre_handling(MT_Setup_Object, OnlyPredict=False)
 
     MT_RR_object = MTRR()
 
     train_predict_selected_models(MT_Setup_Object, MT_RR_object, _X_train, _Y_train, _X_test, _Y_test, Indexer,
                                   MT_Setup_Object.GlobalIndivModel, True)
-
-    #for Model in MT_Setup_Object.OnlyHyPara_Models:
-     #   all_models(MT_Setup_Object, MT_RR_object, Model, _X_train, _Y_train, _X_test, _Y_test, Indexer,
-      #             MT_Setup_Object.GlobalIndivModel, True)
 
     print("Finish training and testing with only optimizing the hyperparameters : %s/%s/%s" % (
         MT_Setup_Object.NameOfData, MT_Setup_Object.NameOfExperiment, MT_Setup_Object.NameOfSubTest))
@@ -270,7 +168,7 @@ def main_OnlyHyParaOpti(MT_Setup_Object):
 
 
 if __name__ == '__main__':
-    # Todo: The following is done in ModelTuning and DataTuning, isn´t it better once in SV?
+    # Todo: The following is done in ModelTuning and DataTuning, isn´t it better once in SVF?
 
     MT_Setup_Object = MTS()
     # define path to data source files '.xls' & '.pickle'

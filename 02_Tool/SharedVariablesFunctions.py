@@ -4,6 +4,9 @@ import pandas as pd
 import numpy as np
 import sys
 from sklearn_pandas import DataFrameMapper
+from PredictorDefinitions import *
+from Functions.ErrorMetrics import *
+from Functions.PlotFcn import *
 from Functions.ErrorMetrics import *
 from Functions.PlotFcn import *
 from sklearn.feature_selection import mutual_info_regression, f_regression
@@ -12,7 +15,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import RobustScaler
 from math import log
 
-from BlackBoxes import *
 
 GUI_Filename = "Empty"
 
@@ -146,6 +148,18 @@ def del_unsupported_os_characters(str):
         "<", "").replace(">", "").replace("|", "")
     return str
 
+def delete_and_create_folder(path):
+    '''Make sure not to accidentally overwrite data.'''
+
+    if os.path.isdir(path) == True:
+        answer = input(f"You are about to overwrite data. Do you want to delete the data in {path}:")
+        if answer == "y":
+            shutil.rmtree(path)
+            print("Folder deleted. Script continued.")
+        else:
+            sys.exit("Code stopped by user. Enter y for yes")
+    os.makedirs(path)
+
 def visualization_documentation(MT_Setup_Object, RR_Model_Summary, NameOfPredictor, Y_Predicted, Y_test, Indexer,
                                 Y_train,
                                 ComputationTime, Shuffle,
@@ -241,14 +255,28 @@ def visualization_documentation(MT_Setup_Object, RR_Model_Summary, NameOfPredict
 
     # return Score for modelselection
     return R2
-def delete_and_create_folder(path):
-    '''Make sure not to accidentally overwrite data.'''
 
-    if os.path.isdir(path) == True:
-        answer = input(f"You are about to overwrite data. Do you want to delete the data in {path}:")
-        if answer == "y":
-            shutil.rmtree(path)
-            print("Folder deleted. Script continued.")
-        else:
-            sys.exit("Code stopped by user. Enter y for yes")
-    os.makedirs(path)
+def getscores(Y_test, Y_Predicted):
+    # evaluate results
+    (R2, STD, RMSE, MAPE, MAE) = evaluation(Y_test, Y_Predicted)
+
+    # return Scores for modelselection
+    return R2, STD, RMSE, MAPE, MAE
+
+
+def apply_scaler(MT_Setup_Object, Y_test, Y_Predicted, Indexer):
+    if os.path.isfile(os.path.join(MT_Setup_Object.ResultsFolder, "ScalerTracker.save")):  # if scaler was used
+        ScaleTracker_Signal = joblib.load(
+            os.path.join(MT_Setup_Object.ResultsFolder, "ScalerTracker.save"))  # load used scaler
+        # Scale Results back to normal; maybe inside the Blackboxes
+        Y_Predicted = ScaleTracker_Signal.inverse_transform(reshape(Y_Predicted))
+        Y_test = ScaleTracker_Signal.inverse_transform(reshape(Y_test))
+        # convert arrays to data frames(Series) for further use
+        Y_test = pd.DataFrame(index=Indexer, data=Y_test, columns=["Measure"])
+        Y_test = Y_test["Measure"]
+
+    # convert arrays to data frames(Series) for further use
+    Y_Predicted = pd.DataFrame(index=Indexer, data=Y_Predicted, columns=["Prediction"])
+    Y_Predicted = Y_Predicted["Prediction"]
+
+    return Y_test, Y_Predicted

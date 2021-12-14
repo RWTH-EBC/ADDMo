@@ -199,7 +199,7 @@ def main_OnlyPredict(MT_Setup_object_PO):
                                      MT_Setup_object_PO.NameOfOnlyPredict)
     MT_Setup_object_PO.OnlyPredictFolder = OnlyPredictFolder
 
-    # check if predict results are safed in the right folder:
+    # check if predict results are saved in the right folder:
     SVF.delete_and_create_folder(MT_Setup_object_PO.OnlyPredictFolder)
 
     AvailablePredictors = ["svr_bayesian_predictor", "rf_predictor", "ann_bayesian_predictor",

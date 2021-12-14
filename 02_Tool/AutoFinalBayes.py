@@ -2,7 +2,7 @@ from math import log
 from sklearn.feature_selection import RFE
 from sklearn.feature_selection import RFECV
 
-from PredictorDefinitions import *
+from BlackBoxes import *
 from Functions.ErrorMetrics import *
 
 import ModelTuning as MT
@@ -91,8 +91,9 @@ def Bayes(MT_Setup_Object_AFB, MT_RR_object_AFB, _X_train, _Y_train, _X_test, _Y
                                                                      _Y_test,
                                                                      EstimatorEmbedded, params["n_F"],
                                                                      MT_Setup_Object_AFB.GlobalCV_MT)  # create the specific train and test data
-        Score = MT.all_models(MT_Setup_Object_AFB, MT_RR_object_AFB, _Model, XTr, YTr, XTe, YTe, Indexer,
+        Score = train_predict_selected_models(MT_Setup_Object_AFB, MT_RR_object_AFB, _Model, XTr, YTr, XTe, YTe, Indexer,
                               str(params["IndivModel"]["IndivModel_baye"]), False)
+        # todo: add documentation part
         t_end = time.time()
         print("Params per iteration: %s \ with the Score score %.3f, took %.2fseconds" % (
             params, Score, (t_end - t_start)))
@@ -136,9 +137,9 @@ def Bayes(MT_Setup_Object_AFB, MT_RR_object_AFB, _X_train, _Y_train, _X_test, _Y
 
     # Todo: Here you could use higher Max_eval for the last final training with best settings(Add specific max eval hyparatuning to the functions)
 
-    Score = MT.all_models(MT_Setup_Object_AFB, MT_RR_object_AFB, _Model, XTr, YTr, XTe, YTe, Indexer,
+    Score = train_predict_selected_models(MT_Setup_Object_AFB, MT_RR_object_AFB, _Model, XTr, YTr, XTe, YTe, Indexer,
                           str(BestParams["IndivModel"]["IndivModel_baye"]), True)
-
+    # todo: add documentation part
     # Document the Results and settings of the final bayesian optimization
     Totaltimeend = time.time()
     # save summary of setup and evaluation

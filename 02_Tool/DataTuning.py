@@ -1,6 +1,6 @@
-'''
+"""
 Executable to perform data tuning.
-'''
+"""
 
 import os
 import time
@@ -12,6 +12,7 @@ import PeriodSelection
 import FeatureConstruction
 import FeatureSelection
 from DataTuningRuntimeResults import DataTuningRuntimeResults as DTRR
+import Documentation as Document
 
 def main(DT_Setup_object):
     print("Data Tuning process has begun...")
@@ -71,7 +72,7 @@ def main(DT_Setup_object):
     DT_RR_object.store_results(DT_Setup_object)
 
     # Documentation
-    DT_Setup_object.documentation_DataTuning(DT_Setup_object, timestart, timeend)
+    Document.documentation_DataTuning(DT_Setup_object, timestart, timeend)
 
     print("Tuning the data took: %s seconds" % (timeend - timestart))
     print("End data tuning: %s/%s" % (DT_Setup_object.NameOfData, DT_Setup_object.NameOfExperiment))

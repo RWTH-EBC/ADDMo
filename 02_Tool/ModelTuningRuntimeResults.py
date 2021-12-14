@@ -1,4 +1,4 @@
-'''This Module contains classes for storing runtime results'''
+"""This Module contains classes for storing runtime results"""
 
 import os
 
@@ -6,9 +6,9 @@ from sklearn.externals import joblib
 
 
 class RRSummary:
-    '''
+    """
     Stores runtime results for one algorithm.
-    '''
+    """
 
     def __init__(self, **kwargs):
         self.model_name = "model"

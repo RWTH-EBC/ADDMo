@@ -31,6 +31,7 @@ import warnings
 import SharedVariablesFunctions as SVF
 import PredictorDefinitions as PD
 import Documentation as Document
+import ModelTuningRuntimeResults as MTRR
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=FutureWarning)
@@ -92,7 +93,7 @@ def train_predict_selected_models(MT_Setup_Object, MT_RR_object, _X_train, _Y_tr
             Document.visualization(MT_Setup_Object, NameOfPredictor, Y_Predicted, Y_test, Scores)
 
             # only dump if it´s the last best one(marked by Documentation=True)
-            Document.model_saver(Result_dic, MT_Setup_Object.ResultsFolderSubTest, NameOfPredictor, IndividualModel)
+            MTRR.model_saver(Result_dic, MT_Setup_Object.ResultsFolderSubTest, NameOfPredictor, IndividualModel)
 
         # Return R2 value
         return Scores[0]

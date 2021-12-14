@@ -8,6 +8,7 @@ from Functions.ErrorMetrics import *
 import ModelTuning as MT
 import SharedVariablesFunctions as SVF
 from ModelTuningRuntimeResults import ModelTuningRuntimeResults as MTRR
+from ModelTuningSetup import ModelTuningSetup as MTS
 
 
 def main_FinalBayes(MT_Setup_Object_AFB):
@@ -21,7 +22,7 @@ def main_FinalBayes(MT_Setup_Object_AFB):
 
     # Do the bayesian optimization
     Bayes(MT_Setup_Object_AFB, MT_RR_object_AFB, _X_train=_X_train, _Y_train=_Y_train, _X_test=_X_test,
-          _Y_test=_Y_test, Indexer=Indexer,Data=Data)
+          _Y_test=_Y_test, Indexer=Indexer, Data=Data)
 
     print("Finish FinalBayesOpt: %s/%s/%s" % (
         MT_Setup_Object_AFB.NameOfData, MT_Setup_Object_AFB.NameOfExperiment, MT_Setup_Object_AFB.NameOfSubTest))
@@ -31,7 +32,6 @@ def main_FinalBayes(MT_Setup_Object_AFB):
 
 
 def Bayes(MT_Setup_Object_AFB, MT_RR_object_AFB, _X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
-
     # Here the final bayesian optimization is done
     Model = MT_Setup_Object_AFB.Model_Bayes
     Totaltimestart = time.time()
@@ -92,7 +92,7 @@ def Bayes(MT_Setup_Object_AFB, MT_RR_object_AFB, _X_train, _Y_train, _X_test, _Y
                                                                      EstimatorEmbedded, params["n_F"],
                                                                      MT_Setup_Object_AFB.GlobalCV_MT)  # create the specific train and test data
         Score = MT.all_models(MT_Setup_Object_AFB, MT_RR_object_AFB, _Model, XTr, YTr, XTe, YTe, Indexer,
-                           str(params["IndivModel"]["IndivModel_baye"]), False)
+                              str(params["IndivModel"]["IndivModel_baye"]), False)
         t_end = time.time()
         print("Params per iteration: %s \ with the Score score %.3f, took %.2fseconds" % (
             params, Score, (t_end - t_start)))
@@ -137,7 +137,7 @@ def Bayes(MT_Setup_Object_AFB, MT_RR_object_AFB, _X_train, _Y_train, _X_test, _Y
     # Todo: Here you could use higher Max_eval for the last final training with best settings(Add specific max eval hyparatuning to the functions)
 
     Score = MT.all_models(MT_Setup_Object_AFB, MT_RR_object_AFB, _Model, XTr, YTr, XTe, YTe, Indexer,
-                       str(BestParams["IndivModel"]["IndivModel_baye"]), True)
+                          str(BestParams["IndivModel"]["IndivModel_baye"]), True)
 
     # Document the Results and settings of the final bayesian optimization
     Totaltimeend = time.time()
@@ -228,3 +228,8 @@ def embedded__recursive_feature_selection(MT_Setup_Object, _X_train, _Y_train, _
                                                         Features_transformed_test)  # merge signal and features
         BestData = pd.concat([_Data_Train, _Data_Test], axis=0)  # merge test and train period back together
         return Features_transformed, _Y_train, Features_transformed_test, _Y_test, BestData
+
+
+if __name__ == "__main__":
+    DT_Setup_Object_AFB, MT_Setup_Object_AFB = SVF.setup_object_initializer()
+    main_FinalBayes(MT_Setup_Object_AFB)

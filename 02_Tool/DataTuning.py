@@ -14,7 +14,7 @@ import FeatureSelection
 from DataTuningRuntimeResults import DataTuningRuntimeResults as DTRR
 
 def main(DT_Setup_object):
-    print("DataTuning")
+    print("Data Tuning process has begun...")
     # define path to data source files '.xls' & '.pickle'
     RootDir = os.path.dirname(os.path.realpath(__file__))
     PathToData = os.path.join(RootDir, 'Data')
@@ -71,7 +71,7 @@ def main(DT_Setup_object):
     DT_RR_object.store_results(DT_Setup_object)
 
     # Documentation
-    DT_Setup_object.documentation_DataTuning(timestart, timeend)
+    DT_Setup_object.documentation_DataTuning(DT_Setup_object, timestart, timeend)
 
     print("Tuning the data took: %s seconds" % (timeend - timestart))
     print("End data tuning: %s/%s" % (DT_Setup_object.NameOfData, DT_Setup_object.NameOfExperiment))
@@ -79,4 +79,8 @@ def main(DT_Setup_object):
 
 
 if __name__ == "__main__":
-    main()
+    DT_Setup_Object, MT_Setup_Object = SVF.setup_object_initializer()
+    SVF.GUI_Filename = input("Please type the name of the input file (must be present in the GUI_Uploads folder):\n")
+    main(DT_Setup_Object)
+
+

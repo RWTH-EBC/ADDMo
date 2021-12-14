@@ -28,7 +28,7 @@ def timeseries_plotting(DT_Setup_object, Data, Scaled):
 # Main---------------------------------------------------------------------------
 def main(DT_Setup_object, DT_RR_object):
 
-    print("PeriodSelection")
+    print("Period Selection has begun...")
     startTime = time.time()
 
     dataScaled = DT_RR_object.df_preprocessing_data

@@ -15,6 +15,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import RobustScaler
 from math import log
 
+from DataTuningSetup import DataTuningSetup as DTS
+from ModelTuningSetup import ModelTuningSetup as MTS
 
 GUI_Filename = "Empty"
 
@@ -148,16 +150,17 @@ def del_unsupported_os_characters(str):
         "<", "").replace(">", "").replace("|", "")
     return str
 
+
 def delete_and_create_folder(path):
     '''Make sure not to accidentally overwrite data.'''
 
     if os.path.isdir(path) == True:
-        answer = input(f"You are about to overwrite data. Do you want to delete the data in {path}:")
+        answer = input(f"You are about to overwrite already existing data. Do you want to delete the data in: \n\'{path}\'?:\n")
         if answer == "y":
             shutil.rmtree(path)
             print("Folder deleted. Script continued.")
         else:
-            sys.exit("Code stopped by user. Enter y for yes")
+            sys.exit("Code stopped by user. Enter y for yes\n")
     os.makedirs(path)
 
 
@@ -185,3 +188,44 @@ def apply_scaler(MT_Setup_Object, Y_test, Y_Predicted, Indexer):
     Y_Predicted = Y_Predicted["Prediction"]
 
     return Y_test, Y_Predicted
+
+
+def setup_object_initializer():
+    DT_Setup_Object = DTS()
+    MT_Setup_Object = MTS()
+
+    # define path to data source files '.xls' & '.pickle'
+    RootDir = os.path.dirname(os.path.realpath(__file__))
+    PathToData = os.path.join(RootDir, 'Data')
+
+    # -------------------------------DTS initialisations-----------------------------------------------------------
+    # Set Folder for Results
+    ResultsFolder = os.path.join(RootDir, "Results", DT_Setup_Object.NameOfData, DT_Setup_Object.NameOfExperiment)
+    PathToPickles = os.path.join(ResultsFolder, "Pickles")
+
+    # Set the found Variables in "SharedVariables"
+    DT_Setup_Object.RootDir = RootDir
+    DT_Setup_Object.PathToData = PathToData
+    DT_Setup_Object.ResultsFolder = ResultsFolder
+    DT_Setup_Object.PathToPickles = PathToPickles
+
+    # Runtime variable initializations
+    DT_Setup_Object.FixImport = False
+    DT_Setup_Object.InputData = "Empty"
+
+    # -------------------------------MTS initialisations-----------------------------------------------------------
+
+    # Set Folder for Results
+    ResultsFolder = os.path.join(RootDir, "Results", MT_Setup_Object.NameOfData, MT_Setup_Object.NameOfExperiment)
+    PathToPickles = os.path.join(ResultsFolder, "Pickles")
+
+    # Set the found Variables in "SharedVariables"
+    MT_Setup_Object.RootDir = RootDir
+    MT_Setup_Object.PathToData = PathToData
+    MT_Setup_Object.ResultsFolder = ResultsFolder
+    MT_Setup_Object.PathToPickles = PathToPickles
+
+    # Runtime variable initializations
+    MT_Setup_Object.ResultsFolderSubTest = "Empty"
+
+    return DT_Setup_Object, MT_Setup_Object

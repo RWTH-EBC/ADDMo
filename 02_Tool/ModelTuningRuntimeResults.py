@@ -55,7 +55,7 @@ class ModelTuningRuntimeResults:
         self.Lasso_grid_Summary = RRSummary()
 
     def store_results(self, MT_Setup_object):
-        print("Saving Model Tuning Runtime Results class Object as a pickle in path: '%s'" % os.path.join(
+        print("Saving Model Tuning Runtime Results class Object as a pickle in path: \n'%s'" % os.path.join(
             MT_Setup_object.ResultsFolder, "DataTuningRuntimeResults.save"))
 
         # Save the object as a pickle for reuse

@@ -31,40 +31,6 @@ import ModelTuning as MT
 from ModelTuningRuntimeResults import ModelTuningRuntimeResults as MTRR
 
 
-def main_OnlyPredict(MT_Setup_object_PO):
-    print("Start only predicting: %s/%s/%s" % (
-        MT_Setup_object_PO.NameOfData, MT_Setup_object_PO.NameOfExperiment, MT_Setup_object_PO.NameOfSubTest))
-    _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = MT.pre_handling(MT_Setup_object_PO, True)
-
-    OnlyPredictFolder = os.path.join(MT_Setup_object_PO.ResultsFolderSubTest, "OnlyPredict",
-                                     MT_Setup_object_PO.NameOfOnlyPredict)
-    MT_Setup_object_PO.OnlyPredictFolder = OnlyPredictFolder
-
-    # check if predict results are safed in the right folder:
-    SVF.delete_and_create_folder(MT_Setup_object_PO.OnlyPredictFolder)
-
-    AvailablePredictors = ["svr_bayesian_predictor", "rf_predictor", "ann_bayesian_predictor",
-                           "gradientboost_bayesian", "lasso_bayesian", "svr_grid_search_predictor",
-                           "gradientboost_gridsearch", "lasso_grid_search_predictor",
-                           "ann_grid_search_predictor"]
-
-    MT_RR_object_PO = MTRR()
-    ModelSummaryObjectList = [MT_RR_object_PO.SVR_Summary, MT_RR_object_PO.RF_Summary, MT_RR_object_PO.ANN_Summary,
-                              MT_RR_object_PO.GB_Summary, MT_RR_object_PO.Lasso_Summary,
-                              MT_RR_object_PO.SVR_grid_Summary,
-                              MT_RR_object_PO.GB_grid_Summary, MT_RR_object_PO.Lasso_grid_Summary,
-                              MT_RR_object_PO.ANN_grid_Summary]
-
-    for NameOfPredictor, ModelSummaryObject in zip(AvailablePredictors, ModelSummaryObjectList):
-            only_predict(MT_Setup_object_PO, ModelSummaryObject, NameOfPredictor, _X_test, _Y_test, Indexer, Data)
-
-    print("Finish only predicting : %s/%s/%s" % (
-        MT_Setup_object_PO.NameOfData, MT_Setup_object_PO.NameOfExperiment, MT_Setup_object_PO.NameOfSubTest))
-    print("________________________________________________________________________\n")
-    print("________________________________________________________________________\n")
-    MT_RR_object_PO.store_results(MT_Setup_object_PO)
-
-
 def only_predict(MT_Setup_object_PO, RR_Model_Summary, NameOfPredictor, _X_test, _Y_test, Indexer, Data):
     timestart = time.time()
     Predicted, IndividualModel = predict(MT_Setup_object_PO, NameOfPredictor, _X_test)
@@ -77,9 +43,9 @@ def only_predict(MT_Setup_object_PO, RR_Model_Summary, NameOfPredictor, _X_test,
     ComputationTime = (timeend - timestart)
 
     MT.visualization_documentation(MT_Setup_object_PO, RR_Model_Summary, NameOfPredictor, Predicted,
-                                _Y_test, Indexer, None, ComputationTime, None, MT_Setup_object_PO.OnlyPredictFolder,
-                                 None, None, None, None, MT_Setup_object_PO.OnlyPredictRecursive, IndividualModel,
-                                None)
+                                   _Y_test, Indexer, None, ComputationTime, None, MT_Setup_object_PO.OnlyPredictFolder,
+                                   None, None, None, None, MT_Setup_object_PO.OnlyPredictRecursive, IndividualModel,
+                                   None)
 
     def documenation_iterative_evaluation(mean_score, SD_score, errorlist, errormetric):
         errorlist = np.around(errorlist, 3)
@@ -136,6 +102,7 @@ def only_predict(MT_Setup_object_PO, RR_Model_Summary, NameOfPredictor, _X_test,
                                                                 errormetric=mean_absolute_percentage_error)
     documenation_iterative_evaluation(mean_score, SD_score, errorlist, "MAPE")
 
+
 def predict(MT_Setup_object_PO, NameOfPredictor, _X_test):
     'Loads trained models from previous trainings and does a prediction for the respective period of _X_test.'
     'Individual models are regarded.'
@@ -185,6 +152,7 @@ def predict(MT_Setup_object_PO, NameOfPredictor, _X_test):
 
     return Predicted, IndividualModel
 
+
 def iterative_evaluation(MT_Setup_Object_PO, TestData, Model, horizon,
                          NameOfPredictor):  # horizon= amount of samples to predict in the future
     'Does an special evaluation which iteratively scores a period with the length of horizon in the whole period of TunedData. It returns the list of scores'
@@ -220,3 +188,42 @@ def mean_scoring(fold_list, errormetric):  # processes the list of scores from "
     mean_scores = statistics.mean(errorlist)  # mean of all scores
     SD_scores = statistics.pstdev(errorlist)  # standard deviation of all scores
     return mean_scores, SD_scores, errorlist, errormetric
+
+
+def main_OnlyPredict(MT_Setup_object_PO):
+    print("Start only predicting: %s/%s/%s" % (
+        MT_Setup_object_PO.NameOfData, MT_Setup_object_PO.NameOfExperiment, MT_Setup_object_PO.NameOfSubTest))
+    _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = MT.pre_handling(MT_Setup_object_PO, True)
+
+    OnlyPredictFolder = os.path.join(MT_Setup_object_PO.ResultsFolderSubTest, "OnlyPredict",
+                                     MT_Setup_object_PO.NameOfOnlyPredict)
+    MT_Setup_object_PO.OnlyPredictFolder = OnlyPredictFolder
+
+    # check if predict results are safed in the right folder:
+    SVF.delete_and_create_folder(MT_Setup_object_PO.OnlyPredictFolder)
+
+    AvailablePredictors = ["svr_bayesian_predictor", "rf_predictor", "ann_bayesian_predictor",
+                           "gradientboost_bayesian", "lasso_bayesian", "svr_grid_search_predictor",
+                           "gradientboost_gridsearch", "lasso_grid_search_predictor",
+                           "ann_grid_search_predictor"]
+
+    MT_RR_object_PO = MTRR()
+    ModelSummaryObjectList = [MT_RR_object_PO.SVR_Summary, MT_RR_object_PO.RF_Summary, MT_RR_object_PO.ANN_Summary,
+                              MT_RR_object_PO.GB_Summary, MT_RR_object_PO.Lasso_Summary,
+                              MT_RR_object_PO.SVR_grid_Summary,
+                              MT_RR_object_PO.GB_grid_Summary, MT_RR_object_PO.Lasso_grid_Summary,
+                              MT_RR_object_PO.ANN_grid_Summary]
+
+    for NameOfPredictor, ModelSummaryObject in zip(AvailablePredictors, ModelSummaryObjectList):
+        only_predict(MT_Setup_object_PO, ModelSummaryObject, NameOfPredictor, _X_test, _Y_test, Indexer, Data)
+
+    print("Finish only predicting : %s/%s/%s" % (
+        MT_Setup_object_PO.NameOfData, MT_Setup_object_PO.NameOfExperiment, MT_Setup_object_PO.NameOfSubTest))
+    print("________________________________________________________________________\n")
+    print("________________________________________________________________________\n")
+    MT_RR_object_PO.store_results(MT_Setup_object_PO)
+
+
+if __name__ == "__main__":
+    DT_Setup_object_PO, MT_Setup_object_PO = SVF.setup_object_initializer()
+    main_OnlyPredict(MT_Setup_object_PO)

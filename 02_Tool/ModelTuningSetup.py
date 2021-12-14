@@ -98,7 +98,7 @@ class ModelTuningSetup:
 
         # -----------------------Model Tuning Variables-------------------------------
 
-        self.NameOfSubTest = "Empty"
+        self.NameOfSubTest = "TrialTunedModel"
         self.StartTraining = '2016-08-01 00:00'
         self.EndTraining = '2016-08-14 23:45'
         self.StartTesting = '2016-08-15 00:00'

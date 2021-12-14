@@ -26,10 +26,10 @@ from Functions.ErrorMetrics import *
 from Functions.PlotFcn import *
 
 import SharedVariablesFunctions as SVF
-from ModelTuningSetup import ModelTuningSetup as MTS
 from ModelTuningRuntimeResults import ModelTuningRuntimeResults as MTRR
 
-print("Model Tuning Started")
+print("Model Tuning has begun...")
+
 
 # --------------------------------------------- Model Tuning Section --------------------------------------------------
 
@@ -38,7 +38,8 @@ print("Model Tuning Started")
 
 def pre_handling(MT_Setup_object, OnlyPredict):
     # define path to data source files '.xls' & '.pickle'
-    RootDir = os.path.dirname(os.path.realpath(__file__)) #Todo: could all that folder "pathing" be done within the setup class (as function eg. in the init?)?
+    RootDir = os.path.dirname(os.path.realpath(
+        __file__))  # Todo: could all that folder "pathing" be done within the setup class (as function eg. in the init?)?
     PathToData = os.path.join(RootDir, 'Data')
 
     # Set Folder for Results
@@ -102,7 +103,7 @@ def manual_train_test_period_select(Data, StartDateTrain, EndDateTrain, StartDat
 
 
 def main_OnlyHyParaOpti(MT_Setup_Object):
-    print("Start training and testing with only optimizing the hyperparameters: %s/%s/%s" % (
+    print("Start training and testing with only optimizing the hyperparameters: \n%s/%s/%s" % (
         MT_Setup_Object.NameOfData, MT_Setup_Object.NameOfExperiment, MT_Setup_Object.NameOfSubTest))
     _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = pre_handling(MT_Setup_Object, OnlyPredict=False)
 
@@ -111,81 +112,13 @@ def main_OnlyHyParaOpti(MT_Setup_Object):
     train_predict_selected_models(MT_Setup_Object, MT_RR_object, _X_train, _Y_train, _X_test, _Y_test, Indexer,
                                   MT_Setup_Object.GlobalIndivModel, True)
 
-    print("Finish training and testing with only optimizing the hyperparameters : %s/%s/%s" % (
+    print("Finish training and testing with only optimizing the hyperparameters : \n%s/%s/%s" % (
         MT_Setup_Object.NameOfData, MT_Setup_Object.NameOfExperiment, MT_Setup_Object.NameOfSubTest))
     print("________________________________________________________________________\n")
     print("________________________________________________________________________\n")
     MT_RR_object.store_results(MT_Setup_Object)
 
 
-# # def modelselection(MT_Setup_Object, MT_RR_object, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError",
-# #                    IndividualModel="Error",
-# #                    Documentation=False):
-# #     # Trains and tests all (bayesian) models and returns the best of them, also saves it in an txtfile.
-# #     Score_RF = BB3.train_predict(MT_Setup_Object, MT_RR_object.RF_Summary, _X_train, _Y_train, _X_test, _Y_test,
-# #                                  Indexer, IndividualModel,
-# #                                  Documentation)
-# #     Score_ANN = BB5.train_predict(MT_Setup_Object, MT_RR_object.ANN_Summary, _X_train, _Y_train, _X_test, _Y_test,
-# #                                   Indexer, IndividualModel,
-# #                                   Documentation)
-# #     Score_GB = BB7.train_predict(MT_Setup_Object, MT_RR_object.GB_Summary, _X_train, _Y_train, _X_test, _Y_test,
-# #                                  Indexer, IndividualModel,
-# #                                  Documentation)
-# #     Score_Lasso = BB9.train_predict(MT_Setup_Object, MT_RR_object.Lasso_Summary, _X_train, _Y_train, _X_test, _Y_test,
-# #                                     Indexer, IndividualModel,
-# #                                     Documentation)
-# #     Score_SVR = BB2.train_predict(MT_Setup_Object, MT_RR_object.SVR_Summary, _X_train, _Y_train, _X_test, _Y_test,
-# #                                   Indexer, IndividualModel,
-# #                                   Documentation)
-#
-#     Score_list = [0, 1, 2, 3, 4]
-#     Score_list[0] = Score_SVR
-#     Score_list[1] = Score_RF
-#     Score_list[2] = Score_ANN
-#     Score_list[3] = Score_GB
-#     Score_list[4] = Score_Lasso
-#
-#     print(Score_list)
-#     # Todo: if Scoring function Score max; if Scoring function some error: min
-#     BestScore = max(Score_list)
-#
-#     if Score_list[0] == BestScore:
-#         __BestModel = "SVR"
-#     if Score_list[1] == BestScore:
-#         __BestModel = "RF"
-#     if Score_list[2] == BestScore:
-#         __BestModel = "ANN"
-#     if Score_list[3] == BestScore:
-#         __BestModel = "GB"
-#     if Score_list[4] == BestScore:
-#         __BestModel = "Lasso"
-#
-#     # state best model in txt file
-#     f = open(os.path.join(MT_Setup_Object.ResultsFolderSubTest, "BestModel.txt"), "w+")
-#     f.write("The best model is %s with an accuracy of %s" % (__BestModel, BestScore))
-#     f.close()
-#     return BestScore
-
-
 if __name__ == '__main__':
-    # Todo: The following is done in ModelTuning and DataTuning, isn´t it better once in SVF?
-
-    MT_Setup_Object = MTS()
-    # define path to data source files '.xls' & '.pickle'
-    RootDir = os.path.dirname(os.path.realpath(__file__))
-    PathToData = os.path.join(RootDir, 'Data')
-
-    # Set Folder for Results
-    ResultsFolder = os.path.join(RootDir, "Results", MT_Setup_Object.NameOfData, MT_Setup_Object.NameOfExperiment)
-    PathToPickles = os.path.join(ResultsFolder, "Pickles")
-
-    # Set the found Variables in "SharedVariables"
-    MT_Setup_Object.RootDir = RootDir
-    MT_Setup_Object.PathToData = PathToData
-    MT_Setup_Object.ResultsFolder = ResultsFolder
-    MT_Setup_Object.PathToPickles = PathToPickles
-
-    # Define which part shall be computed (parameters are set in SharedVariables)
-    # main_FinalBayes()
+    DT_Setup_Object, MT_Setup_Object = SVF.setup_object_initializer()
     main_OnlyHyParaOpti(MT_Setup_Object)
-    # main_OnlyPredict()

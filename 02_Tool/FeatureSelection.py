@@ -126,7 +126,7 @@ def wrapper__recursive_feature_selection(DT_Setup_object, Data):
 
 # Main#############################################################
 def main(DT_Setup_object, DT_RR_object):
-    print("FeatureSelection")
+    print("Feature Selection is being done...")
     startTime = time.time()
 
     Data = DT_RR_object.df_feature_construction_data

@@ -160,7 +160,7 @@ def auto_featurelag_constructor(DT_Setup_object, Data, Data_AllSamples):
 # Main
 def main(DT_Setup_object, DT_RR_object):
 
-    print("FeatureConstruction")
+    print("Feature Construction has begun...")
     startTime = time.time()
 
     Data = DT_RR_object.df_period_selection_data

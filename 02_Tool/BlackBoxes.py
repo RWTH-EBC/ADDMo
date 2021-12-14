@@ -97,6 +97,44 @@ def train_predict_selected_models(MT_Setup_Object, MT_RR_object, _X_train, _Y_tr
         # Return R2 value
         return Scores[0]
 
+    def modelselection():
+        # Trains and tests all (bayesian) models and returns the best of them, also saves it in an txtfile.
+
+        Score_SVR   = evaluate(BlackBox1, MT_RR_object.SVR_Summary)
+        Score_RF    = evaluate(BlackBox2, MT_RR_object.RF_Summary)
+        Score_ANN   = evaluate(BlackBox3, MT_RR_object.ANN_Summary)
+        Score_GB    = evaluate(BlackBox4, MT_RR_object.GB_Summary)
+        Score_Lasso = evaluate(BlackBox5, MT_RR_object.Lasso_Summary)
+
+
+        Score_list = [0, 1, 2, 3, 4]
+        Score_list[0] = Score_SVR
+        Score_list[1] = Score_RF
+        Score_list[2] = Score_ANN
+        Score_list[3] = Score_GB
+        Score_list[4] = Score_Lasso
+
+        print(Score_list)
+        # Todo: if Scoring function Score max; if Scoring function some error: min
+        BestScore = max(Score_list)
+
+        if Score_list[0] == BestScore:
+            __BestModel = "SVR"
+        if Score_list[1] == BestScore:
+            __BestModel = "RF"
+        if Score_list[2] == BestScore:
+            __BestModel = "ANN"
+        if Score_list[3] == BestScore:
+            __BestModel = "GB"
+        if Score_list[4] == BestScore:
+            __BestModel = "Lasso"
+
+        # state best model in txt file
+        f = open(os.path.join(MT_Setup_Object.ResultsFolderSubTest, "BestModel.txt"), "w+")
+        f.write("The best model is %s with an accuracy of %s" % (__BestModel, BestScore))
+        f.close()
+        return BestScore
+
     def train_predict(Model):
 
         # This function is just to "centralize" the train and predict operations so that additional options can be added easier
@@ -110,9 +148,6 @@ def train_predict_selected_models(MT_Setup_Object, MT_RR_object, _X_train, _Y_tr
             Score = evaluate(BlackBox4, MT_RR_object.GB_Summary)
         if Model == "Lasso":
             Score = evaluate(BlackBox5, MT_RR_object.Lasso_Summary)
-        if Model == "ModelSelection":
-            return
-            # Score = modelselection(MT_Setup_Object, MT_RR_object, _X_train, _Y_train, _X_test,_Y_test, Indexer, IndividualModel, Documentation)
         if Model == "SVR_grid":
             Score = evaluate(BlackBox6, MT_RR_object.SVR_grid_Summary)
         if Model == "ANN_grid":
@@ -121,6 +156,8 @@ def train_predict_selected_models(MT_Setup_Object, MT_RR_object, _X_train, _Y_tr
             Score = evaluate(BlackBox8, MT_RR_object.GB_grid_Summary)
         if Model == "Lasso_grid":
             Score = evaluate(BlackBox9, MT_RR_object.Lasso_grid_Summary)
+        if Model == "ModelSelection":
+            Score = modelselection()
 
         return Score
 

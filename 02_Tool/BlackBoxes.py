@@ -28,7 +28,13 @@ import warnings
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=FutureWarning)
+"""
+Eigene Kommentare:
+score für svr änderbar in z.159
+rf depth 247
 
+
+"""
 
 ########################################################################################################################
 #Hyperparameter Tuning Information:
@@ -151,7 +157,7 @@ def svr_grid_search_predictor(Features_train, Signal_train, Features_test, Signa
 
 
     #gridsearch through
-    svr = GridSearchCV(SVR(cache_size = 1500), HyperparameterGrid, cv=CV, scoring="r2")
+    svr = GridSearchCV(SVR(cache_size = 1500), HyperparameterGrid, cv=CV, scoring="r2") #scoring R2 änderbar
     Best_trained_model = svr.fit(Features_train, Signal_train)
     if not Features_test.empty:
         if Recursive == False:
@@ -263,6 +269,120 @@ def rf_predictor(Features_train, Signal_train, Features_test, Signal_test, Hyper
             "ComputationTime" : (timeend-timestart),
             "Best_trained_model": Best_trained_model,
             "best_params": "Not available for RF"}
+def ann_grid_search_predictor(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid, CV, Max_evals=NotImplemented, Recursive=False):
+    #print("Cell GridSearchANN start---------------------------------------------------------")
+    timestart = time.time()
+
+    #HyperparameterGrid= [{'hidden_layer_sizes':[[1],[10],[100],[1000],[1, 1],[10, 10], [100, 100],[1,10],[1,100],[10,100],[100,10],[100,1],[10,1],[1, 1, 1],[10, 10, 10],[100,100,100]]}]
+
+    #gridsearch with MLP
+    ann = GridSearchCV(MLPRegressor(max_iter = 1000000), HyperparameterGrid, cv=CV)
+    Best_trained_model = ann.fit(Features_train, Signal_train)
+    if not Features_test.empty:
+        if Recursive == False:
+            predicted = Best_trained_model.predict(Features_test)
+        elif Recursive == True:
+            Features_test_i = recursive(Features_test, Best_trained_model)
+            predicted = Best_trained_model.predict(Features_test_i)
+        score = Best_trained_model.score(Features_test, Signal_test)
+    else:
+        predicted = []
+        score = "empty"
+
+    timeend = time.time()
+    #print section
+    #print("The Score ann: %s" %Best_trained_model.score(Features_test, Signal_test))
+    #print("Best Hyperparameters: %s" %ann.best_params_)
+    #print("ANN took %s seconds" %(timeend-timestart))
+
+    return {"score" : score,
+            "best_params" : ann.best_params_,
+            "prediction" : predicted,
+            "ComputationTime" : (timeend-timestart),
+            "Best_trained_model": Best_trained_model,
+            "feature_importance": "Not available for that model"}
+
+def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid, CV, Max_evals, Recursive=False):
+    #print("Cell Bayesian Optimization ANN start---------------------------------------------------------")
+    timestart = time.time()
+
+    #HyperparameterGrid= hp.choice("number_of_layers",
+    #                    [
+    #                    {"1layer": scope.int(hp.qloguniform("1.1", log(1), log(1000), 1))},
+    #                    {"2layer": [scope.int(hp.qloguniform("1.2", log(1), log(1000), 1)), scope.int(hp.qloguniform("2.2", log(1), log(1000), 1))]},
+    #                    {"3layer": [scope.int(hp.qloguniform("1.3", log(1), log(1000), 1)), scope.int(hp.qloguniform("2.3", log(1), log(1000), 1)), scope.int(hp.qloguniform("3.3", log(1), log(1000), 1))]}
+    #                    ])
+
+    Signal_test = Signal_test.values.ravel()
+    #Features_test = Features_test.values.ravel() #this one not in order to have recursive still working fine
+    Signal_train = Signal_train.values.ravel()
+    Features_train = Features_train.values
+
+    def hyperopt_cv(params):
+        t_start = time.time()
+        try: #set params so that it fits the estimators attribute style
+            params = {"hidden_layer_sizes": params["1layer"]}
+        except:
+            try:
+                params = {"hidden_layer_sizes": params["2layer"]}
+            except:
+                try:
+                    params = {"hidden_layer_sizes": params["3layer"]}
+                except:
+                    sys.exit("Your bayesian hyperparametergrid does not fit the requirements, check the example and/or change the hyperparametergrid or the postprocessing in def hyperopt_cv")
+        Estimator = MLPRegressor(**params, max_iter=1000000)    #give the specific parameter sample per run from fmin
+        CV_score = cross_val_score(estimator=Estimator, X=Features_train, y=Signal_train, cv=CV, scoring="r2").mean()  # create a crossvalidation score which shall be optimized
+        t_end = time.time()
+        print("Params per iteration: %s \ with the cross-validation score %.3f, took %.2fseconds" % (params, CV_score, (t_end-t_start)))
+        return CV_score
+
+    def f(params):
+        acc = hyperopt_cv(params)
+        return {"loss": -acc, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
+
+    trials = Trials()
+    BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals, trials=trials)
+    try: #set params so that it fits the estimators attribute style
+        Z = [int(BestParams["1.1"])]
+    except:
+        try:
+            Z = [int(BestParams["1.2"]), int(BestParams["2.2"])]
+        except:
+            try:
+                Z = [int(BestParams["1.3"]), int(BestParams["2.3"]), int(BestParams["2.3"])]
+            except:
+                sys.exit("Your bayesian hyperparametergrid does not fit the requirements, check the example and/or change the hyperparametergrid or the postprocessing for the bestparams in ann_bayesian_predictor")
+    BestParams = {"hidden_layer_sizes": Z} #set params so that it fits the estimators attribute style
+    Ann_best = MLPRegressor(**BestParams)    #set the best hyperparameter to the SVR machine
+    Best_trained_model = Ann_best.fit(Features_train, Signal_train)
+    if not Features_test.empty:
+        if Recursive == False:
+            predicted = Best_trained_model.predict(Features_test)
+        elif Recursive == True:
+            Features_test_i = recursive(Features_test, Best_trained_model)
+            predicted = Best_trained_model.predict(Features_test_i)
+        score = Ann_best.score(Features_test, Signal_test) #Todo: Ann_best or should it be Best_trained_model?
+    else:
+        predicted = []
+        score = "empty"
+
+    #print section
+    #print("Bayesian Optimization Parameters")
+    #print("Everything about the search: %s" %trials.trials)
+    #print("List of returns of \"Objective\": %s" %trials.results)
+    #print("List of losses per ok trial: %s" %trials.losses())
+    #print("List of statuses: %s" %trials.statuses())
+    #print("BlackBox Parameter")
+    #print("The Score ann: %s" %Ann_best.score(Features_test, Signal_test))
+    #print("Best Hyperparameters: %s" %BestParams)
+    timeend = time.time()
+    #print("ANN took %s seconds" %(timeend-timestart))
+    return {"score" : score,
+            "best_params" : BestParams,
+            "prediction" : predicted,
+            "ComputationTime" : (timeend-timestart),
+            "Best_trained_model": Best_trained_model,
+            "feature_importance": "Not available for that model"}
 
 def gradientboost_gridsearch(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid, CV, Max_evals=NotImplemented, Recursive=False):
     #print("Cell GradientBoost start---------------------------------------------------------")
@@ -465,120 +585,8 @@ def lasso_bayesian(Features_train, Signal_train, Features_test, Signal_test, Hyp
             "ComputationTime" : (timeend-timestart),
             "Best_trained_model": Best_trained_model}
 
-def ann_grid_search_predictor(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid, CV, Max_evals=NotImplemented, Recursive=False):
-    #print("Cell GridSearchANN start---------------------------------------------------------")
-    timestart = time.time()
 
-    #HyperparameterGrid= [{'hidden_layer_sizes':[[1],[10],[100],[1000],[1, 1],[10, 10], [100, 100],[1,10],[1,100],[10,100],[100,10],[100,1],[10,1],[1, 1, 1],[10, 10, 10],[100,100,100]]}]
 
-    #gridsearch with MLP
-    ann = GridSearchCV(MLPRegressor(max_iter = 1000000), HyperparameterGrid, cv=CV)
-    Best_trained_model = ann.fit(Features_train, Signal_train)
-    if not Features_test.empty:
-        if Recursive == False:
-            predicted = Best_trained_model.predict(Features_test)
-        elif Recursive == True:
-            Features_test_i = recursive(Features_test, Best_trained_model)
-            predicted = Best_trained_model.predict(Features_test_i)
-        score = Best_trained_model.score(Features_test, Signal_test)
-    else:
-        predicted = []
-        score = "empty"
-
-    timeend = time.time()
-    #print section
-    #print("The Score ann: %s" %Best_trained_model.score(Features_test, Signal_test))
-    #print("Best Hyperparameters: %s" %ann.best_params_)
-    #print("ANN took %s seconds" %(timeend-timestart))
-
-    return {"score" : score,
-            "best_params" : ann.best_params_,
-            "prediction" : predicted,
-            "ComputationTime" : (timeend-timestart),
-            "Best_trained_model": Best_trained_model,
-            "feature_importance": "Not available for that model"}
-
-def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid, CV, Max_evals, Recursive=False):
-    #print("Cell Bayesian Optimization ANN start---------------------------------------------------------")
-    timestart = time.time()
-
-    #HyperparameterGrid= hp.choice("number_of_layers",
-    #                    [
-    #                    {"1layer": scope.int(hp.qloguniform("1.1", log(1), log(1000), 1))},
-    #                    {"2layer": [scope.int(hp.qloguniform("1.2", log(1), log(1000), 1)), scope.int(hp.qloguniform("2.2", log(1), log(1000), 1))]},
-    #                    {"3layer": [scope.int(hp.qloguniform("1.3", log(1), log(1000), 1)), scope.int(hp.qloguniform("2.3", log(1), log(1000), 1)), scope.int(hp.qloguniform("3.3", log(1), log(1000), 1))]}
-    #                    ])
-
-    Signal_test = Signal_test.values.ravel()
-    #Features_test = Features_test.values.ravel() #this one not in order to have recursive still working fine
-    Signal_train = Signal_train.values.ravel()
-    Features_train = Features_train.values
-
-    def hyperopt_cv(params):
-        t_start = time.time()
-        try: #set params so that it fits the estimators attribute style
-            params = {"hidden_layer_sizes": params["1layer"]}
-        except:
-            try:
-                params = {"hidden_layer_sizes": params["2layer"]}
-            except:
-                try:
-                    params = {"hidden_layer_sizes": params["3layer"]}
-                except:
-                    sys.exit("Your bayesian hyperparametergrid does not fit the requirements, check the example and/or change the hyperparametergrid or the postprocessing in def hyperopt_cv")
-        Estimator = MLPRegressor(**params, max_iter=1000000)    #give the specific parameter sample per run from fmin
-        CV_score = cross_val_score(estimator=Estimator, X=Features_train, y=Signal_train, cv=CV, scoring="r2").mean()  # create a crossvalidation score which shall be optimized
-        t_end = time.time()
-        print("Params per iteration: %s \ with the cross-validation score %.3f, took %.2fseconds" % (params, CV_score, (t_end-t_start)))
-        return CV_score
-
-    def f(params):
-        acc = hyperopt_cv(params)
-        return {"loss": -acc, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
-
-    trials = Trials()
-    BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals, trials=trials)
-    try: #set params so that it fits the estimators attribute style
-        Z = [int(BestParams["1.1"])]
-    except:
-        try:
-            Z = [int(BestParams["1.2"]), int(BestParams["2.2"])]
-        except:
-            try:
-                Z = [int(BestParams["1.3"]), int(BestParams["2.3"]), int(BestParams["2.3"])]
-            except:
-                sys.exit("Your bayesian hyperparametergrid does not fit the requirements, check the example and/or change the hyperparametergrid or the postprocessing for the bestparams in ann_bayesian_predictor")
-    BestParams = {"hidden_layer_sizes": Z} #set params so that it fits the estimators attribute style
-    Ann_best = MLPRegressor(**BestParams)    #set the best hyperparameter to the SVR machine
-    Best_trained_model = Ann_best.fit(Features_train, Signal_train)
-    if not Features_test.empty:
-        if Recursive == False:
-            predicted = Best_trained_model.predict(Features_test)
-        elif Recursive == True:
-            Features_test_i = recursive(Features_test, Best_trained_model)
-            predicted = Best_trained_model.predict(Features_test_i)
-        score = Ann_best.score(Features_test, Signal_test) #Todo: Ann_best or should it be Best_trained_model?
-    else:
-        predicted = []
-        score = "empty"
-
-    #print section
-    #print("Bayesian Optimization Parameters")
-    #print("Everything about the search: %s" %trials.trials)
-    #print("List of returns of \"Objective\": %s" %trials.results)
-    #print("List of losses per ok trial: %s" %trials.losses())
-    #print("List of statuses: %s" %trials.statuses())
-    #print("BlackBox Parameter")
-    #print("The Score ann: %s" %Ann_best.score(Features_test, Signal_test))
-    #print("Best Hyperparameters: %s" %BestParams)
-    timeend = time.time()
-    #print("ANN took %s seconds" %(timeend-timestart))
-    return {"score" : score,
-            "best_params" : BestParams,
-            "prediction" : predicted,
-            "ComputationTime" : (timeend-timestart),
-            "Best_trained_model": Best_trained_model,
-            "feature_importance": "Not available for that model"}
 
 #Individual Models------------------------------------------------------------------------------------------------------
 #Splitter functions

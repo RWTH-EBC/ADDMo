@@ -222,7 +222,7 @@ BlackBox4 = BlackBox(PD.gradientboost_bayesian, HyperparameterGrid4, Hyperparame
 # ------- Lasso (BlackBox5)
 HyperparameterGrid5 = {"alpha": hp.loguniform("alpha", log(1e-10), log(1e6))}
 HyperparameterGridString5 = """{"alpha": hp.loguniform("alpha", log(1e-10), log(1e6))}"""  # set this as a string in order to have a exact"screenshot" of the hyperparametergrid to save it in the summary
-BlackBox5 = BlackBox(PD.lasso_bayesian, HyperparameterGrid5, str(HyperparameterGridString5))
+BlackBox5 = BlackBox(PD.lasso_bayesian, HyperparameterGrid5, HyperparameterGridString5)
 
 # ------- SVR_grid (BlackBox6)
 HyperparameterGrid6 = [{'gamma': [10000.0, 1000, 100, 10, 1, 0.1, 0.01, 0.001, 0.0001, 'auto'],
@@ -399,19 +399,15 @@ class indiv_model():
 
                 # if i is in one of the dic[key] data sets, use this key!
                 for key in Dic:  # loop through all dictionary entries
-                    if not Dic[
-                        key].empty:  # to avoid a crash if not all individual models are called in the test data range
-                        if i in Dic[key].set_index(
-                                "TrackIndex").index:  # checks whether the line i is in the data for the data of the respective key
-                            OwnLag = best_model[key].predict(
-                                vector_i)  # do a one one timestep prediction with the model of the respective key
+                    if not Dic[key].empty:  # to avoid a crash if not all individual models are called in the test data range
+                        if i in Dic[key].set_index("TrackIndex").index:  # checks whether the line i is in the data for the data of the respective key
+                            OwnLag = best_model[key].predict(vector_i)  # do a one one timestep prediction with the model of the respective key
 
                 Booleans = Features_test_i.columns.str.contains(
                     "_lag_")  # create a Boolean list for with all columns, true for lagged signals, false for other(important: for lagged features it is only "_lag"
                 Lagged_column_list = np.array(list(Features_test_i))[Booleans]
                 for columnname in Lagged_column_list:  # go through each column containing _lag_ in its name
-                    lag = columnname.split("_")[
-                        -1]  # get the lag from the name of the column (lagged signals have the ending, e.g. for lag 1:  "_lag_1"
+                    lag = columnname.split("_")[-1]  # get the lag from the name of the column (lagged signals have the ending, e.g. for lag 1:  "_lag_1"
                     line = int(lag) + i  # define the line where the specific prediction should be safed
                     if line < len(Features_test_i):  # save produced ownlag in features_test_i
                         Features_test_i = Features_test_i.set_value(value=OwnLag, index=line,

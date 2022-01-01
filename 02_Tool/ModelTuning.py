@@ -27,6 +27,7 @@ from Functions.PlotFcn import *
 
 import SharedVariablesFunctions as SVF
 from ModelTuningRuntimeResults import ModelTuningRuntimeResults as MTRR
+from ModelTuningSetup import ModelTuningSetup as MTS
 
 print("Model Tuning has begun...")
 
@@ -37,19 +38,9 @@ print("Model Tuning has begun...")
 # MT_Setup_Object_X type objects, where X refers to Hyperopt/PO/AFB based on the function call)
 
 def pre_handling(MT_Setup_object, OnlyPredict):
-    # define path to data source files '.xls' & '.pickle'
-    RootDir = os.path.dirname(os.path.realpath(
-        __file__))  # Todo: could all that folder "pathing" be done within the setup class (as function eg. in the init?)?
-    PathToData = os.path.join(RootDir, 'Data')
 
-    # Set Folder for Results
-    ResultsFolder = os.path.join(RootDir, "Results", MT_Setup_object.NameOfData, MT_Setup_object.NameOfExperiment)
-    PathToPickles = os.path.join(ResultsFolder, "Pickles")
-
-    MT_Setup_object.RootDir = RootDir
-    MT_Setup_object.PathToData = PathToData
-    MT_Setup_object.ResultsFolder = ResultsFolder
-    MT_Setup_object.PathToPickles = PathToPickles
+    if MT_Setup_object.PathToData == "Empty":
+        MT_Setup_object = SVF.setup_object_initializer(MT_Setup_object).mts()
 
     ResultsFolderSubTest = os.path.join(MT_Setup_object.ResultsFolder, 'Predictions', MT_Setup_object.NameOfSubTest)
     MT_Setup_object.ResultsFolderSubTest = ResultsFolderSubTest
@@ -120,5 +111,6 @@ def main_OnlyHyParaOpti(MT_Setup_Object):
 
 
 if __name__ == '__main__':
-    DT_Setup_Object, MT_Setup_Object = SVF.setup_object_initializer()
+    MT_Setup_Object = MTS()
+    MT_Setup_Object = SVF.setup_object_initializer(MT_Setup_Object).mts()
     main_OnlyHyParaOpti(MT_Setup_Object)

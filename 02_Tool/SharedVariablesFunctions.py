@@ -190,42 +190,46 @@ def apply_scaler(MT_Setup_Object, Y_test, Y_Predicted, Indexer):
     return Y_test, Y_Predicted
 
 
-def setup_object_initializer():
-    DT_Setup_Object = DTS()
-    MT_Setup_Object = MTS()
+class setup_object_initializer():
 
-    # define path to data source files '.xls' & '.pickle'
-    RootDir = os.path.dirname(os.path.realpath(__file__))
-    PathToData = os.path.join(RootDir, 'Data')
+    def __init__(self, Object):
+        # define path to data source files '.xls' & '.pickle'
+        self.RootDir = os.path.dirname(os.path.realpath(__file__))
+        self.PathToData = os.path.join(self.RootDir, 'Data')
+        self.Object = Object
 
     # -------------------------------DTS initialisations-----------------------------------------------------------
-    # Set Folder for Results
-    ResultsFolder = os.path.join(RootDir, "Results", DT_Setup_Object.NameOfData, DT_Setup_Object.NameOfExperiment)
-    PathToPickles = os.path.join(ResultsFolder, "Pickles")
+    def dts(self):
+        DT_Setup_Object = self.Object
+        # Set Folder for Results
+        ResultsFolder = os.path.join(self.RootDir, "Results", DT_Setup_Object.NameOfData, DT_Setup_Object.NameOfExperiment)
+        PathToPickles = os.path.join(ResultsFolder, "Pickles")
 
-    # Set the found Variables in "SharedVariables"
-    DT_Setup_Object.RootDir = RootDir
-    DT_Setup_Object.PathToData = PathToData
-    DT_Setup_Object.ResultsFolder = ResultsFolder
-    DT_Setup_Object.PathToPickles = PathToPickles
+        # Set the found Variables in "SharedVariables"
+        DT_Setup_Object.RootDir = self.RootDir
+        DT_Setup_Object.PathToData = self.PathToData
+        DT_Setup_Object.ResultsFolder = ResultsFolder
+        DT_Setup_Object.PathToPickles = PathToPickles
 
-    # Runtime variable initializations
-    DT_Setup_Object.FixImport = False
-    DT_Setup_Object.InputData = "Empty"
+        # Runtime variable initializations
+        DT_Setup_Object.FixImport = False
+        DT_Setup_Object.InputData = "Empty"
 
+        return DT_Setup_Object
     # -------------------------------MTS initialisations-----------------------------------------------------------
+    def mts(self):
+        MT_Setup_Object = self.Object
+        # Set Folder for Results
+        ResultsFolder = os.path.join(self.RootDir, "Results", MT_Setup_Object.NameOfData, MT_Setup_Object.NameOfExperiment)
+        PathToPickles = os.path.join(ResultsFolder, "Pickles")
 
-    # Set Folder for Results
-    ResultsFolder = os.path.join(RootDir, "Results", MT_Setup_Object.NameOfData, MT_Setup_Object.NameOfExperiment)
-    PathToPickles = os.path.join(ResultsFolder, "Pickles")
+        # Set the found Variables in "SharedVariables"
+        MT_Setup_Object.RootDir = self.RootDir
+        MT_Setup_Object.PathToData = self.PathToData
+        MT_Setup_Object.ResultsFolder = ResultsFolder
+        MT_Setup_Object.PathToPickles = PathToPickles
 
-    # Set the found Variables in "SharedVariables"
-    MT_Setup_Object.RootDir = RootDir
-    MT_Setup_Object.PathToData = PathToData
-    MT_Setup_Object.ResultsFolder = ResultsFolder
-    MT_Setup_Object.PathToPickles = PathToPickles
+        # Runtime variable initializations
+        MT_Setup_Object.ResultsFolderSubTest = "Empty"
 
-    # Runtime variable initializations
-    MT_Setup_Object.ResultsFolderSubTest = "Empty"
-
-    return DT_Setup_Object, MT_Setup_Object
+        return MT_Setup_Object

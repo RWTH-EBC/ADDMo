@@ -4,6 +4,7 @@ from sklearn.externals import joblib
 
 import SharedVariablesFunctions as SVF
 
+
 class ModelTuningSetup:
     """
     Object that stores all the setup and user input information of Model Tuning
@@ -99,10 +100,10 @@ class ModelTuningSetup:
         # -----------------------Model Tuning Variables-------------------------------
 
         self.NameOfSubTest = "TrialTunedModel"
-        self.StartTraining = '2016-08-01 00:00'
-        self.EndTraining = '2016-08-14 23:45'
-        self.StartTesting = '2016-08-15 00:00'
-        self.EndTesting = '2016-08-16 23:45'
+        self.StartTraining = "2016-08-01 00:00"
+        self.EndTraining = "2016-08-14 23:45"
+        self.StartTesting = "2016-08-15 00:00"
+        self.EndTesting = "2016-08-16 23:45"
 
         # Set global variables, those variables are for the BlackBox models themselves not for the final bayesian optimization
 
@@ -126,8 +127,8 @@ class ModelTuningSetup:
 
         self.ValidationPeriod = True
         if self.ValidationPeriod == True:
-            self.StartTest_onlypredict = '2016-06-09 00:00'
-            self.EndTest_onlypredict = '2016-06-15 00:00'
+            self.StartTest_onlypredict = "2016-06-09 00:00"
+            self.EndTest_onlypredict = "2016-06-15 00:00"
 
         # -----------------------Auto Final Bayes Variables-------------------------------
 
@@ -136,7 +137,9 @@ class ModelTuningSetup:
         self.EstimatorEmbedded_FinalBaye = SVF.rf
 
     def dump_object(self):
-        print("Saving Model Tuning Setup class Object as a pickle in path: '%s'" % os.path.join(self.ResultsFolder,
-                                                                                                "ModelTuningSetup.save"))
+        print(
+            "Saving Model Tuning Setup class Object as a pickle in path: '%s'"
+            % os.path.join(self.ResultsFolder, "ModelTuningSetup.save")
+        )
         # Save the object as a pickle for reuse
         joblib.dump(self, os.path.join(self.ResultsFolder, "ModelTuningSetup.save"))

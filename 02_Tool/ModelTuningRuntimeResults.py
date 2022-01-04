@@ -1,7 +1,6 @@
 """This Module contains classes for storing runtime results"""
 
 import os
-
 from sklearn.externals import joblib
 
 
@@ -28,7 +27,6 @@ class ModelTuningRuntimeResults:
     """
     Stores all runtime results of ModelTuning.py, AutoFinalBayes.py, OnlyPredict.py per used algorithm.
 
-
     Stores the following summary:
 
     1. Total Train Samples
@@ -50,11 +48,11 @@ class ModelTuningRuntimeResults:
         self.ANN_Summary = RRSummary()
         self.GB_Summary = RRSummary()
         self.Lasso_Summary = RRSummary()
-        self.ModelSelection_Summary = RRSummary()
         self.SVR_grid_Summary = RRSummary()
         self.ANN_grid_Summary = RRSummary()
         self.GB_grid_Summary = RRSummary()
         self.Lasso_grid_Summary = RRSummary()
+        self.ModelSelection_Summary = RRSummary()
 
     def store_results(self, MT_Setup_object):
         print("Saving Model Tuning Runtime Results class Object as a pickle in path: \n'%s'" % os.path.join(
@@ -137,3 +135,4 @@ def model_saver(Result_dic, ResultsFolderSubTest, NameOfPredictor, IndividualMod
     else:
         joblib.dump(Result_dic["Best_trained_model"],
                     os.path.join(ResultsFolderSubTest, "BestModels", "%s.save" % (NameOfPredictor)))
+

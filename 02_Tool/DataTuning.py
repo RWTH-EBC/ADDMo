@@ -20,7 +20,7 @@ def main(DT_Setup_object):
     print("Data Tuning process has begun...")
 
     if DT_Setup_object.PathToData == "Empty":
-        DT_Setup_Object = SVF.setup_object_initializer(DT_Setup_object).dts()
+        DT_Setup_Object = SVF.setup_object_initializer(DT_Setup_object).dts
 
         # makes sure that the GUI can rename the directory and name of the inputdata if necessary(without Gui the data imported from the fixed place)
         if DT_Setup_object.FixImport:

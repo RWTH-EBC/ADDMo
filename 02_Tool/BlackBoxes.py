@@ -37,7 +37,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 
-def train_predict_selected_models(MT_Setup_Object, MT_RR_object, _X_train, _Y_train, _X_test, _Y_test,
+def train_predict_selected_models(MT_Setup_Object, MT_RR_object, Models, _X_train, _Y_train, _X_test, _Y_test,
                                   Indexer="IndexerError", IndividualModel="Error", Documentation=False):
     def evaluate(Model, RR_Model_Summary):
 
@@ -85,7 +85,7 @@ def train_predict_selected_models(MT_Setup_Object, MT_RR_object, _X_train, _Y_tr
 
         if Documentation == True:  # only do documentation if Documentation is wished(Documentation is False from beginning, and only in the end set True)
 
-            Document.documentation(MT_Setup_Object, RR_Model_Summary, NameOfPredictor, Y_Predicted, Y_test,
+            Document.documentation_model_tuning(MT_Setup_Object, RR_Model_Summary, NameOfPredictor, Y_Predicted, Y_test,
                                    _Y_train, ComputationTime, Scores, Model.HyperparameterGridString,
                                    Bestparams, IndividualModel, FeatureImportance)
 
@@ -162,9 +162,10 @@ def train_predict_selected_models(MT_Setup_Object, MT_RR_object, _X_train, _Y_tr
 
         return Score
 
-    for Model in MT_Setup_Object.OnlyHyPara_Models:
-        train_predict(Model)
+    for Model in Models:
+        Score = train_predict(Model)
 
+    return Score
 
 class BlackBox():
     'This Class uses the machine learning "predictors" for training, predicting and documentation defined in BlackBoxes.py '

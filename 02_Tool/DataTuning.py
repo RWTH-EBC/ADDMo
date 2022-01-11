@@ -20,27 +20,25 @@ def main(DT_Setup_object):
     PathToData = os.path.join(RootDir, 'Data')
 
     # Set Folder for Results
-    ResultsFolder = os.path.join(RootDir, "Results", DT_Setup_object.NameOfData, DT_Setup_object.NameOfExperiment)
+    ResultsFolder = os.path.join(RootDir, "Results", DT_Setup_object.NameOfData, DT_Setup_object.NameOfExperiment) #Todo: could be directly set via setup class? (through getter?)
     PathToPickles = os.path.join(ResultsFolder, "Pickles")
-
-    if not os.path.exists(ResultsFolder):
-        os.makedirs(ResultsFolder)
-        os.makedirs(PathToPickles)
 
     # makes sure that the GUI can rename the directory and name of the inputdata if necessary(without Gui the data imported from the fixed place)
     if DT_Setup_object.FixImport:
-        InputData = os.path.join(PathToData, "InputData" + '.xlsx')
+        path_input_data = os.path.join(PathToData, "InputData" + '.xlsx') #Todo: should be set in the setup class (either by default or by GUI) - delete all fiximport occurances - make GUI define the correct path
     else:
-        InputData = os.path.join(PathToData, "GUI_Uploads", SV.GUI_Filename)
+        path_input_data = os.path.join(PathToData, "GUI_Uploads", SV.GUI_Filename)
 
     # Save all the folder paths in the DTS object
     DT_Setup_object.RootDir = RootDir
     DT_Setup_object.PathToData = PathToData
     DT_Setup_object.ResultsFolder = ResultsFolder
     DT_Setup_object.PathToPickles = PathToPickles
-    DT_Setup_object.InputData = InputData
+    DT_Setup_object.InputData = path_input_data
 
-    ImportData.clear(DT_Setup_object)  # make sure the selected folder is unused
+    # create required folder structure for saving results
+    SV.delete_and_create_folder(DT_Setup_object.ResultsFolder)
+    os.makedirs(PathToPickles)
 
     DT_RR_object = DTRR()  # create the DataTuningRuntimeResults object
 

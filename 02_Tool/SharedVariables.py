@@ -1,4 +1,5 @@
 import os
+import shutil
 import pandas as pd
 import numpy as np
 import sys
@@ -47,19 +48,16 @@ def get_unit_of_meter(Data, ColumnOfMeter):
     UoM = list(Data)[ColumnOfMeter].split("[")[1].split("]")[0]
     return UoM
 
-
 # get the name of the respective Meter
 def nameofmeter(Data, ColumnOfMeter):
     Name = list(Data)[ColumnOfMeter]
     return Name
-
 
 # split signal from feature for the use in an estimator
 def split_signal_and_features(NameOfSignal, Data):
     X = Data.drop(NameOfSignal, axis=1)
     Y = Data[NameOfSignal]
     return (X, Y)
-
 
 # merge after an embedded operator modified the datasets
 def merge_signal_and_features_embedded(NameOfSignal, X_Data, Y_Data, support, X_Data_transformed):
@@ -73,7 +71,6 @@ def merge_signal_and_features_embedded(NameOfSignal, X_Data, Y_Data, support, X_
     Data = pd.concat([Signal, Features], axis=1)
     return Data
 
-
 # regular merge
 def merge_signal_and_features(NameOfSignal, X_Data, Y_Data, X_Data_transformed):
     columns = X_Data.columns
@@ -83,7 +80,6 @@ def merge_signal_and_features(NameOfSignal, X_Data, Y_Data, X_Data_transformed):
     Signal = pd.DataFrame(Y_Data, columns=[NameOfSignal])  # create dataframe of y
     Data = pd.concat([Signal, Features], axis=1)
     return Data
-
 
 # scaling; used if new "unscaled" features were created throughout Feature Construction
 def post_scaler(Data, StandardScaling, RobustScaling):
@@ -111,7 +107,6 @@ def post_scaler(Data, StandardScaling, RobustScaling):
         Scaled_Data = pd.DataFrame(Scaled_Data, index=Data.index)
         return Scaled_Data
 
-
 def reshape(series):
     '''
     Can reshape pandas series and numpy.array
@@ -135,9 +130,20 @@ def reshape(series):
 
     return array
 
-
 def del_unsupported_os_characters(str):
     str = str.replace("/", "").replace("\\", "").replace(":", "").replace("?", "").replace("*", "").replace("\"",
                                                                                                             "").replace(
         "<", "").replace(">", "").replace("|", "")
     return str
+
+def delete_and_create_folder(path):
+    '''Make sure not to accidentally overwrite data.'''
+
+    if os.path.isdir(path) == True:
+        answer = input(f"You are about to overwrite data. Do you want to delete the data in {path}:")
+        if answer == "y":
+            shutil.rmtree(path)
+            print("Folder deleted. Script continued.")
+        else:
+            sys.exit("Code stopped by user. Enter y for yes")
+    os.makedirs(path)

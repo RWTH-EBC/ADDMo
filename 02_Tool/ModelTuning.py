@@ -386,7 +386,7 @@ def main_OnlyHyParaOpti(MT_Setup_Object):
 
 def pre_handling(MT_Setup_object, OnlyPredict):
     # define path to data source files '.xls' & '.pickle'
-    RootDir = os.path.dirname(os.path.realpath(__file__))
+    RootDir = os.path.dirname(os.path.realpath(__file__)) #Todo: could all that folder "pathing" be done within the setup class (as function eg. in the init?)?
     PathToData = os.path.join(RootDir, 'Data')
 
     # Set Folder for Results
@@ -403,18 +403,11 @@ def pre_handling(MT_Setup_object, OnlyPredict):
 
     # check if experiment folder is present
     if os.path.isdir(MT_Setup_object.ResultsFolder) == False:
-        sys.exit("Set a valid experiment folder via NameOfData and NameOfExperiment")
+        sys.exit("Set a valid experiment folder via NameOfData and NameOfExperiment.")
 
     # check if test results are saved in the right folder:
     if OnlyPredict != True:
-        if os.path.isdir(MT_Setup_object.ResultsFolderSubTest) == True:
-            Answer = input("Are you sure you want to overwrite the data in %s: " % MT_Setup_object.ResultsFolderSubTest)
-            if Answer == "yes" or Answer == "Yes" or Answer == "y" or Answer == "Y":
-                print("Start computing")
-            else:
-                sys.exit("Code stopped by user or invalid user input. Valid is Yes, yes, y and Y.")
-        else:
-            os.makedirs(MT_Setup_object.ResultsFolderSubTest)
+        SV.delete_and_create_folder(MT_Setup_object.ResultsFolderSubTest)
 
     # Take Tuned data, build Train and Test Sets, and split them into signal and features
     NameOfSignal = joblib.load(os.path.join(MT_Setup_object.ResultsFolder, "NameOfSignal.save"))

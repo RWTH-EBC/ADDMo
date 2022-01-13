@@ -32,10 +32,10 @@ def import_data(DT_Setup_object, DT_RR_object):
 
 # main#######################################################################
 def main(DT_Setup_object, DT_RR_object):
-    print("ImportData")
+    print("Data is being imported...")
     startTime = time.time()
     warnings.simplefilter(action="ignore", category=RuntimeWarning)
-    print("Loading Input Data")
+    print("Loading Input Data...")
     import_data(DT_Setup_object, DT_RR_object)
     endTime = time.time()
     DT_RR_object.import_time = endTime - startTime

@@ -1,44 +1,39 @@
-'''
+"""
 Executable to perform data tuning.
-'''
+"""
 
 import os
 import time
 
-import SharedVariables as SV
+import SharedVariablesFunctions as SVF
 import ImportData
 import Preprocessing
 import PeriodSelection
 import FeatureConstruction
 import FeatureSelection
 from DataTuningRuntimeResults import DataTuningRuntimeResults as DTRR
+from DataTuningSetup import DataTuningSetup as DTS
+import Documentation as Document
+
 
 def main(DT_Setup_object):
-    print("DataTuning")
-    # define path to data source files '.xls' & '.pickle'
-    RootDir = os.path.dirname(os.path.realpath(__file__))
-    PathToData = os.path.join(RootDir, 'Data')
+    print("Data Tuning process has begun...")
 
-    # Set Folder for Results
-    ResultsFolder = os.path.join(RootDir, "Results", DT_Setup_object.NameOfData, DT_Setup_object.NameOfExperiment) #Todo: could be directly set via setup class? (through getter?)
-    PathToPickles = os.path.join(ResultsFolder, "Pickles")
+    if DT_Setup_object.PathToData == "Empty":
+        DT_Setup_Object = SVF.setup_object_initializer(DT_Setup_object).dts()
 
-    # makes sure that the GUI can rename the directory and name of the inputdata if necessary(without Gui the data imported from the fixed place)
-    if DT_Setup_object.FixImport:
-        path_input_data = os.path.join(PathToData, "InputData" + '.xlsx') #Todo: should be set in the setup class (either by default or by GUI) - delete all fiximport occurances - make GUI define the correct path
-    else:
-        path_input_data = os.path.join(PathToData, "GUI_Uploads", SV.GUI_Filename)
+        # makes sure that the GUI can rename the directory and name of the inputdata if necessary(without Gui the data imported from the fixed place)
+        if DT_Setup_object.FixImport:
+            path_input_data = os.path.join(DT_Setup_Object.PathToData,
+                                       "InputData" + '.xlsx')  # Todo: should be set in the setup class (either by default or by GUI) - delete all fiximport occurances - make GUI define the correct path
+        else:
+            path_input_data = os.path.join(DT_Setup_Object.PathToData, "GUI_Uploads", SVF.GUI_Filename)
 
-    # Save all the folder paths in the DTS object
-    DT_Setup_object.RootDir = RootDir
-    DT_Setup_object.PathToData = PathToData
-    DT_Setup_object.ResultsFolder = ResultsFolder
-    DT_Setup_object.PathToPickles = PathToPickles
-    DT_Setup_object.InputData = path_input_data
+        DT_Setup_object.InputData = path_input_data
 
     # create required folder structure for saving results
-    SV.delete_and_create_folder(DT_Setup_object.ResultsFolder)
-    os.makedirs(PathToPickles)
+    SVF.delete_and_create_folder(DT_Setup_object.ResultsFolder)
+    os.makedirs(DT_Setup_object.PathToPickles)
 
     DT_RR_object = DTRR()  # create the DataTuningRuntimeResults object
 
@@ -71,7 +66,7 @@ def main(DT_Setup_object):
     DT_RR_object.store_results(DT_Setup_object)
 
     # Documentation
-    DT_Setup_object.documentation_DataTuning(timestart, timeend)
+    Document.documentation_DataTuning(DT_Setup_object, timestart, timeend)
 
     print("Tuning the data took: %s seconds" % (timeend - timestart))
     print("End data tuning: %s/%s" % (DT_Setup_object.NameOfData, DT_Setup_object.NameOfExperiment))
@@ -79,4 +74,7 @@ def main(DT_Setup_object):
 
 
 if __name__ == "__main__":
-    main()
+    DT_Setup_Object = DTS()
+    DT_Setup_Object = SVF.setup_object_initializer(DT_Setup_Object).dts()
+    SVF.GUI_Filename = input("Please type the name of the input file (must be present in the GUI_Uploads folder):\n")
+    main(DT_Setup_Object)

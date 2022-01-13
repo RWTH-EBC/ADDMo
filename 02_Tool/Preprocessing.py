@@ -91,7 +91,7 @@ def resample(DT_Setup_object, Data):
 ######################################################################################
 
 def main(DT_Setup_object, DT_RR_object):
-    print("Preprocessing")
+    print("Preprocessing has begun...")
     startTime = time.time()
 
     # read import dataframe from DTRR object

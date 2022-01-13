@@ -1,11 +1,11 @@
 import remi.gui as gui
 import os
 from remi import start, App
-from BlackBoxes import (rf_predictor, RandomForestRegressor)
+from PredictorDefinitions import (rf_predictor, RandomForestRegressor)
 from sklearn.feature_selection import mutual_info_regression, f_regression
 import DataTuning
 import ModelTuning
-import SharedVariables as SV
+import SharedVariablesFunctions as SVF
 import AutoFinalBayes
 import OnlyPredict
 
@@ -607,7 +607,7 @@ class AutomatedTraining(App):
 
         def fileupload_on_success(self, widget, filename):
             set_text(self, 'File upload success: ' + filename)
-            SV.GUI_Filename = filename
+            SVF.GUI_Filename = filename
 
         def fileupload_on_failed(self, widget, filename):
             set_text(self, 'File upload failed: ' + filename)
@@ -1077,8 +1077,8 @@ temperature as signal. """)
             # Set RF as model for embedded and wrapper methods
             rf = RandomForestRegressor(max_depth=10e10, random_state=0)
             DT_Setup_Object.EstimatorEmbedded = rf
-            DT_Setup_Object.EstimatorWrapper = SV.WrapperModels["RF"]
-            DT_Setup_Object.WrapperParams = [SV.Hyperparametergrids["RF"], None, None, False]
+            DT_Setup_Object.EstimatorWrapper = SVF.WrapperModels["RF"]
+            DT_Setup_Object.WrapperParams = [SVF.Hyperparametergrids["RF"], None, None, False]
             DT_Setup_Object.MinIncrease = 0
 
         self.InfoMT.set_text('Check out the python console!')

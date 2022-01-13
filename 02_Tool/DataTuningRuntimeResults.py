@@ -33,7 +33,7 @@ class DataTuningRuntimeResults:
         self.total_time = 0
 
     def store_results(self, DT_Setup_object):
-        print("Saving Data Tuning Runtime Results class Object as a pickle in path: '%s'" % os.path.join(DT_Setup_object.ResultsFolder, "DataTuningRuntimeResults.save"))
+        print("Saving Data Tuning Runtime Results class Object as a pickle in path: \n'%s'" % os.path.join(DT_Setup_object.ResultsFolder, "DataTuningRuntimeResults.save"))
 
         # Save the object as a pickle for reuse
         joblib.dump(self, os.path.join(DT_Setup_object.ResultsFolder, "DataTuningRuntimeResults.save"))

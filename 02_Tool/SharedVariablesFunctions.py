@@ -4,12 +4,19 @@ import pandas as pd
 import numpy as np
 import sys
 from sklearn_pandas import DataFrameMapper
-from BlackBoxes import *
+from PredictorDefinitions import *
+from Functions.ErrorMetrics import *
+from Functions.PlotFcn import *
+from Functions.ErrorMetrics import *
+from Functions.PlotFcn import *
 from sklearn.feature_selection import mutual_info_regression, f_regression
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import RobustScaler
 from math import log
+
+from DataTuningSetup import DataTuningSetup as DTS
+from ModelTuningSetup import ModelTuningSetup as MTS
 
 GUI_Filename = "Empty"
 
@@ -48,16 +55,19 @@ def get_unit_of_meter(Data, ColumnOfMeter):
     UoM = list(Data)[ColumnOfMeter].split("[")[1].split("]")[0]
     return UoM
 
+
 # get the name of the respective Meter
 def nameofmeter(Data, ColumnOfMeter):
     Name = list(Data)[ColumnOfMeter]
     return Name
+
 
 # split signal from feature for the use in an estimator
 def split_signal_and_features(NameOfSignal, Data):
     X = Data.drop(NameOfSignal, axis=1)
     Y = Data[NameOfSignal]
     return (X, Y)
+
 
 # merge after an embedded operator modified the datasets
 def merge_signal_and_features_embedded(NameOfSignal, X_Data, Y_Data, support, X_Data_transformed):
@@ -71,6 +81,7 @@ def merge_signal_and_features_embedded(NameOfSignal, X_Data, Y_Data, support, X_
     Data = pd.concat([Signal, Features], axis=1)
     return Data
 
+
 # regular merge
 def merge_signal_and_features(NameOfSignal, X_Data, Y_Data, X_Data_transformed):
     columns = X_Data.columns
@@ -80,6 +91,7 @@ def merge_signal_and_features(NameOfSignal, X_Data, Y_Data, X_Data_transformed):
     Signal = pd.DataFrame(Y_Data, columns=[NameOfSignal])  # create dataframe of y
     Data = pd.concat([Signal, Features], axis=1)
     return Data
+
 
 # scaling; used if new "unscaled" features were created throughout Feature Construction
 def post_scaler(Data, StandardScaling, RobustScaling):
@@ -107,6 +119,7 @@ def post_scaler(Data, StandardScaling, RobustScaling):
         Scaled_Data = pd.DataFrame(Scaled_Data, index=Data.index)
         return Scaled_Data
 
+
 def reshape(series):
     '''
     Can reshape pandas series and numpy.array
@@ -130,20 +143,93 @@ def reshape(series):
 
     return array
 
+
 def del_unsupported_os_characters(str):
     str = str.replace("/", "").replace("\\", "").replace(":", "").replace("?", "").replace("*", "").replace("\"",
                                                                                                             "").replace(
         "<", "").replace(">", "").replace("|", "")
     return str
 
+
 def delete_and_create_folder(path):
     '''Make sure not to accidentally overwrite data.'''
 
     if os.path.isdir(path) == True:
-        answer = input(f"You are about to overwrite data. Do you want to delete the data in {path}:")
+        answer = input(f"You are about to overwrite already existing data. Do you want to delete the data in: \n\'{path}\'?:\n")
         if answer == "y":
             shutil.rmtree(path)
             print("Folder deleted. Script continued.")
         else:
-            sys.exit("Code stopped by user. Enter y for yes")
+            sys.exit("Code stopped by user. Enter y for yes\n")
     os.makedirs(path)
+
+
+def getscores(Y_test, Y_Predicted):
+    # evaluate results
+    (R2, STD, RMSE, MAPE, MAE) = evaluation(Y_test, Y_Predicted)
+
+    # return Scores for modelselection
+    return R2, STD, RMSE, MAPE, MAE
+
+
+def apply_scaler(MT_Setup_Object, Y_test, Y_Predicted, Indexer):
+    if os.path.isfile(os.path.join(MT_Setup_Object.ResultsFolder, "ScalerTracker.save")):  # if scaler was used
+        ScaleTracker_Signal = joblib.load(
+            os.path.join(MT_Setup_Object.ResultsFolder, "ScalerTracker.save"))  # load used scaler
+        # Scale Results back to normal; maybe inside the Blackboxes
+        Y_Predicted = ScaleTracker_Signal.inverse_transform(reshape(Y_Predicted))
+        Y_test = ScaleTracker_Signal.inverse_transform(reshape(Y_test))
+        # convert arrays to data frames(Series) for further use
+        Y_test = pd.DataFrame(index=Indexer, data=Y_test, columns=["Measure"])
+        Y_test = Y_test["Measure"]
+
+    # convert arrays to data frames(Series) for further use
+    Y_Predicted = pd.DataFrame(index=Indexer, data=Y_Predicted, columns=["Prediction"])
+    Y_Predicted = Y_Predicted["Prediction"]
+
+    return Y_test, Y_Predicted
+
+
+class setup_object_initializer():
+
+    def __init__(self, Object):
+        # define path to data source files '.xls' & '.pickle'
+        self.RootDir = os.path.dirname(os.path.realpath(__file__))
+        self.PathToData = os.path.join(self.RootDir, 'Data')
+        self.Object = Object
+
+    # -------------------------------DTS initialisations-----------------------------------------------------------
+    def dts(self):
+        DT_Setup_Object = self.Object
+        # Set Folder for Results
+        ResultsFolder = os.path.join(self.RootDir, "Results", DT_Setup_Object.NameOfData, DT_Setup_Object.NameOfExperiment)
+        PathToPickles = os.path.join(ResultsFolder, "Pickles")
+
+        # Set the found Variables in "SharedVariables"
+        DT_Setup_Object.RootDir = self.RootDir
+        DT_Setup_Object.PathToData = self.PathToData
+        DT_Setup_Object.ResultsFolder = ResultsFolder
+        DT_Setup_Object.PathToPickles = PathToPickles
+
+        # Runtime variable initializations
+        DT_Setup_Object.FixImport = False
+        DT_Setup_Object.InputData = "Empty"
+
+        return DT_Setup_Object
+    # -------------------------------MTS initialisations-----------------------------------------------------------
+    def mts(self):
+        MT_Setup_Object = self.Object
+        # Set Folder for Results
+        ResultsFolder = os.path.join(self.RootDir, "Results", MT_Setup_Object.NameOfData, MT_Setup_Object.NameOfExperiment)
+        PathToPickles = os.path.join(ResultsFolder, "Pickles")
+
+        # Set the found Variables in "SharedVariables"
+        MT_Setup_Object.RootDir = self.RootDir
+        MT_Setup_Object.PathToData = self.PathToData
+        MT_Setup_Object.ResultsFolder = ResultsFolder
+        MT_Setup_Object.PathToPickles = PathToPickles
+
+        # Runtime variable initializations
+        MT_Setup_Object.ResultsFolderSubTest = "Empty"
+
+        return MT_Setup_Object

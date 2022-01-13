@@ -91,7 +91,7 @@ class ModelTuningSetup:
         self.PathToData = "Empty"
         self.ResultsFolder = "Empty"
         self.PathToPickles = "Empty"
-        self.NameOfData = "AHU Data1"
+        self.NameOfData = "TrialInput"
         self.NameOfExperiment = "NoOL"
         self.NameOfSignal = "Empty"
         self.ColumnOfSignal = 1

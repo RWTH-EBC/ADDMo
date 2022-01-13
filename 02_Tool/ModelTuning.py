@@ -100,7 +100,8 @@ def main_OnlyHyParaOpti(MT_Setup_Object):
 
     MT_RR_object = MTRR()
 
-    train_predict_selected_models(MT_Setup_Object, MT_RR_object, _X_train, _Y_train, _X_test, _Y_test, Indexer,
+    Models = MT_Setup_Object.OnlyHyPara_Models
+    train_predict_selected_models(MT_Setup_Object, MT_RR_object, Models, _X_train, _Y_train, _X_test, _Y_test, Indexer,
                                   MT_Setup_Object.GlobalIndivModel, True)
 
     print("Finish training and testing with only optimizing the hyperparameters : \n%s/%s/%s" % (

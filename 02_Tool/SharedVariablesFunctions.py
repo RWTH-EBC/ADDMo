@@ -190,7 +190,7 @@ def apply_scaler(MT_Setup_Object, Y_test, Y_Predicted, Indexer):
     return Y_test, Y_Predicted
 
 
-class setup_object_initializer():
+class setup_object_initializer:
 
     def __init__(self, Object):
         # define path to data source files '.xls' & '.pickle'

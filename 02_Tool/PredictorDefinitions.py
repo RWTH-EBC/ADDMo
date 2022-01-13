@@ -27,6 +27,8 @@ from sklearn.externals import joblib
 import os
 import warnings
 
+from ModelTuningRuntimeResults import *
+
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=FutureWarning)
 
@@ -53,7 +55,47 @@ def recursive(Features_test, Best_trained_model):
 
 
 # -------------------------------------- Predictor definitions ------------------------------------------------------
+# Follow the following 4 steps when adding a new predictor:
 
+# 1. Add the names of the new predictors to 'AvailablePredictors' and also in the docstrings below
+"""
+Name of the predictors used:
+
+SVR = SVR Bayesian
+RF = RF predictor
+ANN = ANN Bayesian
+GB = Gradient Boost Bayesian
+Lasso = Lasso Bayesian
+SVR_grid = SVR Grid Search
+ANN_grid = ANN Grid Search
+GB_grid = Gradient Boost Grid Search
+Lasso_grid = Lasso Grid Search
+"""
+AvailablePredictors = ["SVR", "RF", "ANN", "GB", "Lasso", "SVR_grid", "ANN_grid", "GB_grid", "Lasso_grid"]
+
+
+# 2. Add the predictor summary as a class attribute to ModelTuningRuntimeResults class in ModelTuningRuntimeResults.py
+# Use the below format to do so:
+"""
+ModelTuningRuntimeResults is a class that stores all the statistical runtime info about each predictor, hence 
+when a new predictor is defined it must added as a class attribute in the format shown below:
+
+Format: self.'name_of_the_predictor'_Summary = RRSummary()
+
+Example:
+self.Lasso_Summary = RRSummary() #if the predictor added is Lasso
+
+"""
+# 3. Add the predictor summary to the list below
+
+def get_model_summary_object_list(MT_RR_object):
+    ModelSummaryObjectList = [MT_RR_object.SVR_Summary, MT_RR_object.RF_Summary, MT_RR_object.ANN_Summary,
+                          MT_RR_object.GB_Summary, MT_RR_object.Lasso_Summary,
+                          MT_RR_object.SVR_grid_Summary, MT_RR_object.ANN_grid_Summary,
+                          MT_RR_object.GB_grid_Summary, MT_RR_object.Lasso_grid_Summary]
+    return ModelSummaryObjectList
+
+# 4. Define the predictor's internal workings
 def svr_grid_search_predictor(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid, CV,
                               Max_evals=NotImplemented, Recursive=False):
     # print("Cell GridSearchSVR start---------------------------------------------------------")

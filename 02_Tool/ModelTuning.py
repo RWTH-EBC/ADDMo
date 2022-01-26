@@ -24,15 +24,18 @@ from BlackBoxes import *
 from Functions.ErrorMetrics import *
 from Functions.PlotFcn import *
 
+import math
 import SharedVariables as SV
+import LogResults as LR
 print("Start")
+
 ########################################################################################################################
 def manual_train_test_period_select(Data ,StartDateTrain, EndDateTrain, StartDateTest, EndDateTest):
     Data_TrainTest = Data[StartDateTrain:EndDateTrain]  #is used to train the model and evaluate the hyperparameter
     Data_Test = Data[StartDateTest:EndDateTest]         #is used to perform a "forecast" with the trained Model
     return (Data_TrainTest, Data_Test)
 
-def visualization_documentation(NameOfPredictor, Y_Predicted, Y_test, Indexer, Y_train, ComputationTime,
+def visualization_documentation(NameOfPredictor,X_test, Y_Predicted, Y_test, Indexer, Y_train, ComputationTime, #wird nur ganz am ende aufgerufen layer müssen pbergeben werden
                                 ResultsFolderSubTest, HyperparameterGrid=None, Bestparams=None, CV=3, Max_eval=None,
                                 Recursive=False, IndividualModel=False, Shuffle=SV.GlobalShuffle,
                                 FeatureImportance="Not available"):
@@ -52,13 +55,26 @@ def visualization_documentation(NameOfPredictor, Y_Predicted, Y_test, Indexer, Y
 
     # evaluate results with more error metrics
     (R2, STD, RMSE, MAPE, MAE) = evaluation(Y_test, Y_Predicted)
+    if NameOfPredictor == 'ann_bayesian_predictor':
+        numparams = LR.calculate_paramANN(Bestparams,X_test.shape[1] ,1)  #X_test oder X_train
+        AIC = calculate_AIC(len(Y_train),numparams,Y_test,Y_Predicted)
 
-    #Plot Results
+        BIC = calculate_BIC(len(Y_train),numparams,Y_test,Y_Predicted)
+    elif NameOfPredictor == 'rf_bayesian':
+        numparams = LR.calc_paramRF(Bestparams)
+        AIC = calculate_AIC(len(Y_train), numparams, Y_test, Y_Predicted)
+        BIC = calculate_BIC(len(Y_train), numparams, Y_test, Y_Predicted)
+    elif NameOfPredictor == 'svr_bayesian_predictor':
+        numparams = LR.calc_paramSVRV1(Bestparams['C'])
+        AIC = calculate_AIC(len(Y_train), numparams, Y_test, Y_Predicted)
+        BIC = calculate_BIC(len(Y_train), numparams, Y_test, Y_Predicted)
+
     plot_predict_measured(prediction=Y_Predicted, measurement=Y_test, MAE=MAE, R2=R2, StartDatePredict=SV.StartTesting,
                           SavePath=ResultsFolderSubTest, nameOfSignal=SV.NameOfSignal, BlackBox=NameOfPredictor,
                           NameOfSubTest=SV.NameOfSubTest)
     plot_Residues(prediction=Y_Predicted, measurement=Y_test, MAE=MAE, R2=R2, SavePath=ResultsFolderSubTest,
                   nameOfSignal=SV.NameOfSignal, BlackBox=NameOfPredictor, NameOfSubTest=SV.NameOfSubTest)
+
 
     # save summary of setup and evaluation
     dfSummary = pd.DataFrame(index=[0])
@@ -88,7 +104,10 @@ def visualization_documentation(NameOfPredictor, Y_Predicted, Y_test, Indexer, Y
     dfSummary['Eval_RMSE'] = RMSE
     dfSummary['Eval_MAPE'] = MAPE
     dfSummary['Eval_MAE'] = MAE
-    dfSummary['Standard deviation'] = STD
+    dfSummary['Standard deviation'] =STD
+    dfSummary['Eval_AIC'] = AIC
+    dfSummary['Eval_BIC'] = BIC
+    #dfSummary['Testtime'] = testtimelist[0]
     dfSummary['Computation Time'] = "%.2f seconds" %ComputationTime
     dfSummary = dfSummary.T
     # write summary of setup and evaluation in excel File
@@ -102,7 +121,8 @@ def visualization_documentation(NameOfPredictor, Y_Predicted, Y_test, Indexer, Y
     Y_Predicted.to_frame(name=SV.NameOfSignal).to_excel(SaveFileName_excel)
 
     #return Score for modelselection
-    return R2
+    return R2,AIC,BIC
+    #return R2
 
 def getscore(Y_Predicted, Y_test, Indexer):
     if os.path.isfile(os.path.join(SV.ResultsFolder, "ScalerTracker.save")): #if scaler was used
@@ -119,8 +139,10 @@ def getscore(Y_Predicted, Y_test, Indexer):
     Y_Predicted = Y_Predicted["Prediction"]
 
     # evaluate results
+    #AIC = calculate_AIC(len(Y_test),100,Y_test,Y_Predicted)
     R2 = r2_score(Y_test, Y_Predicted)
     #return Score for modelselection
+    #return AIC
     return R2
 
 #saves the BestModels in a folder "BestModels", also capable of saving individual models
@@ -207,7 +229,7 @@ class BB():
         ComputationTime = Result_dic["ComputationTime"]
         FeatureImportance = Result_dic["feature_importance"]
         if Documentation == True:  # only do documentation if Documentation is wished(Documentation is False from beginning, and only in the end set True)
-            Score = visualization_documentation(NameOfPredictor, Predicted, _Y_test, Indexer, _Y_train, ComputationTime,
+            Score,AICscore,BICscore = visualization_documentation(NameOfPredictor,_X_train, Predicted, _Y_test, Indexer, _Y_train, ComputationTime,
                                                 SV.ResultsFolderSubTest,
                                                 self.HyperparameterGridString, Bestparams, SV.GlobalCV_MT, SV.GlobalMaxEval_HyParaTuning, SV.GlobalRecu,
                                                 IndividualModel, SV.GlobalShuffle, FeatureImportance)
@@ -215,36 +237,81 @@ class BB():
             model_saver(Result_dic, SV.ResultsFolderSubTest, NameOfPredictor, IndividualModel)
         else:
             Score = getscore(Predicted, _Y_test, Indexer) #Todo: Make possible to set scoring function by yourself
-        return Score
+            if self.Estimator.__name__ == 'ANN':
+                inputsize=_X_train.shape
+                numparams = LR.calculate_param(Bestparams,inputsize[0],1) #Xtest oder Xtrain?
+                AICscore = calculate_AIC((len(_Y_train)),numparams,_Y_test,Predicted)
+                BICscore = calculate_BIC((len(_Y_train)),numparams,_Y_test,Predicted)
+            elif self.Estimator.__name__ == 'RF_bay':
+                numparams= LR.calc_paramRF(Bestparams)
+                AICscore = calculate_AIC(len(_Y_train),numparams,_Y_test,Predicted)
+                BICscore = calculate_BIC(len(_Y_train),numparams,_Y_test,Predicted)
+            elif self.Estimator.__name__ == 'svr_bayesian_predictor':
+                numparams = LR.calc_paramSVRV1(Bestparams['C'])
+                AICscore = calculate_AIC(len(_Y_train), numparams, _Y_test, Predicted)
+                BICscore = calculate_BIC(len(_Y_train), numparams, _Y_test, Predicted)
+        if SV.logresults == True:
+            # Log Data
+            index = list(range(1, (len(traintimelist) + 1)))
+            aicweights= LR.calc_weights(aiclist)
+            bicweights = LR.calc_weights(biclist)
+            # print(len(index))
+            print("Length of traintimelist: %d" % (len(traintimelist)))
+            print("Length of testtimelist: %d" % (len(testtimelist)))
+
+            print("Length of aiclist: %d" % (len(aiclist)))
+            print("Length of biclist: %d" % (len(biclist)))
+            print("Length of paramlist: %d" % (len(paramlist)))
+            print("Length of numparamlist: %d" % (len(numparamlist)))
+            print("Length of r2list: %d" % (len(r2list)))
+            data = np.array([traintimelist,aiclist, aicweights, biclist, bicweights, paramlist, numparamlist, r2list, kpi1list,kpi2list,kpi3list]).T
+            print("Logging Dokumentation")
+            dflog = pd.DataFrame(data, columns=['Traintime', 'AIC', 'AICWeights', 'BIC', 'BICWeights', 'Params',
+                                                'AnzahlParams', 'R2','Mixed_KPI 1','Mixed_KPI 2', 'Mixed_KPI 3'])
+
+            logFile = os.path.join(SV.ResultsFolderSubTest, "Log_Results_%s.xlsx" % (SV.NameOfSubTest))
+            writer = pd.ExcelWriter(logFile)
+            dflog.to_excel(writer, float_format='%.6f')
+            writer.save()
+            # plot Data
+
+            plot_Results(Index=index, Time=traintimelist, AIC=aiclist, numparam=numparamlist, R2=r2list,
+                         SavePath=SV.ResultsFolderSubTest, BlackBox=self.Estimator.__name__, NameOfSubTest=SV.NameOfSubTest)
+
+
+        return Score,AICscore,BICscore
 
 #Initiate the blackboxes
 #Info: Make sure the HyperparameterGrid is always equal to the HyperparameterGridString for correct documentation
 HyperparameterGrid1= [{'gamma': [10000.0, 1000, 100, 10, 1, 0.1, 0.01, 0.001, 0.0001, 'auto'], 'C': [10000.0, 1000, 100, 10, 1, 0.1, 0.01, 0.001, 0.0001], 'epsilon': [1, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6]}]
 BB1 = BB(svr_grid_search_predictor, HyperparameterGrid1, str(HyperparameterGrid1))
 
-HyperparameterGrid2 = {"C": hp.loguniform("C", log(1e-4), log(1e4)), "gamma": hp.loguniform("gamma", log(1e-3), log(1e4)), "epsilon": hp.loguniform("epsilon", log(1e-4), log(1))}  # with loguniform(-6, 23.025) spans a range from 1e-3 to 1e10
+HyperparameterGrid2 = {"C": hp.loguniform("C", log(1e-3), log(1e3)), "gamma": hp.loguniform("gamma", log(1e-3), log(1e3)), "epsilon": hp.loguniform("epsilon", log(1e-4), log(1))}  # with loguniform(-6, 23.025) spans a range from 1e-3 to 1e10
 HyperparameterGridString2 = """{"C": hp.loguniform("C", log(1e-4), log(1e4)), "gamma":hp.loguniform("gamma", log(1e-3),log(1e4)), "epsilon":hp.loguniform("epsilon", log(1e-4), log(1))}"""  # set this as a string in order to have a exact"screenshot" of the hyperparametergrid to save it in the summary
 BB2 = BB(svr_bayesian_predictor, HyperparameterGrid2, HyperparameterGridString2)
 
 BB3 = BB(rf_predictor, None, None)
+HyperparameterGrid3 = {"n_estimators":scope.int(hp.qloguniform("n_estimators", log(1),log(100),1)),"max_depth":scope.int(hp.qloguniform("max_depth",log(1),log(100),1))}
+HyperparameterGridString3 = """{"n_estimators":scope.int(hp.qloguniform("n_estimators", log(1),log(100),1)),"max_depth":scope.int(hp.qloguniform("max_depth",log(1),log(100),1))}"""
+BB32 = BB(rf_bayesian, HyperparameterGrid3, HyperparameterGridString3)
 
 HyperparameterGrid4 = [{'hidden_layer_sizes':[[1],[10],[100],[1000],[1, 1],[10, 10], [100, 100],[1,10],[1,100],[10,100],[100,10],[100,1],[10,1],[1, 1, 1],[10, 10, 10],[100,100,100]]}]
 BB4 = BB(ann_grid_search_predictor, HyperparameterGrid4, str(HyperparameterGrid4))
 
 HyperparameterGrid5 = hp.choice("number_of_layers",
                                [
-                                   {"1layer": scope.int(hp.qloguniform("1.1", log(1), log(1000), 1))},
-                                   {"2layer": [scope.int(hp.qloguniform("1.2", log(1), log(1000), 1)),
-                                               scope.int(hp.qloguniform("2.2", log(1), log(1000), 1))]},
-                                   {"3layer": [scope.int(hp.qloguniform("1.3", log(1), log(1000), 1)),
-                                               scope.int(hp.qloguniform("2.3", log(1), log(1000), 1)),
-                                               scope.int(hp.qloguniform("3.3", log(1), log(1000), 1))]}
+                                   {"1layer": scope.int(hp.qloguniform("1.1", log(1), log(210), 1))},
+                                   {"2layer": [scope.int(hp.qloguniform("1.2", log(1), log(105), 1)),
+                                               scope.int(hp.qloguniform("2.2", log(1), log(105), 1))]},
+                                   {"3layer": [scope.int(hp.qloguniform("1.3", log(1), log(70), 1)),
+                                               scope.int(hp.qloguniform("2.3", log(1), log(70), 1)),
+                                               scope.int(hp.qloguniform("3.3", log(1), log(70), 1))]}
                                ])
 HyperparameterGridString5 = """hp.choice("number_of_layers",
                     [
-                    {"1layer": scope.int(hp.qloguniform("1.1", log(1), log(1000), 1))},
-                    {"2layer": [scope.int(hp.qloguniform("1.2", log(1), log(1000), 1)), scope.int(hp.qloguniform("2.2", log(1), log(1000), 1))]},
-                    {"3layer": [scope.int(hp.qloguniform("1.3", log(1), log(1000), 1)), scope.int(hp.qloguniform("2.3", log(1), log(1000), 1)), scope.int(hp.qloguniform("3.3", log(1), log(1000), 1))]}
+                    {"1layer": scope.int(hp.qloguniform("1.1", log(1), log(210), 1))},
+                    {"2layer": [scope.int(hp.qloguniform("1.2", log(1), log(105), 1)), scope.int(hp.qloguniform("2.2", log(1), log(105), 1))]},
+                    {"3layer": [scope.int(hp.qloguniform("1.3", log(1), log(70), 1)), scope.int(hp.qloguniform("2.3", log(1), log(70), 1)), scope.int(hp.qloguniform("3.3", log(1), log(70), 1))]}
                     ])"""  # set this as a string in order to have a exact"screenshot" of the hyperparametergrid to save it in the summary
 BB5 = BB(ann_bayesian_predictor, HyperparameterGrid5, HyperparameterGridString5)
 
@@ -265,7 +332,7 @@ BB9 = BB(lasso_bayesian, HyperparameterGrid9, str(HyperparameterGridString9))
 def modelselection(_X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError", IndividualModel="Error", Documentation=False):
     #Trains and tests all (bayesian) models and returns the best of them, also saves it in an txtfile.
     Score_RF = BB3.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
-    Score_ANN = BB5.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+    Score_ANN,AIC_ANN,BIC_ANN = BB5.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     Score_GB = BB7.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     Score_Lasso = BB9.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     Score_SVR = BB2.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
@@ -273,13 +340,15 @@ def modelselection(_X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError",
     Score_list = [0,1,2,3,4]
     Score_list[0]=Score_SVR
     Score_list[1]=Score_RF
-    Score_list[2]=Score_ANN
+    Score_list[2]=AIC_ANN
     Score_list[3]=Score_GB
     Score_list[4]=Score_Lasso
 
     print(Score_list)
     #Todo: if Scoring function Score max; if Scoring function some error: min
-    BestScore = max(Score_list)
+    #BestScore = max(Score_list)
+    # noch irrelevant da nur ANN berechnet wird
+    BestScore = min(Score_list) #für AIC
 
     if Score_list[0]==BestScore:
         __BestModel = "SVR"
@@ -325,7 +394,7 @@ def embedded__recursive_feature_selection(_X_train, _Y_train, _X_test, _Y_test, 
         Features_transformed_test = selector.transform(_X_test)
         Features_transformed, _Y_train = index_column_keeper(_X_train, _Y_train, selector.get_support(indices=True), Features_transformed)
         Features_transformed_test, _Y_test = index_column_keeper(_X_test, _Y_test, selector.get_support(indices=True), Features_transformed_test)
-
+    print("EMBEDDED FEATURE SELECTION")
     if Documentation==False:
         return Features_transformed, _Y_train, Features_transformed_test, _Y_test
     if Documentation==True:
@@ -349,11 +418,13 @@ def all_models(Model, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerErro
                Documentation=False):
     # This function is just to "centralize" the train and predict operations so that additional options can be added easier
     if Model == "SVR":
-        Score = BB2.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+        Score,AIC,BIC = BB2.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     if Model == "RF":
         Score = BB3.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+    if Model == "RF_bay":
+        Score,AIC,BIC = BB32.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     if Model == "ANN":
-        Score = BB5.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+        Score,AIC,BIC = BB5.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     if Model == "GB":
         Score = BB7.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     if Model == "Lasso":
@@ -368,7 +439,7 @@ def all_models(Model, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerErro
         Score = BB6.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     if Model == "Lasso_grid":
         Score = BB8.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
-    return Score
+    return Score ,AIC,BIC
 
 def pre_handling(OnlyPredict):
     #define path to data source files '.xls' & '.pickle'
@@ -378,6 +449,7 @@ def pre_handling(OnlyPredict):
     #Set Folder for Results
     ResultsFolder = os.path.join(RootDir, "Results", SV.NameOfData, SV.NameOfExperiment)
     PathToPickles = os.path.join(ResultsFolder, "Pickles")
+    # set folder for logging results
 
     SV.RootDir = RootDir
     SV.PathToData = PathToData
@@ -458,7 +530,7 @@ def Bayes(Model,_X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
                            {"IndivModel_baye": "hourly"},
                            {"IndivModel_baye": "week_weekend"}
                        ]),
-            "n_F" : hp.qloguniform("n_F", log(1), log(len(list(_X_test))), 1)
+            "n_F" : hp.qloguniform("n_F", log(1), log(len(list(_X_test))), 1) #Was ist das? Anzahl der Feautures?
             }
 
     """
@@ -485,18 +557,22 @@ def Bayes(Model,_X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
             _Model=Model
 
         (XTr, YTr, XTe, YTe) = embedded__recursive_feature_selection(_X_train, _Y_train, _X_test, _Y_test, SV.EstimatorEmbedded, params["n_F"], SV.GlobalCV_MT) #create the specific train and test data
-        Score = all_models(_Model, XTr, YTr, XTe, YTe, Indexer, str(params["IndivModel"]["IndivModel_baye"]), False)
+        Score, AIC ,BIC= all_models(_Model, XTr, YTr, XTe, YTe, Indexer, str(params["IndivModel"]["IndivModel_baye"]), False)
         t_end = time.time()
-        print("Params per iteration: %s \ with the Score score %.3f, took %.2fseconds" % (params, Score, (t_end-t_start)))
-        return Score
+        logtime = t_end-t_start
+        print("MODELTUNING HYPEROPT")
+        print("Params per iteration: %s \ with the R2score %.3f, AICscore %.5f and BICscore %.5f took %.2fseconds" % (params, Score, AIC,BIC, (logtime)))
+        return Score,AIC,BIC
 
     def f(params):
-        acc = hyperopt(params,_X_train, _Y_train, _X_test, _Y_test, Indexer) #gets the score of the model
-        return {"loss": -acc, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
+        print("MODELTUNING F")
+        Score,AIC,BIC= hyperopt(params,_X_train, _Y_train, _X_test, _Y_test, Indexer) #gets the score of the model
+        return {"loss":AIC, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
 
     #do the actual bayesian optimization
     trials = Trials() #not used at the moment, only for tracking the intrinsic parameters of the bayesian optimization
     BestParams = fmin(f, params, algo=tpe.suggest, max_evals=SV.MaxEval_Bayes, trials=trials) #Do the optimization to find the best settings(parameters)
+    print("ICH GEBE PARAMETER AUS")  #wird nur einmal aufgerufen
     print(BestParams)
 
     #converting notation style
@@ -520,10 +596,33 @@ def Bayes(Model,_X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
                                                                  SV.EstimatorEmbedded, BestParams["n_F"], SV.GlobalCV_MT, True)
 
     #Todo: Here you could use higher Max_eval for the last final training with best settings(Add specific max eval hyparatuning to the functions)
-    Score = all_models(_Model, XTr, YTr, XTe, YTe, Indexer, str(BestParams["IndivModel"]["IndivModel_baye"]), True)
+    Score,AIC,BIC = all_models(_Model, XTr, YTr, XTe, YTe, Indexer, str(BestParams["IndivModel"]["IndivModel_baye"]), True) #werte werden nicht mehr benutzt
 
     #Document the Results and settings of the final bayesian optimization
     Totaltimeend=time.time()
+
+    if SV.logresults == True:
+        # Log Data
+        index = list(range(1,(len(traintimelist)+1)))
+        aicweights,bicweights = LR.calc_weights(aiclist,biclist)
+        #print(len(index))
+        print("Length of timelist: %d" %(len(traintimelist)))
+        print("Length of aiclist: %d" %(len(aiclist)))
+        print("Length of biclist: %d" %(len(biclist)))
+        print("Length of paramlist: %d" %(len(paramlist)))
+        print("Length of numparamlist: %d" %(len(numparamlist)))
+        print("Length of r2list: %d" %(len(r2list)))
+        data = np.array([traintimelist,aiclist,aicweights,biclist,bicweights,paramlist,numparamlist,r2list]).T
+        print("Logging Dokumentation")
+        dflog = pd.DataFrame(data,columns=['Time', 'AIC','AICWeights','BIC','BICWeights','Params','AnzahlParams','R2'])
+        logFile= os.path.join(SV.ResultsFolderSubTest, "Log_Results_%s.xlsx"%(SV.NameOfSubTest))
+        writer = pd.ExcelWriter(logFile)
+        dflog.to_excel(writer, float_format='%.6f')
+        writer.save()
+        #plot Data
+        plot_Results(Index=index,Time=traintimelist,AIC=aiclist,numparam= numparamlist,R2=r2list,SavePath=SV.ResultsFolderSubTest,BlackBox=Model, NameOfSubTest=SV.NameOfSubTest)
+
+
     # save summary of setup and evaluation
     dfSummary = pd.DataFrame(index=[0])
     dfSummary['Chosen Model'] = Model
@@ -623,7 +722,7 @@ def only_predict(NameOfPredictor, _X_test, _Y_test, Indexer, Data):
         return
     timeend = time.time()
     ComputationTime = (timeend - timestart)
-    visualization_documentation(NameOfPredictor, Predicted, _Y_test, Indexer, None, ComputationTime, SV.OnlyPredictFolder, None, None, None,
+    visualization_documentation(NameOfPredictor,_X_test, Predicted, _Y_test, Indexer, None, ComputationTime, SV.OnlyPredictFolder, None, None, None,
                                 None, SV.OnlyPredictRecursive, IndividualModel, None, None)
 
 
@@ -746,6 +845,6 @@ if __name__ == '__main__':
     SV.PathToPickles = PathToPickles
 
     #Define which part shall be computed (parameters are set in SharedVariables)
-    main_FinalBayes()
-    #main_OnlyHyParaOpti()
+    #main_FinalBayes()
+    main_OnlyHyParaOpti()
     #main_OnlyPredict()

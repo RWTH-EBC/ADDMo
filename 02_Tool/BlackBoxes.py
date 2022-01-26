@@ -25,16 +25,58 @@ import hyperopt.pyll.stochastic
 from sklearn.externals import joblib
 import os
 import warnings
+import LogResults as LR
+import math
+
+from Functions.ErrorMetrics import*
+
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=FutureWarning)
-"""
-Eigene Kommentare:
-score für svr änderbar in z.159
-rf depth 247
 
+aiclist = []
+traintimelist = []
+testtimelist = []
+r2list = []
+numparamlist=[]
+biclist=[]
+paramlist = []
+kpi1list = []
+kpi2list = []
+kpi3list = []
 
-"""
+def log_aic(aic):
+    global aiclist
+    aiclist.append(aic)
+def log_kpi1(kpi):
+    global kpi1list
+    kpi1list.append(kpi)
+def log_kpi2(kpi):
+    global kpi2list
+    kpi2list.append(kpi)
+
+def log_kpi3(kpi):
+    global kpi3list
+    kpi3list.append(kpi)
+def log_traintime(logtime):
+    global traintimelist
+    traintimelist.append(logtime)
+def log_testtime(time):
+    global testtimelist
+    testtimelist.append(time)
+def log_r2(r2):
+    global r2list
+    r2list.append(r2)
+def log_numparam(numparam):
+    global numparamlist
+    numparamlist.append(numparam)
+def log_bic(bic):
+    global biclist
+    biclist.append(bic)
+def log_param(param):
+    global paramlist
+    paramlist.append(param)
+
 
 ########################################################################################################################
 #Hyperparameter Tuning Information:
@@ -182,58 +224,7 @@ def svr_grid_search_predictor(Features_train, Signal_train, Features_test, Signa
             "Best_trained_model": Best_trained_model,
             "feature_importance": "Not available for that model"}
 
-def svr_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid, CV, Max_evals, Recursive=False):
-    #print("Cell Bayesian Optimization SVR start---------------------------------------------------------")
-    timestart = time.time()
 
-    #HyperparameterGrid = {"C": hp.loguniform("C", -6, 23.025), "gamma":hp.loguniform("gamma", -6,23.025), "epsilon":hp.loguniform("epsilon", -6, 23.025)} #if using loguniform, e.g. you want the parameter range 0.1 to 1000 type in (log(0.1), log(1000))
-
-    Signal_train = Signal_train.values.ravel()
-    Features_train = Features_train.values
-
-    def hyperopt_cv(params):
-        t_start = time.time()
-        Estimator = SVR(**params, cache_size=1500)    #give the specific parameter sample per run from fmin
-        CV_score = cross_val_score(estimator=Estimator, X=Features_train, y=Signal_train, cv=CV, scoring="r2").mean()  # create a crossvalidation score which shall be optimized
-        t_end = time.time()
-        print("Params per iteration: %s \ with the cross-validation score %.3f, took %.2fseconds" % (params, CV_score, (t_end-t_start)))
-        return CV_score
-
-    def f(params):
-        acc = hyperopt_cv(params)
-        return {"loss": -acc, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
-
-    trials = Trials() #this is for tracking the bayesian optimization
-    BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals, trials=trials) #do the bayesian optimization
-    Best_trained_model = SVR(**BestParams).fit(Features_train, Signal_train)    #set the best hyperparameter to the SVR machine
-    if not Features_test.empty:
-        if Recursive == False:
-            predicted = Best_trained_model.predict(Features_test)
-        elif Recursive == True:
-            Features_test_i = recursive(Features_test, Best_trained_model)
-            predicted = Best_trained_model.predict(Features_test_i)
-        score = Best_trained_model.score(Features_test, Signal_test)
-    else:
-        predicted = []
-        score = "empty"
-
-    #print section
-    #print("Bayesian Optimization Parameters")
-    #print("Everything about the search: %s" %trials.trials)
-    #print("List of returns of \"Objective\": %s" %trials.results)
-    #print("List of losses per ok trial: %s" %trials.losses())
-    #print("List of statuses: %s" %trials.statuses())
-    #print("BlackBox Parameter")
-    #print("The Score svr: %s" %Best_trained_model.score(Features_test, Signal_test))
-    #print("Best Hyperparameters: %s" %BestParams)
-    timeend = time.time()
-    #print("SVR took %s seconds" %(timeend-timestart))
-    return {"score" : score,
-            "best_params" : BestParams,
-            "prediction" : predicted,
-            "ComputationTime" : (timeend-timestart),
-            "Best_trained_model": Best_trained_model,
-            "feature_importance": "Not available for that model"}
 
 def rf_predictor(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid=NotImplemented, CV=NotImplemented, Max_evals=NotImplemented, Recursive=False):
     #print("Cell RandomForest start---------------------------------------------------------")
@@ -269,6 +260,295 @@ def rf_predictor(Features_train, Signal_train, Features_test, Signal_test, Hyper
             "ComputationTime" : (timeend-timestart),
             "Best_trained_model": Best_trained_model,
             "best_params": "Not available for RF"}
+
+def svr_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid, CV, Max_evals, Recursive=False):
+    #print("Cell Bayesian Optimization SVR start---------------------------------------------------------")
+    timestart = time.time()
+
+    #HyperparameterGrid = {"C": hp.loguniform("C", -6, 23.025), "gamma":hp.loguniform("gamma", -6,23.025), "epsilon":hp.loguniform("epsilon", -6, 23.025)} #if using loguniform, e.g. you want the parameter range 0.1 to 1000 type in (log(0.1), log(1000))
+
+    Signal_train = Signal_train.values.ravel()
+    Features_train = Features_train.values
+
+    def hyperopt_cv(params):
+        t_start = time.time()
+        Estimator = SVR(**params, cache_size=1500)    #give the specific parameter sample per run from fmin
+        CV_score = cross_val_score(estimator=Estimator, X=Features_train, y=Signal_train, cv=CV, scoring="r2").mean()  # create a crossvalidation score which shall be optimized
+
+        trained_model = Estimator.fit(Features_train,Signal_train)
+
+        dual = trained_model.dual_coef_
+        support = trained_model.n_support_
+        predicted = trained_model.predict(Features_test)
+        numparams = LR.calc_paramSVRV1(params['C'])
+        aicscore = calculate_AIC(len(Signal_train), numparams, Signal_test, predicted)
+        aicscoresvr = calc_AICSVR(len(Signal_train), params['epsilon'], Signal_test,predicted,Features_train.shape[1], )
+        bicscore = calculate_BIC(len(Signal_train), numparams, Signal_test, predicted)
+        t_end = time.time()
+        traintime = t_end-t_start
+
+        kpi1 = mixed_kpi1(CV_score, 0.5, aicscore, 0.5)
+        kpi2 = mixed_kpi2(aicscore, 0.5, bicscore, 0.5)
+        kpi3 = mixed_kpi3(CV_score, 0.5, kpi2, 0.5)
+        log_aic(aicscore)
+        log_kpi1(kpi1)
+        log_kpi2(kpi2)
+        log_kpi3(kpi3)
+        log_traintime(traintime)
+        log_bic(bicscore)
+        log_numparam(numparams)
+        log_r2(CV_score)
+        log_param(params)
+
+        print("Params per iteration: %s \ with the CV_Score of %.3f Aic Score of %.5f,and the AICSVRScore of %.5f took %.3fseconds" % (params, CV_score, aicscore, aicscoresvr, traintime))
+        return CV_score, aicscore, bicscore
+
+    def f(params):
+        acc, aic, bic = hyperopt_cv(params)
+        return {"loss": -acc, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
+
+    trials = Trials() #this is for tracking the bayesian optimization
+    BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals, trials=trials) #do the bayesian optimization
+    Best_trained_model = SVR(**BestParams).fit(Features_train, Signal_train)    #set the best hyperparameter to the SVR machine
+    if not Features_test.empty:
+        if Recursive == False:
+            predicted = Best_trained_model.predict(Features_test)
+        elif Recursive == True:
+            Features_test_i = recursive(Features_test, Best_trained_model)
+            predicted = Best_trained_model.predict(Features_test_i)
+        score = Best_trained_model.score(Features_test, Signal_test)
+    else:
+        predicted = []
+        score = "empty"
+
+    #print section
+    #print("Bayesian Optimization Parameters")
+    #print("Everything about the search: %s" %trials.trials)
+    #print("List of returns of \"Objective\": %s" %trials.results)
+    #print("List of losses per ok trial: %s" %trials.losses())
+    #print("List of statuses: %s" %trials.statuses())
+    #print("BlackBox Parameter")
+    #print("The Score svr: %s" %Best_trained_model.score(Features_test, Signal_test))
+    #print("Best Hyperparameters: %s" %BestParams)
+    timeend = time.time()
+    #print("SVR took %s seconds" %(timeend-timestart))
+    return {"score" : score,
+            "best_params" : BestParams,
+            "prediction" : predicted,
+            "ComputationTime" : (timeend-timestart),
+            "Best_trained_model": Best_trained_model,
+            "feature_importance": "Not available for that model"}
+
+def rf_bayesian(Features_train,Signal_train,Features_test,Signal_test,HyperparameterGrid,CV,Max_evals,Recursive = False):
+    timestart = time.time()
+    print("RF_bayesian startet")
+    # HyperparameterGrid RF":{"n_estimators":scope.int(hp.qloguniform("n_estimators", log(1),log(100),1)),"max_depth":scope.int(hp.qloguniform("max_depth",log(1),log(100),1))}
+    Signal_train = Signal_train.values.ravel()
+    Features_train = Features_train.values
+
+    def hyperopt_cv(params):
+        t_start = time.time()
+        Estimator = RandomForestRegressor(**params)  # give the specific parameter sample per run from fmin
+        CV_score = cross_val_score(estimator=Estimator, X=Features_train, y=Signal_train, cv=CV,
+                                   scoring="r2").mean()  # create a crossvalidation score which shall be optimized
+        trained_model = Estimator.fit(Features_train, Signal_train)
+        predicted = trained_model.predict(Features_test)
+        numparams = LR.calc_paramRF(params)
+        aicscore = calculate_AIC(len(Signal_train), numparams, Signal_test, predicted)
+        bicscore = calculate_BIC(len(Signal_train), numparams, Signal_test, predicted)
+
+        t_end = time.time()
+        traintime = t_end-t_start
+
+        kpi1 = mixed_kpi1(CV_score, 0.5, aicscore, 0.5)
+        kpi2 = mixed_kpi2(aicscore, 0.5, bicscore, 0.5)
+        kpi3 = mixed_kpi3(CV_score, 0.5, kpi2, 0.5)
+        log_aic(aicscore)
+        log_kpi1(kpi1)
+        log_kpi2(kpi2)
+        log_kpi3(kpi3)
+        log_traintime(traintime)
+        log_bic(bicscore)
+        log_numparam(numparams)
+        log_r2(CV_score)
+        log_param(params)
+
+        print("Params per iteration: %s \ with the CV_Score of %.3f Aic Score of %.5f,and the Bic Score of %.5f took %.3fseconds"%(params,CV_score,aicscore,bicscore,traintime))
+        return CV_score,aicscore,bicscore,kpi1,kpi2,kpi3
+    def f(params):
+        acc,aic,bic,kpi1,kpi2,kpi3 = hyperopt_cv(params)
+        return {"loss": bic, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
+
+    trials = Trials()  # this is for tracking the bayesian optimization
+    BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals,
+                      trials=trials)  # do the bayesian optimization
+    for k,v in BestParams.items(): #change values in integer
+        BestParams[k] = int(v)
+    teststart = time.time()
+    Best_trained_model = RandomForestRegressor(**BestParams).fit(Features_train, Signal_train)
+    if not Features_test.empty:
+        if Recursive == False:
+            predicted = Best_trained_model.predict(Features_test)
+        elif Recursive == True:
+            Features_test_i = recursive(Features_test, Best_trained_model)
+            predicted = Best_trained_model.predict(Features_test_i)
+        score = Best_trained_model.score(Features_test, Signal_test)
+
+    else:
+        predicted = []
+        score = "empty"
+
+    testend = time.time()
+    numparams = LR.calc_paramRF(BestParams)
+    aicscore = calculate_AIC(len(Signal_train), numparams, Signal_test, predicted)
+    bicscore = calculate_BIC(len(Signal_train), numparams, Signal_test, predicted)
+    log_testtime(testend - teststart)
+    print(" Der R2 Score lautet : %.5f" % (score))
+    print(" Der AIC Score lautet : %.5f" % (aicscore))
+    print(" Der BIC Score lautet : %.5f" % (bicscore))
+
+    timeend = time.time()
+    return {"score": score,  # score
+            "best_params": BestParams,
+            "prediction": predicted,
+            "ComputationTime": (timeend - timestart),
+            "Best_trained_model": Best_trained_model,
+            "feature_importance": "Not available for that model"}
+def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid, CV, Max_evals, Recursive=False):
+    #print("Cell Bayesian Optimization ANN start---------------------------------------------------------")
+    timestart = time.time()
+    print("ANN startet")
+
+    #HyperparameterGrid= hp.choice("number_of_layers",
+    #                    [
+    #                    {"1layer": scope.int(hp.qloguniform("1.1", log(1), log(210), 1))},
+    #                    {"2layer": [scope.int(hp.qloguniform("1.2", log(1), log(105), 1)), scope.int(hp.qloguniform("2.2", log(1), log(105), 1))]},
+    #                    {"3layer": [scope.int(hp.qloguniform("1.3", log(1), log(70), 1)), scope.int(hp.qloguniform("2.3", log(1), log(70), 1)), scope.int(hp.qloguniform("3.3", log(1), log(70), 1))]}
+    #                    ])
+
+    Signal_test = Signal_test.values.ravel()
+    #Features_test = Features_test.values.ravel() #this one not in order to have recursive still working fine
+    Signal_train = Signal_train.values.ravel()
+    Features_train = Features_train.values
+
+
+    def hyperopt_cv(params):
+        t_start = time.time()
+        try: #set params so that it fits the estimators attribute style
+            params = {"hidden_layer_sizes": params["1layer"]}
+        except:
+            try:
+                params = {"hidden_layer_sizes": params["2layer"]}
+            except:
+                try:
+                    params = {"hidden_layer_sizes": params["3layer"]}
+                except:
+                    sys.exit("Your bayesian hyperparametergrid does not fit the requirements, check the example and/or change the hyperparametergrid or the postprocessing in def hyperopt_cv")
+        Estimator = MLPRegressor(**params, max_iter=1000000)    #give the specific parameter sample per run from fmin
+
+        CV_score = cross_val_score(estimator=Estimator, X=Features_train, y=Signal_train, cv=CV, scoring="r2").mean()  # create a crossvalidation score which shall be optimized
+
+
+        trained_model = Estimator.fit(Features_train, Signal_train)
+        t_end = time.time()
+        predicted= trained_model.predict(Features_test)
+        numparams = LR.calculate_paramANN(params, Features_train.shape[1], 1)
+        aicscore = calculate_AIC(len(Signal_train), numparams, Signal_test, predicted)
+        bicscore = calculate_BIC(len(Signal_train), numparams, Signal_test, predicted)
+
+
+        traintime = t_end - t_start  # muss gespeichert werden
+        kpi1= mixed_kpi1(CV_score,0.5,aicscore,0.5)
+        kpi2 = mixed_kpi2(aicscore,0.5,bicscore,0.5)
+        kpi3 = mixed_kpi3(CV_score,0.5,kpi2,0.5)
+        log_aic(aicscore)
+        log_kpi1(kpi1)
+        log_kpi2(kpi2)
+        log_kpi3(kpi3)
+        log_traintime(traintime)
+        log_bic(bicscore)
+        log_numparam(numparams)
+        log_r2(CV_score)
+        log_param(params)
+
+        #for i in range(len(aiclist)):
+        #    print(aiclist[i])
+
+
+
+        #print("Params per iteration: %s \ with the cross-validation score %.3f, took %.2fseconds" % (params, CV_score, logtime))
+        print("Params per iteration: %s \ with the CV_Score of %.3f Aic Score of %.5f,and the Bic Score of %.5f took %.3fseconds"%(params,CV_score,aicscore,bicscore,traintime))
+        return CV_score,aicscore,bicscore,mixed_kpi1,mixed_kpi2,mixed_kpi3
+        #return aicscore
+        #return bicscore
+
+    def f(params):
+        acc,aic,bic,kpi1,kpi2,kpi3 = hyperopt_cv(params)
+
+        #hier gemischte KPI berehcnen
+        #return {"loss": -acc, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)#
+        return {"loss": kpi3, "status": STATUS_OK}
+
+    trials = Trials()
+    BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals, trials=trials)
+    try: #set params so that it fits the estimators attribute style
+        Z = [int(BestParams["1.1"])]
+    except:
+        try:
+            Z = [int(BestParams["1.2"]), int(BestParams["2.2"])]
+        except:
+            try:
+                Z = [int(BestParams["1.3"]), int(BestParams["2.3"]), int(BestParams["2.3"])]
+            except:
+                sys.exit("Your bayesian hyperparametergrid does not fit the requirements, check the example and/or change the hyperparametergrid or the postprocessing for the bestparams in ann_bayesian_predictor")
+    BestParams = {"hidden_layer_sizes": Z} #set params so that it fits the estimators attribute style
+    numparams = LR.calculate_paramANN(BestParams, Features_train.shape[1], 1)  # outputlayer 1 in addmo da nur ein signal
+    teststart=time.time()
+    Ann_best = MLPRegressor(**BestParams)    #set the best hyperparameter to the SVR machine
+    Best_trained_model = Ann_best.fit(Features_train, Signal_train)
+
+
+
+    if not Features_test.empty:
+        if Recursive == False:
+            predicted = Best_trained_model.predict(Features_test)
+        elif Recursive == True:
+            Features_test_i = recursive(Features_test, Best_trained_model)  #zeitschritte speichern für test
+            predicted = Best_trained_model.predict(Features_test_i) #warum werden die features predicted? und nicht signal
+        #score = Ann_best.score(Features_test, Signal_test) #Todo: Ann_best or should it be Best_trained_model?
+        #aicscore = calculate_AIC((len(Signal_test)+len(Signal_train)),numparams,Signal_test,predicted)
+        #bicscore = calculate_BIC((len(Signal_test)+len(Signal_train)),numparams,Signal_test,predicted)
+        #print(" Der AIC Score lautet : %.5f"%(aicscore))
+        #print(" Der BIC Score lautet : %.5f" % (bicscore))
+
+    else:
+        predicted = []
+        score = "empty"
+    testend = time.time()
+    log_testtime(testend-teststart)
+    score = Ann_best.score(Features_test, Signal_test)  # Todo: Ann_best or should it be Best_trained_model?
+    aicscore = calculate_AIC((len(Signal_test) + len(Signal_train)), numparams, Signal_test, predicted)
+    bicscore = calculate_BIC((len(Signal_test) + len(Signal_train)), numparams, Signal_test, predicted)
+    print(" Der AIC Score lautet : %.5f" % (aicscore))
+    print(" Der BIC Score lautet : %.5f" % (bicscore))
+    #print section
+    #print("Bayesian Optimization Parameters")
+    #print("Everything about the search: %s" %trials.trials)
+    #print("List of returns of \"Objective\": %s" %trials.results)
+    #print("List of losses per ok trial: %s" %trials.losses())
+    #print("List of statuses: %s" %trials.statuses())
+    #print("BlackBox Parameter")
+    #print("The Score ann: %s" %Ann_best.score(Features_test, Signal_test))
+    #print("Best Hyperparameters: %s" %BestParams)
+    timeend = time.time()
+    #print("ANN took %s seconds" %(timeend-timestart))
+    return {"score" : aicscore,   #score
+            "best_params" : BestParams,
+            "prediction" : predicted,
+            "ComputationTime" : (timeend-timestart),
+            "Best_trained_model": Best_trained_model,
+            "feature_importance": "Not available for that model"}
+
 def ann_grid_search_predictor(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid, CV, Max_evals=NotImplemented, Recursive=False):
     #print("Cell GridSearchANN start---------------------------------------------------------")
     timestart = time.time()
@@ -297,88 +577,6 @@ def ann_grid_search_predictor(Features_train, Signal_train, Features_test, Signa
 
     return {"score" : score,
             "best_params" : ann.best_params_,
-            "prediction" : predicted,
-            "ComputationTime" : (timeend-timestart),
-            "Best_trained_model": Best_trained_model,
-            "feature_importance": "Not available for that model"}
-
-def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid, CV, Max_evals, Recursive=False):
-    #print("Cell Bayesian Optimization ANN start---------------------------------------------------------")
-    timestart = time.time()
-
-    #HyperparameterGrid= hp.choice("number_of_layers",
-    #                    [
-    #                    {"1layer": scope.int(hp.qloguniform("1.1", log(1), log(1000), 1))},
-    #                    {"2layer": [scope.int(hp.qloguniform("1.2", log(1), log(1000), 1)), scope.int(hp.qloguniform("2.2", log(1), log(1000), 1))]},
-    #                    {"3layer": [scope.int(hp.qloguniform("1.3", log(1), log(1000), 1)), scope.int(hp.qloguniform("2.3", log(1), log(1000), 1)), scope.int(hp.qloguniform("3.3", log(1), log(1000), 1))]}
-    #                    ])
-
-    Signal_test = Signal_test.values.ravel()
-    #Features_test = Features_test.values.ravel() #this one not in order to have recursive still working fine
-    Signal_train = Signal_train.values.ravel()
-    Features_train = Features_train.values
-
-    def hyperopt_cv(params):
-        t_start = time.time()
-        try: #set params so that it fits the estimators attribute style
-            params = {"hidden_layer_sizes": params["1layer"]}
-        except:
-            try:
-                params = {"hidden_layer_sizes": params["2layer"]}
-            except:
-                try:
-                    params = {"hidden_layer_sizes": params["3layer"]}
-                except:
-                    sys.exit("Your bayesian hyperparametergrid does not fit the requirements, check the example and/or change the hyperparametergrid or the postprocessing in def hyperopt_cv")
-        Estimator = MLPRegressor(**params, max_iter=1000000)    #give the specific parameter sample per run from fmin
-        CV_score = cross_val_score(estimator=Estimator, X=Features_train, y=Signal_train, cv=CV, scoring="r2").mean()  # create a crossvalidation score which shall be optimized
-        t_end = time.time()
-        print("Params per iteration: %s \ with the cross-validation score %.3f, took %.2fseconds" % (params, CV_score, (t_end-t_start)))
-        return CV_score
-
-    def f(params):
-        acc = hyperopt_cv(params)
-        return {"loss": -acc, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
-
-    trials = Trials()
-    BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals, trials=trials)
-    try: #set params so that it fits the estimators attribute style
-        Z = [int(BestParams["1.1"])]
-    except:
-        try:
-            Z = [int(BestParams["1.2"]), int(BestParams["2.2"])]
-        except:
-            try:
-                Z = [int(BestParams["1.3"]), int(BestParams["2.3"]), int(BestParams["2.3"])]
-            except:
-                sys.exit("Your bayesian hyperparametergrid does not fit the requirements, check the example and/or change the hyperparametergrid or the postprocessing for the bestparams in ann_bayesian_predictor")
-    BestParams = {"hidden_layer_sizes": Z} #set params so that it fits the estimators attribute style
-    Ann_best = MLPRegressor(**BestParams)    #set the best hyperparameter to the SVR machine
-    Best_trained_model = Ann_best.fit(Features_train, Signal_train)
-    if not Features_test.empty:
-        if Recursive == False:
-            predicted = Best_trained_model.predict(Features_test)
-        elif Recursive == True:
-            Features_test_i = recursive(Features_test, Best_trained_model)
-            predicted = Best_trained_model.predict(Features_test_i)
-        score = Ann_best.score(Features_test, Signal_test) #Todo: Ann_best or should it be Best_trained_model?
-    else:
-        predicted = []
-        score = "empty"
-
-    #print section
-    #print("Bayesian Optimization Parameters")
-    #print("Everything about the search: %s" %trials.trials)
-    #print("List of returns of \"Objective\": %s" %trials.results)
-    #print("List of losses per ok trial: %s" %trials.losses())
-    #print("List of statuses: %s" %trials.statuses())
-    #print("BlackBox Parameter")
-    #print("The Score ann: %s" %Ann_best.score(Features_test, Signal_test))
-    #print("Best Hyperparameters: %s" %BestParams)
-    timeend = time.time()
-    #print("ANN took %s seconds" %(timeend-timestart))
-    return {"score" : score,
-            "best_params" : BestParams,
             "prediction" : predicted,
             "ComputationTime" : (timeend-timestart),
             "Best_trained_model": Best_trained_model,
@@ -682,10 +880,11 @@ class indiv_model():
 
         best_params = dict()
         best_model = dict()
-
+        #param_list = dict()
+        print("BLACKBOX MAIN")
         Y = pd.DataFrame(index=self.Signal_test.index)
         i = 1
-        for key in Dic:
+        for key in Dic: # hier zeit pro timestamp?
             if Dic[key][0].empty:
                 Answer = input(
                     "Attention your train period does not contain data to train all individual models. An Error is very probable. Proceed anyways?")
@@ -697,6 +896,9 @@ class indiv_model():
                              Signal_test=Dic[key][3], HyperparameterGrid=self.HyperparameterGrid, CV=self.CV, Max_evals=self.Max_evals,
                              Recursive=False)  # train and predict for the given data #recursive has to be turned of (doesnt work with individual model), it is done later in this function for individual models
             Y_i = _dic["prediction"]  # pull the prediction from the dictionary
+            #param_list[key]=_dic["best_params"]
+            print("ICH BIN IN BB INDIV MODEL MAIN")
+            print("So oft durch BB main iteriert %d"%(i))
             Index = Dic[key][3]
             Y_i = pd.DataFrame(index=Index.index, data=Y_i)  # reset the index to datetime convention
             Y_i = Y_i.rename(columns={0: i})  # rename column per loop to have each period in a single column

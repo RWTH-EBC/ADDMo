@@ -12,9 +12,9 @@ from math import log
 
 #Input section needed for DataTuning and ModelTuning
 # Set name of the folder where the experiments shall be saved, e.g. the name of the observed data
-NameOfData = "AHU Data1"
+NameOfData = "TrialInputFubic"
 # Set name of the experiments series
-NameOfExperiment = "NoOL"
+NameOfExperiment = "TrialTunedDataFubic"
 
 # User Input Section Data Tuning #######################################################################################
 if True: #if True for neat appearance
@@ -32,9 +32,10 @@ if True: #if True for neat appearance
                             {"2layer": [scope.int(hp.qloguniform("1.2", log(1), log(1000), 1)), scope.int(hp.qloguniform("2.2", log(1), log(1000), 1))]},
                             {"3layer": [scope.int(hp.qloguniform("1.3", log(1), log(1000), 1)), scope.int(hp.qloguniform("2.3", log(1), log(1000), 1)), scope.int(hp.qloguniform("3.3", log(1), log(1000), 1))]}
                             ]),
-                           "SVR":{"C": hp.loguniform("C", log(1e-4), log(1e4)), "gamma": hp.loguniform("gamma", log(1e-3), log(1e4)), "epsilon": hp.loguniform("epsilon", log(1e-4), log(1))},
+                           "SVR":{"C": hp.loguniform("C", log(1e-4), log(1e3)), "gamma": hp.loguniform("gamma", log(1e-3), log(1e3)), "epsilon": hp.loguniform("epsilon", log(1e-4), log(1))},
                            "GB":{"n_estimators": scope.int(hp.qloguniform("n_estimators", log(1), log(1e3), 1)), "max_depth": scope.int(hp.qloguniform("max_depth", log(1),log(100), 1)), "learning_rate":hp.loguniform("learning_rate", log(1e-2), log(1)), "loss":hp.choice("loss",["ls", "lad", "huber", "quantile"])},
                            "Lasso":{"alpha": hp.loguniform("alpha", log(1e-10), log(1e6))},
+                           "RF_bay":{"n_estimators":scope.int(hp.qloguniform("n_estimators", log(1),log(100),1)),"max_depth":scope.int(hp.qloguniform("max_depth",log(1),log(100),1))},
                            "RF":None}
     WrapperModels = {"ANN":ann_bayesian_predictor,"GB":gradientboost_bayesian,"Lasso":lasso_bayesian,"SVR":svr_bayesian_predictor,"RF":rf_predictor}
     EstimatorWrapper = WrapperModels["RF"]  # state one blackbox model from "BlackBoxes.py", without parenthesis, e.g. <rf_predictor>
@@ -77,8 +78,8 @@ if True: #if True for neat appearance
 
     # Manual Period Selection
     ManSelect = False
-    StartDate = '2016-06-02 00:00'  # start day of data set
-    EndDate = '2016-06-16 00:00'  # end day of data set
+    StartDate = '2016-06-02 00:00'  # start day of data set         #Datum geändert von 2016-06-02 00:00
+    EndDate = '2016-06-16 00:00'  # end day of data set                # 2016-06-16 00:00
 
     # -----------------------Input Section Feature Construction----------------------
     # Production of Cross and Autocorrelation Plots in order to find meaningful OwnLags and FeatureLags
@@ -128,7 +129,7 @@ if True: #if True for neat appearance
 
     # Embedded methods start-----------------
     # define and set Estimator which shall be used in all embedded Methods(only present in feature selection)
-    rf = RandomForestRegressor(max_depth=10e17,
+    rf = RandomForestRegressor(max_depth=10e17,            # Max Tiefe
                                random_state=0)  # have to be defined so that they return "feature_importance", more implementation have to be developed
     lasso = linear_model.Lasso(max_iter=10e8)
     EstimatorEmbedded = rf  # e.g. <rf>; set one of the above models to be used
@@ -154,30 +155,34 @@ if True: #if True for neat appearance
 if True: #if True for neat appearance
     #Variables for "ModelTuning.py" (necessary for
     #User Input
-    NameOfSubTest = "FinalBaye"
-    StartTraining = '2016-08-01 00:00'
-    EndTraining = "2016-08-13 00:00"
-    StartTesting = "2016-08-13 00:00"
-    EndTesting = "2016-08-16 23:30:00"
+    NameOfSubTest = "SVR5"
+    StartTraining = '2018-01-01 00:00'
+    EndTraining = '2018-01-20 23:45'
+    StartTesting = '2018-01-21 00:00'
+    EndTesting = '2018-02-21 23:45'
+
+    #Logging Results computing time over train steps and AIC/BIC over train steps
+    logresults = True
+
     # Set global variables, those variables are for the BlackBox models themselves not for the final bayesian optimization
-    GlobalMaxEval_HyParaTuning = 2  # sets the number of evaluations done by the bayesian optimization for each "tuned training" to find the best Hyperparameter, each evaluation is training and testing with cross-validation for one hyperparameter setting
+    GlobalMaxEval_HyParaTuning = 15  # sets the number of evaluations done by the bayesian optimization for each "tuned training" to find the best Hyperparameter, each evaluation is training and testing with cross-validation for one hyperparameter setting
     GlobalCV_MT = 3  # Enter any crossvalidationn method from scikit-learn or any self defined or from elsewhere.
     GlobalRecu = True #(Boolean) this sets whether the it shall be forecasted recursive or not
     GlobalShuffle = True
 
     #Settings for regular training without final bayesian optimization (without "automation)
-    GlobalIndivModel = "hourly"  # "week_weekend"; "hourly"; "No"; "byFeature"
+    GlobalIndivModel = "No"  # "week_weekend"; "hourly"; "No"; "byFeature"
     if GlobalIndivModel == "byFeature":
         IndivFeature = "schedule[]"  # copy the name of feature here
         IndivThreshold = 0.5  # state the threshold at which value of that feature the data frame shall be splitted
-    OnlyHyPara_Models = ["ModelSelection"] #array of the blackboxes you want to use
-    #Possible entries: ["SVR", "RF", "ANN", "GB", "Lasso", "SVR_grid", "ANN_grid", "RF_grid", "GB_grid", "Lasso_grid"]
+    OnlyHyPara_Models = ["SVR"] #array of the blackboxes you want to use
+    #Possible entries: ["SVR", "RF", "RF_bay","ANN", "GB", "Lasso", "SVR_grid", "ANN_grid", "RF_grid", "GB_grid", "Lasso_grid"]
     #                  ["ModelSelection"] uses all bayesian models (those without _grid) and returns the best
 
     #Final bayesian optimization finds optimal combination of "Individual Model"&"Features"&"Model"
     #Final bayesian optimization parameter
-    MaxEval_Bayes = 5
-    Model_Bayes = "Baye"
+    MaxEval_Bayes = 3
+    Model_Bayes = "RF"
     # possible entries
     # Max_eval_Bayes = int - Number of iterations the bayesian optimization should do for selecting NumberofFeatures, IndivModel, BestModel , the less the less quality but faster
     # Model= "SVR","ANN","GB","RF","Lasso" - choose a model for bayesian optimization (RF is by far the fastest)
@@ -204,8 +209,8 @@ if True: #if True for neat appearance
     error is computed. Of those errors the "mean", "standard deviation" and the "max error" are computed
     (see "Automated Data Driven Modeling of Building Energy Systems via Machine Learning Algorithms" by Martin Rätz for more details)"""
     if ValidationPeriod == True:
-        StartTest_onlypredict = '2016-06-09 00:00'
-        EndTest_onlypredict = '2016-06-15 00:00'
+        StartTest_onlypredict = '2018-01-06 00:00'
+        EndTest_onlypredict = '2018-01-07 23:45'
 
 
         # Only necessary for plotting with the style used in the master thesis

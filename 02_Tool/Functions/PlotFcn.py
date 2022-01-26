@@ -191,6 +191,44 @@ def plot_predict_measured(prediction, measurement, MAE, R2, StartDatePredict, Sa
     plt.savefig(SavePath_jpg, transparent=True)
     plt.close()
 
+def plot_R2curve(numparam,R2, SavePath,BlackBox,NameOfSubTest):
+    import matplotlib.pylab as pylab
+    fig = plt.plot(numparam,R2, color='b',label='R2',lw= 0.5)
+
+def plot_Results(Index, Time, AIC, numparam, R2,SavePath,BlackBox,NameOfSubTest):
+    import matplotlib.pylab as pylab
+    params = {'legend.fontsize': 'small',
+              # 'figure.figsize': (15, 5),
+              'axes.labelsize': 'small',
+              'axes.titlesize': 'small',
+              'xtick.labelsize': 'small',
+              'ytick.labelsize': 'small'}
+    pylab.rcParams.update(params)
+    fig,(ax1,ax2,ax3,ax4) = plt.subplots(4,sharex=True,sharey=False)
+    ax1.plot(Index,Time,color= 'b',label = 'Time',lw = 0.5)
+    ax1.set_ylabel("Time in seconds")
+    ax1.set_title('Time')
+    plt.xlabel('Index')
+    plt.legend(fontsize="small", loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.23), fancybox=True, framealpha=0.5,
+               labelspacing=0.1)
+    ax2.plot(Index,AIC,color= 'm',label = 'AIC', lw=0.5)
+    ax2.set_ylabel("Aic score")
+    ax2.set_title('AIC')
+
+    ax3.plot(Index, numparam, color='k', label='Numparam', lw=0.5, )
+    ax3.set_ylabel("Anzahl der Parameter")
+    ax3.set_title('Anzahl der Parameter')
+
+    ax4.plot(Index, R2, color='r',  label='R2', lw=0.5)
+    ax4.set_ylim([0.5,1])
+    ax4.set_ylabel("R2 score")
+    ax4.set_title('R2')
+
+
+    SavePath = "%s/Results_%s" % (SavePath, BlackBox)
+    SavePath_pdf = "%s.pdf" % (SavePath)
+    plt.savefig(SavePath_pdf, transparent=True)
+    plt.close()
 
 def plot_Residues(prediction, measurement, MAE, R2, SavePath, nameOfSignal, BlackBox, NameOfSubTest):
     import matplotlib.pylab as pylab
@@ -201,6 +239,7 @@ def plot_Residues(prediction, measurement, MAE, R2, SavePath, nameOfSignal, Blac
               'xtick.labelsize': 'small',
               'ytick.labelsize': 'small'}
     pylab.rcParams.update(params)
+
 
 
     fig, (ax1, ax2) = plt.subplots(2, sharex=True, sharey=False)

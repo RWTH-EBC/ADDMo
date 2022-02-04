@@ -155,17 +155,17 @@ if True: #if True for neat appearance
 if True: #if True for neat appearance
     #Variables for "ModelTuning.py" (necessary for
     #User Input
-    NameOfSubTest = "SVR5"
-    StartTraining = '2018-01-01 00:00'
-    EndTraining = '2018-01-20 23:45'
-    StartTesting = '2018-01-21 00:00'
-    EndTesting = '2018-02-21 23:45'
+    NameOfSubTest = "ANNlongweightparam1"
+    StartTraining = '2017-12-18 00:00'
+    EndTraining = '2018-01-13 23:45'
+    StartTesting = '2018-01-14 00:00'
+    EndTesting = '2018-12-31 23:45'
 
     #Logging Results computing time over train steps and AIC/BIC over train steps
     logresults = True
 
     # Set global variables, those variables are for the BlackBox models themselves not for the final bayesian optimization
-    GlobalMaxEval_HyParaTuning = 15  # sets the number of evaluations done by the bayesian optimization for each "tuned training" to find the best Hyperparameter, each evaluation is training and testing with cross-validation for one hyperparameter setting
+    GlobalMaxEval_HyParaTuning = 50  # sets the number of evaluations done by the bayesian optimization for each "tuned training" to find the best Hyperparameter, each evaluation is training and testing with cross-validation for one hyperparameter setting
     GlobalCV_MT = 3  # Enter any crossvalidationn method from scikit-learn or any self defined or from elsewhere.
     GlobalRecu = True #(Boolean) this sets whether the it shall be forecasted recursive or not
     GlobalShuffle = True
@@ -175,7 +175,7 @@ if True: #if True for neat appearance
     if GlobalIndivModel == "byFeature":
         IndivFeature = "schedule[]"  # copy the name of feature here
         IndivThreshold = 0.5  # state the threshold at which value of that feature the data frame shall be splitted
-    OnlyHyPara_Models = ["SVR"] #array of the blackboxes you want to use
+    OnlyHyPara_Models = ["ANN"] #array of the blackboxes you want to use
     #Possible entries: ["SVR", "RF", "RF_bay","ANN", "GB", "Lasso", "SVR_grid", "ANN_grid", "RF_grid", "GB_grid", "Lasso_grid"]
     #                  ["ModelSelection"] uses all bayesian models (those without _grid) and returns the best
 
@@ -197,10 +197,10 @@ if True: #if True for neat appearance
     # This is to use after training the models, hence it won´t produce results if there is no trained model safed already(which is done automatically if training one)
     # You define the trained model you want to load through nameofexperiment and NameOfSubTest and the time you want to predict through __StartDateTest and __EndDateTest
     # of course it is necessary that the models have been trained before in the respective nameofdata and nameofexperiment and NameOfSubTest combination
-    NameOfOnlyPredict = "TestNew5"  # use different names if you want to use several only_predicts on the same trained models
+    NameOfOnlyPredict = "Test1"  # use different names if you want to use several only_predicts on the same trained models
     OnlyPredictRecursive = True
 
-    ValidationPeriod = True
+    ValidationPeriod = False
     """Set False to have the prediction error on the whole data period (train and test),
     set True to define a test period by yourself(example the whole outhold data).
     With the difference between StartTesting and EndTesting the required prediction horizon is set
@@ -209,8 +209,8 @@ if True: #if True for neat appearance
     error is computed. Of those errors the "mean", "standard deviation" and the "max error" are computed
     (see "Automated Data Driven Modeling of Building Energy Systems via Machine Learning Algorithms" by Martin Rätz for more details)"""
     if ValidationPeriod == True:
-        StartTest_onlypredict = '2018-01-06 00:00'
-        EndTest_onlypredict = '2018-01-07 23:45'
+        StartTest_onlypredict = '2018-01-14 00:00'
+        EndTest_onlypredict = '2018-12-31 23:45'
 
 
         # Only necessary for plotting with the style used in the master thesis

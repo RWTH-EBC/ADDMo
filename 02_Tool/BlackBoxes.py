@@ -39,12 +39,17 @@ traintimelist = []
 testtimelist = []
 r2list = []
 numparamlist=[]
+annweight=[]
 biclist=[]
 paramlist = []
 kpi1list = []
 kpi2list = []
 kpi3list = []
+optmetric=[]
 
+def log_metric(metric):
+    global optmetric
+    optmetric.append(metric)
 def log_aic(aic):
     global aiclist
     aiclist.append(aic)
@@ -275,18 +280,18 @@ def svr_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
         Estimator = SVR(**params, cache_size=1500)    #give the specific parameter sample per run from fmin
         CV_score = cross_val_score(estimator=Estimator, X=Features_train, y=Signal_train, cv=CV, scoring="r2").mean()  # create a crossvalidation score which shall be optimized
 
-        trained_model = Estimator.fit(Features_train,Signal_train)
+        aicscore,bicscore = LR.cross_val_ic(Estimator, Features_train,Signal_train,CV,"SVR")
+        #trained_model = Estimator.fit(Features_train,Signal_train)
 
-        dual = trained_model.dual_coef_
-        support = trained_model.n_support_
-        predicted = trained_model.predict(Features_test)
-        numparams = LR.calc_paramSVRV1(params['C'])
-        aicscore = calculate_AIC(len(Signal_train), numparams, Signal_test, predicted)
-        aicscoresvr = calc_AICSVR(len(Signal_train), params['epsilon'], Signal_test,predicted,Features_train.shape[1], )
-        bicscore = calculate_BIC(len(Signal_train), numparams, Signal_test, predicted)
+        #predicted = trained_model.predict(Features_test)
+        #numparams = LR.calc_paramSVRV1(params['C'])
+        #aicscore = calculate_AIC(len(Signal_train), numparams, Signal_test, predicted)
+        #aicscoresvr = calc_AICSVR(len(Signal_train), params['epsilon'], Signal_test,predicted,Features_train.shape[1] )
+        #bicscoresvr=calc_BICSVR(len(Signal_train), params['epsilon'], Signal_test,predicted,Features_train.shape[1])
+        #bicscore = calculate_BIC(len(Signal_train), numparams, Signal_test, predicted)
         t_end = time.time()
         traintime = t_end-t_start
-
+        numparams = "leer"
         kpi1 = mixed_kpi1(CV_score, 0.5, aicscore, 0.5)
         kpi2 = mixed_kpi2(aicscore, 0.5, bicscore, 0.5)
         kpi3 = mixed_kpi3(CV_score, 0.5, kpi2, 0.5)
@@ -300,12 +305,13 @@ def svr_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
         log_r2(CV_score)
         log_param(params)
 
-        print("Params per iteration: %s \ with the CV_Score of %.3f Aic Score of %.5f,and the AICSVRScore of %.5f took %.3fseconds" % (params, CV_score, aicscore, aicscoresvr, traintime))
+        print("Params per iteration: %s \ with the CV_Score of %.3f Aic Score of %.5f took %.3fseconds" % (params, CV_score, aicscore, traintime))
         return CV_score, aicscore, bicscore
 
     def f(params):
         acc, aic, bic = hyperopt_cv(params)
-        return {"loss": -acc, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
+        log_metric("aic")
+        return {"loss": aic, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
 
     trials = Trials() #this is for tracking the bayesian optimization
     BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals, trials=trials) #do the bayesian optimization
@@ -320,6 +326,11 @@ def svr_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
     else:
         predicted = []
         score = "empty"
+    aicscore = calc_AICSVR(len(Signal_test), Best_trained_model.epsilon, Signal_test, predicted,Features_train.shape[1])
+    bicscore = calc_BICSVR(len(Signal_test), Best_trained_model.epsilon, Signal_test, predicted,Features_train.shape[1])
+    print(" Der R2 Score lautet : %.5f" % (score))
+    print(" Der AIC Score lautet : %.5f" % (aicscore))
+    print(" Der BIC Score lautet : %.5f" % (bicscore))
 
     #print section
     #print("Bayesian Optimization Parameters")
@@ -351,11 +362,11 @@ def rf_bayesian(Features_train,Signal_train,Features_test,Signal_test,Hyperparam
         Estimator = RandomForestRegressor(**params)  # give the specific parameter sample per run from fmin
         CV_score = cross_val_score(estimator=Estimator, X=Features_train, y=Signal_train, cv=CV,
                                    scoring="r2").mean()  # create a crossvalidation score which shall be optimized
+
+        aicscore,bicscore = LR.cross_val_ic(Estimator, Features_train, Signal_train, CV,"RF")
         trained_model = Estimator.fit(Features_train, Signal_train)
-        predicted = trained_model.predict(Features_test)
-        numparams = LR.calc_paramRF(params)
-        aicscore = calculate_AIC(len(Signal_train), numparams, Signal_test, predicted)
-        bicscore = calculate_BIC(len(Signal_train), numparams, Signal_test, predicted)
+        paramestimator = trained_model.estimators_
+        numparams = LR.calc_paramRF(paramestimator) # Frage wird das überhaupt gebraucht? Da numparam je nach fit sich ändert
 
         t_end = time.time()
         traintime = t_end-t_start
@@ -377,6 +388,7 @@ def rf_bayesian(Features_train,Signal_train,Features_test,Signal_test,Hyperparam
         return CV_score,aicscore,bicscore,kpi1,kpi2,kpi3
     def f(params):
         acc,aic,bic,kpi1,kpi2,kpi3 = hyperopt_cv(params)
+        log_metric("bic")
         return {"loss": bic, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
 
     trials = Trials()  # this is for tracking the bayesian optimization
@@ -384,7 +396,7 @@ def rf_bayesian(Features_train,Signal_train,Features_test,Signal_test,Hyperparam
                       trials=trials)  # do the bayesian optimization
     for k,v in BestParams.items(): #change values in integer
         BestParams[k] = int(v)
-    teststart = time.time()
+
     Best_trained_model = RandomForestRegressor(**BestParams).fit(Features_train, Signal_train)
     if not Features_test.empty:
         if Recursive == False:
@@ -398,11 +410,10 @@ def rf_bayesian(Features_train,Signal_train,Features_test,Signal_test,Hyperparam
         predicted = []
         score = "empty"
 
-    testend = time.time()
-    numparams = LR.calc_paramRF(BestParams)
+    paramestimator = Best_trained_model.estimators_
+    numparams = LR.calc_paramRF(paramestimator)
     aicscore = calculate_AIC(len(Signal_train), numparams, Signal_test, predicted)
     bicscore = calculate_BIC(len(Signal_train), numparams, Signal_test, predicted)
-    log_testtime(testend - teststart)
     print(" Der R2 Score lautet : %.5f" % (score))
     print(" Der AIC Score lautet : %.5f" % (aicscore))
     print(" Der BIC Score lautet : %.5f" % (bicscore))
@@ -448,13 +459,11 @@ def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
 
         CV_score = cross_val_score(estimator=Estimator, X=Features_train, y=Signal_train, cv=CV, scoring="r2").mean()  # create a crossvalidation score which shall be optimized
 
-
-        trained_model = Estimator.fit(Features_train, Signal_train)
+        aicscore,bicscore = LR.cross_val_ic(Estimator,Features_train,Signal_train,CV,"ANN")
+        param=Estimator.hidden_layer_sizes
+        numparams = LR.calculate_paramANN(param, Features_train.shape[1], 1)
         t_end = time.time()
-        predicted= trained_model.predict(Features_test)
-        numparams = LR.calculate_paramANN(params, Features_train.shape[1], 1)
-        aicscore = calculate_AIC(len(Signal_train), numparams, Signal_test, predicted)
-        bicscore = calculate_BIC(len(Signal_train), numparams, Signal_test, predicted)
+
 
 
         traintime = t_end - t_start  # muss gespeichert werden
@@ -478,16 +487,17 @@ def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
 
         #print("Params per iteration: %s \ with the cross-validation score %.3f, took %.2fseconds" % (params, CV_score, logtime))
         print("Params per iteration: %s \ with the CV_Score of %.3f Aic Score of %.5f,and the Bic Score of %.5f took %.3fseconds"%(params,CV_score,aicscore,bicscore,traintime))
-        return CV_score,aicscore,bicscore,mixed_kpi1,mixed_kpi2,mixed_kpi3
+        return CV_score,aicscore,bicscore,kpi1,kpi2,kpi3
         #return aicscore
         #return bicscore
 
     def f(params):
         acc,aic,bic,kpi1,kpi2,kpi3 = hyperopt_cv(params)
+        log_metric("acc")
 
         #hier gemischte KPI berehcnen
         #return {"loss": -acc, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)#
-        return {"loss": kpi3, "status": STATUS_OK}
+        return {"loss": aic, "status": STATUS_OK}
 
     trials = Trials()
     BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals, trials=trials)
@@ -502,10 +512,11 @@ def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
             except:
                 sys.exit("Your bayesian hyperparametergrid does not fit the requirements, check the example and/or change the hyperparametergrid or the postprocessing for the bestparams in ann_bayesian_predictor")
     BestParams = {"hidden_layer_sizes": Z} #set params so that it fits the estimators attribute style
-    numparams = LR.calculate_paramANN(BestParams, Features_train.shape[1], 1)  # outputlayer 1 in addmo da nur ein signal
-    teststart=time.time()
+    bestparam=BestParams["hidden_layer_sizes"]
+    numparams = LR.calculate_paramANN(bestparam, Features_train.shape[1], 1)  # outputlayer 1 in addmo da nur ein signal
     Ann_best = MLPRegressor(**BestParams)    #set the best hyperparameter to the SVR machine
     Best_trained_model = Ann_best.fit(Features_train, Signal_train)
+    numparamsweight= LR.calc_paramANNweights(Best_trained_model)
 
 
 
@@ -524,13 +535,12 @@ def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
     else:
         predicted = []
         score = "empty"
-    testend = time.time()
-    log_testtime(testend-teststart)
     score = Ann_best.score(Features_test, Signal_test)  # Todo: Ann_best or should it be Best_trained_model?
-    aicscore = calculate_AIC((len(Signal_test) + len(Signal_train)), numparams, Signal_test, predicted)
-    bicscore = calculate_BIC((len(Signal_test) + len(Signal_train)), numparams, Signal_test, predicted)
-    print(" Der AIC Score lautet : %.5f" % (aicscore))
-    print(" Der BIC Score lautet : %.5f" % (bicscore))
+    aicscore = calculate_AIC( len(Signal_train), numparamsweight, Signal_test, predicted)
+    bicscore = calculate_BIC( len(Signal_train), numparamsweight, Signal_test, predicted)
+    print(" Der R2 Score des besten Modells lautet :%.5f" %(score))
+    print(" Der AIC Score des besten Modells lautet : %.5f" % (aicscore))
+    print(" Der BIC Score des besten Modells lautet : %.5f" % (bicscore))
     #print section
     #print("Bayesian Optimization Parameters")
     #print("Everything about the search: %s" %trials.trials)

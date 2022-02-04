@@ -98,28 +98,36 @@ def mixed_kpi1(score,scoreweight,aic,aicweight):
     kpiscore= scoreweight * exp(score) * aicweight * aic
     return kpiscore
 def mixed_kpi2(aic,aicweight,bic,bicweight):
-    if aic < -15000:
-        kpiscore = 0.3 * aic + 0.7 * bic
-    else:
-        kpiscore = aicweight * aic + bicweight * bic
+    kpiscore = aicweight * aic + bicweight * bic
     return kpiscore
 def mixed_kpi3(score,scoreweight,kpi,kpiweight):
     kpiscore= scoreweight * exp(score) * kpiweight*kpi
     return kpiscore
 
-def calc_AICSVR(n,epsilon, measuredData, predictData,features):     #scheint nicht gut zu funktionieren !!
+def calc_AICSVR(n,epsilon, measuredData, predictData,features):
     mse = mean_squared_error(measuredData, predictData)
-    measuredData2 = measuredData.values
-    R = empiricalrisk(n,epsilon,measuredData2,predictData)
+    #measuredData2 = measuredData.values
+    R = empiricalrisk(n,epsilon,measuredData,predictData)
 
     K = 0
     for i in range(features):
         temp = factorial(features)/(factorial(i)*factorial(features-i))
         K = K +temp
-    aic =  R + 2*K*mse/(n-K)
+    aic =  -(R + 2*K*mse/(n-K))
 
     return aic
+def calc_BICSVR(n,epsilon,measuredData,predictData,features):
+    mse = mean_squared_error(measuredData, predictData)
+    #measuredData2 = measuredData.values
+    R = empiricalrisk(n, epsilon, measuredData, predictData)
 
+    K = 0
+    for i in range(features):
+        temp = factorial(features) / (factorial(i) * factorial(features - i))
+        K = K + temp
+    bic = -(R + log(n) * K * mse / (n - K))
+
+    return bic
 
 def empiricalrisk(n,epsilon,measuredData,predictData):
     tempR = 0

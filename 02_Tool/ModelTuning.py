@@ -23,7 +23,7 @@ from sklearn.model_selection import train_test_split
 from BlackBoxes import *
 from Functions.ErrorMetrics import *
 from Functions.PlotFcn import *
-
+from LogResults import *
 import math
 import SharedVariables as SV
 import LogResults as LR
@@ -35,15 +35,15 @@ def manual_train_test_period_select(Data ,StartDateTrain, EndDateTrain, StartDat
     Data_Test = Data[StartDateTest:EndDateTest]         #is used to perform a "forecast" with the trained Model
     return (Data_TrainTest, Data_Test)
 
-def visualization_documentation(NameOfPredictor,X_test, Y_Predicted, Y_test, Indexer, Y_train, ComputationTime, #wird nur ganz am ende aufgerufen layer müssen pbergeben werden
+def visualization_documentation(NameOfPredictor,X_test, Y_Predictedscaled, Y_testscaled, Indexer, Y_train, ComputationTime, #wird nur ganz am ende aufgerufen layer müssen pbergeben werden
                                 ResultsFolderSubTest, HyperparameterGrid=None, Bestparams=None, CV=3, Max_eval=None,
                                 Recursive=False, IndividualModel=False, Shuffle=SV.GlobalShuffle,
-                                FeatureImportance="Not available"):
+                                FeatureImportance="Not available", Bestmodel=None):
     if os.path.isfile(os.path.join(SV.ResultsFolder, "ScalerTracker.save")): #if scaler was used
         ScaleTracker_Signal = joblib.load(os.path.join(SV.ResultsFolder, "ScalerTracker.save")) #load used scaler
-        #Scale Results back to normal; maybe inside the Blackboxes
-        Y_Predicted= ScaleTracker_Signal.inverse_transform(SV.reshape(Y_Predicted))
-        Y_test = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_test))
+        #Scale Results back to normal; maybe inside the Blackboxes              #Hier ensteht der große Unterschied in MSE
+        Y_Predicted= ScaleTracker_Signal.inverse_transform(SV.reshape(Y_Predictedscaled))
+        Y_test = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_testscaled))
         # convert arrays to data frames(Series) for further use
         Y_test = pd.DataFrame(index=Indexer, data=Y_test, columns=["Measure"])
         Y_test = Y_test["Measure"]
@@ -56,18 +56,18 @@ def visualization_documentation(NameOfPredictor,X_test, Y_Predicted, Y_test, Ind
     # evaluate results with more error metrics
     (R2, STD, RMSE, MAPE, MAE) = evaluation(Y_test, Y_Predicted)
     if NameOfPredictor == 'ann_bayesian_predictor':
-        numparams = LR.calculate_paramANN(Bestparams,X_test.shape[1] ,1)  #X_test oder X_train
-        AIC = calculate_AIC(len(Y_train),numparams,Y_test,Y_Predicted)
-
-        BIC = calculate_BIC(len(Y_train),numparams,Y_test,Y_Predicted)
+        bestparam=Bestmodel.hidden_layer_sizes
+        numparams = LR.calculate_paramANN(bestparam,X_test.shape[1] ,1)  #X_test oder X_train
+        AIC = calculate_AIC(len(Y_train),numparams,Y_testscaled,Y_Predictedscaled)
+        BIC = calculate_BIC(len(Y_train),numparams,Y_testscaled,Y_Predictedscaled)
     elif NameOfPredictor == 'rf_bayesian':
-        numparams = LR.calc_paramRF(Bestparams)
-        AIC = calculate_AIC(len(Y_train), numparams, Y_test, Y_Predicted)
-        BIC = calculate_BIC(len(Y_train), numparams, Y_test, Y_Predicted)
+        paramestimator = Bestmodel.estimators_
+        numparams = LR.calc_paramRF(paramestimator)
+        AIC = calculate_AIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
+        BIC = calculate_BIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
     elif NameOfPredictor == 'svr_bayesian_predictor':
-        numparams = LR.calc_paramSVRV1(Bestparams['C'])
-        AIC = calculate_AIC(len(Y_train), numparams, Y_test, Y_Predicted)
-        BIC = calculate_BIC(len(Y_train), numparams, Y_test, Y_Predicted)
+        AIC = calc_AICSVR(len(Y_test), Bestmodel.epsilon, Y_testscaled, Y_Predictedscaled,X_test.shape[1]) #sehr sehr große zahlen
+        BIC = calc_BICSVR(len(Y_test), Bestmodel.epsilon, Y_testscaled, Y_Predictedscaled,X_test.shape[1])
 
     plot_predict_measured(prediction=Y_Predicted, measurement=Y_test, MAE=MAE, R2=R2, StartDatePredict=SV.StartTesting,
                           SavePath=ResultsFolderSubTest, nameOfSignal=SV.NameOfSignal, BlackBox=NameOfPredictor,
@@ -100,6 +100,7 @@ def visualization_documentation(NameOfPredictor,X_test, Y_Predicted, Y_test, Ind
     if IndividualModel == "byFeature":
         dfSummary['IndivFeature'] = IndivFeature
         dfSummary['IndivThreshold'] = IndivThreshold
+    #dfSummary['Optimiert nach:'] = optmetric[0]  wegen onlypredict
     dfSummary['Eval_R2'] = R2
     dfSummary['Eval_RMSE'] = RMSE
     dfSummary['Eval_MAPE'] = MAPE
@@ -232,7 +233,7 @@ class BB():
             Score,AICscore,BICscore = visualization_documentation(NameOfPredictor,_X_train, Predicted, _Y_test, Indexer, _Y_train, ComputationTime,
                                                 SV.ResultsFolderSubTest,
                                                 self.HyperparameterGridString, Bestparams, SV.GlobalCV_MT, SV.GlobalMaxEval_HyParaTuning, SV.GlobalRecu,
-                                                IndividualModel, SV.GlobalShuffle, FeatureImportance)
+                                                IndividualModel, SV.GlobalShuffle, FeatureImportance,Result_dic["Best_trained_model"])
             # only dump if it´s the last best one(marked by Documentation=True)
             model_saver(Result_dic, SV.ResultsFolderSubTest, NameOfPredictor, IndividualModel)
         else:
@@ -255,6 +256,9 @@ class BB():
             index = list(range(1, (len(traintimelist) + 1)))
             aicweights= LR.calc_weights(aiclist)
             bicweights = LR.calc_weights(biclist)
+            kp1_weights=LR.calc_weights(kpi1list)
+            kp2_weights = LR.calc_weights(kpi2list)
+            kp3_weights = LR.calc_weights(kpi3list)
             # print(len(index))
             print("Length of traintimelist: %d" % (len(traintimelist)))
             print("Length of testtimelist: %d" % (len(testtimelist)))
@@ -264,10 +268,22 @@ class BB():
             print("Length of paramlist: %d" % (len(paramlist)))
             print("Length of numparamlist: %d" % (len(numparamlist)))
             print("Length of r2list: %d" % (len(r2list)))
-            data = np.array([traintimelist,aiclist, aicweights, biclist, bicweights, paramlist, numparamlist, r2list, kpi1list,kpi2list,kpi3list]).T
+            print("Length of kpi1list: %d" %(len(kpi1list)))
+            print("Length of kpi2list: %d" % (len(kpi2list)))
+            print("Length of kpi3list: %d" % (len(kpi3list)))
+            print("Length of annweight:%d" %(len(annweight)))
             print("Logging Dokumentation")
-            dflog = pd.DataFrame(data, columns=['Traintime', 'AIC', 'AICWeights', 'BIC', 'BICWeights', 'Params',
-                                                'AnzahlParams', 'R2','Mixed_KPI 1','Mixed_KPI 2', 'Mixed_KPI 3'])
+            if self.Estimator.__name__ == 'ann_bayesian_predictor':
+                data = np.array(
+                    [traintimelist, aiclist, aicweights, biclist, bicweights, paramlist, numparamlist, annweight,r2list, kpi1list,
+                     kp1_weights, kpi2list, kp2_weights, kpi3list, kp3_weights]).T
+                dflog = pd.DataFrame(data, columns=['Traintime', 'AIC', 'AICWeights', 'BIC', 'BICWeights', 'Params',
+                                                    'AnzahlParams','WeightParam', 'R2', 'Mixed_KPI 1', 'KPI1weight', 'Mixed_KPI 2',
+                                                    'KPI2weight', 'Mixed_KPI 3', 'KPI3weight'])
+            else:
+                data = np.array([traintimelist,aiclist, aicweights, biclist, bicweights, paramlist, numparamlist, r2list, kpi1list,kp1_weights,kpi2list,kp2_weights,kpi3list,kp3_weights]).T
+                dflog = pd.DataFrame(data, columns=['Traintime', 'AIC', 'AICWeights', 'BIC', 'BICWeights', 'Params',
+                                                'AnzahlParams', 'R2','Mixed_KPI 1','KPI1weight','Mixed_KPI 2', 'KPI2weight', 'Mixed_KPI 3','KPI3weight'])
 
             logFile = os.path.join(SV.ResultsFolderSubTest, "Log_Results_%s.xlsx" % (SV.NameOfSubTest))
             writer = pd.ExcelWriter(logFile)
@@ -711,19 +727,19 @@ def predict(NameOfPredictor,_X_test):
         Predicted = indiv_predictor.main()
         IndividualModel = "byFeature"
     else:
-        return False, False
-    return Predicted, IndividualModel
+        return False, False, False
+    return Predicted, IndividualModel, Predictor
 
-def only_predict(NameOfPredictor, _X_test, _Y_test, Indexer, Data):
+def only_predict(NameOfPredictor, _X_test, _Y_test,_Y_train, Indexer, Data):
     timestart = time.time()
-    Predicted, IndividualModel = predict(NameOfPredictor,_X_test)
+    Predicted, IndividualModel, best_model = predict(NameOfPredictor,_X_test)
     if type(Predicted)==bool:
         print("There is no trained model of %s to do OnlyPredict, if needed set OnlyPredict=False and train a model first." % NameOfPredictor)  # stop function if specific BestModel is not present
         return
     timeend = time.time()
     ComputationTime = (timeend - timestart)
-    visualization_documentation(NameOfPredictor,_X_test, Predicted, _Y_test, Indexer, None, ComputationTime, SV.OnlyPredictFolder, None, None, None,
-                                None, SV.OnlyPredictRecursive, IndividualModel, None, None)
+    visualization_documentation(NameOfPredictor,_X_test, Predicted, _Y_test, Indexer, _Y_train, ComputationTime, SV.OnlyPredictFolder, None, None, None,
+                                None, SV.OnlyPredictRecursive, IndividualModel, None, None, best_model)
 
 
     def documenation_iterative_evaluation(mean_score, SD_score, errorlist, errormetric):
@@ -761,6 +777,7 @@ def only_predict(NameOfPredictor, _X_test, _Y_test, Indexer, Data):
         Excel.to_excel(writer, sheet_name="Sheet1")
         writer.save()
         writer.close()
+    """  #Fehlermeldung too many values to unpack in fold_list
     horizon = len(_X_test) #gets the length of the horizon by the stated period to predict
     if SV.ValidationPeriod==True: #define the data that shall be used to do the mean errors
          MeanErrorData = Data[SV.StartTest_onlypredict:SV.EndTest_onlypredict]
@@ -773,6 +790,8 @@ def only_predict(NameOfPredictor, _X_test, _Y_test, Indexer, Data):
     documenation_iterative_evaluation(mean_score, SD_score, errorlist, "MAE")
     mean_score, SD_score, errorlist, errormetric = mean_scoring(fold_list=fold_list, errormetric=mean_absolute_percentage_error)
     documenation_iterative_evaluation(mean_score, SD_score, errorlist, "MAPE")
+    """
+
 #-----------------------------------------------------------------------------------------------------------------------
 #Executive functions
 def main_FinalBayes():
@@ -815,12 +834,11 @@ def main_OnlyPredict():
     else:
         os.makedirs("%s" % (SV.OnlyPredictFolder))
 
-    AvailablePredictors = ["svr_bayesian_predictor", "rf_predictor", "ann_bayesian_predictor",
-                            "gradientboost_bayesian", "lasso_bayesian", "svr_grid_search_predictor",
-                            "gradientboost_gridsearch", "lasso_grid_search_predictor",
-                            "ann_grid_search_predictor"]
+    AvailablePredictors = ["svr_bayesian_predictor", "rf_bayesian", "ann_bayesian_predictor"] #"gradientboost_bayesian", "lasso_bayesian", "svr_grid_search_predictor",
+                           # "gradientboost_gridsearch", "lasso_grid_search_predictor",
+                           # "ann_grid_search_predictor"
     for NameOfPredictor in AvailablePredictors:
-        only_predict(NameOfPredictor, _X_test, _Y_test, Indexer, Data)
+        only_predict(NameOfPredictor, _X_test, _Y_test, _Y_train,Indexer, Data)
 
 
     print("Finish only predicting : %s/%s/%s" % (SV.NameOfData, SV.NameOfExperiment, SV.NameOfSubTest))

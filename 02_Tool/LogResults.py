@@ -4,59 +4,123 @@ from matplotlib import pyplot as plt
 from math import exp
 import csv
 import os
+from Functions.ErrorMetrics import*
+from sklearn.model_selection import KFold
 
+import statistics
+
+annweight=[]
+def log_annweight(weight):
+    global annweight
+    annweight.append(weight)
 
 def calculate_paramANN(params,inputlayersize,outputlayersize): #Bei ANN anzahl der verbindungen der Neuronen zwischen den Layers. Unter der Annahme ANN ist vollständig verknüpft
 
-    lendict = len(params)
-
-    if lendict == 1:  # nur ein Eintrag für params
-        layerparams = params['hidden_layer_sizes']
-        if type(layerparams) is tuple or type(layerparams) is list:  # hidden layer has more than one layer
-            anzahllayerparams = len(layerparams)
-            temp2 = 0
-            for i in range(anzahllayerparams):
-                if i == 0:  # inputlayer mit ersten hidden layer multiplizieren
-                    temp1 = inputlayersize * layerparams[i]
-                else:
-                    temp1 = layerparams[(i - 1)] * layerparams[i]
-                temp2 = temp2 + temp1
-            numparams=temp2 + layerparams[(anzahllayerparams - 1)] * outputlayersize
-        elif type(layerparams) is int:  #hidden layer has only one layer
-            temp1 = inputlayersize * layerparams
-            numparams=temp1 + layerparams * outputlayersize
-    """
-    else:   #Bestparams
-        for key in params:
-            templayerparams = params[key]
-            layerparams = templayerparams['hidden_layer_sizes']
-            if type(layerparams) is tuple or type(layerparams) is list:  # hidden layer has more than one layer
-                anzahllayerparams = len(layerparams)
-                temp2 = 0
-                for i in range(anzahllayerparams):
-                    if i == 0:  # inputlayer mit ersten hidden layer multiplizieren
-                        temp1 = inputlayersize * layerparams[i]
-                    else:
-                        temp1 = layerparams[(i - 1)] * layerparams[i]
-                    temp2 = temp2 + temp1
-                listparam.append(temp2 + layerparams[(anzahllayerparams - 1)] * outputlayersize)
-            elif type(layerparams) is int:  # hidden layer has only one layer
-                temp1 = inputlayersize * layerparams
-                listparam.append(temp1 + layerparams * outputlayersize)
-                """
+    if type(params) is int:
+        numparams = (inputlayersize+1)*params+(params+1)*outputlayersize  #+param= bias
+    else:
+        lendict = len(params)
+        temp1 = 0
+        for i in range(lendict-1):
+            temp1 = temp1 + (params[i]+1) * params[i+1]  #hidden Layer verbindungen bias
+        numparams = (inputlayersize+1)*params[0] + temp1 + (params[lendict-1]+1)*outputlayersize
 
 
     return numparams
 
-def calc_paramRF(params):
-    numparams = params['max_depth'] * params['n_estimators']        #andere Formel?
+def calc_paramANNweights(fitted_model):  #Problem negative weights. Betrag nehmen
+    weightmatrix= fitted_model.coefs_
+    biasmatrix = fitted_model.intercepts_
+    tempmatrix=0
+    for i in range(len(weightmatrix)):
+        tempweight=0
+        tempbias=0
+        for x in np.nditer(weightmatrix[i]):
+            tempweight = tempweight + abs(x)
+        for y in np.nditer(biasmatrix[i]):
+            tempbias= tempbias+ abs(y)
+        tempmatrix=tempmatrix+tempweight +tempbias
 
+    numparam = tempmatrix
+    return numparam
+
+def calc_paramRF(estimator):
+
+    temp = 0
+    for i in range(len(estimator)):
+        treei = estimator[i]
+        nodei= calc_leafnodes(treei)
+        temp = temp+ nodei
+    numparams = temp
     return numparams
+
+def calc_leafnodes(treei):
+    n_nodes = treei.tree_.node_count
+    children_left=treei.tree_.children_left
+    children_right=treei.tree_.children_right
+    numleaf = 0
+    for i in range(n_nodes):
+        if children_left[i] == children_right[i]:       # leaf node falls child_left == child_right, falls False ist es ein split node
+            numleaf +=1
+
+    return numleaf
 def calc_paramSVRV1(params):        # Nur C Cost beachtet in V1 : großes C-> mehr acc und mehr complexity-> evtl C als Komplexitätsaparameter
     numparams = params
     #numparams = exp(params)
 
     return numparams
+
+def cross_val_ic(Estimator,Features_train,Signal_train, CV, typ):  #X : Features_Train, Y: Signal_train
+    #trained_model = Estimator.fit(Feat)
+    kf = KFold(n_splits=CV)
+    X_train=[]
+    X_test=[]
+    Y_train=[]
+    Y_test=[]
+    aicscore=[]
+    bicscore=[]
+    for train_index,test_index in kf.split(Features_train,Signal_train):
+        X_train.append(Features_train[train_index])
+        X_test.append(Features_train[test_index])
+        Y_train.append(Signal_train[train_index])
+        Y_test.append(Signal_train[test_index])
+
+    if typ == "RF":
+        for i in range(CV):
+            trained_model=Estimator.fit(X_train[i],Y_train[i])
+            predicted= trained_model.predict(X_test[i])
+            paramestimator = trained_model.estimators_
+            numparams = calc_paramRF(paramestimator)
+            aicscore.append(calculate_AIC(len(Y_train[i]), numparams, Y_test[i], predicted))
+            bicscore.append(calculate_BIC(len(Y_train[i]),numparams,Y_test[i],predicted))
+    elif typ =="ANN":
+        params = Estimator.hidden_layer_sizes
+        numparams = calculate_paramANN(params, X_train[0].shape[1], 1) # traindaten alle gleiche größe
+        weights=[]
+        for i in range(CV):
+            trained_model = Estimator.fit(X_train[i], Y_train[i])
+            numparamsweight = calc_paramANNweights(trained_model)
+            weights.append(numparamsweight)
+
+            predicted = trained_model.predict(X_test[i])
+
+            aicscore.append(calculate_AIC(len(Y_train[i]), numparamsweight, Y_test[i], predicted))
+            bicscore.append(calculate_BIC(len(Y_train[i]), numparamsweight, Y_test[i], predicted))
+        meanweight=statistics.mean(weights)
+        log_annweight(meanweight)
+    elif typ=="SVR":
+        for i in range(CV):
+            trained_model = Estimator.fit(X_train[i],Y_train[i])
+            predicted = trained_model.predict(X_test[i])
+            aicscore.append(calc_AICSVR(len(Y_test[i]), Estimator.epsilon, Y_test[i], predicted, X_train[0].shape[1]))
+            bicscore.append(calc_BICSVR(len(Y_test[i]), Estimator.epsilon, Y_test[i], predicted, X_train[0].shape[1]))
+
+
+
+    aic = statistics.mean(aicscore)
+    bic = statistics.mean(bicscore)
+
+    return aic,bic
 
 def calc_weights(list):  # biclist löschen da algo gleich
 
@@ -77,26 +141,6 @@ def calc_weights(list):  # biclist löschen da algo gleich
     #kontrolle1=0
     #for i in range(len(aicweights)):
     #    kontrolle1 = kontrolle1+ aicweights[i]
-    """
-    # Gleiches Prinzip für BIC
-    bicmin = min(biclist)
-    deltabic = []
-    bicweights = []
-    for i in range(len(biclist)):
-        deltabic.append(biclist[i]-bicmin)
-    temp2 = 0
-    for i in range(len(deltabic)):
-        temp2 = temp2 + exp(-deltabic[i]/2)
-    bicnenner = temp2
-    for i in range(len(deltabic)):
-        bicweights.append((exp(-deltabic[i]/2))/bicnenner)
-    kontrolle2 = 0
-    for i in range(len(bicweights)):
-        kontrolle2 = kontrolle2 + bicweights[i]
-
-    """
-
-
     return listweights
 
 
@@ -107,44 +151,3 @@ def plot_data(inputpfad):
 
     timeplot = plt.plot()
 
-
-"""
-def log_ann(trainstep, time, aic,bic):
-
-    trainlist = []
-    trainlist.append(trainstep)
-    timelist = []
-    timelist.append(time)
-    aiclist = []
-    aiclist.append(aic)
-    biclist = []
-    biclist.append(bic)
-    desier_path =  "D:\\thi-dpo\ADDMo\\addmo-automated-ml-regression\\04_CSV"
-    file_path = os.path.join(desier_path, 'log_ann.csv')
-    with open(file_path, 'w', newline='') as f:
-        fieldnames = ['TrainStep','Time', 'Aic', 'Bic']
-        thewriter = csv.DictWriter(f, fieldnames=fieldnames)
-
-        thewriter.writeheader()
-        for i in range(0,len(trainlist)):
-            thewriter.writerow({'TrainStep' : trainlist[i], 'Time' : timelist[i], 'Aic': aiclist[i], 'Bic' : biclist[i]})
-
-
-
-def log_svr():
-    continue
-
-def log_rf():
-    continue
-
-def save_log(trainlist,timelist,aiclist,biclist):
-    desier_path = "D:\\thi-dpo\ADDMo\\addmo-automated-ml-regression\\04_CSV"
-    file_path = os.path.join(desier_path, 'log_ann.csv')
-    with open(file_path, 'w', newline='') as f:
-        fieldnames = ['TrainStep', 'Time', 'Aic', 'Bic']
-        thewriter = csv.DictWriter(f, fieldnames=fieldnames)
-
-        thewriter.writeheader()
-        for i in range(0, len(trainlist)):
-            thewriter.writerow({'TrainStep': trainlist[i], 'Time': timelist[i], 'Aic': aiclist[i], 'Bic': biclist[i]})
-"""

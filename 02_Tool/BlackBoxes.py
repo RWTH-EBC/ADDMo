@@ -1,5 +1,6 @@
 from __future__ import print_function
 from sklearn.svm import SVR
+from sklearn.svm import NuSVR
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
@@ -292,9 +293,9 @@ def svr_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
         t_end = time.time()
         traintime = t_end-t_start
         numparams = "leer"
-        kpi1 = mixed_kpi1(CV_score, 0.5, aicscore, 0.5)
-        kpi2 = mixed_kpi2(aicscore, 0.5, bicscore, 0.5)
-        kpi3 = mixed_kpi3(CV_score, 0.5, kpi2, 0.5)
+        kpi1 = mixed_kpi1(CV_score, 0.75, aicscore, 0.25)
+        kpi2 = mixed_kpi2(aicscore, 0.75, bicscore, 0.25)
+        kpi3 = mixed_kpi3(CV_score, 0.75, kpi2, 0.25)
         log_aic(aicscore)
         log_kpi1(kpi1)
         log_kpi2(kpi2)
@@ -306,12 +307,12 @@ def svr_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
         log_param(params)
 
         print("Params per iteration: %s \ with the CV_Score of %.3f Aic Score of %.5f took %.3fseconds" % (params, CV_score, aicscore, traintime))
-        return CV_score, aicscore, bicscore
+        return CV_score, aicscore, bicscore,kpi1,kpi2,kpi3
 
     def f(params):
-        acc, aic, bic = hyperopt_cv(params)
+        acc, aic, bic,kpi1,kpi2,kpi3 = hyperopt_cv(params)
         log_metric("aic")
-        return {"loss": aic, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
+        return {"loss": -acc, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
 
     trials = Trials() #this is for tracking the bayesian optimization
     BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals, trials=trials) #do the bayesian optimization
@@ -326,6 +327,8 @@ def svr_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
     else:
         predicted = []
         score = "empty"
+    #aicscore = calculate_AIC(len(Signal_test),Best_trained_model.C,Signal_test,predicted)
+    #bicscore = calculate_BIC(len(Signal_test),Best_trained_model.C,Signal_test,predicted)
     aicscore = calc_AICSVR(len(Signal_test), Best_trained_model.epsilon, Signal_test, predicted,Features_train.shape[1])
     bicscore = calc_BICSVR(len(Signal_test), Best_trained_model.epsilon, Signal_test, predicted,Features_train.shape[1])
     print(" Der R2 Score lautet : %.5f" % (score))
@@ -349,7 +352,76 @@ def svr_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
             "ComputationTime" : (timeend-timestart),
             "Best_trained_model": Best_trained_model,
             "feature_importance": "Not available for that model"}
+def nusvr_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_test, HyperparameterGrid, CV, Max_evals, Recursive=False):
+    #print("Cell Bayesian Optimization SVR start---------------------------------------------------------")
+    print("NuSVR startet")
+    timestart = time.time()
 
+    Signal_train = Signal_train.values.ravel()
+    Features_train = Features_train.values
+
+    def hyperopt_cv(params):
+        t_start = time.time()
+        Estimator = NuSVR(**params, cache_size=1500)    #give the specific parameter sample per run from fmin
+        CV_score = cross_val_score(estimator=Estimator, X=Features_train, y=Signal_train, cv=CV, scoring="r2").mean()  # create a crossvalidation score which shall be optimized
+
+        aicscore,bicscore = LR.cross_val_ic(Estimator, Features_train,Signal_train,CV,"NuSVR")
+        trained_model = Estimator.fit(Features_train,Signal_train)
+
+        t_end = time.time()
+        traintime = t_end-t_start
+        numparams = LR.calc_paramNuSVR(trained_model)
+        kpi1 = mixed_kpi1(CV_score, 0.75, aicscore, 0.25)
+        kpi2 = mixed_kpi2(aicscore, 0.5, bicscore, 0.5)
+        kpi3 = mixed_kpi3(CV_score, 0.75, kpi2, 0.25)
+        log_aic(aicscore)
+        log_kpi1(kpi1)
+        log_kpi2(kpi2)
+        log_kpi3(kpi3)
+        log_traintime(traintime)
+        log_bic(bicscore)
+        log_numparam(numparams)
+        log_r2(CV_score)
+        log_param(params)
+
+        print("Params per iteration: %s \ with the CV_Score of %.3f Aic Score of %.5f took %.3fseconds" % (params, CV_score, aicscore, traintime))
+        return CV_score, aicscore, bicscore,kpi1,kpi2,kpi3
+
+    def f(params):
+        acc, aic, bic,kpi1,kpi2,kpi3 = hyperopt_cv(params)
+        log_metric("aic")
+        return {"loss": kpi3, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
+
+    trials = Trials() #this is for tracking the bayesian optimization
+    BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals, trials=trials) #do the bayesian optimization
+    Best_trained_model = NuSVR(**BestParams).fit(Features_train, Signal_train)    #set the best hyperparameter to the SVR machine
+    if not Features_test.empty:
+        if Recursive == False:
+            predicted = Best_trained_model.predict(Features_test)
+        elif Recursive == True:
+            Features_test_i = recursive(Features_test, Best_trained_model)
+            predicted = Best_trained_model.predict(Features_test_i)
+        score = Best_trained_model.score(Features_test, Signal_test)
+    else:
+        predicted = []
+        score = "empty"
+    #aicscore = calculate_AIC(len(Signal_test),Best_trained_model.C,Signal_test,predicted)
+    #bicscore = calculate_BIC(len(Signal_test),Best_trained_model.C,Signal_test,predicted)
+    numparam=LR.calc_paramNuSVR(Best_trained_model)
+    aicscore = calculate_AIC(len(Signal_train), numparam, Signal_test, predicted)
+    bicscore = calculate_BIC(len(Signal_train), numparam, Signal_test, predicted)
+    print(" Der R2 Score lautet : %.5f" % (score))
+    print(" Der AIC Score lautet : %.5f" % (aicscore))
+    print(" Der BIC Score lautet : %.5f" % (bicscore))
+
+    timeend = time.time()
+    #print("SVR took %s seconds" %(timeend-timestart))
+    return {"score" : score,
+            "best_params" : BestParams,
+            "prediction" : predicted,
+            "ComputationTime" : (timeend-timestart),
+            "Best_trained_model": Best_trained_model,
+            "feature_importance": "Not available for that model"}
 def rf_bayesian(Features_train,Signal_train,Features_test,Signal_test,HyperparameterGrid,CV,Max_evals,Recursive = False):
     timestart = time.time()
     print("RF_bayesian startet")
@@ -371,9 +443,9 @@ def rf_bayesian(Features_train,Signal_train,Features_test,Signal_test,Hyperparam
         t_end = time.time()
         traintime = t_end-t_start
 
-        kpi1 = mixed_kpi1(CV_score, 0.5, aicscore, 0.5)
+        kpi1 = mixed_kpi1(CV_score, 0.25, aicscore, 0.75)
         kpi2 = mixed_kpi2(aicscore, 0.5, bicscore, 0.5)
-        kpi3 = mixed_kpi3(CV_score, 0.5, kpi2, 0.5)
+        kpi3 = mixed_kpi3(CV_score, 0.75, kpi2, 0.25)
         log_aic(aicscore)
         log_kpi1(kpi1)
         log_kpi2(kpi2)
@@ -388,8 +460,8 @@ def rf_bayesian(Features_train,Signal_train,Features_test,Signal_test,Hyperparam
         return CV_score,aicscore,bicscore,kpi1,kpi2,kpi3
     def f(params):
         acc,aic,bic,kpi1,kpi2,kpi3 = hyperopt_cv(params)
-        log_metric("bic")
-        return {"loss": bic, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
+        log_metric("acc")
+        return {"loss": kpi2, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
 
     trials = Trials()  # this is for tracking the bayesian optimization
     BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals,
@@ -467,9 +539,9 @@ def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
 
 
         traintime = t_end - t_start  # muss gespeichert werden
-        kpi1= mixed_kpi1(CV_score,0.5,aicscore,0.5)
+        kpi1= mixed_kpi1(CV_score,0.75,aicscore,0.25)
         kpi2 = mixed_kpi2(aicscore,0.5,bicscore,0.5)
-        kpi3 = mixed_kpi3(CV_score,0.5,kpi2,0.5)
+        kpi3 = mixed_kpi3(CV_score,0.75,kpi2,0.25)
         log_aic(aicscore)
         log_kpi1(kpi1)
         log_kpi2(kpi2)
@@ -493,11 +565,11 @@ def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
 
     def f(params):
         acc,aic,bic,kpi1,kpi2,kpi3 = hyperopt_cv(params)
-        log_metric("acc")
+        #log_metric("acc")
 
         #hier gemischte KPI berehcnen
         #return {"loss": -acc, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)#
-        return {"loss": aic, "status": STATUS_OK}
+        return {"loss": kpi3, "status": STATUS_OK}
 
     trials = Trials()
     BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals, trials=trials)

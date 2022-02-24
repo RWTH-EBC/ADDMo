@@ -60,10 +60,11 @@ def calculate_AIC(n,num_params,measuredData,predictData):
 
     mse = mean_squared_error(measuredData, predictData)
 
-    if (n/num_params) < 40:
-        aic = calculate_AICc(n,mse,num_params)
-    else:
-        aic = n*log(mse) + 2*num_params
+    #if (n/num_params) < 40:
+        #aic = calculate_AICc(n,mse,num_params)     # AICc vernachlässigen um Ergebnisse nicht zu verfälschen
+
+    #else:
+    aic = n*log(mse) + 2*num_params
     return aic
     """
     else:
@@ -92,7 +93,10 @@ def calculate_BIC(n,num_params, measuredData, predictData):
 
 
 def calculate_AICc(n,mse,num_params): # korrigierte AIC
-    aicc = n*log(mse) + 2*num_params +(2*num_params*(num_params+1))/(n-num_params-1)
+    if n-num_params-1==0:
+        aicc = n * log(mse) + 2 * num_params + (2 * num_params * (num_params + 1)) / 1  # damit keine division mit 0
+    else:
+        aicc = n*log(mse) + 2*num_params +(2*num_params*(num_params+1))/(n-num_params-1)
     return aicc
 def mixed_kpi1(score,scoreweight,aic,aicweight):
     kpiscore= scoreweight * exp(score) * aicweight * aic

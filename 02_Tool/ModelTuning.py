@@ -56,8 +56,9 @@ def visualization_documentation(NameOfPredictor,X_test, Y_Predictedscaled, Y_tes
     # evaluate results with more error metrics
     (R2, STD, RMSE, MAPE, MAE) = evaluation(Y_test, Y_Predicted)
     if NameOfPredictor == 'ann_bayesian_predictor':
-        bestparam=Bestmodel.hidden_layer_sizes
-        numparams = LR.calculate_paramANN(bestparam,X_test.shape[1] ,1)  #X_test oder X_train
+
+
+        numparams = LR.calc_paramANNweights(Bestmodel)
         AIC = calculate_AIC(len(Y_train),numparams,Y_testscaled,Y_Predictedscaled)
         BIC = calculate_BIC(len(Y_train),numparams,Y_testscaled,Y_Predictedscaled)
     elif NameOfPredictor == 'rf_bayesian':
@@ -66,8 +67,15 @@ def visualization_documentation(NameOfPredictor,X_test, Y_Predictedscaled, Y_tes
         AIC = calculate_AIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
         BIC = calculate_BIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
     elif NameOfPredictor == 'svr_bayesian_predictor':
-        AIC = calc_AICSVR(len(Y_test), Bestmodel.epsilon, Y_testscaled, Y_Predictedscaled,X_test.shape[1]) #sehr sehr große zahlen
+
+        #AIC = calculate_AIC(len(Y_train), Bestmodel.C, Y_testscaled, Y_Predictedscaled)
+        #BIC = calculate_BIC(len(Y_train), Bestmodel.C, Y_testscaled, Y_Predictedscaled)
+        AIC = calc_AICSVR(len(Y_test), Bestmodel.epsilon, Y_testscaled, Y_Predictedscaled,X_test.shape[1])
         BIC = calc_BICSVR(len(Y_test), Bestmodel.epsilon, Y_testscaled, Y_Predictedscaled,X_test.shape[1])
+    elif NameOfPredictor =='nusvr_bayesian_predictor':
+        numparams = LR.calc_paramNuSVR(Bestmodel)
+        AIC = calculate_AIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
+        BIC = calculate_BIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
 
     plot_predict_measured(prediction=Y_Predicted, measurement=Y_test, MAE=MAE, R2=R2, StartDatePredict=SV.StartTesting,
                           SavePath=ResultsFolderSubTest, nameOfSignal=SV.NameOfSignal, BlackBox=NameOfPredictor,
@@ -109,7 +117,9 @@ def visualization_documentation(NameOfPredictor,X_test, Y_Predictedscaled, Y_tes
     dfSummary['Eval_AIC'] = AIC
     dfSummary['Eval_BIC'] = BIC
     #dfSummary['Testtime'] = testtimelist[0]
-    dfSummary['Computation Time'] = "%.2f seconds" %ComputationTime
+    dfSummary['Number of Parameters'] = numparams
+    dfSummary['Computation Time in seconds'] = ComputationTime
+
     dfSummary = dfSummary.T
     # write summary of setup and evaluation in excel File
     SummaryFile = os.path.join(ResultsFolderSubTest, "Summary_%s_%s.xlsx"%(NameOfPredictor, SV.NameOfSubTest))
@@ -260,6 +270,7 @@ class BB():
             kp2_weights = LR.calc_weights(kpi2list)
             kp3_weights = LR.calc_weights(kpi3list)
             # print(len(index))
+            """
             print("Length of traintimelist: %d" % (len(traintimelist)))
             print("Length of testtimelist: %d" % (len(testtimelist)))
 
@@ -272,13 +283,14 @@ class BB():
             print("Length of kpi2list: %d" % (len(kpi2list)))
             print("Length of kpi3list: %d" % (len(kpi3list)))
             print("Length of annweight:%d" %(len(annweight)))
+            """
             print("Logging Dokumentation")
             if self.Estimator.__name__ == 'ann_bayesian_predictor':
                 data = np.array(
                     [traintimelist, aiclist, aicweights, biclist, bicweights, paramlist, numparamlist, annweight,r2list, kpi1list,
                      kp1_weights, kpi2list, kp2_weights, kpi3list, kp3_weights]).T
                 dflog = pd.DataFrame(data, columns=['Traintime', 'AIC', 'AICWeights', 'BIC', 'BICWeights', 'Params',
-                                                    'AnzahlParams','WeightParam', 'R2', 'Mixed_KPI 1', 'KPI1weight', 'Mixed_KPI 2',
+                                                    'AnzahlParams','WeightParam', 'R2','R2Weight', 'Mixed_KPI 1',  'Mixed_KPI 2',
                                                     'KPI2weight', 'Mixed_KPI 3', 'KPI3weight'])
             else:
                 data = np.array([traintimelist,aiclist, aicweights, biclist, bicweights, paramlist, numparamlist, r2list, kpi1list,kp1_weights,kpi2list,kp2_weights,kpi3list,kp3_weights]).T
@@ -303,8 +315,12 @@ HyperparameterGrid1= [{'gamma': [10000.0, 1000, 100, 10, 1, 0.1, 0.01, 0.001, 0.
 BB1 = BB(svr_grid_search_predictor, HyperparameterGrid1, str(HyperparameterGrid1))
 
 HyperparameterGrid2 = {"C": hp.loguniform("C", log(1e-3), log(1e3)), "gamma": hp.loguniform("gamma", log(1e-3), log(1e3)), "epsilon": hp.loguniform("epsilon", log(1e-4), log(1))}  # with loguniform(-6, 23.025) spans a range from 1e-3 to 1e10
-HyperparameterGridString2 = """{"C": hp.loguniform("C", log(1e-4), log(1e4)), "gamma":hp.loguniform("gamma", log(1e-3),log(1e4)), "epsilon":hp.loguniform("epsilon", log(1e-4), log(1))}"""  # set this as a string in order to have a exact"screenshot" of the hyperparametergrid to save it in the summary
+HyperparameterGridString2 = """{"C": hp.loguniform("C", log(1e-3), log(1e3)), "gamma":hp.loguniform("gamma", log(1e-3),log(1e3)), "epsilon":hp.loguniform("epsilon", log(1e-4), log(1))}"""  # set this as a string in order to have a exact"screenshot" of the hyperparametergrid to save it in the summary
 BB2 = BB(svr_bayesian_predictor, HyperparameterGrid2, HyperparameterGridString2)
+
+HyperparameterGrid22 ={"C": hp.loguniform("C", log(1e-3), log(1e3)),"gamma": hp.loguniform("gamma", log(1e-3), log(1e3)), "nu":hp.loguniform("nu",log(1e-4),log(0.5))}
+HyperparameterGridString22="""{"C": hp.loguniform("C", log(1e-3), log(1e3)),"gamma": hp.loguniform("gamma", log(1e-3), log(1e3)), "nu":hp.loguniform("nu",log(1e-3),log(1))}"""
+BB22 = BB(nusvr_bayesian_predictor,HyperparameterGrid22,HyperparameterGridString22)
 
 BB3 = BB(rf_predictor, None, None)
 HyperparameterGrid3 = {"n_estimators":scope.int(hp.qloguniform("n_estimators", log(1),log(100),1)),"max_depth":scope.int(hp.qloguniform("max_depth",log(1),log(100),1))}
@@ -435,6 +451,8 @@ def all_models(Model, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerErro
     # This function is just to "centralize" the train and predict operations so that additional options can be added easier
     if Model == "SVR":
         Score,AIC,BIC = BB2.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+    if Model == "NuSVR":
+        Score,AIC,BIC = BB22.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     if Model == "RF":
         Score = BB3.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     if Model == "RF_bay":
@@ -620,7 +638,8 @@ def Bayes(Model,_X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
     if SV.logresults == True:
         # Log Data
         index = list(range(1,(len(traintimelist)+1)))
-        aicweights,bicweights = LR.calc_weights(aiclist,biclist)
+        aicweights = LR.calc_weights(aiclist)
+        bicweights = LR.calc_weights(biclist)
         #print(len(index))
         print("Length of timelist: %d" %(len(traintimelist)))
         print("Length of aiclist: %d" %(len(aiclist)))
@@ -707,7 +726,10 @@ def predict(NameOfPredictor,_X_test):
             Predicted = Predictor.predict(_X_test)
         elif SV.OnlyPredictRecursive == True:
             Features_test_i = recursive(_X_test, Predictor)
+            predictstarttime =time.time()
             Predicted = Predictor.predict(Features_test_i)
+            predictendtime = time.time()
+            predicttime = predictendtime-predictstarttime
         IndividualModel = "None"
     elif os.path.isfile(os.path.join(SV.ResultsFolderSubTest, "BestModels", "23_%s.save"%(NameOfPredictor))): #for hourly models
         indiv_predictor = indiv_model_onlypredict(indiv_splitter_instance=indiv_splitter(hourly_splitter), Features_test=_X_test, ResultsFolderSubTest=SV.ResultsFolderSubTest, NameOfPredictor=NameOfPredictor, Recursive=SV.OnlyPredictRecursive)
@@ -738,6 +760,9 @@ def only_predict(NameOfPredictor, _X_test, _Y_test,_Y_train, Indexer, Data):
         return
     timeend = time.time()
     ComputationTime = (timeend - timestart)
+    print("Computation Time ohne Recursiv %f" %(ComputationTime))
+   # print(" OnlyPrediction Time  %f" % (predicttime))
+
     visualization_documentation(NameOfPredictor,_X_test, Predicted, _Y_test, Indexer, _Y_train, ComputationTime, SV.OnlyPredictFolder, None, None, None,
                                 None, SV.OnlyPredictRecursive, IndividualModel, None, None, best_model)
 
@@ -834,7 +859,7 @@ def main_OnlyPredict():
     else:
         os.makedirs("%s" % (SV.OnlyPredictFolder))
 
-    AvailablePredictors = ["svr_bayesian_predictor", "rf_bayesian", "ann_bayesian_predictor"] #"gradientboost_bayesian", "lasso_bayesian", "svr_grid_search_predictor",
+    AvailablePredictors = ["nusvr_bayesian_predictor", "rf_bayesian", "ann_bayesian_predictor"] #"gradientboost_bayesian", "lasso_bayesian", "svr_grid_search_predictor",
                            # "gradientboost_gridsearch", "lasso_grid_search_predictor",
                            # "ann_grid_search_predictor"
     for NameOfPredictor in AvailablePredictors:
@@ -864,5 +889,5 @@ if __name__ == '__main__':
 
     #Define which part shall be computed (parameters are set in SharedVariables)
     #main_FinalBayes()
-    main_OnlyHyParaOpti()
-    #main_OnlyPredict()
+    #main_OnlyHyParaOpti()
+    main_OnlyPredict()

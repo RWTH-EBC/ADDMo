@@ -12,9 +12,9 @@ from math import log
 
 #Input section needed for DataTuning and ModelTuning
 # Set name of the folder where the experiments shall be saved, e.g. the name of the observed data
-NameOfData = "TrialInputFubic"
+NameOfData = "TrialInputRWTH"
 # Set name of the experiments series
-NameOfExperiment = "TrialTunedDataFubic"
+NameOfExperiment = "TrialTunedDataRWTH"
 
 # User Input Section Data Tuning #######################################################################################
 if True: #if True for neat appearance
@@ -155,11 +155,12 @@ if True: #if True for neat appearance
 if True: #if True for neat appearance
     #Variables for "ModelTuning.py" (necessary for
     #User Input
-    NameOfSubTest = "ANNlongweightparam1"
-    StartTraining = '2017-12-18 00:00'
-    EndTraining = '2018-01-13 23:45'
-    StartTesting = '2018-01-14 00:00'
-    EndTesting = '2018-12-31 23:45'
+    NameOfSubTest = "ANNAIC.1"
+    StartTraining = '2016-08-01 00:00'    #  StartTraining = '2017-12-18 00:00'
+    EndTraining = '2016-08-07 23:45'       # EndTraining = '2018-01-13 23:45'
+    StartTesting = '2016-08-08 00:00'     #StartTesting = '2018-01-14 00:00'
+    EndTesting = '2016-08-16 23:45'     #EndTesting = '2018-12-31 23:45'
+
 
     #Logging Results computing time over train steps and AIC/BIC over train steps
     logresults = True
@@ -175,8 +176,8 @@ if True: #if True for neat appearance
     if GlobalIndivModel == "byFeature":
         IndivFeature = "schedule[]"  # copy the name of feature here
         IndivThreshold = 0.5  # state the threshold at which value of that feature the data frame shall be splitted
-    OnlyHyPara_Models = ["ANN"] #array of the blackboxes you want to use
-    #Possible entries: ["SVR", "RF", "RF_bay","ANN", "GB", "Lasso", "SVR_grid", "ANN_grid", "RF_grid", "GB_grid", "Lasso_grid"]
+    OnlyHyPara_Models = ["NuSVR"] #array of the blackboxes you want to use
+    #Possible entries: ["SVR","NuSVR", "RF", "RF_bay","ANN", "GB", "Lasso", "SVR_grid", "ANN_grid", "RF_grid", "GB_grid", "Lasso_grid"]
     #                  ["ModelSelection"] uses all bayesian models (those without _grid) and returns the best
 
     #Final bayesian optimization finds optimal combination of "Individual Model"&"Features"&"Model"
@@ -198,7 +199,7 @@ if True: #if True for neat appearance
     # You define the trained model you want to load through nameofexperiment and NameOfSubTest and the time you want to predict through __StartDateTest and __EndDateTest
     # of course it is necessary that the models have been trained before in the respective nameofdata and nameofexperiment and NameOfSubTest combination
     NameOfOnlyPredict = "Test1"  # use different names if you want to use several only_predicts on the same trained models
-    OnlyPredictRecursive = True
+    OnlyPredictRecursive = False
 
     ValidationPeriod = False
     """Set False to have the prediction error on the whole data period (train and test),

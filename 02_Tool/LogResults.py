@@ -69,6 +69,10 @@ def calc_paramSVRV1(params):        # Nur C Cost beachtet in V1 : großes C-> me
     #numparams = exp(params)
 
     return numparams
+def calc_paramNuSVR(estimator):
+    sv = estimator.support_
+    numparam = sv.size
+    return numparam
 
 def cross_val_ic(Estimator,Features_train,Signal_train, CV, typ):  #X : Features_Train, Y: Signal_train
     #trained_model = Estimator.fit(Feat)
@@ -112,11 +116,20 @@ def cross_val_ic(Estimator,Features_train,Signal_train, CV, typ):  #X : Features
         for i in range(CV):
             trained_model = Estimator.fit(X_train[i],Y_train[i])
             predicted = trained_model.predict(X_test[i])
+
+            #numparam=calc_paramSVRV1(Estimator.C) #Falls AIC mit Hyperparameter C berechnet werden soll
+            #aicscore.append(calculate_AIC(len(Y_train[i]), numparam, Y_test[i], predicted))
+            #bicscore.append(calculate_BIC(len(Y_train[i]), numparam, Y_test[i], predicted))
+
             aicscore.append(calc_AICSVR(len(Y_test[i]), Estimator.epsilon, Y_test[i], predicted, X_train[0].shape[1]))
             bicscore.append(calc_BICSVR(len(Y_test[i]), Estimator.epsilon, Y_test[i], predicted, X_train[0].shape[1]))
-
-
-
+    elif typ=="NuSVR":
+        for i in range(CV):
+            trained_model = Estimator.fit(X_train[i], Y_train[i])
+            numparam = calc_paramNuSVR(trained_model)
+            predicted = trained_model.predict(X_test[i])
+            aicscore.append(calculate_AIC(len(Y_train[i]), numparam, Y_test[i], predicted))
+            bicscore.append(calculate_BIC(len(Y_train[i]), numparam, Y_test[i], predicted))
     aic = statistics.mean(aicscore)
     bic = statistics.mean(bicscore)
 
@@ -142,8 +155,6 @@ def calc_weights(list):  # biclist löschen da algo gleich
     #for i in range(len(aicweights)):
     #    kontrolle1 = kontrolle1+ aicweights[i]
     return listweights
-
-
 def plot_data(inputpfad):
     data= pd.read_excel('inputpfad')
     timedata = data.Time

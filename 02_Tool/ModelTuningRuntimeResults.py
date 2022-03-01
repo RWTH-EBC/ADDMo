@@ -55,11 +55,20 @@ class ModelTuningRuntimeResults:
         self.ModelSelection_Summary = RRSummary()
 
     def store_results(self, MT_Setup_object):
-        print("Saving Model Tuning Runtime Results class Object as a pickle in path: \n'%s'" % os.path.join(
-            MT_Setup_object.ResultsFolder, "DataTuningRuntimeResults.save"))
+        print(
+            "Saving Model Tuning Runtime Results class Object as a pickle in path: \n'%s'"
+            % os.path.join(
+                MT_Setup_object.ResultsFolder, "DataTuningRuntimeResults.save"
+            )
+        )
 
         # Save the object as a pickle for reuse
-        joblib.dump(self, os.path.join(MT_Setup_object.ResultsFolder, "ModelTuningRuntimeResults.save"))
+        joblib.dump(
+            self,
+            os.path.join(
+                MT_Setup_object.ResultsFolder, "ModelTuningRuntimeResults.save"
+            ),
+        )
 
         return
 
@@ -72,67 +81,184 @@ def model_saver(Result_dic, ResultsFolderSubTest, NameOfPredictor, IndividualMod
         os.makedirs(os.path.join(ResultsFolderSubTest, "BestModels"))
 
     if IndividualModel == "week_weekend":
-        joblib.dump(Result_dic["Best_trained_model"]["weekday"], os.path.join(ResultsFolderSubTest, "BestModels",
-                                                                              "weekday_%s.save" % (
-                                                                                  NameOfPredictor)))  # dump the best trained model in a file to reuse it for different predictions
-        joblib.dump(Result_dic["Best_trained_model"]["weekend"], os.path.join(ResultsFolderSubTest, "BestModels",
-                                                                              "weekend_%s.save" % (
-                                                                                  NameOfPredictor)))  # dump the best trained model in a file to reuse it for different predictions
+        joblib.dump(
+            Result_dic["Best_trained_model"]["weekday"],
+            os.path.join(
+                ResultsFolderSubTest,
+                "BestModels",
+                "weekday_%s.save" % (NameOfPredictor),
+            ),
+        )  # dump the best trained model in a file to reuse it for different predictions
+        joblib.dump(
+            Result_dic["Best_trained_model"]["weekend"],
+            os.path.join(
+                ResultsFolderSubTest,
+                "BestModels",
+                "weekend_%s.save" % (NameOfPredictor),
+            ),
+        )  # dump the best trained model in a file to reuse it for different predictions
     elif IndividualModel == "hourly":
-        joblib.dump(Result_dic["Best_trained_model"][0],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "0_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][1],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "1_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][2],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "2_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][3],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "3_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][4],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "4_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][5],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "5_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][6],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "6_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][7],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "7_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][8],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "8_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][9],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "9_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][10],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "10_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][11],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "11_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][12],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "12_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][13],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "13_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][14],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "14_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][15],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "15_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][16],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "16_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][17],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "17_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][18],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "18_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][19],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "19_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][20],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "20_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][21],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "21_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][22],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "22_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][23],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "23_%s.save" % (NameOfPredictor)))
+        joblib.dump(
+            Result_dic["Best_trained_model"][0],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "0_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][1],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "1_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][2],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "2_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][3],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "3_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][4],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "4_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][5],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "5_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][6],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "6_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][7],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "7_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][8],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "8_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][9],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "9_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][10],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "10_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][11],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "11_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][12],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "12_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][13],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "13_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][14],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "14_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][15],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "15_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][16],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "16_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][17],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "17_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][18],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "18_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][19],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "19_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][20],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "20_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][21],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "21_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][22],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "22_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"][23],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "23_%s.save" % (NameOfPredictor)
+            ),
+        )
     elif IndividualModel == "byFeature":
-        joblib.dump(Result_dic["Best_trained_model"]["above"],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "above_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"]["below"],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "below_%s.save" % (NameOfPredictor)))
+        joblib.dump(
+            Result_dic["Best_trained_model"]["above"],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "above_%s.save" % (NameOfPredictor)
+            ),
+        )
+        joblib.dump(
+            Result_dic["Best_trained_model"]["below"],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "below_%s.save" % (NameOfPredictor)
+            ),
+        )
     else:
-        joblib.dump(Result_dic["Best_trained_model"],
-                    os.path.join(ResultsFolderSubTest, "BestModels", "%s.save" % (NameOfPredictor)))
-
+        joblib.dump(
+            Result_dic["Best_trained_model"],
+            os.path.join(
+                ResultsFolderSubTest, "BestModels", "%s.save" % (NameOfPredictor)
+            ),
+        )

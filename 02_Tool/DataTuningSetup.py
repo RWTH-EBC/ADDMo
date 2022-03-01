@@ -1,4 +1,3 @@
-
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.feature_selection import mutual_info_regression, f_regression
 from math import log
@@ -6,6 +5,7 @@ from math import log
 from BlackBoxes import *
 
 import SharedVariablesFunctions as SVF
+
 
 class DataTuningSetup:
     """
@@ -192,8 +192,8 @@ class DataTuningSetup:
         # -----------------------PeriodSelection Variables-------------------------------
 
         self.ManSelect = False
-        self.StartDate = '2016-06-02 00:00'
-        self.EndDate = '2016-06-16 00:00'
+        self.StartDate = "2016-06-02 00:00"
+        self.EndDate = "2016-06-16 00:00"
         self.TimeSeriesPlot = False
 
         # -----------------------FeatureConstruction Variables-------------------------------
@@ -236,7 +236,9 @@ class DataTuningSetup:
         self.WrapperRecursiveFeatureSelection = False
 
     def dump_object(self):
-        print("Saving Data Tuning Setup class Object as a pickle in path: \n'%s'" % os.path.join(self.ResultsFolder,
-                                                                                               "DataTuningSetup.save"))
+        print(
+            "Saving Data Tuning Setup class Object as a pickle in path: \n'%s'"
+            % os.path.join(self.ResultsFolder, "DataTuningSetup.save")
+        )
         # Save the object as a pickle for reuse
         joblib.dump(self, os.path.join(self.ResultsFolder, "DataTuningSetup.save"))

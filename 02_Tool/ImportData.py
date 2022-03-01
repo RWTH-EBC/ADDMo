@@ -16,19 +16,29 @@ import warnings
 # imports 1st Sheet ( in the ProcessedInputData_* ) as a dataframe and saves it as "ThePickle_from_ImportData"
 def import_data(DT_Setup_object, DT_RR_object):
     Path = DT_Setup_object.InputData
-    Data = pd.read_excel(io=Path, index_col=0)  # Column 0 has to be the Index Column; reads the excel file
+    Data = pd.read_excel(
+        io=Path, index_col=0
+    )  # Column 0 has to be the Index Column; reads the excel file
 
     DT_RR_object.df_import_data = Data  # saving data to DataTuningRuntimeResults object
-    Data.to_pickle(os.path.join(DT_Setup_object.PathToPickles, "ThePickle_from_ImportData" + '.pickle'))  # saves Data into a pickle
+    Data.to_pickle(
+        os.path.join(
+            DT_Setup_object.PathToPickles, "ThePickle_from_ImportData" + ".pickle"
+        )
+    )  # saves Data into a pickle
 
     # save dataframe in an excel file
-    ExcelFile = os.path.join(DT_Setup_object.ResultsFolder, "ProcessedInputData_%s.xlsx" % DT_Setup_object.NameOfExperiment)
+    ExcelFile = os.path.join(
+        DT_Setup_object.ResultsFolder,
+        "ProcessedInputData_%s.xlsx" % DT_Setup_object.NameOfExperiment,
+    )
     writer = pd.ExcelWriter(ExcelFile)
     Data.to_excel(writer, sheet_name="ImportData")
     writer.save()
     writer.close()
 
     return Data
+
 
 # main#######################################################################
 def main(DT_Setup_object, DT_RR_object):

@@ -1,0 +1,82 @@
+%% Creator: Inkscape 1.1.2 (b8e25be833, 2022-02-05), www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'Fubic_neu3.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \newcommand*\fsize{\dimexpr\f@size pt\relax}%
+  \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{460.8000134bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.5344531)%
+    \lineheight{1}%
+    \setlength\tabcolsep{0pt}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{Fubic_neu3.pdf}}%
+    \put(0.51337258,0.01792937){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Datum\\\end{tabular}}}}%
+    \put(0.1021392,0.50940314){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}800\end{tabular}}}}%
+    \put(0.09741994,0.09696039){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}-800\end{tabular}}}}%
+    \put(0.09832247,0.14779964){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}-600\end{tabular}}}}%
+    \put(0.09561489,0.19935501){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}-400\end{tabular}}}}%
+    \put(0.09741994,0.25091037){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}-200\end{tabular}}}}%
+    \put(0.10829795,0.30318175){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}0\end{tabular}}}}%
+    \put(0.10033415,0.35473707){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}200\end{tabular}}}}%
+    \put(0.10039773,0.40557637){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}400\end{tabular}}}}%
+    \put(0.10100356,0.45927989){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}600\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{Fubic_neu3.pdf}}%
+    \put(0.06272645,0.26719872){\rotatebox{89.54669838}{\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Leistung der Batterie in kW\end{tabular}}}}}%
+    \put(0.12815884,0.04324527){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}01\\Feb\\2018\end{tabular}}}}%
+    \put(0.21119131,0.04396128){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}04\end{tabular}}}}%
+    \put(0.32129963,0.04396123){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}08\end{tabular}}}}%
+    \put(0.43140795,0.04396128){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}12\end{tabular}}}}%
+    \put(0.5415162,0.04467734){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}16\end{tabular}}}}%
+    \put(0.65342962,0.04539335){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}20\end{tabular}}}}%
+    \put(0.76444042,0.04396123){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}24\end{tabular}}}}%
+    \put(0.87545128,0.04396123){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}28\end{tabular}}}}%
+    \put(0.30387084,0.13261973){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}Testdaten\\\end{tabular}}}}%
+    \put(0.28526743,0.11698869){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}ANN\end{tabular}}}}%
+    \put(0.27823794,0.10198948){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}RF\end{tabular}}}}%
+    \put(0.28352247,0.08552042){\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}SVR\end{tabular}}}}%
+  \end{picture}%
+\endgroup%

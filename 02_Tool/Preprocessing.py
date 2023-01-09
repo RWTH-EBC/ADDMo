@@ -49,17 +49,27 @@ def Scaling(StandardScaling,RobustScaling,NoScaling, Data):
 
     #Doing "StandardScaler"
     if StandardScaling == True:
+        # Scaler for signal
         ScaleTracker_Signal = StandardScaler()
         ScaleTracker_Signal.fit(Data[SV.NameOfSignal].values.reshape(-1,1))  # fit a scaler which is used to rescale afterwards
         joblib.dump(ScaleTracker_Signal, os.path.join(SV.ResultsFolder, "ScalerTracker.save")) #dump this scaler in a file in the respective folder
+        # Scaler for features
+        ScaleTracker_Features = StandardScaler()
+        ScaleTracker_Features.fit(Data.copy().drop(SV.NameOfSignal, axis=1))    # fit a scaler which is used to scale input data in closed loop
+        joblib.dump(ScaleTracker_Features, os.path.join(SV.ResultsFolder, "ScalerTrackerFeatures.save"))    #dump this scaler in a file in the respective folder
         mapper = DataFrameMapper([(Data.columns, StandardScaler())]) #create the actually used scaler
         Scaled_Data = mapper.fit_transform(Data.copy()) #train it and scale the data
         Data = pd.DataFrame(Scaled_Data, index=Data.index, columns=Data.columns)
     #Doing "RobustScaler"
     if RobustScaling == True:
+        # Scaler for signal
         ScaleTracker_Signal = RobustScaler()
         ScaleTracker_Signal.fit(Data[SV.NameOfSignal].values.reshape(-1,1))  # fit a scaler which is used to rescale afterwards
         joblib.dump(ScaleTracker_Signal, os.path.join(SV.ResultsFolder, "ScalerTracker.save")) #dump this scaler in a file in the respective folder
+        # Scaler for features
+        ScaleTracker_Features = RobustScaler()
+        ScaleTracker_Features.fit(Data.copy().drop(SV.NameOfSignal, axis=1))    # fit a scaler which is used to scale input data in closed loop
+        joblib.dump(ScaleTracker_Features, os.path.join(SV.ResultsFolder, "ScalerTrackerFeatures.save"))    #dump this scaler in a file in the respective folder
         mapper = DataFrameMapper([(Data.columns, RobustScaler())]) #create the actually used scaler
         Scaled_Data = mapper.fit_transform(Data.copy()) #train it and scale the data
         Data = pd.DataFrame(Scaled_Data, index=Data.index, columns=Data.columns)

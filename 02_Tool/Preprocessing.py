@@ -1,11 +1,10 @@
 import pandas as pd
 
-from openpyxl import load_workbook
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import RobustScaler
 from sklearn_pandas import DataFrameMapper
 import sys
-from sklearn.externals import joblib
+import joblib
 import numpy as np
 import os
 
@@ -104,10 +103,6 @@ def main():
 
     # save dataframe in the ProcessedInputData excel file
     ExcelFile = os.path.join(SV.ResultsFolder, "ProcessedInputData_%s.xlsx"%(SV.NameOfExperiment))
-    book = load_workbook(ExcelFile)
-    writer = pd.ExcelWriter(ExcelFile, engine="openpyxl")
-    writer.book = book
-    writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
-    Data.to_excel(writer, sheet_name="Preprocessing")
-    writer.save()
-    writer.close()
+    with pd.ExcelWriter(ExcelFile, engine="openpyxl") as writer:
+        # writer.book = load_workbook(ExcelFile)
+        Data.to_excel(writer, sheet_name="Preprocessing")

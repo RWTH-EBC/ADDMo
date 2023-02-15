@@ -19,10 +19,9 @@ from sklearn import metrics
 from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 from sklearn.model_selection import cross_val_score
 import pandas as pd
-import numpy as np
 from hyperopt.pyll import scope
 import hyperopt.pyll.stochastic
-from sklearn.externals import joblib
+import joblib
 import os
 import warnings
 

@@ -1,20 +1,21 @@
 from setuptools import setup
 
-pkg_lite = """sklearn-pandas   ==  1.8.0,
-hyperopt         ==  0.1.2,
-scikit-learn     ==  0.20.0,
-openpyxl         ==  2.5.4,
-PyForms          ==  4.0.3,
-remi             == 2019.4,
-statsmodels      ==  0.11.0,
-numpy             == 1.15.4,
-xlrd            ==  1.2.0,
-pillow          == 6.0.0,
-matplotlib      == 2.2.2,
-pandas        == 0.25.3, 
-networkx        ==   1.11"""
+pkg_list = [
+"sklearn-pandas",
+"hyperopt",
+"scikit-learn",
+"openpyxl",
+"PyForms",
+"remi",
+"statsmodels",
+"numpy",
+"xlrd",
+"pillow",
+"matplotlib",
+"pandas",
+"networkx",
+]
 
-pgk_list = pkg_lite.replace(" ", "").split(",\n")
 
 setup(
     name='ADDMo',

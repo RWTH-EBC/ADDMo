@@ -1,7 +1,7 @@
 from math import log
 from sklearn.metrics import r2_score
 from hyperopt.pyll import scope
-from sklearn.externals import joblib
+import joblib
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.utils import shuffle
 import os
@@ -10,7 +10,6 @@ import pandas as pd
 import numpy as np
 from pandas.io.excel import ExcelWriter
 #from GlobalVariables import *
-from openpyxl import load_workbook
 import sys
 from sklearn.feature_selection import RFE
 from sklearn.feature_selection import RFECV

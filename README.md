@@ -153,7 +153,8 @@ Type y for accepting to install first packages
 Activate environment
 `$ conda activate ADDMo`
 
-Install required packages via:
+Install required packages via:\
+`$ pip install -r requirements.txt`\
 `$ pip install -e <Path to your local ADDMo repo>`
 
 Set the conda environment "ADDMo" as interpreter for e.g. in PyCharm

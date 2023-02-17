@@ -141,7 +141,18 @@ To restart the container in cmd:\
 
 __2: Python + Editor__
 
-Via setup.py:\
+Via enviroment.yml for Anaconda:\
+If you have VisualStudio installed it should work properly.
+If not, it could be necessary to install some packages manually.
+
+Either you use the Anaconda.Navigator or navigate the command line to your local ADDMo path and create the environment via:
+
+`$ conda env create -f environment.yml`
+
+Via requirements.txt for Pip:\
+Make sure using python 3.6!
+
+Via setup.py: (deprecated)\
 Install Anaconda (conda version: 4.8.0)
 
 Open command line and create an python 3.6 environment via:

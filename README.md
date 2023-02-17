@@ -140,6 +140,12 @@ To restart the container in cmd:\
 
 
 __2: Python + Editor__
+Via requirements.txt:\
+use the python environment of your choice importing the requirements.txt
+
+e.g. Anaconda:
+Open the the Anaconda.Navigator and import the requirements.txt
+
 
 Via setup.py:\
 Install Anaconda (conda version: 4.8.0)

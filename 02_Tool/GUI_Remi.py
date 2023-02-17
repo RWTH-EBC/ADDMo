@@ -36,11 +36,11 @@ class container():
         self.info_func = info_func
 
     def create(self):
-        self.container = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+        self.container = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                     margin='0px',
                                     style={'display': 'block', 'overflow': 'auto', "text-align": "left"})
         self.lbl = gui.Label(self.label, width="40%", height=20, margin="10px")
-        self.lbl.set_on_click_listener(self.info_func)
+        self.lbl.onclick.do(self.info_func)
 
     def merge(self, other):
         self.container.append([self.lbl, other])
@@ -80,12 +80,12 @@ class checkbox(container):
         super().create()
         txt = gui.CheckBox(False, width="50%", height=20, margin='10px')
         if self.dialog is not False:
-            txt.set_on_change_listener(self.dialog)
+            txt.onchange.do(self.dialog)
         super().merge(txt)
         return self.container, txt
 
 def onerowcheckbox(lbl1, default1,lbl2, default2):
-            subcont = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            subcont = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto'})
             checkbox1 = gui.CheckBoxLabel(" "+lbl1, default1, width="47%", height=20, margin='2px')
@@ -115,133 +115,133 @@ class AutomatedTraining(App):
         tb = gui.TabBox(width='100%', style={'display': 'block', 'overflow': 'hidden', "text-align": "center"})
 
         self.initialinfoboxtext = "Info will appear here upon clicking on the label in question. " \
-                                  "Exemplary entries showing the required format can be found within the entrywidgets. "
+                                  "Exemplary entries showing the required format can be found within the entryContainers. "
 
         #FinalBayes tab
         if True:
-            FinalBayesContainer = gui.Widget(width=500, margin='0px auto', style={'display': 'block', 'overflow': 'hidden', "text-align": "center"})
+            FinalBayesContainer = gui.Container(width=500, margin='0px auto', style={'display': 'block', 'overflow': 'hidden', "text-align": "center"})
 
             self.Infolbl = gui.Label('Info Box', width="100%", height=30, margin='0px')
             self.InfoFB = gui.Label(self.initialinfoboxtext, width="100%", height="auto", margin='0px')
 
 
-            #Creating subcontainer containing the entrywidget and a respective label
+            #Creating subcontainer containing the entryContainer and a respective label
             subContainerNameOfData, self.NameOfDataFB = text("Name of data (results)", self.info_NameOfData, "TrialInput").do()
 
-            subContainerNameOfSubTest = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            subContainerNameOfSubTest = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                    margin='0px',
                                                    style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             self.lbl_NameOfSubTest = gui.Label("Name of subtest (results)", width="40%", height=20, margin="10px")
             self.txt_NameOfSubTest = gui.TextInput(width="50%", height=20, margin='10px')
             self.txt_NameOfSubTest.set_text('AutoML')
-            self.lbl_NameOfSubTest.set_on_click_listener(self.info_NameOfSubTest)
+            self.lbl_NameOfSubTest.onclick.do(self.info_NameOfSubTest)
             subContainerNameOfSubTest.append([self.lbl_NameOfSubTest, self.txt_NameOfSubTest])
 
-            subContainerStartDateTraining = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            subContainerStartDateTraining = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                        margin='0px',
                                                        style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             self.lbl_StartDateTraining = gui.Label("Start of training", width="40%", height=20, margin="10px")
             self.txt_StartDateTraining = gui.TextInput(width="50%", height=20, margin='10px')
             self.txt_StartDateTraining.set_text('2016-08-01 00:00')
-            self.lbl_StartDateTraining.set_on_click_listener(self.info_StartDateTraining)
+            self.lbl_StartDateTraining.onclick.do(self.info_StartDateTraining)
             subContainerStartDateTraining.append([self.lbl_StartDateTraining, self.txt_StartDateTraining])
 
-            subContainerEndDateTraining = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            subContainerEndDateTraining = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                      margin='0px',
                                                      style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             self.lbl_EndDateTraining = gui.Label("End of training", width="40%", height=20, margin="10px")
             self.txt_EndDateTraining = gui.TextInput(width="50%", height=20, margin='10px')
             self.txt_EndDateTraining.set_text('2016-08-14 23:45')
-            self.lbl_EndDateTraining.set_on_click_listener(self.info_EndDateTraining)
+            self.lbl_EndDateTraining.onclick.do(self.info_EndDateTraining)
             subContainerEndDateTraining.append([self.lbl_EndDateTraining, self.txt_EndDateTraining])
 
-            subContainerStartDateTesting = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            subContainerStartDateTesting = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                       margin='0px',
                                                       style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             self.lbl_StartDateTesting = gui.Label("Start of testing", width="40%", height=20, margin="10px")
             self.txt_StartDateTesting = gui.TextInput(width="50%", height=20, margin='10px')
             self.txt_StartDateTesting.set_text('2016-08-15 00:00')
-            self.lbl_StartDateTesting.set_on_click_listener(self.info_StartDateTesting)
+            self.lbl_StartDateTesting.onclick.do(self.info_StartDateTesting)
             subContainerStartDateTesting.append([self.lbl_StartDateTesting, self.txt_StartDateTesting])
 
-            subContainerEndDateTesting = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            subContainerEndDateTesting = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             self.lbl_EndDateTesting = gui.Label("End of testing", width="40%", height=20, margin="10px")
             self.txt_EndDateTesting = gui.TextInput(width="50%", height=20, margin='10px')
             self.txt_EndDateTesting.set_text('2016-08-16 23:45')
-            self.lbl_EndDateTesting.set_on_click_listener(self.info_EndDateTesting)
+            self.lbl_EndDateTesting.onclick.do(self.info_EndDateTesting)
             subContainerEndDateTesting.append([self.lbl_EndDateTesting, self.txt_EndDateTesting])
 
-            subContainerOwnlags = gui.Widget(width="100%", margin='0px auto', style={'display': 'block', 'overflow': 'hidden', "text-align": "left"})
+            subContainerOwnlags = gui.Container(width="100%", margin='0px auto', style={'display': 'block', 'overflow': 'hidden', "text-align": "left"})
             self.lbl_Ownlags = gui.Label("Define which ownlags shall be considered", width="100%", height=20, margin="0px")
-            self.lbl_Ownlags.set_on_click_listener(self.info_Ownlags)
-            subsubContainerCheckboxes1 = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            self.lbl_Ownlags.onclick.do(self.info_Ownlags)
+            subsubContainerCheckboxes1 = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto'})
             self.checkbox_NoOL = gui.CheckBoxLabel('No ownlag', True, width="40%", height=20, margin='0px')
             self.checkbox_InertiaOL = gui.CheckBoxLabel('Inertia ownlag', False, width="40%", height=20, margin='0px')
             subsubContainerCheckboxes1.append([self.checkbox_NoOL, self.checkbox_InertiaOL])
-            subsubContainerCheckboxes2 = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            subsubContainerCheckboxes2 = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto'})
             self.checkbox_TSOL = gui.CheckBoxLabel('Time series ownlag', False, width="40%", height=20, margin='0px')
 
 
             self.checkbox_PeriodOL = gui.CheckBoxLabel('Period ownlag', False, width="40%", height=20, margin='0px')
-            self.checkbox_PeriodOL.set_on_change_listener(self.exec_dialog_periodOL_FB)
+            self.checkbox_PeriodOL.onchange.do(self.exec_dialog_periodOL_FB)
             subsubContainerCheckboxes2.append([self.checkbox_TSOL, self.checkbox_PeriodOL])
             subContainerOwnlags.append([self.lbl_Ownlags, subsubContainerCheckboxes1, subsubContainerCheckboxes2])
 
-            subContainerFeatureConstruction = gui.Widget(width="100%", margin='0px auto', style={'display': 'block', 'overflow': 'hidden', "text-align": "left"})
+            subContainerFeatureConstruction = gui.Container(width="100%", margin='0px auto', style={'display': 'block', 'overflow': 'hidden', "text-align": "left"})
             self.lbl_FeatureConstruction = gui.Label("Define which feature construction methods shall be considered", width="100%", height=20, margin="0px")
-            self.lbl_FeatureConstruction.set_on_click_listener(self.info_FeatureConstruction)
-            subsubContainerCheckboxesFC = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            self.lbl_FeatureConstruction.onclick.do(self.info_FeatureConstruction)
+            subsubContainerCheckboxesFC = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto'})
             self.checkbox_Difference = gui.CheckBoxLabel('Difference', False, width="40%", height=20, margin='0px')
             self.checkbox_FeatureLag = gui.CheckBoxLabel('Feature lags', False, width="40%", height=20, margin='0px')
-            self.checkbox_FeatureLag.set_on_change_listener(self.exec_dialog_featurelag_FB)
+            self.checkbox_FeatureLag.onchange.do(self.exec_dialog_featurelag_FB)
             subsubContainerCheckboxesFC.append([self.checkbox_Difference, self.checkbox_FeatureLag])
             subContainerFeatureConstruction.append([self.lbl_FeatureConstruction, subsubContainerCheckboxesFC])
 
-            subContainerFileUpload = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            subContainerFileUpload = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             self.lbl_UploadFile = gui.Label("Upload the input data", width="40%", height=30, margin="10px")
             self.bt_UploadFile = gui.FileUploader(os.path.join(os.path.dirname(os.path.realpath(__file__)), "Data", "GUI_Uploads"), width="50%", height=30, margin='10px')
-            self.bt_UploadFile.set_on_success_listener(self.fileupload_on_success)
-            self.bt_UploadFile.set_on_failed_listener(self.fileupload_on_failed)
-            self.lbl_UploadFile.set_on_click_listener(self.info_UploadFile)
+            self.bt_UploadFile.onsuccess.do(self.fileupload_on_success)
+            self.bt_UploadFile.onfailed.do(self.fileupload_on_failed)
+            self.lbl_UploadFile.onclick.do(self.info_UploadFile)
             subContainerFileUpload.append([self.lbl_UploadFile, self.bt_UploadFile])
 
-            subContainerColumnOfSignal = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            subContainerColumnOfSignal = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto', "text-align": "left"})
             self.lbl_ColumnOfSignal = gui.Label("Column of signal", width="40%", height=20, margin="10px")
             self.txt_ColumnOfSignal = gui.SpinBox(0, 0, 1000, width="50%", height=20, margin='10px')
-            self.lbl_ColumnOfSignal.set_on_click_listener(self.info_ColumnOfSignal)
+            self.lbl_ColumnOfSignal.onclick.do(self.info_ColumnOfSignal)
             subContainerColumnOfSignal.append([self.lbl_ColumnOfSignal, self.txt_ColumnOfSignal])
 
-            subContainerHyperBayesEval = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            subContainerHyperBayesEval = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto', "text-align": "left"})
             self.lbl_HyperBayesEval = gui.Label("Bayes eval hyperparameter", width="40%", height=20,
                                                 margin="10px")
             self.txt_HyperBayesEval = gui.SpinBox(100, 1, 10000, width="50%", height=20, margin='10px')
-            self.lbl_HyperBayesEval.set_on_click_listener(self.info_HyperBayesEval)
+            self.lbl_HyperBayesEval.onclick.do(self.info_HyperBayesEval)
             subContainerHyperBayesEval.append([self.lbl_HyperBayesEval, self.txt_HyperBayesEval])
 
-            subContainerFinalBayesEval = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            subContainerFinalBayesEval = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto', "text-align": "left"})
             self.lbl_FinalBayesEval = gui.Label("Bayes eval \"final bayes\"", width="40%", height=20, margin="10px")
             self.txt_FinalBayesEval = gui.SpinBox(50, 1, 10000, width="50%", height=20, margin='10px')
-            self.lbl_FinalBayesEval.set_on_click_listener(self.info_FinalBayesEval)
+            self.lbl_FinalBayesEval.onclick.do(self.info_FinalBayesEval)
             subContainerFinalBayesEval.append([self.lbl_FinalBayesEval, self.txt_FinalBayesEval])
 
             self.FB_Execute = gui.Button("Start computations \"Auto Final Bayes\"", width="100%", height=30, margin="0px")
-            self.FB_Execute.set_on_click_listener(self.compute_FB)
+            self.FB_Execute.onclick.do(self.compute_FB)
 
             FinalBayesContainer.append([self.Infolbl, self.InfoFB])
             FinalBayesContainer.append([subContainerFileUpload, subContainerNameOfData, subContainerNameOfSubTest,
@@ -255,7 +255,7 @@ class AutomatedTraining(App):
 
         #Data tuning tab
         if True:
-            DataTuningContainer = gui.Widget(width=500, margin='0px auto',
+            DataTuningContainer = gui.Container(width=500, margin='0px auto',
                                              style={'display': 'block', 'overflow': 'hidden', "text-align": "center"})
 
             self.InfoDT = gui.Label(self.initialinfoboxtext, width="100%", height="auto", margin='0px')
@@ -264,17 +264,17 @@ class AutomatedTraining(App):
             ContDT_NameOfExperiment, self.NameOfExperimentDT = text("Name of experiment (results)", self.info_NameOfExperiment, "TrialTunedData").do()
             ContDT_ColumnOfSignal, self.ColumnOfSignalDT = spinbox("Column of signal", self.info_ColumnOfSignal, 0,0,float("inf")).do()
 
-            ContDT_FileUpload = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            ContDT_FileUpload = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             self.lbl_UploadFileDT = gui.Label("Upload the input data", width="40%", height=30, margin="10px")
             self.bt_UploadFileDT = gui.FileUploader('./Data/GUI_Uploads/', width="50%", height=30, margin='10px')
-            self.bt_UploadFileDT.set_on_success_listener(self.fileupload_on_success)
-            self.bt_UploadFileDT.set_on_failed_listener(self.fileupload_on_failed)
-            self.lbl_UploadFileDT.set_on_click_listener(self.info_UploadFile)
+            self.bt_UploadFileDT.onsuccess.do(self.fileupload_on_success)
+            self.bt_UploadFileDT.onfailed.do(self.fileupload_on_failed)
+            self.lbl_UploadFileDT.onclick.do(self.info_UploadFile)
             ContDT_FileUpload.append([self.lbl_UploadFileDT, self.bt_UploadFileDT])
 
-            ContDT_Preprocessing = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            ContDT_Preprocessing = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             lbl_preprocessing = gui.Label("Preprocessing", width="90%", height=20, margin="10px", style={"text-align": "center"})
@@ -288,7 +288,7 @@ class AutomatedTraining(App):
             ContDT_Preprocessing.append([lbl_preprocessing, ContDT_NanDealing, ContDT_Resample,
                                          ContDT_InitManFeatureSelectDT, ContDT_Scaler])
 
-            ContDT_PeriodSelection = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            ContDT_PeriodSelection = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             lbl_PeriodSelection = gui.Label("Period selection", width="90%", height=20, margin="10px", style={"text-align": "center"})
@@ -296,7 +296,7 @@ class AutomatedTraining(App):
             ContDT_ManPeriodSelection, self.ManPeriodSelectionDT = checkbox("Manual period selection", self.info_ManPeriodSelect,False, self.exec_dialog_ManPeriodSelectionDT).do()
             ContDT_PeriodSelection.append([lbl_PeriodSelection, ContDT_TimeSeriesPlot, ContDT_ManPeriodSelection])
 
-            ContDT_FeatureConstruction = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            ContDT_FeatureConstruction = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto',"text-align": "left"})
             lbl_FeatureConstruction = gui.Label("Feature Construction", width="90%", height=20, margin="10px",
@@ -313,7 +313,7 @@ class AutomatedTraining(App):
                                                ContDT_ManOwnLag, ContDT_AutoOwnLag, ContDT_ManFeatureLag,
                                                ContDT_AutoFeatureLag])
 
-            ContDT_FeatureSelection = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            ContDT_FeatureSelection = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto',
                                                            "text-align": "left"})
@@ -342,7 +342,7 @@ class AutomatedTraining(App):
                                             ContDT_MultivariateEmbedded, ContDT_WrapperRecursive])
 
             self.DT_Execute = gui.Button("Start computations \"Data tuning\"", width="100%", height=30, margin="0px")
-            self.DT_Execute.set_on_click_listener(self.compute_DT)
+            self.DT_Execute.onclick.do(self.compute_DT)
 
             DataTuningContainer.append([self.Infolbl, self.InfoDT])
             DataTuningContainer.append([ContDT_NameOfData, ContDT_NameOfExperiment, ContDT_ColumnOfSignal,
@@ -353,7 +353,7 @@ class AutomatedTraining(App):
 
         #ModelTuning tab
         if True:
-            ModelTuningContainer = gui.Widget(width=500, margin='0px auto',
+            ModelTuningContainer = gui.Container(width=500, margin='0px auto',
                                              style={'display': 'block', 'overflow': 'hidden', "text-align": "center"})
 
             self.InfoMT = gui.Label(self.initialinfoboxtext,
@@ -368,12 +368,12 @@ class AutomatedTraining(App):
             ContMT_EndTesting, self.EndTestingMT = text("End of testing", self.info_EndDateTesting, '2016-08-16 23:45').do()
             ContMT_HyperBayesEval, self.HyperBayesEvalMT = spinbox("Bayes eval hyperparameter", self.info_HyperBayesEval, 100, 1, 10000).do()
 
-            ContMT_CV = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+            ContMT_CV = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                                     margin='0px',
                                                     style={'display': 'block', 'overflow': 'auto',
                                                            "text-align": "left"})
             lbl = gui.Label("Cross-validation", width="40%", height=20, margin="10px")
-            lbl.set_on_click_listener(self.info_CV)
+            lbl.onclick.do(self.info_CV)
             self.CVTypeMT = gui.DropDown(width="40%", height=20, margin='10px')
             entries = {"KFold":"KFold", "TimeSeriesSplit":"TimeSeriesSplit"}
             for key in entries:
@@ -385,10 +385,10 @@ class AutomatedTraining(App):
             ContMT_Shuffle, self.ShuffleMT = checkbox("Shuffle", self.info_shuffle, False).do()
             ContMT_Recursive, self.RecursiveMT = checkbox("Recursive prediction", self.info_Recursive, False).do()
 
-            ContMT_Model = gui.Widget(width="100%", margin='0px auto',
+            ContMT_Model = gui.Container(width="100%", margin='0px auto',
                                              style={'display': 'block', 'overflow': 'hidden', "text-align": "left"})
             self.lbl_ModelMT = gui.Label("Define which models shall be used", width="100%", height=20, margin="0px")
-            self.lbl_ModelMT.set_on_click_listener(self.info_ModelMT)
+            self.lbl_ModelMT.onclick.do(self.info_ModelMT)
             subcont1, self.MT_RF, self.MT_SVR = onerowcheckbox("Random forest", False, "SVR (BayesOpt)", False)
             subcont2, self.MT_ANN, self.MT_GB = onerowcheckbox("ANN (BayesOpt)", False, "GradientBoost (BayesOpt)", False)
             subcont3, self.MT_Lasso, self.MT_Modelselect = onerowcheckbox("Lasso (BayesOpt)", False, "ModelSelect", False)
@@ -397,10 +397,10 @@ class AutomatedTraining(App):
             ContMT_Model.append([self.lbl_ModelMT, subcont1, subcont2, subcont3, subcont4, subcont5])
 
             ContMT_IndivModel, self.IndivModelMT = dropdown("Type of \"individual model\"", self.info_IndivModelMT, {"No":"No individual model", "week_weekend":"Weekday/weekend model", "hourly":"One model per hour (24models)", "byFeature":"By feature threshold"}).do()
-            self.IndivModelMT.set_on_change_listener(self.exec_dialog_indivmodelbyfeature_MT)
+            self.IndivModelMT.onchange.do(self.exec_dialog_indivmodelbyfeature_MT)
 
             self.mt_Execute = gui.Button("Start computations \"Model tuning\"", width="100%", height=30, margin="0px")
-            self.mt_Execute.set_on_click_listener(self.compute_MT)
+            self.mt_Execute.onclick.do(self.compute_MT)
 
             ModelTuningContainer.append([self.Infolbl, self.InfoMT])
             ModelTuningContainer.append([ContMT_NameOfData, ContMT_NameOfExperiment, ContMT_NameOfSubTest,
@@ -413,7 +413,7 @@ class AutomatedTraining(App):
 
         #Predict only tab
         if True:
-            PredictOnlyContainer = gui.Widget(width=500, margin='0px auto',
+            PredictOnlyContainer = gui.Container(width=500, margin='0px auto',
                                              style={'display': 'block', 'overflow': 'hidden', "text-align": "center"})
 
             self.InfoPO = gui.Label(self.initialinfoboxtext,
@@ -434,7 +434,7 @@ class AutomatedTraining(App):
 
 
             self.PO_Execute = gui.Button("Start computations \"Predict only\"", width="100%", height=30, margin="0px")
-            self.PO_Execute.set_on_click_listener(self.compute_PO)
+            self.PO_Execute.onclick.do(self.compute_PO)
 
             PredictOnlyContainer.append([self.Infolbl, self.InfoPO])
             PredictOnlyContainer.append([ContPO_NameOfData, ContPO_NameOfExperiment, ContPO_NameOfSubTest,
@@ -447,45 +447,45 @@ class AutomatedTraining(App):
 
     #Define the listener functions to update the infobox
     if True:
-        def nothing(self, widget, value="optional"): #work around function to have some widget without infofunction
+        def nothing(self, Container, value="optional"): #work around function to have some Container without infofunction
             pass
 
-        def info_NameOfData(self, widget):
+        def info_NameOfData(self, Container):
             text = 'Defines the name of the subfolder in which the results are saved. It is recommended to name it after the input data.'
             set_text(self, text)
 
-        def info_NameOfSubTest(self, widget):
+        def info_NameOfSubTest(self, Container):
             text = 'Defines the name of the subfolder in which the specific results of "model tuning" or "final bayes" are saved. ' \
                    'It is a subfolder of the "name of experiment" folder. '
             set_text(self, text)
 
-        def info_NameOfExperiment(self, widget):
+        def info_NameOfExperiment(self, Container):
             text = 'Name of experiment defines the name of the subfolder in which the results of "data tuning" are saved. ' \
                    'It is a subfolder of the "name of data" folder. '
             set_text(self, text)
 
-        def info_NameOfOnlyPredict(self, widget):
+        def info_NameOfOnlyPredict(self, Container):
             text = "Defines the name of the subfolder in which the results of only predict are saved. " \
                    'It is a subfolder of the "name of subtest" folder. '
             set_text(self, text)
 
-        def info_StartDateTraining(self, widget):
+        def info_StartDateTraining(self, Container):
             text = ('Date and time when the period for training the models shall start. Format: yyyy-mm-dd hh:mm. ')
             set_text(self, text)
 
-        def info_EndDateTraining(self, widget):
+        def info_EndDateTraining(self, Container):
             text = ('Date and time when the period for training the models shall end. Format: yyyy-mm-dd hh:mm. ')
             set_text(self, text)
 
-        def info_StartDateTesting(self, widget):
+        def info_StartDateTesting(self, Container):
             text = ('Date and time when the period for testing the models shall start. Format: yyyy-mm-dd hh:mm. ')
             set_text(self, text)
 
-        def info_EndDateTesting(self, widget):
+        def info_EndDateTesting(self, Container):
             text = ('Date and time when the period for testing the models shall end. Format: yyyy-mm-dd hh:mm. ')
             set_text(self, text)
 
-        def info_Ownlags(self, widget):
+        def info_Ownlags(self, Container):
             text = ('Defines which types of ownlags shall be considered. '
                                    'Each ticked box will create a distinctive tuned data set with the respective ownlags. '
                                    'Information on the types of ownlags and when they should be considered can be found in '
@@ -517,13 +517,13 @@ continuing the patterns and adding changes to that.
                     ''')
             set_text(self, text)
 
-        def info_FeatureConstruction(self, widget):
+        def info_FeatureConstruction(self, Container):
             text = ("""Difference creates the discrete "derivative" for all features. 
             Feature lag creator creates lagged series of features, the optimal lag is chosen automatically. 
             All created features are added to the existing feature space.""")
             set_text(self, text)
 
-        def info_UploadFile(self, widget):
+        def info_UploadFile(self, Container):
             text = """The Input Data has the following restrictions:
             1. Input must be an ExcelFile
             2. The data must be on the first excel sheet, with time as first column and all signals and features thereafter (one per column)
@@ -533,35 +533,35 @@ continuing the patterns and adding changes to that.
             6. The index should be continuous (no missing steps)"""
             set_text(self, text)
 
-        def fileupload_on_success(self, widget, filename):
+        def fileupload_on_success(self, Container, filename):
             set_text(self, 'File upload success: ' + filename)
             SV.GUI_Filename = filename
 
-        def fileupload_on_failed(self, widget, filename):
+        def fileupload_on_failed(self, Container, filename):
             set_text(self, 'File upload failed: ' + filename)
 
-        def info_ColumnOfSignal(self, widget):
+        def info_ColumnOfSignal(self, Container):
             text = 'Define the column of the input file in which the signal is. The signal is the variable that is to be ' \
                    'forecasted. Count up from 0 in the first column after the index (1st column after index = 0)'
             set_text(self, text)
 
-        def info_HyperBayesEval(self, widget):
+        def info_HyperBayesEval(self, Container):
             text = ('Define the number of bayesian evaluations for tuning the hyperparameter of the models.'
                                    ' The more evaluations the more precise and time consuming')
             set_text(self, text)
 
-        def info_FinalBayesEval(self, widget):
+        def info_FinalBayesEval(self, Container):
             text = ('Define the number of bayesian evaluations for the final bayesian optimization. '
                                    'Optimizing the type of model, the selected features and the type of individual model. '
                                    'The more evaluations the more precise and time consuming')
             set_text(self, text)
 
-        def info_ValidationPeriodPO(self, widget):
+        def info_ValidationPeriodPO(self, Container):
             text = ('If ticked define the period on which the validation through the mean, standard deviation and max error shall be conducted. '
                     'Otherwise the whole period of the data is used for this. The period will be split into periods with the length of the prediction horizon length, which is set by the test period. ')
             set_text(self, text)
 
-        def info_Recursive(self, widget):
+        def info_Recursive(self, Container):
             text = ("If enabled the prediction is done recusively. Only necessary if ownlags are used that are smaller than the prediction horizon. "
                     '''Recursive prediction iteratively passes the one step ahead
 predicted signal to the respective ownlags of the future
@@ -572,11 +572,11 @@ the first step is fed to the prediction of the next step, possibly
 increasing the error with each step.''')
             set_text(self, text)
 
-        def info_ModelMT(self, widget):
+        def info_ModelMT(self, Container):
             text = ("Select a model. BayesOpt and grid search mark the used type of hyperparameter optimization for the respective model. Modelselection runs all BayesOpt models and determines the best")
             set_text(self, text)
 
-        def info_IndivModelMT(self, widget):
+        def info_IndivModelMT(self, Container):
             text = ("Type of individual model that is to be used. Own individual models can be defined in \"BlackBoxes.py\". "
                     """Individual model creates individual sample batches. In
 model tuning, one individual model is trained per batch. An
@@ -589,55 +589,55 @@ weekdays model is used only to forecast weekdays and the
 weekends model only for the weekends.""")
             set_text(self, text)
 
-        def info_shuffle(self, widget):
+        def info_shuffle(self, Container):
             text = ("Randomly shuffles the train data. This may increase accuracy through unbiased training.")
             set_text(self, text)
 
-        def info_CV(self, widget):
+        def info_CV(self, Container):
             text = ("Cross-validation avoids overfitting while hyperparameter tuning. Select a type of cross-validation and the respective number of folds. "
                     "More information on \"Scikit-learn.org\" "
                     'Additional cross-validation types can be added in GUI_Remi.py')
             set_text(self, text)
 
-        def info_resample(self, widget):
+        def info_resample(self, Container):
             text = ("Resamples the resolution of the input data.")
             set_text(self, text)
 
-        def info_InitManFeatureSelect(self, widget):
+        def info_InitManFeatureSelect(self, Container):
             text = ("Manual selection of features by their column number")
             set_text(self, text)
 
-        def info_NaNDealing(self, widget):
+        def info_NaNDealing(self, Container):
             text = ("Define how NaN´s shall be handled. Description of the operators can be found on scikit-learn.org.")
             set_text(self, text)
 
-        def info_Scaler(self, widget):
+        def info_Scaler(self, Container):
             text = ("Define a scaler, information can be found on scikit-learn.org. Scaling is recommended in the very most cases.")
             set_text(self, text)
 
-        def info_TimeSeriesPlot(self, widget):
+        def info_TimeSeriesPlot(self, Container):
             text = ("If true all features and signals are plotted and exported to the results folder. Can be used to determine faulty periods or to get an general idea of the data.")
             set_text(self, text)
 
-        def info_ManPeriodSelect(self, widget):
+        def info_ManPeriodSelect(self, Container):
             text = ("Select a period out of the overall data. In model tuning you can select train and test periods, so the period selection here is only meant to exclude periods or to reduce computation time of data tuning. ")
             set_text(self, text)
 
-        def info_CrossAutoPlot(self, widget):
+        def info_CrossAutoPlot(self, Container):
             text = ("Creates cross- & autocorrelation plots of all the features and signal. The autocorrelation plot can be used to determine significant ownlags, the crosscorrelation plot significant featurelags")
             set_text(self, text)
 
-        def info_Difference(self, widget):
+        def info_Difference(self, Container):
             text = ("Difference creates the discrete \"derivative\" of features.")
             set_text(self, text)
 
-        def info_ManOwnLag(self, widget):
+        def info_ManOwnLag(self, Container):
             text = ("Creates custom ownlags. "
                     "We call lagged time series of either the "
                     "signal or a feature “ownlag” and “featurelag” respectively.")
             set_text(self, text)
 
-        def info_AutoOwnLag(self, widget):
+        def info_AutoOwnLag(self, Container):
             text = ("Creates time series ownlags automatically. Being a wrapper method it adds ownlags until the accuracy does not increase anymore."
                     """We call lagged time series of either the
 signal or a feature “ownlag” and “featurelag” respectively. 
@@ -652,7 +652,7 @@ such as trend, periods, etc. Future values are guessed by
 continuing the patterns and adding changes to that.""")
             set_text(self, text)
 
-        def info_ManFeatureLag(self, widget):
+        def info_ManFeatureLag(self, Container):
             text = ("Custom feature lags are constructed. "
                     """We call lagged time series of either the
 signal or a feature “ownlag” and “featurelag” respectively. 
@@ -664,7 +664,7 @@ e.g. lagged radiator temperature as feature to the room
 temperature as signal. """)
             set_text(self, text)
 
-        def info_AutoFeatureLag(self, widget):
+        def info_AutoFeatureLag(self, Container):
             text = ("Creates lagged series of features, the optimal lag is chosen automatically via a wrapper method. "
                     """We call lagged time series of either the
 signal or a feature “ownlag” and “featurelag” respectively. 
@@ -676,35 +676,35 @@ e.g. lagged radiator temperature as feature to the room
 temperature as signal. """)
             set_text(self, text)
 
-        def info_ManFeatureSelect(self, widget):
+        def info_ManFeatureSelect(self, Container):
             text = ("Manual selection of features by their column number")
             set_text(self, text)
 
-        def info_LowVarFilter(self, widget):
+        def info_LowVarFilter(self, Container):
             text = ("Delete features which time series have a low variance (variance value is calculated for the scaled data).")
             set_text(self, text)
 
-        def info_ICADT(self, widget):
+        def info_ICADT(self, Container):
             text = ("Independent component analysis, see scikit-learn.org for more information.")
             set_text(self, text)
 
-        def info_UnivariateFilterDT(self, widget):
+        def info_UnivariateFilterDT(self, Container):
             text = ("Several univariate filter methods. Information can be found in scikit-learn.org and in 'An Introduction to Variable and Feature Selection' from Isabelle Guyon which uses the term \"variable ranking\" for univariate")
             set_text(self, text)
 
-        def info_UnivariateEmbedded(self, widget):
+        def info_UnivariateEmbedded(self, Container):
             text = ("Univariate embedded method. Information can be found on scikit-learn.org and in "
                     "'An Introduction to Variable and Feature Selection' from Isabelle Guyon "
                     "which uses the term \"variable ranking\" for univariate)")
             set_text(self, text)
 
-        def info_MultivariateEmbedded(self, widget):
+        def info_MultivariateEmbedded(self, Container):
             text = ("Recursive embedded feature selection, a multivariate embedded method. Information can be found in "
                     ", scikit-learn.org and 'An Introduction to Variable and Feature Selection' from Isabelle Guyon "
                     "which uses the term \"variable subset selection\" for multivariate. ")
             set_text(self, text)
 
-        def info_WrapperRecursiveDT(self, widget):
+        def info_WrapperRecursiveDT(self, Container):
             text = ("Recursive wrapper feature selection. Deletes features as long as it improves the forecast accuracy. "
                     "Not recommended, information can be found in "
                     '"Automated Data Driven Modeling of Building Energy Systems via Machine Learning Algorithms"'
@@ -712,53 +712,53 @@ temperature as signal. """)
             set_text(self, text)
 
         #info fields within the dialogs
-        def info_Date(self, widget):
+        def info_Date(self, Container):
             text = ("Only the selected data period will be processed. Entry format: yyyy-mm-dd hh:mm")
             self.InfoBoxManPeriodSelectionDT.set_text(text)
 
-        def info_InitFeatures(self, widget):
+        def info_InitFeatures(self, Container):
             text = ("Enter the column number of the features you want to keep, separated by a comma. (Start to count from 0 with first Column after Index, Column of signal needs to be counted, but will be kept in any case)")
             self.InfoBoxInitManFeatureSelect.set_text(text)
 
-        def info_Resolution(self, widget):
+        def info_Resolution(self, Container):
             text = ("Define the desired resolution. min for minutes, s for seconds")
             self.InfoBoxResample.set_text(text)
 
-        def info_WayOfResampling(self, widget):
+        def info_WayOfResampling(self, Container):
             text = ("Define the way how the data shall be transformed. This needs to be defined for each column, separated by a comma. Possible operators are: mean, sum and median")
             self.InfoBoxResample.set_text(text)
 
-        def info_UniFilterScoreFunc(self, widget):
+        def info_UniFilterScoreFunc(self, Container):
             text = ("Information on the score functions for univariate filter can be found on scikit-learn.org")
             self.InfoBoxUnivariateFilterDT.set_text(text)
 
-        def info_UniFilterSearchStratDT(self, widget):
+        def info_UniFilterSearchStratDT(self, Container):
             text = ("Select a search strategy. Percentile selects the best x% of features, k-best the x best features. See scikit-learn.org")
             self.InfoBoxUnivariateFilterDT.set_text(text)
 
-        def info_UniFilterParamDT(self, widget):
+        def info_UniFilterParamDT(self, Container):
             text = ("Enter a value regarding the search strategy: "
                     "If percentile: percent of features to keep, e.g. 50. "
                     "If k-best: amount of features to keep, e.g. 4.")
             self.InfoBoxUnivariateFilterDT.set_text(text)
 
-        def info_FeaturesRFEDT(self, widget):
+        def info_FeaturesRFEDT(self, Container):
             text = ("Enter an integer or \"automatic\". Integer selects the entered number of features, \"automatic\" finds optimal number by itself, only automatic supports cross-validation. Information can be found on scikit-learn.org (RFE). ")
             self.InfoBoxMultivariateEmbeddedDT.set_text(text)
 
-        def info_RFE_CV_DT(self, widget):
+        def info_RFE_CV_DT(self, Container):
             text = ("Select the type of cross-validation. Cross-validation information can be found on scikit-learn.org")
             self.InfoBoxMultivariateEmbeddedDT.set_text(text)
 
         #Template
         """
-        def (self, widget):
+        def (self, Container):
             text = ("")
             set_text(self, text)
         """
 
     #executive functions
-    def compute_FB(self, widget):
+    def compute_FB(self, Container):
         def saveCallbackFB(OwnlagType):
             'save entries in the "SharedVariables.py" file which will be loaded from the executive scripts "DataTuning" and "ModelTuning"'
             #Values DataTuning
@@ -867,7 +867,7 @@ temperature as signal. """)
             p3.join()
             p4.join()''' #Todo: Multiprocessing was tried. But it seems that there is a problem with launching multiple processes from a GUI
 
-    def compute_DT(self, widget):
+    def compute_DT(self, Container):
         def saveCallbackDT():
             'save entries in the "SharedVariables.py" file which will be loaded from the executive scripts "DataTuning"'
             #Values DataTuning
@@ -968,7 +968,7 @@ temperature as signal. """)
         saveCallbackDT()
         DataTuning.main()
 
-    def compute_MT(self, widget):
+    def compute_MT(self, Container):
         def saveCallbackMT():
             'save entries in the "SharedVariables.py" file which will be loaded from the executive script "ModelTuning"'
             #Values ModelTuning
@@ -1006,7 +1006,7 @@ temperature as signal. """)
         saveCallbackMT()
         ModelTuning.main_OnlyHyParaOpti()
 
-    def compute_PO(self, widget):
+    def compute_PO(self, Container):
         def saveCallbackPO():
             SV.NameOfData = self.NameOfDataPO.get_value()
             SV.NameOfExperiment = self.NameOfExperimentPO.get_value()
@@ -1025,7 +1025,7 @@ temperature as signal. """)
         ModelTuning.main_OnlyPredict()
 
     #dialog executions
-    def exec_dialog_periodOL_FB(self, widget, newValue):
+    def exec_dialog_periodOL_FB(self, Container, newValue):
         if newValue == True: #only if the checkbox is ticked
             try:# make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_periodOL.show(self) #works if the dialog window already exists(function is not called the first time)
@@ -1047,7 +1047,7 @@ that.''',
         else:
             pass
 
-    def exec_dialog_featurelag_FB(self, widget, newValue):
+    def exec_dialog_featurelag_FB(self, Container, newValue):
         if newValue == True:
             try:
                 self.dialog_featurelag.show(self)
@@ -1068,8 +1068,8 @@ that.''',
         else:
             pass
 
-    def exec_dialog_indivmodelbyfeature_MT(self, widget, ItemName):
-        Value = widget.get_key()
+    def exec_dialog_indivmodelbyfeature_MT(self, Container, ItemName):
+        Value = Container.get_key()
         if Value == "byFeature":
             try:
                 self.dialog_byfeature.show(self)
@@ -1087,7 +1087,7 @@ that.''',
         else:
             pass
 
-    def exec_dialog_validationperiod_PO(self, widget, newValue):
+    def exec_dialog_validationperiod_PO(self, Container, newValue):
         if newValue == True:
             try:
                 self.dialog_validationperiod.show(self)
@@ -1105,17 +1105,17 @@ that.''',
         else:
             pass
 
-    def exec_dialog_Resample(self, widget, Value):
+    def exec_dialog_Resample(self, Container, Value):
         if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_Resample.show(self)  # works if the dialog window already exists(function is not called the first time)
             except:  # dialog does not exist, hence it is called the first time. The dialog is created below
                 self.dialog_Resample = gui.GenericDialog(title='Resample', width='500px')
 
-                Container = gui.Widget(width=500, margin='0px auto',
+                Container = gui.Container(width=500, margin='0px auto',
                                              style={'display': 'block', 'overflow': 'hidden', "text-align": "center"})
                 self.InfoBoxResample = gui.Label(
-                    'Info will appear here when clicking on the label in question. \n Exemplary entries can be found within the entrywidget',
+                    'Info will appear here when clicking on the label in question. \n Exemplary entries can be found within the entryContainer',
                     width="100%", height="auto", margin='0px')
 
                 Cont1, self.ResolutionDT = text("Resolution", self.info_Resolution, "15min").do()
@@ -1129,7 +1129,7 @@ that.''',
         else:
             pass
 
-    def exec_dialog_InitManFeatureSelect(self, widget, Value):
+    def exec_dialog_InitManFeatureSelect(self, Container, Value):
         if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_InitManFeatureSelect.show(
@@ -1137,10 +1137,10 @@ that.''',
             except:  # dialog does not exist, hence it is called the first time. The dialog is created below
                 self.dialog_InitManFeatureSelect = gui.GenericDialog(title='Initial manual feature selection', width='500px')
 
-                Container = gui.Widget(width=500, margin='0px auto',
+                Container = gui.Container(width=500, margin='0px auto',
                                        style={'display': 'block', 'overflow': 'hidden', "text-align": "center"})
                 self.InfoBoxInitManFeatureSelect = gui.Label(
-                    'Info will appear here when clicking on the label in question. \n Exemplary entries can be found within the entrywidget',
+                    'Info will appear here when clicking on the label in question. \n Exemplary entries can be found within the entryContainer',
                     width="100%", height="auto", margin='0px')
 
                 Cont1, self.InitFeatures = text("Number of features", self.info_InitFeatures, "1, 4, 5, 6").do()
@@ -1153,7 +1153,7 @@ that.''',
         else:
             pass
 
-    def exec_dialog_ManPeriodSelectionDT(self, widget, Value):
+    def exec_dialog_ManPeriodSelectionDT(self, Container, Value):
         if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_ManPeriodSelectionDT.show(
@@ -1161,10 +1161,10 @@ that.''',
             except:  # dialog does not exist, hence it is called the first time. The dialog is created below
                 self.dialog_ManPeriodSelectionDT = gui.GenericDialog(title='Manual period selection', width='500px')
 
-                Container = gui.Widget(width=500, margin='0px auto',
+                Container = gui.Container(width=500, margin='0px auto',
                                        style={'display': 'block', 'overflow': 'hidden', "text-align": "center"})
                 self.InfoBoxManPeriodSelectionDT = gui.Label(
-                    'Info will appear here when clicking on the label in question. \n Exemplary entries can be found within the entrywidget',
+                    'Info will appear here when clicking on the label in question. \n Exemplary entries can be found within the entryContainer',
                     width="100%", height="auto", margin='0px')
 
                 Cont1, self.StartDateDT = text("Start", self.info_Date, "2016-06-02 00:00").do()
@@ -1178,7 +1178,7 @@ that.''',
         else:
             pass
 
-    def exec_dialog_CrossAutoPlot(self, widget, Value):
+    def exec_dialog_CrossAutoPlot(self, Container, Value):
         if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_CrossAutoPlot.show(
@@ -1194,7 +1194,7 @@ that.''',
         else:
             pass
 
-    def exec_dialog_DifferenceDT(self, widget, Value):
+    def exec_dialog_DifferenceDT(self, Container, Value):
         if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_DifferenceDT.show(self)  # works if the dialog window already exists(function is not called the first time)
@@ -1208,7 +1208,7 @@ that.''',
         else:
             pass
 
-    def exec_dialog_ManOwnLagDT(self, widget, Value):
+    def exec_dialog_ManOwnLagDT(self, Container, Value):
         if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_ManOwnLagDT.show(
@@ -1222,7 +1222,7 @@ that.''',
         else:
             pass
 
-    def exec_dialog_AutoFeatureLagDT(self, widget, newValue):
+    def exec_dialog_AutoFeatureLagDT(self, Container, newValue):
         if newValue == True:
             try:
                 self.dialog_featurelag_DT.show(self)
@@ -1238,7 +1238,7 @@ that.''',
         else:
             pass
 
-    def exec_dialog_ManFeatureLagDT(self, widget, Value):
+    def exec_dialog_ManFeatureLagDT(self, Container, Value):
         if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_ManFeatureLagDT.show(self)  # works if the dialog window already exists(function is not called the first time)
@@ -1251,7 +1251,7 @@ that.''',
         else:
             pass
 
-    def exec_dialog_ManFeatureSelectDT(self, widget, Value):
+    def exec_dialog_ManFeatureSelectDT(self, Container, Value):
         if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_ManFeatureSelectDT.show(
@@ -1266,7 +1266,7 @@ that.''',
         else:
             pass
 
-    def exec_dialog_LowVarFilterDT(self, widget, Value):
+    def exec_dialog_LowVarFilterDT(self, Container, Value):
         if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_LowVarFilterDT.show(
@@ -1281,7 +1281,7 @@ that.''',
         else:
             pass
 
-    def exec_dialog_UnivariateEmbeddedDT(self, widget, Value):
+    def exec_dialog_UnivariateEmbeddedDT(self, Container, Value):
         if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_UnivariateEmbeddedDT.show(self)  # works if the dialog window already exists(function is not called the first time)
@@ -1296,17 +1296,17 @@ that.''',
         else:
             pass
 
-    def exec_dialog_UnivariateFilterDT(self, widget, Value):
+    def exec_dialog_UnivariateFilterDT(self, Container, Value):
         if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_UnivariateFilterDT.show(self)  # works if the dialog window already exists(function is not called the first time)
             except:  # dialog does not exist, hence it is called the first time. The dialog is created below
                 self.dialog_UnivariateFilterDT = gui.GenericDialog(title='Univariate filter', width='500px')
 
-                Container = gui.Widget(width=500, margin='0px auto',
+                Container = gui.Container(width=500, margin='0px auto',
                                        style={'display': 'block', 'overflow': 'hidden', "text-align": "center"})
                 self.InfoBoxUnivariateFilterDT = gui.Label(
-                    'Info will appear here when clicking on the label in question. \n Exemplary entries can be found within the entrywidget',
+                    'Info will appear here when clicking on the label in question. \n Exemplary entries can be found within the entryContainer',
                     width="100%", height="auto", margin='0px')
 
                 Cont1, self.UniFilterScorFuncDT = dropdown("Type of score function", self.info_UniFilterScoreFunc, {mutual_info_regression:"mutual information regression", f_regression:"f regression"}).do()
@@ -1321,7 +1321,7 @@ that.''',
         else:
             pass
 
-    def exec_dialog_MultivariateEmbeddedDT(self, widget, Value):
+    def exec_dialog_MultivariateEmbeddedDT(self, Container, Value):
         if Value == True:  # only if the checkbox is ticked
             try:  # make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_MultivariateEmbeddedDT.show(
@@ -1330,20 +1330,20 @@ that.''',
                 self.dialog_MultivariateEmbeddedDT = gui.GenericDialog(title='Embedded recursive feature elemination',
                                                                        width='500px')
 
-                Container = gui.Widget(width=500, margin='0px auto',
+                Container = gui.Container(width=500, margin='0px auto',
                                        style={'display': 'block', 'overflow': 'hidden', "text-align": "center"})
                 self.InfoBoxMultivariateEmbeddedDT = gui.Label(
-                    'Info will appear here when clicking on the label in question. \n Exemplary entries can be found within the entrywidget',
+                    'Info will appear here when clicking on the label in question. \n Exemplary entries can be found within the entryContainer',
                     width="100%", height="auto", margin='0px')
 
                 Cont1, self.FeaturesRFEDT = text("Number of features", self.info_FeaturesRFEDT, "automatic").do()
 
-                Cont2 = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,
+                Cont2 = gui.Container(width='100%', layout_orientation=gui.Container.LAYOUT_HORIZONTAL,
                                        margin='0px',
                                        style={'display': 'block', 'overflow': 'auto',
                                               "text-align": "left"})
                 lbl_CVDT = gui.Label("Cross-validation", width="40%", height=20, margin="10px")
-                lbl_CVDT.set_on_click_listener(self.info_RFE_CV_DT)
+                lbl_CVDT.onclick.do(self.info_RFE_CV_DT)
                 self.RFE_CV_DT = gui.DropDown(width="40%", height=20, margin='10px')
                 entries = {"KFold": "KFold", "TimeSeriesSplit": "TimeSeriesSplit"}
                 for key in entries:
@@ -1362,17 +1362,17 @@ that.''',
 
     #template
     '''
-    def exec_dialog_$(self, widget, Value):
+    def exec_dialog_$(self, Container, Value):
         if Value == True: #only if the checkbox is ticked
             try:# make sure that the dialog opens with the previously entered values and does not overwrite it with the default ones
                 self.dialog_$.show(self) #works if the dialog window already exists(function is not called the first time)
             except: #dialog does not exist, hence it is called the first time. The dialog is created below
                 self.dialog_$ = gui.GenericDialog(title='$', width='500px')
 
-                Container = gui.Widget(width=500, margin='0px auto',
+                Container = gui.Container(width=500, margin='0px auto',
                                              style={'display': 'block', 'overflow': 'hidden', "text-align": "center"})
                 self.InfoBox$ = gui.Label(
-                    'Info will appear here when clicking on the label in question. \n Exemplary entries can be found within the entrywidget',
+                    'Info will appear here when clicking on the label in question. \n Exemplary entries can be found within the entryContainer',
                     width="100%", height="auto", margin='0px')
 
                 Cont1, self.Trial = text("Name of data", self.info_NameOfData, "AHU1").do()

@@ -185,7 +185,7 @@ if True: #if True for neat appearance
     #        "Baye" - models are chosen through bayesian optimization as well (consider higher amount of Max_eval_bayes
 
     # define and set Estimator which shall be used in for the embedded feature selection
-    rf = RandomForestRegressor(max_depth=10e17, random_state=0)  #have to be defined so that they return "feature_importance", more implementation have to be developed
+    rf = RandomForestRegressor(max_depth=int(10e17), random_state=0)  #have to be defined so that they return "feature_importance", more implementation have to be developed
     EstimatorEmbedded_FinalBaye = rf  # e.g. <rf>; set one of the above models to be used
 
     #Parameters for only prediction

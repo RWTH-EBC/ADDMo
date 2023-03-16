@@ -30,6 +30,7 @@ import LogResults as LR
 import math
 
 from Functions.ErrorMetrics import*
+import SharedVariables as SV
 
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -390,7 +391,8 @@ def nusvr_bayesian_predictor(Features_train, Signal_train, Features_test, Signal
     def f(params):
         acc, aic, bic,kpi1,kpi2,kpi3 = hyperopt_cv(params)
         log_metric("aic")
-        return {"loss": kpi3, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
+        dict_kpis = {"acc": -acc, "aic": aic, "bic": bic, "kpi1": kpi1, "kpi2": kpi2, "kpi3": kpi3}
+        return {"loss": dict_kpis[SV.OnlyHyPara_KPI], "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
 
     trials = Trials() #this is for tracking the bayesian optimization
     BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals, trials=trials) #do the bayesian optimization
@@ -460,8 +462,8 @@ def rf_bayesian(Features_train,Signal_train,Features_test,Signal_test,Hyperparam
         return CV_score,aicscore,bicscore,kpi1,kpi2,kpi3
     def f(params):
         acc,aic,bic,kpi1,kpi2,kpi3 = hyperopt_cv(params)
-        log_metric("acc")
-        return {"loss": kpi2, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
+        dict_kpis = {"acc": -acc, "aic": aic, "bic": bic, "kpi1": kpi1, "kpi2": kpi2, "kpi3": kpi3}
+        return {"loss": dict_kpis[SV.OnlyHyPara_KPI], "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
 
     trials = Trials()  # this is for tracking the bayesian optimization
     BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals,
@@ -566,10 +568,10 @@ def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
     def f(params):
         acc,aic,bic,kpi1,kpi2,kpi3 = hyperopt_cv(params)
         #log_metric("acc")
-
         #hier gemischte KPI berehcnen
-        #return {"loss": -acc, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)#
-        return {"loss": kpi3, "status": STATUS_OK}
+        dict_kpis = {"acc": -acc, "aic": aic, "bic": bic, "kpi1": kpi1, "kpi2": kpi2, "kpi3": kpi3}
+        # return {"loss": dict_kpis[SV.OnlyHyPara_KPI], "status": STATUS_OK}
+        return {"loss":-acc, "status": STATUS_OK}#return {"loss": -acc, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)#
 
     trials = Trials()
     BestParams = fmin(f, HyperparameterGrid, algo=tpe.suggest, max_evals=Max_evals, trials=trials)

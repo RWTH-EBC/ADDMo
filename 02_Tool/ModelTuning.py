@@ -19,13 +19,13 @@ from sklearn.decomposition import FastICA
 from sklearn.feature_selection import GenericUnivariateSelect
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.model_selection import train_test_split
-
+import SharedVariables as SV
 from BlackBoxes import *
 from Functions.ErrorMetrics import *
 from Functions.PlotFcn import *
 from LogResults import *
 import math
-import SharedVariables as SV
+
 import LogResults as LR
 print("Start")
 
@@ -889,5 +889,5 @@ if __name__ == '__main__':
 
     #Define which part shall be computed (parameters are set in SharedVariables)
     #main_FinalBayes()
-    #main_OnlyHyParaOpti()
-    main_OnlyPredict()
+    main_OnlyHyParaOpti()
+    # main_OnlyPredict()

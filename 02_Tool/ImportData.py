@@ -36,16 +36,22 @@ def clear():
 #imports 1st Sheet as a dataframe and saves it as "ThePickle"
 def import_data():
     Path = SV.InputData
-    Data = pd.read_excel(io=Path, index_col=0)                              #Column 0 has to be the Index Column; reads the excel file
+    # create InputData.pickle if InputData is currently only saved as .xlsx
+    try:
+        Data = pd.read_pickle(path=Path)   # Column 0 has to be the Index Column; reads the excel file
+    except FileNotFoundError:
+        Data = pd.read_excel(io=os.path.join(SV.PathToData, "InputData" + '.xlsx'), index_col=0)
+        Data.to_pickle(os.path.join(SV.PathToData, "InputData" + '.pickle'))
 
-    Data.to_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_ImportData" + '.pickle'))  #saves Data into a pickle
-
+    Data.to_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_ImportData" + '.pickle'))  # saves Data into a pickle
+    #
     # save dataframe in an excel file
-    ExcelFile = os.path.join(SV.ResultsFolder, "ProcessedInputData_%s.xlsx"%(SV.NameOfExperiment))
-    writer = pd.ExcelWriter(ExcelFile)
-    Data.to_excel(writer, sheet_name="ImportData")
-    writer.save()
-    writer.close()
+    if SV.save_datatuning_as_xlsx:
+        ExcelFile = os.path.join(SV.ResultsFolder, "ProcessedInputData_%s.xlsx"%(SV.NameOfExperiment))
+        writer = pd.ExcelWriter(ExcelFile)
+        Data.to_excel(writer, sheet_name="ImportData")
+        writer.save()
+        writer.close()
 
     return Data
 

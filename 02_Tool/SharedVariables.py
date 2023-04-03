@@ -246,6 +246,7 @@ OnlyPredictFolder = "Empty"  # by ModelTuning
 InputData = "Empty"  # by DataTuning
 FixImport = True  # set by GUI used in "DataTuning"
 GUI_Filename = "Empty"  # set by GUI
+save_datatuning_as_xlsx = "Empty" # set by Datatuning
 
 
 # Some functions used in many modules:

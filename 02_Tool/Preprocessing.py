@@ -113,11 +113,12 @@ def main():
     Data.to_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_Preprocessing" + '.pickle'))
 
     # save dataframe in the ProcessedInputData excel file
-    ExcelFile = os.path.join(SV.ResultsFolder, "ProcessedInputData_%s.xlsx"%(SV.NameOfExperiment))
-    book = load_workbook(ExcelFile)
-    writer = pd.ExcelWriter(ExcelFile, engine="openpyxl")
-    writer.book = book
-    writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
-    Data.to_excel(writer, sheet_name="Preprocessing")
-    writer.save()
-    writer.close()
+    if SV.save_datatuning_as_xlsx:
+        ExcelFile = os.path.join(SV.ResultsFolder, "ProcessedInputData_%s.xlsx"%(SV.NameOfExperiment))
+        book = load_workbook(ExcelFile)
+        writer = pd.ExcelWriter(ExcelFile, engine="openpyxl")
+        writer.book = book
+        writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
+        Data.to_excel(writer, sheet_name="Preprocessing")
+        writer.save()
+        writer.close()

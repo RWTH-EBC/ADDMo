@@ -27,7 +27,7 @@ def main():
         os.makedirs(PathToPickles)
 
     if SV.FixImport: #makes sure that the GUI can rename the directory and name of the inputdata if necessary(without Gui the data imported from the fixed place)
-        InputData = os.path.join(PathToData, "InputData" + '.xlsx')
+        InputData = os.path.join(PathToData, "InputData" + '.pickle')
     else:
         InputData = os.path.join(PathToData, "GUI_Uploads", SV.GUI_Filename)
 
@@ -37,6 +37,7 @@ def main():
     SV.ResultsFolder = ResultsFolder
     SV.PathToPickles = PathToPickles
     SV.InputData = InputData
+    SV.save_datatuning_as_xlsx = False
 
     ImportData.clear() #make sure the selected folder is unused
 

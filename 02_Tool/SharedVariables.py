@@ -167,7 +167,7 @@ if True:  # if True for neat appearance
 if True:  # if True for neat appearance
     # Variables for "ModelTuning.py" (necessary for
     # User Input
-    NameOfSubTest = "ANN_100_ACC_wievorher_jetzt echt"
+    NameOfSubTest = "ANN_100_ACC"
     StartTraining = '2016-08-01 00:00'  # StartTraining = '2017-12-18 00:00'
     EndTraining = '2016-08-07 23:45'  # EndTraining = '2018-01-13 23:45'
     StartTesting = '2016-08-08 00:00'  # StartTesting = '2018-01-14 00:00'

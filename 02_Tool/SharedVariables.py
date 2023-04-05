@@ -12,15 +12,15 @@ from math import log
 
 # Input section needed for DataTuning and ModelTuning
 # Set name of the folder where the experiments shall be saved, e.g. the name of the observed data
-NameOfData = "TrialInputRWTH"
+NameOfData = "ECOS2023"
 # Set name of the experiments series
-NameOfExperiment = "TrialTunedDataRWTH"
+NameOfExperiment = "AdaptedData_all_4preds_500estimators"
 
 # User Input Section Data Tuning #######################################################################################
 if True:  # if True for neat appearance
     # -----------------------Input Section general variables--------------------------
     # The name of the column where the signal in question is safed; count up from 0 in the first column after the index(1st column after index = 0)
-    ColumnOfSignal = 1
+    ColumnOfSignal = 0
 
     # Set Estimator which shall be used in all Wrapper Methods, should be the one used for the final forecast(just copy paste into WrapperParams)
     # Those settings will only be used if a wrapper is used later on, skip if not.
@@ -167,17 +167,17 @@ if True:  # if True for neat appearance
 if True:  # if True for neat appearance
     # Variables for "ModelTuning.py" (necessary for
     # User Input
-    NameOfSubTest = "ANN_100_ACC"
-    StartTraining = '2016-08-01 00:00'  # StartTraining = '2017-12-18 00:00'
-    EndTraining = '2016-08-07 23:45'  # EndTraining = '2018-01-13 23:45'
-    StartTesting = '2016-08-08 00:00'  # StartTesting = '2018-01-14 00:00'
-    EndTesting = '2016-08-16 23:45'  # EndTesting = '2018-12-31 23:45'
+    NameOfSubTest = "RF_120_ACC"
+    StartTraining = '2020-01-01 00:00'
+    EndTraining = "2020-06-30 23:45"
+    StartTesting = "2020-07-01 00:00"
+    EndTesting = "2020-12-31 23:45:00"
 
     # Logging Results computing time over train steps and AIC/BIC over train steps
     logresults = True
 
     # Set global variables, those variables are for the BlackBox models themselves not for the final bayesian optimization
-    GlobalMaxEval_HyParaTuning = 100  # sets the number of evaluations done by the bayesian optimization for each "tuned training" to find the best Hyperparameter, each evaluation is training and testing with cross-validation for one hyperparameter setting
+    GlobalMaxEval_HyParaTuning = 120  # sets the number of evaluations done by the bayesian optimization for each "tuned training" to find the best Hyperparameter, each evaluation is training and testing with cross-validation for one hyperparameter setting
     GlobalCV_MT = 3  # Enter any crossvalidationn method from scikit-learn or any self defined or from elsewhere.
     GlobalRecu = True  # (Boolean) this sets whether the it shall be forecasted recursive or not
     GlobalShuffle = True
@@ -187,7 +187,7 @@ if True:  # if True for neat appearance
     if GlobalIndivModel == "byFeature":
         IndivFeature = "schedule[]"  # copy the name of feature here
         IndivThreshold = 0.5  # state the threshold at which value of that feature the data frame shall be splitted
-    OnlyHyPara_Models = ["ANN"]  # array of the blackboxes you want to use
+    OnlyHyPara_Models = ["RF_bay"]  # array of the blackboxes you want to use
     # Possible entries: ["SVR","NuSVR", "RF", "RF_bay","ANN", "GB", "Lasso", "SVR_grid", "ANN_grid", "RF_grid", "GB_grid", "Lasso_grid"]
     #                  ["ModelSelection"] uses all bayesian models (those without _grid) and returns the best
     OnlyHyPara_KPI = "acc"  # choice of KPI that shall be used for optimization
@@ -196,7 +196,7 @@ if True:  # if True for neat appearance
 
     # Final bayesian optimization finds optimal combination of "Individual Model"&"Features"&"Model"
     # Final bayesian optimization parameter
-    MaxEval_Bayes = 3
+    MaxEval_Bayes = 50
     Model_Bayes = "RF"
     # possible entries
     # Max_eval_Bayes = int - Number of iterations the bayesian optimization should do for selecting NumberofFeatures, IndivModel, BestModel , the less the less quality but faster

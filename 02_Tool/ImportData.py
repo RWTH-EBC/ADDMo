@@ -38,9 +38,9 @@ def import_data():
     Path = SV.InputData
     # create InputData.pickle if InputData is currently only saved as .xlsx
     try:
-        Data = pd.read_pickle(path=Path)   # Column 0 has to be the Index Column; reads the excel file
+        Data = pd.read_pickle(path=Path)
     except FileNotFoundError:
-        Data = pd.read_excel(io=os.path.join(SV.PathToData, "InputData" + '.xlsx'), index_col=0)
+        Data = pd.read_excel(io=os.path.join(SV.PathToData, "InputData" + '.xlsx'), index_col=0) # Column 0 has to be the Index Column; reads the excel file
         Data.to_pickle(os.path.join(SV.PathToData, "InputData" + '.pickle'))
 
     Data.to_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_ImportData" + '.pickle'))  # saves Data into a pickle

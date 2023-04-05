@@ -48,25 +48,34 @@ def change_shared_variables(NameOfData, NameOfExperiment, NameOfSubTest, GlobalM
 if __name__ == '__main__':
 
     # Ganze Jahre für thermische Bedarfe
-    SV.StartTraining = '2016-08-01 00:00'
-    SV.EndTraining = '2016-08-07 23:45'
-    SV.StartTesting = '2016-08-08 00:00'
-    SV.EndTesting = '2016-08-16 23:45'
+    StartTraining = '2020-01-01 00:00'
+    EndTraining = "2020-06-30 23:45"
+    StartTesting = "2020-07-01 00:00"
+    EndTesting = "2020-12-31 23:45:00"
 
     SV.StandardScaling = False  # Für Reihen mit vielen Nullen
     SV.RobustScaling = True  # für alle sonstigen daten
 
-    NameOfData = "TrialInputRWTH"
-    NameOfExperiment = "TrialTunedDataRWTH"
+    NameOfData = "ECOS2023"
+    NameOfExperiment = "AdaptedData_all_4preds_500estimators"
 
-    NameOfSubTest = "ANN_100_ACC"
-    GlobalMaxEval_HyParaTuning = 100
+    NameOfSubTest = "RFbay_120_ACC"
+    GlobalMaxEval_HyParaTuning = 120
     MaxEval_Bayes = 3
     Model_Bayes = "RF"
 
     num_of_experiments = 3
 
-    for experiment in range(num_of_experiments):
+    # Set True if DataTuning shall be run before ModelTuning
+    run_datatuning = True
+
+    if run_datatuning:
+        first_num_of_experiment = 0
+    else:
+        first_num_of_experiment = 1
+        num_of_experiments += 1
+
+    for experiment in range(first_num_of_experiment, num_of_experiments):
         change_shared_variables(NameOfData, NameOfExperiment, NameOfSubTest + str(experiment),
                                 GlobalMaxEval_HyParaTuning, MaxEval_Bayes, Model_Bayes)
         if experiment == 0:
@@ -75,4 +84,3 @@ if __name__ == '__main__':
             ModelTuning.main_OnlyHyParaOpti()
         else:
             ModelTuning.main_OnlyHyParaOpti()
-            #pass

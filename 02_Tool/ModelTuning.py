@@ -56,8 +56,6 @@ def visualization_documentation(NameOfPredictor,X_test, Y_Predictedscaled, Y_tes
     # evaluate results with more error metrics
     (R2, STD, RMSE, MAPE, MAE) = evaluation(Y_test, Y_Predicted)
     if NameOfPredictor == 'ann_bayesian_predictor':
-
-
         numparams = LR.calc_paramANNweights(Bestmodel)
         AIC = calculate_AIC(len(Y_train),numparams,Y_testscaled,Y_Predictedscaled)
         BIC = calculate_BIC(len(Y_train),numparams,Y_testscaled,Y_Predictedscaled)

@@ -59,9 +59,9 @@ if __name__ == '__main__':
     NameOfData = "ECOS2023"
     NameOfExperiment = "AdaptedData_all_4preds_500estimators"
 
-    NameOfSubTest = "RFbay_120_ACC"
+    NameOfSubTest = "RF_120_50"
     GlobalMaxEval_HyParaTuning = 120
-    MaxEval_Bayes = 3
+    MaxEval_Bayes = 50
     Model_Bayes = "RF"
 
     num_of_experiments = 3
@@ -76,11 +76,11 @@ if __name__ == '__main__':
         num_of_experiments += 1
 
     for experiment in range(first_num_of_experiment, num_of_experiments):
-        change_shared_variables(NameOfData, NameOfExperiment, NameOfSubTest + str(experiment),
+        change_shared_variables(NameOfData, NameOfExperiment, NameOfSubTest + "_" + str(experiment),
                                 GlobalMaxEval_HyParaTuning, MaxEval_Bayes, Model_Bayes)
         if experiment == 0:
             DataTuning.main()
             # choices: ModelTuning.main_FinalBayes(), ModelTuning.main_OnlyHyParaOpti(), main_OnlyPredict()
-            ModelTuning.main_OnlyHyParaOpti()
+            ModelTuning.main_FinalBayes()
         else:
-            ModelTuning.main_OnlyHyParaOpti()
+            ModelTuning.main_FinalBayes()

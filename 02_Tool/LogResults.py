@@ -24,8 +24,6 @@ def calculate_paramANN(params,inputlayersize,outputlayersize): #Bei ANN anzahl d
         for i in range(lendict-1):
             temp1 = temp1 + (params[i]+1) * params[i+1]  #hidden Layer verbindungen bias
         numparams = (inputlayersize+1)*params[0] + temp1 + (params[lendict-1]+1)*outputlayersize
-
-
     return numparams
 
 def calc_paramANNweights(fitted_model):  #Problem negative weights. Betrag nehmen
@@ -133,7 +131,7 @@ def cross_val_ic(Estimator,Features_train,Signal_train, CV, typ):  #X : Features
     aic = statistics.mean(aicscore)
     bic = statistics.mean(bicscore)
 
-    return aic,bic
+    return aic, bic
 
 def calc_weights(list):  # biclist löschen da algo gleich
 

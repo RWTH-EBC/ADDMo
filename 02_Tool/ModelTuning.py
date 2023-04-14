@@ -9,7 +9,7 @@ from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 import pandas as pd
 import numpy as np
 from pandas.io.excel import ExcelWriter
-#from GlobalVariables import *
+# from GlobalVariables import *
 from openpyxl import load_workbook
 import sys
 from sklearn.feature_selection import RFE
@@ -27,53 +27,57 @@ from LogResults import *
 import math
 
 import LogResults as LR
+
 print("Start")
 
+
 ########################################################################################################################
-def manual_train_test_period_select(Data ,StartDateTrain, EndDateTrain, StartDateTest, EndDateTest):
-    Data_TrainTest = Data[StartDateTrain:EndDateTrain]  #is used to train the model and evaluate the hyperparameter
-    Data_Test = Data[StartDateTest:EndDateTest]         #is used to perform a "forecast" with the trained Model
+def manual_train_test_period_select(Data, StartDateTrain, EndDateTrain, StartDateTest, EndDateTest):
+    Data_TrainTest = Data[StartDateTrain:EndDateTrain]  # is used to train the model and evaluate the hyperparameter
+    Data_Test = Data[StartDateTest:EndDateTest]  # is used to perform a "forecast" with the trained Model
     return (Data_TrainTest, Data_Test)
 
-def visualization_documentation(NameOfPredictor,X_test, Y_Predictedscaled, Y_testscaled, Indexer, Y_train, ComputationTime, #wird nur ganz am ende aufgerufen layer müssen pbergeben werden
-                                ResultsFolderSubTest, HyperparameterGrid=None, Bestparams=None, CV=3, Max_eval=None,
+
+def visualization_documentation(NameOfPredictor, Indexer,# wird nur ganz am ende aufgerufen layer müssen übergeben werden
+                                ComputationTime,
+                                ResultsFolderSubTest, Y_test=None, Y_train=None,
+                                Y_Predictedscaled=None, Y_Predicted=None, Y_testscaled=None,HyperparameterGrid=None, Bestparams=None, CV=3, Max_eval=None,
                                 Recursive=False, IndividualModel=False, Shuffle=SV.GlobalShuffle,
-                                FeatureImportance="Not available", Bestmodel=None):
-    if os.path.isfile(os.path.join(SV.ResultsFolder, "ScalerTracker.save")): #if scaler was used
-        ScaleTracker_Signal = joblib.load(os.path.join(SV.ResultsFolder, "ScalerTracker.save")) #load used scaler
-        #Scale Results back to normal; maybe inside the Blackboxes              #Hier ensteht der große Unterschied in MSE
-        Y_Predicted= ScaleTracker_Signal.inverse_transform(SV.reshape(Y_Predictedscaled))
-        Y_test = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_testscaled))
+                                FeatureImportance="Not available", Bestmodel=None, Documentation=False):
+    if os.path.isfile(os.path.join(SV.ResultsFolder, "ScalerTracker.save")):  # if scaler was used
+        ScaleTracker_Signal = joblib.load(os.path.join(SV.ResultsFolder, "ScalerTracker.save"))  # load used scaler
+        # Scale Results back to normal; maybe inside the Blackboxes              #Hier ensteht der große Unterschied in MSE
+
+        if NameOfPredictor in ['ann_bayesian_predictor', 'rf_bayesian', 'nusvr_bayesian_predictor']:
+            Y_Predicted = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_Predictedscaled))
+            Y_test = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_testscaled))
+        else:
+            Y_Predicted = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_Predicted))
+            Y_test = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_test))
         # convert arrays to data frames(Series) for further use
         Y_test = pd.DataFrame(index=Indexer, data=Y_test, columns=["Measure"])
         Y_test = Y_test["Measure"]
 
-    #convert arrays to data frames(Series) for further use
+    # convert arrays to data frames(Series) for further use
     Y_Predicted = pd.DataFrame(index=Indexer, data=Y_Predicted, columns=["Prediction"])
     Y_Predicted = Y_Predicted["Prediction"]
 
-
     # evaluate results with more error metrics
     (R2, STD, RMSE, MAPE, MAE) = evaluation(Y_test, Y_Predicted)
-    if NameOfPredictor == 'ann_bayesian_predictor':
-        numparams = LR.calc_paramANNweights(Bestmodel)
-        AIC = calculate_AIC(len(Y_train),numparams,Y_testscaled,Y_Predictedscaled)
-        BIC = calculate_BIC(len(Y_train),numparams,Y_testscaled,Y_Predictedscaled)
-    elif NameOfPredictor == 'rf_bayesian':
-        paramestimator = Bestmodel.estimators_
-        numparams = LR.calc_paramRF(paramestimator)
-        AIC = calculate_AIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
-        BIC = calculate_BIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
-    elif NameOfPredictor == 'svr_bayesian_predictor':
-
-        #AIC = calculate_AIC(len(Y_train), Bestmodel.C, Y_testscaled, Y_Predictedscaled)
-        #BIC = calculate_BIC(len(Y_train), Bestmodel.C, Y_testscaled, Y_Predictedscaled)
-        AIC = calc_AICSVR(len(Y_test), Bestmodel.epsilon, Y_testscaled, Y_Predictedscaled,X_test.shape[1])
-        BIC = calc_BICSVR(len(Y_test), Bestmodel.epsilon, Y_testscaled, Y_Predictedscaled,X_test.shape[1])
-    elif NameOfPredictor =='nusvr_bayesian_predictor':
-        numparams = LR.calc_paramNuSVR(Bestmodel)
-        AIC = calculate_AIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
-        BIC = calculate_BIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
+    if Documentation:
+        if NameOfPredictor == 'ann_bayesian_predictor':
+            numparams = LR.calc_paramANNweights(Bestmodel)
+            AIC = calculate_AIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
+            BIC = calculate_BIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
+        elif NameOfPredictor == 'rf_bayesian':
+            paramestimator = Bestmodel.estimators_
+            numparams = LR.calc_paramRF(paramestimator)
+            AIC = calculate_AIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
+            BIC = calculate_BIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
+        elif NameOfPredictor == 'nusvr_bayesian_predictor':
+            numparams = LR.calc_paramNuSVR(Bestmodel)
+            AIC = calculate_AIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
+            BIC = calculate_BIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
 
     plot_predict_measured(prediction=Y_Predicted, measurement=Y_test, MAE=MAE, R2=R2, StartDatePredict=SV.StartTesting,
                           SavePath=ResultsFolderSubTest, nameOfSignal=SV.NameOfSignal, BlackBox=NameOfPredictor,
@@ -81,16 +85,15 @@ def visualization_documentation(NameOfPredictor,X_test, Y_Predictedscaled, Y_tes
     plot_Residues(prediction=Y_Predicted, measurement=Y_test, MAE=MAE, R2=R2, SavePath=ResultsFolderSubTest,
                   nameOfSignal=SV.NameOfSignal, BlackBox=NameOfPredictor, NameOfSubTest=SV.NameOfSubTest)
 
-
     # save summary of setup and evaluation
     dfSummary = pd.DataFrame(index=[0])
     dfSummary['Estimator'] = NameOfPredictor
-    if Y_train is not None: #don´t document this if "onlypredict" is used
+    if Y_train is not None:  # don´t document this if "onlypredict" is used
         dfSummary['Start_date_Fit'] = SV.StartTraining
         dfSummary['End_date_Fit'] = SV.EndTraining
     dfSummary['Start_date_Predict'] = SV.StartTesting
     dfSummary['End_date_Predict'] = SV.EndTesting
-    if Y_train is not None: #don´t document this if "onlypredict" is used
+    if Y_train is not None:  # don´t document this if "onlypredict" is used
         dfSummary['Total Train Samples'] = len(Y_train.index)
     dfSummary['Test Samples'] = len(Y_test.index)
     dfSummary['Recursive'] = Recursive
@@ -106,105 +109,144 @@ def visualization_documentation(NameOfPredictor,X_test, Y_Predictedscaled, Y_tes
     if IndividualModel == "byFeature":
         dfSummary['IndivFeature'] = IndivFeature
         dfSummary['IndivThreshold'] = IndivThreshold
-    #dfSummary['Optimiert nach:'] = optmetric[0]  wegen onlypredict
+    # dfSummary['Optimiert nach:'] = optmetric[0]  wegen onlypredict
     dfSummary['Eval_R2'] = R2
     dfSummary['Eval_RMSE'] = RMSE
     dfSummary['Eval_MAPE'] = MAPE
     dfSummary['Eval_MAE'] = MAE
-    dfSummary['Standard deviation'] =STD
-    dfSummary['Eval_AIC'] = AIC
-    dfSummary['Eval_BIC'] = BIC
-    #dfSummary['Testtime'] = testtimelist[0]
-    dfSummary['Number of Parameters'] = numparams
+    dfSummary['Standard deviation'] = STD
+
+    # dfSummary['Testtime'] = testtimelist[0]
+    if Documentation and NameOfPredictor in ['ann_bayesian_predictor', 'rf_bayesian', 'nusvr_bayesian_predictor']:
+        dfSummary['Number of Parameters'] = numparams
+        dfSummary['Eval_AIC'] = AIC
+        dfSummary['Eval_BIC'] = BIC
     dfSummary['Computation Time in seconds'] = ComputationTime
 
     dfSummary = dfSummary.T
     # write summary of setup and evaluation in excel File
-    SummaryFile = os.path.join(ResultsFolderSubTest, "Summary_%s_%s.xlsx"%(NameOfPredictor, SV.NameOfSubTest))
+    SummaryFile = os.path.join(ResultsFolderSubTest, "Summary_%s_%s.xlsx" % (NameOfPredictor, SV.NameOfSubTest))
     writer = pd.ExcelWriter(SummaryFile)
     dfSummary.to_excel(writer, float_format='%.6f')
     writer.save()
 
     # export prediction to Excel
-    SaveFileName_excel = os.path.join(ResultsFolderSubTest ,"Prediction_%s_%s.xlsx" %(NameOfPredictor, SV.NameOfSubTest))
+    SaveFileName_excel = os.path.join(ResultsFolderSubTest,
+                                      "Prediction_%s_%s.xlsx" % (NameOfPredictor, SV.NameOfSubTest))
     Y_Predicted.to_frame(name=SV.NameOfSignal).to_excel(SaveFileName_excel)
 
-    #return Score for modelselection
-    return R2,AIC,BIC
-    #return R2
+    # return Score for modelselection
+    if Documentation and NameOfPredictor in ['ann_bayesian_predictor', 'rf_bayesian', 'nusvr_bayesian_predictor']:
+        return R2, AIC, BIC
+    else:
+        return R2
+
 
 def getscore(Y_Predicted, Y_test, Indexer):
-    if os.path.isfile(os.path.join(SV.ResultsFolder, "ScalerTracker.save")): #if scaler was used
-        ScaleTracker_Signal = joblib.load(os.path.join(SV.ResultsFolder , "ScalerTracker.save")) #load used scaler
-        #Scale Results back to normal; maybe inside the Blackboxes
-        Y_Predicted= ScaleTracker_Signal.inverse_transform(SV.reshape(Y_Predicted))
+    if os.path.isfile(os.path.join(SV.ResultsFolder, "ScalerTracker.save")):  # if scaler was used
+        ScaleTracker_Signal = joblib.load(os.path.join(SV.ResultsFolder, "ScalerTracker.save"))  # load used scaler
+        # Scale Results back to normal; maybe inside the Blackboxes
+        Y_Predicted = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_Predicted))
         Y_test = ScaleTracker_Signal.inverse_transform(SV.reshape(Y_test))
         # convert arrays to data frames(Series) for further use
         Y_test = pd.DataFrame(index=Indexer, data=Y_test, columns=["Measure"])
         Y_test = Y_test["Measure"]
 
-    #convert arrays to data frames(Series) for further use
+    # convert arrays to data frames(Series) for further use
     Y_Predicted = pd.DataFrame(index=Indexer, data=Y_Predicted, columns=["Prediction"])
     Y_Predicted = Y_Predicted["Prediction"]
 
     # evaluate results
-    #AIC = calculate_AIC(len(Y_test),100,Y_test,Y_Predicted)
     R2 = r2_score(Y_test, Y_Predicted)
-    #return Score for modelselection
-    #return AIC
+    # return Score for modelselection
     return R2
 
-#saves the BestModels in a folder "BestModels", also capable of saving individual models
+
+# saves the BestModels in a folder "BestModels", also capable of saving individual models
 def model_saver(Result_dic, ResultsFolderSubTest, NameOfPredictor, IndividualModel):
-    if os.path.isdir(os.path.join(ResultsFolderSubTest,"BestModels")) == True:
+    if os.path.isdir(os.path.join(ResultsFolderSubTest, "BestModels")) == True:
         pass
     else:
         os.makedirs(os.path.join(ResultsFolderSubTest, "BestModels"))
 
-    if IndividualModel=="week_weekend":
-        joblib.dump(Result_dic["Best_trained_model"]["weekday"], os.path.join(ResultsFolderSubTest, "BestModels", "weekday_%s.save" % (NameOfPredictor)))  # dump the best trained model in a file to reuse it for different predictions
-        joblib.dump(Result_dic["Best_trained_model"]["weekend"], os.path.join(ResultsFolderSubTest, "BestModels", "weekend_%s.save" % (NameOfPredictor)))  # dump the best trained model in a file to reuse it for different predictions
-    elif IndividualModel=="hourly":
-        joblib.dump(Result_dic["Best_trained_model"][0], os.path.join(ResultsFolderSubTest, "BestModels", "0_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][1], os.path.join(ResultsFolderSubTest, "BestModels", "1_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][2], os.path.join(ResultsFolderSubTest, "BestModels", "2_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][3], os.path.join(ResultsFolderSubTest, "BestModels", "3_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][4], os.path.join(ResultsFolderSubTest, "BestModels", "4_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][5], os.path.join(ResultsFolderSubTest, "BestModels", "5_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][6], os.path.join(ResultsFolderSubTest, "BestModels", "6_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][7], os.path.join(ResultsFolderSubTest, "BestModels", "7_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][8], os.path.join(ResultsFolderSubTest, "BestModels", "8_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][9], os.path.join(ResultsFolderSubTest, "BestModels", "9_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][10], os.path.join(ResultsFolderSubTest, "BestModels", "10_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][11], os.path.join(ResultsFolderSubTest, "BestModels", "11_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][12], os.path.join(ResultsFolderSubTest, "BestModels", "12_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][13], os.path.join(ResultsFolderSubTest, "BestModels", "13_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][14], os.path.join(ResultsFolderSubTest, "BestModels", "14_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][15], os.path.join(ResultsFolderSubTest, "BestModels", "15_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][16], os.path.join(ResultsFolderSubTest, "BestModels", "16_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][17], os.path.join(ResultsFolderSubTest, "BestModels", "17_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][18], os.path.join(ResultsFolderSubTest, "BestModels", "18_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][19], os.path.join(ResultsFolderSubTest, "BestModels", "19_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][20], os.path.join(ResultsFolderSubTest, "BestModels", "20_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][21], os.path.join(ResultsFolderSubTest, "BestModels", "21_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][22], os.path.join(ResultsFolderSubTest, "BestModels", "22_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"][23], os.path.join(ResultsFolderSubTest, "BestModels", "23_%s.save" % (NameOfPredictor)))
+    if IndividualModel == "week_weekend":
+        joblib.dump(Result_dic["Best_trained_model"]["weekday"], os.path.join(ResultsFolderSubTest, "BestModels",
+                                                                              "weekday_%s.save" % (
+                                                                                  NameOfPredictor)))  # dump the best trained model in a file to reuse it for different predictions
+        joblib.dump(Result_dic["Best_trained_model"]["weekend"], os.path.join(ResultsFolderSubTest, "BestModels",
+                                                                              "weekend_%s.save" % (
+                                                                                  NameOfPredictor)))  # dump the best trained model in a file to reuse it for different predictions
+    elif IndividualModel == "hourly":
+        joblib.dump(Result_dic["Best_trained_model"][0],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "0_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][1],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "1_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][2],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "2_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][3],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "3_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][4],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "4_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][5],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "5_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][6],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "6_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][7],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "7_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][8],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "8_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][9],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "9_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][10],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "10_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][11],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "11_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][12],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "12_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][13],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "13_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][14],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "14_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][15],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "15_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][16],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "16_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][17],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "17_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][18],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "18_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][19],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "19_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][20],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "20_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][21],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "21_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][22],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "22_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"][23],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "23_%s.save" % (NameOfPredictor)))
     elif IndividualModel == "byFeature":
-        joblib.dump(Result_dic["Best_trained_model"]["above"], os.path.join(ResultsFolderSubTest, "BestModels", "above_%s.save" % (NameOfPredictor)))
-        joblib.dump(Result_dic["Best_trained_model"]["below"], os.path.join(ResultsFolderSubTest, "BestModels", "below_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"]["above"],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "above_%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"]["below"],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "below_%s.save" % (NameOfPredictor)))
     else:
-        joblib.dump(Result_dic["Best_trained_model"], os.path.join(ResultsFolderSubTest, "BestModels", "%s.save" % (NameOfPredictor)))
+        joblib.dump(Result_dic["Best_trained_model"],
+                    os.path.join(ResultsFolderSubTest, "BestModels", "%s.save" % (NameOfPredictor)))
 
-#-----------------------------------------------------------------------------------------------------------------------
-#Section BlackBoxes
+
+# -----------------------------------------------------------------------------------------------------------------------
+# Section BlackBoxes
 class BB():
     'This Class uses the in BlackBoxes.py defined machine learning "predictors" for training, predicting and documentation.'
-    def __init__(self, Estimator, HyperparameterGrid = "None", HyperparameterGridString = "None"):
+
+    def __init__(self, Estimator, HyperparameterGrid="None", HyperparameterGridString="None"):
         self.Estimator = Estimator
         self.HyperparameterGrid = HyperparameterGrid
         self.HyperparameterGridString = HyperparameterGridString
 
-    def train_predict(self, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError", IndividualModel="Error", Documentation=False):
+    def train_predict(self, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError", IndividualModel="Error",
+                      Documentation=False):
         NameOfPredictor = self.Estimator.__name__
         if IndividualModel == "week_weekend":
             indivweekweekend = indiv_model(indiv_splitter_instance=indiv_splitter(week_weekend_splitter),
@@ -230,41 +272,39 @@ class BB():
             Result_dic = indivbyfeature.main()
         else:
             Result_dic = self.Estimator(Features_train=_X_train, Signal_train=_Y_train, Features_test=_X_test,
-                                        Signal_test=_Y_test, HyperparameterGrid=self.HyperparameterGrid, CV=SV.GlobalCV_MT,
-                                        Max_evals = SV.GlobalMaxEval_HyParaTuning, Recursive=SV.GlobalRecu)
+                                        Signal_test=_Y_test, HyperparameterGrid=self.HyperparameterGrid,
+                                        CV=SV.GlobalCV_MT, Max_evals=SV.GlobalMaxEval_HyParaTuning,
+                                        Recursive=SV.GlobalRecu)
 
         Predicted = Result_dic["prediction"]
         Bestparams = Result_dic["best_params"]
         ComputationTime = Result_dic["ComputationTime"]
         FeatureImportance = Result_dic["feature_importance"]
-        if Documentation == True:  # only do documentation if Documentation is wished(Documentation is False from beginning, and only in the end set True)
-            Score,AICscore,BICscore = visualization_documentation(NameOfPredictor,_X_train, Predicted, _Y_test, Indexer, _Y_train, ComputationTime,
-                                                SV.ResultsFolderSubTest,
-                                                self.HyperparameterGridString, Bestparams, SV.GlobalCV_MT, SV.GlobalMaxEval_HyParaTuning, SV.GlobalRecu,
-                                                IndividualModel, SV.GlobalShuffle, FeatureImportance,Result_dic["Best_trained_model"])
+        if Documentation and NameOfPredictor in [
+                'nusvr_bayesian_predictor', 'rf_bayesian',  "ann_bayesian_predictor"]:  # only do documentation if Documentation is wished(Documentation is False from beginning, and only in the end set True)
+            Score, AICscore, BICscore = visualization_documentation(NameOfPredictor,    # afu: Documentation is never set True in FinalBayes. All functionalities concerning AIC, BIC and other KPIs are not relevant if documentation is False
+                                                                    Y_Predictedscaled=Predicted,
+                                                                    Y_testscaled=_Y_test, Indexer=Indexer,
+                                                                    Y_train=_Y_train,
+                                                                    ComputationTime=ComputationTime,
+                                                                    ResultsFolderSubTest=SV.ResultsFolderSubTest,
+                                                                    HyperparameterGrid=self.HyperparameterGridString,
+                                                                    Bestparams=Bestparams,
+                                                                    CV=SV.GlobalCV_MT,
+                                                                    Max_eval=SV.GlobalMaxEval_HyParaTuning,
+                                                                    Recursive=SV.GlobalRecu,
+                                                                    IndividualModel=IndividualModel,
+                                                                    Shuffle=SV.GlobalShuffle,
+                                                                    FeatureImportance=FeatureImportance,
+                                                                    Bestmodel=Result_dic["Best_trained_model"],
+                                                                    Documentation=Documentation)
             # only dump if it´s the last best one(marked by Documentation=True)
             model_saver(Result_dic, SV.ResultsFolderSubTest, NameOfPredictor, IndividualModel)
-        else:
-            Score = getscore(Predicted, _Y_test, Indexer) #Todo: Make possible to set scoring function by yourself
-            if self.Estimator.__name__ == 'ANN':
-                inputsize=_X_train.shape
-                numparams = LR.calculate_param(Bestparams,inputsize[0],1) #Xtest oder Xtrain?
-                AICscore = calculate_AIC((len(_Y_train)),numparams,_Y_test,Predicted)
-                BICscore = calculate_BIC((len(_Y_train)),numparams,_Y_test,Predicted)
-            elif self.Estimator.__name__ == 'RF_bay':
-                numparams= LR.calc_paramRF(Bestparams)
-                AICscore = calculate_AIC(len(_Y_train),numparams,_Y_test,Predicted)
-                BICscore = calculate_BIC(len(_Y_train),numparams,_Y_test,Predicted)
-            elif self.Estimator.__name__ == 'svr_bayesian_predictor':
-                numparams = LR.calc_paramSVRV1(Bestparams['C'])
-                AICscore = calculate_AIC(len(_Y_train), numparams, _Y_test, Predicted)
-                BICscore = calculate_BIC(len(_Y_train), numparams, _Y_test, Predicted)
-        if SV.logresults == True:
-            # Log Data
+
             index = list(range(1, (len(traintimelist) + 1)))
-            aicweights= LR.calc_weights(aiclist)
+            aicweights = LR.calc_weights(aiclist)
             bicweights = LR.calc_weights(biclist)
-            kp1_weights=LR.calc_weights(kpi1list)
+            kp1_weights = LR.calc_weights(kpi1list)
             kp2_weights = LR.calc_weights(kpi2list)
             kp3_weights = LR.calc_weights(kpi3list)
             # print(len(index))
@@ -285,15 +325,20 @@ class BB():
             print("Logging Dokumentation")
             if self.Estimator.__name__ == 'ann_bayesian_predictor':
                 data = np.array(
-                    [traintimelist, aiclist, aicweights, biclist, bicweights, paramlist, numparamlist, annweight,r2list, kpi1list,
+                    [traintimelist, aiclist, aicweights, biclist, bicweights, paramlist, numparamlist, annweight,
+                     r2list, kpi1list,
                      kp1_weights, kpi2list, kp2_weights, kpi3list, kp3_weights]).T
                 dflog = pd.DataFrame(data, columns=['Traintime', 'AIC', 'AICWeights', 'BIC', 'BICWeights', 'Params',
-                                                    'AnzahlParams','WeightParam', 'R2','R2Weight', 'Mixed_KPI 1',  'Mixed_KPI 2',
+                                                    'AnzahlParams', 'WeightParam', 'R2', 'R2Weight', 'Mixed_KPI 1',
+                                                    'Mixed_KPI 2',
                                                     'KPI2weight', 'Mixed_KPI 3', 'KPI3weight'])
             else:
-                data = np.array([traintimelist,aiclist, aicweights, biclist, bicweights, paramlist, numparamlist, r2list, kpi1list,kp1_weights,kpi2list,kp2_weights,kpi3list,kp3_weights]).T
+                data = np.array(
+                    [traintimelist, aiclist, aicweights, biclist, bicweights, paramlist, numparamlist, r2list, kpi1list,
+                     kp1_weights, kpi2list, kp2_weights, kpi3list, kp3_weights]).T
                 dflog = pd.DataFrame(data, columns=['Traintime', 'AIC', 'AICWeights', 'BIC', 'BICWeights', 'Params',
-                                                'AnzahlParams', 'R2','Mixed_KPI 1','KPI1weight','Mixed_KPI 2', 'KPI2weight', 'Mixed_KPI 3','KPI3weight'])
+                                                    'AnzahlParams', 'R2', 'Mixed_KPI 1', 'KPI1weight', 'Mixed_KPI 2',
+                                                    'KPI2weight', 'Mixed_KPI 3', 'KPI3weight'])
 
             logFile = os.path.join(SV.ResultsFolderSubTest, "Log_Results_%s.xlsx" % (SV.NameOfSubTest))
             writer = pd.ExcelWriter(logFile)
@@ -302,41 +347,71 @@ class BB():
             # plot Data
 
             plot_Results(Index=index, Time=traintimelist, AIC=aiclist, numparam=numparamlist, R2=r2list,
-                         SavePath=SV.ResultsFolderSubTest, BlackBox=self.Estimator.__name__, NameOfSubTest=SV.NameOfSubTest)
+                         SavePath=SV.ResultsFolderSubTest, BlackBox=self.Estimator.__name__,
+                         NameOfSubTest=SV.NameOfSubTest)
+            return Score, AICscore, BICscore
+        elif Documentation and not NameOfPredictor in [
+                'nusvr_bayesian_predictor', 'rf_bayesian',  "ann_bayesian_predictor"]:  # only do documentation if Documentation is wished(Documentation is False from beginning, and only in the end set True)
+            Score = visualization_documentation(NameOfPredictor, Y_Predicted=Predicted, Y_test=_Y_test, Indexer=Indexer,
+                                                Y_train=_Y_train,
+                                                ComputationTime=ComputationTime,
+                                                ResultsFolderSubTest=SV.ResultsFolderSubTest,
+                                                HyperparameterGrid=self.HyperparameterGridString,
+                                                Bestparams=Bestparams,
+                                                CV=SV.GlobalCV_MT,
+                                                Max_eval=SV.GlobalMaxEval_HyParaTuning,
+                                                Recursive=SV.GlobalRecu,
+                                                IndividualModel=IndividualModel,
+                                                Shuffle=SV.GlobalShuffle,
+                                                FeatureImportance=FeatureImportance)
+            # only dump if it´s the last best one(marked by Documentation=True)
+            model_saver(Result_dic, SV.ResultsFolderSubTest, NameOfPredictor, IndividualModel)
+            return Score
+        else:
+            Score = getscore(Predicted, _Y_test, Indexer)  # Todo: Make possible to set scoring function by yourself
+            return Score
 
 
-        return Score,AICscore,BICscore
-
-#Initiate the blackboxes
-#Info: Make sure the HyperparameterGrid is always equal to the HyperparameterGridString for correct documentation
-HyperparameterGrid1= [{'gamma': [10000.0, 1000, 100, 10, 1, 0.1, 0.01, 0.001, 0.0001, 'auto'], 'C': [10000.0, 1000, 100, 10, 1, 0.1, 0.01, 0.001, 0.0001], 'epsilon': [1, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6]}]
+# Initiate the blackboxes
+# Info: Make sure the HyperparameterGrid is always equal to the HyperparameterGridString for correct documentation
+HyperparameterGrid1 = [{'gamma': [10000.0, 1000, 100, 10, 1, 0.1, 0.01, 0.001, 0.0001, 'auto'],
+                        'C': [10000.0, 1000, 100, 10, 1, 0.1, 0.01, 0.001, 0.0001],
+                        'epsilon': [1, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6]}]
 BB1 = BB(svr_grid_search_predictor, HyperparameterGrid1, str(HyperparameterGrid1))
 
-HyperparameterGrid2 = {"C": hp.loguniform("C", log(1e-3), log(1e3)), "gamma": hp.loguniform("gamma", log(1e-3), log(1e3)), "epsilon": hp.loguniform("epsilon", log(1e-4), log(1))}  # with loguniform(-6, 23.025) spans a range from 1e-3 to 1e10
+HyperparameterGrid2 = {"C": hp.loguniform("C", log(1e-3), log(1e3)),
+                       "gamma": hp.loguniform("gamma", log(1e-3), log(1e3)),
+                       "epsilon": hp.loguniform("epsilon", log(1e-4),
+                                                log(1))}  # with loguniform(-6, 23.025) spans a range from 1e-3 to 1e10
 HyperparameterGridString2 = """{"C": hp.loguniform("C", log(1e-3), log(1e3)), "gamma":hp.loguniform("gamma", log(1e-3),log(1e3)), "epsilon":hp.loguniform("epsilon", log(1e-4), log(1))}"""  # set this as a string in order to have a exact"screenshot" of the hyperparametergrid to save it in the summary
 BB2 = BB(svr_bayesian_predictor, HyperparameterGrid2, HyperparameterGridString2)
 
-HyperparameterGrid22 ={"C": hp.loguniform("C", log(1e-3), log(1e3)),"gamma": hp.loguniform("gamma", log(1e-3), log(1e3)), "nu":hp.loguniform("nu",log(1e-4),log(0.5))}
-HyperparameterGridString22="""{"C": hp.loguniform("C", log(1e-3), log(1e3)),"gamma": hp.loguniform("gamma", log(1e-3), log(1e3)), "nu":hp.loguniform("nu",log(1e-3),log(1))}"""
-BB22 = BB(nusvr_bayesian_predictor,HyperparameterGrid22,HyperparameterGridString22)
+HyperparameterGrid22 = {"C": hp.loguniform("C", log(1e-3), log(1e3)),
+                        "gamma": hp.loguniform("gamma", log(1e-3), log(1e3)),
+                        "nu": hp.loguniform("nu", log(1e-4), log(0.5))}
+HyperparameterGridString22 = """{"C": hp.loguniform("C", log(1e-3), log(1e3)),"gamma": hp.loguniform("gamma", log(1e-3), log(1e3)), "nu":hp.loguniform("nu",log(1e-3),log(1))}"""
+BB22 = BB(nusvr_bayesian_predictor, HyperparameterGrid22, HyperparameterGridString22)
 
 BB3 = BB(rf_predictor, None, None)
-HyperparameterGrid3 = {"n_estimators":scope.int(hp.qloguniform("n_estimators", log(1),log(100),1)),"max_depth":scope.int(hp.qloguniform("max_depth",log(1),log(100),1))}
+HyperparameterGrid3 = {"n_estimators": scope.int(hp.qloguniform("n_estimators", log(1), log(100), 1)),
+                       "max_depth": scope.int(hp.qloguniform("max_depth", log(1), log(100), 1))}
 HyperparameterGridString3 = """{"n_estimators":scope.int(hp.qloguniform("n_estimators", log(1),log(100),1)),"max_depth":scope.int(hp.qloguniform("max_depth",log(1),log(100),1))}"""
 BB32 = BB(rf_bayesian, HyperparameterGrid3, HyperparameterGridString3)
 
-HyperparameterGrid4 = [{'hidden_layer_sizes':[[1],[10],[100],[1000],[1, 1],[10, 10], [100, 100],[1,10],[1,100],[10,100],[100,10],[100,1],[10,1],[1, 1, 1],[10, 10, 10],[100,100,100]]}]
+HyperparameterGrid4 = [{'hidden_layer_sizes': [[1], [10], [100], [1000], [1, 1], [10, 10], [100, 100], [1, 10],
+                                               [1, 100], [10, 100], [100, 10], [100, 1], [10, 1], [1, 1, 1],
+                                               [10, 10, 10], [100, 100, 100]]}]
 BB4 = BB(ann_grid_search_predictor, HyperparameterGrid4, str(HyperparameterGrid4))
 
 HyperparameterGrid5 = hp.choice("number_of_layers",
-                               [
-                                   {"1layer": scope.int(hp.qloguniform("1.1", log(1), log(210), 1))},
-                                   {"2layer": [scope.int(hp.qloguniform("1.2", log(1), log(105), 1)),
-                                               scope.int(hp.qloguniform("2.2", log(1), log(105), 1))]},
-                                   {"3layer": [scope.int(hp.qloguniform("1.3", log(1), log(70), 1)),
-                                               scope.int(hp.qloguniform("2.3", log(1), log(70), 1)),
-                                               scope.int(hp.qloguniform("3.3", log(1), log(70), 1))]}
-                               ])
+                                [
+                                    {"1layer": scope.int(hp.qloguniform("1.1", log(1), log(210), 1))},
+                                    {"2layer": [scope.int(hp.qloguniform("1.2", log(1), log(105), 1)),
+                                                scope.int(hp.qloguniform("2.2", log(1), log(105), 1))]},
+                                    {"3layer": [scope.int(hp.qloguniform("1.3", log(1), log(70), 1)),
+                                                scope.int(hp.qloguniform("2.3", log(1), log(70), 1)),
+                                                scope.int(hp.qloguniform("3.3", log(1), log(70), 1))]}
+                                ])
 HyperparameterGridString5 = """hp.choice("number_of_layers",
                     [
                     {"1layer": scope.int(hp.qloguniform("1.1", log(1), log(210), 1))},
@@ -345,42 +420,54 @@ HyperparameterGridString5 = """hp.choice("number_of_layers",
                     ])"""  # set this as a string in order to have a exact"screenshot" of the hyperparametergrid to save it in the summary
 BB5 = BB(ann_bayesian_predictor, HyperparameterGrid5, HyperparameterGridString5)
 
-HyperparameterGrid6 = [{'n_estimators': [10, 100, 1000], 'max_depth': [1, 10, 100], 'learning_rate': [0.01, 0.1, 0.5, 1], 'loss': ['ls', 'lad', 'huber', 'quantile']}] #Learning_rate in range 0 to 1
+HyperparameterGrid6 = [
+    {'n_estimators': [10, 100, 1000], 'max_depth': [1, 10, 100], 'learning_rate': [0.01, 0.1, 0.5, 1],
+     'loss': ['ls', 'lad', 'huber', 'quantile']}]  # Learning_rate in range 0 to 1
 BB6 = BB(gradientboost_gridsearch, HyperparameterGrid6, str(HyperparameterGrid6))
 
-HyperparameterGrid7 = {"n_estimators": scope.int(hp.qloguniform("n_estimators", log(1), log(1e3), 1)), "max_depth": scope.int(hp.qloguniform("max_depth", log(1),log(100), 1)), "learning_rate":hp.loguniform("learning_rate", log(1e-2), log(1)), "loss":hp.choice("loss",["ls", "lad", "huber", "quantile"])} #if anything except numbers is changed, please change the respective code lines for converting notation style in the gradienboost_bayesian function
+HyperparameterGrid7 = {"n_estimators": scope.int(hp.qloguniform("n_estimators", log(1), log(1e3), 1)),
+                       "max_depth": scope.int(hp.qloguniform("max_depth", log(1), log(100), 1)),
+                       "learning_rate": hp.loguniform("learning_rate", log(1e-2), log(1)), "loss": hp.choice("loss",
+                                                                                                             ["ls",
+                                                                                                              "lad",
+                                                                                                              "huber",
+                                                                                                              "quantile"])}  # if anything except numbers is changed, please change the respective code lines for converting notation style in the gradienboost_bayesian function
 HyperparameterGridString7 = """{"n_estimators": scope.int(hp.qloguniform("n_estimators", log(1), log(1e3), 1)), "max_depth": scope.int(hp.qloguniform("max_depth", log(1),log(100), 1)), "learning_rate":hp.loguniform("learning_rate", log(1e-2), log(1)), "loss":hp.choice("loss",["ls", "lad", "huber", "quantile"])}"""  # set this as a string in order to have a exact"screenshot" of the hyperparametergrid to save it in the summary
 BB7 = BB(gradientboost_bayesian, HyperparameterGrid7, HyperparameterGridString7)
 
-HyperparameterGrid8 = [{'alpha': [1000000, 100000, 10000, 1000, 100, 10, 1, 0.1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10]}]
+HyperparameterGrid8 = [
+    {'alpha': [1000000, 100000, 10000, 1000, 100, 10, 1, 0.1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10]}]
 BB8 = BB(lasso_grid_search_predictor, HyperparameterGrid8, str(HyperparameterGrid8))
 
 HyperparameterGrid9 = {"alpha": hp.loguniform("alpha", log(1e-10), log(1e6))}
 HyperparameterGridString9 = """{"alpha": hp.loguniform("alpha", log(1e-10), log(1e6))}"""  # set this as a string in order to have a exact"screenshot" of the hyperparametergrid to save it in the summary
 BB9 = BB(lasso_bayesian, HyperparameterGrid9, str(HyperparameterGridString9))
 
-def modelselection(_X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError", IndividualModel="Error", Documentation=False):
-    #Trains and tests all (bayesian) models and returns the best of them, also saves it in an txtfile.
+
+def modelselection(_X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError", IndividualModel="Error",
+                   Documentation=False):
+    # Trains and tests all (bayesian) models and returns the best of them, also saves it in an txtfile.
     Score_RF = BB3.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
-    Score_ANN,AIC_ANN,BIC_ANN = BB5.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+    Score_ANN, AIC_ANN, BIC_ANN = BB5.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel,
+                                                    Documentation)
     Score_GB = BB7.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     Score_Lasso = BB9.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     Score_SVR = BB2.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
 
-    Score_list = [0,1,2,3,4]
-    Score_list[0]=Score_SVR
-    Score_list[1]=Score_RF
-    Score_list[2]=AIC_ANN
-    Score_list[3]=Score_GB
-    Score_list[4]=Score_Lasso
+    Score_list = [0, 1, 2, 3, 4]
+    Score_list[0] = Score_SVR
+    Score_list[1] = Score_RF
+    Score_list[2] = AIC_ANN
+    Score_list[3] = Score_GB
+    Score_list[4] = Score_Lasso
 
     print(Score_list)
-    #Todo: if Scoring function Score max; if Scoring function some error: min
-    #BestScore = max(Score_list)
+    # Todo: if Scoring function Score max; if Scoring function some error: min
+    # BestScore = max(Score_list)
     # noch irrelevant da nur ANN berechnet wird
-    BestScore = min(Score_list) #für AIC
+    BestScore = min(Score_list)  # für AIC
 
-    if Score_list[0]==BestScore:
+    if Score_list[0] == BestScore:
         __BestModel = "SVR"
     if Score_list[1] == BestScore:
         __BestModel = "RF"
@@ -391,44 +478,53 @@ def modelselection(_X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError",
     if Score_list[4] == BestScore:
         __BestModel = "Lasso"
 
-    #state best model in txt file
+    # state best model in txt file
     f = open(os.path.join(SV.ResultsFolderSubTest, "BestModel.txt"), "w+")
-    f.write("The best model is %s with an accuracy of %s" %(__BestModel, BestScore))
+    f.write("The best model is %s with an accuracy of %s" % (__BestModel, BestScore))
     f.close()
     return BestScore
-#-----------------------------------------------------------------------------------------------------------------------
-def embedded__recursive_feature_selection(_X_train, _Y_train, _X_test, _Y_test, Estimator, N_features_to_select, CV, Documentation=False):
-    #Special feature selection method for the feature selection within the final bayesian optimization (def Bayes())
+
+
+# -----------------------------------------------------------------------------------------------------------------------
+def embedded__recursive_feature_selection(_X_train, _Y_train, _X_test, _Y_test, Estimator, N_features_to_select, CV,
+                                          Documentation=False):
+    # Special feature selection method for the feature selection within the final bayesian optimization (def Bayes())
     def index_column_keeper(X_Data, Y_Data, support, X_Data_transformed):
         columns = X_Data.columns
         rows = X_Data.index
         labels = [columns[x] for x in support if
                   x >= 0]  # get the columns which shall be kept by the transformer(the selected features)
         X = pd.DataFrame(X_Data_transformed, columns=labels,
-                                index=rows)  # creates a dataframe reassigning the names of the features as column header and the index as index
+                         index=rows)  # creates a dataframe reassigning the names of the features as column header and the index as index
         Y = pd.DataFrame(Y_Data, columns=[SV.NameOfSignal])  # create dataframe of y
         return X, Y
+
     if N_features_to_select == "automatic":
         selector = RFECV(estimator=Estimator, step=1, cv=CV)
         selector = selector.fit(_X_train, _Y_train)
-        print("Ranks of all Features %s" %selector.ranking_)
+        print("Ranks of all Features %s" % selector.ranking_)
         Features_transformed = selector.transform(_X_train)
         Features_transformed_test = selector.transform(_X_test)
-        Features_transformed, _Y_train = index_column_keeper(_X_train, _Y_train, selector.get_support(indices=True), Features_transformed)
-        Features_transformed_test, _Y_test = index_column_keeper(_X_test, _Y_test, selector.get_support(indices=True), Features_transformed_test)
+        Features_transformed, _Y_train = index_column_keeper(_X_train, _Y_train, selector.get_support(indices=True),
+                                                             Features_transformed)
+        Features_transformed_test, _Y_test = index_column_keeper(_X_test, _Y_test, selector.get_support(indices=True),
+                                                                 Features_transformed_test)
     else:
         selector = RFE(estimator=Estimator, n_features_to_select=N_features_to_select, step=1)
         selector = selector.fit(_X_train, _Y_train)
-        print("Ranks of all Features %s" %selector.ranking_)
+        print("Ranks of all Features %s" % selector.ranking_)
         Features_transformed = selector.transform(_X_train)
         Features_transformed_test = selector.transform(_X_test)
-        Features_transformed, _Y_train = index_column_keeper(_X_train, _Y_train, selector.get_support(indices=True), Features_transformed)
-        Features_transformed_test, _Y_test = index_column_keeper(_X_test, _Y_test, selector.get_support(indices=True), Features_transformed_test)
+        Features_transformed, _Y_train = index_column_keeper(_X_train, _Y_train, selector.get_support(indices=True),
+                                                             Features_transformed)
+        Features_transformed_test, _Y_test = index_column_keeper(_X_test, _Y_test, selector.get_support(indices=True),
+                                                                 Features_transformed_test)
     print("EMBEDDED FEATURE SELECTION")
-    if Documentation==False:
+    if Documentation == False:
         return Features_transformed, _Y_train, Features_transformed_test, _Y_test
-    if Documentation==True:
-        def merge_signal_and_features_embedded(X_Data, Y_Data, support, X_Data_transformed): #Todo: could be pulled directly from SharedVariables (check for how to get the right "NameOfSignal"
+    if Documentation == True:
+        def merge_signal_and_features_embedded(X_Data, Y_Data, support,
+                                               X_Data_transformed):  # Todo: could be pulled directly from SharedVariables (check for how to get the right "NameOfSignal"
             columns = X_Data.columns
             rows = X_Data.index
             labels = [columns[x] for x in support if
@@ -438,9 +534,12 @@ def embedded__recursive_feature_selection(_X_train, _Y_train, _X_test, _Y_test, 
             Signal = pd.DataFrame(Y_Data, columns=[SV.NameOfSignal])  # create dataframe of y
             Data = pd.concat([Signal, Features], axis=1)
             return Data
-        _Data_Train=merge_signal_and_features_embedded(_X_train, _Y_train,selector.get_support(indices=True), Features_transformed) #merge signal and features
-        _Data_Test=merge_signal_and_features_embedded(_X_test,_Y_test,selector.get_support(indices=True),Features_transformed_test) #merge signal and features
-        BestData = pd.concat([_Data_Train, _Data_Test], axis=0) #merge test and train period back together
+
+        _Data_Train = merge_signal_and_features_embedded(_X_train, _Y_train, selector.get_support(indices=True),
+                                                         Features_transformed)  # merge signal and features
+        _Data_Test = merge_signal_and_features_embedded(_X_test, _Y_test, selector.get_support(indices=True),
+                                                        Features_transformed_test)  # merge signal and features
+        BestData = pd.concat([_Data_Train, _Data_Test], axis=0)  # merge test and train period back together
         return Features_transformed, _Y_train, Features_transformed_test, _Y_test, BestData
 
 
@@ -448,15 +547,21 @@ def all_models(Model, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerErro
                Documentation=False):
     # This function is just to "centralize" the train and predict operations so that additional options can be added easier
     if Model == "SVR":
-        Score,AIC,BIC = BB2.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+        Score = BB2.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     if Model == "NuSVR":
-        Score,AIC,BIC = BB22.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+        Score, AIC, BIC = BB22.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel,
+                                             Documentation)
     if Model == "RF":
         Score = BB3.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     if Model == "RF_bay":
-        Score,AIC,BIC = BB32.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
-    if Model == "ANN":
-        Score,AIC,BIC = BB5.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
+        Score, AIC, BIC = BB32.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel,
+                                             Documentation)
+    if Model == "ANN" and Documentation:    # afu: this is needed because this call of BB5 returns Score, AIC and BIC in main_OnlyHyParaOpti(). Documentation will be True in that case
+        Score, AIC, BIC = BB5.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel,
+                                            Documentation)
+    if Model == "ANN" and not Documentation:    # Documentation is False in main_FinalBayes(). In that Cas BB5 will only return Score
+        Score = BB5.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel,
+                                            Documentation)
     if Model == "GB":
         Score = BB7.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     if Model == "Lasso":
@@ -471,14 +576,18 @@ def all_models(Model, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerErro
         Score = BB6.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     if Model == "Lasso_grid":
         Score = BB8.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
-    return Score ,AIC,BIC
+    if Model == ("NuSVR" or "RF_bay" or "ANN"):
+        return Score, AIC, BIC
+    else:
+        return Score
+
 
 def pre_handling(OnlyPredict):
-    #define path to data source files '.xls' & '.pickle'
+    # define path to data source files '.xls' & '.pickle'
     RootDir = os.path.dirname(os.path.realpath(__file__))
     PathToData = os.path.join(RootDir, 'Data')
 
-    #Set Folder for Results
+    # Set Folder for Results
     ResultsFolder = os.path.join(RootDir, "Results", SV.NameOfData, SV.NameOfExperiment)
     PathToPickles = os.path.join(ResultsFolder, "Pickles")
     # set folder for logging results
@@ -491,11 +600,11 @@ def pre_handling(OnlyPredict):
     ResultsFolderSubTest = os.path.join(SV.ResultsFolder, 'Predictions', SV.NameOfSubTest)
     SV.ResultsFolderSubTest = ResultsFolderSubTest
 
-    #check if experiment folder is present
+    # check if experiment folder is present
     if os.path.isdir(SV.ResultsFolder) == False:
         sys.exit("Set a valid experiment folder via NameOfData and NameOfExperiment")
 
-    #check if test results are safed in the right folder:
+    # check if test results are safed in the right folder:
     if OnlyPredict != True:
         if os.path.isdir(SV.ResultsFolderSubTest) == True:
             Answer = input("Are you sure you want to overwrite the data in %s: " % SV.ResultsFolderSubTest)
@@ -506,64 +615,69 @@ def pre_handling(OnlyPredict):
         else:
             os.makedirs(SV.ResultsFolderSubTest)
 
-    #Take Tuned data, build Train and Test Sets, and split them into signal and features
+    # Take Tuned data, build Train and Test Sets, and split them into signal and features
     NameOfSignal = joblib.load(os.path.join(SV.ResultsFolder, "NameOfSignal.save"))
-    SV.NameOfSignal = NameOfSignal #Todo: check whether NameOfSignal fits with GUI (maybe one wants to define it by himself)
+    SV.NameOfSignal = NameOfSignal  # Todo: check whether NameOfSignal fits with GUI (maybe one wants to define it by himself)
 
     # Take FinalInputData, build Train and Test Sets, and split them into signal and features
     if OnlyPredict == True:
-        ImportBaye = os.path.isfile(os.path.join(SV.ResultsFolderSubTest, "BestData_%s.xlsx"%(SV.NameOfSubTest))) #is True if FinalBayes was used, this implies that we want to load the data that was produced by finalbayes
+        ImportBaye = os.path.isfile(os.path.join(SV.ResultsFolderSubTest, "BestData_%s.xlsx" % (
+            SV.NameOfSubTest)))  # is True if FinalBayes was used, this implies that we want to load the data that was produced by finalbayes
     else:
-        ImportBaye = False #if onlypredict isn´t used we (up to now) don´t want to load from finalbayes
-    if  ImportBaye == False:
-        Data = pd.read_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_FeatureSelection" + '.pickle')) #import from data tuning
+        ImportBaye = False  # if onlypredict isn´t used we (up to now) don´t want to load from finalbayes
+    if ImportBaye == False:
+        Data = pd.read_pickle(
+            os.path.join(SV.PathToPickles, "ThePickle_from_FeatureSelection" + '.pickle'))  # import from data tuning
     if ImportBaye == True:
-        Data = pd.read_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_%s" %SV.NameOfSubTest + '.pickle')) #import the data set produced by "final bayesian optimization"
+        Data = pd.read_pickle(os.path.join(SV.PathToPickles,
+                                           "ThePickle_from_%s" % SV.NameOfSubTest + '.pickle'))  # import the data set produced by "final bayesian optimization"
 
-    (Data_Train, Data_Test) = manual_train_test_period_select(Data=Data, StartDateTrain=SV.StartTraining, EndDateTrain= SV.EndTraining, StartDateTest=SV.StartTesting, EndDateTest=SV.EndTesting)
+    (Data_Train, Data_Test) = manual_train_test_period_select(Data=Data, StartDateTrain=SV.StartTraining,
+                                                              EndDateTrain=SV.EndTraining,
+                                                              StartDateTest=SV.StartTesting, EndDateTest=SV.EndTesting)
 
-    #shuffles data randomly if wished
+    # shuffles data randomly if wished
     if SV.GlobalShuffle == True:
         Data_Train = shuffle(Data_Train)
-        #Data_Test = shuffle(Data_Test) #not necessary since experiments showed that the order of test samples does not affect the >prediction<
-
+        # Data_Test = shuffle(Data_Test) #not necessary since experiments showed that the order of test samples does not affect the >prediction<
 
     (_X_train, _Y_train) = SV.split_signal_and_features(Data_Train)
     (_X_test, _Y_test) = SV.split_signal_and_features(Data_Test)
-    Indexer = _X_test.index #for tracking the orignal index(timestamps) of the test data
+    Indexer = _X_test.index  # for tracking the orignal index(timestamps) of the test data
 
     return _X_train, _Y_train, _X_test, _Y_test, Indexer, Data
 
-#Final Bayes function
-def Bayes(Model,_X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
-    #Here the final bayesian optimization is done
+
+# Final Bayes function
+def Bayes(Model, _X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
+    # Here the final bayesian optimization is done
     Totaltimestart = time.time()
-    if Model == "Baye": #set the bayesian parameter space
-        params = {"IndivModel":hp.choice("IndivModel",
-                       [
-                           {"IndivModel_baye": "No"},
-                           {"IndivModel_baye": "hourly"},
-                           {"IndivModel_baye": "week_weekend"}
-                       ]),
-                "n_F" : hp.qloguniform("n_F", log(1), log(len(list(_X_test))), 1),
-                "Model":hp.choice("Model",
-                       [
-                           {"Model": "SVR"},
-                           {"Model": "ANN"},
-                           {"Model": "GB"},
-                           {"Model": "RF"},
-                           {"Model": "Lasso"}
-                       ])
-                }
+    if Model == "Baye":  # set the bayesian parameter space
+        params = {"IndivModel": hp.choice("IndivModel",
+                                          [
+                                              {"IndivModel_baye": "No"},
+                                              {"IndivModel_baye": "hourly"},
+                                              {"IndivModel_baye": "week_weekend"}
+                                          ]),
+                  "n_F": hp.qloguniform("n_F", log(1), log(len(list(_X_test))), 1),
+                  "Model": hp.choice("Model",
+                                     [
+                                         {"Model": "SVR"},
+                                         {"Model": "ANN"},
+                                         {"Model": "GB"},
+                                         {"Model": "RF"},
+                                         {"Model": "Lasso"}
+                                     ])
+                  }
     else:
-        params = {"IndivModel":hp.choice("IndivModel",
-                       [
-                           {"IndivModel_baye": "No"},
-                           {"IndivModel_baye": "hourly"},
-                           {"IndivModel_baye": "week_weekend"}
-                       ]),
-            "n_F" : hp.qloguniform("n_F", log(1), log(len(list(_X_test))), 1) #Was ist das? Anzahl der Feautures?
-            }
+        params = {"IndivModel": hp.choice("IndivModel",
+                                          [
+                                              {"IndivModel_baye": "No"},
+                                              {"IndivModel_baye": "hourly"},
+                                              {"IndivModel_baye": "week_weekend"}
+                                          ]),
+                  "n_F": hp.qloguniform("n_F", log(1), log(len(list(_X_test))), 1)
+                  }
 
     """
     #Todo: just for checking; delete afterwards
@@ -583,78 +697,84 @@ def Bayes(Model,_X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
 
     def hyperopt(params, _X_train, _Y_train, _X_test, _Y_test, Indexer):
         t_start = time.time()
-        if Model=="Baye": #if model is chosen by bayesian optimization, set Model equal to the one from the params
-            _Model=params["Model"]["Model"]
+        if Model == "Baye":  # if model is chosen by bayesian optimization, set Model equal to the one from the params
+            _Model = params["Model"]["Model"]
         else:
-            _Model=Model
+            _Model = Model
 
-        (XTr, YTr, XTe, YTe) = embedded__recursive_feature_selection(_X_train, _Y_train, _X_test, _Y_test, SV.EstimatorEmbedded, params["n_F"], SV.GlobalCV_MT) #create the specific train and test data
-        Score, AIC ,BIC= all_models(_Model, XTr, YTr, XTe, YTe, Indexer, str(params["IndivModel"]["IndivModel_baye"]), False)
+        (XTr, YTr, XTe, YTe) = embedded__recursive_feature_selection(_X_train, _Y_train, _X_test, _Y_test,
+                                                                     SV.EstimatorEmbedded, params["n_F"],
+                                                                     SV.GlobalCV_MT)  # create the specific train and test data
+        Score = all_models(_Model, XTr, YTr, XTe, YTe, Indexer, str(params["IndivModel"]["IndivModel_baye"]), False)
         t_end = time.time()
-        logtime = t_end-t_start
-        print("MODELTUNING HYPEROPT")
-        print("Params per iteration: %s \ with the R2score %.3f, AICscore %.5f and BICscore %.5f took %.2fseconds" % (params, Score, AIC,BIC, (logtime)))
-        return Score,AIC,BIC
+        logtime = t_end - t_start
+        print("Params per iteration: %s \ with the Score score %.3f, took %.2fseconds" % (params, Score, (logtime)))
+        return Score
 
     def f(params):
-        print("MODELTUNING F")
-        Score,AIC,BIC= hyperopt(params,_X_train, _Y_train, _X_test, _Y_test, Indexer) #gets the score of the model
-        return {"loss":AIC, "status": STATUS_OK} #fmin always minimizes the loss function, we want acc to maximize-> (-acc)
+        acc = hyperopt(params, _X_train, _Y_train, _X_test, _Y_test, Indexer)  # gets the score of the model
+        return {"loss": -acc,
+                "status": STATUS_OK}  # fmin always minimizes the loss function, we want acc to maximize-> (-acc)
 
-    #do the actual bayesian optimization
-    trials = Trials() #not used at the moment, only for tracking the intrinsic parameters of the bayesian optimization
-    BestParams = fmin(f, params, algo=tpe.suggest, max_evals=SV.MaxEval_Bayes, trials=trials) #Do the optimization to find the best settings(parameters)
-    print("ICH GEBE PARAMETER AUS")  #wird nur einmal aufgerufen
+    # do the actual bayesian optimization
+    trials = Trials()  # not used at the moment, only for tracking the intrinsic parameters of the bayesian optimization
+    BestParams = fmin(f, params, algo=tpe.suggest, max_evals=SV.MaxEval_Bayes,
+                      trials=trials)  # Do the optimization to find the best settings(parameters)
+    print("ICH GEBE PARAMETER AUS")  # wird nur einmal aufgerufen
     print(BestParams)
 
-    #converting notation style
-    if Model=="Baye":
-        Best_IndivModel = ["No", "hourly","week_weekend"][BestParams["IndivModel"]]
-        Best_Model = ["SVR","ANN","GB","RF","Lasso"][BestParams["Model"]]
+    # converting notation style
+    if Model == "Baye":
+        Best_IndivModel = ["No", "hourly", "week_weekend"][BestParams["IndivModel"]]
+        Best_Model = ["SVR", "ANN", "GB", "RF", "Lasso"][BestParams["Model"]]
         Best_n_F = BestParams["n_F"]
-        BestParams = {'IndivModel': {'IndivModel_baye': Best_IndivModel}, 'Model': {'Model': Best_Model}, 'n_F': Best_n_F}
+        BestParams = {'IndivModel': {'IndivModel_baye': Best_IndivModel}, 'Model': {'Model': Best_Model},
+                      'n_F': Best_n_F}
     else:
-        Best_IndivModel = ["No", "hourly","week_weekend"][BestParams["IndivModel"]]
+        Best_IndivModel = ["No", "hourly", "week_weekend"][BestParams["IndivModel"]]
         Best_n_F = BestParams["n_F"]
         BestParams = {'IndivModel': {'IndivModel_baye': Best_IndivModel}, 'n_F': Best_n_F}
 
-    #redo the training and testing with the found "BestParams", also document the results
+    # redo the training and testing with the found "BestParams", also document the results
     if Model == "Baye":  # if model is chosen by bayesian optimization, set Model equal to the one from the bestparams
         _Model = BestParams["Model"]["Model"]
     else:
         _Model = Model
 
     (XTr, YTr, XTe, YTe, BestData) = embedded__recursive_feature_selection(_X_train, _Y_train, _X_test, _Y_test,
-                                                                 SV.EstimatorEmbedded, BestParams["n_F"], SV.GlobalCV_MT, True)
+                                                                           SV.EstimatorEmbedded, BestParams["n_F"],
+                                                                           SV.GlobalCV_MT, True)
+    # afu: Value seems not to be used anymore
+    # # Todo: Here you could use higher Max_eval for the last final training with best settings(Add specific max eval hyparatuning to the functions)
+    # Score = all_models(_Model, XTr, YTr, XTe, YTe, Indexer, str(BestParams["IndivModel"]["IndivModel_baye"]),
+    #                    True)  # werte werden nicht mehr benutzt
 
-    #Todo: Here you could use higher Max_eval for the last final training with best settings(Add specific max eval hyparatuning to the functions)
-    Score,AIC,BIC = all_models(_Model, XTr, YTr, XTe, YTe, Indexer, str(BestParams["IndivModel"]["IndivModel_baye"]), True) #werte werden nicht mehr benutzt
+    # Document the Results and settings of the final bayesian optimization
+    Totaltimeend = time.time()
 
-    #Document the Results and settings of the final bayesian optimization
-    Totaltimeend=time.time()
-
-    if SV.logresults == True:
+    if SV.logresults:
         # Log Data
-        index = list(range(1,(len(traintimelist)+1)))
+        index = list(range(1, (len(traintimelist) + 1)))
         aicweights = LR.calc_weights(aiclist)
         bicweights = LR.calc_weights(biclist)
-        #print(len(index))
-        print("Length of timelist: %d" %(len(traintimelist)))
-        print("Length of aiclist: %d" %(len(aiclist)))
-        print("Length of biclist: %d" %(len(biclist)))
-        print("Length of paramlist: %d" %(len(paramlist)))
-        print("Length of numparamlist: %d" %(len(numparamlist)))
-        print("Length of r2list: %d" %(len(r2list)))
-        data = np.array([traintimelist,aiclist,aicweights,biclist,bicweights,paramlist,numparamlist,r2list]).T
+        # print(len(index))
+        print("Length of timelist: %d" % (len(traintimelist)))
+        print("Length of aiclist: %d" % (len(aiclist)))
+        print("Length of biclist: %d" % (len(biclist)))
+        print("Length of paramlist: %d" % (len(paramlist)))
+        print("Length of numparamlist: %d" % (len(numparamlist)))
+        print("Length of r2list: %d" % (len(r2list)))
+        data = np.array([traintimelist, aiclist, aicweights, biclist, bicweights, paramlist, numparamlist, r2list]).T
         print("Logging Dokumentation")
-        dflog = pd.DataFrame(data,columns=['Time', 'AIC','AICWeights','BIC','BICWeights','Params','AnzahlParams','R2'])
-        logFile= os.path.join(SV.ResultsFolderSubTest, "Log_Results_%s.xlsx"%(SV.NameOfSubTest))
+        dflog = pd.DataFrame(data,
+                             columns=['Time', 'AIC', 'AICWeights', 'BIC', 'BICWeights', 'Params', 'AnzahlParams', 'R2'])
+        logFile = os.path.join(SV.ResultsFolderSubTest, "Log_Results_%s.xlsx" % (SV.NameOfSubTest))
         writer = pd.ExcelWriter(logFile)
         dflog.to_excel(writer, float_format='%.6f')
         writer.save()
-        #plot Data
-        plot_Results(Index=index,Time=traintimelist,AIC=aiclist,numparam= numparamlist,R2=r2list,SavePath=SV.ResultsFolderSubTest,BlackBox=Model, NameOfSubTest=SV.NameOfSubTest)
-
+        # plot Data
+        plot_Results(Index=index, Time=traintimelist, AIC=aiclist, numparam=numparamlist, R2=r2list,
+                     SavePath=SV.ResultsFolderSubTest, BlackBox=Model, NameOfSubTest=SV.NameOfSubTest)
 
     # save summary of setup and evaluation
     dfSummary = pd.DataFrame(index=[0])
@@ -666,124 +786,147 @@ def Bayes(Model,_X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
     dfSummary['Best number of features'] = Best_n_F
     dfSummary['Best Features incl. Signal'] = str(list(BestData))
     dfSummary['Best parameter in original shape'] = str(BestParams)
-    dfSummary['Computation Time in seconds'] = str((Totaltimeend-Totaltimestart))
+    dfSummary['Computation Time in seconds'] = str((Totaltimeend - Totaltimestart))
     dfSummary = dfSummary.T
     # write summary of setup and evaluation in excel File
-    SummaryFile = os.path.join(SV.ResultsFolderSubTest, "Summary_FinalBayes_%s.xlsx"%(SV.NameOfSubTest))
+    SummaryFile = os.path.join(SV.ResultsFolderSubTest, "Summary_FinalBayes_%s.xlsx" % (SV.NameOfSubTest))
     writer = pd.ExcelWriter(SummaryFile)
     dfSummary.to_excel(writer, float_format='%.6f')
     writer.save()
 
-    #export BestData to Excel
-    BestData = Data[list(BestData)] #make sure BestData contains the whole available period(not only the period used for training and prediction)
-    SaveFileName_excel = os.path.join(SV.ResultsFolderSubTest, "BestData_%s.xlsx"%(SV.NameOfSubTest))
+    # export BestData to Excel
+    BestData = Data[list(
+        BestData)]  # make sure BestData contains the whole available period(not only the period used for training and prediction)
+    SaveFileName_excel = os.path.join(SV.ResultsFolderSubTest, "BestData_%s.xlsx" % (SV.NameOfSubTest))
     BestData.to_excel(SaveFileName_excel)
 
-    #save dataframe in an pickle
-    BestData.to_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_%s.pickle"%SV.NameOfSubTest))
+    # save dataframe in an pickle
+    BestData.to_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_%s.pickle" % SV.NameOfSubTest))
 
-#OnlyPredict functions
-def iterative_evaluation(TestData, Model, horizon, NameOfPredictor): #horizon= amount of samples to predict in the future
+
+# OnlyPredict functions
+def iterative_evaluation(TestData, Model, horizon,
+                         NameOfPredictor):  # horizon= amount of samples to predict in the future
     'Does an special evaluation which iteratively scores a period with the length of horizon in the whole period of TunedData. It returns the list of scores'
-    #Todo: think of inserting this "iterative evaluation" to the regular scoring while training and testing(not only for onlypredict)
-    n_folds = len(TestData)/horizon #get how many times the horizon fits into the data
-    n_folds = int(n_folds) #cut of incomplete horizons
-    #TunedData.index = range(len(TunedData)) #give them dataframe an counter index
+    # Todo: think of inserting this "iterative evaluation" to the regular scoring while training and testing(not only for onlypredict)
+    n_folds = len(TestData) / horizon  # get how many times the horizon fits into the data
+    n_folds = int(n_folds)  # cut of incomplete horizons
+    # TunedData.index = range(len(TunedData)) #give them dataframe an counter index
     (TestData_X, TestData_Y) = SV.split_signal_and_features(TestData)
 
-    if os.path.isfile(os.path.join(SV.ResultsFolder, "ScalerTracker.save")): #if scaler was used
-        ScaleTracker_Signal = joblib.load(os.path.join(SV.ResultsFolder, "ScalerTracker.save")) #load used scaler
+    if os.path.isfile(os.path.join(SV.ResultsFolder, "ScalerTracker.save")):  # if scaler was used
+        ScaleTracker_Signal = joblib.load(os.path.join(SV.ResultsFolder, "ScalerTracker.save"))  # load used scaler
 
-    fold_list=[]
+    fold_list = []
     for i in range(n_folds):
-        measured_fold = TestData_Y[(horizon*i):(horizon*(i + 1))]
-        Fold = TestData_X[(horizon*i):(horizon*(i+1))]
-        predicted_fold, Nothing = Model(NameOfPredictor,Fold) #predict on that fold
-        #rescale
+        measured_fold = TestData_Y[(horizon * i):(horizon * (i + 1))]
+        Fold = TestData_X[(horizon * i):(horizon * (i + 1))]
+        predicted_fold, Nothing = Model(NameOfPredictor, Fold)  # predict on that fold
+        # rescale
         predicted_fold = ScaleTracker_Signal.inverse_transform(SV.reshape(predicted_fold))
         measured_fold = ScaleTracker_Signal.inverse_transform(SV.reshape(measured_fold))
 
         fold_list.append([measured_fold, predicted_fold])
     return fold_list
 
-def mean_scoring(fold_list, errormetric): #processes the list of scores from "iterative_evaluation"
+
+def mean_scoring(fold_list, errormetric):  # processes the list of scores from "iterative_evaluation"
     'The list of scores (fold_list) is processed and the mean of all scores and the standard deviation over all scores are computed'
     errorlist = []
     for i in range(len(fold_list)):
-        score = errormetric(fold_list[i][0],fold_list[i][1])
+        score = errormetric(fold_list[i][0], fold_list[i][1])
         errorlist.append(score)
-    mean_scores = statistics.mean(errorlist) #mean of all scores
-    SD_scores = statistics.pstdev(errorlist) #standard deviation of all scores
+    mean_scores = statistics.mean(errorlist)  # mean of all scores
+    SD_scores = statistics.pstdev(errorlist)  # standard deviation of all scores
     return mean_scores, SD_scores, errorlist, errormetric
 
-def predict(NameOfPredictor,_X_test):
+
+def predict(NameOfPredictor, _X_test):
     'Loads trained models from previous trainings and does a prediction for the respective period of _X_test. Individual models are regarded.'
-    if os.path.isfile(os.path.join(SV.ResultsFolderSubTest, "BestModels", "%s.save"%(NameOfPredictor))): #to find out which indivmodel was used
-        Predictor = joblib.load(os.path.join(SV.ResultsFolderSubTest, "BestModels", "%s.save" %(NameOfPredictor))) #load the best and trained model from previous tuning and training
+    if os.path.isfile(os.path.join(SV.ResultsFolderSubTest, "BestModels",
+                                   "%s.save" % (NameOfPredictor))):  # to find out which indivmodel was used
+        Predictor = joblib.load(os.path.join(SV.ResultsFolderSubTest, "BestModels", "%s.save" % (
+            NameOfPredictor)))  # load the best and trained model from previous tuning and training
         if SV.OnlyPredictRecursive == False:
             Predicted = Predictor.predict(_X_test)
         elif SV.OnlyPredictRecursive == True:
             Features_test_i = recursive(_X_test, Predictor)
-            predictstarttime =time.time()
+            predictstarttime = time.time()
             Predicted = Predictor.predict(Features_test_i)
             predictendtime = time.time()
-            predicttime = predictendtime-predictstarttime
+            predicttime = predictendtime - predictstarttime
         IndividualModel = "None"
-    elif os.path.isfile(os.path.join(SV.ResultsFolderSubTest, "BestModels", "23_%s.save"%(NameOfPredictor))): #for hourly models
-        indiv_predictor = indiv_model_onlypredict(indiv_splitter_instance=indiv_splitter(hourly_splitter), Features_test=_X_test, ResultsFolderSubTest=SV.ResultsFolderSubTest, NameOfPredictor=NameOfPredictor, Recursive=SV.OnlyPredictRecursive)
+    elif os.path.isfile(
+            os.path.join(SV.ResultsFolderSubTest, "BestModels", "23_%s.save" % (NameOfPredictor))):  # for hourly models
+        indiv_predictor = indiv_model_onlypredict(indiv_splitter_instance=indiv_splitter(hourly_splitter),
+                                                  Features_test=_X_test, ResultsFolderSubTest=SV.ResultsFolderSubTest,
+                                                  NameOfPredictor=NameOfPredictor, Recursive=SV.OnlyPredictRecursive)
         Predicted = indiv_predictor.main()
         IndividualModel = "hourly"
-        #Predicted = individual_model_per_hour_onlypredict(_X_test, ResultsFolderSubTest, NameOfPredictor, OnlyPredictRecursive)
-    elif os.path.isfile(os.path.join(SV.ResultsFolderSubTest, "BestModels", "weekday_%s.save"%(NameOfPredictor))): #for weekday_weekend models
-        indiv_predictor = indiv_model_onlypredict(indiv_splitter_instance=indiv_splitter(week_weekend_splitter), Features_test=_X_test, ResultsFolderSubTest=SV.ResultsFolderSubTest, NameOfPredictor=NameOfPredictor, Recursive=SV.OnlyPredictRecursive)
+        # Predicted = individual_model_per_hour_onlypredict(_X_test, ResultsFolderSubTest, NameOfPredictor, OnlyPredictRecursive)
+    elif os.path.isfile(os.path.join(SV.ResultsFolderSubTest, "BestModels",
+                                     "weekday_%s.save" % (NameOfPredictor))):  # for weekday_weekend models
+        indiv_predictor = indiv_model_onlypredict(indiv_splitter_instance=indiv_splitter(week_weekend_splitter),
+                                                  Features_test=_X_test, ResultsFolderSubTest=SV.ResultsFolderSubTest,
+                                                  NameOfPredictor=NameOfPredictor, Recursive=SV.OnlyPredictRecursive)
         Predicted = indiv_predictor.main()
         IndividualModel = "weekend/weekday"
-        #Predicted = individual_model_week_weekend_onlypredict(_X_test, ResultsFolderSubTest, NameOfPredictor, OnlyPredictRecursive)
-    elif os.path.isfile(os.path.join(SV.ResultsFolderSubTest, "BestModels", "above_%s.save"%(NameOfPredictor))): #for byFeature models
-        byFeaturesplitter = byfeature_splitter(IndivThreshold,IndivFeature,_X_test)
+        # Predicted = individual_model_week_weekend_onlypredict(_X_test, ResultsFolderSubTest, NameOfPredictor, OnlyPredictRecursive)
+    elif os.path.isfile(os.path.join(SV.ResultsFolderSubTest, "BestModels",
+                                     "above_%s.save" % (NameOfPredictor))):  # for byFeature models
+        byFeaturesplitter = byfeature_splitter(IndivThreshold, IndivFeature, _X_test)
         indiv_predictor = indiv_model_onlypredict(indiv_splitter_instance=indiv_splitter(byFeaturesplitter.splitter),
                                                   Features_test=_X_test, ResultsFolderSubTest=SV.ResultsFolderSubTest,
-                                                  NameOfPredictor=NameOfPredictor, Recursive=SV.OnlyPredictRecursive) #Todo: best models "byfeature" auch mit feature und threshold im namen abspeichern oder irgendwie damit das predicten unabhängig von den aktuellen werten von indivFeature usw. ist
+                                                  NameOfPredictor=NameOfPredictor,
+                                                  Recursive=SV.OnlyPredictRecursive)  # Todo: best models "byfeature" auch mit feature und threshold im namen abspeichern oder irgendwie damit das predicten unabhängig von den aktuellen werten von indivFeature usw. ist
         Predicted = indiv_predictor.main()
         IndividualModel = "byFeature"
     else:
         return False, False, False
     return Predicted, IndividualModel, Predictor
 
-def only_predict(NameOfPredictor, _X_test, _Y_test,_Y_train, Indexer, Data):
+
+def only_predict(NameOfPredictor, _X_test, _Y_test, _Y_train, Indexer, Data):
     timestart = time.time()
-    Predicted, IndividualModel, best_model = predict(NameOfPredictor,_X_test)
-    if type(Predicted)==bool:
-        print("There is no trained model of %s to do OnlyPredict, if needed set OnlyPredict=False and train a model first." % NameOfPredictor)  # stop function if specific BestModel is not present
+    Predicted, IndividualModel, best_model = predict(NameOfPredictor, _X_test)
+    if type(Predicted) == bool:
+        print(
+            "There is no trained model of %s to do OnlyPredict, if needed set OnlyPredict=False and train a model first." % NameOfPredictor)  # stop function if specific BestModel is not present
         return
     timeend = time.time()
     ComputationTime = (timeend - timestart)
-    print("Computation Time ohne Recursiv %f" %(ComputationTime))
-   # print(" OnlyPrediction Time  %f" % (predicttime))
+    print("Computation Time ohne Recursiv %f" % (ComputationTime))
+    # print(" OnlyPrediction Time  %f" % (predicttime))
 
-    visualization_documentation(NameOfPredictor,_X_test, Predicted, _Y_test, Indexer, _Y_train, ComputationTime, SV.OnlyPredictFolder, None, None, None,
-                                None, SV.OnlyPredictRecursive, IndividualModel, None, None, best_model)
-
+    if NameOfPredictor in ['nusvr_bayesian_predictor', 'rf_bayesian', "ANN"]:
+        visualization_documentation(NameOfPredictor, Predicted, _Y_test, Indexer, _Y_train, ComputationTime,
+                                    SV.OnlyPredictFolder, None, None, None,
+                                    None, SV.OnlyPredictRecursive, IndividualModel, None, None, best_model)
+    else:
+        visualization_documentation(NameOfPredictor, Predicted, _Y_test, Indexer, None, ComputationTime,
+                                    SV.OnlyPredictFolder, None, None, None,
+                                    None, SV.OnlyPredictRecursive, IndividualModel, None, None)
 
     def documenation_iterative_evaluation(mean_score, SD_score, errorlist, errormetric):
-        errorlist = np.around(errorlist,3)
+        errorlist = np.around(errorlist, 3)
         # save results of iterative evaluation in the summary file
-        ExcelFile = os.path.join(SV.OnlyPredictFolder, "Summary_%s_%s.xlsx"%(NameOfPredictor, SV.NameOfSubTest))
+        ExcelFile = os.path.join(SV.OnlyPredictFolder, "Summary_%s_%s.xlsx" % (NameOfPredictor, SV.NameOfSubTest))
         Excel = pd.read_excel(ExcelFile)
         book = load_workbook(ExcelFile)
         writer = pd.ExcelWriter(ExcelFile, engine="openpyxl")
         writer.book = book
         writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
-        #create dataframe containing the information
+        # create dataframe containing the information
         ErrorDF = pd.DataFrame(index=[0])
         ErrorDF['________'] = "_________________________________"
-        if SV.ValidationPeriod==True:
-            ErrorDF['Test Data'] = "Interpretation of error measures of the data from %s till %s, per error metric" %(SV.StartTest_onlypredict, SV.EndTest_onlypredict)
+        if SV.ValidationPeriod == True:
+            ErrorDF['Test Data'] = "Interpretation of error measures of the data from %s till %s, per error metric" % (
+                SV.StartTest_onlypredict, SV.EndTest_onlypredict)
         else:
             ErrorDF['Test Data'] = "Interpretation of error measures regarding the whole data set per error metric"
         ErrorDF['Used error metric'] = str(errormetric)
         ErrorDF['Horizon length'] = horizon
-        ErrorDF['Mean score'] = "%.3f" %mean_score
+        ErrorDF['Mean score'] = "%.3f" % mean_score
         ErrorDF['Standard deviation of errors'] = SD_score
         ErrorDF['Max score'] = str(max(errorlist))
         ErrorDF['Min score'] = str(min(errorlist))
@@ -794,12 +937,12 @@ def only_predict(NameOfPredictor, _X_test, _Y_test,_Y_train, Indexer, Data):
         ErrorListDF['List of errors'] = errorlist
         ErrorListDF = ErrorListDF.T
 
-
-        Excel = pd.concat([Excel,ErrorDF,ErrorListDF])
+        Excel = pd.concat([Excel, ErrorDF, ErrorListDF])
 
         Excel.to_excel(writer, sheet_name="Sheet1")
         writer.save()
         writer.close()
+
     """  #Fehlermeldung too many values to unpack in fold_list
     horizon = len(_X_test) #gets the length of the horizon by the stated period to predict
     if SV.ValidationPeriod==True: #define the data that shall be used to do the mean errors
@@ -815,31 +958,38 @@ def only_predict(NameOfPredictor, _X_test, _Y_test,_Y_train, Indexer, Data):
     documenation_iterative_evaluation(mean_score, SD_score, errorlist, "MAPE")
     """
 
-#-----------------------------------------------------------------------------------------------------------------------
-#Executive functions
+
+# -----------------------------------------------------------------------------------------------------------------------
+# Executive functions
 def main_FinalBayes():
-    #The automatic procedure for model tuning and parts of data tuning
+    # The automatic procedure for model tuning and parts of data tuning
     print("Start FinalBayesOpt: %s/%s/%s" % (SV.NameOfData, SV.NameOfExperiment, SV.NameOfSubTest))
 
     _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = pre_handling(False)
+    SV.logresults = False  # afu: logresults shal only be used in main_OnlyHyParaOpti()
+    SV.OnlyHyPara_KPI = "acc"  # afu: ANN shall be scored with R², like the other models in main_FinalBayes()
+    # Do the bayesian optimization
+    Bayes(Model=SV.Model_Bayes, _X_train=_X_train, _Y_train=_Y_train, _X_test=_X_test, _Y_test=_Y_test, Indexer=Indexer,
+          Data=Data)
 
-    #Do the bayesian optimization
-    Bayes(Model=SV.Model_Bayes, _X_train=_X_train, _Y_train=_Y_train, _X_test=_X_test, _Y_test=_Y_test, Indexer=Indexer, Data=Data)
-
-    print("Finish FinalBayesOpt: %s/%s/%s" %(SV.NameOfData,SV.NameOfExperiment,SV.NameOfSubTest))
+    print("Finish FinalBayesOpt: %s/%s/%s" % (SV.NameOfData, SV.NameOfExperiment, SV.NameOfSubTest))
     print("________________________________________________________________________\n")
     print("________________________________________________________________________\n")
+
 
 def main_OnlyHyParaOpti():
-    print("Start training and testing with only optimizing the hyperparameters: %s/%s/%s" % (SV.NameOfData, SV.NameOfExperiment, SV.NameOfSubTest))
+    print("Start training and testing with only optimizing the hyperparameters: %s/%s/%s" % (
+        SV.NameOfData, SV.NameOfExperiment, SV.NameOfSubTest))
     _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = pre_handling(False)
 
     for Model in SV.OnlyHyPara_Models:
         all_models(Model, _X_train, _Y_train, _X_test, _Y_test, Indexer, SV.GlobalIndivModel, True)
 
-    print("Finish training and testing with only optimizing the hyperparameters : %s/%s/%s" % (SV.NameOfData, SV.NameOfExperiment, SV.NameOfSubTest))
+    print("Finish training and testing with only optimizing the hyperparameters : %s/%s/%s" % (
+        SV.NameOfData, SV.NameOfExperiment, SV.NameOfSubTest))
     print("________________________________________________________________________\n")
     print("________________________________________________________________________\n")
+
 
 def main_OnlyPredict():
     print("Start only predicting: %s/%s/%s" % (SV.NameOfData, SV.NameOfExperiment, SV.NameOfSubTest))
@@ -847,7 +997,7 @@ def main_OnlyPredict():
 
     OnlyPredictFolder = os.path.join(SV.ResultsFolderSubTest, "OnlyPredict", SV.NameOfOnlyPredict)
     SV.OnlyPredictFolder = OnlyPredictFolder
-    #check if predict results are safed in the right folder:
+    # check if predict results are safed in the right folder:
     if os.path.isdir("%s" % (SV.OnlyPredictFolder)) == True:
         Answer = input("Are you sure you want to overwrite the data in %s: " % SV.OnlyPredictFolder)
         if Answer == "yes" or Answer == "Yes" or Answer == "y" or Answer == "Y":
@@ -857,12 +1007,12 @@ def main_OnlyPredict():
     else:
         os.makedirs("%s" % (SV.OnlyPredictFolder))
 
-    AvailablePredictors = ["nusvr_bayesian_predictor", "rf_bayesian", "ann_bayesian_predictor"] #"gradientboost_bayesian", "lasso_bayesian", "svr_grid_search_predictor",
-                           # "gradientboost_gridsearch", "lasso_grid_search_predictor",
-                           # "ann_grid_search_predictor"
+    AvailablePredictors = ["nusvr_bayesian_predictor", "rf_bayesian",
+                           "ann_bayesian_predictor"]  # "gradientboost_bayesian", "lasso_bayesian", "svr_grid_search_predictor",
+    # "gradientboost_gridsearch", "lasso_grid_search_predictor",
+    # "ann_grid_search_predictor"
     for NameOfPredictor in AvailablePredictors:
-        only_predict(NameOfPredictor, _X_test, _Y_test, _Y_train,Indexer, Data)
-
+        only_predict(NameOfPredictor, _X_test, _Y_test, _Y_train, Indexer, Data)
 
     print("Finish only predicting : %s/%s/%s" % (SV.NameOfData, SV.NameOfExperiment, SV.NameOfSubTest))
     print("________________________________________________________________________\n")
@@ -870,22 +1020,22 @@ def main_OnlyPredict():
 
 
 if __name__ == '__main__':
-    #Todo: The following is done in ModelTuning and DataTuning, isn´t it better once in SV?
-    #define path to data source files '.xls' & '.pickle'
+    # Todo: The following is done in ModelTuning and DataTuning, isn´t it better once in SV?
+    # define path to data source files '.xls' & '.pickle'
     RootDir = os.path.dirname(os.path.realpath(__file__))
     PathToData = os.path.join(RootDir, 'Data')
 
-    #Set Folder for Results
+    # Set Folder for Results
     ResultsFolder = os.path.join(RootDir, "Results", SV.NameOfData, SV.NameOfExperiment)
     PathToPickles = os.path.join(ResultsFolder, "Pickles")
 
-    #Set the found Variables in "SharedVariables"
+    # Set the found Variables in "SharedVariables"
     SV.RootDir = RootDir
     SV.PathToData = PathToData
     SV.ResultsFolder = ResultsFolder
     SV.PathToPickles = PathToPickles
 
-    #Define which part shall be computed (parameters are set in SharedVariables)
-    #main_FinalBayes()
-    main_OnlyHyParaOpti()
+    # Define which part shall be computed (parameters are set in SharedVariables)
+    main_FinalBayes()
+    # main_OnlyHyParaOpti()
     # main_OnlyPredict()

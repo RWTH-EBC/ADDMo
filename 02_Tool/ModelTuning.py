@@ -64,7 +64,7 @@ def visualization_documentation(NameOfPredictor, Indexer,# wird nur ganz am ende
 
     # evaluate results with more error metrics
     (R2, STD, RMSE, MAPE, MAE) = evaluation(Y_test, Y_Predicted)
-    if Documentation:
+    if SV.OnlyHyPara:  # afu: main_OnlyHyParaOpti() is running and uses additional KPIs for the following models
         if NameOfPredictor == 'ann_bayesian_predictor':
             numparams = LR.calc_paramANNweights(Bestmodel)
             AIC = calculate_AIC(len(Y_train), numparams, Y_testscaled, Y_Predictedscaled)
@@ -109,7 +109,6 @@ def visualization_documentation(NameOfPredictor, Indexer,# wird nur ganz am ende
     if IndividualModel == "byFeature":
         dfSummary['IndivFeature'] = IndivFeature
         dfSummary['IndivThreshold'] = IndivThreshold
-    # dfSummary['Optimiert nach:'] = optmetric[0]  wegen onlypredict
     dfSummary['Eval_R2'] = R2
     dfSummary['Eval_RMSE'] = RMSE
     dfSummary['Eval_MAPE'] = MAPE
@@ -117,7 +116,7 @@ def visualization_documentation(NameOfPredictor, Indexer,# wird nur ganz am ende
     dfSummary['Standard deviation'] = STD
 
     # dfSummary['Testtime'] = testtimelist[0]
-    if Documentation and NameOfPredictor in ['ann_bayesian_predictor', 'rf_bayesian', 'nusvr_bayesian_predictor']:
+    if SV.OnlyHyPara and NameOfPredictor in ['ann_bayesian_predictor', 'rf_bayesian', 'nusvr_bayesian_predictor']:
         dfSummary['Number of Parameters'] = numparams
         dfSummary['Eval_AIC'] = AIC
         dfSummary['Eval_BIC'] = BIC
@@ -136,7 +135,7 @@ def visualization_documentation(NameOfPredictor, Indexer,# wird nur ganz am ende
     Y_Predicted.to_frame(name=SV.NameOfSignal).to_excel(SaveFileName_excel)
 
     # return Score for modelselection
-    if Documentation and NameOfPredictor in ['ann_bayesian_predictor', 'rf_bayesian', 'nusvr_bayesian_predictor']:
+    if SV.OnlyHyPara and NameOfPredictor in ['ann_bayesian_predictor', 'rf_bayesian', 'nusvr_bayesian_predictor']:
         return R2, AIC, BIC
     else:
         return R2
@@ -280,9 +279,10 @@ class BB():
         Bestparams = Result_dic["best_params"]
         ComputationTime = Result_dic["ComputationTime"]
         FeatureImportance = Result_dic["feature_importance"]
-        if Documentation and NameOfPredictor in [
+        if Documentation and NameOfPredictor in [  # afu: These 3 predictors have some different varaible entries for visualization_documentation call than the others
                 'nusvr_bayesian_predictor', 'rf_bayesian',  "ann_bayesian_predictor"]:  # only do documentation if Documentation is wished(Documentation is False from beginning, and only in the end set True)
-            Score, AICscore, BICscore = visualization_documentation(NameOfPredictor,    # afu: Documentation is never set True in FinalBayes. All functionalities concerning AIC, BIC and other KPIs are not relevant if documentation is False
+            if not SV.OnlyHyPara:  # Additional KPIs are only use in with only hyperparameter optimization
+                Score = visualization_documentation(NameOfPredictor,
                                                                     Y_Predictedscaled=Predicted,
                                                                     Y_testscaled=_Y_test, Indexer=Indexer,
                                                                     Y_train=_Y_train,
@@ -298,6 +298,24 @@ class BB():
                                                                     FeatureImportance=FeatureImportance,
                                                                     Bestmodel=Result_dic["Best_trained_model"],
                                                                     Documentation=Documentation)
+            else:  # main_OnlyHyParaOpti() is called so additional KPIs are used for 3 models
+                Score, AICscore, BICscore = visualization_documentation(NameOfPredictor,
+                                                                        Y_Predictedscaled=Predicted,
+                                                                        Y_testscaled=_Y_test, Indexer=Indexer,
+                                                                        Y_train=_Y_train,
+                                                                        ComputationTime=ComputationTime,
+                                                                        ResultsFolderSubTest=SV.ResultsFolderSubTest,
+                                                                        HyperparameterGrid=self.HyperparameterGridString,
+                                                                        Bestparams=Bestparams,
+                                                                        CV=SV.GlobalCV_MT,
+                                                                        Max_eval=SV.GlobalMaxEval_HyParaTuning,
+                                                                        Recursive=SV.GlobalRecu,
+                                                                        IndividualModel=IndividualModel,
+                                                                        Shuffle=SV.GlobalShuffle,
+                                                                        FeatureImportance=FeatureImportance,
+                                                                        Bestmodel=Result_dic["Best_trained_model"],
+                                                                        Documentation=Documentation)
+
             # only dump if it´s the last best one(marked by Documentation=True)
             model_saver(Result_dic, SV.ResultsFolderSubTest, NameOfPredictor, IndividualModel)
 
@@ -349,8 +367,12 @@ class BB():
             plot_Results(Index=index, Time=traintimelist, AIC=aiclist, numparam=numparamlist, R2=r2list,
                          SavePath=SV.ResultsFolderSubTest, BlackBox=self.Estimator.__name__,
                          NameOfSubTest=SV.NameOfSubTest)
-            return Score, AICscore, BICscore
-        elif Documentation and not NameOfPredictor in [
+            model_saver(Result_dic, SV.ResultsFolderSubTest, NameOfPredictor, IndividualModel)
+            if SV.OnlyHyPara:
+                return Score, AICscore, BICscore
+            else:
+                return Score
+        elif Documentation and NameOfPredictor not in [ # all other models don't have additional KPIs and have different entries for visualization_documentation call
                 'nusvr_bayesian_predictor', 'rf_bayesian',  "ann_bayesian_predictor"]:  # only do documentation if Documentation is wished(Documentation is False from beginning, and only in the end set True)
             Score = visualization_documentation(NameOfPredictor, Y_Predicted=Predicted, Y_test=_Y_test, Indexer=Indexer,
                                                 Y_train=_Y_train,
@@ -448,7 +470,7 @@ def modelselection(_X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError",
                    Documentation=False):
     # Trains and tests all (bayesian) models and returns the best of them, also saves it in an txtfile.
     Score_RF = BB3.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
-    Score_ANN, AIC_ANN, BIC_ANN = BB5.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel,
+    Score_ANN = BB5.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel,
                                                     Documentation)
     Score_GB = BB7.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
     Score_Lasso = BB9.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel, Documentation)
@@ -457,15 +479,13 @@ def modelselection(_X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerError",
     Score_list = [0, 1, 2, 3, 4]
     Score_list[0] = Score_SVR
     Score_list[1] = Score_RF
-    Score_list[2] = AIC_ANN
+    Score_list[2] = Score_ANN
     Score_list[3] = Score_GB
     Score_list[4] = Score_Lasso
 
     print(Score_list)
     # Todo: if Scoring function Score max; if Scoring function some error: min
-    # BestScore = max(Score_list)
-    # noch irrelevant da nur ANN berechnet wird
-    BestScore = min(Score_list)  # für AIC
+    BestScore = max(Score_list)
 
     if Score_list[0] == BestScore:
         __BestModel = "SVR"
@@ -556,10 +576,10 @@ def all_models(Model, _X_train, _Y_train, _X_test, _Y_test, Indexer="IndexerErro
     if Model == "RF_bay":
         Score, AIC, BIC = BB32.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel,
                                              Documentation)
-    if Model == "ANN" and Documentation:    # afu: this is needed because this call of BB5 returns Score, AIC and BIC in main_OnlyHyParaOpti(). Documentation will be True in that case
+    if Model == "ANN" and SV.OnlyHyPara:    # afu: this is needed because this call of BB5 returns Score, AIC and BIC in main_OnlyHyParaOpti()
         Score, AIC, BIC = BB5.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel,
                                             Documentation)
-    if Model == "ANN" and not Documentation:    # Documentation is False in main_FinalBayes(). In that Cas BB5 will only return Score
+    if Model == "ANN" and not SV.OnlyHyPara:    # afu: only return score, when not called by main_OnlyHyParaOpti()
         Score = BB5.train_predict(_X_train, _Y_train, _X_test, _Y_test, Indexer, IndividualModel,
                                             Documentation)
     if Model == "GB":
@@ -744,15 +764,15 @@ def Bayes(Model, _X_train, _Y_train, _X_test, _Y_test, Indexer, Data):
     (XTr, YTr, XTe, YTe, BestData) = embedded__recursive_feature_selection(_X_train, _Y_train, _X_test, _Y_test,
                                                                            SV.EstimatorEmbedded, BestParams["n_F"],
                                                                            SV.GlobalCV_MT, True)
-    # afu: Value seems not to be used anymore
-    # # Todo: Here you could use higher Max_eval for the last final training with best settings(Add specific max eval hyparatuning to the functions)
-    # Score = all_models(_Model, XTr, YTr, XTe, YTe, Indexer, str(BestParams["IndivModel"]["IndivModel_baye"]),
-    #                    True)  # werte werden nicht mehr benutzt
+
+    # Todo: Here you could use higher Max_eval for the last final training with best settings(Add specific max eval hyparatuning to the functions)
+    Score = all_models(_Model, XTr, YTr, XTe, YTe, Indexer, str(BestParams["IndivModel"]["IndivModel_baye"]),
+                       True)
 
     # Document the Results and settings of the final bayesian optimization
     Totaltimeend = time.time()
 
-    if SV.logresults:
+    if SV.logresults and SV.OnlyHyPara: # afu: these results are only relevant for additional KPIs in main_OnlyHyParaOpti()
         # Log Data
         index = list(range(1, (len(traintimelist) + 1)))
         aicweights = LR.calc_weights(aiclist)
@@ -882,13 +902,14 @@ def predict(NameOfPredictor, _X_test):
         Predicted = indiv_predictor.main()
         IndividualModel = "byFeature"
     else:
-        return False, False, False
-    return Predicted, IndividualModel, Predictor
+        return False, False
+
+    return Predicted, IndividualModel
 
 
 def only_predict(NameOfPredictor, _X_test, _Y_test, _Y_train, Indexer, Data):
     timestart = time.time()
-    Predicted, IndividualModel, best_model = predict(NameOfPredictor, _X_test)
+    Predicted, IndividualModel = predict(NameOfPredictor, _X_test)
     if type(Predicted) == bool:
         print(
             "There is no trained model of %s to do OnlyPredict, if needed set OnlyPredict=False and train a model first." % NameOfPredictor)  # stop function if specific BestModel is not present
@@ -896,16 +917,26 @@ def only_predict(NameOfPredictor, _X_test, _Y_test, _Y_train, Indexer, Data):
     timeend = time.time()
     ComputationTime = (timeend - timestart)
     print("Computation Time ohne Recursiv %f" % (ComputationTime))
-    # print(" OnlyPrediction Time  %f" % (predicttime))
+    # print(" OnlyPrediction Time  %f" % (predicttime))y
 
-    if NameOfPredictor in ['nusvr_bayesian_predictor', 'rf_bayesian', "ANN"]:
-        visualization_documentation(NameOfPredictor, Predicted, _Y_test, Indexer, _Y_train, ComputationTime,
-                                    SV.OnlyPredictFolder, None, None, None,
-                                    None, SV.OnlyPredictRecursive, IndividualModel, None, None, best_model)
+    if NameOfPredictor in ['nusvr_bayesian_predictor', 'rf_bayesian', "ann_bayesian_predictor"]:
+        visualization_documentation(NameOfPredictor,
+                                    Y_Predictedscaled=Predicted,
+                                    Y_testscaled=_Y_test, Indexer=Indexer,
+                                    Y_train=_Y_train,
+                                    ComputationTime=ComputationTime,
+                                    ResultsFolderSubTest=SV.OnlyPredictFolder,
+                                    Recursive=SV.OnlyPredictRecursive,
+                                    IndividualModel=IndividualModel)
     else:
-        visualization_documentation(NameOfPredictor, Predicted, _Y_test, Indexer, None, ComputationTime,
-                                    SV.OnlyPredictFolder, None, None, None,
-                                    None, SV.OnlyPredictRecursive, IndividualModel, None, None)
+        visualization_documentation(NameOfPredictor,
+                                    Y_Predicted=Predicted,
+                                    Y_test=_Y_test, Indexer=Indexer,
+                                    Y_train=_Y_train,
+                                    ComputationTime=ComputationTime,
+                                    ResultsFolderSubTest=SV.OnlyPredictFolder,
+                                    Recursive=SV.OnlyPredictRecursive,
+                                    IndividualModel=IndividualModel)
 
     def documenation_iterative_evaluation(mean_score, SD_score, errorlist, errormetric):
         errorlist = np.around(errorlist, 3)
@@ -964,9 +995,8 @@ def only_predict(NameOfPredictor, _X_test, _Y_test, _Y_train, Indexer, Data):
 def main_FinalBayes():
     # The automatic procedure for model tuning and parts of data tuning
     print("Start FinalBayesOpt: %s/%s/%s" % (SV.NameOfData, SV.NameOfExperiment, SV.NameOfSubTest))
-
+    SV.OnlyHyPara = False
     _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = pre_handling(False)
-    SV.logresults = False  # afu: logresults shal only be used in main_OnlyHyParaOpti()
     SV.OnlyHyPara_KPI = "acc"  # afu: ANN shall be scored with R², like the other models in main_FinalBayes()
     # Do the bayesian optimization
     Bayes(Model=SV.Model_Bayes, _X_train=_X_train, _Y_train=_Y_train, _X_test=_X_test, _Y_test=_Y_test, Indexer=Indexer,
@@ -978,6 +1008,7 @@ def main_FinalBayes():
 
 
 def main_OnlyHyParaOpti():
+    SV.OnlyHyPara = True
     print("Start training and testing with only optimizing the hyperparameters: %s/%s/%s" % (
         SV.NameOfData, SV.NameOfExperiment, SV.NameOfSubTest))
     _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = pre_handling(False)
@@ -994,7 +1025,7 @@ def main_OnlyHyParaOpti():
 def main_OnlyPredict():
     print("Start only predicting: %s/%s/%s" % (SV.NameOfData, SV.NameOfExperiment, SV.NameOfSubTest))
     _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = pre_handling(True)
-
+    SV.OnlyHyPara = False
     OnlyPredictFolder = os.path.join(SV.ResultsFolderSubTest, "OnlyPredict", SV.NameOfOnlyPredict)
     SV.OnlyPredictFolder = OnlyPredictFolder
     # check if predict results are safed in the right folder:
@@ -1007,10 +1038,11 @@ def main_OnlyPredict():
     else:
         os.makedirs("%s" % (SV.OnlyPredictFolder))
 
-    AvailablePredictors = ["nusvr_bayesian_predictor", "rf_bayesian",
-                           "ann_bayesian_predictor"]  # "gradientboost_bayesian", "lasso_bayesian", "svr_grid_search_predictor",
-    # "gradientboost_gridsearch", "lasso_grid_search_predictor",
-    # "ann_grid_search_predictor"
+    AvailablePredictors = ["svr_bayesian_predictor", "rf_predictor", "ann_bayesian_predictor",
+                            "gradientboost_bayesian", "lasso_bayesian", "svr_grid_search_predictor",
+                            "gradientboost_gridsearch", "lasso_grid_search_predictor",
+                            "ann_grid_search_predictor", "nusvr_bayesian_predictor", "rf_bayesian"]
+
     for NameOfPredictor in AvailablePredictors:
         only_predict(NameOfPredictor, _X_test, _Y_test, _Y_train, Indexer, Data)
 
@@ -1038,4 +1070,4 @@ if __name__ == '__main__':
     # Define which part shall be computed (parameters are set in SharedVariables)
     main_FinalBayes()
     # main_OnlyHyParaOpti()
-    # main_OnlyPredict()
+    main_OnlyPredict()

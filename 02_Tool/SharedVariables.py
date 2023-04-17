@@ -177,7 +177,7 @@ if True:  # if True for neat appearance
     logresults = True
 
     # Set global variables, those variables are for the BlackBox models themselves not for the final bayesian optimization
-    GlobalMaxEval_HyParaTuning = 2  # sets the number of evaluations done by the bayesian optimization for each "tuned training" to find the best Hyperparameter, each evaluation is training and testing with cross-validation for one hyperparameter setting
+    GlobalMaxEval_HyParaTuning = 1  # sets the number of evaluations done by the bayesian optimization for each "tuned training" to find the best Hyperparameter, each evaluation is training and testing with cross-validation for one hyperparameter setting
     GlobalCV_MT = 3  # Enter any crossvalidationn method from scikit-learn or any self defined or from elsewhere.
     GlobalRecu = True  # (Boolean) this sets whether the it shall be forecasted recursive or not
     GlobalShuffle = True
@@ -187,17 +187,17 @@ if True:  # if True for neat appearance
     if GlobalIndivModel == "byFeature":
         IndivFeature = "schedule[]"  # copy the name of feature here
         IndivThreshold = 0.5  # state the threshold at which value of that feature the data frame shall be splitted
-    OnlyHyPara_Models = ["Lasso"]  # array of the blackboxes you want to use
+    OnlyHyPara_Models = ["ANN"]  # array of the blackboxes you want to use
     # Possible entries: ["SVR","NuSVR", "RF", "RF_bay","ANN", "GB", "Lasso", "SVR_grid", "ANN_grid", "RF_grid", "GB_grid", "Lasso_grid"]
     #                  ["ModelSelection"] uses all bayesian models (those without _grid) and returns the best
-    OnlyHyPara_KPI = "acc"  # choice of KPI that shall be used for optimization
+    OnlyHyPara_KPI = "kpi3"  # choice of KPI that shall be used for optimization
     # possible entries: "acc", "aic", "bic", "kpi1", "kpi2", "kpi3"
 
 
     # Final bayesian optimization finds optimal combination of "Individual Model"&"Features"&"Model"
     # Final bayesian optimization parameter
-    MaxEval_Bayes = 2
-    Model_Bayes = "Baye"
+    MaxEval_Bayes = 1
+    Model_Bayes = "ModelSelection"
     # possible entries
     # Max_eval_Bayes = int - Number of iterations the bayesian optimization should do for selecting NumberofFeatures, IndivModel, BestModel , the less the less quality but faster
     # Model= "SVR","ANN","GB","RF","Lasso" - choose a model for bayesian optimization (RF is by far the fastest)
@@ -247,6 +247,7 @@ InputData = "Empty"  # by DataTuning
 FixImport = True  # set by GUI used in "DataTuning"
 GUI_Filename = "Empty"  # set by GUI
 save_datatuning_as_xlsx = "Empty" # set by Datatuning
+OnlyHyPara = False  # set by Modeltuning
 
 
 # Some functions used in many modules:

@@ -149,10 +149,7 @@ Either you use the Anaconda.Navigator or navigate the command line to your local
 
 `$ conda env create -f environment.yml`
 
-Via requirements.txt for Pip:\
-Make sure using python 3.6!
-
-Via setup.py: (deprecated)\
+Via setup.py: \
 Install Anaconda (conda version: 4.8.0)
 
 Open command line and create an python 3.6 environment via:
@@ -169,7 +166,7 @@ Install required packages via:
 
 Set the conda environment "ADDMo" as interpreter for e.g. in PyCharm
 
-Via pip by your own:\
+Via pip by your own (possibly deprecated):\
 The used Python version is 3.6.2
 
 Except the regular packages you need to install:\
@@ -284,7 +281,7 @@ If you use ADDMo in scientific publication, we would appreciate citations to the
 Automated data-driven modeling of building energy systems via machine learning algorithms, Rätz et al., Energy and Buildings, Volume 202, 2019.
 
 Published at Energy&Buildings Journal:
-[Link to article](https://doi.org/10.1016/j.enbuild.2019.109384)
+[Link to article](https://doi.org/10.1016/j.enbuild.2019.109384 )
 
 If you are not granted access to the paper, you may find the pre-print at:
 [Link to pre-print article at researchgate](https://www.researchgate.net/publication/335424562_Automated_Data-driven_Modeling_of_Building_Energy_Systems_via_Machine_Learning_Algorithms)

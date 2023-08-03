@@ -545,7 +545,7 @@ def ann_bayesian_predictor(Features_train, Signal_train, Features_test, Signal_t
             Z = [int(BestParams["1.2"]), int(BestParams["2.2"])]
         except:
             try:
-                Z = [int(BestParams["1.3"]), int(BestParams["2.3"]), int(BestParams["2.3"])]
+                Z = [int(BestParams["1.3"]), int(BestParams["2.3"]), int(BestParams["3.3"])]
             except:
                 sys.exit("Your bayesian hyperparametergrid does not fit the requirements, check the example and/or change the hyperparametergrid or the postprocessing for the bestparams in ann_bayesian_predictor")
     BestParams = {"hidden_layer_sizes": Z} #set params so that it fits the estimators attribute style

@@ -38,6 +38,9 @@ def import_data():
     Path = SV.InputData
     Data = pd.read_excel(io=Path, index_col=0)                              #Column 0 has to be the Index Column; reads the excel file
 
+    # infer datetimeindex
+    Data.index = pd.to_datetime(Data.index)
+
     Data.to_pickle(os.path.join(SV.PathToPickles, "ThePickle_from_ImportData" + '.pickle'))  #saves Data into a pickle
 
     # save dataframe in an excel file

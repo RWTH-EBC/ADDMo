@@ -1,0 +1,69 @@
+[
+    {
+        // "TrainingData_Alias": "latest", // mention Alias for training data (for example-v1,v2) otherwise it will take latest
+        "Name": "neural_network",  // Name of model
+        "n_neurons": 32,  // Number of neurons per layer
+        "n_layers": 1,  // Number of layers
+        "batch_size": 32,  // Training batch size
+        "epochs": 1000,  // Number of training epochs
+        "learning_rate": 0.0005,
+        //"TrainingData_Name": null,  //if you want to provide specific training dataset then uncomment this and comment TrainingData_config and mention the name of the dataset that you want to take otherwise it will take the TrainingData_config
+        "TrainingData_config": {  // Training data config -> see s01_preprocessing
+            "File": "data.csv",
+            "Name": "training_data_availVar_NK",
+            "Output": "Strom Kaelteerzeugung NK",
+            "Inputs": {
+                "Aussentemperatur": 1,
+                "Verdampfungstemperatur NK": 0,
+                "rel. Belegung": 1,
+                "Sollwert Gaskuehlertemperatur": 1,
+                "Sollwert Verdampfungstemperatur NK":0,
+                "Sauggastemperatur NK":0,
+                "Sollwert Verdampfungstemperatur TK":0,
+                "Sauggastemperatur TK":0
+            },
+            "Constructed": {
+                "Aussentemperatur_Squared": {
+                    "Inputs": ["Aussentemperatur"],
+                    "function": "func_squared",
+                    "active": 1
+                },
+                "Aussentemperatur_Cubic": {
+                    "Inputs": ["Aussentemperatur"],
+                    "function": "func_cubic",
+                    "active": 1
+                },
+                "Aussentemperatur_Frac": {
+                    "Inputs": ["Aussentemperatur"],
+                    "function": "func_1frac",
+                    "active": 1
+                },
+                "Gaskuehlertemperatur_Squared": {
+                    "Inputs": ["Sollwert Gaskuehlertemperatur"],
+                    "function": "func_squared",
+                    "active": 1
+                },
+                "Gaskuehlertemperatur_Cubic": {
+                    "Inputs": ["Sollwert Gaskuehlertemperatur"],
+                    "function": "func_cubic",
+                    "active": 1
+                },
+                "Gaskuehlertemperatur_Frac": {
+                    "Inputs": ["Sollwert Gaskuehlertemperatur"],
+                    "function": "func_1frac",
+                    "active": 1
+                },
+                "Belegung_Squared": {
+                    "Inputs": ["rel. Belegung"],
+                    "function": "func_squared",
+                    "active": 1
+                },
+                "Belegung_Cubic": {
+                    "Inputs": ["rel. Belegung"],
+                    "function": "func_cubic",
+                    "active": 0
+                }
+            }
+        }
+    }
+]

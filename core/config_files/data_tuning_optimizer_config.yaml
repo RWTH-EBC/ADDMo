@@ -1,0 +1,85 @@
+# filename: data_tuning_setup.yaml
+
+# Global Variables
+name_of_data: "AHU Data1"  # Name of the folder for experiment storage
+name_of_experiment: "NoOL"  # Name of the experiment series
+name_of_target: "Empty"  # Name of the target variable
+root_dir: "Empty"  # Root directory of the file
+path_to_data: "Empty"  # Path to the data file
+results_folder: "Empty"  # Path to results storage folder
+path_to_pickles: "Empty"  # Path to pickle storage folder
+column_of_signal: 1  # Column index of the signal
+
+# Wrapper Variables
+estimator_wrapper: "RF"  # Model from BlackBoxes.py (without parenthesis)
+wrapper_params:  # Parameters for the model
+  - "RF"  # Hyperparametergrid
+  - None  # Crossvalidation
+  - None  # max_eval
+  - False  # Recursive feature
+min_increase: 0.005  # Minimum score difference to accept a data change
+
+# ImportData Variables
+# (No specific variables defined under this section)
+
+# Preprocessing Variables
+nan_dealing: "bfill"  # Method for handling NaN values
+init_man_feature_select: False  # Initial manual feature selection flag
+init_features: [1, 2, 3, 8, 9]  # Initial manual selected features
+standard_scaling: False  # Standard scaling flag
+robust_scaling: True  # Robust scaling flag
+no_scaling: False  # No scaling flag
+resample: False  # Data resampling flag
+resolution: "60min"  # Resampling resolution
+way_of_resampling:  # Method of resampling per column
+  - "np.mean"
+  - "np.mean"
+  - "np.mean"
+
+# PeriodSelection Variables
+man_select: False  # Manual period selection flag
+start_date: "2016-06-02 00:00"  # Start date for period selection
+end_date: "2016-06-16 00:00"  # End date for period selection
+time_series_plot: False  # Time series plotting flag
+
+# FeatureConstruction Variables
+cross_auto_cloud_correlation_plotting: False  # Flag for correlation plotting
+lags_to_be_plotted: 200  # Number of lags for plotting
+
+features_difference:
+  bool: False
+
+manual_target_lag:
+  bool: False  # Manual ownlag creation flag
+  lags: [1]  # target_lags in format [first lag (int), second lag (int)]
+
+
+man_featurelag_create:
+  bool: False  # Manual feature lag creation flag
+  feature_lags:  # Configuration for feature lags {var_name: [first lag (int), second lag (int)]}
+    {"feature": [3, 2]}
+automatic_time_series_ownlag_construct: False  # Flag for automatic ownlag construction
+min_own_lag: 1  # Minimum ownlag for consideration
+auto_featurelag_create: False  # Flag for automatic feature lag creation
+min_feature_lag: 1  # Minimum feature lag
+max_feature_lag: 20  # Maximum feature lag
+
+# FeatureSelection Variables
+man_feature_select: False  # Manual feature selection flag
+feature_select: [2, 3, 6, 8, 9]  # Selected features
+low_variance_filter: False  # Low variance filter flag
+threshold_low_variance_filter: 0.1  # Threshold for low variance filter
+ica: False  # ICA filter flag
+univariate_filter: False  # Univariate filter flag
+score_func: "mutual_info_regression"  # Scoring function for univariate filter
+search_mode: "percentile"  # Search mode for univariate filter
+param_univariate_filter: 50  # Parameter for univariate filter
+
+# Embedded Methods
+estimator_embedded: "rf"  # Embedded method estimator
+embedded_feature_selection_threshold: False  # Threshold-based feature selection flag
+threshold_embedded: "median"  # Threshold value for feature selection
+recursive_feature_selection: False  # Recursive feature selection flag
+n_feature_to_select_rfe: 18  # Number of features to select in RFE
+cv_dt:  # Cross-validation configuration
+  - TimeSeriesSplit

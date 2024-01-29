@@ -2,7 +2,7 @@
 #
 # from core.model_tuning.models.model_factory import ModelFactory
 # from core.model_tuning.models.abstract_model import AbstractMLModel
-# from core.model_tuning.scoring.scoring_factory import ScoringFactory
+# from core.model_tuning.scoring.get_splitter import ScoringFactory
 # from core.model_tuning.scoring.abstract_scoring import BaseScoring
 # from core.data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 #
@@ -11,7 +11,7 @@
 #     def __init__(self, config_gui: DataTuningSetup, xy):
 #         self.config_gui = config_gui
 #         self.xy = xy
-#         self.scorer: BaseScoring = ScoringFactory.scoring_factory(
+#         self.scorer: BaseScoring = ScoringFactory.get_splitter(
 #             config_gui.wrapper_scoring
 #         )
 #         self.model: AbstractMLModel = ModelFactory.model_factory(

@@ -1,7 +1,5 @@
-
-from core.model_tuning.scoring.abstract_scoring import BaseScoring
-from core.model_tuning.scoring.validation_scoring import ValidationScoring
-from core.model_tuning.scoring.validation_scoring import CrossValidation
+from core.model_tuning.scoring.trash.validation_scoring import ValidationScoring
+from core.model_tuning.scoring.abstract_scoring import CrossValidation
 
 class ScoringFactory:
     """
@@ -9,7 +7,7 @@ class ScoringFactory:
     """
 
     @staticmethod
-    def scoring_factory(splitting_type: str, scoring_metric:str) -> ValidationScoring:
+    def scoring_factory(splitting_type: str) -> ValidationScoring:
         if splitting_type == 'KFold':
             return CrossValidation()
 

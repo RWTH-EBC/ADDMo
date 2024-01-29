@@ -1,12 +1,12 @@
 from sklearn.model_selection import BaseCrossValidator
-from core.model_tuning.scoring.splitter.custom_splitters import NoSplitting, myKFold, TrialCustomSplitter
+from core.model_tuning.scoring.custom_splitters import NoSplitting, myKFold, TrialCustomSplitter
 class SplitterFactory:
     """
     Factory for creating custom splitter instances for scikit-learn cross-validation.
     """
 
     @staticmethod
-    def splitter_factory(splitter_type: str, **kwargs) -> BaseCrossValidator:
+    def splitter_factory(splitter_type: str) -> BaseCrossValidator:
         """
         Creates a custom splitter based on the specified type.
         :param splitter_type: Type of splitter to create (e.g., "no_splitting", "custom_kfold", "trial_custom_splitter").
@@ -14,10 +14,10 @@ class SplitterFactory:
         :return: Instance of a custom splitter.
         """
         if splitter_type == "no_splitting":
-            return NoSplitting(**kwargs)
+            return NoSplitting()
         elif splitter_type == "custom_kfold":
-            return myKFold(**kwargs)
+            return myKFold()
         elif splitter_type == "trial_custom_splitter":
-            return TrialCustomSplitter(**kwargs)
+            return TrialCustomSplitter()
         else:
             raise ValueError(f"Unknown splitter type: {splitter_type}")

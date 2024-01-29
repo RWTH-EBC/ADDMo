@@ -3,6 +3,7 @@ import optuna
 from optuna.integration import WeightsAndBiasesCallback
 import wandb
 import inspect
+from sklearn.model_selection import GridSearchCV, cross_validate
 
 from core.model_tuning.hyperparameter_tuning.abstract_hyparam_tuner import AbstractHyParamTuner
 
@@ -24,7 +25,7 @@ class NoTuningTuner(AbstractHyParamTuner):
         return hyperparameters
 
 class OptunaTuner(AbstractHyParamTuner):
-    def tune(self, n_trials=100):
+    def tune(self, x_train_val, y_train_val, n_trials=100):
         """
         Perform hyperparameter tuning using Optuna.
         :param n_trials: Number of optimization trials.
@@ -45,7 +46,7 @@ class OptunaTuner(AbstractHyParamTuner):
         def objective(trial):
             hyperparameters = self.model.optuna_hyperparameter_suggest(trial)
             self.model.set_hyperparameters(hyperparameters)
-            score = self.scorer()
+            score = cross_validate(self.model, self.model.data, self.model.target, cv=5)
             wandb.log({"score_test": score, "hyperparameters": hyperparameters})
             return score
 

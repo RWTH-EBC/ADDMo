@@ -23,12 +23,3 @@ from core.model_tuning.scoring.abstract_scoring import ValidationScoring
     #
     #     score = self.calc_metric(model, metric_name, x_test, y_test)
     #     return score
-class CrossValidation(ValidationScoring):
-
-    def score_validation(self, model, metric_name, x, y, **cv_kwargs):
-        """ Returns a positive float value. The higher the better.
-        x and y include train and evaluation period.
-        CV is shuffle=False by default, so the splits will be same across calls."""
-
-        scores = cross_val_score(model, x, y, **cv_kwargs)
-        return scores.mean()

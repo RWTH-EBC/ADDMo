@@ -1,6 +1,4 @@
 from core.model_tuning.models.abstract_model import AbstractMLModel
-from core.model_tuning.scoring.abstract_scoring import BaseScoring
-from core.model_tuning.scoring.scoring_factory import ScoringFactory
 from core.model_tuning.model_configs.model_tuning_config import ModelTuningSetup
 
 class AbstractHyParamTuner:
@@ -10,7 +8,7 @@ class AbstractHyParamTuner:
 
     def __init__(self, config: ModelTuningSetup, model: AbstractMLModel):
         self.model = model
-        self.scorer: BaseScoring = ScoringFactory.scoring_factory(config.validation_score_splitting)
+        self.config = config
 
     def tune(self):
         """

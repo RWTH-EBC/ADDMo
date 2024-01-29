@@ -5,7 +5,6 @@ from sklearn.feature_selection import GenericUnivariateSelect
 from sklearn.feature_selection import RFE, RFECV
 from sklearn.feature_selection import SequentialFeatureSelector
 
-from core.data_tuning import feature_constructor
 from core.util.data_handling import split_target_features
 from core.model_tuning.scoring.scoring_factory import ScoringFactory
 from core.model_tuning.models.model_factory import ModelFactory
@@ -105,7 +104,7 @@ def recursive_feature_selection_wrapper_scikit_learn(config: DataTuningAutoSetup
 #     '''
 #     x_selected = pd.DataFrame()
 #
-#     scorer: ValidationScoring = ScoringFactory.scoring_factory(config.scoring_split_technique)
+#     scorer: ValidationScoring = ScoringFactory.get_splitter(config.scoring_split_technique)
 #     model: AbstractMLModel = ModelFactory.model_factory(config.wrapper_model)
 #
 #     # Splitting features and target

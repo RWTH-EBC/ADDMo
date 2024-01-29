@@ -1,5 +1,7 @@
-from core.model_tuning.scoring.test_scoring import MSESoring, MAEScoring, R2Scoring
+
 from core.model_tuning.scoring.abstract_scoring import BaseScoring
+from core.model_tuning.scoring.validation_scoring import ValidationScoring
+from core.model_tuning.scoring.validation_scoring import CrossValidation
 
 class ScoringFactory:
     """
@@ -7,13 +9,10 @@ class ScoringFactory:
     """
 
     @staticmethod
-    def scoring_factory(scoring_type: str) -> BaseScoring:
-        if scoring_type == 'MSE':
-            return MSESoring()
-        elif scoring_type == 'MAE':
-            return MAEScoring()
-        elif scoring_type == 'R2':
-            return R2Scoring()
+    def scoring_factory(splitting_type: str, scoring_metric:str) -> ValidationScoring:
+        if splitting_type == 'KFold':
+            return CrossValidation()
+
         # Add more conditions for other scoring methods
         else:
             raise ValueError("Unknown scoring type")

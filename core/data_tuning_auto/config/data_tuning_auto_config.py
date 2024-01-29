@@ -3,7 +3,7 @@ from sklearn.feature_selection import mutual_info_regression, f_regression
 
 import SharedVariablesFunctions as SVF
 
-
+'''Serves as blueprint for the yaml-configs.'''
 class DataTuningSetup:
     """
     Object that stores all the setup and user input information of Data Tuning
@@ -163,7 +163,7 @@ class DataTuningSetup:
         self.name_of_target = "Empty"
 
         self.RootDir = "Empty"
-        self.abs_path_to_data = r"/03_TrialInput/InputData.xlsx"
+        self.abs_path_to_data = r"/raw_input_data/InputData.xlsx"
         self.abs_path_to_result_folder = r"Empty"
         self.path_to_pickles = r"Empty"
 

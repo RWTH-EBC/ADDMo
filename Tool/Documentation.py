@@ -2,7 +2,7 @@ from openpyxl import load_workbook
 from PredictorDefinitions import *
 from Functions.ErrorMetrics import *
 from Functions.PlotFcn import *
-from core.data_tuning.data_tuning_config import DataTuningSetup
+from core.data_tuning_optimizer.config.data_tuning_config import DataTuningSetup
 
 
 def documentation_DataTuning(DT_Setup_object: DataTuningSetup, timestart, timeend):

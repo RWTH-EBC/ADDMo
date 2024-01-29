@@ -1,15 +1,17 @@
-import yaml
 import pandas as pd
 
+from core.data_tuning.config.data_tuning_config import DataTuningConfig
 from core.data_tuning import feature_constructor as fc
+from core.data_tuning.data_importer import load_raw_data
+from core.util.experiment_logger import ExperimentLogger
 
 class DataTunerByConfig():
     '''Tunes the data in a fixed manner. Without randomness.'''
-    def __init__(self, path_data_tuning_config, xy_raw: pd.DataFrame):
-        with open(path_data_tuning_config, 'r') as file:
-            self.config = yaml.safe_load(file)
-        self.xy_raw = xy_raw
-        self.x_processed = pd.DataFrame(index=xy_raw.index)  # Initialize with the same index
+    def __init__(self, config: DataTuningConfig, logger:ExperimentLogger):
+        self.config = config
+        self.logger = logger
+        self.xy_raw = load_raw_data(self.config.path_to_raw_data)
+        self.x_processed = pd.DataFrame(index=self.xy_raw.index)  # Initialize with the same index
 
     def update_x_raw(self, x_sample: pd.DataFrame):
         """
@@ -32,8 +34,8 @@ class DataTunerByConfig():
         self.xy_raw = self.xy_raw.combine_first(y_sample)
 
 
-    def preprocess_main(self):
-        for feature_name in self.config["features"]:
+    def tune_fixed(self):
+        for feature_name in self.config.features:
             # extract feature name and modification type
             if '___' in feature_name:
                 original_name, modification = feature_name.split('___')
@@ -58,3 +60,5 @@ class DataTunerByConfig():
 
             else:
                 print(f"Feature <{feature_name}> not present in loaded data.")
+
+        return self.x_processed

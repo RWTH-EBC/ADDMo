@@ -54,21 +54,6 @@ def write_pkl(data, filename: str, directory: str = 'storedData', override: bool
     pkl_file.close()
 
 
-def _get_path(filename: str, directory: str):
-    """
-    Returns the full path for a given filename and directory.
-    """
-    if '.pkl' not in filename:                      # check for file extension
-        filename += '.pkl'                          # add file extension
-
-    if directory is not None:                       # check if directory is none
-        if not os.path.exists(directory):           # check if path exists
-            os.makedirs(directory)                  # create new directory
-        return str(directory + '\\' + filename)     # calculate full path
-    else:
-        return filename
-
-
 def _get_bool(message: str,
               true: list = ['yes', 'ja', 'true', 'wahr', '0', 'y'],
               false: list = ['no', 'nein', 'false', '1', 'n']):

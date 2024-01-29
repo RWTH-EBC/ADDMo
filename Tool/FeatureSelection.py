@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split
 
 # from GlobalVariables import *
 import SharedVariablesFunctions as SVF
-from core.data_tuning.data_tuning_config import DataTuningSetup
+from core.data_tuning_optimizer.config.data_tuning_config import DataTuningSetup
 from core.util.data_handling import split_signal_and_features
 
 

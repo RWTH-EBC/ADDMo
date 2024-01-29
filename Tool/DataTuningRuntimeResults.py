@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 from sklearn.externals import joblib
-from core.data_tuning.data_tuning_config import DataTuningSetup
+from core.data_tuning_optimizer.config.data_tuning_config import DataTuningSetup
 
 
 class DataTuningRuntimeResults:

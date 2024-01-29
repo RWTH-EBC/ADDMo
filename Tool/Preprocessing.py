@@ -10,7 +10,7 @@ from sklearn.externals import joblib
 import numpy as np
 import os
 
-from core.data_tuning.data_tuning_config import DataTuningSetup
+from core.data_tuning_optimizer.config.data_tuning_config import DataTuningSetup
 
 # Manual Selection of Features (By the columns of the "FeatureConstruction" Excel Table)
 def init_man_feature_select(DT_Setup_object: DataTuningSetup, Data):

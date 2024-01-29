@@ -1,13 +1,29 @@
 from sklearn.neural_network import MLPRegressor
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+import onnxmltools
+from skl2onnx.common.data_types import FloatTensorType, StringTensorType
 
 from core.model_tuning.models.abstract_model import AbstractMLModel
 
-
 class ScikitLearnBaseModel(AbstractMLModel):
     def __init__(self, model):
-        self.model = model  # Create an instance of the scikit-learn model
+        # Create an instance of the scikit-learn model including a scaler
+        self.model = self._build_pipeline(model)
+
+    def _build_pipeline(self):
+        """
+        Build a pipeline for the model.
+        Including a scaler.
+        """
+        pipeline = Pipeline([
+            ('scaler', StandardScaler()),  # Data preprocessing step
+            ('model', self.model)  # Keras model as the final step
+        ])
+        return pipeline
 
     def fit(self, x, y):
+        self.x = x # Save the training data to be used later for ONNX conversion
         self.model.fit(x, y)  # Train the model
 
     def infer(self, x):
@@ -19,11 +35,12 @@ class ScikitLearnBaseModel(AbstractMLModel):
     def default_hyperparameter(self):
         return self.model.get_params()
 
-    def save_model(self, path):
-        # Implement model saving (e.g., using joblib)
-        pass
+    def save_model(self, abs_path):
+        # Convert the entire pipeline to ONNX
+        onnx_model = onnxmltools.convert_sklearn(self.pipeline, X=x) #Todo: optionally with initial types instead of x
+        onnxmltools.utils.save_model(onnx_model, abs_path)
 
-    def load_model(self, path):
+    def load_model(self, abs_path):
         # Implement model loading
         pass
 

@@ -13,7 +13,7 @@ import FeatureConstruction
 import FeatureSelection
 from DataTuningRuntimeResults import DataTuningRuntimeResults as DTRR
 import Documentation as Document
-from core.data_tuning.data_tuning_config import DataTuningSetup
+from core.data_tuning_optimizer.config.data_tuning_config import DataTuningSetup
 
 
 def main(DT_Setup_object: DataTuningSetup):

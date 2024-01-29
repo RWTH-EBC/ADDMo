@@ -7,7 +7,7 @@ import pandas as pd
 from openpyxl import load_workbook
 from sklearn.model_selection import train_test_split
 import SharedVariablesFunctions as SVF
-from core.data_tuning.data_tuning_config import DataTuningSetup
+from core.data_tuning_optimizer.config.data_tuning_config import DataTuningSetup
 
 
 # Todo: get the resolution of the data

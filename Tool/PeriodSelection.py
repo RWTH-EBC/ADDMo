@@ -5,7 +5,7 @@ from openpyxl import load_workbook
 from Functions.PlotFcn import plot_TimeSeries
 import os
 
-from core.data_tuning.data_tuning_config import DataTuningSetup
+from core.data_tuning_optimizer.config.data_tuning_config import DataTuningSetup
 
 # -------------------------------------------------------------------------------
 def manual_period_select(DT_Setup_object: DataTuningSetup, Data):

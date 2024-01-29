@@ -3,7 +3,7 @@ import time
 
 import pandas as pd
 import warnings
-from core.data_tuning.data_tuning_config import DataTuningSetup
+from core.data_tuning_optimizer.config.data_tuning_config import DataTuningSetup
 
 # Information about required Input shape -------------------------------------
 # Input ExcelFile has to be named: "InputData" and saved in the Folder Data

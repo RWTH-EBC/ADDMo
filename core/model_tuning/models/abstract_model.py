@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-
 class AbstractMLModel(ABC):
     """
     Abstract base class for machine learning models.
@@ -23,7 +22,6 @@ class AbstractMLModel(ABC):
         Make predictions on the given input data.
         """
         pass
-
 
     def optuna_hyperparameter_suggest(self, trial):
         """
@@ -52,8 +50,6 @@ class AbstractMLModel(ABC):
         Set the hyperparameters of the model.
         """
         pass
-
-
 
     @abstractmethod
     def save_model(self, path):

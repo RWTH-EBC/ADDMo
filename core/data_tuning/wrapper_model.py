@@ -2,7 +2,7 @@ from core.model_tuning.models.model_factory import ModelFactory
 from core.model_tuning.models.abstract_model import AbstractMLModel
 from core.model_tuning.scoring.scoring_factory import ScoringFactory
 from core.model_tuning.scoring.abstract_scoring import AbstractScoring
-from core.data_tuning.data_tuning_config import DataTuningSetup
+from core.data_tuning_optimizer.config.data_tuning_config import DataTuningSetup
 
 
 class DataTunerWrapperModel:

@@ -2,7 +2,7 @@ import yaml
 
 from core.data_tuning.data_importer import load_raw_data
 from core.data_tuning_optimizer import feature_construction
-from core.data_tuning.data_tuning_config import DataTuningSetup
+from core.data_tuning_optimizer.config.data_tuning_config import DataTuningSetup
 
 # load config for automatic data tuning aka GUI config
 path_to_config = r"D:\04_GitRepos\addmo-extra\core\config_files\1_datatuning_GUI_config.yaml"

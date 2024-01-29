@@ -148,19 +148,19 @@ def documentation_DataTuning(DT_Setup_object: DataTuningSetup, timestart, timeen
             "Selected Features= %s" % DT_Setup_object.selected_features
         )
     DfMethodology.at[3, "FeatureSelection"] = (
-        "Low Variance Filter = %s" % DT_Setup_object.low_variance_filter
+        "Low Variance Filter = %s" % DT_Setup_object.filter_low_variance
     )
-    if DT_Setup_object.low_variance_filter == True:
+    if DT_Setup_object.filter_low_variance == True:
         DfMethodology.at[4, "FeatureSelection"] = (
             "Threshold Variance= %s" % DT_Setup_object.low_variance_threshold
         )
     DfMethodology.at[5, "FeatureSelection"] = (
-        "Independent Component Analysis = %s" % DT_Setup_object.ICA
+        "Independent Component Analysis = %s" % DT_Setup_object.filter_ICA
     )
     DfMethodology.at[6, "FeatureSelection"] = (
-        "Univariate Filter = %s" % DT_Setup_object.univariate_filter
+        "Univariate Filter = %s" % DT_Setup_object.filter_univariate
     )
-    if DT_Setup_object.univariate_filter == True:
+    if DT_Setup_object.filter_univariate == True:
         DfMethodology.at[7, "FeatureSelection"] = (
             "Score function= %s" % DT_Setup_object.univariate_score_function
         )
@@ -174,30 +174,30 @@ def documentation_DataTuning(DT_Setup_object: DataTuningSetup, timestart, timeen
     DfMethodology.at[
         10, "FeatureSelection"
     ] = "Embedded-Recursive Feature Selection = %s" % (
-        DT_Setup_object.recursive_feature_selection
-        or DT_Setup_object.embedded_feature_selection_threshold
+        DT_Setup_object.filter_recursive_embedded
+        or DT_Setup_object.recursive_embedded_threshold
     )
     if (
-        DT_Setup_object.recursive_feature_selection
-        or DT_Setup_object.embedded_feature_selection_threshold
+        DT_Setup_object.filter_recursive_embedded
+        or DT_Setup_object.recursive_embedded_threshold
     ) == True:
         DfMethodology.at[11, "FeatureSelection"] = (
             "Embedded Estimator = %s" % DT_Setup_object.embedded_model
         )
-        if DT_Setup_object.recursive_feature_selection == True:
+        if DT_Setup_object.filter_recursive_embedded == True:
             DfMethodology.at[12, "FeatureSelection"] = (
                 "Number of Features to select= %s"
-                % DT_Setup_object.recursive_fs_number_features_to_select
+                % DT_Setup_object.recursive_embedded_number_features_to_select
             )
-            if DT_Setup_object.recursive_fs_number_features_to_select == "automatic":
+            if DT_Setup_object.recursive_embedded_number_features_to_select == "automatic":
                 DfMethodology.at[13, "FeatureSelection"] = (
-                    "CrossValidation= %s" % DT_Setup_object.cross_validation_4_data_tuning
+                    "CrossValidation= %s" % DT_Setup_object.recursive_embedded_scoring
                 )
             else:
                 DfMethodology.at[14, "FeatureSelection"] = "CrossValidation= None"
-        if DT_Setup_object.embedded_feature_selection_threshold == True:
+        if DT_Setup_object.recursive_embedded_threshold == True:
             DfMethodology.at[15, "FeatureSelection"] = (
-                "Feature importance threshold = %s" % DT_Setup_object.embedded_threshold_type
+                "Feature importance threshold = %s" % DT_Setup_object.recursive_embedded_threshold_type
             )
             DfMethodology.at[16, "FeatureSelection"] = "CrossValidation= None"
 

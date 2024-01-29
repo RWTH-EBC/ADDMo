@@ -5,42 +5,43 @@ from core.data_tuning import feature_constructor
 from core.util.data_handling import split_target_features
 from core.data_tuning.wrapper_model import DataTunerWrapperModel
 
-def manual_feature_lags(config_gui, xy):
-    # feature_lags in format {var_name: [first lag (int), second lag (int)]}
+from core.data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
+
+def create_difference(config: DataTuningAutoSetup, data):
 
     x_created = pd.DataFrame()
 
-    for var_name, lags in config_gui["feature_lags"].items():
-        if var_name != config_gui["target"]:
-            for lag in lags:
-                series = feature_constructor.create_lag(xy[var_name], lag)
-                x_created[series.name] = series
+    for var_name in data.columns:
+        if var_name != config.name_of_target
+            series = feature_constructor.create_difference(data[var_name])
+            x_created[series.name] = series
 
     return x_created
 
-def manual_target_lags(config_gui, xy):
+def manual_target_lags(config: DataTuningAutoSetup, xy):
     # target_lags in format [first lag (int), second lag (int)]
     x_created = pd.DataFrame()
 
-    for lag in config_gui["target_lags"]:
-        series = feature_constructor.create_lag(xy[config_gui["target"]], lag)
+    for lag in config.name_of_target:
+        series = feature_constructor.create_lag(xy[config.name_of_target], lag)
         x_created[series.name] = series
 
     return x_created
 
-def automatic_timeseries_target_lag_constructor(config_gui, xy):
+def automatic_timeseries_target_lag_constructor(config: DataTuningAutoSetup, xy):
     x_created = pd.DataFrame()
 
-    Wrapper = DataTunerWrapperModel(config_gui)
+    Wrapper = DataTunerWrapperModel(config)
 
     # prepare data
-    x, y = split_target_features(config_gui.name_of_target, xy)
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25)
+    x, y = split_target_features(config.name_of_target, xy)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25) #todo: überflüssig
+    # da alle genutzt werden darf?
 
     old_score = Wrapper.train_score(x_train, x_test, y_train, y_test)
 
     # loop through to create lags as long as they improve the result
-    for i in range(config_gui.minimum_target_lag, len(x_train)):
+    for i in range(config.minimum_target_lag, len(x_train)):
         series = feature_constructor.create_lag(y, i)
         x_processed = pd.concat([x, series], axis=1, join="inner")
 
@@ -51,7 +52,7 @@ def automatic_timeseries_target_lag_constructor(config_gui, xy):
         new_score = Wrapper.train_score(x_train_processed, x_test_processed, y_train,
                                         y_test)
 
-        if new_score <= old_score + config_gui["min_increase"]:
+        if new_score <= old_score + config.min_increase_4_wrapper:
             break
         else:
             x_created[series.name] = series
@@ -59,12 +60,25 @@ def automatic_timeseries_target_lag_constructor(config_gui, xy):
 
     return x_created
 
-def automatic_feature_lag_constructor(config_gui, data):
+def manual_feature_lags(config: DataTuningAutoSetup, xy):
+    # feature_lags in format {var_name: [first lag (int), second lag (int)]}
+
     x_created = pd.DataFrame()
 
-    Wrapper = DataTunerWrapperModel(config_gui)
+    for var_name, lags in config.feature_lags.items():
+        if var_name != config.name_of_target:
+            for lag in lags:
+                series = feature_constructor.create_lag(xy[var_name], lag)
+                x_created[series.name] = series
 
-    x, y = split_target_features(config_gui.name_of_target, data)
+    return x_created
+
+def automatic_feature_lag_constructor(config: DataTuningAutoSetup, data):
+    x_created = pd.DataFrame()
+
+    Wrapper = DataTunerWrapperModel(config)
+
+    x, y = split_target_features(config.name_of_target, data)
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25)
 
     old_score = Wrapper.train_score(x_train, x_test, y_train, y_test)
@@ -72,7 +86,7 @@ def automatic_feature_lag_constructor(config_gui, data):
     # Loop through to create feature lags as long as they improve the result
     for column in x:
         temp_score = old_score
-        for i in range(config_gui["min_feature_lag"], config_gui["max_feature_lag"] + 1):
+        for i in range(config.minimum_feature_lag, config.maximum_feature_lag + 1):
             series = feature_constructor.create_lag(x[column], i)
             x_processed = pd.concat([x, series], axis=1, join="inner")
 
@@ -88,18 +102,8 @@ def automatic_feature_lag_constructor(config_gui, data):
                 x_best_lag = series
 
         # add best lag to feature space if good enough
-        if temp_score >= old_score + config_gui["min_increase"]:
+        if temp_score >= old_score + config.min_increase_4_wrapper:
             x_created[x_best_lag.name] = x_best_lag
 
     return x_created
 
-def create_difference(config_gui, data):
-
-    x_created = pd.DataFrame()
-
-    for var_name in data.columns:
-        if var_name != config_gui["target"]:
-            series = feature_constructor.create_difference(data[var_name])
-            x_created[series.name] = series
-
-    return x_created

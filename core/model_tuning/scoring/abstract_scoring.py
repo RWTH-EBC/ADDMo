@@ -8,5 +8,6 @@ class AbstractScoring(ABC):
     @abstractmethod
     @staticmethod
     def score(model: AbstractMLModel, x, y):
-        """ Returns a positive float value. The higher the better."""
+        """ Returns a positive float value. The higher the better.
+        x and y include train and evaluation period."""
         pass

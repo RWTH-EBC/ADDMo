@@ -1326,13 +1326,13 @@ temperature as signal. """
                     self.dialog_featurelag.get_field("maxFeatureLag").get_value()
                 )
             DT_Setup_Object_AFB.manual_feature_selection = False
-            DT_Setup_Object_AFB.low_variance_filter = False
-            DT_Setup_Object_AFB.ICA = False
-            DT_Setup_Object_AFB.univariate_filter = False
+            DT_Setup_Object_AFB.filter_low_variance = False
+            DT_Setup_Object_AFB.filter_ICA = False
+            DT_Setup_Object_AFB.filter_univariate = False
             rf = RandomForestRegressor(max_depth=10e17, random_state=0)
             DT_Setup_Object_AFB.embedded_model = rf
-            DT_Setup_Object_AFB.embedded_feature_selection_threshold = False
-            DT_Setup_Object_AFB.recursive_feature_selection = False
+            DT_Setup_Object_AFB.recursive_embedded_threshold = False
+            DT_Setup_Object_AFB.filter_recursive_embedded = False
             DT_Setup_Object_AFB.wrapper_recursive_feature_selection = False
 
             # Values ModelTuning
@@ -1534,40 +1534,40 @@ temperature as signal. """
                 DT_Setup_Object.selected_features = convert_string_to_list(
                     self.ManFeatureSelectFeaturesDT.get_value(), int
                 )
-            DT_Setup_Object.low_variance_filter = self.LowVarFilterDT.get_value()
-            if DT_Setup_Object.low_variance_filter == True:
+            DT_Setup_Object.filter_low_variance = self.LowVarFilterDT.get_value()
+            if DT_Setup_Object.filter_low_variance == True:
                 DT_Setup_Object.low_variance_threshold = float(
                     self.VarianceDT.get_value()
                 )
-            DT_Setup_Object.ICA = self.ICADT.get_value()
-            DT_Setup_Object.univariate_filter = self.UnivariateFilterDT.get_value()
-            if DT_Setup_Object.univariate_filter == True:
+            DT_Setup_Object.filter_ICA = self.ICADT.get_value()
+            DT_Setup_Object.filter_univariate = self.UnivariateFilterDT.get_value()
+            if DT_Setup_Object.filter_univariate == True:
                 DT_Setup_Object.univariate_score_function = self.UniFilterScorFuncDT.get_key()
                 DT_Setup_Object.univariate_search_mode = self.UniFilterSearchStratDT.get_key()
                 DT_Setup_Object.univariate_filter_params = float(
                     self.UniFilterParamDT.get_value()
                 )  # Todo: review if float works with number of features which is int
-            DT_Setup_Object.embedded_feature_selection_threshold = (
+            DT_Setup_Object.recursive_embedded_threshold = (
                 self.UnivariateEmbeddedDT.get_value()
             )
-            if DT_Setup_Object.embedded_feature_selection_threshold == True:
-                DT_Setup_Object.embedded_threshold_type = float(
+            if DT_Setup_Object.recursive_embedded_threshold == True:
+                DT_Setup_Object.recursive_embedded_threshold_type = float(
                     self.Threshold_embeddedDT.get_value()
                 )
-            DT_Setup_Object.recursive_feature_selection = (
+            DT_Setup_Object.filter_recursive_embedded = (
                 self.MultivariateEmbeddedDT.get_value()
             )
-            if DT_Setup_Object.recursive_feature_selection == True:
-                DT_Setup_Object.recursive_fs_number_features_to_select = self.FeaturesRFEDT.get_value()
-                if DT_Setup_Object.recursive_fs_number_features_to_select != "automatic":
-                    DT_Setup_Object.recursive_fs_number_features_to_select = int(
+            if DT_Setup_Object.filter_recursive_embedded == True:
+                DT_Setup_Object.recursive_embedded_number_features_to_select = self.FeaturesRFEDT.get_value()
+                if DT_Setup_Object.recursive_embedded_number_features_to_select != "automatic":
+                    DT_Setup_Object.recursive_embedded_number_features_to_select = int(
                         self.FeaturesRFEDT.get_value()
                     )
                 # convert string type keys into functions to be passed to SharedVariables
                 DicCVTypes = {"KFold": KFold, "TimeSeriesSplit": TimeSeriesSplit}
                 for key in DicCVTypes:
                     if key == self.RFE_CV_DT.get_key():
-                        DT_Setup_Object.cross_validation_4_data_tuning = DicCVTypes[key](
+                        DT_Setup_Object.recursive_embedded_scoring = DicCVTypes[key](
                             (int(self.RFE_CVFolds_DT.get_value()))
                         )
             DT_Setup_Object.wrapper_recursive_feature_selection = (

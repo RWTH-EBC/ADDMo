@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split
 
 # from GlobalVariables import *
 import SharedVariablesFunctions as SVF
-from core.data_tuning_optimizer.config.data_tuning_config import DataTuningSetup
+from core.data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from core.util.data_handling import split_signal_and_features
 
 
@@ -23,7 +23,7 @@ from core.util.data_handling import split_signal_and_features
 # Todo: add function to just delete certain features
 # Manual Selection of Features (By the columns of the "FeatureConstruction" Excel Table)
 
-def manual_feature_select(dt_setup: DataTuningSetup, data):
+def manual_feature_select(dt_setup: DataTuningAutoSetup, data):
     # Ensure the target column is included in the selected features
     selected_features = set(dt_setup.selected_features) | {dt_setup.name_of_target}
     return data[selected_features]
@@ -31,7 +31,7 @@ def manual_feature_select(dt_setup: DataTuningSetup, data):
 
 
 # Pre-Filter removing features with low variance
-def low_variance_filter(dt_setup: DataTuningSetup, data):
+def low_variance_filter(dt_setup: DataTuningAutoSetup, data):
     (x, y) = split_signal_and_features(dt_setup.name_of_target, Data=data)
     filter = VarianceThreshold(
         threshold=dt_setup.low_variance_threshold
@@ -48,7 +48,7 @@ def low_variance_filter(dt_setup: DataTuningSetup, data):
 
 
 # Filter Independent Component Analysis (ICA)
-def filter_ica(DT_Setup_object: DataTuningSetup: DataTuningSetup, Data):
+def filter_ica(DT_Setup_object: DataTuningSetup: DataTuningAutoSetup, Data):
     (X, Y) = split_signal_and_features(DT_Setup_object.name_of_target, Data=Data)
     Ica = FastICA(max_iter=1000)
     Features_transformed = Ica.fit_transform(X=X)
@@ -62,7 +62,8 @@ def filter_ica(DT_Setup_object: DataTuningSetup: DataTuningSetup, Data):
 
 
 # Filter Univariate with scoring function f-test or mutual information and search mode : {‘percentile’, ‘k_best’, ‘fpr’, ‘fdr’, ‘fwe’}
-def filter_univariate(DT_Setup_object: DataTuningSetup, Data):
+def filter_univariate(DT_Setup_object: DataTuningAutoSetup, Data):
+    '''Filter Univariate with scoring function f-test or mutual information and search mode : {‘percentile’, ‘k_best’, ‘fpr’, ‘fdr’, ‘fwe’}'''
     (X, Y) = split_signal_and_features(DT_Setup_object.name_of_target, Data=Data)
     filter = GenericUnivariateSelect(
         score_func=DT_Setup_object.univariate_score_function,
@@ -82,14 +83,14 @@ def filter_univariate(DT_Setup_object: DataTuningSetup, Data):
 
 
 # embedded Feature Selection by recursive feature elemination (Feature Subset Selection, multivariate)
-def embedded__recursive_feature_selection(DT_Setup_object: DataTuningSetup, Data):
+def embedded__recursive_feature_selection(DT_Setup_object: DataTuningAutoSetup, Data):
     (X, Y) = split_signal_and_features(DT_Setup_object.name_of_target, Data=Data)
     # split into automatic and selection by number because those are two different functions
     if DT_Setup_object.N_features_to_select == "automatic":
         selector = RFECV(
             estimator=DT_Setup_object.embedded_model,
             step=1,
-            cv=DT_Setup_object.cross_validation_4_data_tuning,
+            cv=DT_Setup_object.recursive_embedded_scoring,
         )
         selector = selector.fit(X, Y)
         print("Ranks of all Features %s" % selector.ranking_)
@@ -97,7 +98,7 @@ def embedded__recursive_feature_selection(DT_Setup_object: DataTuningSetup, Data
     else:
         selector = RFE(
             estimator=DT_Setup_object.embedded_model,
-            n_features_to_select=DT_Setup_object.recursive_fs_number_features_to_select,
+            n_features_to_select=DT_Setup_object.recursive_embedded_number_features_to_select,
             step=1,
         )
         selector = selector.fit(X, Y)
@@ -114,13 +115,13 @@ def embedded__recursive_feature_selection(DT_Setup_object: DataTuningSetup, Data
 
 
 # embedded Feature Selection by importance with setting an threshold of importance (Feature Selection through ranking; univariate)
-def embedded__feature_selection_by_importance_threshold(DT_Setup_object: DataTuningSetup, Data):
+def embedded__feature_selection_by_importance_threshold(DT_Setup_object: DataTuningAutoSetup, Data):
     (X, Y) = split_signal_and_features(DT_Setup_object.name_of_target, Data)
     Estimator = DT_Setup_object.embedded_model.fit(X, Y)
     # Estimator.feature_importances_ #Todo: delete if proven unnecessary
     print("Importance of all Features %s" % Estimator.feature_importances_)
     selector = SelectFromModel(
-        threshold=DT_Setup_object.embedded_threshold_type, estimator=Estimator, prefit=True
+        threshold=DT_Setup_object.recursive_embedded_threshold_type, estimator=Estimator, prefit=True
     )
     Features_transformed = selector.transform(X)
     Data = SVF.merge_signal_and_features_embedded(
@@ -133,7 +134,7 @@ def embedded__feature_selection_by_importance_threshold(DT_Setup_object: DataTun
     return Data
 
 
-def wrapper__recursive_feature_selection(DT_Setup_object: DataTuningSetup, Data):
+def wrapper__recursive_feature_selection(DT_Setup_object: DataTuningAutoSetup, Data):
     print("recursive feature selection via wrapper START")
     (X, Y) = split_signal_and_features(DT_Setup_object.name_of_target, Data)
     X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25)
@@ -168,7 +169,7 @@ def wrapper__recursive_feature_selection(DT_Setup_object: DataTuningSetup, Data)
 
 
 # Main#############################################################
-def main(DT_Setup_object: DataTuningSetup, DT_RR_object):
+def main(DT_Setup_object: DataTuningAutoSetup, DT_RR_object):
     print("Feature Selection is being done...")
     startTime = time.time()
 
@@ -177,17 +178,17 @@ def main(DT_Setup_object: DataTuningSetup, DT_RR_object):
 
     if DT_Setup_object.manual_feature_selection == True:
         Data = manual_feature_select(DT_Setup_object, Data)
-    if DT_Setup_object.low_variance_filter == True:
+    if DT_Setup_object.filter_low_variance == True:
         Data = low_variance_filter(DT_Setup_object, Data)
-    if DT_Setup_object.ICA == True:
+    if DT_Setup_object.filter_ICA == True:
         Data = filter_ica(DT_Setup_object, Data)
-    if DT_Setup_object.univariate_filter == True:
+    if DT_Setup_object.filter_univariate == True:
         Data = filter_univariate(DT_Setup_object, Data)
-    if DT_Setup_object.embedded_feature_selection_threshold == True:
+    if DT_Setup_object.recursive_embedded_threshold == True:
         Data = embedded__feature_selection_by_importance_threshold(
             DT_Setup_object, Data
         )
-    if DT_Setup_object.recursive_feature_selection == True:
+    if DT_Setup_object.filter_recursive_embedded == True:
         Data = embedded__recursive_feature_selection(DT_Setup_object, Data)
     if DT_Setup_object.wrapper_recursive_feature_selection == True:
         Data = wrapper__recursive_feature_selection(DT_Setup_object, Data)

@@ -2,14 +2,14 @@ import os
 
 from core.util.definitions import root_dir, results_dir_data_tuning_local
 from core.util.experiment_logger import LocalLogger
-from core.data_tuning.config.data_tuning_config import DataTuningConfig
-from core.data_tuning.data_tuner import DataTunerByConfig
+from core.data_tuning.config.data_tuning_config import DataTuningFixedConfig
+from core.data_tuning.data_tuner_fixed import DataTunerByConfig
 
 # Path to the config file
 path_to_yaml = os.path.join(root_dir(), 'core', 'data_tuning', 'config', 'data_tuning_config.yaml')
 
 # Create the config object
-config = DataTuningConfig()
+config = DataTuningFixedConfig()
 
 # Load the config from the yaml file
 config.load_yaml_to_class(path_to_yaml)

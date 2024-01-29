@@ -1,6 +1,6 @@
 from core.util.load_save import load_yaml_to_dict
 
-class DataTuningConfig():
+class DataTuningFixedConfig():
     def __init__(self):
         self.config_as_dict = None # safe the config as dict for specific use cases
 

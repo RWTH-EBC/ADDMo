@@ -1,7 +1,7 @@
 import os
 import git
 import shutil
-from core.data_tuning.config.data_tuning_config import DataTuningConfig
+from core.data_tuning.config.data_tuning_config import DataTuningFixedConfig
 def root_dir():
     # Finds the root directory of the git repository
     return git.Repo('.', search_parent_directories=True).working_tree_dir
@@ -25,7 +25,7 @@ def results_dir_wandb():
 def config_files_path():
     return os.path.join(root_dir(), 'config')
 
-def results_dir_data_tuning_local(config: DataTuningConfig):
+def results_dir_data_tuning_local(config: DataTuningFixedConfig):
     path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, config.name_of_tuning)
     return _create_or_override_directory(path)
 

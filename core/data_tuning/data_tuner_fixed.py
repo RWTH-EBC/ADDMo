@@ -1,13 +1,13 @@
 import pandas as pd
 
-from core.data_tuning.config.data_tuning_config import DataTuningConfig
+from core.data_tuning.config.data_tuning_config import DataTuningFixedConfig
 from core.data_tuning import feature_constructor as fc
 from core.data_tuning.data_importer import load_raw_data
 from core.util.experiment_logger import ExperimentLogger
 
 class DataTunerByConfig():
     '''Tunes the data in a fixed manner. Without randomness.'''
-    def __init__(self, config: DataTuningConfig, logger:ExperimentLogger):
+    def __init__(self, config: DataTuningFixedConfig, logger:ExperimentLogger):
         self.config = config
         self.logger = logger
         self.xy_raw = load_raw_data(self.config.path_to_raw_data)

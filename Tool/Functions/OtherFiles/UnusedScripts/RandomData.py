@@ -84,7 +84,7 @@ ax.scatter(Feature1_test, Feature2_test, predicted_ann, color='aqua', label='pre
 ax.set_xlabel('Feature1')
 ax.set_ylabel('Feature2')
 ax.set_zlabel('Signal_train')
-#ax.set_title('Score SVR: %s, Score RF: %s' %(clf.score(Features_test, Signal_test), rf.score(Features_test, Signal_test)))
+#ax.set_title('Score SVR: %s, Score RF: %s' %(clf.score_test(Features_test, Signal_test), rf.score_test(Features_test, Signal_test)))
 ax.legend()
 timeend = time.time()
 print("Plotting took %s seconds" %(timeend-timestart))

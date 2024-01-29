@@ -26,7 +26,9 @@ class DataTuningAutoSetup:
         self.wrapper_model: str = "MLP"  # Set the model that shall be used for the wrapper
         self.wrapper_params: str = "default"  # State the parameters that the model should have.
         # Eg. "default" or a dictionary with parameters readable for the model
-        self.wrapper_scoring: str = "R2"  # Scoring method for the wrapper
+        self.scoring_split_technique: str = "TimeSeriesSplit"  # Set the split technique that shall
+        # be used
+        self.scoring_metric: str = "R2"  # Scoring method for the wrapper
         self.min_increase_4_wrapper: float = 0.005  # Minimum difference between two scores to
         # accept a feature constuction or selection as worthy. Only used in wrapper methods.
 

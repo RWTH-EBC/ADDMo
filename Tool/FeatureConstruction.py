@@ -162,13 +162,13 @@ def automatic_timeseries_ownlag_constructor(DT_Setup_object, Data, Data_AllSampl
     X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25)
     Result_dic = DT_Setup_object.wrapper_model(
         X_train, y_train, X_test, y_test, *DT_Setup_object.wrapper_params
-    )  # score will be done over hold out 0.25 percent of data
-    Score = Result_dic["score"]  # get the score  #get initial score
+    )  # score_test will be done over hold out 0.25 percent of data
+    Score = Result_dic["score_test"]  # get the score_test  #get initial score_test
     Score_i = Score
     i = DT_Setup_object.minimum_target_lag - 1  # just for easier looping
     while True:  # loop as long as a new ownlag increases the accuracy
         i += 1
-        Score = Score_i  # set score equal to the new and better score_i
+        Score = Score_i  # set score_test equal to the new and better score_i
         OwnLagName = (
                 DT_Setup_object.name_of_target + "_lag_" + str(i)
         )  # create a column name per lag
@@ -182,13 +182,13 @@ def automatic_timeseries_ownlag_constructor(DT_Setup_object, Data, Data_AllSampl
         X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25)
         Result_dic = DT_Setup_object.wrapper_model(
             X_train, y_train, X_test, y_test, *DT_Setup_object.wrapper_params
-        )  # score will be done over hold out 0.25 percent of data
-        Score_i = Result_dic["score"]  # get the score with the additional ownlag
+        )  # score_test will be done over hold out 0.25 percent of data
+        Score_i = Result_dic["score_test"]  # get the score_test with the additional ownlag
         if not (Score + DT_Setup_object.min_increase_4_wrapper) <= Score_i:
             break
     Data = Data.drop(
         [OwnLagName], axis=1
-    )  # drop the last ownlag that was not improving the score
+    )  # drop the last ownlag that was not improving the score_test
     return Data
 
 
@@ -199,8 +199,8 @@ def auto_featurelag_constructor(DT_Setup_object, Data, Data_AllSamples):
     X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25)
     Result_dic = DT_Setup_object.wrapper_model(
         X_train, y_train, X_test, y_test, *DT_Setup_object.wrapper_params
-    )  # score will be done over hold out 0.25 percent of data
-    Score = Result_dic["score"]  # get the score  #get initial score
+    )  # score_test will be done over hold out 0.25 percent of data
+    Score = Result_dic["score_test"]  # get the score_test  #get initial score_test
     Columns = list(Data)
     Data_c = Data  # copy of Data that is never changed
     for i in range(0, len(Columns)):
@@ -236,18 +236,18 @@ def auto_featurelag_constructor(DT_Setup_object, Data, Data_AllSamples):
                 )
                 Result_dic = DT_Setup_object.wrapper_model(
                     X_train_i, y_train, X_test_i, y_test, *DT_Setup_object.wrapper_params
-                )  # score will be done over hold out 0.25 percent of data
+                )  # score_test will be done over hold out 0.25 percent of data
                 Score_2 = Result_dic[
-                    "score"
-                ]  # get the score with the additional featurelag
-                # check whether score is higher than previous or not
+                    "score_test"
+                ]  # get the score_test with the additional featurelag
+                # check whether score_test is higher than previous or not
                 if Score_2 > Score_1:
                     DataShift_best = DataShift
                     FeatureLagName_best = FeatureLagName
                     Score_best = Score_2
             if Score_best > (
                 Score + DT_Setup_object.min_increase_4_wrapper
-            ):  # if best featurelag of respective feature is better than initial score: add it
+            ):  # if best featurelag of respective feature is better than initial score_test: add it
                 Data = pd.concat(
                     [Data, DataShift_best.rename(FeatureLagName_best)],
                     axis=1,

@@ -216,7 +216,7 @@ def Bayes(
         )
         t_end = time.time()
         print(
-            "Params per iteration: %s \ with the Score score %.3f, took %.2fseconds"
+            "Params per iteration: %s \ with the Score score_test %.3f, took %.2fseconds"
             % (params, Score, (t_end - t_start))
         )
         return Score
@@ -224,7 +224,7 @@ def Bayes(
     def f(params):
         acc = hyperopt(
             params, _X_train, _Y_train, _X_test, _Y_test, Indexer
-        )  # gets the score of the model
+        )  # gets the score_test of the model
         return {
             "loss": -acc,
             "status": STATUS_OK,

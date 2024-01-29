@@ -17,7 +17,7 @@ wrapper_params:  # Parameters for the model
   - None  # Crossvalidation
   - None  # max_eval
   - False  # Recursive feature
-min_increase: 0.005  # Minimum score difference to accept a data change
+min_increase: 0.005  # Minimum score_test difference to accept a data change
 
 # ImportData Variables
 # (No specific variables defined under this section)

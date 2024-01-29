@@ -70,7 +70,7 @@ def recursive_feature_selection_wrapper(config: DataTuningAutoSetup, x,
                                                   y) -> pd.DataFrame:
     '''
     Filter using Sequential Feature Selection.
-    This method selects features based on the resulting score of the estimator.
+    This method selects features based on the resulting score_test of the estimator.
     For documentation see scikit-learn.org.
     '''
 

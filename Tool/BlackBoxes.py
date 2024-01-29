@@ -202,7 +202,7 @@ def train_predict_selected_models(
 
     def train_predict(Model):
 
-        # This function is just to "centralize" the fit and infer operations so that additional options can be added easier
+        # This function is just to "centralize" the fit and predict operations so that additional options can be added easier
         if Model == "SVR":
             Score = evaluate(BlackBox1, MT_RR_object.SVR_Summary)
         if Model == "RF":
@@ -542,7 +542,7 @@ class indiv_model:
                 CV=self.CV,
                 Max_evals=self.Max_evals,
                 Recursive=False,
-            )  # fit and infer for the given data #recursive has to be turned of (doesnt work with individual model), it is done later in this function for individual models
+            )  # fit and predict for the given data #recursive has to be turned of (doesnt work with individual model), it is done later in this function for individual models
             Y_i = _dic["prediction"]  # pull the prediction from the dictionary
             Index = Dic[key][3]
             Y_i = pd.DataFrame(
@@ -589,7 +589,7 @@ class indiv_model:
                         if (
                             i in Dic[key].set_index("TrackIndex").index
                         ):  # checks whether the line i is in the data for the data of the respective key
-                            OwnLag = best_model[key].infer(
+                            OwnLag = best_model[key].predict(
                                 vector_i
                             )  # do a one one timestep prediction with the model of the respective key
 
@@ -630,7 +630,7 @@ class indiv_model:
                 if not Dic[
                     key
                 ].empty:  # to avoid a crash if not all individual models are called in the test data range
-                    Y_i = best_model[key].infer(Dic[key])
+                    Y_i = best_model[key].predict(Dic[key])
                     Index = Dic[key]
                     Y_i = pd.DataFrame(
                         index=Index.index, data=Y_i
@@ -690,7 +690,7 @@ class indiv_model_onlypredict:
                             "%s_%s.save" % (key, self.NameOfPredictor),
                         )
                     )
-                    Y_i = Predictor.infer(Dic[key])  # infer
+                    Y_i = Predictor.predict(Dic[key])  # predict
                     Index = Dic[key]
                     Y_i = pd.DataFrame(
                         index=Index.index, data=Y_i
@@ -736,7 +736,7 @@ class indiv_model_onlypredict:
                                     "%s_%s.save" % (key, self.NameOfPredictor),
                                 )
                             )  # load the respective model
-                            OwnLag = Predictor.infer(
+                            OwnLag = Predictor.predict(
                                 vector_i
                             )  # do a one one timestep prediction with the model of the respective key
 
@@ -785,7 +785,7 @@ class indiv_model_onlypredict:
                             "%s_%s.save" % (key, self.NameOfPredictor),
                         )
                     )  # load the respective model
-                    Y_i = Predictor.infer(Dic[key])
+                    Y_i = Predictor.predict(Dic[key])
                     Index = Dic[key]
                     Y_i = pd.DataFrame(
                         index=Index.index, data=Y_i

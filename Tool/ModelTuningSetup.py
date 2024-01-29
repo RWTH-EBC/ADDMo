@@ -47,7 +47,7 @@ class ModelTuningSetup:
     # -----------------------Only Predict Variables-------------------------------
 
         # This is to use after training the models, hence it won´t produce results if there is no trained model saved already(which is done automatically if training one)
-        # You define the trained model you want to load through nameofexperiment and NameOfSubTest and the time you want to infer through __StartDateTest and __EndDateTest
+        # You define the trained model you want to load through nameofexperiment and NameOfSubTest and the time you want to predict through __StartDateTest and __EndDateTest
         # of course it is necessary that the models have been trained before in the respective nameofdata and nameofexperiment and NameOfSubTest combination
 
         NameOfOnlyPredict = "TestNew5"  # use different names if you want to use several only_predicts on the same trained models
@@ -75,7 +75,7 @@ class ModelTuningSetup:
     # possible entries
     # Max_eval_Bayes = int - Number of iterations the bayesian optimization should do for selecting NumberofFeatures, IndivModel, BestModel , the less the less quality but faster
     # Model= "SVR","ANN","GB","RF","Lasso" - choose a model for bayesian optimization (RF is by far the fastest)
-    #        "ModelSelection" - bayesian optimization is done with the score of the best model (hence in each iteration all models are calculated)
+    #        "ModelSelection" - bayesian optimization is done with the score_test of the best model (hence in each iteration all models are calculated)
     #        "Baye" - models are chosen through bayesian optimization as well (consider higher amount of Max_eval_bayes
 
     # define and set Estimator which shall be used in for the embedded feature selection

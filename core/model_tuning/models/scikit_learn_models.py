@@ -26,7 +26,7 @@ class ScikitLearnBaseModel(AbstractMLModel):
         self.x = x # Save the training data to be used later for ONNX conversion
         self.model.fit(x, y)  # Train the model
 
-    def infer(self, x):
+    def predict(self, x):
         return self.model.predict(x)  # Make predictions
 
     def set_hyperparameters(self, hyperparameters):

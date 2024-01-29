@@ -41,7 +41,7 @@ def recursive(Features_test, Best_trained_model):
     )  # set an trackable index 0,1,2,3,etc.
     for i in Features_test_i.index:
         vector_i = Features_test_i.iloc[[i]]  # get the features of the timestep i
-        OwnLag = Best_trained_model.infer(
+        OwnLag = Best_trained_model.predict(
             vector_i
         )  # do a one one timestep prediction
         Booleans = Features_test_i.columns.str.contains(
@@ -162,12 +162,12 @@ def svr_grid_search_predictor(
         score = "empty"
 
     # print section
-    # print("The Score svr: %s" %Best_trained_model.score(Features_test, Signal_test))
+    # print("The Score svr: %s" %Best_trained_model.score_test(Features_test, Signal_test))
     # print("Best Hyperparameters: %s" %svr.best_params_)
     timeend = time.time()
     # print("SVR took %s seconds" %(timeend-timestart))
     return {
-        "score": score,
+        "score_test": score,
         "best_params": svr.best_params_,
         "prediction": predicted,
         "ComputationTime": (timeend - timestart),
@@ -201,10 +201,10 @@ def svr_bayesian_predictor(
         )  # give the specific parameter sample per run from fmin
         CV_score = cross_val_score(
             estimator=Estimator, X=Features_train, y=Signal_train, cv=CV, scoring="r2"
-        ).mean()  # create a crossvalidation score which shall be optimized
+        ).mean()  # create a crossvalidation score_test which shall be optimized
         t_end = time.time()
         print(
-            "Params per iteration: %s \ with the cross-validation score %.3f, took %.2fseconds"
+            "Params per iteration: %s \ with the cross-validation score_test %.3f, took %.2fseconds"
             % (params, CV_score, (t_end - t_start))
         )
         return CV_score
@@ -241,12 +241,12 @@ def svr_bayesian_predictor(
     # print("List of losses per ok trial: %s" %trials.losses())
     # print("List of statuses: %s" %trials.statuses())
     # print("BlackBox Parameter")
-    # print("The Score svr: %s" %Best_trained_model.score(Features_test, Signal_test))
+    # print("The Score svr: %s" %Best_trained_model.score_test(Features_test, Signal_test))
     # print("Best Hyperparameters: %s" %BestParams)
     timeend = time.time()
     # print("SVR took %s seconds" %(timeend-timestart))
     return {
-        "score": score,
+        "score_test": score,
         "best_params": BestParams,
         "prediction": predicted,
         "ComputationTime": (timeend - timestart),
@@ -279,7 +279,7 @@ def rf_predictor(
     Best_trained_model = rf.fit(Features_train, Signal_train)
     if (
         not Features_test.empty
-    ):  # check whether the test data is not empty #todo:finish(seems to work now but still do for the other models) (maybe better as a class, think an plan)(didnt work because there is no Signal_test for scoring or doing the score; check whether score is necessary anyways, because it is scored later on)(Think of objectoriented programming, there you could apply the function "score" inside the class and only call it if necesaarry
+    ):  # check whether the test data is not empty #todo:finish(seems to work now but still do for the other models) (maybe better as a class, think an plan)(didnt work because there is no Signal_test for scoring or doing the score_test; check whether score_test is necessary anyways, because it is scored later on)(Think of objectoriented programming, there you could apply the function "score_test" inside the class and only call it if necesaarry
         if Recursive == False:
             predicted = Best_trained_model.predict(Features_test)
         elif Recursive == True:
@@ -296,7 +296,7 @@ def rf_predictor(
     timeend = time.time()
     print("RF took %s seconds" % (timeend - timestart))
     return {
-        "score": score,
+        "score_test": score,
         "feature_importance": Best_trained_model.feature_importances_,
         "prediction": predicted,
         "ComputationTime": (timeend - timestart),
@@ -332,23 +332,23 @@ def gradientboost_gridsearch(
     Best_trained_model = bestgb.fit(Features_train, Signal_train)
     if not Features_test.empty:
         if Recursive == False:
-            predicted = Best_trained_model.infer(Features_test)
+            predicted = Best_trained_model.predict(Features_test)
         elif Recursive == True:
             Features_test_i = recursive(Features_test, Best_trained_model)
-            predicted = Best_trained_model.infer(Features_test_i)
-        score = Best_trained_model.score(Features_test, Signal_test)
+            predicted = Best_trained_model.predict(Features_test_i)
+        score = Best_trained_model.score_test(Features_test, Signal_test)
     else:
         predicted = []
         score = "empty"
 
     # print section
-    # print("The Score gb: %s" %Best_trained_model.score(Features_test, Signal_test))
+    # print("The Score gb: %s" %Best_trained_model.score_test(Features_test, Signal_test))
     # print("Feature Importance gb: %s" %Best_trained_model.feature_importances_)
     # print("best_params: %s" %gb.best_params_)
     timeend = time.time()
     # print("gb took %s seconds" %(timeend-timestart))
     return {
-        "score": score,
+        "score_test": score,
         "best_params": gb.best_params_,
         "feature_importance": Best_trained_model.feature_importances_,
         "prediction": predicted,
@@ -390,10 +390,10 @@ def gradientboost_bayesian(
         )  # give the specific parameter sample per run from fmin
         CV_score = cross_val_score(
             estimator=Estimator, X=Features_train, y=Signal_train, cv=CV, scoring="r2"
-        ).mean()  # create a crossvalidation score which shall be optimized
+        ).mean()  # create a crossvalidation score_test which shall be optimized
         t_end = time.time()
         print(
-            "Params per iteration: %s \ with the cross-validation score %.3f, took %.2fseconds"
+            "Params per iteration: %s \ with the cross-validation score_test %.3f, took %.2fseconds"
             % (params, CV_score, (t_end - t_start))
         )
         return CV_score
@@ -443,12 +443,12 @@ def gradientboost_bayesian(
     # print("List of losses per ok trial: %s" %trials.losses())
     # print("List of statuses: %s" %trials.statuses())
     # print("BlackBox Parameter")
-    # print("The Score GB: %s" %Best_trained_model.score(Features_test, Signal_test))
+    # print("The Score GB: %s" %Best_trained_model.score_test(Features_test, Signal_test))
     # print("Best Hyperparameters: %s" %BestParams)
     timeend = time.time()
     # print("GB took %s seconds" %(timeend-timestart))
     return {
-        "score": score,
+        "score_test": score,
         "feature_importance": Best_trained_model.feature_importances_,
         "best_params": BestParams,
         "prediction": predicted,
@@ -484,24 +484,24 @@ def lasso_grid_search_predictor(
     Best_trained_model = bestlasso.fit(Features_train, Signal_train)
     if not Features_test.empty:
         if Recursive == False:
-            predicted = Best_trained_model.infer(Features_test)
+            predicted = Best_trained_model.predict(Features_test)
         elif Recursive == True:
             Features_test_i = recursive(Features_test, Best_trained_model)
-            predicted = Best_trained_model.infer(Features_test_i)
-        score = Best_trained_model.score(Features_test, Signal_test)
+            predicted = Best_trained_model.predict(Features_test_i)
+        score = Best_trained_model.score_test(Features_test, Signal_test)
     else:
         predicted = []
         score = "empty"
 
     # print section
     timeend = time.time()
-    # print("The Score Lasso: %s" % Best_trained_model.score(Features_test, Signal_test))
+    # print("The Score Lasso: %s" % Best_trained_model.score_test(Features_test, Signal_test))
     # print("Best Hyperparameters: %s" %lasso.best_params_)
     # print("Lasso coef: %s" % Best_trained_model.coef_)
     # print("Lasso took %s seconds" %(timeend-timestart))
 
     return {
-        "score": score,
+        "score_test": score,
         "best_params": lasso.best_params_,
         "feature_importance": Best_trained_model.coef_,
         "prediction": predicted,
@@ -536,10 +536,10 @@ def lasso_bayesian(
         )  # give the specific parameter sample per run from fmin
         CV_score = cross_val_score(
             estimator=Estimator, X=Features_train, y=Signal_train, cv=CV, scoring="r2"
-        ).mean()  # create a crossvalidation score which shall be optimized
+        ).mean()  # create a crossvalidation score_test which shall be optimized
         t_end = time.time()
         print(
-            "Params per iteration: %s \ with the cross-validation score %.3f, took %.2fseconds"
+            "Params per iteration: %s \ with the cross-validation score_test %.3f, took %.2fseconds"
             % (params, CV_score, (t_end - t_start))
         )
         return CV_score
@@ -576,12 +576,12 @@ def lasso_bayesian(
     # print("List of losses per ok trial: %s" %trials.losses())
     # print("List of statuses: %s" %trials.statuses())
     # print("BlackBox Parameter")
-    # print("The Score Lasso: %s" %Best_trained_model.score(Features_test, Signal_test))
+    # print("The Score Lasso: %s" %Best_trained_model.score_test(Features_test, Signal_test))
     # print("Best Hyperparameters: %s" %BestParams)
     timeend = time.time()
     # print("Lasso took %s seconds" %(timeend-timestart))
     return {
-        "score": score,
+        "score_test": score,
         "feature_importance": Best_trained_model.coef_,
         "best_params": BestParams,
         "prediction": predicted,
@@ -621,12 +621,12 @@ def ann_grid_search_predictor(
 
     timeend = time.time()
     # print section
-    # print("The Score ann: %s" %Best_trained_model.score(Features_test, Signal_test))
+    # print("The Score ann: %s" %Best_trained_model.score_test(Features_test, Signal_test))
     # print("Best Hyperparameters: %s" %ann.best_params_)
     # print("ANN took %s seconds" %(timeend-timestart))
 
     return {
-        "score": score,
+        "score_test": score,
         "best_params": ann.best_params_,
         "prediction": predicted,
         "ComputationTime": (timeend - timestart),
@@ -679,10 +679,10 @@ def ann_bayesian_predictor(
         )  # give the specific parameter sample per run from fmin
         CV_score = cross_val_score(
             estimator=Estimator, X=Features_train, y=Signal_train, cv=CV, scoring="r2"
-        ).mean()  # create a crossvalidation score which shall be optimized
+        ).mean()  # create a crossvalidation score_test which shall be optimized
         t_end = time.time()
         print(
-            "Params per iteration: %s \ with the cross-validation score %.3f, took %.2fseconds"
+            "Params per iteration: %s \ with the cross-validation score_test %.3f, took %.2fseconds"
             % (params, CV_score, (t_end - t_start))
         )
         return CV_score
@@ -741,12 +741,12 @@ def ann_bayesian_predictor(
     # print("List of losses per ok trial: %s" %trials.losses())
     # print("List of statuses: %s" %trials.statuses())
     # print("BlackBox Parameter")
-    # print("The Score ann: %s" %Ann_best.score(Features_test, Signal_test))
+    # print("The Score ann: %s" %Ann_best.score_test(Features_test, Signal_test))
     # print("Best Hyperparameters: %s" %BestParams)
     timeend = time.time()
     # print("ANN took %s seconds" %(timeend-timestart))
     return {
-        "score": score,
+        "score_test": score,
         "best_params": BestParams,
         "prediction": predicted,
         "ComputationTime": (timeend - timestart),

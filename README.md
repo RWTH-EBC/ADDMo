@@ -40,8 +40,8 @@ informative value.
 - Custom ownlag creation*
 - Automated time series ownlag creation*: Wrapper for creating
 the optimal number of time series ownlags. Ownlags
-are added as long as they improve the score. The selection
-is based on the assumption that the score is monotonically
+are added as long as they improve the score_test. The selection
+is based on the assumption that the score_test is monotonically
 increasing with the number of ownlags, till it reaches the
 global optimum.
 
@@ -59,7 +59,7 @@ of features can be both found automatically or set manually.
 selection by a custom threshold of importance.
 - Wrapper recursive feature selection*: Multivariate wrapper
 which iteratively deletes the worst feature of the respective
-feature subset as long as it improves the score.
+feature subset as long as it improves the score_test.
 
 Sample processing:
 - Individual model “hourly”*: One model per hour of the day.
@@ -208,12 +208,12 @@ Necessary steps "Model tuning":\
 	2.Define settings\
 	3.Run
 
-4.Only infer: Import previously trained models and their underlying tuned data, infer and evaluate the model with a more sophisticated evaluation method.\
+4.Only predict: Import previously trained models and their underlying tuned data, predict and evaluate the model with a more sophisticated evaluation method.\
 Necessary steps "Predict only":\
 	1.Define the folder from which the trained models (and their respective tuned data) shall be imported\
 	2.Define settings\
 	3.Run
-Note: If you want to use "only infer" upon a new data set, make sure it has the same feature set and is scaled exactly equal to the data set used for training.
+Note: If you want to use "only predict" upon a new data set, make sure it has the same feature set and is scaled exactly equal to the data set used for training.
 
 
 __Running the scripts directly via the python console:__
@@ -222,7 +222,7 @@ __Running the scripts directly via the python console:__
 - DataTuning.py for tuning the data (achieving the tuned data)
 - ModelTuning.py for tuning the model (with the tuned data as input). 
 In the final lines of ModelTuning.py one can define via commmenting and uncommenting, whether the automatic procedure (final bayes: training the model while automatically selecting the best: 
-		"Model", "Individual Model", "Features" and "Hyperparameters of the model"), the regular procedure (optimizing the hyperparameter of the model), or the procedure for using previously trained models to only infer.
+		"Model", "Individual Model", "Features" and "Hyperparameters of the model"), the regular procedure (optimizing the hyperparameter of the model), or the procedure for using previously trained models to only predict.
 
 
 Set a name of the data and a name of the experiment in order to save your documentation and results (final input data) in a folder named as the data and a subfolder named as the name of experiment. This allows to go back to this final input data whenever you want. 

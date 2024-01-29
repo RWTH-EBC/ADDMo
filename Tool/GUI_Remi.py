@@ -967,7 +967,7 @@ class AutomatedTraining(App):
 
         def info_NameOfOnlyPredict(self, widget):
             text = (
-                "Defines the name of the subfolder in which the results of only infer are saved. "
+                "Defines the name of the subfolder in which the results of only predict are saved. "
                 'It is a subfolder of the "name of subtest" folder. '
             )
             set_text(self, text)
@@ -1262,7 +1262,7 @@ temperature as signal. """
             self.InfoBoxResample.set_text(text)
 
         def info_UniFilterScoreFunc(self, widget):
-            text = "Information on the score functions for univariate filter can be found on scikit-learn.org"
+            text = "Information on the score_test functions for univariate filter can be found on scikit-learn.org"
             self.InfoBoxUnivariateFilterDT.set_text(text)
 
         def info_UniFilterSearchStratDT(self, widget):
@@ -1943,7 +1943,7 @@ that.""",
             except:  # dialog does not exist, hence it is called the first time. The dialog is created below
                 self.dialog_CrossAutoPlot = gui.GenericDialog(
                     title="Period ownlags",
-                    message="Define how many lags shall be plotted. The lags are the x-axis while the cross- or autocorrelation score is the y-axis.",
+                    message="Define how many lags shall be plotted. The lags are the x-axis while the cross- or autocorrelation score_test is the y-axis.",
                     width="500px",
                 )
                 self.CrossAutoPlotLagsDT = gui.SpinBox(
@@ -2145,7 +2145,7 @@ that.""",
                 )
 
                 Cont1, self.UniFilterScorFuncDT = dropdown(
-                    "Type of score function",
+                    "Type of score_test function",
                     self.info_UniFilterScoreFunc,
                     {
                         mutual_info_regression: "mutual information regression",

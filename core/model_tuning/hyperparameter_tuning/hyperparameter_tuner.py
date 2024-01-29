@@ -49,7 +49,7 @@ class OptunaTuner(AbstractHyParamTuner):
             hyperparameters = self.model.optuna_hyperparameter_suggest(trial)
             self.model.set_hyperparameters(hyperparameters)
             score = self.scorer()
-            wandb.log({"score": score, "hyperparameters": hyperparameters})
+            wandb.log({"score_test": score, "hyperparameters": hyperparameters})
             return score
 
         study = optuna.create_study(direction="maximize")

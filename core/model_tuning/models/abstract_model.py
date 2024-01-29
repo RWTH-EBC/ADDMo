@@ -13,13 +13,15 @@ class AbstractMLModel(ABC):
     def fit(self, x, y):
         """
         Train the model on the provided data.
+        Name of the method is chosen to be consistent with sklearn.
         """
         pass
 
     @abstractmethod
-    def infer(self, x):
+    def predict(self, x):
         """
         Make predictions on the given input data.
+        Name of the method is chosen to be consistent with sklearn.
         """
         pass
 

@@ -35,7 +35,7 @@ import Documentation as Document
 
 def iterative_evaluation(
     MT_Setup_Object_PO, TestData, Model, horizon, NameOfPredictor
-):  # horizon= amount of samples to infer in the future
+):  # horizon= amount of samples to predict in the future
     "Does an special evaluation which iteratively scores a period with the length of horizon in the whole period of TunedData. It returns the list of scores"
     # Todo: think of inserting this "iterative evaluation" to the regular scoring while training and testing(not only for onlypredict)
     n_folds = (
@@ -60,7 +60,7 @@ def iterative_evaluation(
         Fold = TestData_X[(horizon * i) : (horizon * (i + 1))]
         predicted_fold, Nothing = Model(
             MT_Setup_Object_PO, NameOfPredictor, Fold
-        )  # infer on that fold
+        )  # predict on that fold
         # rescale
         predicted_fold = ScaleTracker_Signal.inverse_transform(
             SVF.reshape(predicted_fold)
@@ -91,10 +91,10 @@ def predict(MT_Setup_object_PO, NameOfPredictor, _X_test):
             )
         )  # load the best and trained model from previous tuning and training
         if MT_Setup_object_PO.OnlyPredictRecursive == False:
-            Predicted = Predictor.infer(_X_test)
+            Predicted = Predictor.predict(_X_test)
         elif MT_Setup_object_PO.OnlyPredictRecursive == True:
             Features_test_i = PD.recursive(_X_test, Predictor)
-            Predicted = Predictor.infer(Features_test_i)
+            Predicted = Predictor.predict(Features_test_i)
         IndividualModel = "None"
     elif os.path.isfile(
         os.path.join(
@@ -213,7 +213,7 @@ def only_predict(
 
     horizon = len(
         _X_test
-    )  # gets the length of the horizon by the stated period to infer
+    )  # gets the length of the horizon by the stated period to predict
     if (
         MT_Setup_object_PO.ValidationPeriod == True
     ):  # define the data that shall be used to do the mean errors
@@ -290,7 +290,7 @@ def main_OnlyPredict(MT_Setup_object_PO):
     )
     MT_Setup_object_PO.OnlyPredictFolder = OnlyPredictFolder
 
-    # check if infer results are saved in the right folder:
+    # check if predict results are saved in the right folder:
     SVF.delete_and_create_folder(MT_Setup_object_PO.OnlyPredictFolder)
 
     MT_RR_object_PO = MTRR()

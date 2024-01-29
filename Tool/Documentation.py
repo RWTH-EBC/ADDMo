@@ -426,10 +426,10 @@ def documentation_iterative_evaluation(
         ] = "Interpretation of error measures regarding the whole data set per error metric"
     ErrorDF["Used error metric"] = str(errormetric)
     ErrorDF["Horizon length"] = horizon
-    ErrorDF["Mean score"] = "%.3f" % mean_score
+    ErrorDF["Mean score_test"] = "%.3f" % mean_score
     ErrorDF["Standard deviation of errors"] = SD_score
-    ErrorDF["Max score"] = str(max(errorlist))
-    ErrorDF["Min score"] = str(min(errorlist))
+    ErrorDF["Max score_test"] = str(max(errorlist))
+    ErrorDF["Min score_test"] = str(min(errorlist))
     ErrorDF["Number of tested folds"] = len(errorlist)
     ErrorDF = ErrorDF.T
 

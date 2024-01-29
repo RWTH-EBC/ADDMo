@@ -140,11 +140,11 @@ def wrapper__recursive_feature_selection(DT_Setup_object: DataTuningAutoSetup, D
     X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25)
     Result_dic = DT_Setup_object.wrapper_model(
         X_train, y_train, X_test, y_test, *DT_Setup_object.wrapper_params
-    )  # score will be done over hold out 0.25 percent of data
-    Score = Result_dic["score"]  # get the score  #get initial score
+    )  # score_test will be done over hold out 0.25 percent of data
+    Score = Result_dic["score_test"]  # get the score_test  #get initial score_test
     Score_i = Score
     while True:  # loop as long as deleting features increases accuracy
-        Score = Score_i  # set score equal to the new and better score_i
+        Score = Score_i  # set score_test equal to the new and better score_i
         (X_i, Y) = split_signal_and_features(DT_Setup_object.name_of_target, Data)
         for column in X_i:  # loop through all columns
             X_ii = X_i.drop(column, axis=1)  # drop the respective columns
@@ -153,14 +153,14 @@ def wrapper__recursive_feature_selection(DT_Setup_object: DataTuningAutoSetup, D
             )
             Result_dic = DT_Setup_object.wrapper_model(
                 X_train_ii, y_train, X_test_ii, y_test, *DT_Setup_object.wrapper_params
-            )  # score will be done over hold out 0.25 percent of data
-            Score_ii = Result_dic["score"]  # get the score
-            if Score_ii > Score_i:  # check for the data that provided the best score
+            )  # score_test will be done over hold out 0.25 percent of data
+            Score_ii = Result_dic["score_test"]  # get the score_test
+            if Score_ii > Score_i:  # check for the data that provided the best score_test
                 Score_i = Score_ii
                 Todrop = column  # get the column that should be dropped
         if Score_i > (
             Score + DT_Setup_object.min_increase_4_wrapper
-        ):  # is new score higher than the old one? (take care that >= would not work, since in the case that no new score was set, score_i is equal to score
+        ):  # is new score_test higher than the old one? (take care that >= would not work, since in the case that no new score_test was set, score_i is equal to score_test
             Data = Data.drop(Todrop, axis=1)
             print("Dropped column: %s" % Todrop)
         else:

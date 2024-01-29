@@ -1,5 +1,4 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split
 
 from core.data_tuning import feature_constructor
 from core.util.data_handling import split_target_features
@@ -7,10 +6,6 @@ from core.model_tuning.scoring.scoring_factory import ScoringFactory
 from core.model_tuning.models.model_factory import ModelFactory
 from core.model_tuning.scoring.abstract_scoring import ValidationScoring
 from core.model_tuning.models.abstract_model import AbstractMLModel
-
-
-from core.data_tuning.wrapper_model import DataTunerWrapperModel
-
 from core.data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 
 

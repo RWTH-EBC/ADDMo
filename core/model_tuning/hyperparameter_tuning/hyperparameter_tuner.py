@@ -24,9 +24,6 @@ class NoTuningTuner(AbstractHyParamTuner):
         return hyperparameters
 
 class OptunaTuner(AbstractHyParamTuner):
-    """
-    Class for tuning hyperparameters with multiple methods including scikit-learn, Optuna, and Hyperopt.
-    """
     def tune(self, n_trials=100):
         """
         Perform hyperparameter tuning using Optuna.

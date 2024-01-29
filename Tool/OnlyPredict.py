@@ -2,22 +2,15 @@ from math import log
 from sklearn.metrics import r2_score
 from hyperopt.pyll import scope
 from sklearn.externals import joblib
-from sklearn.model_selection import TimeSeriesSplit
-from sklearn.utils import shuffle
 import os
-from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
-import pandas as pd
 import numpy as np
-from pandas.io.excel import ExcelWriter
 
 # from GlobalVariables import *
 from openpyxl import load_workbook
 import sys
 from sklearn.feature_selection import RFE
-from sklearn.feature_selection import RFECV
 from sklearn.feature_selection import SelectFromModel
 from sklearn.decomposition import FastICA
-from sklearn.feature_selection import GenericUnivariateSelect
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.model_selection import train_test_split
 
@@ -26,7 +19,7 @@ from Functions.ErrorMetrics import *
 from Functions.PlotFcn import *
 
 import SharedVariablesFunctions as SVF
-from ModelTuningSetup import ModelTuningSetup as MTS
+from core.model_tuning.model_configs.model_tuning_config import ModelTuningSetup as MTS
 import ModelTuning as MT
 import PredictorDefinitions as PD
 from ModelTuningRuntimeResults import ModelTuningRuntimeResults as MTRR
@@ -276,7 +269,7 @@ def main_OnlyPredict(MT_Setup_object_PO):
         % (
             MT_Setup_object_PO.name_of_raw_data,
             MT_Setup_object_PO.name_of_data_tuning_experiment,
-            MT_Setup_object_PO.NameOfSubTest,
+            MT_Setup_object_PO.name_of_model_tuning_experiment,
         )
     )
     _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = MT.pre_handling(
@@ -314,7 +307,7 @@ def main_OnlyPredict(MT_Setup_object_PO):
         % (
             MT_Setup_object_PO.name_of_raw_data,
             MT_Setup_object_PO.name_of_data_tuning_experiment,
-            MT_Setup_object_PO.NameOfSubTest,
+            MT_Setup_object_PO.name_of_model_tuning_experiment,
         )
     )
     print("________________________________________________________________________\n")

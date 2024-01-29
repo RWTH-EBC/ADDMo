@@ -20,12 +20,12 @@ def saveCallback2(OwnlagType): #save entries in an txt file which will be loaded
     #SVF.AutoFeatureLagLags = AutoFeatureLagLags.get()
 
     #Variables for Model Tuning
-    SV.NameOfSubTest = NameOfSubTest.get()
-    SV.StartTraining = StartTraining.get()
-    SV.EndTraining = EndTraining.get()
-    SV.StartTesting = StartTesting.get()
-    SV.EndTesting = EndTesting.get()
-    SV.StartTraining = StartTraining.get()
+    SV.name_of_model_tuning_experiment = NameOfSubTest.get()
+    SV.start_train_val = StartTraining.get()
+    SV.stop_train_val = EndTraining.get()
+    SV.start_test = StartTesting.get()
+    SV.end_test = EndTesting.get()
+    SV.start_train_val = StartTraining.get()
 
     if OwnlagType == "NoOL":
         SV.name_of_data_tuning_experiment = "NoOL"

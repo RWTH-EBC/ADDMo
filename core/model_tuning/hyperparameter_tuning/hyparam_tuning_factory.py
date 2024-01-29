@@ -9,7 +9,7 @@ class HyperparameterTunerFactory:
     """
 
     @staticmethod
-    def create_tuner(tuner_type: str, model: AbstractMLModel, scoring: str) -> AbstractHyParamTuner:
+    def tuner_factory(tuner_type: str, model: AbstractMLModel, scoring: str) -> AbstractHyParamTuner:
         """
         Creates a hyperparameter tuner based on the specified type.
         :param tuner_type: Type of tuner to create (e.g., "grid", "none", "optuna").

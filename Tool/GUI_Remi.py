@@ -11,7 +11,7 @@ import OnlyPredict
 
 import numpy as np
 from sklearn.model_selection import KFold, TimeSeriesSplit
-from ModelTuningSetup import ModelTuningSetup
+from core.model_tuning.model_configs.model_tuning_config import ModelTuningSetup
 from core.data_tuning_optimizer.config.data_tuning_config import DataTuningSetup
 
 print("Import in GUI_Remi.py done")
@@ -1336,16 +1336,16 @@ temperature as signal. """
             DT_Setup_Object_AFB.wrapper_recursive_feature_selection = False
 
             # Values ModelTuning
-            MT_Setup_Object_AFB.NameOfSubTest = self.txt_NameOfSubTest.get_value()
-            MT_Setup_Object_AFB.StartTraining = self.txt_StartDateTraining.get_value()
-            MT_Setup_Object_AFB.EndTraining = self.txt_EndDateTraining.get_value()
-            MT_Setup_Object_AFB.StartTesting = self.txt_StartDateTesting.get_value()
-            MT_Setup_Object_AFB.EndTesting = self.txt_EndDateTesting.get_value()
-            MT_Setup_Object_AFB.GlobalMaxEval_HyParaTuning = int(
+            MT_Setup_Object_AFB.name_of_model_tuning_experiment = self.txt_NameOfSubTest.get_value()
+            MT_Setup_Object_AFB.start_train_val = self.txt_StartDateTraining.get_value()
+            MT_Setup_Object_AFB.stop_train_val = self.txt_EndDateTraining.get_value()
+            MT_Setup_Object_AFB.start_test = self.txt_StartDateTesting.get_value()
+            MT_Setup_Object_AFB.end_test = self.txt_EndDateTesting.get_value()
+            MT_Setup_Object_AFB.iterations_hyperparameter_tuning = int(
                 self.txt_HyperBayesEval.get_value()
             )
             MT_Setup_Object_AFB.GlobalCV_MT = 3
-            MT_Setup_Object_AFB.GlobalShuffle = False
+            MT_Setup_Object_AFB.shuffle_samples = False
             MT_Setup_Object_AFB.MaxEval_Bayes = int(self.txt_FinalBayesEval.get_value())
             MT_Setup_Object_AFB.Model_Bayes = "Baye"
             MT_Setup_Object_AFB.EstimatorEmbedded_FinalBaye = RandomForestRegressor(
@@ -1599,12 +1599,12 @@ temperature as signal. """
             # Values ModelTuning
             MT_Setup_Object.NameOfData = self.NameOfDataMT.get_value()
             MT_Setup_Object.NameOfExperiment = self.NameOfExperimentMT.get_value()
-            MT_Setup_Object.NameOfSubTest = self.NameOfSubTestMT.get_value()
-            MT_Setup_Object.StartTraining = self.StartTrainingMT.get_value()
-            MT_Setup_Object.EndTraining = self.EndTrainingMT.get_value()
-            MT_Setup_Object.StartTesting = self.StartTestingMT.get_value()
-            MT_Setup_Object.EndTesting = self.EndTestingMT.get_value()
-            MT_Setup_Object.GlobalMaxEval_HyParaTuning = int(
+            MT_Setup_Object.name_of_model_tuning_experiment = self.NameOfSubTestMT.get_value()
+            MT_Setup_Object.start_train_val = self.StartTrainingMT.get_value()
+            MT_Setup_Object.stop_train_val = self.EndTrainingMT.get_value()
+            MT_Setup_Object.start_test = self.StartTestingMT.get_value()
+            MT_Setup_Object.end_test = self.EndTestingMT.get_value()
+            MT_Setup_Object.iterations_hyperparameter_tuning = int(
                 self.HyperBayesEvalMT.get_value()
             )
 
@@ -1617,7 +1617,7 @@ temperature as signal. """
                     )
 
             MT_Setup_Object.GlobalRecu = self.RecursiveMT.get_value()
-            MT_Setup_Object.GlobalShuffle = self.ShuffleMT.get_value()
+            MT_Setup_Object.shuffle_samples = self.ShuffleMT.get_value()
 
             MT_Setup_Object.GlobalIndivModel = self.IndivModelMT.get_key()
             if MT_Setup_Object.GlobalIndivModel == "byfeature":
@@ -1656,12 +1656,12 @@ temperature as signal. """
         def saveCallbackPO():
             MT_Setup_Object_PO.NameOfData = self.NameOfDataPO.get_value()
             MT_Setup_Object_PO.NameOfExperiment = self.NameOfExperimentPO.get_value()
-            MT_Setup_Object_PO.NameOfSubTest = self.NameOfSubTestPO.get_value()
+            MT_Setup_Object_PO.name_of_model_tuning_experiment = self.NameOfSubTestPO.get_value()
 
             MT_Setup_Object_PO.NameOfOnlyPredict = self.NameOfOnlyPredictPO.get_value()
 
-            MT_Setup_Object_PO.StartTesting = self.StartTestingPO.get_value()
-            MT_Setup_Object_PO.EndTesting = self.EndTestingPO.get_value()
+            MT_Setup_Object_PO.start_test = self.StartTestingPO.get_value()
+            MT_Setup_Object_PO.end_test = self.EndTestingPO.get_value()
 
             MT_Setup_Object_PO.OnlyPredictRecursive = self.RecursivePO.get_value()
             MT_Setup_Object_PO.ValidationPeriod = self.ValidationPeriodPO.get_value()

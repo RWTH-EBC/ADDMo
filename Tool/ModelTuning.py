@@ -30,7 +30,7 @@ from Functions.PlotFcn import *
 
 import SharedVariablesFunctions as SVF
 from ModelTuningRuntimeResults import ModelTuningRuntimeResults as MTRR
-from ModelTuningSetup import ModelTuningSetup as MTS
+from core.model_tuning.model_configs.model_tuning_config import ModelTuningSetup as MTS
 
 print("Model Tuning has begun...")
 
@@ -134,7 +134,7 @@ def main_OnlyHyParaOpti(MT_Setup_Object):
         % (
             MT_Setup_Object.name_of_raw_data,
             MT_Setup_Object.name_of_data_tuning_experiment,
-            MT_Setup_Object.NameOfSubTest,
+            MT_Setup_Object.name_of_model_tuning_experiment,
         )
     )
     _X_train, _Y_train, _X_test, _Y_test, Indexer, Data = pre_handling(
@@ -162,7 +162,7 @@ def main_OnlyHyParaOpti(MT_Setup_Object):
         % (
             MT_Setup_Object.name_of_raw_data,
             MT_Setup_Object.name_of_data_tuning_experiment,
-            MT_Setup_Object.NameOfSubTest,
+            MT_Setup_Object.name_of_model_tuning_experiment,
         )
     )
     print("________________________________________________________________________\n")

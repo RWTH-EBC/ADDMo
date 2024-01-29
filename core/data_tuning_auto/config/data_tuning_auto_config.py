@@ -1,9 +1,7 @@
-from core.util.load_save import load_yaml_to_dict
-from sklearn.model_selection import TimeSeriesSplit
-from sklearn.feature_selection import mutual_info_regression, f_regression
+from core.util.abstract_config import BaseConfig
 
 '''Serves as blueprint for the yaml-configs.'''
-class DataTuningAutoSetup:
+class DataTuningAutoSetup(BaseConfig):
     """
     Object that stores all the setup and user input information of Data Tuning"""
 
@@ -99,25 +97,5 @@ class DataTuningAutoSetup:
 
         self.wrapper_recursive_feature_selection = False  # Wrapper recursive feature
 
-    # load data from config.yaml and dynamically assign to the class variables
-    def load_yaml_to_class(self, path_to_yaml:dict): # Todo: identical for all config classes -> move to parent class
-        '''Loads the dict to a class object. Overwrites existing attributes. Only works for
-        flat yaml files. And only for attributes that are already defined in the class.'''
 
-        config_dict = load_yaml_to_dict(path_to_yaml)
-        if config_dict is not None:
-            for key, value in config_dict.items():
-                if hasattr(self, key):
-                    setattr(self, key, value)
-        else:
-            raise ValueError("YAML file is empty or not properly formatted.")
 
-        self.config_as_dict = config_dict # safe the config as dict for specific use cases
-
-    def dump_object(self):
-        print(
-            "Saving Data Tuning Setup class Object as a pickle in path: \n'%s'"
-            % os.path.join(self.abs_path_to_result_folder, "DataTuningSetup.save")
-        )
-        # Save the object as a pickle for reuse
-        joblib.dump(self, os.path.join(self.abs_path_to_result_folder, "DataTuningSetup.save"))

@@ -8,7 +8,7 @@ from Functions.ErrorMetrics import *
 import ModelTuning as MT
 import SharedVariablesFunctions as SVF
 from ModelTuningRuntimeResults import ModelTuningRuntimeResults as MTRR
-from ModelTuningSetup import ModelTuningSetup as MTS
+from core.model_tuning.model_configs.model_tuning_config import ModelTuningSetup as MTS
 
 
 def embedded__recursive_feature_selection(
@@ -320,7 +320,7 @@ def Bayes(
     # write summary of setup and evaluation in excel File
     SummaryFile = os.path.join(
         MT_Setup_Object_AFB.ResultsFolderSubTest,
-        "Summary_FinalBayes_%s.xlsx" % (MT_Setup_Object_AFB.NameOfSubTest),
+        "Summary_FinalBayes_%s.xlsx" % (MT_Setup_Object_AFB.name_of_model_tuning_experiment),
     )
     writer = pd.ExcelWriter(SummaryFile)
     dfSummary.to_excel(writer, float_format="%.6f")
@@ -332,7 +332,7 @@ def Bayes(
     ]  # make sure BestData contains the whole available period(not only the period used for training and prediction)
     SaveFileName_excel = os.path.join(
         MT_Setup_Object_AFB.ResultsFolderSubTest,
-        "BestData_%s.xlsx" % (MT_Setup_Object_AFB.NameOfSubTest),
+        "BestData_%s.xlsx" % (MT_Setup_Object_AFB.name_of_model_tuning_experiment),
     )
     BestData.to_excel(SaveFileName_excel)
 
@@ -340,7 +340,7 @@ def Bayes(
     BestData.to_pickle(
         os.path.join(
             MT_Setup_Object_AFB.path_to_pickles,
-            "ThePickle_from_%s.pickle" % MT_Setup_Object_AFB.NameOfSubTest,
+            "ThePickle_from_%s.pickle" % MT_Setup_Object_AFB.name_of_model_tuning_experiment,
         )
     )
 
@@ -352,7 +352,7 @@ def main_FinalBayes(MT_Setup_Object_AFB):
         % (
             MT_Setup_Object_AFB.name_of_raw_data,
             MT_Setup_Object_AFB.name_of_data_tuning_experiment,
-            MT_Setup_Object_AFB.NameOfSubTest,
+            MT_Setup_Object_AFB.name_of_model_tuning_experiment,
         )
     )
 
@@ -379,7 +379,7 @@ def main_FinalBayes(MT_Setup_Object_AFB):
         % (
             MT_Setup_Object_AFB.name_of_raw_data,
             MT_Setup_Object_AFB.name_of_data_tuning_experiment,
-            MT_Setup_Object_AFB.NameOfSubTest,
+            MT_Setup_Object_AFB.name_of_model_tuning_experiment,
         )
     )
     print("________________________________________________________________________\n")

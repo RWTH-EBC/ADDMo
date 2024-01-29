@@ -62,7 +62,7 @@ def train_predict_selected_models(
                 Signal_test=_Y_test,
                 HyperparameterGrid=Model.HyperparameterGrid,
                 CV=MT_Setup_Object.GlobalCV_MT,
-                Max_evals=MT_Setup_Object.GlobalMaxEval_HyParaTuning,
+                Max_evals=MT_Setup_Object.iterations_hyperparameter_tuning,
                 Recursive=MT_Setup_Object.GlobalRecu,
             )
             Result_dic = indivweekweekend.main()
@@ -76,7 +76,7 @@ def train_predict_selected_models(
                 Signal_test=_Y_test,
                 HyperparameterGrid=Model.HyperparameterGrid,
                 CV=MT_Setup_Object.GlobalCV_MT,
-                Max_evals=MT_Setup_Object.GlobalMaxEval_HyParaTuning,
+                Max_evals=MT_Setup_Object.iterations_hyperparameter_tuning,
                 Recursive=MT_Setup_Object.GlobalRecu,
             )
             Result_dic = indivhourly.main()
@@ -96,7 +96,7 @@ def train_predict_selected_models(
                 Signal_test=_Y_test,
                 HyperparameterGrid=Model.HyperparameterGrid,
                 CV=MT_Setup_Object.GlobalCV_MT,
-                Max_evals=MT_Setup_Object.GlobalMaxEval_HyParaTuning,
+                Max_evals=MT_Setup_Object.iterations_hyperparameter_tuning,
                 Recursive=MT_Setup_Object.GlobalRecu,
             )
             Result_dic = indivbyfeature.main()
@@ -108,7 +108,7 @@ def train_predict_selected_models(
                 Signal_test=_Y_test,
                 HyperparameterGrid=Model.HyperparameterGrid,
                 CV=MT_Setup_Object.GlobalCV_MT,
-                Max_evals=MT_Setup_Object.GlobalMaxEval_HyParaTuning,
+                Max_evals=MT_Setup_Object.iterations_hyperparameter_tuning,
                 Recursive=MT_Setup_Object.GlobalRecu,
             )
 

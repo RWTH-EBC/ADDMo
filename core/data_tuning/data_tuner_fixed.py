@@ -2,7 +2,7 @@ import pandas as pd
 
 from core.data_tuning.config.data_tuning_config import DataTuningFixedConfig
 from core.data_tuning import feature_constructor as fc
-from core.data_tuning.data_importer import load_raw_data
+from core.data_tuning.data_importer import load_data
 from core.util.experiment_logger import ExperimentLogger
 
 class DataTunerByConfig():
@@ -10,7 +10,7 @@ class DataTunerByConfig():
     def __init__(self, config: DataTuningFixedConfig, logger:ExperimentLogger):
         self.config = config
         self.logger = logger
-        self.xy_raw = load_raw_data(self.config.path_to_raw_data)
+        self.xy_raw = load_data(self.config.path_to_raw_data)
         self.x_processed = pd.DataFrame(index=self.xy_raw.index)  # Initialize with the same index
 
     def update_x_raw(self, x_sample: pd.DataFrame):

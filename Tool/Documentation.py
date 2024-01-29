@@ -232,22 +232,22 @@ def documentation_model_tuning(
     dfSummary = pd.DataFrame(index=[0])
     dfSummary["Estimator"] = NameOfPredictor
     if Y_train is not None:  # don´t document this if "onlypredict" is used
-        dfSummary["Start_date_Fit"] = MT_Setup_Object.StartTraining
-        dfSummary["End_date_Fit"] = MT_Setup_Object.EndTraining
-    dfSummary["Start_date_Predict"] = MT_Setup_Object.StartTesting
-    dfSummary["End_date_Predict"] = MT_Setup_Object.EndTesting
+        dfSummary["Start_date_Fit"] = MT_Setup_Object.start_train_val
+        dfSummary["End_date_Fit"] = MT_Setup_Object.stop_train_val
+    dfSummary["Start_date_Predict"] = MT_Setup_Object.start_test
+    dfSummary["End_date_Predict"] = MT_Setup_Object.end_test
     if Y_train is not None:  # don´t document this if "onlypredict" is used
         dfSummary["Total Train Samples"] = len(Y_train.index)
     dfSummary["Test Samples"] = len(Y_test.index)
     dfSummary["Recursive"] = MT_Setup_Object.GlobalRecu
-    dfSummary["Shuffle"] = MT_Setup_Object.GlobalShuffle
+    dfSummary["Shuffle"] = MT_Setup_Object.shuffle_samples
     if HyperparameterGrid is not None:
         dfSummary["Range Hyperparameter"] = str(HyperparameterGrid)
         dfSummary["CrossValidation"] = str(MT_Setup_Object.GlobalCV_MT)
         dfSummary["Best Hyperparameter"] = str(Bestparams)
-        if MT_Setup_Object.GlobalMaxEval_HyParaTuning is not None:
+        if MT_Setup_Object.iterations_hyperparameter_tuning is not None:
             dfSummary["Max Bayesian Evaluations"] = str(
-                MT_Setup_Object.GlobalMaxEval_HyParaTuning
+                MT_Setup_Object.iterations_hyperparameter_tuning
             )
     dfSummary["Feature importance"] = str(FeatureImportance)
     dfSummary["Individual model"] = IndividualModel
@@ -264,7 +264,7 @@ def documentation_model_tuning(
     # write summary of setup and evaluation in excel File
     SummaryFile = os.path.join(
         MT_Setup_Object.ResultsFolderSubTest,
-        "Summary_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_Object.NameOfSubTest),
+        "Summary_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_Object.name_of_model_tuning_experiment),
     )
     writer = pd.ExcelWriter(SummaryFile)
     dfSummary.to_excel(writer, float_format="%.6f")
@@ -273,7 +273,7 @@ def documentation_model_tuning(
     # export prediction to Excel
     SaveFileName_excel = os.path.join(
         MT_Setup_Object.ResultsFolderSubTest,
-        "Prediction_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_Object.NameOfSubTest),
+        "Prediction_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_Object.name_of_model_tuning_experiment),
     )
     Y_Predicted.to_frame(name=MT_Setup_Object.name_of_target).to_excel(SaveFileName_excel)
 
@@ -313,8 +313,8 @@ def documentation_only_predict(
     # save summary of setup and evaluation
     dfSummary = pd.DataFrame(index=[0])
     dfSummary["Estimator"] = NameOfPredictor
-    dfSummary["Start_date_Predict"] = MT_Setup_Object_PO.StartTesting
-    dfSummary["End_date_Predict"] = MT_Setup_Object_PO.EndTesting
+    dfSummary["Start_date_Predict"] = MT_Setup_Object_PO.start_test
+    dfSummary["End_date_Predict"] = MT_Setup_Object_PO.end_test
     dfSummary["Test Samples"] = len(Y_test.index)
     dfSummary["Recursive"] = MT_Setup_Object_PO.OnlyPredictRecursive
     dfSummary["Shuffle"] = None
@@ -333,7 +333,7 @@ def documentation_only_predict(
     # write summary of setup and evaluation in excel File
     SummaryFile = os.path.join(
         MT_Setup_Object_PO.OnlyPredictFolder,
-        "Summary_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_Object_PO.NameOfSubTest),
+        "Summary_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_Object_PO.name_of_model_tuning_experiment),
     )
     writer = pd.ExcelWriter(SummaryFile)
     dfSummary.to_excel(writer, float_format="%.6f")
@@ -342,7 +342,7 @@ def documentation_only_predict(
     # export prediction to Excel
     SaveFileName_excel = os.path.join(
         MT_Setup_Object_PO.OnlyPredictFolder,
-        "Prediction_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_Object_PO.NameOfSubTest),
+        "Prediction_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_Object_PO.name_of_model_tuning_experiment),
     )
     Y_Predicted.to_frame(name=MT_Setup_Object_PO.name_of_target).to_excel(
         SaveFileName_excel
@@ -369,11 +369,11 @@ def visualization(MT_Setup_Object, NameOfPredictor, prediction, measurement, Sco
         measurement,
         MAE=MAE,
         R2=R2,
-        StartDatePredict=MT_Setup_Object.StartTesting,
+        StartDatePredict=MT_Setup_Object.start_test,
         SavePath=MT_Setup_Object.ResultsFolderSubTest,
         nameOfSignal=MT_Setup_Object.name_of_target,
         BlackBox=NameOfPredictor,
-        NameOfSubTest=MT_Setup_Object.NameOfSubTest,
+        NameOfSubTest=MT_Setup_Object.name_of_model_tuning_experiment,
     )
 
     plot_Residues(
@@ -384,7 +384,7 @@ def visualization(MT_Setup_Object, NameOfPredictor, prediction, measurement, Sco
         SavePath=MT_Setup_Object.ResultsFolderSubTest,
         nameOfSignal=MT_Setup_Object.name_of_target,
         BlackBox=NameOfPredictor,
-        NameOfSubTest=MT_Setup_Object.NameOfSubTest,
+        NameOfSubTest=MT_Setup_Object.name_of_model_tuning_experiment,
     )
 
 
@@ -402,7 +402,7 @@ def documentation_iterative_evaluation(
     # save results of iterative evaluation in the summary file
     ExcelFile = os.path.join(
         MT_Setup_object_PO.OnlyPredictFolder,
-        "Summary_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_object_PO.NameOfSubTest),
+        "Summary_%s_%s.xlsx" % (NameOfPredictor, MT_Setup_object_PO.name_of_model_tuning_experiment),
     )
     Excel = pd.read_excel(ExcelFile)
     book = load_workbook(ExcelFile)

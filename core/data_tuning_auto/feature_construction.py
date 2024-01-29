@@ -80,12 +80,12 @@ def manual_feature_lags(config: DataTuningAutoSetup, xy):
 def automatic_feature_lag_constructor(config: DataTuningAutoSetup, data):
     x_created = pd.DataFrame()
 
-    Wrapper = DataTunerWrapperModel(config)
+    scorer: ValidationScoring = ScoringFactory.scoring_factory(config.scoring_split_technique)
+    model: AbstractMLModel = ModelFactory.model_factory(config.wrapper_model)
 
     x, y = split_target_features(config.name_of_target, data)
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25)
 
-    old_score = Wrapper.train_score(x_train, x_test, y_train, y_test)
+    old_score = scorer.score_validation(model, config.scoring_metric, x, y)
 
     # Loop through to create feature lags as long as they improve the result
     for column in x:
@@ -94,12 +94,8 @@ def automatic_feature_lag_constructor(config: DataTuningAutoSetup, data):
             series = feature_constructor.create_lag(x[column], i)
             x_processed = pd.concat([x, series], axis=1, join="inner")
 
-            x_train_processed = x_processed.loc[x_train.index]
-            x_test_processed = x_processed.loc[x_test.index]
+            new_score = scorer.score_validation(model, config.scoring_metric, x_processed, y)
 
-            new_score = Wrapper.train_score(
-                x_train_processed, x_test_processed, y_train, y_test
-            )
             # choose the best lag for that feature
             if new_score > temp_score:
                 temp_score = new_score

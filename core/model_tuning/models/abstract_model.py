@@ -4,17 +4,27 @@ from abc import ABC, abstractmethod
 class AbstractMLModel(ABC):
     """
     Abstract base class for machine learning models.
-    Should include, if required, a scaler.
+
+    This class provides an interface for all machine learning models, potentially including
+    a scaler.
+
+    Attributes:
+        model: An instance of the machine learning model, usually including the scaler.
     """
 
     @abstractmethod
     def __init__(self):
+        """Initializes the machine learning model."""
         self.model = None
 
     @abstractmethod
     def fit(self, x, y):
         """
         Train the model on the provided data.
+
+        Args:
+            x: Features used for training.
+            y: Target values used for training.
         """
         pass
 
@@ -22,29 +32,47 @@ class AbstractMLModel(ABC):
     def predict(self, x):
         """
         Make predictions on the given input data.
-        The prediction should be scaled back to the original scale.
+
+        Args:
+            x: Input data for making predictions.
+
+        Returns:
+            Predicted values, scaled back to the original scale if applicable.
         """
         pass
 
     @abstractmethod
     def save_model(self, path):
         """
-        Save the trained model to a file.
+        Save the trained model including scaler to a file.
+        This is done using the ONNX format.
+
+        Args:
+            path: File path where the model will be saved.
         """
         pass
 
     @abstractmethod
     def load_model(self, path):
         """
-        Load a model from a file.
+        Load a model including scaler from a file.
+        An ONNX format is expected.
+
+        Args:
+            path: File path from which the model will be loaded.
         """
         pass
 
     @abstractmethod
     def to_scikit_learn(self):
         """
-        Convert the model to a scikit-learn model for several scikit_learn specific tasks.
-        Most ML frameworks provide such converter.
+        Convert the model including scaler to a scikit-learn compatible model.
+        E.g. a scikit-learn pipeline.
+
+        Most ML frameworks provide a converter to adapt models for scikit-learn specific tasks.
+
+        Returns:
+            A scikit-learn compatible version of the model including scaler.
         """
         pass
 
@@ -52,6 +80,9 @@ class AbstractMLModel(ABC):
     def set_params(self, **params):
         """
         Set the hyperparameters of the ML model.
+
+        Args:
+            **params: Variable length keyword arguments for hyperparameters.
         """
         pass
 
@@ -59,14 +90,22 @@ class AbstractMLModel(ABC):
     def get_params(self):
         """
         Get the hyperparameters of the ML model.
+
+        Returns:
+            A dictionary of the current hyperparameters.
         """
         pass
 
     @abstractmethod
     def optuna_hyperparameter_suggest(self, trial):
         """
-        Suggest hyperparameters for Optuna´s hyperparameter optimization.
-        Returns a dictionary of hyperparameters with optuna distributions.
+        Suggest hyperparameters using Optuna for hyperparameter optimization.
+
+        Args:
+            trial: An Optuna trial object used to suggest hyperparameters.
+
+        Returns:
+            A dictionary of hyperparameters with Optuna distributions.
         """
         pass
 
@@ -74,7 +113,9 @@ class AbstractMLModel(ABC):
     def grid_search_hyperparameter(self):
         """
         Define the hyperparameters for grid search.
-        Returns a dictionary of a hyperparameter grid.
+
+        Returns:
+            A dictionary representing a hyperparameter grid for grid search.
         """
         pass
 
@@ -82,6 +123,8 @@ class AbstractMLModel(ABC):
     def default_hyperparameter(self):
         """
         Define the default hyperparameters of the model.
-        Returns a dictionary with one set of hyperparameters.
+
+        Returns:
+            A dictionary with a default set of hyperparameters.
         """
         pass

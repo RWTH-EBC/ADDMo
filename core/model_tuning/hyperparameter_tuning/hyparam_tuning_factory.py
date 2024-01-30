@@ -1,7 +1,15 @@
-from core.model_tuning.hyperparameter_tuning.hyperparameter_tuner import OptunaTuner, \
-    NoTuningTuner, GridSearchTuner
+from core.model_tuning.hyperparameter_tuning.hyperparameter_tuner import (
+    OptunaTuner,
+    NoTuningTuner,
+    GridSearchTuner,
+)
 from core.model_tuning.models.abstract_model import AbstractMLModel
-from core.model_tuning.hyperparameter_tuning.abstract_hyparam_tuner import AbstractHyParamTuner
+from core.model_tuning.config.model_tuning_config import ModelTuningSetup
+from core.model_tuning.hyperparameter_tuning.abstract_hyparam_tuner import (
+    AbstractHyParamTuner,
+)
+from core.model_tuning.scoring.abstract_scorer import ValidationScoring
+
 
 class HyperparameterTunerFactory:
     """
@@ -9,7 +17,8 @@ class HyperparameterTunerFactory:
     """
 
     @staticmethod
-    def tuner_factory(tuner_type: str, model: AbstractMLModel, scoring: str) -> AbstractHyParamTuner:
+    def tuner_factory(config: ModelTuningSetup, model: AbstractMLModel, scorer: ValidationScoring
+    ) -> AbstractHyParamTuner:
         """
         Creates a hyperparameter tuner based on the specified type.
         :param tuner_type: Type of tuner to create (e.g., "grid", "none", "optuna").
@@ -17,11 +26,11 @@ class HyperparameterTunerFactory:
         :param scoring: Scoring method to use.
         :return: Instance of a hyperparameter tuner.
         """
-        if tuner_type == "grid":
-            return GridSearchTuner(model, scoring)
-        elif tuner_type == "none":
-            return NoTuningTuner(model, scoring)
-        elif tuner_type == "optuna":
-            return OptunaTuner(model, scoring)
+        if config.hyperparameter_tuning_type == "grid":
+            return GridSearchTuner(config, model, scorer)
+        elif config.hyperparameter_tuning_type == "none":
+            return NoTuningTuner(config, model, scorer)
+        elif config.hyperparameter_tuning_type == "optuna":
+            return OptunaTuner(config, model, scorer)
         else:
-            raise ValueError("Unknown tuner type: {}".format(tuner_type))
+            raise ValueError("Unknown tuner type: {}".format(config.hyperparameter_tuning_type))

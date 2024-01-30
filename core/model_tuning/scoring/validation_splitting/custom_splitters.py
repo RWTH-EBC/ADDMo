@@ -1,10 +1,11 @@
-from sklearn.model_selection import BaseCrossValidator
-
 from sklearn.model_selection import KFold
-import numpy as np
+
+from core.model_tuning.scoring.validation_splitting.abstract_splitter import AbstractSplitter
+
 '''Creating custom splitter that work with scikit-learn.
 An iterable yielding (train, test) splits as arrays of indices.'''
-class NoSplitting(BaseCrossValidator):
+
+class NoSplitting(AbstractSplitter):
     def get_n_splits(self, X=None, y=None, groups=None):
         return 1
 
@@ -12,7 +13,7 @@ class myKFold(KFold):
     def nur_zum_testen_ob_das_klappt(self):
         pass
 
-class TrialCustomSplitter(BaseCrossValidator):
+class TrialCustomSplitter(AbstractSplitter):
     """Custom splitter for scikit-learn cross-validation.
 
     This splitter creates two folds:

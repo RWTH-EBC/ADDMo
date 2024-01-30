@@ -11,7 +11,7 @@ import OnlyPredict
 
 import numpy as np
 from sklearn.model_selection import KFold, TimeSeriesSplit
-from core.model_tuning.model_configs.model_tuning_config import ModelTuningSetup
+from core.model_tuning.config.model_tuning_config import ModelTuningSetup
 from core.data_tuning_optimizer.config.data_tuning_config import DataTuningSetup
 
 print("Import in GUI_Remi.py done")

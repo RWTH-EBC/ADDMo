@@ -2,9 +2,9 @@ import pandas as pd
 
 from core.data_tuning import feature_constructor
 from core.util.data_handling import split_target_features
-from core.model_tuning.scoring.scoring_factory import ScoringFactory
+from core.model_tuning.scoring.scoring_factory import ScoringFactoryValidation
 from core.model_tuning.models.model_factory import ModelFactory
-from core.model_tuning.scoring.abstract_scoring import ValidationScoring
+from core.model_tuning.scoring.abstract_scorer import ValidationScoring
 from core.model_tuning.models.abstract_model import AbstractMLModel
 from core.data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 
@@ -34,7 +34,7 @@ def manual_target_lags(config: DataTuningAutoSetup, xy):
 def automatic_timeseries_target_lag_constructor(config: DataTuningAutoSetup, xy):
     x_created = pd.DataFrame()
 
-    scorer: ValidationScoring = ScoringFactory.scoring_factory(config.scoring_split_technique)
+    scorer: ValidationScoring = ScoringFactoryValidation.scoring_factory(config.scoring_split_technique)
     model: AbstractMLModel = ModelFactory.model_factory(config.wrapper_model)
 
     # prepare data
@@ -75,7 +75,7 @@ def manual_feature_lags(config: DataTuningAutoSetup, xy):
 def automatic_feature_lag_constructor(config: DataTuningAutoSetup, data):
     x_created = pd.DataFrame()
 
-    scorer: ValidationScoring = ScoringFactory.scoring_factory(config.scoring_split_technique)
+    scorer: ValidationScoring = ScoringFactoryValidation.scoring_factory(config.scoring_split_technique)
     model: AbstractMLModel = ModelFactory.model_factory(config.wrapper_model)
 
     x, y = split_target_features(config.name_of_target, data)

@@ -11,14 +11,14 @@ class ScikitLearnBaseModel(AbstractMLModel):
         # Create an instance of the scikit-learn model including a scaler
         self.model = self._build_pipeline(model)
 
-    def _build_pipeline(self):
+    def _build_pipeline(self, model):
         """
         Build a pipeline for the model.
         Including a scaler.
         """
-        pipeline = Pipeline([
-            ('scaler', StandardScaler()),  # Data preprocessing step
-            ('model', self.model)  # Keras model as the final step
+        pipeline = Pipeline(steps=[
+            ('scaling', StandardScaler()),  # Data preprocessing step
+            ('model', model)  # Keras model as the final step
         ])
         return pipeline
 
@@ -29,8 +29,14 @@ class ScikitLearnBaseModel(AbstractMLModel):
     def predict(self, x):
         return self.model.predict(x)  # Make predictions
 
-    def set_hyperparameters(self, hyperparameters):
-        self.model.set_params(**hyperparameters)  # Set hyperparameters
+    def set_params(self, hyperparameters):
+        # Convert the hyperparameters to the format expected by scikit-learn pipeline
+        model_hyperparameters = {'model__' + key: value for key, value in hyperparameters.items()}
+        self.model.set_params(**model_hyperparameters)  # Set hyperparameters
+
+    def get_params(self, deep=True):
+        # Get the hyperparameters of the model
+        return self.model.get_params(deep=deep)['model']
 
     def default_hyperparameter(self):
         return self.model.get_params()
@@ -43,6 +49,10 @@ class ScikitLearnBaseModel(AbstractMLModel):
     def load_model(self, abs_path):
         # Implement model loading
         pass
+
+    def to_scikit_learn(self):
+        return self.model
+
 
 
 class MLP(ScikitLearnBaseModel):
@@ -65,7 +75,7 @@ class MLP(ScikitLearnBaseModel):
                                                                   ["identity", "logistic", "tanh",
                                                                    "relu"])
         hyperparameters['solver'] = trial.suggest_categorical('solver', ["lbfgs", "sgd", "adam"])
-        hyperparameters['alpha'] = trial.suggest_loguniform('alpha', 1e-5, 1e-1)
+        hyperparameters['alpha'] = trial.suggest_float('alpha', 1e-5, 1e-1, log=True)
         hyperparameters['learning_rate'] = trial.suggest_categorical('learning_rate',
                                                                      ["constant", "invscaling",
                                                                       "adaptive"])

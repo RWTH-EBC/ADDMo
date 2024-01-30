@@ -31,13 +31,15 @@ class ModelTuningSetup(BaseConfig):
         self.hyperparameter_tuning_type: str  = "none"  # grid, optuna, none
 
         self.iterations_hyperparameter_tuning:int = 2
-        self.validation_score_splitting: str  = "TimeSeriesSplit"
+        self.validation_score_mechanism = "CV"
+        self.validation_score_splitting: str  = "KFold"
         self.validation_score_metric: str  = "R2"
+
 
         self.predict_recurrent:bool = True
         self.shuffle_samples:bool = True
 
-        self.models: list[str] = ["ModelSelection"]  # "all" or array of the models you want to use
+        self.models: list[str] = ["mlp"]  # "all" or array of the models you want to use
 
         # # -- Settings for regular training without final bayesian optimization (without "automation) -----------------------
         #

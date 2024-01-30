@@ -1,5 +1,5 @@
-from sklearn.model_selection import BaseCrossValidator
-from core.model_tuning.scoring.custom_splitters import NoSplitting, myKFold, TrialCustomSplitter
+from core.model_tuning.scoring.validation_splitting.custom_splitters import NoSplitting, myKFold,\
+    TrialCustomSplitter, BaseCrossValidator
 class SplitterFactory:
     """
     Factory for creating custom splitter instances for scikit-learn cross-validation.

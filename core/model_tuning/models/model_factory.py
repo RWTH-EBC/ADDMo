@@ -8,7 +8,7 @@ class ModelFactory:
 
     @staticmethod
     def model_factory(model_type: str) -> AbstractMLModel:
-        if model_type == 'MLP':
+        if model_type == 'mlp':
             return MLP()
         elif model_type == 'test':
             pass

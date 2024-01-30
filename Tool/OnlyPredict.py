@@ -19,7 +19,7 @@ from Functions.ErrorMetrics import *
 from Functions.PlotFcn import *
 
 import SharedVariablesFunctions as SVF
-from core.model_tuning.model_configs.model_tuning_config import ModelTuningSetup as MTS
+from core.model_tuning.config.model_tuning_config import ModelTuningSetup as MTS
 import ModelTuning as MT
 import PredictorDefinitions as PD
 from ModelTuningRuntimeResults import ModelTuningRuntimeResults as MTRR

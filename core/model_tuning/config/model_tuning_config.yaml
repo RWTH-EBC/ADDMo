@@ -1,0 +1,21 @@
+
+name_of_raw_data: "AHU Data1"
+name_of_data_tuning_experiment: "NoOL"
+abs_path_to_data: "D:\\04_GitRepos\\addmo-extra\\raw_input_data\\InputData.xlsx"
+name_of_target: "FreshAir Temperature"
+abs_path_to_result_folder: "Empty"
+
+name_of_model_tuning_experiment: "TrialTunedModel"
+start_train_val: "2016-08-01 00:00"
+stop_train_val: "2016-08-14 23:45"
+start_test: "2016-08-15 00:00"
+end_test: "2016-08-16 23:45"
+hyperparameter_tuning_type: "optuna"
+iterations_hyperparameter_tuning: 2
+validation_score_mechanism: "cv"
+validation_score_splitting: "kfold"
+validation_score_metric: "r2"
+predict_recurrent: true
+shuffle_samples: true
+models:
+  - "mlp"

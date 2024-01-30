@@ -2,6 +2,7 @@ import os
 import git
 import shutil
 from core.data_tuning.config.data_tuning_config import DataTuningFixedConfig
+from core.model_tuning.config.model_tuning_config import ModelTuningSetup
 def root_dir():
     # Finds the root directory of the git repository
     return git.Repo('.', search_parent_directories=True).working_tree_dir
@@ -29,9 +30,18 @@ def results_dir_data_tuning_local(config: DataTuningFixedConfig):
     path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, config.name_of_tuning)
     return _create_or_override_directory(path)
 
+def results_dir_model_tuning_local(config: ModelTuningSetup):
+    path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data,
+                        config.name_of_data_tuning_experiment, config.name_of_model_tuning_experiment)
+    return _create_or_override_directory(path)
+
 def _create_or_override_directory(path: str) -> str:
     if not os.path.exists(path):
+        # Path does not exist, create it
         os.makedirs(path)
+    elif not os.listdir(path):
+        # Path exists, but is empty
+        pass
     else:
         # Path exists, ask for confirmation to delete current contents
         response = input(f"The directory {path} already exists. Do you want to delete the current "

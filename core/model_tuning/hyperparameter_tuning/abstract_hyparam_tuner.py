@@ -1,14 +1,16 @@
 from core.model_tuning.models.abstract_model import AbstractMLModel
-from core.model_tuning.model_configs.model_tuning_config import ModelTuningSetup
+from core.model_tuning.config.model_tuning_config import ModelTuningSetup
+from core.model_tuning.scoring.abstract_scorer import ValidationScoring
 
 class AbstractHyParamTuner:
     """
     Abstract class for hyperparameter tuning.
     """
 
-    def __init__(self, config: ModelTuningSetup, model: AbstractMLModel):
-        self.model = model
+    def __init__(self, config: ModelTuningSetup, model: AbstractMLModel, scorer: ValidationScoring):
         self.config = config
+        self.model = model
+        self.scorer = scorer
 
     def tune(self):
         """

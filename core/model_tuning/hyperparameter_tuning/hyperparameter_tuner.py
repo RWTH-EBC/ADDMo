@@ -6,58 +6,63 @@ import inspect
 from sklearn.model_selection import GridSearchCV, cross_validate
 
 from core.model_tuning.hyperparameter_tuning.abstract_hyparam_tuner import AbstractHyParamTuner
+from core.model_tuning.scoring.abstract_scorer import ValidationScoring
+from core.model_tuning.config.model_tuning_config import ModelTuningSetup
 
 class NoTuningTuner(AbstractHyParamTuner):
     """
     Tuner implementation for no tuning.
     """
-    def tune(self, hyperparameters=None): #Todo: überlegen wo dann die yaml mit spezifischen
+    def tune(self, hyperparameter_set=None): #Todo: überlegen wo dann die yaml mit spezifischen
         # hyperparametern hin soll und eingeladen wird
         """
         Returns the default hyperparameters without any tuning.
         """
-        if hyperparameters is None:
-            hyperparameters = self.model.default_hyperparameter()
+        if hyperparameter_set is None:
+            hyperparameter_set = self.model.default_hyperparameter()
 
-        self.model.set_hyperparameters(self.model.default_hyperparameter())
+        self.model.set_params(self.model.default_hyperparameter())
 
-        self.model.set_hyperparameters()
-        return hyperparameters
+        self.model.set_params()
+        return hyperparameter_set
 
 class OptunaTuner(AbstractHyParamTuner):
-    def tune(self, x_train_val, y_train_val, n_trials=100):
+    def tune(self, x_train_val, y_train_val):
         """
         Perform hyperparameter tuning using Optuna.
         :param n_trials: Number of optimization trials.
         """
 
-        wandb_kwargs = {"project": "my-project"}
-        wandbc = WeightsAndBiasesCallback(wandb_kwargs=wandb_kwargs, as_multirun=True)
+        # wandb_kwargs = {"project": "my-project"}
+        # wandbc = WeightsAndBiasesCallback(wandb_kwargs=wandb_kwargs, as_multirun=True)
+        #
+        # wandb.log(
+        #     {
+        #         "hyperparameter_range": inspect.getsource(
+        #             self.model.optuna_hyperparameter_suggest
+        #         )
+        #     }
+        # )
 
-        wandb.log(
-            {
-                "hyperparameter_range": inspect.getsource(
-                    self.model.optuna_hyperparameter_suggest
-                )
-            }
-        )
-
-        @wandbc.track_in_wandb()
+        #@wandbc.track_in_wandb()
         def objective(trial):
             hyperparameters = self.model.optuna_hyperparameter_suggest(trial)
-            self.model.set_hyperparameters(hyperparameters)
-            score = cross_validate(self.model, self.model.data, self.model.target, cv=5)
-            wandb.log({"score_test": score, "hyperparameters": hyperparameters})
+            self.model.set_params(hyperparameters)
+            score = self.scorer.score_validation(self.model, x_train_val, y_train_val)
+            # wandb.log({"score_test": score, "hyperparameters": hyperparameters})
             return score
 
         study = optuna.create_study(direction="maximize")
-        study.optimize(objective, n_trials=n_trials, callbacks=[wandbc])
-        wandb.finish()
+        study.optimize(objective, n_trials=self.config.iterations_hyperparameter_tuning)
+        # , callbacks=[wandbc])
+        # wandb.finish()
 
-        self.model.set_hyperparameters(study.best_params)
-        return study.best_params
+        # convert optuna params to model params
+        best_params = self.model.optuna_hyperparameter_suggest(study.best_trial)
+        self.model.set_params(best_params)
+        return best_params
 
-class GridSearchTuner(AbstractHyParamTuner):
+class GridSearchTuner(AbstractHyParamTuner): # Todo
     """
     Tuner implementation using Grid Search.
     """
@@ -75,5 +80,5 @@ class GridSearchTuner(AbstractHyParamTuner):
 
         hyperparameters = grid_search.best_params_
 
-        self.model.set_hyperparameters(hyperparameters)
+        self.model.set_params(hyperparameters)
         return hyperparameters

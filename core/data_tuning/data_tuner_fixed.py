@@ -41,12 +41,13 @@ class DataTunerByConfig():
                 original_name, modification = feature_name.split('___')
                 var = self.xy_raw[original_name]
 
-                # get method dynamically from module
-                method = getattr(fc, "create_"+modification)
+
                 if modification.startswith('lag'):
                     lag = int(modification[3:])
                     series = method(var, lag)
                 else:
+                    # get the other methods dynamically from module
+                    method = getattr(fc, "create_" + modification)
                     series = method(var)
                 self.x_processed[series.name] = series
 

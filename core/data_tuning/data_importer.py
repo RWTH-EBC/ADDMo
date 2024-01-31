@@ -1,6 +1,8 @@
 import pandas as pd
 
 
+
+
 def load_data(abs_path: str) -> pd.DataFrame: #todo: move to data_handling or load_save
 
     if abs_path.endswith(".csv"):

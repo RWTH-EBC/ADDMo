@@ -271,7 +271,7 @@ def main(DT_Setup_object, DT_RR_object):
     ]  # also for not making e.g. featurelagcreate create lags of differences; Data needs to be in for the case no feature construction is done
     if DT_Setup_object.correlation_plotting == True:
         cross_auto_cloud_correlation_plotting(DT_Setup_object, Data)
-    if DT_Setup_object.create_difference == True:
+    if DT_Setup_object.create_diff == True:
         _Data = difference_create(DT_Setup_object, Data)
         Datas.append(
             _Data.drop(list(Data), axis=1)

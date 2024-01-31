@@ -5,11 +5,11 @@ from core.data_tuning import feature_constructor as fc
 from core.data_tuning.data_importer import load_data
 from core.util.experiment_logger import ExperimentLogger
 
+
 class DataTunerByConfig():
     '''Tunes the data in a fixed manner. Without randomness.'''
-    def __init__(self, config: DataTuningFixedConfig, logger:ExperimentLogger):
+    def __init__(self, config: DataTuningFixedConfig):
         self.config = config
-        self.logger = logger
         self.xy_raw = load_data(self.config.path_to_raw_data)
         self.x_processed = pd.DataFrame(index=self.xy_raw.index)  # Initialize with the same index
 

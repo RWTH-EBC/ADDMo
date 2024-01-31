@@ -23,7 +23,7 @@ x_created_2 = feature_construction.manual_target_lags(dt_config, df)
 import os
 
 from core.util.definitions import root_dir, results_dir_data_tuning_local
-from core.util.experiment_logger import LocalLogger
+from core.util.experiment_logger import ExperimentLogger
 from core.data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from core.data_tuning_auto.data_tuner_auto import DataTunerAuto
 

@@ -101,7 +101,7 @@ def plot_acf_diff(x, savePath, lags=50):
     plt.savefig(SavePath_jpg)
     plt.close()
 
-'''
+"""
 def plot_predict_measured(prediction, measurement, Score, StartDatePredict, SavePath, nameOfSignal, BlackBox, NameOfSubTest):
     fig = plt.figure()
     ax1 = plt.subplot2grid((1, 1), (0, 0))
@@ -120,8 +120,8 @@ def plot_predict_measured(prediction, measurement, Score, StartDatePredict, Save
     plt.savefig(SavePath_pdf, transparent=True)
     plt.savefig(SavePath_jpg, transparent=True)
     plt.close()
-'''
-'''
+"""
+"""
 def plot_predict_exogeneous(prediction, measurement, Xtest, nameOfSignal, ExogInputs, ExogVector, SavePath,
                             EndingFileNames):
     fig, (ax1, ax2) = plt.subplots(2, sharex=True, sharey=False);
@@ -139,8 +139,8 @@ def plot_predict_exogeneous(prediction, measurement, Xtest, nameOfSignal, ExogIn
     plt.savefig(SavePath_pdf)
     plt.savefig(SavePath_jpg)
     plt.close()
-'''
-'''
+"""
+"""
 def plot_Residues(prediction, measurement, Score, SavePath, nameOfSignal, BlackBox, NameOfSubTest):
     fig, (ax1, ax2) = plt.subplots(2, sharex=True, sharey=False);
     measurement.plot(ax=ax1, color='k', label='Measurement', lw=0.5)
@@ -162,7 +162,7 @@ def plot_Residues(prediction, measurement, Score, SavePath, nameOfSignal, BlackB
     plt.savefig(SavePath_pdf, transparent=True)
     plt.savefig(SavePath_jpg, transparent=True)
     plt.close()
-'''
+"""
 
 def plot_predict_measured(prediction, measurement, MAE, R2, StartDatePredict, SavePath, nameOfSignal, BlackBox, NameOfSubTest):
     import matplotlib.pylab as pylab

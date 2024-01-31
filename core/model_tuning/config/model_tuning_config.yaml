@@ -14,7 +14,7 @@ hyperparameter_tuning_type: "optuna"
 iterations_hyperparameter_tuning: 2
 validation_score_mechanism: "cv"
 validation_score_splitting: "TrialCustomSplitter"
-validation_score_metric: "r2"
+validation_score_metric: "r22"
 predict_recurrent: true
 shuffle_samples: true
 models:

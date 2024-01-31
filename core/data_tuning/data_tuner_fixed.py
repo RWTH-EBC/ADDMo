@@ -7,7 +7,7 @@ from core.util.experiment_logger import ExperimentLogger
 
 
 class DataTunerByConfig():
-    '''Tunes the data in a fixed manner. Without randomness.'''
+    """Tunes the data in a fixed manner. Without randomness."""
     def __init__(self, config: DataTuningFixedConfig):
         self.config = config
         self.xy_raw = load_data(self.config.path_to_raw_data)
@@ -29,7 +29,7 @@ class DataTunerByConfig():
         self.xy_raw = self.xy_raw.tail(100)
 
     def update_y(self, y_sample: pd.DataFrame): #Todo: notwenig?
-        '''recursive prediction'''
+        """recursive prediction"""
         # Overwrite existing data or append new data
         self.xy_raw = self.xy_raw.combine_first(y_sample)
 

@@ -91,7 +91,7 @@ def recursive_feature_selection_wrapper_scikit_learn(config: DataTuningAutoSetup
 
 
 # def custom_forward_feature_selector(config: DataTuningAutoSetup, xy) -> pd.DataFrame:
-#     '''
+#     """
 #     Custom Sequential Feature Selector supporting other scoring functions.
 #     This method selects features based on custom scoring functions.
 #
@@ -101,7 +101,7 @@ def recursive_feature_selection_wrapper_scikit_learn(config: DataTuningAutoSetup
 #
 #     Returns:
 #     x_selected: pd.DataFrame - selected feature data after feature selection
-#     '''
+#     """
 #     x_selected = pd.DataFrame()
 #
 #     scorer: ValidationScoring = ScoringFactory.get_splitter(config.scoring_split_technique)
@@ -139,7 +139,7 @@ def recursive_feature_selection_wrapper_scikit_learn(config: DataTuningAutoSetup
 
 
 def forward_feature_selector(config: DataTuningAutoSetup, xy) -> pd.DataFrame:
-    '''
+    """
     Forward Sequential Feature Selector.
     This method selects features based on custom scoring functions in a forward manner.
 
@@ -149,7 +149,7 @@ def forward_feature_selector(config: DataTuningAutoSetup, xy) -> pd.DataFrame:
 
     Returns:
     x_selected: pd.DataFrame - selected feature data after feature selection
-    '''
+    """
     x_selected = pd.DataFrame()
 
     scorer: ValidationScoring = ValidatorFactory.ValidatorFactory(config.scoring_split_technique)

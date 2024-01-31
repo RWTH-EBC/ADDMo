@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 
 from core.model_tuning.config.model_tuning_config import ModelTuningSetup
 from core.model_tuning.models.abstract_model import AbstractMLModel
+from core.model_tuning.scoring.metrics.abstract_metric import AbstractMetric
 from core.model_tuning.scoring.metrics.metric_factory import MetricFactory
 from core.model_tuning.scoring.validation_splitting.splitter_factory import (
     SplitterFactory,
 )
-from core.model_tuning.scoring.metrics.abstract_metric import AbstractMetric
 
 
 class Scoring:

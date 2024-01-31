@@ -102,8 +102,8 @@ class LocalLogger(AbstractLogger):
 
 
 class ExperimentLogger(AbstractLogger):
-    '''Static class to trigger the different loggers. A static class can be used throughout the
-    whole code without the need to pass it as an argument.'''
+    """Static class to trigger the different loggers. A static class can be used throughout the
+    whole code without the need to pass it as an argument."""
 
     wandb_logger = None
     local_logger = None

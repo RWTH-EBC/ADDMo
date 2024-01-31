@@ -5,10 +5,10 @@ class BaseConfig(ABC):
     def __init__(self):
         self.config_as_dict = None
     def load_yaml_to_class(self, path_to_yaml:dict):
-        '''
+        """
         Load data from config.yaml and dynamically assign to the class variables.
         Overwrites existing attributes. Only works for flat yaml files. And only for attributes
-        that are already defined in the class.'''
+        that are already defined in the class."""
 
         config_dict = load_yaml_to_dict(path_to_yaml)
         if config_dict is not None:

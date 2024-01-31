@@ -5,27 +5,26 @@ from core.model_tuning.models.abstract_model import AbstractMLModel
 
 from core.util.experiment_logger import WandbLogger
 
-class CrossValidation(ValidationScoring):
 
-    def score_validation(self, model:AbstractMLModel, x, y):
-        """ Returns a positive float value. The higher the better.
+class CrossValidation(ValidationScoring):
+    def score_validation(self, model: AbstractMLModel, x, y):
+        """Returns a positive float value. The higher the better.
         x and y include train and evaluation period.
         CV is shuffle=False by default, so the splits will be same across calls."""
 
-        info = cross_validate(model.to_scikit_learn(), x, y, scoring=self.metric,
-                              cv=self.splitter, return_indices=True)
+        cv_info = cross_validate(
+            model.to_scikit_learn(),
+            x,
+            y,
+            scoring=self.metric,
+            cv=self.splitter,
+            return_indices=True,
+        )
 
-        # log the dataset splits for specific splitters which are good important to check
+        # log the dataset splits for specific splitters which are important to check
         if self.splitter.__class__.__name__ == "KrasserSplitter":
-            splitter_indices:dict = info["indices"]
+            splitter_indices: dict = cv_info["indices"]
             WandbLogger(splitter_indices)
 
-
-        scores = info["test_score"]
+        scores = cv_info["test_score"]
         return scores.mean()
-
-
-
-
-class TimeSeriesSplitting(ValidationScoring):
-    pass

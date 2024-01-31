@@ -1,6 +1,6 @@
 from core.util.abstract_config import BaseConfig
 
-'''Serves as blueprint for the yaml-configs.'''
+"""Serves as blueprint for the yaml-configs."""
 class DataTuningAutoSetup(BaseConfig):
     """
     Object that stores all the setup and user input information of Data Tuning"""

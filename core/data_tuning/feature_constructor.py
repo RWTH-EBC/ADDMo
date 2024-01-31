@@ -1,7 +1,7 @@
 import pandas as pd
 
-'''If the name of function is "create_" + "variable suffix", the methods are dynamically used 
-through the getattr() function in the DataTunerByConfig class.'''
+"""If the name of function is "create_" + "variable suffix", the methods are dynamically used 
+through the getattr() function in the DataTunerByConfig class."""
 
 def create_lag(var: pd.Series, lag: int):
     series = var.shift(lag)

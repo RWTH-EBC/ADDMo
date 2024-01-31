@@ -1,5 +1,8 @@
-from core.model_tuning.models.scikit_learn_models import MLP
+import inspect
+
+from core.model_tuning.models import scikit_learn_models
 from core.model_tuning.models.abstract_model import AbstractMLModel
+
 
 class ModelFactory:
     """
@@ -8,10 +11,31 @@ class ModelFactory:
 
     @staticmethod
     def model_factory(model_type: str) -> AbstractMLModel:
-        if model_type == 'mlp':
-            return MLP()
-        elif model_type == 'test':
-            pass
-        # Add more conditions for other models
+        """Get the model instance dynamically."""
+
+        # If model is based on scikit-learn
+        if hasattr(scikit_learn_models, model_type):
+            custom_model_class = getattr(scikit_learn_models, model_type)
+            return custom_model_class()
+
+        # You may add something like:
+        # # If model is based on e.g. Keras
+        # elif hasattr(keras_models, model_type):
+        #     custom_model_class = getattr(keras_models, model_type)
+        #     return custom_model_class(**kwargs)
+
+        # If model is not found
         else:
-            raise ValueError("Unknown model type")
+            # Get the names of all custom models for error message
+            custom_model_names = [
+                name
+                for name, obj in inspect.getmembers(scikit_learn_models)
+                if inspect.isclass(obj)
+                and issubclass(obj, AbstractMLModel)
+                and not inspect.isabstract(obj)
+            ]
+
+            raise ValueError(
+                f"Unknown model type: {model_type}. "
+                f"Available custom models are: {', '.join(custom_model_names)}. "
+            )

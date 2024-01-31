@@ -4,13 +4,16 @@ from core.model_tuning.config.model_tuning_config import ModelTuningSetup
 
 class ValidatorFactory:
     """
-    Creates and returns an instance of the specified scoring method.
+    Factory for creating validator instances.
     """
 
     @staticmethod
     def ValidatorFactory(config: ModelTuningSetup) -> ValidationScoring:
         if config.validation_score_mechanism == 'cv':
             return CrossValidation(config)
-        # Add more conditions for other scoring methods
+        # Add more conditions for other scoring mechanisms or get them dynamically like in the
+        # other factory methods
         else:
-            raise ValueError("Unknown scoring type")
+            raise ValueError("Unknown validation scoring mechanism: "
+                             f"{config.validation_score_mechanism}. "
+                             "Available validation scoring mechanisms are: cv")

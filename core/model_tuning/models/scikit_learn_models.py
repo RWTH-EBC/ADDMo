@@ -1,3 +1,5 @@
+from abc import ABC
+
 from sklearn.neural_network import MLPRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -7,7 +9,7 @@ from skl2onnx.common.data_types import FloatTensorType, StringTensorType
 from core.model_tuning.models.abstract_model import AbstractMLModel
 
 
-class ScikitLearnBaseModel(AbstractMLModel):
+class BaseScikitLearnModel(AbstractMLModel, ABC):
     """
     Base class for scikit-learn models.
     This class extends the AbstractMLModel, providing concrete implementations of
@@ -62,7 +64,7 @@ class ScikitLearnBaseModel(AbstractMLModel):
         return self.model.get_params()
 
 
-class MLP(ScikitLearnBaseModel):
+class MLP(BaseScikitLearnModel):
     """Scikit-learn MLPRegressor model."""
 
     def __init__(self):

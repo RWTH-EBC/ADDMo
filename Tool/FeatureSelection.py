@@ -63,7 +63,7 @@ def filter_ica(DT_Setup_object: DataTuningSetup: DataTuningAutoSetup, Data):
 
 # Filter Univariate with scoring function f-test or mutual information and search mode : {‘percentile’, ‘k_best’, ‘fpr’, ‘fdr’, ‘fwe’}
 def filter_univariate(DT_Setup_object: DataTuningAutoSetup, Data):
-    '''Filter Univariate with scoring function f-test or mutual information and search mode : {‘percentile’, ‘k_best’, ‘fpr’, ‘fdr’, ‘fwe’}'''
+    """Filter Univariate with scoring function f-test or mutual information and search mode : {‘percentile’, ‘k_best’, ‘fpr’, ‘fdr’, ‘fwe’}"""
     (X, Y) = split_signal_and_features(DT_Setup_object.name_of_target, Data=Data)
     filter = GenericUnivariateSelect(
         score_func=DT_Setup_object.univariate_score_function,

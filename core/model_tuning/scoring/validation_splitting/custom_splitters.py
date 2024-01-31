@@ -1,9 +1,10 @@
-from sklearn.model_selection import KFold
+from core.model_tuning.scoring.validation_splitting.abstract_splitter import (
+    AbstractSplitter,
+)
 
-from core.model_tuning.scoring.validation_splitting.abstract_splitter import AbstractSplitter
+"""Creating custom splitter that work with scikit-learn. Please see the documentation of the 
+AbstractSplitter class for more information."""
 
-'''Creating custom splitter that work with scikit-learn. Please see the documentation of the 
-AbstractSplitter class for more information.'''
 
 class TrialCustomSplitter(AbstractSplitter):
     """Custom splitter for scikit-learn cross-validation.
@@ -25,7 +26,9 @@ class TrialCustomSplitter(AbstractSplitter):
         """Generate integer indices for test set for each fold."""
         n_samples = len(X)
         if n_samples < 20:
-            raise ValueError("The dataset must have at least 20 samples for this custom splitter.")
+            raise ValueError(
+                "The dataset must have at least 20 samples for this custom splitter."
+            )
 
         first_fold_indices = list(range(10)) + list(range(n_samples - 10, n_samples))
         yield first_fold_indices
@@ -35,6 +38,3 @@ class TrialCustomSplitter(AbstractSplitter):
         # if you only yield one fold the cross-validation will only produce one score on the
         # yielded test indices. For each yielded fold, e.g. through a for loop, the cross-validation
         # will produce one score on the yielded test indices.
-
-
-

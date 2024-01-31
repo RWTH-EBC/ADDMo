@@ -1,9 +1,10 @@
 import numpy as np
+
 from sklearn.model_selection import BaseCrossValidator
 
 from core.model_tuning.config.model_tuning_config import ModelTuningSetup
 
-class AbstractSplitter(BaseCrossValidator):  # Todo finalisieren
+class AbstractSplitter(BaseCrossValidator):
     """
     Generate a splitter that is compatible with scikit-learn cross-validation tools.
 

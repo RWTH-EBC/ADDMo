@@ -5,39 +5,34 @@ class ModelTuningSetup(BaseConfig):
     def __init__(self, **kwargs):
         # -----------------------Global Variables-------------------------------
 
-        self.name_of_raw_data: str = "AHU Data1"  # Set name of the folder where the experiments
-        # shall be saved, e.g. the name of the observed data
-        self.name_of_data_tuning_experiment: str = "NoOL"  # Set name of the experiments series
+        self.name_of_raw_data: str = "AHU Data1"  # Refer to the raw data connected to this
+        self.name_of_data_tuning_experiment: str = "NoOL"  # Refer to the data tuning experiment
+        # aka the input data for this model tuning experiment
 
-        self.abs_path_to_data: str = r"/raw_input_data/InputData.xlsx"  # Path to the file that has
+        self.name_of_model_tuning_experiment: str = "TrialTunedModel"  # Set name of the
+        # current experiment
+
+        self.abs_path_to_data: str = r"D:\\04_GitRepos\\addmo-extra\\raw_input_data\\InputData.xlsx"  # Path to the file that has
         # the data
+
         self.name_of_target:str = "FreshAir Temperature"
         # Name of the target variable
 
-        self.abs_path_to_result_folder: str = r"Empty"  # Path to the folder where the results will
-        # be stored
-
-        self.name_of_target: str = "Empty"  # Name of the target variable
-
         # -----------------------Model Tuning Variables-------------------------------
-
-        self.name_of_model_tuning_experiment: str = "TrialTunedModel"
 
         self.start_train_val: str  = "2016-08-01 00:00"
         self.stop_train_val: str  = "2016-08-14 23:45"
         self.start_test: str  = "2016-08-15 00:00"
         self.end_test: str  = "2016-08-16 23:45"
 
-        self.hyperparameter_tuning_type: str  = "none"  # grid, optuna, none
+        self.hyperparameter_tuning_type: str  = "optuna"  # grid, optuna, none
 
         self.iterations_hyperparameter_tuning:int = 2
-        self.validation_score_mechanism = "CV"
-        self.validation_score_splitting: str  = "KFold"
-        self.validation_score_metric: str  = "R2"
-
-
-        self.predict_recurrent:bool = True
-        self.shuffle_samples:bool = True
+        self.validation_score_mechanism:str = "cv"
+        self.validation_score_splitting: str  = "kfold"
+        self.validation_score_splitting_kwargs: dict = None
+        self.validation_score_metric: str  = "r2"
+        self.validation_score_metric_kwargs: dict = None
 
         self.models: list[str] = ["mlp"]  # "all" or array of the models you want to use
 

@@ -1,5 +1,6 @@
 from sklearn import metrics
 from core.model_tuning.scoring.metrics.abstract_metric import AbstractMetric
+from core.model_tuning.config.model_tuning_config import ModelTuningSetup
 
 class MetricFactory:
     """
@@ -7,7 +8,7 @@ class MetricFactory:
     """
 
     @staticmethod
-    def metric_factory(metric_name: str) -> AbstractMetric:
+    def metric_factory(metric_name, metric_kwargs=None):
         """
         Creates a metric instance based on the specified name.
         :param metric_name: Name of the metric to create.
@@ -24,6 +25,12 @@ class MetricFactory:
             # d2_pinball_score, d2_tweedie_score
 
             metric = metrics.get_scorer(metric_name)
+
+            # Customize metric with additional kwargs if provided
+            if metric_kwargs is not None:
+                metric = metrics.make_scorer(metric._score_func, **metric_kwargs)
+
+
         # If metric is custom
         else:
             # This is where you can integrate custom metrics

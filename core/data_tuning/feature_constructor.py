@@ -1,13 +1,14 @@
 import pandas as pd
 
-'''It is important that the name of variable is equal to the names in DataTunerByConfig'''
+'''If the name of function is "create_" + "variable suffix", the methods are dynamically used 
+through the getattr() function in the DataTunerByConfig class.'''
 
 def create_lag(var: pd.Series, lag: int):
     series = var.shift(lag)
     series.name = f"{var.name}___lag{lag}"
     return series
 
-def create_difference(var: pd.Series):
+def create_diff(var: pd.Series):
     series = var.diff()
     series.name = f"{var.name}___diff"
     return series

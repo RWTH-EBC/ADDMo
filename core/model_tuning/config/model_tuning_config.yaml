@@ -13,7 +13,7 @@ end_test: "2016-08-16 23:45"
 hyperparameter_tuning_type: "optuna"
 iterations_hyperparameter_tuning: 2
 validation_score_mechanism: "cv"
-validation_score_splitting: "kfold"
+validation_score_splitting: "TrialCustomSplitter"
 validation_score_metric: "r2"
 predict_recurrent: true
 shuffle_samples: true

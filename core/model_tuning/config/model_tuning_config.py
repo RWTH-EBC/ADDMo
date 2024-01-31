@@ -29,7 +29,7 @@ class ModelTuningSetup(BaseConfig):
 
         self.iterations_hyperparameter_tuning:int = 2
         self.validation_score_mechanism:str = "cv"
-        self.validation_score_splitting: str  = "kfold"
+        self.validation_score_splitting: str  = "kfold" # all custom splitters or scikit-learn splitters
         self.validation_score_splitting_kwargs: dict = None
         self.validation_score_metric: str  = "r2"
         self.validation_score_metric_kwargs: dict = None

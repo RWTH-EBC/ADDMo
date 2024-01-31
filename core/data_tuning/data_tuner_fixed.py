@@ -41,18 +41,14 @@ class DataTunerByConfig():
                 original_name, modification = feature_name.split('___')
                 var = self.xy_raw[original_name]
 
+                # get method dynamically from module
+                method = getattr(fc, "create_"+modification)
                 if modification.startswith('lag'):
                     lag = int(modification[3:])
-                    series = fc.create_lag(var, lag)
-                    self.x_processed[series.name] = series
-
-                elif modification == 'diff':
-                    series = fc.create_difference(var)
-                    self.x_processed[series.name] = series
-
-                elif modification == 'squared':
-                    series = fc.create_squared(var)
-                    self.x_processed[series.name] = series
+                    series = method(var, lag)
+                else:
+                    series = method(var)
+                self.x_processed[series.name] = series
 
             # keep desired raw features
             elif feature_name in self.xy_raw.columns:

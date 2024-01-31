@@ -14,7 +14,7 @@ def create_difference(config: DataTuningAutoSetup, data):
 
     for var_name in data.columns:
         if var_name != config.name_of_target:
-            series = feature_constructor.create_difference(data[var_name])
+            series = feature_constructor.create_diff(data[var_name])
             x_created[series.name] = series
 
     return x_created

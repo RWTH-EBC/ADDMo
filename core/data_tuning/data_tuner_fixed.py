@@ -44,7 +44,7 @@ class DataTunerByConfig():
 
                 if modification.startswith('lag'):
                     lag = int(modification[3:])
-                    series = method(var, lag)
+                    series = fc.create_lag(var, lag)
                 else:
                     # get the other methods dynamically from module
                     method = getattr(fc, "create_" + modification)

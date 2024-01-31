@@ -10,15 +10,9 @@ from core.util.data_handling import split_target_features
 
 
 class ModelTuner:
-    def __init__(self, config: ModelTuningSetup, logger: ExperimentLogger):
+    def __init__(self, config: ModelTuningSetup):
         self.config = config
-        self.logger = logger
         self.xy = load_data(self.config.abs_path_to_data)
-
-    # def _get_models(self):
-    #     """Returns a list of models to be tuned"""
-    #     for model_name in self.config.models:
-    #         yield ModelFactory.model_factory(model_name)
 
     def tune_model(self):
         model = ModelFactory.model_factory(self.config.models[0])

@@ -26,11 +26,12 @@ class HyperparameterTunerFactory:
         :param scoring: Scoring method to use.
         :return: Instance of a hyperparameter tuner.
         """
-        if config.hyperparameter_tuning_type == "grid":
-            return GridSearchTuner(config, model, scorer)
-        elif config.hyperparameter_tuning_type == "none":
+
+        if config.hyperparameter_tuning_type == "NoTuningTuner":
             return NoTuningTuner(config, model, scorer)
-        elif config.hyperparameter_tuning_type == "optuna":
+        elif config.hyperparameter_tuning_type == "OptunaTuner":
             return OptunaTuner(config, model, scorer)
+        elif config.hyperparameter_tuning_type == "GridSearchTuner":
+            return GridSearchTuner(config, model, scorer)
         else:
             raise ValueError("Unknown tuner type: {}".format(config.hyperparameter_tuning_type))

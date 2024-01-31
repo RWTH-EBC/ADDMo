@@ -19,16 +19,7 @@ class DataTuningAutoSetup(BaseConfig):
         self.abs_path_to_result_folder: str = r"Empty"  # Path to the folder where the results will
         # be stored
 
-        # -----------------------Wrapper Variables-------------------------------
 
-        self.wrapper_model: str = "MLP"  # Set the model that shall be used for the wrapper
-        self.wrapper_params: str = "default"  # State the parameters that the model should have.
-        # Eg. "default" or a dictionary with parameters readable for the model
-        self.scoring_split_technique: str = "TimeSeriesSplit"  # Set the split technique that shall
-        # be used
-        self.scoring_metric: str = "R2"  # Scoring method for the wrapper
-        self.min_increase_4_wrapper: float = 0.005  # Minimum difference between two scores to
-        # accept a feature constuction or selection as worthy. Only used in wrapper methods.
 
         # -----------------------ImportData Variables-------------------------------
 
@@ -89,13 +80,30 @@ class DataTuningAutoSetup(BaseConfig):
         self.filter_recursive_embedded: bool = False
         self.recursive_embedded_number_features_to_select:int = 18
         # Enter number of features to select. Enter 0 for automatic choice
-        self.recursive_embedded_scoring = "R2" # choose a scoring function hyperparameter tuning
-        self.recursive_embedded_threshold = False
-        self.recursive_embedded_threshold_type = "median"
 
 
+        self.wrapper_sequential_feature_selection:bool = False  # Wrapper recursive feature
+        self.sequential_direction = "forward"  # 'forward' or 'backward'
 
-        self.wrapper_recursive_feature_selection = False  # Wrapper recursive feature
+        # -----------------------Wrapper Model Variables-------------------------------
 
+        self.hyperparameter_tuning_type: str = "optuna"  # e.g. OptunaTuner, GridSearchTuner, or NoTuningTuner
+        self.hyperparameter_tuning_kwargs: dict = {"n_trials": 10}  # kwargs for the tuner
+
+        self.validation_score_mechanism: str = "cv"  # e.g. cross validation, holdout, etc.
+        self.validation_score_mechanism_kwargs: dict = None  # kwargs for the mechanism
+
+        self.validation_score_splitting: str = "kfold"  # all custom splitters or scikit-learn
+        # splitters, e.g. kfold, timeseriessplit, etc.
+        self.validation_score_splitting_kwargs: dict = None  # kwargs for the splitter
+
+        self.validation_score_metric: str = "r2"  # all custom metrics or scikit-learn metrics,
+        # e.g. r2, neg_mean_absolute_error, d2_pinball_score, etc.
+        self.validation_score_metric_kwargs: dict = None  # kwargs for the metric
+
+        self.model: str = "mlp"  # array of the models you want to use
+
+        self.min_increase_4_wrapper: float = 0.005  # Minimum difference between two scores to
+        # accept a feature constuction or selection as worthy. Only used in wrapper methods.
 
 

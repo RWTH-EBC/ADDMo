@@ -9,12 +9,12 @@ from core.model_tuning.models.abstract_model import AbstractMLModel
 from core.data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 
 
-def create_difference(config: DataTuningAutoSetup, data):
+def create_difference(config: DataTuningAutoSetup, xy):
     x_created = pd.DataFrame()
 
-    for var_name in data.columns:
+    for var_name in xy.columns:
         if var_name != config.name_of_target:
-            series = feature_constructor.create_diff(data[var_name])
+            series = feature_constructor.create_diff(xy[var_name])
             x_created[series.name] = series
 
     return x_created
@@ -72,13 +72,13 @@ def manual_feature_lags(config: DataTuningAutoSetup, xy):
     return x_created
 
 
-def automatic_feature_lag_constructor(config: DataTuningAutoSetup, data):
+def automatic_feature_lag_constructor(config: DataTuningAutoSetup, xy):
     x_created = pd.DataFrame()
 
     scorer: ValidationScoring = ValidatorFactory.ValidatorFactory(config.scoring_split_technique)
     model: AbstractMLModel = ModelFactory.model_factory(config.wrapper_model)
 
-    x, y = split_target_features(config.name_of_target, data)
+    x, y = split_target_features(config.name_of_target, xy)
 
     old_score = scorer.score_validation(model, config.scoring_metric, x, y)
 

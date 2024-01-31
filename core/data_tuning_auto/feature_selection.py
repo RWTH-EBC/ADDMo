@@ -5,10 +5,14 @@ from sklearn.feature_selection import GenericUnivariateSelect
 from sklearn.feature_selection import RFE, RFECV
 from sklearn.feature_selection import SequentialFeatureSelector
 
-from core.util.data_handling import split_target_features
-from core.model_tuning.scoring.validator_factory import ValidatorFactory
+
 from core.model_tuning.models.model_factory import ModelFactory
-from core.model_tuning.scoring.abstract_scorer import ValidationScoring
+from core.model_tuning.scoring.metrics.metric_factory import MetricFactory
+from core.model_tuning.scoring.validation_splitting.splitter_factory import (
+    SplitterFactory,
+)
+from core.model_tuning.scoring.validator_factory import ValidatorFactory
+from core.model_tuning.hyperparameter_tuning.hyparam_tuning_factory import HyperparameterTunerFactory
 from core.model_tuning.models.abstract_model import AbstractMLModel
 from core.data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 
@@ -78,104 +82,35 @@ def recursive_feature_selection_embedded(config: DataTuningAutoSetup, x, y):
 
     return x_processed
 
-def recursive_feature_selection_wrapper_scikit_learn(config: DataTuningAutoSetup, x, y) -> pd.DataFrame:
-    # get model from the factory
-    wrapper_model = ModelFactory.model_factory(config.wrapper_model)
+
+def recursive_feature_selection_wrapper_scikit_learn(
+    config: DataTuningAutoSetup, x, y
+) -> pd.DataFrame:
+
+    # erfolgloser Versuch, die Wrapper Funktionen von scikit-learn zu nutzen und gleichzeitig die
+    # Modelle hyperparameter zu tunen, vermutlich am besten einen eigenen Wrapper schreiben
+    # alternativ die feature selection mit in optuna integrieren?
+    model = ModelFactory.model_factory(config.model)
+
+    metric = MetricFactory.metric_factory(
+        config.validation_score_metric, config.validation_score_metric_kwargs
+    )
+    splitter = SplitterFactory.splitter_factory(config)
+
+    scorer = ValidatorFactory.ValidatorFactory(config)
+
+    tuner = HyperparameterTunerFactory.tuner_factory(config, model, scorer)
+
+    def tuning():
+        best_params = tuner.tune(x, y, **config.hyperparameter_tuning_kwargs)
+        model.set_params(best_params)
+        return model.to_scikit_learn()
+
 
     selector = SequentialFeatureSelector(
-        estimator=wrapper_model, **config.filter_sequential_kwargs
+        estimator=model.to_scikit_learn(), cv=splitter, scoring=metric,
+        tol=config.min_increase_4_wrapper, direction=config.sequential_direction
     )
     selector.fit(X=x, y=y)  # fit the selector
     x_processed = selector.transform(X=x)  # transform the data
     return x_processed
-
-
-# def custom_forward_feature_selector(config: DataTuningAutoSetup, xy) -> pd.DataFrame:
-#     """
-#     Custom Sequential Feature Selector supporting other scoring functions.
-#     This method selects features based on custom scoring functions.
-#
-#     Parameters:
-#     config: DataTuningAutoSetup - configuration object with selection parameters
-#     xy: pd.DataFrame - combined feature and target data
-#
-#     Returns:
-#     x_selected: pd.DataFrame - selected feature data after feature selection
-#     """
-#     x_selected = pd.DataFrame()
-#
-#     scorer: ValidationScoring = ScoringFactory.get_splitter(config.scoring_split_technique)
-#     model: AbstractMLModel = ModelFactory.model_factory(config.wrapper_model)
-#
-#     # Splitting features and target
-#     x, y = split_target_features(config.name_of_target, xy)
-#
-#     # Initialize score
-#     old_score = scorer.score_validation(model, config.scoring_metric, x, y)
-#
-#     # Feature selection loop
-#     for i in x.columns:
-#         temp_score = old_score
-#         for feature in x.columns:
-#             # Add the feature for testing
-#             x_temp = pd.concat([x_selected, x[[feature]]], axis=1)
-#
-#             # Calculate new score with the added feature
-#             new_score = scorer.score_validation(model, config.scoring_metric, x_temp, y)
-#
-#
-#
-#             # choose the best feature for that iteration
-#             if new_score > temp_score:
-#                 temp_score = new_score
-#                 x_best_lag = series
-#
-#             # Add feature permanently if score improves
-#             if new_score > old_score:
-#                 x_selected[feature] = x[feature]
-#                 old_score = new_score
-#
-#     return x_selected
-
-
-def forward_feature_selector(config: DataTuningAutoSetup, xy) -> pd.DataFrame:
-    """
-    Forward Sequential Feature Selector.
-    This method selects features based on custom scoring functions in a forward manner.
-
-    Parameters:
-    config: DataTuningAutoSetup - configuration object with selection parameters
-    xy: pd.DataFrame - combined feature and target data
-
-    Returns:
-    x_selected: pd.DataFrame - selected feature data after feature selection
-    """
-    x_selected = pd.DataFrame()
-
-    scorer: ValidationScoring = ValidatorFactory.ValidatorFactory(config.scoring_split_technique)
-    model: AbstractMLModel = ModelFactory.model_factory(config.wrapper_model)
-
-    x, y = split_target_features(config.name_of_target, xy)
-
-    features = set(x.columns)
-    selected_features = set()
-    old_score = scorer.score_validation(model, config.scoring_metric, x_selected, y)
-
-    while True:
-        score_changes = {}
-        for feature in features - selected_features:
-            x_test = pd.concat([x_selected, x[[feature]]], axis=1)
-            new_score = scorer.score_validation(model, config.scoring_metric, x_test, y)
-            score_changes[feature] = new_score - old_score
-
-        best_feature = max(score_changes, key=score_changes.get, default=None)
-        improvement = score_changes.get(best_feature, 0) > 0
-        if not improvement:
-            break
-
-        x_selected[best_feature] = x[best_feature]
-        selected_features.add(best_feature)
-        old_score = scorer.score_validation(model, config.scoring_metric, x_selected, y)
-
-    return x_selected
-

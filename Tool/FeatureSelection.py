@@ -190,7 +190,7 @@ def main(DT_Setup_object: DataTuningAutoSetup, DT_RR_object):
         )
     if DT_Setup_object.filter_recursive_embedded == True:
         Data = embedded__recursive_feature_selection(DT_Setup_object, Data)
-    if DT_Setup_object.wrapper_recursive_feature_selection == True:
+    if DT_Setup_object.wrapper_sequential_feature_selection == True:
         Data = wrapper__recursive_feature_selection(DT_Setup_object, Data)
     if (
         DT_Setup_object.create_automatic_timeseries_target_lag == True

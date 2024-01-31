@@ -1333,7 +1333,7 @@ temperature as signal. """
             DT_Setup_Object_AFB.embedded_model = rf
             DT_Setup_Object_AFB.recursive_embedded_threshold = False
             DT_Setup_Object_AFB.filter_recursive_embedded = False
-            DT_Setup_Object_AFB.wrapper_recursive_feature_selection = False
+            DT_Setup_Object_AFB.wrapper_sequential_feature_selection = False
 
             # Values ModelTuning
             MT_Setup_Object_AFB.name_of_model_tuning_experiment = self.txt_NameOfSubTest.get_value()
@@ -1570,7 +1570,7 @@ temperature as signal. """
                         DT_Setup_Object.recursive_embedded_scoring = DicCVTypes[key](
                             (int(self.RFE_CVFolds_DT.get_value()))
                         )
-            DT_Setup_Object.wrapper_recursive_feature_selection = (
+            DT_Setup_Object.wrapper_sequential_feature_selection = (
                 self.WrapperRecursiveDT.get_value()
             )
 

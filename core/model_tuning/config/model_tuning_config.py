@@ -25,13 +25,16 @@ class ModelTuningSetup(BaseConfig):
         self.start_test: str  = "2016-08-15 00:00"
         self.end_test: str  = "2016-08-16 23:45"
 
-        self.hyperparameter_tuning_type: str  = "optuna"  # grid, optuna, none
+        self.hyperparameter_tuning_type: str  = "optuna"  # e.g. OptunaTuner, GridSearchTuner, or NoTuningTuner
+        self.hyperparameter_tuning_kwargs: dict = {"n_trials": 10}  # kwargs for the tuner
 
-        self.iterations_hyperparameter_tuning:int = 2 # number of iterations for hyperparameter tuning
         self.validation_score_mechanism:str = "cv" # e.g. cross validation, holdout, etc.
+        self.validation_score_mechanism_kwargs: dict = None # kwargs for the mechanism
+
         self.validation_score_splitting: str  = "kfold" # all custom splitters or scikit-learn
         # splitters, e.g. kfold, timeseriessplit, etc.
         self.validation_score_splitting_kwargs: dict = None # kwargs for the splitter
+
         self.validation_score_metric: str  = "r2" # all custom metrics or scikit-learn metrics,
         # e.g. r2, neg_mean_absolute_error, d2_pinball_score, etc.
         self.validation_score_metric_kwargs: dict = None # kwargs for the metric

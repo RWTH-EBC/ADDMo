@@ -6,7 +6,7 @@ from core.data_tuning.data_importer import load_data
 from core.util.experiment_logger import ExperimentLogger
 
 
-class DataTunerByConfig():
+class DataTunerByConfig:
     """Tunes the data in a fixed manner. Without randomness."""
     def __init__(self, config: DataTuningFixedConfig):
         self.config = config

@@ -1,36 +1,29 @@
-# Import necessary libraries
 import optuna
-from optuna.integration import WeightsAndBiasesCallback
-import wandb
-import inspect
-from sklearn.model_selection import GridSearchCV, cross_validate
+from sklearn.model_selection import GridSearchCV
 
 from core.model_tuning.hyperparameter_tuning.abstract_hyparam_tuner import AbstractHyParamTuner
-from core.model_tuning.scoring.abstract_scorer import ValidationScoring
-from core.model_tuning.config.model_tuning_config import ModelTuningSetup
 
 class NoTuningTuner(AbstractHyParamTuner):
     """
     Tuner implementation for no tuning.
     """
-    def tune(self, hyperparameter_set=None): #Todo: überlegen wo dann die yaml mit spezifischen
-        # hyperparametern hin soll und eingeladen wird
+    def tune(self, x_train_val, y_train_val, **kwargs):
         """
         Returns the default hyperparameters without any tuning.
         """
+
+        # if no kwargs are given, use default hyperparameters
+        hyperparameter_set = kwargs.get("hyperparameter_set", None)
         if hyperparameter_set is None:
             hyperparameter_set = self.model.default_hyperparameter()
-
         self.model.set_params(self.model.default_hyperparameter())
 
-        self.model.set_params()
         return hyperparameter_set
 
 class OptunaTuner(AbstractHyParamTuner):
-    def tune(self, x_train_val, y_train_val):
+    def tune(self, x_train_val, y_train_val, **kwargs):
         """
         Perform hyperparameter tuning using Optuna.
-        :param n_trials: Number of optimization trials.
         """
 
         # wandb_kwargs = {"project": "my-project"}
@@ -53,32 +46,31 @@ class OptunaTuner(AbstractHyParamTuner):
             return score
 
         study = optuna.create_study(direction="maximize")
-        study.optimize(objective, n_trials=self.config.iterations_hyperparameter_tuning)
+        study.optimize(objective, n_trials=self.config.hyperparameter_tuning_kwargs["n_trials"])
         # , callbacks=[wandbc])
         # wandb.finish()
 
         # convert optuna params to model params
-        best_params = self.model.optuna_hyperparameter_suggest(study.best_trial)
-        self.model.set_params(best_params)
-        return best_params
+        study.best_params = self.model.optuna_hyperparameter_suggest(study.best_trial)
+        self.model.set_params(study.best_params)
+        return study.best_params
 
-class GridSearchTuner(AbstractHyParamTuner): # Todo
+class GridSearchTuner(AbstractHyParamTuner):
     """
     Tuner implementation using Grid Search.
     """
 
-    def tune(self, cv=5):
+    def tune(self, x_train_val, y_train_val, **kwargs):
         """
         Perform hyperparameter tuning using Grid Search.
         """
-        #todo: actually i want to have CV within the scoring function
 
-        grid_search = GridSearchCV(self.model, self.model.gridsearch_hyperparameter(),
-                                   cv=cv,
-                                   scoring=self.scorer)
-        grid_search.fit(self.model.data, self.model.target)
+        grid_search = GridSearchCV(self.model, self.model.grid_search_hyperparameter(),
+                                   cv=self.scorer.splitter,
+                                   scoring=self.scorer.metric)
+        grid_search.fit(x_train_val, y_train_val)
 
-        hyperparameters = grid_search.best_params_
+        best_params = grid_search.best_params_
 
-        self.model.set_params(hyperparameters)
-        return hyperparameters
+        self.model.set_params(best_params)
+        return best_params

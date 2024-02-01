@@ -11,14 +11,12 @@ class AbstractHyParamTuner:
     def __init__(
         self,
         config: ModelTuningSetup,
-        model: AbstractMLModel,
         scorer: ValidationScoring,
     ):
         self.config = config
-        self.model = model
         self.scorer = scorer
 
-    def tune(self, x_train_val, y_train_val, **kwargs):
+    def tune(self, model:AbstractMLModel, x_train_val, y_train_val, **kwargs):
         """
         Abstract method for performing hyperparameter tuning.
         Returns the best hyperparameters found in the structure provided by the model.

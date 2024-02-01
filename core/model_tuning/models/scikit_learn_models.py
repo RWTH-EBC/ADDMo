@@ -3,6 +3,7 @@ from abc import ABC
 from sklearn.neural_network import MLPRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
+from sklearn.compose import TransformedTargetRegressor
 import onnxmltools
 from skl2onnx.common.data_types import FloatTensorType, StringTensorType
 
@@ -23,8 +24,12 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         # Create an instance of the scikit-learn model including a scaler
         self.model = Pipeline(
             steps=[
-                ("scaler", StandardScaler()),  # Data preprocessing step
-                ("model", model),  # Keras model as the final step
+                ("scaler", StandardScaler()),  # scale the features
+                (
+                    "model",
+                    TransformedTargetRegressor(model, transformer=StandardScaler()),
+                )
+                # also scale the target variable through TransformedTargetRegressor
             ]
         )
 
@@ -50,15 +55,13 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         return self.model
 
     def set_params(self, hyperparameters):
-        # Convert the hyperparameters to the format expected by scikit-learn pipeline
-        model_hyperparameters = {
-            "model__" + key: value for key, value in hyperparameters.items()
-        }
-        self.model.set_params(**model_hyperparameters)  # Set hyperparameters
+        # access the hyperparameters of the model within the pipeline within the
+        # TransformedTargetRegressor
+        self.model.named_steps["model"].regressor.set_params(**hyperparameters)
 
     def get_params(self, deep=True):
         # Get the hyperparameters of the model
-        return self.model.get_params(deep=deep)["model"]
+        return self.model.named_steps["model"].regressor.get_params(deep=deep)
 
     def default_hyperparameter(self):
         return self.model.get_params()
@@ -84,7 +87,8 @@ class MLP(BaseScikitLearnModel):
 
         # Other hyperparameters
         hyperparameters["activation"] = "relu"
-        hyperparameters["solver"] = "lbfgs"
+        # hyperparameters["solver"] = "lbfgs"
+        # hyperparameters["max_iter"] = 2000
         #     "activation", ["identity", "logistic", "tanh", "relu"
         # hyperparameters["activation"] = trial.suggest_categorical(
         #     "activation", ["identity", "logistic", "tanh", "relu"]

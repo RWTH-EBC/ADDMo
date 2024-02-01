@@ -57,7 +57,7 @@ class DataTuningAutoSetup(BaseConfig):
         self.selected_features: list = ["FreshAir Temperature", "Total active power"]
         # variable names of the features to keep (incl. created features)
 
-        self.filter_low_variance:bool = False  # Remove features with low variance
+        self.filter_low_variance:bool = True  # Remove features with low variance
         self.low_variance_threshold = 0.1  # Removes all features with a lower variance than the stated threshold; variance is calculated with scaled data (if a scaler was used, regularly only features that are always the same have a small variance)
 
         self.filter_ICA:bool = False  # Filter: Independent Component Analysis(ICA)

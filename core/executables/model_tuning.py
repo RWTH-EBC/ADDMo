@@ -30,8 +30,11 @@ ExperimentLogger.start_experiment(config=config)
 # Create the model tuner
 model_tuner = ModelTuner(config=config)
 
-# Tune the model
-best_model = model_tuner.tune_model()
+# Tune the models
+model_dict = model_tuner.tune_all_models()
+
+# Get the best model
+best_model = model_tuner.get_best_model(model_dict)
 
 # Log the tuned model
 ExperimentLogger.log_artifact(best_model, name='tuned_model', art_type='model')

@@ -74,7 +74,7 @@ class MLP(BaseScikitLearnModel):
         hyperparameters = {}
 
         # Suggest hyperparameters
-        n_layers = trial.suggest_int("n_layers", 1, 5)
+        n_layers = trial.suggest_int("n_layers", 1, 3)
         hidden_layer_sizes = tuple(
             trial.suggest_int(f"n_units_l{i}", 10, 100) for i in range(n_layers)
         )
@@ -83,17 +83,20 @@ class MLP(BaseScikitLearnModel):
         hyperparameters["hidden_layer_sizes"] = hidden_layer_sizes
 
         # Other hyperparameters
-        hyperparameters["activation"] = trial.suggest_categorical(
-            "activation", ["identity", "logistic", "tanh", "relu"]
-        )
-        hyperparameters["solver"] = trial.suggest_categorical(
-            "solver", ["lbfgs", "sgd", "adam"]
-        )
-        hyperparameters["alpha"] = trial.suggest_float("alpha", 1e-5, 1e-1, log=True)
-        hyperparameters["learning_rate"] = trial.suggest_categorical(
-            "learning_rate", ["constant", "invscaling", "adaptive"]
-        )
-        hyperparameters["max_iter"] = trial.suggest_int("max_iter", 100, 500)
+        hyperparameters["activation"] = "relu"
+        hyperparameters["solver"] = "lbfgs"
+        #     "activation", ["identity", "logistic", "tanh", "relu"
+        # hyperparameters["activation"] = trial.suggest_categorical(
+        #     "activation", ["identity", "logistic", "tanh", "relu"]
+        # )
+        # hyperparameters["solver"] = trial.suggest_categorical(
+        #     "solver", ["lbfgs", "sgd", "adam"]
+        # )
+        # hyperparameters["alpha"] = trial.suggest_float("alpha", 1e-5, 1e-1, log=True)
+        # hyperparameters["learning_rate"] = trial.suggest_categorical(
+        #     "learning_rate", ["constant", "invscaling", "adaptive"]
+        # )
+        # hyperparameters["max_iter"] = trial.suggest_int("max_iter", 100, 500)
 
         return hyperparameters
 

@@ -17,7 +17,7 @@ class HyperparameterTunerFactory:
     """
 
     @staticmethod
-    def tuner_factory(config: ModelTuningSetup, model: AbstractMLModel, scorer: ValidationScoring
+    def tuner_factory(config: ModelTuningSetup, scorer: ValidationScoring
     ) -> AbstractHyParamTuner:
         """
         Creates a hyperparameter tuner based on the specified type.
@@ -28,10 +28,10 @@ class HyperparameterTunerFactory:
         """
 
         if config.hyperparameter_tuning_type == "NoTuningTuner":
-            return NoTuningTuner(config, model, scorer)
+            return NoTuningTuner(config, scorer)
         elif config.hyperparameter_tuning_type == "OptunaTuner":
-            return OptunaTuner(config, model, scorer)
+            return OptunaTuner(config, scorer)
         elif config.hyperparameter_tuning_type == "GridSearchTuner":
-            return GridSearchTuner(config, model, scorer)
+            return GridSearchTuner(config, scorer)
         else:
             raise ValueError("Unknown tuner type: {}".format(config.hyperparameter_tuning_type))

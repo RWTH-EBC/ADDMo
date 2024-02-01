@@ -37,20 +37,20 @@ def automatic_timeseries_target_lag_constructor(config: DataTuningAutoSetup, xy)
 
     tuner = ModelTuner(config)
 
-    tuner.tune_model(config.model)
-
-
     # prepare data
     x, y = split_target_features(config.name_of_target, xy)
 
-    old_score = scorer.score_validation(model, config.scoring_metric, x, y)
+    model = tuner.tune_models_hyperparameter(config.model, x, y)
+
+    old_score = tuner.scorer.score_validation(model, x, y)
 
     # loop through to create lags as long as they improve the result
     for i in range(config.minimum_target_lag, len(x)):
         series = feature_constructor.create_lag(y, i)
-        x_processed = pd.concat([x, series], axis=1, join="inner")
+        x_processed = pd.concat([x, series], axis=1, join="inner").bfill()
 
-        new_score = scorer.score_validation(model, config.scoring_metric, x_processed, y)
+        new_model = tuner.tune_models_hyperparameter(config.model, x_processed, y)
+        new_score = tuner.scorer.score_validation(new_model, x_processed, y)
 
         if new_score <= old_score + config.min_increase_4_wrapper:
             break
@@ -78,12 +78,14 @@ def manual_feature_lags(config: DataTuningAutoSetup, xy):
 def automatic_feature_lag_constructor(config: DataTuningAutoSetup, xy):
     x_created = pd.DataFrame()
 
-    scorer: ValidationScoring = ValidatorFactory.ValidatorFactory(config.scoring_split_technique)
-    model: AbstractMLModel = ModelFactory.model_factory(config.wrapper_model)
+    tuner = ModelTuner(config)
 
+    # prepare data
     x, y = split_target_features(config.name_of_target, xy)
 
-    old_score = scorer.score_validation(model, config.scoring_metric, x, y)
+    model = tuner.tune_models_hyperparameter(config.model, x, y)
+
+    old_score = tuner.scorer.score_validation(model, x, y)
 
     # Loop through to create feature lags as long as they improve the result
     for column in x:
@@ -92,7 +94,8 @@ def automatic_feature_lag_constructor(config: DataTuningAutoSetup, xy):
             series = feature_constructor.create_lag(x[column], i)
             x_processed = pd.concat([x, series], axis=1, join="inner")
 
-            new_score = scorer.score_validation(model, config.scoring_metric, x_processed, y)
+            new_model = tuner.tune_models_hyperparameter(config.model, x_processed, y)
+            new_score = tuner.scorer.score_validation(new_model, x_processed, y)
 
             # choose the best lag for that feature
             if new_score > temp_score:

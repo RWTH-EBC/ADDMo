@@ -17,8 +17,6 @@ class NoTuningTuner(AbstractHyParamTuner):
         hyperparameter_set = kwargs.get("hyperparameter_set", None)
         if hyperparameter_set is None:
             hyperparameter_set = model.default_hyperparameter()
-        model.set_params(model.default_hyperparameter())
-
         return hyperparameter_set
 
 class OptunaTuner(AbstractHyParamTuner):
@@ -52,9 +50,8 @@ class OptunaTuner(AbstractHyParamTuner):
         # wandb.finish()
 
         # convert optuna params to model params
-        study.best_params = model.optuna_hyperparameter_suggest(study.best_trial)
-        model.set_params(study.best_params)
-        return study.best_params
+        best_params = model.optuna_hyperparameter_suggest(study.best_trial)
+        return best_params
 
 class GridSearchTuner(AbstractHyParamTuner):
     """
@@ -72,6 +69,4 @@ class GridSearchTuner(AbstractHyParamTuner):
         grid_search.fit(x_train_val, y_train_val)
 
         best_params = grid_search.best_params_
-
-        model.set_params(best_params)
         return best_params

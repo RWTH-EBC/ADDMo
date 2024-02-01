@@ -32,19 +32,18 @@ class DataTunerAuto:
         """
         if self.config.create_differences:
             x_created = fc.create_difference(self.config, self.xy_raw)
-            self.x = pd.concat([self.x, x_created], axis=1)
         if self.config.create_manual_target_lag:
             x_created = fc.manual_target_lags(self.config, self.xy_raw)
-            self.x = pd.concat([self.x, x_created], axis=1)
+            self.x = pd.concat([self.x, x_created], axis=1, join="inner").bfill()
         if self.config.create_automatic_timeseries_target_lag:
             x_created = fc.automatic_timeseries_target_lag_constructor(self.config, self.xy_raw)
-            self.x = pd.concat([self.x, x_created], axis=1)
+            self.x = pd.concat([self.x, x_created], axis=1, join="inner").bfill()
         if self.config.create_manual_feature_lags:
             x_created = fc.manual_feature_lags(self.config, self.xy_raw)
-            self.x = pd.concat([self.x, x_created], axis=1)
+            self.x = pd.concat([self.x, x_created], axis=1, join="inner").bfill()
         if self.config.create_automatic_feature_lags:
             x_created = fc.automatic_feature_lag_constructor(self.config, self.xy_raw)
-            self.x = pd.concat([self.x, x_created], axis=1)
+            self.x = pd.concat([self.x, x_created], axis=1, join="inner").bfill()
 
 
     def feature_selection(self):

@@ -23,7 +23,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         # Create an instance of the scikit-learn model including a scaler
         self.model = Pipeline(
             steps=[
-                ("scaling", StandardScaler()),  # Data preprocessing step
+                ("scaler", StandardScaler()),  # Data preprocessing step
                 ("model", model),  # Keras model as the final step
             ]
         )

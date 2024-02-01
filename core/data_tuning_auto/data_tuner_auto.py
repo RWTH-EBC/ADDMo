@@ -14,7 +14,7 @@ class DataTunerAuto:
 
     def __init__(self, config: DataTuningAutoSetup):
         self.config = config
-        self.xy_raw = load_data(self.config.path_to_raw_data)
+        self.xy_raw = load_data(self.config.abs_path_to_data)
         self.x, self.y = split_target_features(self.config.name_of_target, self.xy_raw)
 
     def tune_auto(self):
@@ -24,6 +24,7 @@ class DataTunerAuto:
         """
         self.feature_construction()
         self.feature_selection()
+        return self.x
 
     def feature_construction(self):
         """

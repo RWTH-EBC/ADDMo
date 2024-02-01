@@ -30,7 +30,7 @@ def documentation_DataTuning(DT_Setup_object: DataTuningSetup, timestart, timeen
         "NameOfData = %s" % DT_Setup_object.name_of_raw_data
     )
     DfMethodology.at[2, "GlobalVariables"] = (
-        "NameOfExperiment = %s" % DT_Setup_object.name_of_data_tuning_experiment
+        "NameOfExperiment = %s" % DT_Setup_object.name_of_tuning
     )
     DfMethodology.at[3, "GlobalVariables"] = (
         "NameOfSignal = %s" % DT_Setup_object.name_of_target
@@ -204,7 +204,7 @@ def documentation_DataTuning(DT_Setup_object: DataTuningSetup, timestart, timeen
     # save this dataframe in an excel
     ExcelFile = os.path.join(
         DT_Setup_object.abs_path_to_result_folder,
-        "Settings_%s.xlsx" % (DT_Setup_object.name_of_data_tuning_experiment),
+        "Settings_%s.xlsx" % (DT_Setup_object.name_of_tuning),
     )
     writer = pd.ExcelWriter(ExcelFile, engine="openpyxl")
     DfMethodology.to_excel(writer, sheet_name="Methodology")

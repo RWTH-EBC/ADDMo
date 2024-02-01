@@ -241,7 +241,7 @@ class setup_object_initializer:
             self.RootDir,
             "Results",
             DT_Setup_Object.name_of_raw_data,
-            DT_Setup_Object.name_of_data_tuning_experiment,
+            DT_Setup_Object.name_of_tuning,
         )
         PathToPickles = os.path.join(ResultsFolder, "Pickles")
 
@@ -265,7 +265,7 @@ class setup_object_initializer:
             self.RootDir,
             "Results",
             MT_Setup_Object.name_of_raw_data,
-            MT_Setup_Object.name_of_data_tuning_experiment,
+            MT_Setup_Object.name_of_tuning,
         )
         PathToPickles = os.path.join(ResultsFolder, "Pickles")
 

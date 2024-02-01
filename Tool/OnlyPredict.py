@@ -268,7 +268,7 @@ def main_OnlyPredict(MT_Setup_object_PO):
         "Start only predicting: %s/%s/%s"
         % (
             MT_Setup_object_PO.name_of_raw_data,
-            MT_Setup_object_PO.name_of_data_tuning_experiment,
+            MT_Setup_object_PO.name_of_tuning,
             MT_Setup_object_PO.name_of_model_tuning_experiment,
         )
     )
@@ -306,7 +306,7 @@ def main_OnlyPredict(MT_Setup_object_PO):
         "Finish only predicting : %s/%s/%s"
         % (
             MT_Setup_object_PO.name_of_raw_data,
-            MT_Setup_object_PO.name_of_data_tuning_experiment,
+            MT_Setup_object_PO.name_of_tuning,
             MT_Setup_object_PO.name_of_model_tuning_experiment,
         )
     )

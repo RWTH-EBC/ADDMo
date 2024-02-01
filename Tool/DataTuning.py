@@ -74,7 +74,7 @@ def main(DT_Setup_object: DataTuningSetup):
     print("Tuning the data took: %s seconds" % (timeend - timestart))
     print(
         "End data tuning: %s/%s"
-        % (DT_Setup_object.name_of_raw_data, DT_Setup_object.name_of_data_tuning_experiment)
+        % (DT_Setup_object.name_of_raw_data, DT_Setup_object.name_of_tuning)
     )
     print("________________________________________________________________________\n")
 

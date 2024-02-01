@@ -12,42 +12,36 @@ from core.util.experiment_logger import ExperimentLogger
 
 
 
-
 class ModelTuner:
     def __init__(self, config: ModelTuningSetup):
         self.config = config
-        self.set_data()
+        self.scorer = ValidatorFactory.ValidatorFactory(self.config)
+        self.tuner = HyperparameterTunerFactory.tuner_factory(self.config, model, self.scorer)
 
-    def set_data(self, xy=None):
-        if xy is None:
-            self.xy = load_data(self.config.abs_path_to_data)
-        else:
-            self.xy = xy
+    def create
 
-    def tune_all_models(self):
+    def tune_all_models(self, x_train_val, y_train_val):
         model_dict = {}
         for model_name in self.config.models:
-            model = self.tune_model(model_name)
+            model = self.tune_model(model_name, x_train_val, y_train_val)
             model_dict[model_name] = model
         return model_dict
 
-    def tune_model(self, model_name: str):
+    def tune_model(self, model_name: str, x_train_val, y_train_val):
         model = ModelFactory.model_factory(model_name)
 
-        scorer = ValidatorFactory.ValidatorFactory(self.config)
 
-        tuner = HyperparameterTunerFactory.tuner_factory(self.config, model, scorer)
 
-        x_train_val, y_train_val = split_target_features(
-            self.config.name_of_target, self.xy
-        )
 
-        best_params = tuner.tune(
+
+        best_params = self.tuner.tune(
             x_train_val, y_train_val, **self.config.hyperparameter_tuning_kwargs
         )
 
         model.set_params(best_params)
 
-        model.fit(x_train_val, y_train_val)
-
         return model
+
+    def (self, model_name: str, x_train_val, y_train_val):
+        self.tune_model(model_name, x_train_val, y_train_val)
+

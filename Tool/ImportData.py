@@ -31,7 +31,7 @@ def import_data(DT_Setup_object: DataTuningSetup, DT_RR_object):
     # save dataframe in an excel file
     ExcelFile = os.path.join(
         DT_Setup_object.abs_path_to_result_folder,
-        "ProcessedInputData_%s.xlsx" % DT_Setup_object.name_of_data_tuning_experiment,
+        "ProcessedInputData_%s.xlsx" % DT_Setup_object.name_of_tuning,
     )
     writer = pd.ExcelWriter(ExcelFile)
     Data.to_excel(writer, sheet_name="ImportData")

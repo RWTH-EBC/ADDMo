@@ -303,7 +303,7 @@ def main(DT_Setup_object, DT_RR_object):
     # save dataframe in the ProcessedInputData excel file
     ExcelFile = os.path.join(
         DT_Setup_object.abs_path_to_result_folder,
-        "ProcessedInputData_%s.xlsx" % (DT_Setup_object.name_of_data_tuning_experiment),
+        "ProcessedInputData_%s.xlsx" % (DT_Setup_object.name_of_tuning),
     )
     book = load_workbook(ExcelFile)
     writer = pd.ExcelWriter(ExcelFile, engine="openpyxl")

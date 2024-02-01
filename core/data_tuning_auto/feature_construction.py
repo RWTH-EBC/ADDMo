@@ -7,6 +7,7 @@ from core.model_tuning.models.model_factory import ModelFactory
 from core.model_tuning.scoring.abstract_scorer import ValidationScoring
 from core.model_tuning.models.abstract_model import AbstractMLModel
 from core.data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
+from core.model_tuning.model_tuner import ModelTuner
 
 
 def create_difference(config: DataTuningAutoSetup, xy):
@@ -24,7 +25,7 @@ def manual_target_lags(config: DataTuningAutoSetup, xy):
     # target_lags in format [first lag (int), second lag (int)]
     x_created = pd.DataFrame()
 
-    for lag in config.name_of_target:
+    for lag in config.target_lag:
         series = feature_constructor.create_lag(xy[config.name_of_target], lag)
         x_created[series.name] = series
 
@@ -34,8 +35,10 @@ def manual_target_lags(config: DataTuningAutoSetup, xy):
 def automatic_timeseries_target_lag_constructor(config: DataTuningAutoSetup, xy):
     x_created = pd.DataFrame()
 
-    scorer: ValidationScoring = ValidatorFactory.ValidatorFactory(config.scoring_split_technique)
-    model: AbstractMLModel = ModelFactory.model_factory(config.wrapper_model)
+    tuner = ModelTuner(config)
+
+    tuner.tune_model(config.model)
+
 
     # prepare data
     x, y = split_target_features(config.name_of_target, xy)

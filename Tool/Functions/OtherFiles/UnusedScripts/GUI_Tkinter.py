@@ -28,26 +28,26 @@ def saveCallback2(OwnlagType): #save entries in an txt file which will be loaded
     SV.start_train_val = StartTraining.get()
 
     if OwnlagType == "NoOL":
-        SV.name_of_data_tuning_experiment = "NoOL"
+        SV.name_of_tuning = "NoOL"
         SV.wrapper_params = [None, None, None, False]
         SV.create_manual_target_lag = False
         SV.create_automatic_timeseries_target_lag = False
         SV.GlobalRecu = False
     if OwnlagType == "TSOL":
-        SV.name_of_data_tuning_experiment = "TSOL"
+        SV.name_of_tuning = "TSOL"
         SV.wrapper_params = [None, None, None, True]
         SV.create_manual_target_lag = False
         SV.create_automatic_timeseries_target_lag = True
         SV.GlobalRecu = True
     if OwnlagType == "InertiaOL":
-        SV.name_of_data_tuning_experiment = "InertiaOL"
+        SV.name_of_tuning = "InertiaOL"
         SV.wrapper_params = [None, None, None, True]
         SV.create_manual_target_lag = True
         SV.target_lag = [1]
         SV.create_automatic_timeseries_target_lag = False
         SV.GlobalRecu = True
     if OwnlagType == "PeriodOL":
-        SV.name_of_data_tuning_experiment = "PeriodOL"
+        SV.name_of_tuning = "PeriodOL"
         SV.wrapper_params = [None, None, None, True]
         SV.create_manual_target_lag = True
         SV.target_lag = [672]

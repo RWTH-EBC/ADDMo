@@ -1359,26 +1359,26 @@ temperature as signal. """
             )
 
             if OwnlagType == "NoOL":
-                DT_Setup_Object_AFB.name_of_data_tuning_experiment = "NoOL"
+                DT_Setup_Object_AFB.name_of_tuning = "NoOL"
                 DT_Setup_Object_AFB.wrapper_params = [None, None, None, False]
                 DT_Setup_Object_AFB.create_manual_target_lag = False
                 DT_Setup_Object_AFB.create_automatic_timeseries_target_lag = False
                 MT_Setup_Object_AFB.GlobalRecu = False
             if OwnlagType == "TSOL":
-                DT_Setup_Object_AFB.name_of_data_tuning_experiment = "TSOL"
+                DT_Setup_Object_AFB.name_of_tuning = "TSOL"
                 DT_Setup_Object_AFB.wrapper_params = [None, None, None, True]
                 DT_Setup_Object_AFB.create_manual_target_lag = False
                 DT_Setup_Object_AFB.create_automatic_timeseries_target_lag = True
                 MT_Setup_Object_AFB.GlobalRecu = True
             if OwnlagType == "InertiaOL":
-                DT_Setup_Object_AFB.name_of_data_tuning_experiment = "InertiaOL"
+                DT_Setup_Object_AFB.name_of_tuning = "InertiaOL"
                 DT_Setup_Object_AFB.wrapper_params = [None, None, None, True]
                 DT_Setup_Object_AFB.create_manual_target_lag = True
                 DT_Setup_Object_AFB.target_lag = [1]
                 DT_Setup_Object_AFB.create_automatic_timeseries_target_lag = False
                 MT_Setup_Object_AFB.GlobalRecu = True
             if OwnlagType == "PeriodOL":
-                DT_Setup_Object_AFB.name_of_data_tuning_experiment = "PeriodOL"
+                DT_Setup_Object_AFB.name_of_tuning = "PeriodOL"
                 DT_Setup_Object_AFB.wrapper_params = [None, None, None, True]
                 DT_Setup_Object_AFB.create_manual_target_lag = True
                 DT_Setup_Object_AFB.target_lag = [
@@ -1394,7 +1394,7 @@ temperature as signal. """
             # Copying Global Variables set in Data Tuning to the Model Tuning Setup Object using Data Tuning Setup Object
 
             MT_Setup_Object_AFB.NameOfData = DT_Setup_Object_AFB.name_of_raw_data
-            MT_Setup_Object_AFB.NameOfExperiment = DT_Setup_Object_AFB.name_of_data_tuning_experiment
+            MT_Setup_Object_AFB.NameOfExperiment = DT_Setup_Object_AFB.name_of_tuning
             MT_Setup_Object_AFB.NameOfSignal = DT_Setup_Object_AFB.name_of_target
             MT_Setup_Object_AFB.RootDir = DT_Setup_Object_AFB.RootDir
             MT_Setup_Object_AFB.PathToData = DT_Setup_Object_AFB.abs_path_to_data
@@ -1446,7 +1446,7 @@ temperature as signal. """
             # General variables
             DT_Setup_Object.FixImport = False
             DT_Setup_Object.name_of_raw_data = self.NameOfDataDT.get_value()
-            DT_Setup_Object.name_of_data_tuning_experiment = self.NameOfExperimentDT.get_value()
+            DT_Setup_Object.name_of_tuning = self.NameOfExperimentDT.get_value()
             DT_Setup_Object.name_of_target = int(self.ColumnOfSignalDT.get_value())
 
             # Preprocessing

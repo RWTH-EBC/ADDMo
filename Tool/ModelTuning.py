@@ -133,7 +133,7 @@ def main_OnlyHyParaOpti(MT_Setup_Object):
         "Start training and testing with only optimizing the hyperparameters: \n%s/%s/%s"
         % (
             MT_Setup_Object.name_of_raw_data,
-            MT_Setup_Object.name_of_data_tuning_experiment,
+            MT_Setup_Object.name_of_tuning,
             MT_Setup_Object.name_of_model_tuning_experiment,
         )
     )
@@ -161,7 +161,7 @@ def main_OnlyHyParaOpti(MT_Setup_Object):
         "Finish training and testing with only optimizing the hyperparameters : \n%s/%s/%s"
         % (
             MT_Setup_Object.name_of_raw_data,
-            MT_Setup_Object.name_of_data_tuning_experiment,
+            MT_Setup_Object.name_of_tuning,
             MT_Setup_Object.name_of_model_tuning_experiment,
         )
     )

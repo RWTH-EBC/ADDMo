@@ -351,7 +351,7 @@ def main_FinalBayes(MT_Setup_Object_AFB):
         "Start FinalBayesOpt: %s/%s/%s"
         % (
             MT_Setup_Object_AFB.name_of_raw_data,
-            MT_Setup_Object_AFB.name_of_data_tuning_experiment,
+            MT_Setup_Object_AFB.name_of_tuning,
             MT_Setup_Object_AFB.name_of_model_tuning_experiment,
         )
     )
@@ -378,7 +378,7 @@ def main_FinalBayes(MT_Setup_Object_AFB):
         "Finish FinalBayesOpt: %s/%s/%s"
         % (
             MT_Setup_Object_AFB.name_of_raw_data,
-            MT_Setup_Object_AFB.name_of_data_tuning_experiment,
+            MT_Setup_Object_AFB.name_of_tuning,
             MT_Setup_Object_AFB.name_of_model_tuning_experiment,
         )
     )

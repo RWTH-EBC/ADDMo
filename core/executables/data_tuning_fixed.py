@@ -1,6 +1,6 @@
 import os
 
-from core.util.definitions import root_dir, results_dir_data_tuning_local
+from core.util.definitions import root_dir, results_dir_data_tuning_local, results_dir_data_tuning_wandb
 from core.util.experiment_logger import LocalLogger
 from core.util.experiment_logger import WandbLogger
 from core.util.experiment_logger import ExperimentLogger
@@ -18,9 +18,10 @@ config.load_yaml_to_class(path_to_yaml)
 
 # Configure the logger
 LocalLogger.directory = results_dir_data_tuning_local(config)
-ExperimentLogger.local_logger = LocalLogger
-# WandbLogger.project = "todo"
-# ExperimentLogger.wandb_logger = WandbLogger
+LocalLogger.active = True
+WandbLogger.project = "addmo-tests"
+WandbLogger.directory = results_dir_data_tuning_local(config)
+WandbLogger.active = True
 
 # Initialize logging
 ExperimentLogger.start_experiment(config=config)
@@ -37,5 +38,8 @@ tuned_x_data = tuned_x_data.dropna()
 # Log the tuned data
 ExperimentLogger.log_artifact(tuned_x_data, name='tuned_data', art_type='data')
 #Todo: possibly xy needs to be logged instead of x
+
+# Finish logging
+ExperimentLogger.finish_experiment()
 
 print("Finished")

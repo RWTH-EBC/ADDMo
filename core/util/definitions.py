@@ -30,6 +30,10 @@ def results_dir_data_tuning_local(config: DataTuningFixedConfig):
     path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, config.name_of_tuning)
     return _create_or_override_directory(path)
 
+def results_dir_data_tuning_wandb(config: DataTuningFixedConfig):
+    path = os.path.join(results_dir_data_tuning_local(config), 'wandb')
+    return _create_or_override_directory(path)
+
 def results_dir_model_tuning_local(config: ModelTuningSetup):
     path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data,
                         config.name_of_data_tuning_experiment, config.name_of_model_tuning_experiment)
@@ -45,8 +49,8 @@ def _create_or_override_directory(path: str) -> str:
     else:
         # Path exists, ask for confirmation to delete current contents
         response = input(f"The directory {path} already exists. Do you want to delete the current "
-                         f"contents? (yes/no): ")
-        if response.lower() == 'yes':
+                         f"contents? (y/n): ")
+        if response.lower() == 'y':
             # Delete the contents of the directory
             for filename in os.listdir(path):
                 file_path = os.path.join(path, filename)

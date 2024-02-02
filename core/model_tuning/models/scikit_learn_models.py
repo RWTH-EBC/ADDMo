@@ -88,7 +88,7 @@ class MLP(BaseScikitLearnModel):
         # Other hyperparameters
         hyperparameters["activation"] = "relu"
         # hyperparameters["solver"] = "lbfgs"
-        # hyperparameters["max_iter"] = 2000
+        hyperparameters["max_iter"] = 500
         #     "activation", ["identity", "logistic", "tanh", "relu"
         # hyperparameters["activation"] = trial.suggest_categorical(
         #     "activation", ["identity", "logistic", "tanh", "relu"]

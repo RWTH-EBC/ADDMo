@@ -2,7 +2,7 @@ from core.util.abstract_config import BaseConfig
 
 class ModelTuningSetup(BaseConfig):
 
-    def __init__(self, **kwargs):
+    def __init__(self):
         # -----------------------Global Variables-------------------------------
 
         self.name_of_raw_data: str = "AHU Data1"  # Refer to the raw data connected to this

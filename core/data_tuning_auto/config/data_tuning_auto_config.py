@@ -5,7 +5,7 @@ class DataTuningAutoSetup(BaseConfig):
     """
     Object that stores all the setup and user input information of Data Tuning"""
 
-    def __init__(self, **kwargs):
+    def __init__(self):
         # -----------------------Global Variables-------------------------------
 
         self.name_of_raw_data: str = "test_raw_data"  # Set name of the folder where the experiments

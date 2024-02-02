@@ -1,0 +1,40 @@
+
+[I 2024-02-02 17:08:05,803] A new study created in memory with name: no-name-5cb39b27-a439-413d-a8aa-a8bb8bb1f8dc
+[W 2024-02-02 17:08:10,736] Trial 0 failed with parameters: {'n_layers': 2, 'n_units_l0': 16, 'n_units_l1': 96} because of the following error: AttributeError("'WeightsAndBiasesCallback' object has no attribute 'log'").
+Traceback (most recent call last):
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\site-packages\optuna\study\_optimize.py", line 200, in _run_trial
+    value_or_values = func(trial)
+                      ^^^^^^^^^^^
+  File "D:\04_GitRepos\addmo-extra\core\model_tuning\hyperparameter_tuning\hyperparameter_tuner.py", line 62, in objective
+    wandbc[0].log({"score": score})
+    ^^^^^^^^^^^^^
+AttributeError: 'WeightsAndBiasesCallback' object has no attribute 'log'
+[W 2024-02-02 17:08:10,738] Trial 0 failed with value None.
+Traceback (most recent call last):
+  File "D:\04_GitRepos\addmo-extra\core\executables\model_tuning.py", line 46, in <module>
+    model_dict = model_tuner.tune_all_models(x_train_val, y_train_val)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\04_GitRepos\addmo-extra\core\model_tuning\model_tuner.py", line 21, in tune_all_models
+    model = self.tune_models_hyperparameter(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\04_GitRepos\addmo-extra\core\model_tuning\model_tuner.py", line 35, in tune_models_hyperparameter
+    best_params = self.tuner.tune(
+                  ^^^^^^^^^^^^^^^^
+  File "D:\04_GitRepos\addmo-extra\core\model_tuning\hyperparameter_tuning\hyperparameter_tuner.py", line 66, in tune
+    study.optimize(
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\site-packages\optuna\study\study.py", line 451, in optimize
+    _optimize(
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\site-packages\optuna\study\_optimize.py", line 66, in _optimize
+    _optimize_sequential(
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\site-packages\optuna\study\_optimize.py", line 163, in _optimize_sequential
+    frozen_trial = _run_trial(study, func, catch)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\site-packages\optuna\study\_optimize.py", line 251, in _run_trial
+    raise func_err
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\site-packages\optuna\study\_optimize.py", line 200, in _run_trial
+    value_or_values = func(trial)
+                      ^^^^^^^^^^^
+  File "D:\04_GitRepos\addmo-extra\core\model_tuning\hyperparameter_tuning\hyperparameter_tuner.py", line 62, in objective
+    wandbc[0].log({"score": score})
+    ^^^^^^^^^^^^^
+AttributeError: 'WeightsAndBiasesCallback' object has no attribute 'log'

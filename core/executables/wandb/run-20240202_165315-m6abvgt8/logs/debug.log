@@ -1,0 +1,24 @@
+2024-02-02 16:53:15,535 INFO    MainThread:19384 [wandb_setup.py:_flush():76] Current SDK version is 0.16.2
+2024-02-02 16:53:15,535 INFO    MainThread:19384 [wandb_setup.py:_flush():76] Configure stats pid to 19384
+2024-02-02 16:53:15,535 INFO    MainThread:19384 [wandb_setup.py:_flush():76] Loading settings from C:\Users\mre\.config\wandb\settings
+2024-02-02 16:53:15,535 INFO    MainThread:19384 [wandb_setup.py:_flush():76] Loading settings from D:\04_GitRepos\addmo-extra\core\executables\wandb\settings
+2024-02-02 16:53:15,535 INFO    MainThread:19384 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2024-02-02 16:53:15,535 INFO    MainThread:19384 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2024-02-02 16:53:15,536 INFO    MainThread:19384 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'core\\executables\\model_tuning.py', 'program_abspath': 'D:\\04_GitRepos\\addmo-extra\\core\\executables\\model_tuning.py', 'program': 'D:\\04_GitRepos\\addmo-extra\\core\\executables\\model_tuning.py'}
+2024-02-02 16:53:15,536 INFO    MainThread:19384 [wandb_init.py:_log_setup():526] Logging user logs to D:\04_GitRepos\addmo-extra\core\executables\wandb\run-20240202_165315-m6abvgt8\logs\debug.log
+2024-02-02 16:53:15,536 INFO    MainThread:19384 [wandb_init.py:_log_setup():527] Logging internal logs to D:\04_GitRepos\addmo-extra\core\executables\wandb\run-20240202_165315-m6abvgt8\logs\debug-internal.log
+2024-02-02 16:53:15,536 INFO    MainThread:19384 [wandb_init.py:init():566] calling init triggers
+2024-02-02 16:53:15,536 INFO    MainThread:19384 [wandb_init.py:init():573] wandb.init called with sweep_config: {}
+config: {}
+2024-02-02 16:53:15,536 INFO    MainThread:19384 [wandb_init.py:init():611] wandb.init() called when a run is still active
+2024-02-02 16:53:55,613 INFO    ThreadPoolExecutor-0_2:19384 [wandb_run.py:_config_callback():1342] config_cb None None {'direction': ['MAXIMIZE']}
+2024-02-02 16:53:56,130 INFO    ThreadPoolExecutor-0_1:19384 [wandb_run.py:_config_callback():1342] config_cb None None {'direction': ['MAXIMIZE']}
+2024-02-02 16:53:57,641 INFO    ThreadPoolExecutor-0_9:19384 [wandb_run.py:_config_callback():1342] config_cb None None {'direction': ['MAXIMIZE']}
+2024-02-02 16:53:59,474 INFO    ThreadPoolExecutor-0_4:19384 [wandb_run.py:_config_callback():1342] config_cb None None {'direction': ['MAXIMIZE']}
+2024-02-02 16:54:00,785 INFO    ThreadPoolExecutor-0_8:19384 [wandb_run.py:_config_callback():1342] config_cb None None {'direction': ['MAXIMIZE']}
+2024-02-02 16:54:01,270 INFO    ThreadPoolExecutor-0_0:19384 [wandb_run.py:_config_callback():1342] config_cb None None {'direction': ['MAXIMIZE']}
+2024-02-02 16:54:02,335 INFO    ThreadPoolExecutor-0_3:19384 [wandb_run.py:_config_callback():1342] config_cb None None {'direction': ['MAXIMIZE']}
+2024-02-02 16:54:02,521 INFO    ThreadPoolExecutor-0_6:19384 [wandb_run.py:_config_callback():1342] config_cb None None {'direction': ['MAXIMIZE']}
+2024-02-02 16:54:02,692 INFO    ThreadPoolExecutor-0_5:19384 [wandb_run.py:_config_callback():1342] config_cb None None {'direction': ['MAXIMIZE']}
+2024-02-02 16:54:03,258 INFO    ThreadPoolExecutor-0_7:19384 [wandb_run.py:_config_callback():1342] config_cb None None {'direction': ['MAXIMIZE']}
+2024-02-02 16:54:17,091 WARNING MsgRouterThr:19384 [router.py:message_loop():77] message_loop has been closed

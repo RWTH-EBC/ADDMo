@@ -25,7 +25,7 @@ LocalLogger.directory = results_dir_model_tuning(config)
 LocalLogger.active = False
 WandbLogger.project = "addmo-tests"
 WandbLogger.directory = results_dir_model_tuning(config)
-WandbLogger.active = False
+WandbLogger.active = True
 
 # Initialize logging
 ExperimentLogger.start_experiment(config=config)

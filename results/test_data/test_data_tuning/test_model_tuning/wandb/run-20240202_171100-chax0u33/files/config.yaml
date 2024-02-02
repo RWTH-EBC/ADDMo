@@ -1,0 +1,92 @@
+wandb_version: 1
+
+name_of_raw_data:
+  desc: null
+  value: test_data
+name_of_data_tuning_experiment:
+  desc: null
+  value: test_data_tuning
+name_of_model_tuning_experiment:
+  desc: null
+  value: test_model_tuning
+abs_path_to_data:
+  desc: null
+  value: D:\\04_GitRepos\\addmo-extra\\raw_input_data\\InputData.xlsx
+name_of_target:
+  desc: null
+  value: FreshAir Temperature
+start_train_val:
+  desc: null
+  value: 2016-08-01 00:00
+stop_train_val:
+  desc: null
+  value: 2016-08-14 23:45
+start_test:
+  desc: null
+  value: 2016-08-15 00:00
+end_test:
+  desc: null
+  value: 2016-08-16 23:45
+hyperparameter_tuning_type:
+  desc: null
+  value: OptunaTuner
+hyperparameter_tuning_kwargs:
+  desc: null
+  value:
+    n_trials: 10
+validation_score_mechanism:
+  desc: null
+  value: cv
+validation_score_mechanism_kwargs:
+  desc: null
+  value: null
+validation_score_splitting:
+  desc: null
+  value: KFold
+validation_score_splitting_kwargs:
+  desc: null
+  value: null
+validation_score_metric:
+  desc: null
+  value: r2
+validation_score_metric_kwargs:
+  desc: null
+  value: null
+models:
+  desc: null
+  value:
+  - MLP
+_wandb:
+  desc: null
+  value:
+    python_version: 3.11.7
+    cli_version: 0.16.2
+    framework: sklearn
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1706890260.500667
+    t:
+      1:
+      - 5
+      - 35
+      - 53
+      - 55
+      2:
+      - 5
+      - 35
+      - 53
+      - 55
+      3:
+      - 16
+      - 23
+      - 24
+      4: 3.11.7
+      5: 0.16.2
+      8:
+      - 3
+      - 5
+      13: windows-amd64
+direction:
+  desc: null
+  value:
+  - MAXIMIZE

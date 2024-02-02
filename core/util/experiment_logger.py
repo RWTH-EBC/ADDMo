@@ -1,16 +1,11 @@
+import os
+from abc import ABC, abstractmethod
+
 import pandas as pd
 import wandb
-import os
-from abc import ABC, abstractmethod
-
 
 from core.util.pickle_handling import write_pkl, read_pkl
-
-
-import wandb
-import os
-from abc import ABC, abstractmethod
-from core.util.pickle_handling import write_pkl, read_pkl
+from core.model_tuning.models.abstract_model import AbstractMLModel
 
 
 class AbstractLogger(ABC):
@@ -69,13 +64,33 @@ class WandbLogger(AbstractLogger):
             for name, data in log.items():
                 if isinstance(data, (pd.DataFrame, pd.Series)):
                     data = data.reset_index()
-                    data = wandb.Table(dataframe=data)
-                wandb.log({name: data})
+                    log[name] = wandb.Table(dataframe=data)
+                if isinstance(data, (list, dict)):
+                    log[name] = wandb.Histogram(data)
+                if isinstance(data, str):
+                    log[name] = wandb.Html(data)
+            wandb.log(log)
     @staticmethod
-    def log_artifact(data, name: str, art_type: str):
+    def log_artifact(data, name: str, art_type: str, description: str = None, metadata: dict = None):
         if WandbLogger.active:
-            artifact = wandb.Artifact(name=name, type=art_type)
-            artifact.add_file(_get_path(name))
+            # save data to disk first
+            filepath = None
+            # todo: implement logic to save data to disk
+            if art_type == "data":
+                filepath = os.path.join(WandbLogger.directory, name + ".pkl")
+                write_pkl(data, filepath)
+            if art_type == "model":
+                model : AbstractMLModel = data
+                filepath = os.path.join(WandbLogger.directory, name + ".onnx")
+                model.save_model(filepath)
+
+            # create artifact object
+            artifact = wandb.Artifact(name=name, type=art_type, description=description, metadata=metadata)
+
+            # add saved file to the artifact, you may also add a whole directory to the artifact
+            artifact.add_file(filepath)
+
+            # actually log the artifact
             wandb.run.log_artifact(artifact)
             artifact.wait()
 

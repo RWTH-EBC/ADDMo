@@ -36,9 +36,6 @@ class OptunaTuner(AbstractHyParamTuner):
         Perform hyperparameter tuning using Optuna.
         """
 
-        # wandb_kwargs = {"project": "my-project"}
-        # wandbc = WeightsAndBiasesCallback(wandb_kwargs=wandb_kwargs, as_multirun=True)
-        #
         ExperimentLogger.log(
             {
                 "hyperparameter_range": inspect.getsource(
@@ -47,20 +44,14 @@ class OptunaTuner(AbstractHyParamTuner):
             }
         )
 
-        # if wandb is active, use optuna´s wandb integration for logging
-        if WandbLogger.active:
-            wandb_kwargs = {"project": WandbLogger.project}
-            wandbc = [WeightsAndBiasesCallback(wandb_kwargs=wandb_kwargs)]
-            # must be a list
-        else:
-            wandbc = None
-
 
         def objective(trial):
             hyperparameters = model.optuna_hyperparameter_suggest(trial)
             model.set_params(hyperparameters)
             score = self.scorer.score_validation(model, x_train_val, y_train_val)
             WandbLogger.log({"score": score})
+            WandbLogger.log({"score2": score})
+            # WandbLogger.log(hyperparameters)
             return score
 
         study = optuna.create_study(direction="maximize")
@@ -68,8 +59,8 @@ class OptunaTuner(AbstractHyParamTuner):
             objective,
             n_trials=self.config.hyperparameter_tuning_kwargs["n_trials"],
             n_jobs=1,  # The number of parallel jobs. If this argument is set to -1, the number
-            # is set to CPU count.
-            callbacks=wandbc # logging to wandb, no logging if wandbc is None
+            # is set to CPU count. Parallel jobs may fail sequential logging to wandb.
+            # callbacks=wandbc # logging to wandb, no logging if wandbc is None
         )
 
         # convert optuna params to model params

@@ -64,7 +64,7 @@ _wandb:
     framework: sklearn
     is_jupyter_run: false
     is_kaggle_kernel: false
-    start_time: 1706890260.500667
+    start_time: 1706891244.529353
     t:
       1:
       - 5
@@ -79,14 +79,9 @@ _wandb:
       3:
       - 16
       - 23
-      - 24
       4: 3.11.7
       5: 0.16.2
       8:
       - 3
       - 5
       13: windows-amd64
-direction:
-  desc: null
-  value:
-  - MAXIMIZE

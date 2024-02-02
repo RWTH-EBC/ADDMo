@@ -5,11 +5,12 @@ class ModelTuningSetup(BaseConfig):
     def __init__(self):
         # -----------------------Global Variables-------------------------------
 
-        self.name_of_raw_data: str = "AHU Data1"  # Refer to the raw data connected to this
-        self.name_of_data_tuning_experiment: str = "NoOL"  # Refer to the data tuning experiment
+        self.name_of_raw_data: str = "test_data"  # Refer to the raw data connected to this
+        self.name_of_data_tuning_experiment: str = "test_data_tuning"  # Refer to the data tuning
+        # experiment
         # aka the input data for this model tuning experiment
 
-        self.name_of_model_tuning_experiment: str = "TrialTunedModel"  # Set name of the
+        self.name_of_model_tuning_experiment: str = "test_model_tuning"  # Set name of the
         # current experiment
 
         self.abs_path_to_data: str = r"D:\\04_GitRepos\\addmo-extra\\raw_input_data\\InputData.xlsx"  # Path to the file that has
@@ -31,15 +32,15 @@ class ModelTuningSetup(BaseConfig):
         self.validation_score_mechanism:str = "cv" # e.g. cross validation, holdout, etc.
         self.validation_score_mechanism_kwargs: dict = None # kwargs for the mechanism
 
-        self.validation_score_splitting: str  = "kfold" # all custom splitters or scikit-learn
-        # splitters, e.g. kfold, timeseriessplit, etc.
+        self.validation_score_splitting: str  = "KFold" # all custom splitters or scikit-learn
+        # splitters, e.g. KFold, PredefinedSplit, TimeSeriesSplit, etc.
         self.validation_score_splitting_kwargs: dict = None # kwargs for the splitter
 
         self.validation_score_metric: str  = "r2" # all custom metrics or scikit-learn metrics,
         # e.g. r2, neg_mean_absolute_error, d2_pinball_score, etc.
         self.validation_score_metric_kwargs: dict = None # kwargs for the metric
 
-        self.models: list[str] = ["mlp"]  # array of the models you want to use
+        self.models: list[str] = ["MLP"]  # array of the models you want to use
 
         # # -- Settings for regular training without final bayesian optimization (without "automation) -----------------------
         #

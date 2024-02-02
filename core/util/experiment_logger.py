@@ -7,14 +7,13 @@ from abc import ABC, abstractmethod
 from core.util.pickle_handling import write_pkl, read_pkl
 
 
-
 import wandb
 import os
 from abc import ABC, abstractmethod
 from core.util.pickle_handling import write_pkl, read_pkl
 
-class AbstractLogger(ABC):
 
+class AbstractLogger(ABC):
     @staticmethod
     @abstractmethod
     def start_experiment(config: dict = None, **kwargs):
@@ -37,82 +36,91 @@ class AbstractLogger(ABC):
 
     @staticmethod
     @abstractmethod
-    def use_artifact(name: str, alias: str = 'latest'):
+    def use_artifact(name: str, alias: str = "latest"):
         pass
-
 
 
 class WandbLogger(AbstractLogger):
     active: bool = False
-    project = None # Name of the Weights & Biases project that you created in the browser wandb.ai
-    directory = None # Local directory where a backup of the uploaded files is stored
+    project = None  # Name of the Weights & Biases project that you created in the browser wandb.ai
+    directory = None  # Local directory where a backup of the uploaded files is stored
 
     @staticmethod
     def start_experiment(config=None, **kwargs):
-        """"Starts a new experiment and logs the config to wandb."""
-        wandb.init(project=WandbLogger.project, config=config, **kwargs, dir=WandbLogger.directory)
-        return wandb.config
+        """Starts a new experiment and logs the config to wandb."""
+        if WandbLogger.active:
+            wandb.init(
+                project=WandbLogger.project,
+                config=config,
+                dir=WandbLogger.directory,
+                **kwargs,
+            )
+            return wandb.config
 
     @staticmethod
     def finish_experiment():
         """Finishes the current experiment."""
-        wandb.finish()
+        if WandbLogger.active:
+            wandb.finish()
 
     @staticmethod
     def log(log: dict):
-        for key, value in log.items():
-            if isinstance(value, pd.DataFrame):
-                table = wandb.Table(dataframe=value)
-                wandb.log({key: table})
-
-
+        if WandbLogger.active:
+            for name, data in log.items():
+                if isinstance(data, (pd.DataFrame, pd.Series)):
+                    data = data.reset_index()
+                    data = wandb.Table(dataframe=data)
+                wandb.log({name: data})
     @staticmethod
-    @only_if_active
     def log_artifact(data, name: str, art_type: str):
-        artifact = wandb.Artifact(name=name, type=art_type)
-        artifact.add_file(_get_path(name))
-        wandb.run.log_artifact(artifact)
-        artifact.wait()
+        if WandbLogger.active:
+            artifact = wandb.Artifact(name=name, type=art_type)
+            artifact.add_file(_get_path(name))
+            wandb.run.log_artifact(artifact)
+            artifact.wait()
 
     @staticmethod
-    @only_if_active
-    def use_artifact(name: str, alias: str = 'latest'):
-        artifact = wandb.use_artifact(f'{name}:{alias}')
-        filename = artifact.download() + '\\' + name + '.pkl'
-        return read_pkl(filename)
+    def use_artifact(name: str, alias: str = "latest"):
+        if WandbLogger.active:
+            artifact = wandb.use_artifact(f"{name}:{alias}")
+            filename = artifact.download() + "\\" + name + ".pkl"
+            return read_pkl(filename)
+
 
 class LocalLogger(AbstractLogger):
-
-    directory = None
+    active:bool = False  # Activate local logging
+    directory = None  # Directory to store artifacts locally
+    run_time_storage = {}  # Storage for the current run
 
     @staticmethod
-    @only_if_active
     def start_experiment(config, **kwargs):
-        return config
+        if LocalLogger.active:
+            return config
 
     @staticmethod
-    @only_if_active
     def finish_experiment():
-        pass
+        if LocalLogger.active:
+            # safe run_time_storage to disk
+            pass  # Implement finish experiment logic here
 
     @staticmethod
-    @only_if_active
     def log(log: dict):
-        pass
+        if LocalLogger.active:
+            # safe to run_time_storage
+            pass  # Implement log logic here
 
     @staticmethod
-    @only_if_active
     def log_artifact(data, name: str, art_type: str):
-        if art_type == 'data':
-            file_path = os.path.join(LocalLogger.directory, name + '.csv')
-            data.to_csv(file_path)
+        if LocalLogger.active:
+            if art_type == "data":
+                file_path = os.path.join(LocalLogger.directory, name + ".csv")
+                data.to_csv(file_path)
 
     @staticmethod
-    @only_if_active
-    def use_artifact(name: str, alias: str = 'latest'):
-        filename = name
-        return read_pkl(filename, LocalLogger.directory)
-
+    def use_artifact(name: str, alias: str = "latest"):
+        if LocalLogger.active:
+            filename = name  # Assuming filename logic is handled appropriately
+            return read_pkl(filename, LocalLogger.directory)
 
 
 class ExperimentLogger(AbstractLogger):
@@ -141,7 +149,7 @@ class ExperimentLogger(AbstractLogger):
         LocalLogger.log_artifact(data, name, art_type)
 
     @staticmethod
-    def use_artifact(name: str, alias: str = 'latest'):
+    def use_artifact(name: str, alias: str = "latest"):
         data_wandb = WandbLogger.use_artifact(name, alias)
         data_local = LocalLogger.use_artifact(name, alias)
         return data_wandb or data_local

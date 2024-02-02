@@ -45,7 +45,9 @@ class MetricFactory:
             custom_metric_names = [
                 name
                 for name, obj in inspect.getmembers(custom_metrics)
-                if inspect.isclass(obj) and issubclass(obj, AbstractMetric)
+                if inspect.isclass(obj)
+                and issubclass(obj, AbstractMetric)
+                and not inspect.isabstract(obj)
             ]
 
             raise ValueError(

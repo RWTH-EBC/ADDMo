@@ -1,6 +1,6 @@
 import os
 
-from core.util.definitions import root_dir, results_dir_data_tuning_local
+from core.util.definitions import root_dir, results_dir_data_tuning
 from core.util.experiment_logger import ExperimentLogger
 from core.util.experiment_logger import LocalLogger
 from core.util.experiment_logger import WandbLogger
@@ -18,7 +18,7 @@ config = DataTuningAutoSetup()
 # config.load_yaml_to_class(path_to_yaml)
 
 # Configure the logger
-LocalLogger.directory = results_dir_data_tuning_local(config)
+LocalLogger.directory = results_dir_data_tuning(config)
 ExperimentLogger.local_logger = LocalLogger
 # WandbLogger.project = "todo"
 # ExperimentLogger.wandb_logger = WandbLogger

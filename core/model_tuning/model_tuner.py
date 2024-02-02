@@ -1,5 +1,5 @@
 from core.model_tuning.config.model_tuning_config import ModelTuningSetup
-from core.data_tuning.data_importer import load_data
+from core.util.load_save import load_data
 from core.model_tuning.models.model_factory import ModelFactory
 from core.model_tuning.hyperparameter_tuning.hyparam_tuning_factory import (
     HyperparameterTunerFactory,

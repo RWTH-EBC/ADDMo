@@ -26,15 +26,12 @@ def results_dir_wandb():
 def config_files_path():
     return os.path.join(root_dir(), 'config')
 
-def results_dir_data_tuning_local(config: DataTuningFixedConfig):
+def results_dir_data_tuning(config: DataTuningFixedConfig):
     path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, config.name_of_tuning)
     return _create_or_override_directory(path)
 
-def results_dir_data_tuning_wandb(config: DataTuningFixedConfig):
-    path = os.path.join(results_dir_data_tuning_local(config), 'wandb')
-    return _create_or_override_directory(path)
 
-def results_dir_model_tuning_local(config: ModelTuningSetup):
+def results_dir_model_tuning(config: ModelTuningSetup):
     path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data,
                         config.name_of_data_tuning_experiment, config.name_of_model_tuning_experiment)
     return _create_or_override_directory(path)

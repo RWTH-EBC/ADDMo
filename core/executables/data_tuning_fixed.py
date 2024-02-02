@@ -1,11 +1,13 @@
 import os
 
-from core.util.definitions import root_dir, results_dir_data_tuning_local, results_dir_data_tuning_wandb
+from core.util.definitions import root_dir, results_dir_data_tuning
 from core.util.experiment_logger import LocalLogger
 from core.util.experiment_logger import WandbLogger
 from core.util.experiment_logger import ExperimentLogger
 from core.data_tuning.config.data_tuning_config import DataTuningFixedConfig
 from core.data_tuning.data_tuner_fixed import DataTunerByConfig
+from core.util.load_save import load_data
+from core.util.data_handling import split_target_features
 
 # Path to the config file
 path_to_yaml = os.path.join(root_dir(), 'core', 'data_tuning', 'config', 'data_tuning_config.yaml')
@@ -17,10 +19,10 @@ config = DataTuningFixedConfig()
 config.load_yaml_to_class(path_to_yaml)
 
 # Configure the logger
-LocalLogger.directory = results_dir_data_tuning_local(config)
+LocalLogger.directory = results_dir_data_tuning(config)
 LocalLogger.active = True
 WandbLogger.project = "addmo-tests"
-WandbLogger.directory = results_dir_data_tuning_local(config)
+WandbLogger.directory = results_dir_data_tuning(config)
 WandbLogger.active = True
 
 # Initialize logging
@@ -29,15 +31,27 @@ ExperimentLogger.start_experiment(config=config)
 # Create the data tuner
 tuner = DataTunerByConfig(config=config)
 
+# Load the data
+xy_raw = load_data(config.path_to_raw_data)
+ExperimentLogger.log({"xy_raw": xy_raw.head(15)})
+
+# Split the data
+x, y = split_target_features(config.target, xy_raw)
+ExperimentLogger.log({"x": x.head(15)})
+ExperimentLogger.log({"y": y.head(15)})
+
 # Tune the data
-tuned_x_data = tuner.tune_fixed()
+tuned_x_data = tuner.tune_fixed(xy_raw)
+ExperimentLogger.log({"x_tuned": tuned_x_data.head(15)})
+
+# Merge target and features
+tuned_data = tuned_x_data.join(y)
+ExperimentLogger.log({"xy_tuned": tuned_data.head(15)})
 
 # Drop NaNs
-tuned_x_data = tuned_x_data.dropna()
+tuned_data = tuned_data.dropna()
+ExperimentLogger.log({"xy_tuned": tuned_data.head(15)})
 
-# Log the tuned data
-ExperimentLogger.log_artifact(tuned_x_data, name='tuned_data', art_type='data')
-#Todo: possibly xy needs to be logged instead of x
 
 # Finish logging
 ExperimentLogger.finish_experiment()

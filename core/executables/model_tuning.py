@@ -1,12 +1,14 @@
 import os
 
-from core.util.definitions import root_dir, results_dir_model_tuning_local
+from core.util.definitions import root_dir, results_dir_model_tuning
 from core.util.experiment_logger import LocalLogger
 from core.util.experiment_logger import WandbLogger
 from core.util.experiment_logger import ExperimentLogger
 
 from core.model_tuning.config.model_tuning_config import ModelTuningSetup
 from core.model_tuning.model_tuner import ModelTuner
+from core.util.load_save import load_data
+from core.util.data_handling import split_target_features
 
 # Path to the config file
 path_to_yaml = os.path.join(root_dir(), 'core', 'model_tuning', 'config',
@@ -16,13 +18,14 @@ path_to_yaml = os.path.join(root_dir(), 'core', 'model_tuning', 'config',
 config = ModelTuningSetup()
 
 # Load the config from the yaml file
-config.load_yaml_to_class(path_to_yaml)
+# config.load_yaml_to_class(path_to_yaml)
 
 # Configure the logger
-LocalLogger.directory = results_dir_model_tuning_local(config)
-ExperimentLogger.local_logger = LocalLogger
-# WandbLogger.project = "todo"
-# ExperimentLogger.wandb_logger = WandbLogger
+LocalLogger.directory = results_dir_model_tuning(config)
+LocalLogger.active = False
+WandbLogger.project = "addmo-tests"
+WandbLogger.directory = results_dir_model_tuning(config)
+WandbLogger.active = False
 
 # Initialize logging
 ExperimentLogger.start_experiment(config=config)
@@ -30,14 +33,20 @@ ExperimentLogger.start_experiment(config=config)
 # Create the model tuner
 model_tuner = ModelTuner(config=config)
 
+# Load the data
+xy_tuned = load_data(config.abs_path_to_data)
+
+# Select training and validation period
+xy_tuned_train_val = xy_tuned.loc[config.start_train_val:config.stop_train_val]
+ExperimentLogger.log({"xy_tuned_train_val": xy_tuned_train_val.head(15)})
+
+x_train_val, y_train_val = split_target_features(config.name_of_target, xy_tuned_train_val)
+
 # Tune the models
-model_dict = model_tuner.tune_all_models()
+model_dict = model_tuner.tune_all_models(x_train_val, y_train_val)
 
 # Get the best model
 best_model = model_tuner.get_best_model(model_dict)
-
-# Log the tuned model
-ExperimentLogger.log_artifact(best_model, name='tuned_model', art_type='model')
 
 
 print("Finished")

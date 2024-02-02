@@ -1,7 +1,7 @@
 import pandas as pd
 
 from core.data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
-from core.data_tuning.data_importer import load_data
+from core.util.load_save import load_data
 from core.data_tuning_auto import feature_construction as fc
 from core.data_tuning_auto import feature_selection as fs
 from core.util.data_handling import split_target_features

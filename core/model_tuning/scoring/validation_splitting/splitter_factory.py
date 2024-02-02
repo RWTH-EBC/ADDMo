@@ -30,9 +30,12 @@ class SplitterFactory:
             scikit_learn_splitter_class = getattr(
                 model_selection, config.validation_score_splitting
             )
-            return scikit_learn_splitter_class(
-                **config.validation_score_splitting_kwargs
-            )
+            if config.validation_score_splitting_kwargs is None:
+                return scikit_learn_splitter_class()
+            else:
+                return scikit_learn_splitter_class(
+                    **config.validation_score_splitting_kwargs
+                )
 
         # if splitter is not found
         else:
@@ -40,7 +43,9 @@ class SplitterFactory:
             custom_splitter_names = [
                 name
                 for name, obj in inspect.getmembers(custom_splitters)
-                if inspect.isclass(obj) and issubclass(obj, AbstractSplitter)
+                if inspect.isclass(obj)
+                and issubclass(obj, AbstractSplitter)
+                and name is not "AbstractSplitter"
             ]
 
             raise ValueError(

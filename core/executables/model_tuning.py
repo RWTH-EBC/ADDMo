@@ -23,7 +23,7 @@ config = ModelTuningSetup()
 # Configure the logger
 LocalLogger.directory = results_dir_model_tuning(config)
 LocalLogger.active = False
-WandbLogger.project = "addmo-tests"
+WandbLogger.project = "addmo-test_model_tuning"
 WandbLogger.directory = results_dir_model_tuning(config)
 WandbLogger.active = True
 

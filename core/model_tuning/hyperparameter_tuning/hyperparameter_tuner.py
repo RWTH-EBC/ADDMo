@@ -1,9 +1,7 @@
 import inspect
 
 import optuna
-from optuna.integration.wandb import WeightsAndBiasesCallback
 from sklearn.model_selection import GridSearchCV
-
 
 from core.model_tuning.models.abstract_model import AbstractMLModel
 from core.model_tuning.hyperparameter_tuning.abstract_hyparam_tuner import (
@@ -55,10 +53,21 @@ class OptunaTuner(AbstractHyParamTuner):
         study.optimize(
             objective,
             n_trials=self.config.hyperparameter_tuning_kwargs["n_trials"],
-            n_jobs=1,  # The number of parallel jobs. If this argument is set to -1, the number
+            n_jobs=-1,  # The number of parallel jobs. If this argument is set to -1, the number
             # is set to CPU count. Parallel jobs may fail sequential logging to wandb.
             # callbacks=wandbc # logging to wandb, no logging if wandbc is None
         )
+
+        ExperimentLogger.log_artifact(study, "optuna_study", art_type="pkl")
+
+        # visualize study internals
+        ExperimentLogger.log({"optuna_plot_optimization_history":
+                                  optuna.visualization.plot_optimization_history(study)})
+        ExperimentLogger.log({"optuna_plot_parallel_coordinate":
+                                  optuna.visualization.plot_parallel_coordinate(study)})
+        ExperimentLogger.log({"optuna_plot_contour": optuna.visualization.plot_contour(study)})
+        ExperimentLogger.log({"optuna_plot_param_importances":
+                                  optuna.visualization.plot_param_importances(study)})
 
         # convert optuna params to model params
         best_params = model.optuna_hyperparameter_suggest(study.best_trial)

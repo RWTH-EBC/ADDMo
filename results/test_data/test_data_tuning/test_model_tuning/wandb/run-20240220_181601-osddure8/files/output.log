@@ -1,0 +1,17 @@
+
+[I 2024-02-20 18:16:05,339] A new study created in memory with name: no-name-e2f40581-3388-42a4-ba6c-2ae912154a4e
+[I 2024-02-20 18:16:42,499] Trial 0 finished with value: 0.833138290086349 and parameters: {'n_layers': 1, 'n_units_l0': 27}. Best is trial 0 with value: 0.833138290086349.
+[I 2024-02-20 18:16:48,814] Trial 4 finished with value: 0.8250405223591855 and parameters: {'n_layers': 2, 'n_units_l0': 84, 'n_units_l1': 77}. Best is trial 0 with value: 0.833138290086349.
+[I 2024-02-20 18:16:50,371] Trial 3 finished with value: 0.824520177083962 and parameters: {'n_layers': 2, 'n_units_l0': 79, 'n_units_l1': 83}. Best is trial 0 with value: 0.833138290086349.
+[I 2024-02-20 18:16:50,638] Trial 1 finished with value: 0.8246388431998481 and parameters: {'n_layers': 3, 'n_units_l0': 11, 'n_units_l1': 10, 'n_units_l2': 94}. Best is trial 0 with value: 0.833138290086349.
+[I 2024-02-20 18:16:50,868] Trial 9 finished with value: 0.8228995934592953 and parameters: {'n_layers': 2, 'n_units_l0': 81, 'n_units_l1': 65}. Best is trial 0 with value: 0.833138290086349.
+[I 2024-02-20 18:16:51,418] Trial 7 finished with value: 0.8199511973219448 and parameters: {'n_layers': 3, 'n_units_l0': 99, 'n_units_l1': 66, 'n_units_l2': 42}. Best is trial 0 with value: 0.833138290086349.
+[I 2024-02-20 18:16:51,828] Trial 5 finished with value: 0.8187117976477678 and parameters: {'n_layers': 2, 'n_units_l0': 51, 'n_units_l1': 36}. Best is trial 0 with value: 0.833138290086349.
+[I 2024-02-20 18:16:51,892] Trial 2 finished with value: 0.8283993596466528 and parameters: {'n_layers': 2, 'n_units_l0': 76, 'n_units_l1': 39}. Best is trial 0 with value: 0.833138290086349.
+[I 2024-02-20 18:16:52,286] Trial 8 finished with value: 0.8021914684697249 and parameters: {'n_layers': 2, 'n_units_l0': 58, 'n_units_l1': 45}. Best is trial 0 with value: 0.833138290086349.
+[I 2024-02-20 18:16:52,290] Trial 6 finished with value: 0.8185635916948419 and parameters: {'n_layers': 1, 'n_units_l0': 73}. Best is trial 0 with value: 0.833138290086349.
+wandb: Waiting for artifact optuna_study to be committed...
+
+wandb: \ 0.006 MB of 0.015 MB uploaded
+wandb: Committed artifact team-martinraetz/addmo-test_model_tuning/optuna_study:v3
+Finished

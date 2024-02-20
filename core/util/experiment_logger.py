@@ -1,10 +1,10 @@
 import os
 from abc import ABC, abstractmethod
+import pickle
 
 import pandas as pd
 import wandb
 
-from core.util.pickle_handling import write_pkl, read_pkl
 from core.model_tuning.models.abstract_model import AbstractMLModel
 
 
@@ -70,22 +70,31 @@ class WandbLogger(AbstractLogger):
                 if isinstance(data, str):
                     log[name] = wandb.Html(data)
             wandb.log(log)
+
     @staticmethod
-    def log_artifact(data, name: str, art_type: str, description: str = None, metadata: dict = None):
+    def log_artifact(
+        data,
+        name: str,
+        art_type: str,
+        description: str = None,
+        metadata: dict = None,
+    ):
         if WandbLogger.active:
             # save data to disk first
             filepath = None
-            # todo: implement logic to save data to disk
-            if art_type == "data":
+            if art_type == "pkl":
                 filepath = os.path.join(WandbLogger.directory, name + ".pkl")
-                write_pkl(data, filepath)
-            if art_type == "model":
-                model : AbstractMLModel = data
+                with open(filepath, 'wb') as f:
+                    pickle.dump(data, f)
+            if art_type == "onnx":
+                model: AbstractMLModel = data
                 filepath = os.path.join(WandbLogger.directory, name + ".onnx")
                 model.save_model(filepath)
 
             # create artifact object
-            artifact = wandb.Artifact(name=name, type=art_type, description=description, metadata=metadata)
+            artifact = wandb.Artifact(
+                name=name, type=art_type, description=description, metadata=metadata
+            )
 
             # add saved file to the artifact, you may also add a whole directory to the artifact
             artifact.add_file(filepath)
@@ -103,7 +112,7 @@ class WandbLogger(AbstractLogger):
 
 
 class LocalLogger(AbstractLogger):
-    active:bool = False  # Activate local logging
+    active: bool = False  # Activate local logging
     directory = None  # Directory to store artifacts locally
     run_time_storage = {}  # Storage for the current run
 

@@ -1,0 +1,307 @@
+2024-02-20 18:16:01,705 INFO    StreamThr :16428 [internal.py:wandb_internal():86] W&B internal server running at pid: 16428, started at: 2024-02-20 18:16:01.704200
+2024-02-20 18:16:01,706 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: status
+2024-02-20 18:16:01,708 INFO    WriterThread:16428 [datastore.py:open_for_write():87] open: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\run-osddure8.wandb
+2024-02-20 18:16:01,710 DEBUG   SenderThread:16428 [sender.py:send():382] send: header
+2024-02-20 18:16:01,784 DEBUG   SenderThread:16428 [sender.py:send():382] send: run
+2024-02-20 18:16:02,606 INFO    SenderThread:16428 [dir_watcher.py:__init__():211] watching files in: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files
+2024-02-20 18:16:02,608 INFO    SenderThread:16428 [sender.py:_start_run_threads():1136] run started: osddure8 with start time 1708449361.705201
+2024-02-20 18:16:02,621 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: check_version
+2024-02-20 18:16:02,621 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: check_version
+2024-02-20 18:16:03,202 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: run_start
+2024-02-20 18:16:03,220 DEBUG   HandlerThread:16428 [system_info.py:__init__():27] System info init
+2024-02-20 18:16:03,221 DEBUG   HandlerThread:16428 [system_info.py:__init__():42] System info init done
+2024-02-20 18:16:03,221 INFO    HandlerThread:16428 [system_monitor.py:start():194] Starting system monitor
+2024-02-20 18:16:03,221 INFO    SystemMonitor:16428 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-02-20 18:16:03,221 INFO    HandlerThread:16428 [system_monitor.py:probe():214] Collecting system info
+2024-02-20 18:16:03,227 INFO    SystemMonitor:16428 [interfaces.py:start():190] Started cpu monitoring
+2024-02-20 18:16:03,232 DEBUG   HandlerThread:16428 [system_info.py:probe():151] Probing system
+2024-02-20 18:16:03,232 INFO    SystemMonitor:16428 [interfaces.py:start():190] Started disk monitoring
+2024-02-20 18:16:03,241 INFO    SystemMonitor:16428 [interfaces.py:start():190] Started memory monitoring
+2024-02-20 18:16:03,255 INFO    SystemMonitor:16428 [interfaces.py:start():190] Started network monitoring
+2024-02-20 18:16:03,259 DEBUG   HandlerThread:16428 [system_info.py:_probe_git():136] Probing git
+2024-02-20 18:16:03,395 DEBUG   HandlerThread:16428 [system_info.py:_probe_git():144] Probing git done
+2024-02-20 18:16:03,396 DEBUG   HandlerThread:16428 [system_info.py:probe():199] Probing system done
+2024-02-20 18:16:03,396 DEBUG   HandlerThread:16428 [system_monitor.py:probe():223] {'os': 'Windows-10-10.0.19045-SP0', 'python': '3.11.7', 'heartbeatAt': '2024-02-20T17:16:03.232521', 'startedAt': '2024-02-20T17:16:01.691353', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': 'D:\\04_GitRepos\\addmo-extra\\core\\executables\\model_tuning.py', 'codePathLocal': 'model_tuning.py', 'codePath': 'core\\executables\\model_tuning.py', 'git': {'remote': 'https://git-ce.rwth-aachen.de/ebc/ebc-general/machine-learning/addmo-automated-ml-regression.git', 'commit': 'bb88d7471ac7d7e72f50ecbdab2ced863deea7fd'}, 'email': 'mraetz@eonerc.rwth-aachen.de', 'root': 'D:/04_GitRepos/addmo-extra', 'host': 'Laptop-EBC203', 'username': 'mre', 'executable': 'D:\\01_Anaconda\\envs\\ADDMo-Extra\\python.exe', 'cpu_count': 8, 'cpu_count_logical': 16, 'cpu_freq': {'current': 1901.0, 'min': 0.0, 'max': 1901.0}, 'cpu_freq_per_core': [{'current': 1901.0, 'min': 0.0, 'max': 1901.0}], 'disk': {'/': {'total': 703.2060508728027, 'used': 48.792701721191406}}, 'memory': {'total': 27.82659149169922}}
+2024-02-20 18:16:03,396 INFO    HandlerThread:16428 [system_monitor.py:probe():224] Finished collecting system info
+2024-02-20 18:16:03,396 INFO    HandlerThread:16428 [system_monitor.py:probe():227] Publishing system info
+2024-02-20 18:16:03,396 DEBUG   HandlerThread:16428 [system_info.py:_save_conda():208] Saving list of conda packages installed into the current environment
+2024-02-20 18:16:03,401 ERROR   HandlerThread:16428 [system_info.py:_save_conda():219] Error saving conda packages: [WinError 2] Das System kann die angegebene Datei nicht finden
+Traceback (most recent call last):
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\site-packages\wandb\sdk\internal\system\system_info.py", line 215, in _save_conda
+    subprocess.call(
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\subprocess.py", line 389, in call
+    with Popen(*popenargs, **kwargs) as p:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Das System kann die angegebene Datei nicht finden
+2024-02-20 18:16:03,404 DEBUG   HandlerThread:16428 [system_info.py:_save_conda():220] Saving conda packages done
+2024-02-20 18:16:03,405 INFO    HandlerThread:16428 [system_monitor.py:probe():229] Finished publishing system info
+2024-02-20 18:16:03,410 DEBUG   SenderThread:16428 [sender.py:send():382] send: files
+2024-02-20 18:16:03,410 INFO    SenderThread:16428 [sender.py:_save_file():1403] saving file wandb-metadata.json with policy now
+2024-02-20 18:16:03,421 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: python_packages
+2024-02-20 18:16:03,421 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: python_packages
+2024-02-20 18:16:03,421 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: stop_status
+2024-02-20 18:16:03,422 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: internal_messages
+2024-02-20 18:16:03,422 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: stop_status
+2024-02-20 18:16:03,612 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_created():271] file/dir created: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\requirements.txt
+2024-02-20 18:16:03,612 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_created():271] file/dir created: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\conda-environment.yaml
+2024-02-20 18:16:03,613 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_created():271] file/dir created: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\wandb-metadata.json
+2024-02-20 18:16:03,648 DEBUG   SenderThread:16428 [sender.py:send():382] send: telemetry
+2024-02-20 18:16:04,541 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: log_artifact
+2024-02-20 18:16:04,541 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: log_artifact
+2024-02-20 18:16:04,612 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_created():271] file/dir created: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media\table\xy_tuned_train_val_0_ddd8a80f9690eba1034c.table.json
+2024-02-20 18:16:04,612 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_created():271] file/dir created: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media\table
+2024-02-20 18:16:04,612 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_created():271] file/dir created: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media
+2024-02-20 18:16:05,024 INFO    wandb-upload_0:16428 [upload_job.py:push():131] Uploaded file C:\Users\mre\AppData\Local\Temp\tmp75eniwq5wandb\bn66x8ke-wandb-metadata.json
+2024-02-20 18:16:05,304 INFO    SenderThread:16428 [sender.py:send_request_log_artifact():1470] logged artifact run-osddure8-xy_tuned_train_val - {'id': 'QXJ0aWZhY3Q6NzI3MDM4MTU2', 'state': 'PENDING', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjE0MTUyMDAyOA==', 'latestArtifact': None}}
+2024-02-20 18:16:05,304 DEBUG   SenderThread:16428 [sender.py:send():382] send: files
+2024-02-20 18:16:05,305 INFO    SenderThread:16428 [sender.py:_save_file():1403] saving file media\table\xy_tuned_train_val_0_ddd8a80f9690eba1034c.table.json with policy now
+2024-02-20 18:16:05,328 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-20 18:16:05,329 DEBUG   SenderThread:16428 [sender.py:send():382] send: history
+2024-02-20 18:16:05,329 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: summary_record
+2024-02-20 18:16:05,335 INFO    SenderThread:16428 [sender.py:_save_file():1403] saving file wandb-summary.json with policy end
+2024-02-20 18:16:05,338 DEBUG   SenderThread:16428 [sender.py:send():382] send: files
+2024-02-20 18:16:05,338 INFO    SenderThread:16428 [sender.py:_save_file():1403] saving file media\html\hyperparameter_range_1_d9ba70ebf54c2691ce6e.html with policy now
+2024-02-20 18:16:05,339 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-20 18:16:05,340 DEBUG   SenderThread:16428 [sender.py:send():382] send: history
+2024-02-20 18:16:05,340 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: summary_record
+2024-02-20 18:16:05,341 INFO    SenderThread:16428 [sender.py:_save_file():1403] saving file wandb-summary.json with policy end
+2024-02-20 18:16:05,438 INFO    wandb-upload_1:16428 [upload_job.py:push():131] Uploaded file C:\Users\mre\AppData\Local\Temp\tmp75eniwq5wandb\a8ybcelh-media/table/xy_tuned_train_val_0_ddd8a80f9690eba1034c.table.json
+2024-02-20 18:16:05,623 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_created():271] file/dir created: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\wandb-summary.json
+2024-02-20 18:16:05,624 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_created():271] file/dir created: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\output.log
+2024-02-20 18:16:05,624 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_created():271] file/dir created: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media\html\hyperparameter_range_1_d9ba70ebf54c2691ce6e.html
+2024-02-20 18:16:05,625 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_modified():288] file/dir modified: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media
+2024-02-20 18:16:05,625 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_created():271] file/dir created: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media\html
+2024-02-20 18:16:05,740 INFO    wandb-upload_2:16428 [upload_job.py:push():131] Uploaded file C:\Users\mre\AppData\Local\Temp\tmp75eniwq5wandb\jmvu1l2m-media/html/hyperparameter_range_1_d9ba70ebf54c2691ce6e.html
+2024-02-20 18:16:06,222 INFO    wandb-upload_2:16428 [upload_job.py:push():131] Uploaded file C:\Users\mre\AppData\Local\Temp\tmp75eniwq5wandb\c3ooagg9-media/html/hyperparameter_range_1_d9ba70ebf54c2691ce6e.html
+2024-02-20 18:16:06,595 INFO    wandb-upload_1:16428 [upload_job.py:push():131] Uploaded file C:\Users\mre\AppData\Local\Temp\tmp75eniwq5wandb\6xe7v1jm-media/table/xy_tuned_train_val_0_ddd8a80f9690eba1034c.table.json
+2024-02-20 18:16:06,646 INFO    wandb-upload_0:16428 [upload_job.py:push():89] Uploaded file C:\Users\mre\AppData\Local\wandb\wandb\artifacts\staging\tmps4i9pghu
+2024-02-20 18:16:07,368 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: status_report
+2024-02-20 18:16:07,650 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_modified():288] file/dir modified: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\output.log
+2024-02-20 18:16:12,411 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: status_report
+2024-02-20 18:16:17,461 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: status_report
+2024-02-20 18:16:18,422 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: stop_status
+2024-02-20 18:16:18,422 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: stop_status
+2024-02-20 18:16:18,434 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: internal_messages
+2024-02-20 18:16:22,694 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: status_report
+2024-02-20 18:16:27,742 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: status_report
+2024-02-20 18:16:32,784 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: status_report
+2024-02-20 18:16:33,434 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: stop_status
+2024-02-20 18:16:33,434 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: stop_status
+2024-02-20 18:16:33,454 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: internal_messages
+2024-02-20 18:16:33,883 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_modified():288] file/dir modified: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\config.yaml
+2024-02-20 18:16:38,775 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: status_report
+2024-02-20 18:16:43,960 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_modified():288] file/dir modified: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\output.log
+2024-02-20 18:16:44,531 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: status_report
+2024-02-20 18:16:48,446 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: stop_status
+2024-02-20 18:16:48,447 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: stop_status
+2024-02-20 18:16:48,461 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: internal_messages
+2024-02-20 18:16:49,826 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: status_report
+2024-02-20 18:16:50,034 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_modified():288] file/dir modified: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\output.log
+2024-02-20 18:16:52,048 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_modified():288] file/dir modified: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\output.log
+2024-02-20 18:16:52,859 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: log_artifact
+2024-02-20 18:16:52,859 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: log_artifact
+2024-02-20 18:16:53,309 INFO    SenderThread:16428 [sender.py:send_request_log_artifact():1470] logged artifact optuna_study - {'id': 'QXJ0aWZhY3Q6NzI3MDM4Njk4', 'state': 'PENDING', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjE0MTQwMzcyMg==', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6NzI3MDM3MjAy', 'versionIndex': 2}}}
+2024-02-20 18:16:53,872 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: poll_exit
+2024-02-20 18:16:53,872 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: poll_exit
+2024-02-20 18:16:54,059 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_modified():288] file/dir modified: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\output.log
+2024-02-20 18:16:54,450 INFO    wandb-upload_2:16428 [upload_job.py:push():89] Uploaded file C:\Users\mre\AppData\Local\wandb\wandb\artifacts\staging\tmpz_eapztm
+2024-02-20 18:16:54,879 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: status_report
+2024-02-20 18:16:54,879 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: poll_exit
+2024-02-20 18:16:54,880 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: poll_exit
+2024-02-20 18:16:56,075 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_modified():288] file/dir modified: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\output.log
+2024-02-20 18:16:57,104 DEBUG   SenderThread:16428 [sender.py:send():382] send: files
+2024-02-20 18:16:57,104 INFO    SenderThread:16428 [sender.py:_save_file():1403] saving file media\plotly\optuna_plot_2_ec0affe08513ce914c70.plotly.json with policy now
+2024-02-20 18:16:57,104 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-20 18:16:57,105 DEBUG   SenderThread:16428 [sender.py:send():382] send: history
+2024-02-20 18:16:57,105 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: summary_record
+2024-02-20 18:16:57,106 INFO    SenderThread:16428 [sender.py:_save_file():1403] saving file wandb-summary.json with policy end
+2024-02-20 18:16:57,144 DEBUG   SenderThread:16428 [sender.py:send():382] send: files
+2024-02-20 18:16:57,144 INFO    SenderThread:16428 [sender.py:_save_file():1403] saving file media\plotly\optuna_plot_3_74553ae39ed65a111c77.plotly.json with policy now
+2024-02-20 18:16:57,144 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-20 18:16:57,146 DEBUG   SenderThread:16428 [sender.py:send():382] send: history
+2024-02-20 18:16:57,146 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: summary_record
+2024-02-20 18:16:57,147 INFO    SenderThread:16428 [sender.py:_save_file():1403] saving file wandb-summary.json with policy end
+2024-02-20 18:16:57,432 DEBUG   SenderThread:16428 [sender.py:send():382] send: files
+2024-02-20 18:16:57,432 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-20 18:16:57,433 INFO    SenderThread:16428 [sender.py:_save_file():1403] saving file media\plotly\optuna_plot_4_7483ed4e11ca5feb8e40.plotly.json with policy now
+2024-02-20 18:16:57,434 DEBUG   SenderThread:16428 [sender.py:send():382] send: history
+2024-02-20 18:16:57,434 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: summary_record
+2024-02-20 18:16:57,435 INFO    SenderThread:16428 [sender.py:_save_file():1403] saving file wandb-summary.json with policy end
+2024-02-20 18:16:57,516 INFO    wandb-upload_0:16428 [upload_job.py:push():131] Uploaded file C:\Users\mre\AppData\Local\Temp\tmp75eniwq5wandb\lo6shnix-media/plotly/optuna_plot_2_ec0affe08513ce914c70.plotly.json
+2024-02-20 18:16:57,534 INFO    wandb-upload_2:16428 [upload_job.py:push():131] Uploaded file C:\Users\mre\AppData\Local\Temp\tmp75eniwq5wandb\005zvlpa-media/plotly/optuna_plot_3_74553ae39ed65a111c77.plotly.json
+2024-02-20 18:16:57,559 DEBUG   SenderThread:16428 [sender.py:send():382] send: files
+2024-02-20 18:16:57,559 INFO    SenderThread:16428 [sender.py:_save_file():1403] saving file media\plotly\optuna_plot_5_fb9cca48d88af83c27ad.plotly.json with policy now
+2024-02-20 18:16:57,559 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-20 18:16:57,560 DEBUG   SenderThread:16428 [sender.py:send():382] send: history
+2024-02-20 18:16:57,560 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: summary_record
+2024-02-20 18:16:57,561 INFO    SenderThread:16428 [sender.py:_save_file():1403] saving file wandb-summary.json with policy end
+2024-02-20 18:16:57,888 INFO    wandb-upload_1:16428 [upload_job.py:push():131] Uploaded file C:\Users\mre\AppData\Local\Temp\tmp75eniwq5wandb\hu9i3uh3-media/plotly/optuna_plot_4_7483ed4e11ca5feb8e40.plotly.json
+2024-02-20 18:16:57,969 INFO    wandb-upload_0:16428 [upload_job.py:push():131] Uploaded file C:\Users\mre\AppData\Local\Temp\tmp75eniwq5wandb\whaurv04-media/plotly/optuna_plot_5_fb9cca48d88af83c27ad.plotly.json
+2024-02-20 18:16:58,101 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_modified():288] file/dir modified: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\wandb-summary.json
+2024-02-20 18:16:58,101 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_modified():288] file/dir modified: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\output.log
+2024-02-20 18:16:58,101 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_created():271] file/dir created: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media\plotly\optuna_plot_2_ec0affe08513ce914c70.plotly.json
+2024-02-20 18:16:58,101 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_created():271] file/dir created: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media\plotly\optuna_plot_3_74553ae39ed65a111c77.plotly.json
+2024-02-20 18:16:58,102 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_created():271] file/dir created: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media\plotly\optuna_plot_5_fb9cca48d88af83c27ad.plotly.json
+2024-02-20 18:16:58,102 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_created():271] file/dir created: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media\plotly\optuna_plot_4_7483ed4e11ca5feb8e40.plotly.json
+2024-02-20 18:16:58,102 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_modified():288] file/dir modified: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media
+2024-02-20 18:16:58,103 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_created():271] file/dir created: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media\plotly
+2024-02-20 18:16:58,584 INFO    wandb-upload_2:16428 [upload_job.py:push():131] Uploaded file C:\Users\mre\AppData\Local\Temp\tmp75eniwq5wandb\unv18g3q-media/plotly/optuna_plot_2_ec0affe08513ce914c70.plotly.json
+2024-02-20 18:16:58,585 INFO    wandb-upload_1:16428 [upload_job.py:push():131] Uploaded file C:\Users\mre\AppData\Local\Temp\tmp75eniwq5wandb\zcj49m2v-media/plotly/optuna_plot_5_fb9cca48d88af83c27ad.plotly.json
+2024-02-20 18:16:59,055 INFO    wandb-upload_0:16428 [upload_job.py:push():131] Uploaded file C:\Users\mre\AppData\Local\Temp\tmp75eniwq5wandb\ql6rb2q0-media/plotly/optuna_plot_3_74553ae39ed65a111c77.plotly.json
+2024-02-20 18:16:59,078 INFO    wandb-upload_3:16428 [upload_job.py:push():131] Uploaded file C:\Users\mre\AppData\Local\Temp\tmp75eniwq5wandb\2iei98tz-media/plotly/optuna_plot_4_7483ed4e11ca5feb8e40.plotly.json
+2024-02-20 18:16:59,520 DEBUG   SenderThread:16428 [sender.py:send():382] send: exit
+2024-02-20 18:16:59,520 INFO    SenderThread:16428 [sender.py:send_exit():589] handling exit code: 0
+2024-02-20 18:16:59,520 INFO    SenderThread:16428 [sender.py:send_exit():591] handling runtime: 56
+2024-02-20 18:16:59,522 INFO    SenderThread:16428 [sender.py:_save_file():1403] saving file wandb-summary.json with policy end
+2024-02-20 18:16:59,522 INFO    SenderThread:16428 [sender.py:send_exit():597] send defer
+2024-02-20 18:16:59,522 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: defer
+2024-02-20 18:16:59,522 INFO    HandlerThread:16428 [handler.py:handle_request_defer():172] handle defer: 0
+2024-02-20 18:16:59,522 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: defer
+2024-02-20 18:16:59,522 INFO    SenderThread:16428 [sender.py:send_request_defer():613] handle sender defer: 0
+2024-02-20 18:16:59,522 INFO    SenderThread:16428 [sender.py:transition_state():617] send defer: 1
+2024-02-20 18:16:59,523 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: defer
+2024-02-20 18:16:59,523 INFO    HandlerThread:16428 [handler.py:handle_request_defer():172] handle defer: 1
+2024-02-20 18:16:59,523 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: defer
+2024-02-20 18:16:59,523 INFO    SenderThread:16428 [sender.py:send_request_defer():613] handle sender defer: 1
+2024-02-20 18:16:59,523 INFO    SenderThread:16428 [sender.py:transition_state():617] send defer: 2
+2024-02-20 18:16:59,523 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: defer
+2024-02-20 18:16:59,523 INFO    HandlerThread:16428 [handler.py:handle_request_defer():172] handle defer: 2
+2024-02-20 18:16:59,523 INFO    HandlerThread:16428 [system_monitor.py:finish():203] Stopping system monitor
+2024-02-20 18:16:59,523 DEBUG   SystemMonitor:16428 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-02-20 18:16:59,524 INFO    HandlerThread:16428 [interfaces.py:finish():202] Joined cpu monitor
+2024-02-20 18:16:59,524 DEBUG   SystemMonitor:16428 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-02-20 18:16:59,524 INFO    HandlerThread:16428 [interfaces.py:finish():202] Joined disk monitor
+2024-02-20 18:16:59,524 DEBUG   SystemMonitor:16428 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-02-20 18:16:59,524 INFO    HandlerThread:16428 [interfaces.py:finish():202] Joined memory monitor
+2024-02-20 18:16:59,525 INFO    HandlerThread:16428 [interfaces.py:finish():202] Joined network monitor
+2024-02-20 18:16:59,525 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: defer
+2024-02-20 18:16:59,525 INFO    SenderThread:16428 [sender.py:send_request_defer():613] handle sender defer: 2
+2024-02-20 18:16:59,525 INFO    SenderThread:16428 [sender.py:transition_state():617] send defer: 3
+2024-02-20 18:16:59,525 DEBUG   SenderThread:16428 [sender.py:send():382] send: stats
+2024-02-20 18:16:59,525 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: defer
+2024-02-20 18:16:59,531 INFO    HandlerThread:16428 [handler.py:handle_request_defer():172] handle defer: 3
+2024-02-20 18:16:59,531 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: defer
+2024-02-20 18:16:59,531 INFO    SenderThread:16428 [sender.py:send_request_defer():613] handle sender defer: 3
+2024-02-20 18:16:59,531 INFO    SenderThread:16428 [sender.py:transition_state():617] send defer: 4
+2024-02-20 18:16:59,531 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: defer
+2024-02-20 18:16:59,532 INFO    HandlerThread:16428 [handler.py:handle_request_defer():172] handle defer: 4
+2024-02-20 18:16:59,532 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: defer
+2024-02-20 18:16:59,532 INFO    SenderThread:16428 [sender.py:send_request_defer():613] handle sender defer: 4
+2024-02-20 18:16:59,532 INFO    SenderThread:16428 [sender.py:transition_state():617] send defer: 5
+2024-02-20 18:16:59,532 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: defer
+2024-02-20 18:16:59,532 INFO    HandlerThread:16428 [handler.py:handle_request_defer():172] handle defer: 5
+2024-02-20 18:16:59,533 DEBUG   SenderThread:16428 [sender.py:send():382] send: summary
+2024-02-20 18:16:59,534 INFO    SenderThread:16428 [sender.py:_save_file():1403] saving file wandb-summary.json with policy end
+2024-02-20 18:16:59,534 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: defer
+2024-02-20 18:16:59,534 INFO    SenderThread:16428 [sender.py:send_request_defer():613] handle sender defer: 5
+2024-02-20 18:16:59,534 INFO    SenderThread:16428 [sender.py:transition_state():617] send defer: 6
+2024-02-20 18:16:59,534 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: defer
+2024-02-20 18:16:59,534 INFO    HandlerThread:16428 [handler.py:handle_request_defer():172] handle defer: 6
+2024-02-20 18:16:59,535 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: defer
+2024-02-20 18:16:59,535 INFO    SenderThread:16428 [sender.py:send_request_defer():613] handle sender defer: 6
+2024-02-20 18:16:59,535 INFO    SenderThread:16428 [sender.py:transition_state():617] send defer: 7
+2024-02-20 18:16:59,535 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: status_report
+2024-02-20 18:16:59,535 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: defer
+2024-02-20 18:16:59,535 INFO    HandlerThread:16428 [handler.py:handle_request_defer():172] handle defer: 7
+2024-02-20 18:16:59,535 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: defer
+2024-02-20 18:16:59,535 INFO    SenderThread:16428 [sender.py:send_request_defer():613] handle sender defer: 7
+2024-02-20 18:17:00,118 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_modified():288] file/dir modified: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\wandb-summary.json
+2024-02-20 18:17:00,118 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_modified():288] file/dir modified: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\output.log
+2024-02-20 18:17:00,534 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: poll_exit
+2024-02-20 18:17:01,523 INFO    SenderThread:16428 [sender.py:transition_state():617] send defer: 8
+2024-02-20 18:17:01,524 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: poll_exit
+2024-02-20 18:17:01,524 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: defer
+2024-02-20 18:17:01,524 INFO    HandlerThread:16428 [handler.py:handle_request_defer():172] handle defer: 8
+2024-02-20 18:17:01,525 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: defer
+2024-02-20 18:17:01,525 INFO    SenderThread:16428 [sender.py:send_request_defer():613] handle sender defer: 8
+2024-02-20 18:17:01,525 INFO    SenderThread:16428 [job_builder.py:build():296] Attempting to build job artifact
+2024-02-20 18:17:01,526 INFO    SenderThread:16428 [job_builder.py:_get_source_type():426] is repo sourced job
+2024-02-20 18:17:01,527 INFO    SenderThread:16428 [job_builder.py:build():402] adding wandb-job metadata file
+2024-02-20 18:17:01,534 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: poll_exit
+2024-02-20 18:17:01,548 INFO    SenderThread:16428 [sender.py:transition_state():617] send defer: 9
+2024-02-20 18:17:01,548 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: poll_exit
+2024-02-20 18:17:01,549 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: defer
+2024-02-20 18:17:01,549 DEBUG   SenderThread:16428 [sender.py:send():382] send: artifact
+2024-02-20 18:17:01,549 INFO    HandlerThread:16428 [handler.py:handle_request_defer():172] handle defer: 9
+2024-02-20 18:17:02,137 INFO    Thread-16 :16428 [dir_watcher.py:_on_file_modified():288] file/dir modified: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\output.log
+2024-02-20 18:17:02,538 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: poll_exit
+2024-02-20 18:17:02,546 INFO    SenderThread:16428 [sender.py:send_artifact():1494] sent artifact job-https___git-ce.rwth-aachen.de_ebc_ebc-general_machine-learn..mo-automated-ml-regression.git_core_executables_model_tuning.py - {'id': 'QXJ0aWZhY3Q6NzI2NjU5ODQ3', 'state': 'COMMITTED', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjE0MTQwMzc2Mg==', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6NzI3MDM3MzA5', 'versionIndex': 1}}}
+2024-02-20 18:17:02,546 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: defer
+2024-02-20 18:17:02,546 INFO    SenderThread:16428 [sender.py:send_request_defer():613] handle sender defer: 9
+2024-02-20 18:17:02,546 INFO    SenderThread:16428 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-02-20 18:17:03,147 INFO    SenderThread:16428 [dir_watcher.py:finish():388] scan: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files
+2024-02-20 18:17:03,148 INFO    SenderThread:16428 [dir_watcher.py:finish():402] scan save: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\conda-environment.yaml conda-environment.yaml
+2024-02-20 18:17:03,148 INFO    SenderThread:16428 [dir_watcher.py:finish():402] scan save: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\config.yaml config.yaml
+2024-02-20 18:17:03,149 INFO    SenderThread:16428 [dir_watcher.py:finish():402] scan save: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\output.log output.log
+2024-02-20 18:17:03,151 INFO    SenderThread:16428 [dir_watcher.py:finish():402] scan save: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\requirements.txt requirements.txt
+2024-02-20 18:17:03,153 INFO    SenderThread:16428 [dir_watcher.py:finish():402] scan save: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\wandb-metadata.json wandb-metadata.json
+2024-02-20 18:17:03,153 INFO    SenderThread:16428 [dir_watcher.py:finish():402] scan save: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\wandb-summary.json wandb-summary.json
+2024-02-20 18:17:03,158 INFO    SenderThread:16428 [dir_watcher.py:finish():402] scan save: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media\html\hyperparameter_range_1_d9ba70ebf54c2691ce6e.html media/html/hyperparameter_range_1_d9ba70ebf54c2691ce6e.html
+2024-02-20 18:17:03,159 INFO    SenderThread:16428 [dir_watcher.py:finish():402] scan save: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media\plotly\optuna_plot_2_ec0affe08513ce914c70.plotly.json media/plotly/optuna_plot_2_ec0affe08513ce914c70.plotly.json
+2024-02-20 18:17:03,159 INFO    SenderThread:16428 [dir_watcher.py:finish():402] scan save: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media\plotly\optuna_plot_3_74553ae39ed65a111c77.plotly.json media/plotly/optuna_plot_3_74553ae39ed65a111c77.plotly.json
+2024-02-20 18:17:03,159 INFO    SenderThread:16428 [dir_watcher.py:finish():402] scan save: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media\plotly\optuna_plot_4_7483ed4e11ca5feb8e40.plotly.json media/plotly/optuna_plot_4_7483ed4e11ca5feb8e40.plotly.json
+2024-02-20 18:17:03,159 INFO    SenderThread:16428 [dir_watcher.py:finish():402] scan save: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media\plotly\optuna_plot_5_fb9cca48d88af83c27ad.plotly.json media/plotly/optuna_plot_5_fb9cca48d88af83c27ad.plotly.json
+2024-02-20 18:17:03,159 INFO    SenderThread:16428 [dir_watcher.py:finish():402] scan save: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\media\table\xy_tuned_train_val_0_ddd8a80f9690eba1034c.table.json media/table/xy_tuned_train_val_0_ddd8a80f9690eba1034c.table.json
+2024-02-20 18:17:03,160 INFO    SenderThread:16428 [sender.py:transition_state():617] send defer: 10
+2024-02-20 18:17:03,160 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: poll_exit
+2024-02-20 18:17:03,160 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: defer
+2024-02-20 18:17:03,160 INFO    HandlerThread:16428 [handler.py:handle_request_defer():172] handle defer: 10
+2024-02-20 18:17:03,160 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: defer
+2024-02-20 18:17:03,160 INFO    SenderThread:16428 [sender.py:send_request_defer():613] handle sender defer: 10
+2024-02-20 18:17:03,161 INFO    SenderThread:16428 [file_pusher.py:finish():175] shutting down file pusher
+2024-02-20 18:17:03,539 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: poll_exit
+2024-02-20 18:17:03,540 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: poll_exit
+2024-02-20 18:17:03,607 INFO    wandb-upload_0:16428 [upload_job.py:push():131] Uploaded file D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\output.log
+2024-02-20 18:17:03,608 INFO    wandb-upload_1:16428 [upload_job.py:push():131] Uploaded file D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\requirements.txt
+2024-02-20 18:17:03,608 INFO    wandb-upload_2:16428 [upload_job.py:push():131] Uploaded file D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\config.yaml
+2024-02-20 18:17:04,117 INFO    wandb-upload_3:16428 [upload_job.py:push():131] Uploaded file D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\files\wandb-summary.json
+2024-02-20 18:17:04,328 INFO    Thread-15 (_thread_body):16428 [sender.py:transition_state():617] send defer: 11
+2024-02-20 18:17:04,328 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: defer
+2024-02-20 18:17:04,328 INFO    HandlerThread:16428 [handler.py:handle_request_defer():172] handle defer: 11
+2024-02-20 18:17:04,329 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: defer
+2024-02-20 18:17:04,329 INFO    SenderThread:16428 [sender.py:send_request_defer():613] handle sender defer: 11
+2024-02-20 18:17:04,329 INFO    SenderThread:16428 [file_pusher.py:join():181] waiting for file pusher
+2024-02-20 18:17:04,329 INFO    SenderThread:16428 [sender.py:transition_state():617] send defer: 12
+2024-02-20 18:17:04,329 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: defer
+2024-02-20 18:17:04,329 INFO    HandlerThread:16428 [handler.py:handle_request_defer():172] handle defer: 12
+2024-02-20 18:17:04,329 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: defer
+2024-02-20 18:17:04,329 INFO    SenderThread:16428 [sender.py:send_request_defer():613] handle sender defer: 12
+2024-02-20 18:17:04,329 INFO    SenderThread:16428 [file_stream.py:finish():595] file stream finish called
+2024-02-20 18:17:04,502 INFO    SenderThread:16428 [file_stream.py:finish():599] file stream finish is done
+2024-02-20 18:17:04,502 INFO    SenderThread:16428 [sender.py:transition_state():617] send defer: 13
+2024-02-20 18:17:04,502 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: defer
+2024-02-20 18:17:04,503 INFO    HandlerThread:16428 [handler.py:handle_request_defer():172] handle defer: 13
+2024-02-20 18:17:04,503 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: defer
+2024-02-20 18:17:04,503 INFO    SenderThread:16428 [sender.py:send_request_defer():613] handle sender defer: 13
+2024-02-20 18:17:04,503 INFO    SenderThread:16428 [sender.py:transition_state():617] send defer: 14
+2024-02-20 18:17:04,504 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: defer
+2024-02-20 18:17:04,504 DEBUG   SenderThread:16428 [sender.py:send():382] send: final
+2024-02-20 18:17:04,504 INFO    HandlerThread:16428 [handler.py:handle_request_defer():172] handle defer: 14
+2024-02-20 18:17:04,504 DEBUG   SenderThread:16428 [sender.py:send():382] send: footer
+2024-02-20 18:17:04,504 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: defer
+2024-02-20 18:17:04,504 INFO    SenderThread:16428 [sender.py:send_request_defer():613] handle sender defer: 14
+2024-02-20 18:17:04,505 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: poll_exit
+2024-02-20 18:17:04,505 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: poll_exit
+2024-02-20 18:17:04,505 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: server_info
+2024-02-20 18:17:04,505 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: poll_exit
+2024-02-20 18:17:04,505 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: get_summary
+2024-02-20 18:17:04,506 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: poll_exit
+2024-02-20 18:17:04,506 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: sampled_history
+2024-02-20 18:17:04,506 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: server_info
+2024-02-20 18:17:04,507 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: internal_messages
+2024-02-20 18:17:04,508 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: job_info
+2024-02-20 18:17:04,667 DEBUG   SenderThread:16428 [sender.py:send_request():409] send_request: job_info
+2024-02-20 18:17:04,668 INFO    MainThread:16428 [wandb_run.py:_footer_history_summary_info():3857] rendering history
+2024-02-20 18:17:04,668 INFO    MainThread:16428 [wandb_run.py:_footer_history_summary_info():3889] rendering summary
+2024-02-20 18:17:04,668 INFO    MainThread:16428 [wandb_run.py:_footer_sync_info():3816] logging synced files
+2024-02-20 18:17:04,669 DEBUG   HandlerThread:16428 [handler.py:handle_request():146] handle_request: shutdown
+2024-02-20 18:17:04,669 INFO    HandlerThread:16428 [handler.py:finish():869] shutting down handler
+2024-02-20 18:17:05,510 INFO    WriterThread:16428 [datastore.py:close():296] close: D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240220_181601-osddure8\run-osddure8.wandb
+2024-02-20 18:17:05,681 INFO    SenderThread:16428 [sender.py:finish():1572] shutting down sender
+2024-02-20 18:17:05,681 INFO    SenderThread:16428 [file_pusher.py:finish():175] shutting down file pusher
+2024-02-20 18:17:05,682 INFO    SenderThread:16428 [file_pusher.py:join():181] waiting for file pusher

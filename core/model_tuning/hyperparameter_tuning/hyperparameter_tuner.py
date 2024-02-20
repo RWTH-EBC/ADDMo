@@ -49,9 +49,6 @@ class OptunaTuner(AbstractHyParamTuner):
             hyperparameters = model.optuna_hyperparameter_suggest(trial)
             model.set_params(hyperparameters)
             score = self.scorer.score_validation(model, x_train_val, y_train_val)
-            WandbLogger.log({"score": score})
-            WandbLogger.log({"score2": score})
-            # WandbLogger.log(hyperparameters)
             return score
 
         study = optuna.create_study(direction="maximize")

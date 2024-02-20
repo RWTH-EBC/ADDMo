@@ -50,6 +50,7 @@ class WandbLogger(AbstractLogger):
                 dir=WandbLogger.directory,
                 **kwargs,
             )
+            wandb.define_metric("*", step_metric="global_step")
             return wandb.config
 
     @staticmethod
@@ -61,15 +62,22 @@ class WandbLogger(AbstractLogger):
     @staticmethod
     def log(log: dict):
         if WandbLogger.active:
+            processed_log = {}
             for name, data in log.items():
                 if isinstance(data, (pd.DataFrame, pd.Series)):
                     data = data.reset_index()
-                    log[name] = wandb.Table(dataframe=data)
-                if isinstance(data, (list, dict)):
-                    log[name] = wandb.Histogram(data)
-                if isinstance(data, str):
-                    log[name] = wandb.Html(data)
-            wandb.log(log)
+                    processed_log[name] = wandb.Table(dataframe=data)
+                elif isinstance(data, list):
+                    processed_log[name] = wandb.Histogram(data)
+                elif isinstance(data, str):
+                    processed_log[name] = wandb.Html(data)
+                elif isinstance(data, dict):
+                    # flatten the dictionary
+                    for key, value in data.items():
+                        processed_log[f"{name}.{key}"] = value
+                else:
+                    processed_log[name] = data
+            wandb.log(processed_log)
 
     @staticmethod
     def log_artifact(
@@ -84,7 +92,7 @@ class WandbLogger(AbstractLogger):
             filepath = None
             if art_type == "pkl":
                 filepath = os.path.join(WandbLogger.directory, name + ".pkl")
-                with open(filepath, 'wb') as f:
+                with open(filepath, "wb") as f:
                     pickle.dump(data, f)
             if art_type == "onnx":
                 model: AbstractMLModel = data
@@ -101,7 +109,7 @@ class WandbLogger(AbstractLogger):
 
             # actually log the artifact
             wandb.run.log_artifact(artifact)
-            artifact.wait()
+            # artifact.wait()
 
     @staticmethod
     def use_artifact(name: str, alias: str = "latest"):

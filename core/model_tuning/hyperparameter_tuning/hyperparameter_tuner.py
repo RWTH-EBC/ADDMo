@@ -1,6 +1,7 @@
 import inspect
 
 import optuna
+import wandb
 from sklearn.model_selection import GridSearchCV
 
 from core.model_tuning.models.abstract_model import AbstractMLModel
@@ -34,15 +35,6 @@ class OptunaTuner(AbstractHyParamTuner):
         Perform hyperparameter tuning using Optuna.
         """
 
-        ExperimentLogger.log(
-            {
-                "hyperparameter_range": inspect.getsource(
-                    model.optuna_hyperparameter_suggest
-                )
-            }
-        )
-
-
         def objective(trial):
             hyperparameters = model.optuna_hyperparameter_suggest(trial)
             model.set_params(hyperparameters)
@@ -55,23 +47,39 @@ class OptunaTuner(AbstractHyParamTuner):
             n_trials=self.config.hyperparameter_tuning_kwargs["n_trials"],
             n_jobs=-1,  # The number of parallel jobs. If this argument is set to -1, the number
             # is set to CPU count. Parallel jobs may fail sequential logging to wandb.
-            # callbacks=wandbc # logging to wandb, no logging if wandbc is None
         )
 
-        ExperimentLogger.log_artifact(study, "optuna_study", art_type="pkl")
-
-        # visualize study internals
-        ExperimentLogger.log({"optuna_plot_optimization_history":
-                                  optuna.visualization.plot_optimization_history(study)})
-        ExperimentLogger.log({"optuna_plot_parallel_coordinate":
-                                  optuna.visualization.plot_parallel_coordinate(study)})
-        ExperimentLogger.log({"optuna_plot_contour": optuna.visualization.plot_contour(study)})
-        ExperimentLogger.log({"optuna_plot_param_importances":
-                                  optuna.visualization.plot_param_importances(study)})
+        # logging
+        self._log_optuna_study(study, model)
 
         # convert optuna params to model params
         best_params = model.optuna_hyperparameter_suggest(study.best_trial)
         return best_params
+
+    @staticmethod
+    def _log_optuna_study(study, model):
+        ExperimentLogger.log_artifact(study, "optuna_study", art_type="pkl")
+        hyperparameter_range = {"hyperparameter_range": inspect.getsource(
+                    model.optuna_hyperparameter_suggest
+                )
+            }
+        study_results = {
+            "optuna_study_best_params": study.best_params,
+            "optuna_study_best_validation_score": study.best_value,
+        }
+        plots = {
+            "optuna_plot_optimization_history": optuna.visualization.plot_optimization_history(
+                study
+            ),
+            "optuna_plot_parallel_coordinate": optuna.visualization.plot_parallel_coordinate(
+                study
+            ),
+            "optuna_plot_contour": optuna.visualization.plot_contour(study),
+            "optuna_plot_param_importances": optuna.visualization.plot_param_importances(
+                study
+            ),
+        }
+        ExperimentLogger.log({**hyperparameter_range, **study_results, **plots})
 
 
 class GridSearchTuner(AbstractHyParamTuner):

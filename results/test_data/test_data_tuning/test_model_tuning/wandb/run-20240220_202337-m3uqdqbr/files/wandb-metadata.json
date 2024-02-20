@@ -1,8 +1,8 @@
 {
     "os": "Windows-10-10.0.19045-SP0",
     "python": "3.11.7",
-    "heartbeatAt": "2024-02-20T17:16:03.232521",
-    "startedAt": "2024-02-20T17:16:01.691353",
+    "heartbeatAt": "2024-02-20T19:23:39.076514",
+    "startedAt": "2024-02-20T19:23:37.154974",
     "docker": null,
     "cuda": null,
     "args": [],
@@ -12,7 +12,7 @@
     "codePath": "core\\executables\\model_tuning.py",
     "git": {
         "remote": "https://git-ce.rwth-aachen.de/ebc/ebc-general/machine-learning/addmo-automated-ml-regression.git",
-        "commit": "bb88d7471ac7d7e72f50ecbdab2ced863deea7fd"
+        "commit": "c33679c7cb4dd1eb443c52fc5ef939ad218a396d"
     },
     "email": "mraetz@eonerc.rwth-aachen.de",
     "root": "D:/04_GitRepos/addmo-extra",
@@ -36,7 +36,7 @@
     "disk": {
         "/": {
             "total": 703.2060508728027,
-            "used": 48.792701721191406
+            "used": 48.79276657104492
         }
     },
     "memory": {

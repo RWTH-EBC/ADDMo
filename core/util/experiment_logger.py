@@ -1,11 +1,12 @@
 import os
 from abc import ABC, abstractmethod
 import pickle
+import time
 
 import pandas as pd
 import wandb
 
-from core.model_tuning.models.abstract_model import AbstractMLModel
+from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 
 
 class AbstractLogger(ABC):
@@ -50,7 +51,7 @@ class WandbLogger(AbstractLogger):
                 dir=WandbLogger.directory,
                 **kwargs,
             )
-            wandb.define_metric("*", step_metric="global_step")
+
             return wandb.config
 
     @staticmethod

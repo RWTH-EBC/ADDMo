@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "D:\04_GitRepos\addmo-extra\core\executables\exe_data_tuning_auto.py", line 42, in <module>
+    ExperimentLogger.log_artifact(tuned_xy, name='tuned_xy', art_type='data')
+  File "D:\04_GitRepos\addmo-extra\core\util\experiment_logger.py", line 181, in log_artifact
+    WandbLogger.log_artifact(data, name, art_type)
+  File "D:\04_GitRepos\addmo-extra\core\util\experiment_logger.py", line 109, in log_artifact
+    artifact.add_file(filepath)
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\site-packages\wandb\sdk\artifacts\artifact.py", line 1156, in add_file
+    if not os.path.isfile(local_path):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen genericpath>", line 30, in isfile
+TypeError: stat: path should be string, bytes, os.PathLike or integer, not NoneType

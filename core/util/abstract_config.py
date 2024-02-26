@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from core.util.load_save import load_yaml_to_dict
+from core.util.load_save import load_yaml_to_dict, save_yaml_from_dict
 
 class BaseConfig(ABC):
     def load_yaml_to_class(self, path_to_yaml:dict):

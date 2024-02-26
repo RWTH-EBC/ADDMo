@@ -1,8 +1,8 @@
 import os
 import git
 import shutil
-from core.data_tuning.config.data_tuning_config import DataTuningFixedConfig
-from core.model_tuning.config.model_tuning_config import ModelTuningSetup
+from core.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
+from core.s3_model_tuning.config.model_tuning_config import ModelTuningSetup
 def root_dir():
     # Finds the root directory of the git repository
     return git.Repo('.', search_parent_directories=True).working_tree_dir
@@ -45,9 +45,9 @@ def _create_or_override_directory(path: str) -> str:
         pass
     else:
         # Path exists, ask for confirmation to delete current contents
-        response = input(f"The directory {path} already exists. Do you want to delete the current "
-                         f"contents? (y/n): ")
-        if response.lower() == 'y':
+        # response = input(f"The directory {path} already exists. Do you want to delete the current "
+        #                  f"contents? (y/n): ")
+        if True: #response.lower() == 'y': # Todo: uncomment for production
             # Delete the contents of the directory
             for filename in os.listdir(path):
                 file_path = os.path.join(path, filename)

@@ -1,0 +1,218 @@
+wandb_version: 1
+
+name_of_raw_data:
+  desc: null
+  value: test_data
+name_of_data_tuning_experiment:
+  desc: null
+  value: test_data_tuning
+name_of_model_tuning_experiment:
+  desc: null
+  value: test_model_tuning
+abs_path_to_data:
+  desc: null
+  value: D:\\04_GitRepos\\addmo-extra\\raw_input_data\\InputData.xlsx
+name_of_target:
+  desc: null
+  value: FreshAir Temperature
+start_train_val:
+  desc: null
+  value: 2016-08-01 00:00
+stop_train_val:
+  desc: null
+  value: 2016-08-14 23:45
+start_test:
+  desc: null
+  value: 2016-08-15 00:00
+end_test:
+  desc: null
+  value: 2016-08-16 23:45
+hyperparameter_tuning_type:
+  desc: null
+  value: OptunaTuner
+hyperparameter_tuning_kwargs:
+  desc: null
+  value:
+    n_trials: 10
+validation_score_mechanism:
+  desc: null
+  value: cv
+validation_score_mechanism_kwargs:
+  desc: null
+  value: null
+validation_score_splitting:
+  desc: null
+  value: KFold
+validation_score_splitting_kwargs:
+  desc: null
+  value: null
+validation_score_metric:
+  desc: null
+  value: r2
+validation_score_metric_kwargs:
+  desc: null
+  value: null
+models:
+  desc: null
+  value:
+  - MLP
+_wandb:
+  desc: null
+  value:
+    python_version: 3.11.7
+    cli_version: 0.16.3
+    framework: sklearn
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1708523261.345429
+    t:
+      1:
+      - 5
+      - 35
+      - 53
+      - 55
+      2:
+      - 5
+      - 35
+      - 53
+      - 55
+      3:
+      - 7
+      - 16
+      - 23
+      4: 3.11.7
+      5: 0.16.3
+      8:
+      - 3
+      - 5
+      13: windows-amd64
+    m:
+    - 1: global_step
+    - 1: xy_tuned_train_val._type
+      5: 1
+      6:
+      - 1
+    - 1: xy_tuned_train_val.sha256
+      5: 1
+      6:
+      - 1
+    - 1: xy_tuned_train_val.size
+      5: 1
+      6:
+      - 1
+    - 1: xy_tuned_train_val.artifact_path
+      5: 1
+      6:
+      - 1
+    - 1: xy_tuned_train_val._latest_artifact_path
+      5: 1
+      6:
+      - 1
+    - 1: xy_tuned_train_val.path
+      5: 1
+      6:
+      - 1
+    - 1: xy_tuned_train_val.ncols
+      5: 1
+      6:
+      - 1
+    - 1: xy_tuned_train_val.nrows
+      5: 1
+      6:
+      - 1
+    - 1: hyperparameter_range._type
+      5: 1
+      6:
+      - 1
+    - 1: hyperparameter_range.sha256
+      5: 1
+      6:
+      - 1
+    - 1: hyperparameter_range.size
+      5: 1
+      6:
+      - 1
+    - 1: hyperparameter_range.path
+      5: 1
+      6:
+      - 1
+    - 1: optuna_study_best_params\.n_layers
+      5: 1
+      6:
+      - 1
+    - 1: optuna_study_best_params\.n_units_l0
+      5: 1
+      6:
+      - 1
+    - 1: optuna_study_best_params\.n_units_l1
+      5: 1
+      6:
+      - 1
+    - 1: optuna_study_best_validation_score
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_optimization_history._type
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_optimization_history.sha256
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_optimization_history.size
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_optimization_history.path
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_parallel_coordinate._type
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_parallel_coordinate.sha256
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_parallel_coordinate.size
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_parallel_coordinate.path
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_contour._type
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_contour.sha256
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_contour.size
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_contour.path
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_param_importances._type
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_param_importances.sha256
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_param_importances.size
+      5: 1
+      6:
+      - 1
+    - 1: optuna_plot_param_importances.path
+      5: 1
+      6:
+      - 1

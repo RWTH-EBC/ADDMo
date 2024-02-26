@@ -8,7 +8,7 @@ from Functions.ErrorMetrics import *
 import ModelTuning as MT
 import SharedVariablesFunctions as SVF
 from ModelTuningRuntimeResults import ModelTuningRuntimeResults as MTRR
-from core.model_tuning.config.model_tuning_config import ModelTuningSetup as MTS
+from core.s3_model_tuning.config.model_tuning_config import ModelTuningSetup as MTS
 
 
 def embedded__recursive_feature_selection(

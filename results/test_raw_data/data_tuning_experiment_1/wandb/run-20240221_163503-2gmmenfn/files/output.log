@@ -1,0 +1,44 @@
+
+[I 2024-02-21 16:35:05,763] A new study created in memory with name: no-name-0236898a-1440-4646-a07f-b73fe40009a5
+[I 2024-02-21 16:35:34,502] Trial 2 finished with value: 0.8347588001123684 and parameters: {'n_layers': 1, 'n_units_l0': 31}. Best is trial 2 with value: 0.8347588001123684.
+[I 2024-02-21 16:35:37,192] Trial 4 finished with value: 0.8316242545225606 and parameters: {'n_layers': 3, 'n_units_l0': 25, 'n_units_l1': 20, 'n_units_l2': 52}. Best is trial 2 with value: 0.8347588001123684.
+[I 2024-02-21 16:35:37,316] Trial 1 finished with value: 0.82237411751312 and parameters: {'n_layers': 1, 'n_units_l0': 72}. Best is trial 2 with value: 0.8347588001123684.
+[I 2024-02-21 16:35:37,760] Trial 0 finished with value: 0.8319469705080501 and parameters: {'n_layers': 3, 'n_units_l0': 19, 'n_units_l1': 93, 'n_units_l2': 98}. Best is trial 2 with value: 0.8347588001123684.
+[I 2024-02-21 16:35:38,224] Trial 3 finished with value: 0.8254089073260618 and parameters: {'n_layers': 3, 'n_units_l0': 73, 'n_units_l1': 78, 'n_units_l2': 40}. Best is trial 2 with value: 0.8347588001123684.
+[I 2024-02-21 16:35:47,168] A new study created in memory with name: no-name-9e9be064-44be-42f7-a2d0-7b91ff4ce25d
+[I 2024-02-21 16:36:22,911] Trial 0 finished with value: 0.9885541778365187 and parameters: {'n_layers': 1, 'n_units_l0': 40}. Best is trial 0 with value: 0.9885541778365187.
+[I 2024-02-21 16:36:23,537] Trial 1 finished with value: 0.9889301259329825 and parameters: {'n_layers': 2, 'n_units_l0': 72, 'n_units_l1': 44}. Best is trial 1 with value: 0.9889301259329825.
+[I 2024-02-21 16:36:23,775] Trial 4 finished with value: 0.9875875097616756 and parameters: {'n_layers': 1, 'n_units_l0': 85}. Best is trial 1 with value: 0.9889301259329825.
+[I 2024-02-21 16:36:24,183] Trial 2 finished with value: 0.9876014036485494 and parameters: {'n_layers': 2, 'n_units_l0': 15, 'n_units_l1': 52}. Best is trial 1 with value: 0.9889301259329825.
+Traceback (most recent call last):
+  File "D:\04_GitRepos\addmo-extra\core\executables\exe_data_tuning_auto.py", line 36, in <module>
+    tuned_x = tuner.tune_auto()
+              ^^^^^^^^^^^^^^^^^
+  File "D:\04_GitRepos\addmo-extra\core\s1_data_tuning_auto\data_tuner_auto.py", line 25, in tune_auto
+    self.feature_construction()
+  File "D:\04_GitRepos\addmo-extra\core\s1_data_tuning_auto\data_tuner_auto.py", line 40, in feature_construction
+    x_created = fc.automatic_timeseries_target_lag_constructor(self.config, self.xy_raw)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\04_GitRepos\addmo-extra\core\s1_data_tuning_auto\feature_construction.py", line 52, in automatic_timeseries_target_lag_constructor
+    new_model = tuner.tune_model(config.model, x_processed, y)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\04_GitRepos\addmo-extra\core\s3_model_tuning\model_tuner.py", line 21, in tune_model
+    best_params = self.tuner.tune(
+                  ^^^^^^^^^^^^^^^^
+  File "D:\04_GitRepos\addmo-extra\core\s3_model_tuning\hyperparameter_tuning\hyperparameter_tuner.py", line 45, in tune
+    study.optimize(
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\site-packages\optuna\study\study.py", line 451, in optimize
+    _optimize(
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\site-packages\optuna\study\_optimize.py", line 85, in _optimize
+    with ThreadPoolExecutor(max_workers=n_jobs) as executor:
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\concurrent\futures\_base.py", line 647, in __exit__
+    self.shutdown(wait=True)
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\concurrent\futures\thread.py", line 235, in shutdown
+    t.join()
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\threading.py", line 1119, in join
+    self._wait_for_tstate_lock()
+  File "D:\01_Anaconda\envs\ADDMo-Extra\Lib\threading.py", line 1139, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+[I 2024-02-21 16:36:24,514] Trial 3 finished with value: 0.9892723208790488 and parameters: {'n_layers': 2, 'n_units_l0': 97, 'n_units_l1': 82}. Best is trial 3 with value: 0.9892723208790488.

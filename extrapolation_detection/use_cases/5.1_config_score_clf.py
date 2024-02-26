@@ -1,4 +1,4 @@
-from use_cases.score_clf import score_clf, score_clf_2D, evaluate
+from extrapolation_detection.use_cases.score_clf import score_clf, score_clf_2D, evaluate
 
 #######################################################################################################################
 # TODO: specifiy parameters here

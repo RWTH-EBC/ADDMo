@@ -1,6 +1,6 @@
 import numpy as np
-import machine_learning_util.data_handling as dh
-from detector import scoring
+import extrapolation_detection.machine_learning_util.data_handling as dh
+from extrapolation_detection.detector import scoring
 
 
 def score_clf(name: str, clf_name: str):

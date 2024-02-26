@@ -1,7 +1,8 @@
 import os
 
 import pandas
-import machine_learning_util.data_handling as dh
+
+import extrapolation_detection.machine_learning_util.data_handling as dh
 
 
 # creates csv with already available scores

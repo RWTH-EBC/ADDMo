@@ -2,8 +2,9 @@ import os
 
 from matplotlib import pyplot as plt
 
-import machine_learning_util.data_handling as dh
-from use_cases.plot import plot_multiple_3
+from extrapolation_detection.use_cases.plot import plot_multiple_3
+from extrapolation_detection.machine_learning_util import data_handling as dh
+
 
 #######################################################################################################################
 save_plot = True

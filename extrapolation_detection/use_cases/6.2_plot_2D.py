@@ -1,6 +1,7 @@
 import os
-import machine_learning_util.data_handling as dh
-from use_cases.plot import plot_single
+
+import extrapolation_detection.machine_learning_util.data_handling as dh
+from extrapolation_detection.use_cases.plot import plot_single
 
 #######################################################################################################################
 save_plot = True

@@ -1,8 +1,8 @@
 import numpy as np
 from keras.callbacks import EarlyStopping
 
-import machine_learning_util.data_handling as dh
-from machine_learning_util.ann import NetworkTrainer, load_network_trainer, TunerModel
+import extrapolation_detection.machine_learning_util.data_handling as dh
+from extrapolation_detection.machine_learning_util.ann import NetworkTrainer, load_network_trainer, TunerModel
 
 
 def train_ann(name: str, tuner: TunerModel, training_interval: list, val_fraction: float = 0.1,

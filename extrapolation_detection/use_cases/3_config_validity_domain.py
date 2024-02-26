@@ -1,4 +1,4 @@
-from use_cases.validity_domain import validity_domain, validity_domain_data
+from extrapolation_detection.use_cases.validity_domain import validity_domain, validity_domain_data
 
 #######################################################################################################################
 # TODO: specifiy parameters here

@@ -11,7 +11,7 @@ from keras import Sequential, models
 from keras.engine.base_layer import Layer
 from keras.layers import Dense, Rescaling, BatchNormalization
 
-from machine_learning_util.data_handling import TrainingData, write_pkl, read_pkl
+from extrapolation_detection.machine_learning_util.data_handling import TrainingData, write_pkl, read_pkl
 
 
 class TunerLayer(ABC):

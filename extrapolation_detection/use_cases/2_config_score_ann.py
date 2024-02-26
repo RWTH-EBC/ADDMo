@@ -1,4 +1,4 @@
-from use_cases.score_ann import score, carnot_model, score_2D
+from extrapolation_detection.use_cases.score_ann import score, carnot_model, score_2D
 
 #######################################################################################################################
 # TODO: specifiy parameters here

@@ -10,9 +10,9 @@ from numpy import ndarray
 
 from sklearn.gaussian_process.kernels import RBF
 
-from detector.detector import D_KNN, D_OCSVM, D_ParzenWindow, D_GP, D_IF, Detector, D_ABOD, D_LOF, D_MCD, D_GMM, \
+from extrapolation_detection.detector.detector import D_KNN, D_OCSVM, D_ParzenWindow, D_GP, D_IF, Detector, D_ABOD, D_LOF, D_MCD, D_GMM, \
     D_HBOS, D_ECOD, D_DSVDD, D_RNN, D_PCA, D_FB_KNN
-from detector.scoring import score_samples
+from extrapolation_detection.detector.scoring import score_samples
 
 
 class HyperOpt(ABC):

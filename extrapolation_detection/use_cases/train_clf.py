@@ -2,8 +2,8 @@ from typing import Callable
 
 import numpy as np
 
-import machine_learning_util.data_handling as dh
-from machine_learning_util.util import rearrange_training_data
+import extrapolation_detection.machine_learning_util.data_handling as dh
+from extrapolation_detection.machine_learning_util.util import rearrange_training_data
 
 
 def train_clf(name: str, clf_name: str, clf_callback: Callable, outlier_fraction: float, score: str = 'fbeta',

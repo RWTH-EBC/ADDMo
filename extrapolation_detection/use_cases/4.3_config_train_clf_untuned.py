@@ -1,7 +1,7 @@
 from sklearn.gaussian_process.kernels import RBF
 
-from detector.detector import D_KNN, D_GP, D_ParzenWindow, D_OCSVM, D_IF
-from use_cases.train_clf_untuned import train_clf_untuned
+from extrapolation_detection.detector.detector import D_KNN, D_GP, D_ParzenWindow, D_OCSVM, D_IF
+from extrapolation_detection.use_cases.train_clf_untuned import train_clf_untuned
 
 #######################################################################################################################
 # TODO: specifiy parameters here

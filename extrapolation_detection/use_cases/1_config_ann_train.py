@@ -1,5 +1,5 @@
-from machine_learning_util.ann import TunerModel, TunerBatchNormalizing, TunerRescaling, TunerDense
-from use_cases.train_ann import train_ann
+from extrapolation_detection.machine_learning_util.ann import TunerModel, TunerBatchNormalizing, TunerRescaling, TunerDense
+from extrapolation_detection.use_cases.train_ann import train_ann
 
 #######################################################################################################################
 

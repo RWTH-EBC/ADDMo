@@ -2,8 +2,8 @@ import math
 
 import numpy as np
 
-import machine_learning_util.data_handling as dh
-from detector import scoring
+import extrapolation_detection.machine_learning_util.data_handling as dh
+from extrapolation_detection.detector import scoring
 
 
 def validity_domain(name: str, outlier_threshold: float, threshold_is_fraction: bool=True):

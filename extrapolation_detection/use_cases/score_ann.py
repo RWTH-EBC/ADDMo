@@ -2,8 +2,8 @@ from typing import Callable
 
 import numpy as np
 
-import machine_learning_util.ann
-import machine_learning_util.data_handling as dh
+from extrapolation_detection import machine_learning_util
+import extrapolation_detection.machine_learning_util.data_handling as dh
 
 
 def score(name: str):

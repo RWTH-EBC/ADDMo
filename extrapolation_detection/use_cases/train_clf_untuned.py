@@ -2,9 +2,9 @@ import math
 
 import numpy as np
 
-import machine_learning_util.data_handling as dh
-from detector.detector import D_KNN, D_ParzenWindow, D_OCSVM, D_GP, D_IF
-from machine_learning_util.util import rearrange_training_data
+import extrapolation_detection.machine_learning_util.data_handling as dh
+from extrapolation_detection.detector.detector import D_KNN, D_ParzenWindow, D_OCSVM, D_GP, D_IF
+from extrapolation_detection.machine_learning_util.util import rearrange_training_data
 
 
 def train_clf_untuned(name: str, clf_name: str, clf: D_KNN or D_ParzenWindow or D_OCSVM or D_GP or D_IF,

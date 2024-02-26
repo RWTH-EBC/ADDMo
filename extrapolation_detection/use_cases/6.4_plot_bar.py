@@ -3,8 +3,8 @@ import os
 import pandas as pd
 from matplotlib import pyplot as plt
 
-import machine_learning_util.data_handling as dh
-from use_cases.plot import plot_multiple, plot_bar_plot
+import extrapolation_detection.machine_learning_util.data_handling as dh
+from extrapolation_detection.use_cases.plot import plot_multiple, plot_bar_plot
 
 #######################################################################################################################
 save_plot = True

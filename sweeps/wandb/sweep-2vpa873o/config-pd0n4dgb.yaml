@@ -1,0 +1,31 @@
+wandb_version: 1
+
+abs_path_to_data:
+  value: D:\\\\04_GitRepos\\\\addmo-extra\\\\raw_input_data\\\\InputData.xlsx
+end_test:
+  value: 2016-08-16 23:45
+hyperparameter_tuning_kwargs:
+  value:
+    n_trials: 5
+hyperparameter_tuning_type:
+  value: OptunaTuner
+name_of_data_tuning_experiment:
+  value: test_data_tuning
+name_of_model_tuning_experiment:
+  value: test_model_tuning
+name_of_raw_data:
+  value: test_data
+name_of_target:
+  value: FreshAir Temperature
+start_test:
+  value: 2016-08-15 00:00
+start_train_val:
+  value: 2016-08-01 00:00
+stop_train_val:
+  value: 2016-08-14 23:45
+validation_score_mechanism:
+  value: cv
+validation_score_metric:
+  value: r2
+validation_score_splitting:
+  value: KFold

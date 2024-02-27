@@ -11,7 +11,7 @@ from keras import Sequential, models
 from keras.engine.base_layer import Layer
 from keras.layers import Dense, Rescaling, BatchNormalization
 
-from extrapolation_detection.machine_learning_util.data_handling import TrainingData, write_pkl, read_pkl
+from extrapolation_detection.machine_learning_util.data_handling import available_data, write_pkl, read_pkl
 
 
 class TunerLayer(ABC):
@@ -198,7 +198,7 @@ class NeuralNetwork:
         # update the name
         self.name = self.sequential.name
 
-    def fit(self, training_data: TrainingData, **kwargs):
+    def fit(self, training_data: available_data, **kwargs):
         """ trains the ann on data """
 
         assert self.sequential is not None, 'Please call build_sequential() before fitting.'
@@ -241,7 +241,7 @@ class NeuralNetwork:
 
         return f'{self.directory}//{self.name}'
 
-    def test(self, training_data: TrainingData, metric: str = 'rmse') -> float:
+    def test(self, training_data: available_data, metric: str = 'rmse') -> float:
         """ Tests the ann on a given test dataset and returns the score """
 
         x_test = training_data.xTest
@@ -321,7 +321,7 @@ class NetworkTrainer:
 
             self.neural_networks.append(neural_network)
 
-    def fit(self, training_data: TrainingData, **kwargs):
+    def fit(self, training_data: available_data, **kwargs):
         """ trains all sequential Keras models that are stored in neural_networks """
 
         assert len(self.neural_networks) != 0, 'Make sure to call build() first.'
@@ -334,7 +334,7 @@ class NetworkTrainer:
 
         self.sort(training_data)
 
-    def sort(self, training_data: TrainingData):
+    def sort(self, training_data: available_data):
         """ sorts all sequential Keras models that are stored in neural_networks based on their score """
 
         scores = dict()

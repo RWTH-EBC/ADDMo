@@ -27,7 +27,7 @@ class ModelTuningSetup(BaseConfig):
         self.end_test: str  = "2016-08-16 23:45"
 
         self.hyperparameter_tuning_type: str  = "OptunaTuner"  # e.g. OptunaTuner, GridSearchTuner, or NoTuningTuner
-        self.hyperparameter_tuning_kwargs: dict = {"n_trials": 10}  # kwargs for the tuner
+        self.hyperparameter_tuning_kwargs: dict = {"n_trials": 2}  # kwargs for the tuner
 
         self.validation_score_mechanism:str = "cv" # e.g. cross validation, holdout, etc.
         self.validation_score_mechanism_kwargs: dict = None # kwargs for the mechanism

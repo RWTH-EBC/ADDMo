@@ -16,6 +16,7 @@ class ModelTuner:
         self.tuner = HyperparameterTunerFactory.tuner_factory(self.config, self.scorer)
 
     def tune_model(self, model_name: str, x_train_val, y_train_val):
+        '''Tune a model and return the best model fitted to training and validation data.'''
         model = ModelFactory.model_factory(model_name)
 
         best_params = self.tuner.tune(

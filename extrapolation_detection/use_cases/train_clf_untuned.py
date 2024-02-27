@@ -25,16 +25,16 @@ def train_clf_untuned(name: str, clf_name: str, clf: D_KNN or D_ParzenWindow or 
 
     # Load data
     data: dict = dh.read_pkl('data', name)
-    validity_domain: dict = dh.read_pkl('validity_domain', name)
+    true_validity_classified_train_test_val: dict = dh.read_pkl('true_validity_classified_train_test_val', name)
 
     # Prepare data
-    x_train = data['TrainingData'].xTrain
-    x_val = data['TrainingData'].xValid
-    x_test = data['TrainingData'].xTest
+    x_train = data['available_data'].xTrain
+    x_val = data['available_data'].xValid
+    x_test = data['available_data'].xTest
     x_val = np.concatenate((x_val, x_test))
-    y_train = validity_domain['ground_truth_train']
-    y_val = validity_domain['ground_truth_val']
-    y_test = validity_domain['ground_truth_test']
+    y_train = true_validity_classified_train_test_val['ground_truth_train']
+    y_val = true_validity_classified_train_test_val['ground_truth_val']
+    y_test = true_validity_classified_train_test_val['ground_truth_test']
     y_val = np.concatenate((y_val, y_test))
 
     # Preprocess data

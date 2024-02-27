@@ -30,9 +30,11 @@ xy_boundaries = {
 # Fit the classifier to the data
 classifier.fit(xy, np.random.randint(0, 2, 10))
 
-num_points = 5
+num_points = 100
+
 
 quantifier = ExplorationQuantifier(xy, xy_boundaries)
 quantifier.generate_point_grid(num_points)
+# quantifier.generate_random_points(num_points)
 volume_percentage = quantifier.calculate_exploration_percentages(classifier)
-quantifier.plot_scatter()
+quantifier.plot_scatter_extrapolation_share_2D()

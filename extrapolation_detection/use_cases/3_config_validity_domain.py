@@ -1,4 +1,4 @@
-from extrapolation_detection.use_cases.validity_domain import validity_domain, validity_domain_data
+from extrapolation_detection.use_cases.validity_domain import true_validity_classified_train_val_test, true_validity_classified_remaining
 
 #######################################################################################################################
 # TODO: specifiy parameters here
@@ -17,8 +17,8 @@ threshold_is_fraction = False
 #######################################################################################################################
 name = 'Carnot_uncertain_mid_32Neurons'
 
-validity_domain(name, outlier_threshold, threshold_is_fraction)
-validity_domain_data(name)
+true_validity_classified_train_val_test(name, outlier_threshold, threshold_is_fraction)
+true_validity_classified_remaining(name)
 #######################################################################################################################
 # name = 'Carnot_uncertain_long'
 #

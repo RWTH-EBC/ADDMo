@@ -41,7 +41,7 @@ def train_ann(name: str, tuner: TunerModel, training_interval: list, val_fractio
     data = dh.load_csv(name, path='data')
 
     # Preprocess data
-    data = dh.split_data(data, training_interval, val_fraction, test_fraction, random_state=1, shuffle=shuffle)
+    data = dh.split_simulation_data(data, training_interval, val_fraction, test_fraction, random_state=1, shuffle=shuffle)
     dh.write_pkl(data, 'data', directory=name, override=False)
 
     # Specify ANN Training
@@ -49,17 +49,17 @@ def train_ann(name: str, tuner: TunerModel, training_interval: list, val_fractio
     trainer.build(n=n, keras_tuner=tuner)
 
     # Fit ANN to training data
-    trainer.fit(training_data=data['TrainingData'], epochs=epochs, batch_size=batch_size, verbose=1,
+    trainer.fit(training_data=data['available_data'], epochs=epochs, batch_size=batch_size, verbose=1,
                 callbacks=callbacks)
     trainer.save(name, override=False)
     trainer = load_network_trainer(name, name)
 
     # Score ANN on data
     errors = dict()
-    errors['train_error'] = trainer.best.prediction_error(data['TrainingData'].xTrain, data['TrainingData'].yTrain,
+    errors['train_error'] = trainer.best.prediction_error(data['available_data'].xTrain, data['available_data'].yTrain,
                                                           metric='mae')
-    errors['val_error'] = trainer.best.prediction_error(data['TrainingData'].xValid, data['TrainingData'].yValid,
+    errors['val_error'] = trainer.best.prediction_error(data['available_data'].xValid, data['available_data'].yValid,
                                                         metric='mae')
-    errors['test_error'] = trainer.best.prediction_error(data['TrainingData'].xTest, data['TrainingData'].yTest,
+    errors['test_error'] = trainer.best.prediction_error(data['available_data'].xTest, data['available_data'].yTest,
                                                          metric='mae')
     dh.write_pkl(errors, 'errors', directory=name, override=False)

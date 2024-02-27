@@ -21,7 +21,7 @@ def score(name: str):
 
     # Score
     score_dct = dict()
-    score_dct['errors'] = ann.prediction_error(data['x_data'], data['y_data'], metric='mae')
+    score_dct['errors'] = ann.prediction_error(data['non_available_data'].x_remaining, data['non_available_data'].y_remaining, metric='mae')
     dh.write_pkl(score_dct, 'data_error', name, override=False)
 
 
@@ -43,14 +43,14 @@ def score_2D(name: str, model: Callable, contour_detail_error: int = 100):
     data: dict = dh.read_pkl('data', name)
 
     # Get bounds of 2D plot
-    left = np.amin(np.concatenate((data['TrainingData'].xTrain, data['TrainingData'].xValid,
-                                   data['TrainingData'].xTest, data['x_data']))[:, 0])
-    right = np.amax(np.concatenate((data['TrainingData'].xTrain, data['TrainingData'].xValid,
-                                    data['TrainingData'].xTest, data['x_data']))[:, 0])
-    bottom = np.amin(np.concatenate((data['TrainingData'].xTrain, data['TrainingData'].xValid,
-                                     data['TrainingData'].xTest, data['x_data']))[:, 1])
-    top = np.amax(np.concatenate((data['TrainingData'].xTrain, data['TrainingData'].xValid,
-                                  data['TrainingData'].xTest, data['x_data']))[:, 1])
+    left = np.amin(np.concatenate((data['available_data'].xTrain, data['available_data'].xValid,
+                                   data['available_data'].xTest, data['non_available_data'].x_remaining))[:, 0])
+    right = np.amax(np.concatenate((data['available_data'].xTrain, data['available_data'].xValid,
+                                    data['available_data'].xTest, data['non_available_data'].x_remaining))[:, 0])
+    bottom = np.amin(np.concatenate((data['available_data'].xTrain, data['available_data'].xValid,
+                                     data['available_data'].xTest, data['non_available_data'].x_remaining))[:, 1])
+    top = np.amax(np.concatenate((data['available_data'].xTrain, data['available_data'].xValid,
+                                  data['available_data'].xTest, data['non_available_data'].x_remaining))[:, 1])
 
     # Generate Meshgrid
     xspace = np.linspace(left, right, contour_detail_error)
@@ -58,15 +58,15 @@ def score_2D(name: str, model: Callable, contour_detail_error: int = 100):
     xx, yy = np.meshgrid(xspace, yspace)
 
     score_2D_dct = dict()
-    score_2D_dct['xx_error'] = xx
-    score_2D_dct['yy_error'] = yy
-    contour_error = np.zeros((contour_detail_error, contour_detail_error))
+    score_2D_dct['var1_meshgrid'] = xx
+    score_2D_dct['var2_meshgrid'] = yy
+    error_on_mesh = np.zeros((contour_detail_error, contour_detail_error))
     # Evaluate meshgrid with ANN and underlying model
     for i in range(0, contour_detail_error):
         for j in range(0, contour_detail_error):
-            contour_error[i, j] = np.sqrt(
+            error_on_mesh[i, j] = np.sqrt(
                 np.array(ann.predict(np.array([xx[i, j], yy[i, j]]).reshape(1, -1)) - model(xx[i, j], yy[i, j])) ** 2)
-    score_2D_dct['contour_error'] = contour_error
+    score_2D_dct['error_on_mesh'] = error_on_mesh
 
     dh.write_pkl(score_2D_dct, 'errors_2D', name, override=False)
 

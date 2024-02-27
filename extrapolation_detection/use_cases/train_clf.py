@@ -30,12 +30,12 @@ def train_clf(name: str, clf_name: str, clf_callback: Callable, outlier_fraction
 
     # Load data
     data: dict = dh.read_pkl('data', name)
-    validity_domain: dict = dh.read_pkl('validity_domain', name)
+    validity_domain: dict = dh.read_pkl('true_validity_classified_train_test_val', name)
 
     # Prepare data
-    x_train = data['TrainingData'].xTrain
-    x_val = data['TrainingData'].xValid
-    x_test = data['TrainingData'].xTest
+    x_train = data['available_data'].xTrain
+    x_val = data['available_data'].xValid
+    x_test = data['available_data'].xTest
     x_val = np.concatenate((x_val, x_test))
     y_train = validity_domain['ground_truth_train']
     y_val = validity_domain['ground_truth_val']
@@ -82,18 +82,18 @@ def train_clf_ideal(name, clf_name, clf_callback, outlier_fraction, score='fbeta
 
     # Load data
     data: dict = dh.read_pkl('data', name)
-    validity_domain: dict = dh.read_pkl('validity_domain', name)
+    validity_domain: dict = dh.read_pkl('true_validity_classified_train_test_val', name)
 
     # Prepare data
-    x_train = data['TrainingData'].xTrain
-    x_val = data['TrainingData'].xValid
-    x_test = data['TrainingData'].xTest
-    x_data = data['x_data']
-    x_val = np.concatenate((x_val, x_test, x_data))
+    x_train = data['available_data'].xTrain
+    x_val = data['available_data'].xValid
+    x_test = data['available_data'].xTest
+    x_remaining = data['non_available_data'].x_remaining
+    x_val = np.concatenate((x_val, x_test, x_remaining))
     y_train = validity_domain['ground_truth_train']
     y_val = validity_domain['ground_truth_val']
     y_test = validity_domain['ground_truth_test']
-    y_data = dh.read_pkl('ground_truth_data', name)
+    y_data = dh.read_pkl('true_validity_classified_remaining', name)
     y_val = np.concatenate((y_val, y_test, y_data))
 
     # Preprocess data

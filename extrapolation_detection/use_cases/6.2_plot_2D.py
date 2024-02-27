@@ -56,12 +56,12 @@ for clf_name in clf_names:
         data = dh.read_pkl('data', name)
         errors = dh.read_pkl('errors', name)
         data_error = dh.read_pkl('data_error', name)
-        validity_domain = dh.read_pkl('validity_domain', name)
+        true_validity_classified_train_test_val = dh.read_pkl('true_validity_classified_train_test_val', name)
         score_2D_dct = dh.read_pkl('errors_2D', name)
-        validity_domain_dct = dh.read_pkl('validity_domain', name)
+        true_validity_classified_train_test_val_dct = dh.read_pkl('true_validity_classified_train_test_val', name)
         novelty_2D_dct = dh.read_pkl('errors_2D_' + clf_name, name)
         threshold = dh.read_pkl(clf_name + '_threshold', name)
 
         # Plot data
-        plot_single(data, errors, data_error, score_2D_dct, validity_domain_dct, novelty_2D_dct, threshold, name + '_' +
+        plot_single(data, errors, data_error, score_2D_dct, true_validity_classified_train_test_val_dct, novelty_2D_dct, threshold, name + '_' +
                     clf_name + '.pdf', save_plot)

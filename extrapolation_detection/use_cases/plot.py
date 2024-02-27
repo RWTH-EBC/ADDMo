@@ -51,20 +51,20 @@ def plot_single(data: dict, errors: dict, data_error: dict, score_2D_dct: dict, 
     )
 
     # Plot data
-    axs.scatter(data['x_data'][:, 0], data['x_data'][:, 1], c=data_error['errors'], norm=divnorm,
+    axs.scatter(data['non_available_data'].x_remaining[:, 0], data['non_available_data'].x_remaining[:, 1], c=data_error['errors'], norm=divnorm,
                 cmap=colors.LinearSegmentedColormap.from_list('gwr', [green, darkgrey, red], N=256), marker='.',
                 label='Evaluation Data')
     # Plot training
-    axs.scatter(data['TrainingData'].xTrain[:, 0], data['TrainingData'].xTrain[:, 1], c=errors['train_error'],
+    axs.scatter(data['available_data'].xTrain[:, 0], data['available_data'].xTrain[:, 1], c=errors['train_error'],
                 norm=divnorm,
                 cmap=colors.LinearSegmentedColormap.from_list('gwr', [green, darkgrey, red], N=256), edgecolors=black,
                 linewidths=1.5, label='Training Data')
     # Plot validation and testing
-    axs.scatter(data['TrainingData'].xValid[:, 0], data['TrainingData'].xValid[:, 1], c=errors['val_error'],
+    axs.scatter(data['available_data'].xValid[:, 0], data['available_data'].xValid[:, 1], c=errors['val_error'],
                 norm=divnorm,
                 cmap=colors.LinearSegmentedColormap.from_list('gwr', [green, darkgrey, red], N=256), edgecolors=blue,
                 linewidths=1.5, label='Validation Data')
-    axs.scatter(data['TrainingData'].xTest[:, 0], data['TrainingData'].xTest[:, 1], c=errors['test_error'],
+    axs.scatter(data['available_data'].xTest[:, 0], data['available_data'].xTest[:, 1], c=errors['test_error'],
                 norm=divnorm,
                 cmap=colors.LinearSegmentedColormap.from_list('gwr', [green, darkgrey, red], N=256), edgecolors=blue,
                 linewidths=1.5)
@@ -83,13 +83,13 @@ def plot_single(data: dict, errors: dict, data_error: dict, score_2D_dct: dict, 
     # cb.ax.set_yticklabels([0, 1, 2, 3, 4, 5, 6, 7, 8])
 
     # Validity domain
-    c1 = axs.contour(score_2D_dct['xx_error'], score_2D_dct['yy_error'], score_2D_dct['contour_error'],
+    c1 = axs.contour(score_2D_dct['var1_meshgrid'], score_2D_dct['var2_meshgrid'], score_2D_dct['error_on_mesh'],
                      levels=[validity_domain_dct['error_threshold']],
                      linewidths=2.5, colors=[petrol])
     h1, _ = c1.legend_elements()
 
     # Classifier decision boundary
-    c2 = axs.contour(novelty_2D_dct['xx_error'], novelty_2D_dct['yy_error'], novelty_2D_dct['contour_ns_scores'],
+    c2 = axs.contour(novelty_2D_dct['var1_meshgrid'], novelty_2D_dct['var2_meshgrid'], novelty_2D_dct['contour_ns_scores'],
                      levels=[threshold], linewidths=2.5, colors=[violett], linestyles='solid')
     h2, _ = c2.legend_elements()
 
@@ -161,20 +161,20 @@ def _plot_subplot(data: dict, errors: dict, data_error: dict, score_2D_dct: dict
     markersize = 20
 
     # Plot data
-    axs.scatter(data['x_data'][:, 0], data['x_data'][:, 1], c=data_error['errors'], norm=divnorm,
+    axs.scatter(data['non_available_data'].x_remaining[:, 0], data['non_available_data'].x_remaining[:, 1], c=data_error['errors'], norm=divnorm,
                 cmap=colors.LinearSegmentedColormap.from_list('gwr', [green, darkgrey, red], N=256), marker='.',
                 label='Evaluation Data', alpha=1)
     # Plot training
-    axs.scatter(data['TrainingData'].xTrain[:, 0], data['TrainingData'].xTrain[:, 1], c=errors['train_error'],
+    axs.scatter(data['available_data'].xTrain[:, 0], data['available_data'].xTrain[:, 1], c=errors['train_error'],
                 norm=divnorm,
                 cmap=colors.LinearSegmentedColormap.from_list('gwr', [green, darkgrey, red], N=256), edgecolors=black,
                 linewidths=1.5, label='Training Data', s=markersize)
     # Plot validation and testing
-    axs.scatter(data['TrainingData'].xValid[:, 0], data['TrainingData'].xValid[:, 1], c=errors['val_error'],
+    axs.scatter(data['available_data'].xValid[:, 0], data['available_data'].xValid[:, 1], c=errors['val_error'],
                 norm=divnorm,
                 cmap=colors.LinearSegmentedColormap.from_list('gwr', [green, darkgrey, red], N=256), edgecolors=blue,
                 linewidths=1.5, label='Validation Data', s=markersize)
-    axs.scatter(data['TrainingData'].xTest[:, 0], data['TrainingData'].xTest[:, 1], c=errors['test_error'],
+    axs.scatter(data['available_data'].xTest[:, 0], data['available_data'].xTest[:, 1], c=errors['test_error'],
                 norm=divnorm,
                 cmap=colors.LinearSegmentedColormap.from_list('gwr', [green, darkgrey, red], N=256), edgecolors=blue,
                 linewidths=1.5, s=markersize)
@@ -189,13 +189,13 @@ def _plot_subplot(data: dict, errors: dict, data_error: dict, score_2D_dct: dict
     # cb.ax.set_yticklabels([0, 1, 2, 3, 4, 5, 6, 7, 8])
 
     # Validity domain
-    c1 = axs.contour(score_2D_dct['xx_error'], score_2D_dct['yy_error'], score_2D_dct['contour_error'],
+    c1 = axs.contour(score_2D_dct['var1_meshgrid'], score_2D_dct['var2_meshgrid'], score_2D_dct['error_on_mesh'],
                      levels=[validity_domain_dct['error_threshold']],
                      linewidths=2.5, colors=[petrol])
     h1, _ = c1.legend_elements()
 
     # Classifier decision boundary
-    c2 = axs.contour(novelty_2D_dct['xx_error'], novelty_2D_dct['yy_error'], novelty_2D_dct['contour_ns_scores'],
+    c2 = axs.contour(novelty_2D_dct['var1_meshgrid'], novelty_2D_dct['var2_meshgrid'], novelty_2D_dct['contour_ns_scores'],
                      levels=[threshold], linewidths=2.5, colors=[violett], linestyles='solid')
     h2, _ = c2.legend_elements()
 

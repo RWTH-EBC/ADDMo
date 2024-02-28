@@ -10,15 +10,17 @@ from numpy import ndarray
 
 from sklearn.gaussian_process.kernels import RBF
 
-from extrapolation_detection.detector.detector import D_KNN, D_OCSVM, D_ParzenWindow, D_GP, D_IF, Detector, D_ABOD, D_LOF, D_MCD, D_GMM, \
+from extrapolation_detection.detector.detectors import D_KNN, D_OCSVM, D_ParzenWindow, D_GP, D_IF, \
+    D_ABOD, D_LOF, D_MCD, D_GMM, \
     D_HBOS, D_ECOD, D_DSVDD, D_RNN, D_PCA, D_FB_KNN
+from extrapolation_detection.detector.abstract_detector import AbstractDetector
 from extrapolation_detection.detector.scoring import score_samples
 
 
-class HyperOpt(ABC):
+class AbstractHyper(ABC):
     """Abstract class for hyperparameter optimization"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, outlier_fraction: float= 0.05, beta: float = 1, score_name: str = 'fbeta'):
         """
 
         Parameters
@@ -103,7 +105,7 @@ class HyperOpt(ABC):
 
     @abstractmethod
     def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None) \
-            -> tuple[Detector, float]:
+            -> tuple[AbstractDetector, float]:
         """Get classifier with optimized hyperparameters
 
         Parameters
@@ -120,13 +122,13 @@ class HyperOpt(ABC):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         pass
 
 
-class Hyper_KNN(HyperOpt):
+class Hyper_KNN(AbstractHyper):
     """Hyperparameter optimization for k nearest neighbors"""
 
     def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
@@ -203,7 +205,7 @@ class Hyper_KNN(HyperOpt):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         # Data assignment
@@ -230,7 +232,7 @@ class Hyper_KNN(HyperOpt):
         return clf, nscores_threshold
 
 
-class Hyper_FB_KNN(HyperOpt):
+class Hyper_FB_KNN(AbstractHyper):
     """Hyperparameter optimization for feature bagging using k nearest neighbors"""
 
     def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
@@ -310,7 +312,7 @@ class Hyper_FB_KNN(HyperOpt):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         # Data assignment
@@ -340,7 +342,7 @@ class Hyper_FB_KNN(HyperOpt):
         return clf, nscores_threshold
 
 
-class Hyper_LOF(HyperOpt):
+class Hyper_LOF(AbstractHyper):
     """Hyperparameter optimization for k nearest neighbors"""
 
     def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
@@ -415,7 +417,7 @@ class Hyper_LOF(HyperOpt):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         # Data assignment
@@ -439,7 +441,7 @@ class Hyper_LOF(HyperOpt):
         return clf, nscores_threshold
 
 
-class Hyper_ABOD(HyperOpt):
+class Hyper_ABOD(AbstractHyper):
     """Hyperparameter optimization for angle based outlier detection"""
 
     def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
@@ -512,7 +514,7 @@ class Hyper_ABOD(HyperOpt):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         # Data assignment
@@ -533,7 +535,7 @@ class Hyper_ABOD(HyperOpt):
         return clf, nscores_threshold
 
 
-class Hyper_GMM(HyperOpt):
+class Hyper_GMM(AbstractHyper):
     """Hyperparameter optimization for gaussian mixture model"""
 
     def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
@@ -606,7 +608,7 @@ class Hyper_GMM(HyperOpt):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         # Data assignment
@@ -627,7 +629,7 @@ class Hyper_GMM(HyperOpt):
         return clf, nscores_threshold
 
 
-class Hyper_HBOS(HyperOpt):
+class Hyper_HBOS(AbstractHyper):
     """Hyperparameter optimization for histogram-based outlier detection"""
 
     def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
@@ -700,7 +702,7 @@ class Hyper_HBOS(HyperOpt):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         # Data assignment
@@ -721,7 +723,7 @@ class Hyper_HBOS(HyperOpt):
         return clf, nscores_threshold
 
 
-class Hyper_RNN(HyperOpt):
+class Hyper_RNN(AbstractHyper):
     """Hyperparameter optimization for Auto Encoder / Replicator Neural Network"""
 
     def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
@@ -794,7 +796,7 @@ class Hyper_RNN(HyperOpt):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         # Data assignment
@@ -815,7 +817,7 @@ class Hyper_RNN(HyperOpt):
         return clf, nscores_threshold
 
 
-class Hyper_PCA(HyperOpt):
+class Hyper_PCA(AbstractHyper):
     """Hyperparameter optimization for Principal Component Analysis"""
 
     def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
@@ -888,7 +890,7 @@ class Hyper_PCA(HyperOpt):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         # Data assignment
@@ -909,7 +911,7 @@ class Hyper_PCA(HyperOpt):
         return clf, nscores_threshold
 
 
-class Hyper_MCD(HyperOpt):
+class Hyper_MCD(AbstractHyper):
     """Hyperparameter optimization for minimum covariance determinant"""
 
     def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
@@ -974,7 +976,7 @@ class Hyper_MCD(HyperOpt):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         # Data assignment
@@ -993,7 +995,7 @@ class Hyper_MCD(HyperOpt):
         return clf, nscores_threshold
 
 
-class Hyper_ECOD(HyperOpt):
+class Hyper_ECOD(AbstractHyper):
     """Hyperparameter optimization for Empirical Cumulative Distribution Functions (ECOD)"""
 
     def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
@@ -1058,7 +1060,7 @@ class Hyper_ECOD(HyperOpt):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         # Data assignment
@@ -1077,7 +1079,7 @@ class Hyper_ECOD(HyperOpt):
         return clf, nscores_threshold
 
 
-class Hyper_DSVDD(HyperOpt):
+class Hyper_DSVDD(AbstractHyper):
     """Hyperparameter optimization for Deep One-Class Classification"""
 
     def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
@@ -1150,7 +1152,7 @@ class Hyper_DSVDD(HyperOpt):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         # Data assignment
@@ -1171,7 +1173,7 @@ class Hyper_DSVDD(HyperOpt):
         return clf, nscores_threshold
 
 
-class Hyper_OCSVM(HyperOpt):
+class Hyper_OCSVM(AbstractHyper):
     """Hyperparameter optimization for one class support vector machine"""
 
     def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
@@ -1248,7 +1250,7 @@ class Hyper_OCSVM(HyperOpt):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         # Data assignment
@@ -1270,7 +1272,7 @@ class Hyper_OCSVM(HyperOpt):
         return clf, nscores_threshold
 
 
-class Hyper_KDE(HyperOpt):
+class Hyper_KDE(AbstractHyper):
     """Hyperparameter optimization for kernel density estimation"""
 
     def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
@@ -1342,7 +1344,7 @@ class Hyper_KDE(HyperOpt):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         # Data assignment
@@ -1363,7 +1365,7 @@ class Hyper_KDE(HyperOpt):
         return clf, nscores_threshold
 
 
-class Hyper_GP(HyperOpt):
+class Hyper_GP(AbstractHyper):
     """Hyperparameter optimization for gaussian process regression"""
 
     def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
@@ -1436,7 +1438,7 @@ class Hyper_GP(HyperOpt):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         # Data assignment
@@ -1458,7 +1460,7 @@ class Hyper_GP(HyperOpt):
         return clf, nscores_threshold
 
 
-class Hyper_IF(HyperOpt):
+class Hyper_IF(AbstractHyper):
     """Hyperparameter optimization for isolation forest"""
 
     def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
@@ -1530,7 +1532,7 @@ class Hyper_IF(HyperOpt):
 
         Returns
         -------
-         tuple[Detector, float]
+         tuple[AbstractDetector, float]
             Classifier and novelty detection threshold
         """
         # Data assignment

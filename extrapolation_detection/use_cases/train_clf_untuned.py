@@ -3,7 +3,7 @@ import math
 import numpy as np
 
 import extrapolation_detection.machine_learning_util.data_handling as dh
-from extrapolation_detection.detector.detector import D_KNN, D_ParzenWindow, D_OCSVM, D_GP, D_IF
+from extrapolation_detection.detector.detectors import D_KNN, D_ParzenWindow, D_OCSVM, D_GP, D_IF
 from extrapolation_detection.machine_learning_util.util import rearrange_training_data
 
 

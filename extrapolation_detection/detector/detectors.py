@@ -24,137 +24,8 @@ from sklearn.gaussian_process.kernels import RBF
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.utils._testing import ignore_warnings
 
-
-class Detector(ABC):
-    """Abstract base novelty detection classifier"""
-
-    def __init__(self):
-        self.min = None
-        self.max = None
-        self.clf = None
-        self.threshold = None
-
-    def train(self, x_train: ndarray):
-        """Train classifier with training data
-
-        Parameters
-        ----------
-        x_train: ndarray
-            NxD matrix of training data, N: number of data points, D: number of dimensions
-        """
-        # Copy data
-        x_train_c = x_train.copy()
-
-        # Normalize training data
-        x_train_c = self.norm(x_train_c, init=True)
-
-        # Train classifier
-        self.clf.fit(x_train_c)
-
-    def norm(self, x_t: ndarray, init: bool = False) -> ndarray:
-        """Normalize data, min/max normalization
-
-        Parameters
-        ----------
-        x_t: ndarray
-            NxD matrix of data to be normalized, N: number of data points, D: number of dimensions
-        init: bool
-            If true, min/max values for normalization will be initialized
-
-        Returns
-        -------
-        ndarray
-            Normalized data, NxD matrix, N: number of data points, D: number of dimensions
-        """
-        # Copy data
-        x_t_c = x_t.copy()
-
-        x_t_n = np.zeros(x_t_c.shape)
-        nc = len(x_t_c[0])
-
-        # Initialize min/max values
-        if init:
-            self.min: ndarray = np.zeros(nc)
-            self.max: ndarray = np.zeros(nc)
-
-        # Normalization per dimension
-        for c in range(0, nc):
-
-            # Initialize min/max values
-            if init:
-                self.min[c] = np.amin(x_t_c[:, c])
-                self.max[c] = np.amax(x_t_c[:, c])
-
-                # Fallback, if min/max are equal
-                if self.min[c] == self.max[c]:
-                    self.min[c] = 0
-                    self.max[c] = 1
-                    print('Warning: Normalization failed.')
-
-            # Min/Max normalization
-            x_t_n[:, c] = (x_t_c[:, c] - self.min[c]) / (self.max[c] - self.min[c])
-        return x_t_n
-
-    def predict(self, x_test: ndarray) -> ndarray:
-        """Classify test data
-
-        Parameters
-        ----------
-        x_test: ndarray
-            Test data to be classified: NxD matrix, N: number of data points, D: number of dimensions
-        Returns
-        -------
-        ndarray
-            Classification; 0: Normal data, 1: Outlier;  Nx1 matrix, N: number of data points
-        """
-        # Get novelty scores
-        scores = self.score(x_test)
-
-        # Classify data
-        classification = np.zeros(len(x_test))
-        classification[scores > self.threshold] = 1
-        return classification
-
-    def score(self, x_test: ndarray) -> ndarray:
-        """Get novelty scores for training data
-
-        Parameters
-        ----------
-        x_test: ndarray
-            Test data to be scored: NxD matrix, N: number of data points, D: number of dimensions
-        Returns
-        -------
-        ndarray
-            Novelty scores;  Nx1 matrix, N: number of data points
-        """
-        # Normalize data
-        x_test_c = self.norm(x_test)
-
-        # Return decision scores
-        return self.clf.decision_function(x_test_c)
-
-    def get_decision_scores(self) -> ndarray:
-        """Get novelty scores of training data
-
-        Returns
-        -------
-        ndarray
-            Novelty scores of training data; Nx1 matrix, N: number of data points
-        """
-        return self.clf.decision_scores_
-
-    @property
-    def info(self) -> dict:
-        """Additional classifier information
-
-        Returns
-        -------
-        dict
-        """
-        return {}
-
-
-class D_OCSVM(Detector):
+from extrapolation_detection.detector.abstract_detector import AbstractDetector
+class D_OCSVM(AbstractDetector):
     """One class support vector machine"""
 
     def __init__(self, contamination: float = 0.01, nu: float = 0.15, kernel: str = 'rbf', gamma: float or str = 10):
@@ -189,7 +60,7 @@ class D_OCSVM(Detector):
         return {'Gamma': self.gamma, 'Nu': self.nu, 'Kernel': self.kernel, 'NoveltyThreshold': self.threshold}
 
 
-class D_IF(Detector):
+class D_IF(AbstractDetector):
     """Isolation Forest"""
 
     def __init__(self, contamination: float = 0.01, random_state: float = None):
@@ -221,7 +92,7 @@ class D_IF(Detector):
         return {'Seed': self.clf.random_state, 'NoveltyThreshold': self.threshold}
 
 
-class D_MCD(Detector):
+class D_MCD(AbstractDetector):
     """Minimum Covariance Determinant"""
 
     def __init__(self, contamination: float = 0.01):
@@ -247,7 +118,7 @@ class D_MCD(Detector):
         return {'NoveltyThreshold': self.threshold}
 
 
-class D_ECOD(Detector):
+class D_ECOD(AbstractDetector):
     """Empirical Cumulative Distribution Functions (ECOD)"""
 
     def __init__(self, contamination: float = 0.01):
@@ -273,7 +144,7 @@ class D_ECOD(Detector):
         return {'NoveltyThreshold': self.threshold}
 
 
-class D_DSVDD(Detector):
+class D_DSVDD(AbstractDetector):
     """Deep One-Class Classification for outlier detection"""
 
     def __init__(self, contamination: float = 0.01, n_neurons: int = 32):
@@ -300,7 +171,7 @@ class D_DSVDD(Detector):
         return {'NoveltyThreshold': self.threshold, 'N_neurons': self.n_neurons}
 
 
-class D_KNN(Detector):
+class D_KNN(AbstractDetector):
     """K nearest neighbors"""
 
     def __init__(self, contamination: float = 0.01, n_neighbors: int = 5, method: str = 'largest', p: int = 2):
@@ -335,7 +206,7 @@ class D_KNN(Detector):
         return {'K': self.n_neighbors, 'p': self.p, 'Method': self.method, 'NoveltyThreshold': self.threshold}
 
 
-class D_FB_KNN(Detector):
+class D_FB_KNN(AbstractDetector):
     """Feature bagging with K nearest neighbors"""
 
     def __init__(self, contamination: float = 0.01, n_estimators: int = 10, n_neighbors: int = 5,
@@ -377,7 +248,7 @@ class D_FB_KNN(Detector):
                 'NoveltyThreshold': self.threshold}
 
 
-class D_ABOD(Detector):
+class D_ABOD(AbstractDetector):
     """Angle based outlier detection"""
 
     def __init__(self, contamination: float = 0.01, n_neigbors: int = 5):
@@ -431,7 +302,7 @@ class D_ABOD(Detector):
         return {'N-Neigbors': self.n_neigbors, 'NoveltyThreshold': self.threshold}
 
 
-class D_HBOS(Detector):
+class D_HBOS(AbstractDetector):
     """Histogram-based Outlier Detection"""
 
     def __init__(self, contamination: float = 0.01, n_bins: int = 10):
@@ -460,7 +331,7 @@ class D_HBOS(Detector):
         return {'N Bins': self.n_bins, 'NoveltyThreshold': self.threshold}
 
 
-class D_RNN(Detector):
+class D_RNN(AbstractDetector):
     """Auto Encoder / Replicator Neural Network"""
 
     def __init__(self, contamination: float = 0.01, n_neurons: int = 32):
@@ -490,7 +361,7 @@ class D_RNN(Detector):
         return {'Hidden layer': self.hidden_layer, 'NoveltyThreshold': self.threshold}
 
 
-class D_PCA(Detector):
+class D_PCA(AbstractDetector):
     """Principal Component Analysis"""
 
     def __init__(self, contamination: float = 0.01, n_components: int = None):
@@ -519,7 +390,7 @@ class D_PCA(Detector):
         return {'N components': self.n_components, 'NoveltyThreshold': self.threshold}
 
 
-class D_LOF(Detector):
+class D_LOF(AbstractDetector):
     """Local outlier factor"""
 
     def __init__(self, contamination: float = 0.01, n_neighbors: int = 20, p: int = 2):
@@ -551,7 +422,7 @@ class D_LOF(Detector):
         return {'Neighbors': self.n_neighbors, 'p': self.p, 'NoveltyThreshold': self.threshold}
 
 
-class Detector_SKLearn(Detector, ABC):
+class Detector_SKLearn(AbstractDetector, ABC):
     """Abstract base classifier for outlier detection with sk learn methods"""
 
     def __init__(self):
@@ -731,7 +602,7 @@ class NoveltyDetectionGPR(GaussianProcessRegressor):
         super().fit(x_train, y_train)
 
 
-class D_GP(Detector):
+class D_GP(AbstractDetector):
     """Outlier detection with gaussian process regression"""
 
     def __init__(self, contamination: float = 0.01,
@@ -826,7 +697,7 @@ class D_GP(Detector):
         return {'LengthScale': self.clf.kernel.k2.length_scale, 'NoveltyThreshold': self.threshold}
 
 
-class D_None(Detector):
+class D_None(AbstractDetector):
     """Classifier always returning normal class"""
 
     def __init__(self, **kwargs):
@@ -901,12 +772,12 @@ class D_None(Detector):
         """
         return self.decision_scores_
 
-    def get_clf(self, *args, **kwargs) -> Detector:
+    def get_clf(self, *args, **kwargs) -> AbstractDetector:
         """Return classifier
 
         Returns
         -------
-        Detector
+        AbstractDetector
             returns classifier
         """
         return self

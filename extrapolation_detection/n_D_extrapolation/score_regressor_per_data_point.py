@@ -6,10 +6,12 @@ import pandas as pd
 
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from extrapolation_detection.machine_learning_util import data_handling as dh
+from core.util.data_handling import split_target_features
+from core.exploration_quantification.exploration_quantification import ArtificialPointGenerator
 
 
 def score_per_sample(
-    regressor: AbstractMLModel, x: np.ndarray, y: np.ndarray, metric: str = "mae"
+    regressor: AbstractMLModel, x: pd.DataFrame, y: pd.DataFrame, metric: str = "mae"
 ) -> np.ndarray:
     """Tests the ann on given dataset and returns the score per datapoint"""
 
@@ -17,7 +19,7 @@ def score_per_sample(
 
     df = pd.DataFrame()
 
-    df["y_real"] = y.squeeze()
+    df["y_real"] = y
 
     df["y_pred"] = regressor.predict(x)
 
@@ -30,79 +32,27 @@ def score_per_sample(
     else:
         raise ValueError("Please select a proper metric.")
 
-    return df["error"]
-
-
-def score_train_val_test(
-    regressor: AbstractMLModel, available_data, metric: str = "mae"
-) -> dict:
-    """Scores the regressor on training, validation and test data"""
-    x_train = available_data["x_train"]
-    y_train = available_data["y_train"]
-    x_val = available_data["x_val"]
-    y_val = available_data["y_val"]
-    x_test = available_data["x_test"]
-    y_test = available_data["y_test"]
-
-    errors = dict()
-    errors["train_error"] = score_per_sample(regressor, x_train, y_train, metric)
-    errors["val_error"] = score_per_sample(regressor, x_val, y_val, metric)
-    errors["test_error"] = score_per_sample(regressor, x_test, y_test, metric)
-    return errors
-
-
-def score_remaining_data(
-    regressor: AbstractMLModel, remaining_data, metric: str = "mae"
-) -> dict:
-    """Scores the regressor on remaining data"""
-    x_remaining = remaining_data["x_remaining"]
-    y_remaining = remaining_data["y_remaining"]
-
-    errors = dict()
-    errors["data_error"] = score_per_sample(regressor, x_remaining, y_remaining, metric)
-    return errors
+    return df
 
 
 def score_meshgrid(
     regressor: AbstractMLModel,
-    xy_tot_splitted,
     system_simulation: Callable,
+    x_tot: pd.DataFrame,
     mesh_points_per_axis: int = 100,
     metric: str = "mae",
 ) -> dict:
-    # Get bounds of nD plot
-    bounds = []
-    for i in range(xy_tot_splitted["available_data"]["x_train"].shape[1]):
-        full_range = np.concatenate(
-            (
-                xy_tot_splitted["available_data"]["x_train"],
-                xy_tot_splitted["available_data"]["x_val"],
-                xy_tot_splitted["available_data"]["x_test"],
-                xy_tot_splitted["non_available_data"]["x_remaining"],
-            )
-        )[:, i]
-        min_val = np.amin(full_range)
-        max_val = np.amax(full_range)
-        bounds.append((min_val, max_val))
+    """Calculates the error on a meshgrid for plotting purposes"""
 
-    # Generate Meshgrid
-    spaces = [np.linspace(bound[0], bound[1], mesh_points_per_axis) for bound in bounds]
-    mesh = np.meshgrid(*spaces)
+    grid_generator = ArtificialPointGenerator()
+    bounds = grid_generator.infer_meshgrid_bounds(x_tot)
+    x_grid = grid_generator.generate_point_grid(x_tot, bounds, mesh_points_per_axis)
 
-    score_meshgrid_dct = dict()
-    for i, space in enumerate(spaces):
-        score_meshgrid_dct[xy_tot_splitted["header"][i]] = space
+    # simulate true values for the grid via the system simulation
+    # take care of correct order of features
+    y_grid = x_grid.apply(lambda row: system_simulation(*row), axis=1)
+    xy_grid = pd.concat([x_grid, y_grid], axis=1)
 
-    # Initialize error array
-    error_on_mesh = np.zeros([mesh_points_per_axis] * len(spaces))
+    df_grid_scores = score_per_sample(regressor, x_grid, y_grid, metric)
 
-    # Evaluate meshgrid with ANN and underlying model
-    for index in itertools.product(*[range(mesh_points_per_axis)] * len(spaces)):
-        point = [mesh[i][index] for i in range(len(spaces))]
-        error_on_mesh[index] = score_per_sample(
-            regressor, np.array(point).reshape(1, -1), system_simulation(*point), metric
-        )
-
-    score_meshgrid_dct["error_on_mesh"] = error_on_mesh
-
-    return score_meshgrid_dct
+    return xy_grid, df_grid_scores

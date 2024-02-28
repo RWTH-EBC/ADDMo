@@ -17,7 +17,7 @@ from pyod.utils.utility import precision_n_scores
 
 from extrapolation_detection.machine_learning_util.util import rearrange_training_data
 from extrapolation_detection.detector import scoring
-from extrapolation_detection.detector.hyper_opt import Hyper_KNN, Hyper_OCSVM, Hyper_KDE, Hyper_GP, Hyper_IF, Hyper_ABOD, Hyper_LOF, \
+from extrapolation_detection.detector.detector_tuners import Hyper_KNN, Hyper_OCSVM, Hyper_KDE, Hyper_GP, Hyper_IF, Hyper_ABOD, Hyper_LOF, \
     Hyper_MCD, Hyper_GMM, Hyper_HBOS, Hyper_ECOD, Hyper_DSVDD, Hyper_RNN, Hyper_PCA, Hyper_FB_KNN
 
 warnings.filterwarnings("ignore")

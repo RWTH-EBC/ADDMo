@@ -4,17 +4,9 @@ from typing import Any
 
 import pandas as pd
 import numpy as np
+import json
 from pandas import DataFrame
 
-def load_csv(filename: str, path: str = "data") -> DataFrame:
-    """Loads csv file as dataframe"""
-    if not filename.endswith(".csv"):
-        filename = filename + ".csv"
-    if len(path) > 0:
-        file = path + "/" + filename
-    else:
-        file = filename
-    return pd.read_csv(file, delimiter=";", dtype="float", encoding="unicode_escape")
 
 
 def split_simulation_data(
@@ -22,7 +14,6 @@ def split_simulation_data(
     train_val_test_indices: list,
     val_fraction: float,
     test_fraction: float,
-    random_state: int = 0,
     shuffle: bool = False,
 ) -> dict:
     """Splits data in training, validation, test and remaining splits; last column of dataframe will be used as y
@@ -53,56 +44,55 @@ def split_simulation_data(
 
     # Shuffle data
     if shuffle:
-        data_shuffled = data.sample(frac=1, random_state=random_state)
+        data_shuffled = data.sample(frac=1, random_state=1)
     else:
         data_shuffled = data
-    training_split = 1 - val_fraction - test_fraction
 
-    # training data
+
+
+
+    # training split
+    training_split = 1 - val_fraction - test_fraction
     xy_training = data_shuffled.iloc[0 : round(len(data_shuffled) * training_split)]
-    # validation data
+
+    # validation split
     xy_validation = data_shuffled.iloc[
-        round(len(data_shuffled) * training_split) : round(
+        round(len(data_shuffled) * training_split): round(
             len(data_shuffled) * (training_split + val_fraction)
         )
     ]
-    # test data
+
+    # test split
     xy_test = data_shuffled.iloc[
               round(len(data_shuffled) * (training_split + val_fraction)):
     ]
 
-    # Last column will be used as y, the rest of the dataframe will be used as x
-    x_val = xy_validation.iloc[:, :-1].to_numpy()
-    y_val = xy_validation.iloc[:, -1].to_numpy().reshape((-1, 1))
-    x_test = xy_test.iloc[:, :-1].to_numpy()
-    y_test = xy_test.iloc[:, -1].to_numpy().reshape((-1, 1))
-    x_train = xy_training.iloc[:, :-1].to_numpy()
-    y_train = xy_training.iloc[:, -1].to_numpy().reshape((-1, 1))
+    # remaining split (not train/val/test)
+    xy_remaining = df.drop(train_val_test_indices)
 
-    # Select remaining data not used for training, validation and testing
-    data = df.drop(train_val_test_indices)
-    x_remaining = data.iloc[:, :-1].to_numpy()
-    y_remaining = data.iloc[:, -1].to_numpy().reshape((-1, 1))
+    return xy_training, xy_validation, xy_test, xy_remaining
+
+def move_true_invalid_from_training_2_validation(xy_train, xy_val, true_validity_train, true_validity_val):
+    """Moves true invalid from training data to validation data"""
+
+    # Convert 0s and 1s to False and True first for easier handling
+    true_validity_train = true_validity_train.astype(bool)
+    true_validity_val = true_validity_val.astype(bool)
+
+    # Select the "true invalid" data points from xy_train
+    invalid_data = xy_train[~true_validity_train]
+    invalid_labels = true_validity_train[~true_validity_train]
+
+    # Remove the "true invalid" data points from xy_train
+    xy_train_new = xy_train[true_validity_train]
+    true_validity_train_new = true_validity_train[true_validity_train]
+
+    # Append the "true invalid" data points to xy_val
+    xy_val_new = pd.concat([xy_val, invalid_data])
+    true_validity_val_new = pd.concat([true_validity_val, invalid_labels])
 
 
-
-    xy_tot_splitted = {
-        "available_data": {
-            "x_train": x_train,
-            "y_train": y_train,
-            "x_val": x_val,
-            "y_val": y_val,
-            "x_test": x_test,
-            "y_test": y_test,
-        },
-        "non_available_data": {  # remaining not in training, validation and test (full year simulation)
-            "x_remaining": x_remaining,
-            "y_remaining": y_remaining,
-        },
-        "header": np.array(df.columns),
-    }
-
-    return xy_tot_splitted
+    return xy_train_new, xy_val_new, true_validity_train_new, true_validity_val_new
 
 
 def write_pkl(data, filename: str, directory: str = None, override: bool = False):
@@ -112,7 +102,6 @@ def write_pkl(data, filename: str, directory: str = None, override: bool = False
     ----------
     data:
         The object that is supposed to be saved.
-    filename: str
         The name of the file.
     directory: str
         The directory the file will be saved to.
@@ -140,42 +129,6 @@ def write_pkl(data, filename: str, directory: str = None, override: bool = False
 
     # close file
     pkl_file.close()
-
-
-def _get_path(filename: str, directory: str) -> str:
-    """
-    Returns the full path for a given filename and directory.
-    """
-    if ".pkl" not in filename:  # check for file extension
-        filename += ".pkl"  # add file extension
-
-    if directory is not None:  # check if directory is none
-        if not os.path.exists(directory):  # check if path exists
-            os.makedirs(directory)  # create new directory
-        return str(directory + "\\" + filename)  # calculate full path
-    else:
-        return filename
-
-
-def _get_bool(message: str, true: list = None, false: list = None) -> bool or str:
-    if false is None:
-        false = ["no", "nein", "false", "1", "n"]
-    if true is None:
-        true = ["yes", "ja", "true", "wahr", "0", "y"]
-
-    val = input(message).lower()
-    if val in true:
-        return True
-    elif val in false:
-        return False
-    else:
-        print("Please try again.")
-        print("True:", true)
-        print("False:", false)
-        _get_bool(message, true, false)
-
-    return val
-
 
 def read_pkl(filename: str, directory: str = None) -> Any:
     """Reads data from a pickle file.
@@ -206,3 +159,99 @@ def read_pkl(filename: str, directory: str = None) -> Any:
             raise FileNotFoundError(f"No data at {path} found.")
     else:
         raise FileNotFoundError(f"The path {path} does not exist.")
+
+def _get_path(filename: str, directory: str) -> str:
+    """
+    Returns the full path for a given filename and directory.
+    """
+    if directory is not None:  # check if directory is none
+        if not os.path.exists(directory):  # check if path exists
+            os.makedirs(directory)  # create new directory
+        return str(directory + "\\" + filename)  # calculate full path
+    else:
+        return filename
+
+
+def _get_bool(message: str, true: list = None, false: list = None) -> bool or str:
+    if false is None:
+        false = ["no", "nein", "false", "1", "n"]
+    if true is None:
+        true = ["yes", "ja", "true", "wahr", "0", "y"]
+
+    val = input(message).lower()
+    if val in true:
+        return True
+    elif val in false:
+        return False
+    else:
+        print("Please try again.")
+        print("True:", true)
+        print("False:", false)
+        _get_bool(message, true, false)
+
+    return val
+
+def write_csv(data: pd.DataFrame, filename: str, directory: str = None, overwrite: bool = True):
+    """Writes data to a CSV file.
+
+    Parameters
+    ----------
+    data: pd.DataFrame
+        The DataFrame that is supposed to be saved.
+    filename: str
+        The name of the file.
+    directory: str
+        The directory the file will be saved to.
+    overwrite: Boolean
+        If true, existing data will be overwritten
+    """
+
+    filename = filename + ".csv"
+
+    path = _get_path(filename, directory)
+
+    # make sure the directory does exist
+    if directory is not None:
+        if not os.path.exists(directory):
+            os.mkdir(directory)
+
+    # make sure the file does not already exist
+    if os.path.exists(path) and not overwrite:
+        if not _get_bool(
+            f'The file "{path}" already exists. Do you want to override it?\n'
+        ):
+            return 0
+
+    # Write DataFrame to CSV
+    data.to_csv(path, sep=";", index=True, header=True, encoding="utf-8")
+
+def read_csv(filename: str, directory: str = None, **kwargs) -> pd.DataFrame:
+    """Reads data from a CSV file.
+
+    Parameters
+    ----------
+    filename: str
+        The name of the file.
+    directory: str
+        The directory the file is located.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame object.
+    """
+
+    if "index_col" in kwargs:
+        index_col = kwargs["index_col"]
+    else:
+        index_col = 0
+
+    filename = filename + ".csv"
+
+    path = _get_path(filename, directory)
+
+    if os.path.exists(path):  # check for the existence of the path
+        return pd.read_csv(path, sep=";", dtype="float", encoding="unicode_escape", index_col=index_col)
+    else:
+        raise FileNotFoundError(f"The path {path} does not exist.")
+

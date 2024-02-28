@@ -16,7 +16,7 @@ def save_yaml_from_dict(path_to_yaml, dict_to_save):
         yaml.dump(dict_to_save, f)
 
 
-def load_data(abs_path: str) -> pd.DataFrame: #todo: move to data_handling or load_save
+def load_data(abs_path: str) -> pd.DataFrame:
 
     if abs_path.endswith(".csv"):
         # Read the CSV file
@@ -29,3 +29,11 @@ def load_data(abs_path: str) -> pd.DataFrame: #todo: move to data_handling or lo
     df.index = pd.to_datetime(df.index, format='%d.%m.%Y %H:%M %Z')
 
     return df
+
+def write_data(df: pd.DataFrame, abs_path: str):
+    if abs_path.endswith(".csv"):
+        # Write the CSV file
+        df.to_csv(abs_path, sep=';', encoding='latin1')
+    elif abs_path.endswith(".xlsx"):
+        # Write the Excel file
+        df.to_excel(abs_path)

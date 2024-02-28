@@ -1,4 +1,4 @@
-from extrapolation_detection.detector.hyper_opt import Hyper_KNN, Hyper_KDE, Hyper_GP, Hyper_OCSVM, Hyper_IF
+from extrapolation_detection.detector.detector_tuners import Hyper_KNN, Hyper_KDE, Hyper_GP, Hyper_OCSVM, Hyper_IF
 from extrapolation_detection.use_cases.train_clf import train_clf_ideal
 
 #######################################################################################################################

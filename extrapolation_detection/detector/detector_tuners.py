@@ -131,7 +131,7 @@ class AbstractHyper(ABC):
 class Hyper_KNN(AbstractHyper):
     """Hyperparameter optimization for k nearest neighbors"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -143,7 +143,7 @@ class Hyper_KNN(AbstractHyper):
         score_name: str
             Name of score to be used for optimization
         """
-        super(Hyper_KNN, self).__init__(outlier_fraction, beta, score_name)
+        super(Hyper_KNN, self).__init__(**kwargs)
 
     def opt(self) -> dict:
         """Optimize hyperparameters and return best result
@@ -235,7 +235,7 @@ class Hyper_KNN(AbstractHyper):
 class Hyper_FB_KNN(AbstractHyper):
     """Hyperparameter optimization for feature bagging using k nearest neighbors"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -247,7 +247,7 @@ class Hyper_FB_KNN(AbstractHyper):
         score_name: str
             Name of score to be used for optimization
         """
-        super(Hyper_FB_KNN, self).__init__(outlier_fraction, beta, score_name)
+        super(Hyper_FB_KNN, self).__init__(**kwargs)
 
     def opt(self) -> dict:
         """Optimize hyperparameters and return best result
@@ -345,7 +345,7 @@ class Hyper_FB_KNN(AbstractHyper):
 class Hyper_LOF(AbstractHyper):
     """Hyperparameter optimization for k nearest neighbors"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -357,7 +357,7 @@ class Hyper_LOF(AbstractHyper):
         score_name: str
             Name of score to be used for optimization
         """
-        super(Hyper_LOF, self).__init__(outlier_fraction, beta, score_name)
+        super(Hyper_LOF, self).__init__(**kwargs)
 
     def opt(self) -> dict:
         """Optimize hyperparameters and return best result
@@ -444,7 +444,7 @@ class Hyper_LOF(AbstractHyper):
 class Hyper_ABOD(AbstractHyper):
     """Hyperparameter optimization for angle based outlier detection"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -456,7 +456,7 @@ class Hyper_ABOD(AbstractHyper):
         score_name: str
             Name of score to be used for optimization
         """
-        super(Hyper_ABOD, self).__init__(outlier_fraction, beta, score_name)
+        super(Hyper_ABOD, self).__init__(**kwargs)
 
     def opt(self) -> dict:
         """Optimize hyperparameters and return best result
@@ -538,7 +538,7 @@ class Hyper_ABOD(AbstractHyper):
 class Hyper_GMM(AbstractHyper):
     """Hyperparameter optimization for gaussian mixture model"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -550,7 +550,7 @@ class Hyper_GMM(AbstractHyper):
         score_name: str
             Name of score to be used for optimization
         """
-        super(Hyper_GMM, self).__init__(outlier_fraction, beta, score_name)
+        super(Hyper_GMM, self).__init__(**kwargs)
 
     def opt(self) -> dict:
         """Optimize hyperparameters and return best result
@@ -632,7 +632,7 @@ class Hyper_GMM(AbstractHyper):
 class Hyper_HBOS(AbstractHyper):
     """Hyperparameter optimization for histogram-based outlier detection"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -644,7 +644,7 @@ class Hyper_HBOS(AbstractHyper):
         score_name: str
             Name of score to be used for optimization
         """
-        super(Hyper_HBOS, self).__init__(outlier_fraction, beta, score_name)
+        super(Hyper_HBOS, self).__init__(**kwargs)
 
     def opt(self) -> dict:
         """Optimize hyperparameters and return best result
@@ -726,7 +726,7 @@ class Hyper_HBOS(AbstractHyper):
 class Hyper_RNN(AbstractHyper):
     """Hyperparameter optimization for Auto Encoder / Replicator Neural Network"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -738,7 +738,7 @@ class Hyper_RNN(AbstractHyper):
         score_name: str
             Name of score to be used for optimization
         """
-        super(Hyper_RNN, self).__init__(outlier_fraction, beta, score_name)
+        super(Hyper_RNN, self).__init__(**kwargs)
 
     def opt(self) -> dict:
         """Optimize hyperparameters and return best result
@@ -820,7 +820,7 @@ class Hyper_RNN(AbstractHyper):
 class Hyper_PCA(AbstractHyper):
     """Hyperparameter optimization for Principal Component Analysis"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -832,7 +832,7 @@ class Hyper_PCA(AbstractHyper):
         score_name: str
             Name of score to be used for optimization
         """
-        super(Hyper_PCA, self).__init__(outlier_fraction, beta, score_name)
+        super(Hyper_PCA, self).__init__(**kwargs)
 
     def opt(self) -> dict:
         """Optimize hyperparameters and return best result
@@ -914,7 +914,7 @@ class Hyper_PCA(AbstractHyper):
 class Hyper_MCD(AbstractHyper):
     """Hyperparameter optimization for minimum covariance determinant"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -926,7 +926,7 @@ class Hyper_MCD(AbstractHyper):
         score_name: str
             Name of score to be used for optimization
         """
-        super(Hyper_MCD, self).__init__(outlier_fraction, beta, score_name)
+        super(Hyper_MCD, self).__init__(**kwargs)
 
     def opt(self) -> dict:
         """Optimize hyperparameters and return best result
@@ -998,7 +998,7 @@ class Hyper_MCD(AbstractHyper):
 class Hyper_ECOD(AbstractHyper):
     """Hyperparameter optimization for Empirical Cumulative Distribution Functions (ECOD)"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -1010,7 +1010,7 @@ class Hyper_ECOD(AbstractHyper):
         score_name: str
             Name of score to be used for optimization
         """
-        super(Hyper_ECOD, self).__init__(outlier_fraction, beta, score_name)
+        super(Hyper_ECOD, self).__init__(**kwargs)
 
     def opt(self) -> dict:
         """Optimize hyperparameters and return best result
@@ -1082,7 +1082,7 @@ class Hyper_ECOD(AbstractHyper):
 class Hyper_DSVDD(AbstractHyper):
     """Hyperparameter optimization for Deep One-Class Classification"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -1094,7 +1094,7 @@ class Hyper_DSVDD(AbstractHyper):
         score_name: str
             Name of score to be used for optimization
         """
-        super(Hyper_DSVDD, self).__init__(outlier_fraction, beta, score_name)
+        super(Hyper_DSVDD, self).__init__(**kwargs)
 
     def opt(self) -> dict:
         """Optimize hyperparameters and return best result
@@ -1176,7 +1176,7 @@ class Hyper_DSVDD(AbstractHyper):
 class Hyper_OCSVM(AbstractHyper):
     """Hyperparameter optimization for one class support vector machine"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -1188,7 +1188,7 @@ class Hyper_OCSVM(AbstractHyper):
         score_name: str
             Name of score to be used for optimization
         """
-        super(Hyper_OCSVM, self).__init__(outlier_fraction, beta, score_name)
+        super(Hyper_OCSVM, self).__init__(**kwargs)
 
     def opt(self) -> dict:
         """Optimize hyperparameters and return best result
@@ -1275,7 +1275,7 @@ class Hyper_OCSVM(AbstractHyper):
 class Hyper_KDE(AbstractHyper):
     """Hyperparameter optimization for kernel density estimation"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -1287,7 +1287,7 @@ class Hyper_KDE(AbstractHyper):
         score_name: str
             Name of score to be used for optimization
         """
-        super(Hyper_KDE, self).__init__(outlier_fraction, beta, score_name)
+        super(Hyper_KDE, self).__init__(**kwargs)
 
     def opt(self) -> dict:
         """Optimize hyperparameters and return best result
@@ -1368,7 +1368,7 @@ class Hyper_KDE(AbstractHyper):
 class Hyper_GP(AbstractHyper):
     """Hyperparameter optimization for gaussian process regression"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -1380,7 +1380,7 @@ class Hyper_GP(AbstractHyper):
         score_name: str
             Name of score to be used for optimization
         """
-        super(Hyper_GP, self).__init__(outlier_fraction, beta, score_name)
+        super(Hyper_GP, self).__init__(**kwargs)
 
     def opt(self) -> dict:
         """Optimize hyperparameters and return best result
@@ -1463,7 +1463,7 @@ class Hyper_GP(AbstractHyper):
 class Hyper_IF(AbstractHyper):
     """Hyperparameter optimization for isolation forest"""
 
-    def __init__(self, outlier_fraction: float, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, **kwargs):
         """
 
         Parameters
@@ -1475,7 +1475,7 @@ class Hyper_IF(AbstractHyper):
         score_name: str
             Name of score to be used for optimization
         """
-        super(Hyper_IF, self).__init__(outlier_fraction, beta, score_name)
+        super(Hyper_IF, self).__init__(**kwargs)
 
     def opt(self) -> dict:
         """Optimize hyperparameters and return best result

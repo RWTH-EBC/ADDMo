@@ -22,16 +22,18 @@ class AbstractDetector(ABC):
             NxD matrix of training data, N: number of data points, D: number of dimensions
         """
         # Copy data
-        x_train_c = x_train.copy()
+        # x_train_c = x_train.copy()
 
         # Normalize training data
-        x_train_c = self.norm(x_train_c, init=True)
+        x_train_c = self.norm(x_train, init=True)
 
         # Train classifier
         self.clf.fit(x_train_c)
 
     def norm(self, x_t: ndarray, init: bool = False) -> ndarray:
         """Normalize data, min/max normalization
+
+        #Todo: achtung scaling beißt sich vllt. mit dem der ML Modelle, reproduzierbarkeit?
 
         Parameters
         ----------

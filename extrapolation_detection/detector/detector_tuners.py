@@ -60,12 +60,7 @@ class AbstractHyper(ABC):
         train_nscores = self.clf.get_decision_scores()
         val_nscores = self.clf.score(self.x_val)
 
-        # Check, if training data should be included in validation
-        if self.groundtruth_train is not None:
-            val_nscores = np.concatenate((train_nscores, val_nscores))
-            groundtruth = np.concatenate((self.groundtruth_train, self.groundtruth_val))
-        else:
-            groundtruth = self.groundtruth_val
+        groundtruth = self.groundtruth_val
 
         # Get novelty threshold through optimization
         nscores_threshold = self.hyper_threshold.opt(groundtruth, val_nscores)
@@ -104,7 +99,7 @@ class AbstractHyper(ABC):
         pass
 
     @abstractmethod
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None) \
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray) \
             -> tuple[AbstractDetector, float]:
         """Get classifier with optimized hyperparameters
 
@@ -187,7 +182,7 @@ class Hyper_KNN(AbstractHyper):
         self.clf: D_KNN = D_KNN(contamination=self.outlier_fraction, n_neighbors=n_neighbors, p=p, method=method)
         return self.score()
 
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None)\
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray)\
             -> tuple[D_KNN, float]:
         """Get classifier with optimized hyperparameters
 
@@ -212,7 +207,8 @@ class Hyper_KNN(AbstractHyper):
         self.x_train: ndarray = x_train
         self.x_val: ndarray = x_val
         self.groundtruth_val: ndarray = groundtruth_val
-        self.groundtruth_train: ndarray = groundtruth_train
+
+
 
         # Optimization
         best = self.opt()
@@ -294,7 +290,7 @@ class Hyper_FB_KNN(AbstractHyper):
                                       n_neighbors=n_neighbors, p=p, method=method)
         return self.score()
 
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None) \
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray) \
             -> tuple[D_FB_KNN, float]:
         """Get classifier with optimized hyperparameters
 
@@ -319,7 +315,7 @@ class Hyper_FB_KNN(AbstractHyper):
         self.x_train: ndarray = x_train
         self.x_val: ndarray = x_val
         self.groundtruth_val: ndarray = groundtruth_val
-        self.groundtruth_train: ndarray = groundtruth_train
+
 
         # Optimization
         best = self.opt()
@@ -399,7 +395,7 @@ class Hyper_LOF(AbstractHyper):
         self.clf: D_LOF = D_LOF(contamination=self.outlier_fraction, n_neighbors=n_neighbors, p=p)
         return self.score()
 
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None)\
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray)\
             -> tuple[D_LOF, float]:
         """Get classifier with optimized hyperparameters
 
@@ -424,7 +420,7 @@ class Hyper_LOF(AbstractHyper):
         self.x_train: ndarray = x_train
         self.x_val: ndarray = x_val
         self.groundtruth_val: ndarray = groundtruth_val
-        self.groundtruth_train: ndarray = groundtruth_train
+
 
         # Optimization
         best = self.opt()
@@ -496,7 +492,7 @@ class Hyper_ABOD(AbstractHyper):
         self.clf: D_ABOD = D_ABOD(contamination=self.outlier_fraction, n_neigbors=n_neighbors)
         return self.score()
 
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None) \
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray) \
             -> tuple[D_ABOD, float]:
         """Get classifier with optimized hyperparameters
 
@@ -521,7 +517,7 @@ class Hyper_ABOD(AbstractHyper):
         self.x_train: ndarray = x_train
         self.x_val: ndarray = x_val
         self.groundtruth_val: ndarray = groundtruth_val
-        self.groundtruth_train: ndarray = groundtruth_train
+
 
         # Optimization
         best = self.opt()
@@ -590,7 +586,7 @@ class Hyper_GMM(AbstractHyper):
         self.clf: D_GMM = D_GMM(contamination=self.outlier_fraction, n_components=n_components)
         return self.score()
 
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None) \
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray) \
             -> tuple[D_GMM, float]:
         """Get classifier with optimized hyperparameters
 
@@ -615,7 +611,7 @@ class Hyper_GMM(AbstractHyper):
         self.x_train: ndarray = x_train
         self.x_val: ndarray = x_val
         self.groundtruth_val: ndarray = groundtruth_val
-        self.groundtruth_train: ndarray = groundtruth_train
+
 
         # Optimization
         best = self.opt()
@@ -684,7 +680,7 @@ class Hyper_HBOS(AbstractHyper):
         self.clf: D_HBOS = D_HBOS(contamination=self.outlier_fraction, n_bins=n_bins)
         return self.score()
 
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None) \
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray) \
             -> tuple[D_HBOS, float]:
         """Get classifier with optimized hyperparameters
 
@@ -709,7 +705,7 @@ class Hyper_HBOS(AbstractHyper):
         self.x_train: ndarray = x_train
         self.x_val: ndarray = x_val
         self.groundtruth_val: ndarray = groundtruth_val
-        self.groundtruth_train: ndarray = groundtruth_train
+
 
         # Optimization
         best = self.opt()
@@ -778,7 +774,7 @@ class Hyper_RNN(AbstractHyper):
         self.clf: D_RNN = D_RNN(contamination=self.outlier_fraction, n_neurons=n_neurons)
         return self.score()
 
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None) \
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray) \
             -> tuple[D_RNN, float]:
         """Get classifier with optimized hyperparameters
 
@@ -803,7 +799,7 @@ class Hyper_RNN(AbstractHyper):
         self.x_train: ndarray = x_train
         self.x_val: ndarray = x_val
         self.groundtruth_val: ndarray = groundtruth_val
-        self.groundtruth_train: ndarray = groundtruth_train
+
 
         # Optimization
         best = self.opt()
@@ -872,7 +868,7 @@ class Hyper_PCA(AbstractHyper):
         self.clf: D_PCA = D_PCA(contamination=self.outlier_fraction, n_components=n_components)
         return self.score()
 
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None) \
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray) \
             -> tuple[D_PCA, float]:
         """Get classifier with optimized hyperparameters
 
@@ -897,7 +893,7 @@ class Hyper_PCA(AbstractHyper):
         self.x_train: ndarray = x_train
         self.x_val: ndarray = x_val
         self.groundtruth_val: ndarray = groundtruth_val
-        self.groundtruth_train: ndarray = groundtruth_train
+
 
         # Optimization
         best = self.opt()
@@ -958,7 +954,7 @@ class Hyper_MCD(AbstractHyper):
         self.clf: D_MCD = D_MCD(contamination=self.outlier_fraction)
         return self.score()
 
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None)\
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray)\
             -> tuple[D_MCD, float]:
         """Get classifier with optimized hyperparameters
 
@@ -983,7 +979,7 @@ class Hyper_MCD(AbstractHyper):
         self.x_train: ndarray = x_train
         self.x_val: ndarray = x_val
         self.groundtruth_val: ndarray = groundtruth_val
-        self.groundtruth_train: ndarray = groundtruth_train
+
 
         # Optimization
         best = self.opt()
@@ -1042,7 +1038,7 @@ class Hyper_ECOD(AbstractHyper):
         self.clf: D_ECOD = D_ECOD(contamination=self.outlier_fraction)
         return self.score()
 
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None) \
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray) \
             -> tuple[D_ECOD, float]:
         """Get classifier with optimized hyperparameters
 
@@ -1067,7 +1063,7 @@ class Hyper_ECOD(AbstractHyper):
         self.x_train: ndarray = x_train
         self.x_val: ndarray = x_val
         self.groundtruth_val: ndarray = groundtruth_val
-        self.groundtruth_train: ndarray = groundtruth_train
+
 
         # Optimization
         best = self.opt()
@@ -1134,7 +1130,7 @@ class Hyper_DSVDD(AbstractHyper):
         self.clf: D_DSVDD = D_DSVDD(contamination=self.outlier_fraction, n_neurons=n_neurons)
         return self.score()
 
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None)\
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray)\
             -> tuple[D_DSVDD, float]:
         """Get classifier with optimized hyperparameters
 
@@ -1159,7 +1155,7 @@ class Hyper_DSVDD(AbstractHyper):
         self.x_train: ndarray = x_train
         self.x_val: ndarray = x_val
         self.groundtruth_val: ndarray = groundtruth_val
-        self.groundtruth_train: ndarray = groundtruth_train
+
 
         # Optimization
         best = self.opt()
@@ -1232,7 +1228,7 @@ class Hyper_OCSVM(AbstractHyper):
         self.clf: D_OCSVM = D_OCSVM(contamination=self.outlier_fraction, nu=nu, gamma=gamma)
         return self.score()
 
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None) \
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray) \
             -> tuple[D_OCSVM, float]:
         """Get classifier with optimized hyperparameters
 
@@ -1257,7 +1253,7 @@ class Hyper_OCSVM(AbstractHyper):
         self.x_train: ndarray = x_train
         self.x_val: ndarray = x_val
         self.groundtruth_val: ndarray = groundtruth_val
-        self.groundtruth_train: ndarray = groundtruth_train
+
 
         # Optimization
         best = self.opt()
@@ -1326,7 +1322,7 @@ class Hyper_KDE(AbstractHyper):
         self.clf: D_ParzenWindow = D_ParzenWindow(contamination=self.outlier_fraction, bandwith=bandwith)
         return self.score()
 
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None)\
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray)\
             -> tuple[D_ParzenWindow, float]:
         """Get classifier with optimized hyperparameters
 
@@ -1351,7 +1347,7 @@ class Hyper_KDE(AbstractHyper):
         self.x_train: ndarray = x_train
         self.x_val: ndarray = x_val
         self.groundtruth_val: ndarray = groundtruth_val
-        self.groundtruth_train: ndarray = groundtruth_train
+
 
         # Optimization
         best = self.opt()
@@ -1420,7 +1416,7 @@ class Hyper_GP(AbstractHyper):
                               kernel=1.0 * RBF(length_scale=length_scale, length_scale_bounds='fixed'))
         return self.score()
 
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None) \
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray) \
             -> tuple[D_GP, float]:
         """Get classifier with optimized hyperparameters
 
@@ -1445,7 +1441,7 @@ class Hyper_GP(AbstractHyper):
         self.x_train: ndarray = x_train
         self.x_val: ndarray = x_val
         self.groundtruth_val: ndarray = groundtruth_val
-        self.groundtruth_train: ndarray = groundtruth_train
+
 
         # Optimization
         best = self.opt()
@@ -1514,7 +1510,7 @@ class Hyper_IF(AbstractHyper):
         self.clf: D_IF = D_IF(contamination=self.outlier_fraction, random_state=seed)
         return self.score()
 
-    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray, groundtruth_train: ndarray = None) \
+    def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray) \
             -> tuple[D_IF, float]:
         """Get classifier with optimized hyperparameters
 
@@ -1539,7 +1535,7 @@ class Hyper_IF(AbstractHyper):
         self.x_train: ndarray = x_train
         self.x_val: ndarray = x_val
         self.groundtruth_val: ndarray = groundtruth_val
-        self.groundtruth_train: ndarray = groundtruth_train
+
 
         # Optimization
         best = self.opt()

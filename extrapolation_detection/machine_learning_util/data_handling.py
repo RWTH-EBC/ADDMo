@@ -75,9 +75,9 @@ def split_simulation_data(
 def move_true_invalid_from_training_2_validation(xy_train, xy_val, true_validity_train, true_validity_val):
     """Moves true invalid from training data to validation data"""
 
-    # Convert 0s and 1s to False and True first for easier handling
-    true_validity_train = true_validity_train.astype(bool)
-    true_validity_val = true_validity_val.astype(bool)
+    # Convert 0s and 1s to False and True first for easier handling, as well df to series via squeeze
+    true_validity_train = true_validity_train.astype(bool).squeeze()
+    true_validity_val = true_validity_val.astype(bool).squeeze()
 
     # Select the "true invalid" data points from xy_train
     invalid_data = xy_train[~true_validity_train]
@@ -91,11 +91,10 @@ def move_true_invalid_from_training_2_validation(xy_train, xy_val, true_validity
     xy_val_new = pd.concat([xy_val, invalid_data])
     true_validity_val_new = pd.concat([true_validity_val, invalid_labels])
 
-
     return xy_train_new, xy_val_new, true_validity_train_new, true_validity_val_new
 
 
-def write_pkl(data, filename: str, directory: str = None, override: bool = False):
+def write_pkl(data, filename: str, directory: str = None, override: bool = True):
     """Writes data to a pickle file.
 
     Parameters

@@ -16,4 +16,6 @@ def classify_errors_2_true_validity(errors: pd.Series, absolute_validity_thresho
     # convert bool to 0 and 1
     true_validity = true_validity.astype(int)
 
+    true_validity.name = None
+
     return true_validity

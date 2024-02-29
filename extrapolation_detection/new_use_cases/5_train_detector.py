@@ -14,11 +14,14 @@ def exe_train_detector(config: ExtrapolationExperimentConfig):
     xy_test = data_handling.read_csv("xy_test", directory=config.experiment_name)
     xy_remaining = data_handling.read_csv("xy_remaining", directory=config.experiment_name)
 
-    true_validity_train = data_handling.read_csv("true_validity_train", directory=config.experiment_name)
-    true_validity_val = data_handling.read_csv("true_validity_val", directory=config.experiment_name)
-    true_validity_test = data_handling.read_csv("true_validity_test", directory=config.experiment_name)
+    true_validity_train = data_handling.read_csv("true_validity_train",
+                                                 directory=config.experiment_name).squeeze()
+    true_validity_val = data_handling.read_csv("true_validity_val",
+                                               directory=config.experiment_name).squeeze()
+    true_validity_test = data_handling.read_csv("true_validity_test",
+                                                directory=config.experiment_name).squeeze()
     true_validity_remaining = data_handling.read_csv("true_validity_remaining",
-                                                     directory=config.experiment_name)
+                                                     directory=config.experiment_name).squeeze()
 
     xy_train_new, xy_val_new, true_validity_train_new, true_validity_val_new = data_handling.move_true_invalid_from_training_2_validation(xy_training, xy_validation, true_validity_train, true_validity_val)
 
@@ -30,11 +33,11 @@ def exe_train_detector(config: ExtrapolationExperimentConfig):
         tag = tag+"+test"
     if config.detector_config.use_remaining_for_validation:
         xy_val_new = pd.concat([xy_val_new, xy_remaining])
-        true_validity_train_new = pd.concat([true_validity_train_new, true_validity_remaining])
+        true_validity_val_new = pd.concat([true_validity_val_new, true_validity_remaining])
         tag = tag+"+remaining"
     if config.detector_config.use_train_for_validation:
         xy_val_new = pd.concat([xy_val_new, xy_training])
-        true_validity_train_new = pd.concat([true_validity_train_new, true_validity_train])
+        true_validity_val_new = pd.concat([true_validity_val_new, true_validity_train])
         tag = tag+"+train"
     if tag == "val+test+remaining+train":
         tag = "ideal"
@@ -47,13 +50,12 @@ def exe_train_detector(config: ExtrapolationExperimentConfig):
     for detector_name in config.detector_config.detectors:
         if config.detector_config.tuning_bool:
             detector, threshold = tune_detector(detector_name, x_train, x_val,
-                                             true_validity_train_new,
                            true_validity_val_new, config.detector_config)
 
             # save detector and threshold
             save_path = os.path.join(config.experiment_name, "detectors")
             data_handling.write_pkl(detector, f"{detector_name}_{tag}", save_path)
-            data_handling.write_csv(threshold,f"{detector_name}_{tag}_threshold", save_path)
+            data_handling.write_csv(threshold, f"{detector_name}_{tag}_threshold", save_path)
         else:
             raise NotImplementedError("Only tuning is implemented for the detector")
 

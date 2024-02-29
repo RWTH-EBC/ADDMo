@@ -44,14 +44,6 @@ def score_meshgrid(
 ) -> dict:
     """Calculates the error on a meshgrid for plotting purposes"""
 
-    grid_generator = ArtificialPointGenerator()
-    bounds = grid_generator.infer_meshgrid_bounds(x_tot)
-    x_grid = grid_generator.generate_point_grid(x_tot, bounds, mesh_points_per_axis)
-
-    # simulate true values for the grid via the system simulation
-    # take care of correct order of features
-    y_grid = x_grid.apply(lambda row: system_simulation(*row), axis=1)
-    xy_grid = pd.concat([x_grid, y_grid], axis=1)
 
     df_grid_scores = score_per_sample(regressor, x_grid, y_grid, metric)
 

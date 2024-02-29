@@ -23,6 +23,9 @@ def exe_true_validity_domain(config: ExtrapolationExperimentConfig):
     errors_remaining = data_handling.read_csv(
         "errors_remaining", directory=config.experiment_name
     )
+    errors_grid = data_handling.read_csv(
+        "errors_grid", directory=config.experiment_name
+    )
 
     # infer threshold
     errors_train_val_test = pd.concat([errors_train, errors_val, errors_test])
@@ -43,6 +46,9 @@ def exe_true_validity_domain(config: ExtrapolationExperimentConfig):
     true_validity_remaining = true_validity_domain.classify_errors_2_true_validity(
         errors_remaining["error"], absolute_threshold
     )
+    true_validity_grid = true_validity_domain.classify_errors_2_true_validity(
+        errors_grid["error"], absolute_threshold
+    )
 
     # Save to csv
     data_handling.write_csv(
@@ -58,6 +64,9 @@ def exe_true_validity_domain(config: ExtrapolationExperimentConfig):
         true_validity_remaining,
         "true_validity_remaining",
         directory=config.experiment_name,
+    )
+    data_handling.write_csv(
+        true_validity_grid, "true_validity_grid", directory=config.experiment_name
     )
 
 

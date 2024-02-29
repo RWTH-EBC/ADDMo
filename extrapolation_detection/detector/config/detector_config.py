@@ -16,5 +16,3 @@ class DetectorConfig(BaseConfig):
         # for scoring
         self.beta_f_score: float = 1 # beta value for F-score
 
-        # for training
-        self.outlier_fraction: float = 0.05 # irrelevant for tuned detectors

@@ -19,6 +19,7 @@ def exe_regressor_error_calculation(config: ExtrapolationExperimentConfig):
     xy_validation = data_handling.read_csv("xy_val", directory=config.experiment_name)
     xy_test = data_handling.read_csv("xy_test", directory=config.experiment_name)
     xy_remaining = data_handling.read_csv("xy_remaining", directory=config.experiment_name)
+    xy_grid = data_handling.read_csv("xy_grid", directory=config.experiment_name)
 
     x_train, y_train = split_target_features(config.name_of_target, xy_training)
     errors_train = score_per_sample(regressor, x_train, y_train, metric="mae")
@@ -36,15 +37,8 @@ def exe_regressor_error_calculation(config: ExtrapolationExperimentConfig):
     errors_remaining = score_per_sample(regressor, x_remaining, y_remaining, metric="mae")
     data_handling.write_csv(errors_remaining, "errors_remaining", directory=config.experiment_name)
 
-    # create meshgrid and calculate errors on it for plotting
-    if config.system_simulation == "carnot":
-        from extrapolation_detection.use_cases.score_ann import carnot_model
-        system_simulation = carnot_model
-
-    x_tot = pd.concat([x_train, x_val, x_test, x_remaining], axis=0)
-    xy_grid, errors_grid = score_meshgrid(regressor, system_simulation, x_tot,
-                                 config.grid_points_per_axis)
-    data_handling.write_csv(xy_grid, "xy_grid", directory=config.experiment_name)
+    x_grid, y_grid = split_target_features(config.name_of_target, xy_grid)
+    errors_grid = score_per_sample(regressor, x_grid, y_grid, metric="mae")
     data_handling.write_csv(errors_grid, "errors_grid", directory=config.experiment_name)
 
 if __name__ == "__main__":

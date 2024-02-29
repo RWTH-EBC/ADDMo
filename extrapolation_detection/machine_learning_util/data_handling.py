@@ -108,6 +108,8 @@ def write_pkl(data, filename: str, directory: str = None, override: bool = True)
         If true, existing data will be overwritten
     """
 
+    filename = filename + ".pkl"
+
     path = _get_path(filename, directory)
 
     # make sure the directory does exist

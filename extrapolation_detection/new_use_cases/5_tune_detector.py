@@ -4,7 +4,7 @@ import pandas as pd
 
 from extrapolation_detection.machine_learning_util import data_handling
 from extrapolation_detection.new_use_cases.ed_experiment_config import ExtrapolationExperimentConfig
-from extrapolation_detection.detector.tuning_mechanisms import tune_detector
+from extrapolation_detection.detector.tuning_mechanisms import tune_detector, untuned_detector
 from core.util.data_handling import split_target_features
 
 def exe_train_detector(config: ExtrapolationExperimentConfig):
@@ -57,7 +57,14 @@ def exe_train_detector(config: ExtrapolationExperimentConfig):
             data_handling.write_pkl(detector, f"{detector_name}_{tag}", save_path)
             data_handling.write_csv(threshold, f"{detector_name}_{tag}_threshold", save_path)
         else:
-            raise NotImplementedError("Only tuning is implemented for the detector")
+            detector, threshold = untuned_detector(detector_name, x_train, x_val, config.true_outlier_fraction)
+
+            # save detector and threshold
+            save_path = os.path.join(config.experiment_name, "detectors")
+            data_handling.write_pkl(detector, f"{detector_name}_{tag}_untuned", save_path)
+            data_handling.write_csv(threshold, f"{detector_name}_{tag}_untuned_threshold",
+                                    save_path)
+
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()

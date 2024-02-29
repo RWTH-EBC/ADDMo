@@ -12,6 +12,8 @@ class DetectorFactory:
     def detector_factory(detector_type: str) -> AbstractDetector:
         """Get the detector instance dynamically."""
 
+        detector_type = "D_" + detector_type
+
         # If detector is based on extrapolation_detection.detector
         if hasattr(detectors, detector_type):
             custom_detector_class: detectors.AbstractDetector = getattr(detectors, detector_type)

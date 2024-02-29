@@ -22,7 +22,7 @@ def plot_single(data: dict, errors: dict, data_error: dict, score_2D_dct: dict, 
     novelty_2D_dct: dict
         from 3_config_validity_domain.py
     threshold: float
-        from 5_train_detector.py
+        from 5_tune_detector.py
     save_name: str
         Name of the plot
     save_plot: str
@@ -138,7 +138,7 @@ def _plot_subplot(data: dict, errors: dict, data_error: dict, score_2D_dct: dict
     novelty_2D_dct: dict
         from 3_config_validity_domain.py
     threshold: float
-        from 5_train_detector.py
+        from 5_tune_detector.py
     """
     # Define colors
     green = (87 / 255, 171 / 255, 39 / 255)

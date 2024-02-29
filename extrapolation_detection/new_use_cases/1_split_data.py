@@ -49,6 +49,23 @@ def exe_split_data(config: ExtrapolationExperimentConfig):
     data_handling.write_csv(xy_remaining, "xy_remaining", directory=config.experiment_name)
     data_handling.write_csv(xy_grid, "xy_grid", directory=config.experiment_name)
 
+    # additionally save the features and targets separately
+    x_train, y_train = split_target_features(config.name_of_target, xy_training)
+    x_val, y_val = split_target_features(config.name_of_target, xy_validation)
+    x_test, y_test = split_target_features(config.name_of_target, xy_test)
+    x_remaining, y_remaining = split_target_features(config.name_of_target, xy_remaining)
+    x_grid, y_grid = split_target_features(config.name_of_target, xy_grid)
+
+    data_handling.write_csv(x_train, "x_train", directory=config.experiment_name)
+    data_handling.write_csv(y_train, "y_train", directory=config.experiment_name)
+    data_handling.write_csv(x_val, "x_val", directory=config.experiment_name)
+    data_handling.write_csv(y_val, "y_val", directory=config.experiment_name)
+    data_handling.write_csv(x_test, "x_test", directory=config.experiment_name)
+    data_handling.write_csv(y_test, "y_test", directory=config.experiment_name)
+    data_handling.write_csv(x_remaining, "x_remaining", directory=config.experiment_name)
+    data_handling.write_csv(y_remaining, "y_remaining", directory=config.experiment_name)
+    data_handling.write_csv(x_grid, "x_grid", directory=config.experiment_name)
+    data_handling.write_csv(y_grid, "y_grid", directory=config.experiment_name)
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()

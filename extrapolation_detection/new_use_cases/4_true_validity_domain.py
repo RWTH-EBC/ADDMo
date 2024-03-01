@@ -29,28 +29,35 @@ def exe_true_validity_domain(config: ExtrapolationExperimentConfig):
 
     # infer threshold
     errors_train_val_test = pd.concat([errors_train, errors_val, errors_test])
-    absolute_threshold = true_validity_domain.infer_threshold(
+    true_validity_threshold = true_validity_domain.infer_threshold(
         config.true_outlier_fraction, errors_train_val_test["error"]
     )
 
+
     # classify errors to validity boolean
     true_validity_train = true_validity_domain.classify_errors_2_true_validity(
-        errors_train["error"], absolute_threshold
+        errors_train["error"], true_validity_threshold
     )
     true_validity_val = true_validity_domain.classify_errors_2_true_validity(
-        errors_val["error"], absolute_threshold
+        errors_val["error"], true_validity_threshold
     )
     true_validity_test = true_validity_domain.classify_errors_2_true_validity(
-        errors_test["error"], absolute_threshold
+        errors_test["error"], true_validity_threshold
     )
     true_validity_remaining = true_validity_domain.classify_errors_2_true_validity(
-        errors_remaining["error"], absolute_threshold
+        errors_remaining["error"], true_validity_threshold
     )
     true_validity_grid = true_validity_domain.classify_errors_2_true_validity(
-        errors_grid["error"], absolute_threshold
+        errors_grid["error"], true_validity_threshold
     )
 
     # Save to csv
+    # to dataframe for saving in human readable csv format
+    true_validity_threshold = pd.DataFrame([true_validity_threshold])
+    data_handling.write_csv(
+        true_validity_threshold, "true_validity_threshold", directory=config.experiment_name
+    )
+
     data_handling.write_csv(
         true_validity_train, "true_validity_train", directory=config.experiment_name
     )

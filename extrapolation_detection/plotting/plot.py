@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt, colors, axes
 from matplotlib.cm import ScalarMappable
+from matplotlib.tri import Triangulation
 
 from extrapolation_detection.machine_learning_util import data_handling as dh
 
@@ -216,8 +217,6 @@ def _plot_subplot(plt_data: PlotData, axs: axes.Axes):
         s=markersize,
     )
 
-    from matplotlib.tri import Triangulation
-
     triang = Triangulation(plt_data.x_grid.iloc[:, 0], plt_data.x_grid.iloc[:, 1])
     c1 = axs.tricontour(
         triang,
@@ -226,15 +225,6 @@ def _plot_subplot(plt_data: PlotData, axs: axes.Axes):
         linewidths=2.5,
         colors=[petrol],
     )
-
-    # Validity domain for true validity
-    # c1 = axs.contour(
-    #     [plt_data.x_grid.iloc[:, 0], plt_data.x_grid.iloc[:, 1]],
-    #     plt_data.errors_grid["error"],
-    #     levels=[plt_data.true_validity_threshold],
-    #     linewidths=2.5,
-    #     colors=[petrol],
-    # )
     h1, _ = c1.legend_elements()
 
     # Classifier decision boundary
@@ -245,15 +235,6 @@ def _plot_subplot(plt_data: PlotData, axs: axes.Axes):
         linewidths=2.5,
         colors=[violett],
     )
-
-    # c2 = axs.contour(
-    #     [plt_data.x_grid.iloc[:, 0] * plt_data.x_grid.iloc[:, 1]],
-    #     plt_data.n_score_grid,
-    #     levels=[plt_data.n_score_threshold],
-    #     linewidths=2.5,
-    #     colors=[violett],
-    #     linestyles="solid",
-    # )
     h2, _ = c2.legend_elements()
 
     # Legend

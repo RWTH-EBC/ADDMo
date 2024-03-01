@@ -475,6 +475,7 @@ def plot_3(plt_data_list: list[PlotData]):
 
 
 def plot_bar_plot(bars, clf_labels, bars_ideal=None, labels=None, ylabel=None):
+    # todo:
     blue = (0 / 255, 84 / 255, 159 / 255)
     green = (87 / 255, 171 / 255, 39 / 255)
     violett = (97 / 255, 33 / 255, 88 / 255)

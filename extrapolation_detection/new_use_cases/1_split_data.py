@@ -35,7 +35,7 @@ def exe_split_data(config: ExtrapolationExperimentConfig):
 
     # simulate true values for the grid via the system simulation
     if config.system_simulation == "carnot":
-        from extrapolation_detection.use_cases.score_ann import carnot_model
+        from extrapolation_detection.system_simulations.carnot_model import carnot_model
         system_simulation = carnot_model
 
     y_grid = x_grid.apply(lambda row: system_simulation(*row), axis=1)

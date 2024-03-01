@@ -9,7 +9,7 @@ class ExtrapolationExperimentConfig(BaseConfig):
         # Global Variables ########################################
         self.simulation_data_name: str = "Carnot_mid"
 
-        self.experiment_name: str = "Carnot_Test2"
+        self.experiment_name: str = "Carnot_Test3"
 
         self.name_of_target: str = "$\dot{Q}_{heiz}$ in kW"
 

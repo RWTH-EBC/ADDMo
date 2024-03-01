@@ -33,12 +33,13 @@ def exe_detector_score_calculation(config: ExtrapolationExperimentConfig):
     directory = os.path.join(config.experiment_name, "detectors")
     for detector_file in os.listdir(directory):
         if detector_file.endswith(".pkl"):
-            # load detector
-            detector: AbstractDetector = data_handling.read_pkl(
-                detector_file, directory=directory
-            )
             # get name without file ending
             detector_name = detector_file.split(".")[0]
+
+            # load detector
+            detector: AbstractDetector = data_handling.read_pkl(
+                detector_name, directory=directory
+            )
 
             # score the detector
             x_train, y_train = split_target_features(config.name_of_target, xy_training)

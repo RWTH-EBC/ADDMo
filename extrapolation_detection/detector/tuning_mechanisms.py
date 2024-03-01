@@ -1,8 +1,6 @@
 import numpy as np
 import pandas as pd
 
-import extrapolation_detection.machine_learning_util.data_handling as dh
-from extrapolation_detection.machine_learning_util.util import rearrange_training_data
 from extrapolation_detection.detector.detector_factory import DetectorFactory
 from extrapolation_detection.detector.config.detector_config import DetectorConfig
 from extrapolation_detection.n_D_extrapolation.true_validity_domain import infer_threshold

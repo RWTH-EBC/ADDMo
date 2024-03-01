@@ -147,6 +147,8 @@ def read_pkl(filename: str, directory: str = None) -> Any:
         Pickle object.
     """
 
+    filename = filename + ".pkl"
+
     path = _get_path(filename, directory)
 
     if os.path.exists(path):  # check for the existence of the path

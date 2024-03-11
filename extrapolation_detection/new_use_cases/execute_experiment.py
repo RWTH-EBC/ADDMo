@@ -1,8 +1,0 @@
-from extrapolation_detection.machine_learning_util import data_handling
-from extrapolation_detection.new_use_cases.ed_experiment_config import ExtrapolationExperimentConfig
-
-
-
-config = ExtrapolationExperimentConfig()
-
-

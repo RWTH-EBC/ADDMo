@@ -6,10 +6,10 @@ from matplotlib import pyplot as plt, colors, axes
 from matplotlib.cm import ScalarMappable
 from matplotlib.tri import Triangulation
 
-from extrapolation_detection.machine_learning_util import data_handling as dh
+from extrapolation_detection.util import data_handling as dh
 
 
-class PlotData:
+class PlotData2D:
     def __init__(self):
         self.plot_title: str = None
 
@@ -45,73 +45,73 @@ class PlotData:
         self.x_test_ml_model = None
         self.errors_test_ml_model = None
 
-    def load_plot_data(self, experiment_name: str, detector: str):
+    def load_plot_data(self, experiment_folder: str, detector: str):
         # read experiment data
-        self.x_train = dh.read_csv("x_train", directory=experiment_name)
-        self.y_train = dh.read_csv("y_train", directory=experiment_name)
-        self.x_val = dh.read_csv("x_val", directory=experiment_name)
-        self.y_val = dh.read_csv("y_val", directory=experiment_name)
-        self.x_test = dh.read_csv("x_test", directory=experiment_name)
-        self.y_test = dh.read_csv("y_test", directory=experiment_name)
-        self.x_remaining = dh.read_csv("x_remaining", directory=experiment_name)
-        self.y_remaining = dh.read_csv("y_remaining", directory=experiment_name)
-        self.x_grid = dh.read_csv("x_grid", directory=experiment_name)
-        self.y_grid = dh.read_csv("y_grid", directory=experiment_name)
+        self.x_train = dh.read_csv("x_train", directory=experiment_folder)
+        self.y_train = dh.read_csv("y_train", directory=experiment_folder)
+        self.x_val = dh.read_csv("x_val", directory=experiment_folder)
+        self.y_val = dh.read_csv("y_val", directory=experiment_folder)
+        self.x_test = dh.read_csv("x_test", directory=experiment_folder)
+        self.y_test = dh.read_csv("y_test", directory=experiment_folder)
+        self.x_remaining = dh.read_csv("x_remaining", directory=experiment_folder)
+        self.y_remaining = dh.read_csv("y_remaining", directory=experiment_folder)
+        self.x_grid = dh.read_csv("x_grid", directory=experiment_folder)
+        self.y_grid = dh.read_csv("y_grid", directory=experiment_folder)
 
-        self.xy_training = dh.read_csv("xy_train", directory=experiment_name)
-        self.xy_validation = dh.read_csv("xy_val", directory=experiment_name)
-        self.xy_test = dh.read_csv("xy_test", directory=experiment_name)
-        self.xy_remaining = dh.read_csv("xy_remaining", directory=experiment_name)
-        self.xy_grid = dh.read_csv("xy_grid", directory=experiment_name)
+        self.xy_training = dh.read_csv("xy_train", directory=experiment_folder)
+        self.xy_validation = dh.read_csv("xy_val", directory=experiment_folder)
+        self.xy_test = dh.read_csv("xy_test", directory=experiment_folder)
+        self.xy_remaining = dh.read_csv("xy_remaining", directory=experiment_folder)
+        self.xy_grid = dh.read_csv("xy_grid", directory=experiment_folder)
 
         # read errors
-        self.errors_train = dh.read_csv("errors_train", directory=experiment_name)
-        self.errors_val = dh.read_csv("errors_val", directory=experiment_name)
-        self.errors_test = dh.read_csv("errors_test", directory=experiment_name)
+        self.errors_train = dh.read_csv("errors_train", directory=experiment_folder)
+        self.errors_val = dh.read_csv("errors_val", directory=experiment_folder)
+        self.errors_test = dh.read_csv("errors_test", directory=experiment_folder)
         self.errors_remaining = dh.read_csv(
-            "errors_remaining", directory=experiment_name
+            "errors_remaining", directory=experiment_folder
         )
-        self.errors_grid = dh.read_csv("errors_grid", directory=experiment_name)
+        self.errors_grid = dh.read_csv("errors_grid", directory=experiment_folder)
 
         # read true_validity
         self.true_validity_train = dh.read_csv(
-            "true_validity_train", experiment_name
+            "true_validity_train", experiment_folder
         ).squeeze()
         self.true_validity_val = dh.read_csv(
-            "true_validity_val", experiment_name
+            "true_validity_val", experiment_folder
         ).squeeze()
         self.true_validity_test = dh.read_csv(
-            "true_validity_test", experiment_name
+            "true_validity_test", experiment_folder
         ).squeeze()
         self.true_validity_remaining = dh.read_csv(
-            "true_validity_remaining", experiment_name
+            "true_validity_remaining", experiment_folder
         ).squeeze()
         self.true_validity_grid = dh.read_csv(
-            "true_validity_grid", experiment_name
+            "true_validity_grid", experiment_folder
         ).squeeze()
         self.true_validity_threshold = dh.read_csv(
-            "true_validity_threshold", experiment_name
+            "true_validity_threshold", experiment_folder
         ).iloc[0, 0]
 
         # read detector data
         self.n_score_train = dh.read_csv(
-            f"n_score_train_{detector}", directory=experiment_name
+            f"n_score_train_{detector}", directory=experiment_folder
         ).squeeze()
         self.n_score_val = dh.read_csv(
-            f"n_score_val_{detector}", directory=experiment_name
+            f"n_score_val_{detector}", directory=experiment_folder
         ).squeeze()
         self.n_score_test = dh.read_csv(
-            f"n_score_test_{detector}", directory=experiment_name
+            f"n_score_test_{detector}", directory=experiment_folder
         ).squeeze()
         self.n_score_remaining = dh.read_csv(
-            f"n_score_remaining_{detector}", directory=experiment_name
+            f"n_score_remaining_{detector}", directory=experiment_folder
         ).squeeze()
         self.n_score_grid = dh.read_csv(
-            f"n_score_grid_{detector}", directory=experiment_name
+            f"n_score_grid_{detector}", directory=experiment_folder
         ).squeeze()
         self.n_score_threshold = dh.read_csv(
             f"{detector}_threshold",
-            directory=os.path.join(experiment_name, "detectors"),
+            directory=os.path.join(experiment_folder, "detectors"),
         ).iloc[0, 0]
 
     def infer_ml_model_data_splits(self):
@@ -126,14 +126,13 @@ class PlotData:
 def show_plot(plt):
     plt.show()
 
+def save_plot(plt, file_name: str, experiment_folder: str):
+    folder = os.path.join(experiment_folder, "plots")
+    if not os.path.exists(folder):
+        os.mkdir(folder)
+    plt.savefig(os.path.join(folder, file_name), bbox_inches="tight")
 
-def save_plot(plt, file_name: str):
-    if not os.path.exists("plots"):
-        os.mkdir("plots")
-    plt.savefig(os.path.join("plots", file_name), bbox_inches="tight")
-
-
-def _plot_subplot(plt_data: PlotData, axs: axes.Axes):
+def _plot_subplot(plt_data: PlotData2D, axs: axes.Axes):
     """Plots 2D UseCases"""
 
     # Define colors
@@ -257,7 +256,7 @@ def _plot_subplot(plt_data: PlotData, axs: axes.Axes):
 
     return labels, handles, divnorm, color_dict
 
-def plot_single_via_subplot(plt_data: PlotData):
+def plot_single(plt_data: PlotData2D):
     # Subplots
     fig, axs = plt.subplots(1, 1, figsize=(5.4, 4.1))
     plt.subplots_adjust(
@@ -321,8 +320,81 @@ def plot_single_via_subplot(plt_data: PlotData):
 
     return plt
 
+def plot_3(plt_data_list: list[PlotData2D]):
+    assert len(plt_data_list) == 3
 
-def plot_5(plt_data_list: list[PlotData]):
+    fig, axs = plt.subplots(3, 2, figsize=(5.4, 4.8), height_ratios=[1, 0, 1])
+    plt.subplots_adjust(
+        left=0.075, right=0.98, bottom=0.09, top=0.95, wspace=0.05, hspace=0.2
+    )
+
+    handles = None
+    labels = None
+    divnorm = None
+    for row in range(0, 3):
+        for column in range(0, 2):
+            if row == 1 or row == 3:
+                axs[row, column].remove()
+            else:
+                if row == 0:
+                    indx = column
+                elif row == 2:
+                    indx = column + 2
+                # elif row == 4:
+                #     indx = column + 4
+                if indx < 3:
+                    labels, handles, divnorm, color_dict = _plot_subplot(
+                        plt_data_list[indx], axs[row, column]
+                    )
+                    if indx != 1 and indx != 2:  # and indx != 2:
+                        axs[row, column].set_xticklabels([])
+                    else:
+                        axs[row, column].set_xlabel(
+                            plt_data_list[0].x_train.columns[0],
+                            labelpad=0
+                            # r"$\mathrm{T}_\mathrm{amb}$ in °C", labelpad=0
+                        )
+
+                    if indx != 0 and indx != 2 and indx != 4:
+                        axs[row, column].set_yticklabels([])
+                    else:
+                        axs[row, column].set_ylabel(
+                            plt_data_list[0].x_train.columns[1],
+                            labelpad=0
+                            # r"$\mathrm{P}_\mathrm{el}$ in kW", labelpad=0
+                        )
+                else:
+                    axs[row, column].axis("off")
+
+    handles[0], handles[1], handles[2] = handles[1], handles[2], handles[0]
+    labels[0], labels[1], labels[2] = labels[1], labels[2], labels[0]
+
+    axs[2, 1].legend(handles, labels)
+    ticks = (
+        np.linspace(divnorm.vmin + 0.01, divnorm.vcenter, 3).tolist()
+        + np.linspace(divnorm.vcenter, divnorm.vmax - 0.01, 3).tolist()
+    )
+    # ticks = [0.01, 0.05, 0.1, 4, 8]
+    cb = plt.colorbar(
+        ScalarMappable(
+            norm=divnorm,
+            cmap=colors.LinearSegmentedColormap.from_list(
+                "gwr",
+                [color_dict["green"], color_dict["darkgrey"], color_dict["red"]],
+                N=256,
+            ),
+        ),
+        ax=axs[2, 1],
+        fraction=0.05,
+        orientation="horizontal",
+        ticks=[round(i, 2) for i in ticks],
+        label="Absolute Prediction Error \n of ANN in kW",
+    )
+    cb.ax.xaxis.set_label_position("top")
+
+    return plt
+
+def plot_5(plt_data_list: list[PlotData2D]):
     assert len(plt_data_list) == 5
 
     fig, axs = plt.subplots(5, 2, figsize=(5.4, 7.2), height_ratios=[1, 0, 1, 0, 1])
@@ -397,82 +469,6 @@ def plot_5(plt_data_list: list[PlotData]):
     cb.ax.xaxis.set_label_position("top")
 
     return plt
-
-
-def plot_3(plt_data_list: list[PlotData]):
-    assert len(plt_data_list) == 3
-
-    fig, axs = plt.subplots(3, 2, figsize=(5.4, 4.8), height_ratios=[1, 0, 1])
-    plt.subplots_adjust(
-        left=0.075, right=0.98, bottom=0.09, top=0.95, wspace=0.05, hspace=0.2
-    )
-
-    handles = None
-    labels = None
-    divnorm = None
-    for row in range(0, 3):
-        for column in range(0, 2):
-            if row == 1 or row == 3:
-                axs[row, column].remove()
-            else:
-                if row == 0:
-                    indx = column
-                elif row == 2:
-                    indx = column + 2
-                # elif row == 4:
-                #     indx = column + 4
-                if indx < 3:
-                    labels, handles, divnorm, color_dict = _plot_subplot(
-                        plt_data_list[indx], axs[row, column]
-                    )
-                    if indx != 1 and indx != 2:  # and indx != 2:
-                        axs[row, column].set_xticklabels([])
-                    else:
-                        axs[row, column].set_xlabel(
-                            plt_data_list[0].x_train.columns[0],
-                            labelpad=0
-                            # r"$\mathrm{T}_\mathrm{amb}$ in °C", labelpad=0
-                        )
-
-                    if indx != 0 and indx != 2 and indx != 4:
-                        axs[row, column].set_yticklabels([])
-                    else:
-                        axs[row, column].set_ylabel(
-                            plt_data_list[0].x_train.columns[1],
-                            labelpad=0
-                            # r"$\mathrm{P}_\mathrm{el}$ in kW", labelpad=0
-                        )
-                else:
-                    axs[row, column].axis("off")
-
-    handles[0], handles[1], handles[2] = handles[1], handles[2], handles[0]
-    labels[0], labels[1], labels[2] = labels[1], labels[2], labels[0]
-
-    axs[2, 1].legend(handles, labels)
-    ticks = (
-        np.linspace(divnorm.vmin + 0.01, divnorm.vcenter, 3).tolist()
-        + np.linspace(divnorm.vcenter, divnorm.vmax - 0.01, 3).tolist()
-    )
-    # ticks = [0.01, 0.05, 0.1, 4, 8]
-    cb = plt.colorbar(
-        ScalarMappable(
-            norm=divnorm,
-            cmap=colors.LinearSegmentedColormap.from_list(
-                "gwr",
-                [color_dict["green"], color_dict["darkgrey"], color_dict["red"]],
-                N=256,
-            ),
-        ),
-        ax=axs[2, 1],
-        fraction=0.05,
-        orientation="horizontal",
-        ticks=[round(i, 2) for i in ticks],
-        label="Absolute Prediction Error \n of ANN in kW",
-    )
-    cb.ax.xaxis.set_label_position("top")
-
-    return plt
-
 
 def plot_bar_plot(bars, clf_labels, bars_ideal=None, labels=None, ylabel=None):
     # todo:

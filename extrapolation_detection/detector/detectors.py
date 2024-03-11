@@ -16,6 +16,8 @@ from pyod.models.mcd import MCD
 from pyod.models.knn import KNN
 from pyod.models.pca import PCA
 
+from scipy.spatial import ConvexHull
+
 from sklearn.neighbors import KernelDensity
 from sklearn.mixture import GaussianMixture
 from sklearn.gaussian_process import GaussianProcessRegressor
@@ -781,3 +783,19 @@ class D_None(AbstractDetector):
             returns classifier
         """
         return self
+
+class D_ConvexHull(AbstractDetector):
+    def __init__(self):
+        super(D_ConvexHull).__init__()
+        self.hull = None
+
+    def train(self, x_train):
+        self.hull = ConvexHull(x_train)
+
+    def score(self, x_test):
+        scores = np.zeros(len(x_test))
+        for i, point in enumerate(x_test):
+            eq = self.hull.equations.T
+            dist = np.dot(eq[:-1], point) + eq[-1]
+            scores[i] = np.max(dist)
+        return scores

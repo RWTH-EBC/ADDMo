@@ -5,9 +5,8 @@ import numpy as np
 import pandas as pd
 
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
-from extrapolation_detection.machine_learning_util import data_handling as dh
+from extrapolation_detection.util import data_handling as dh
 from core.util.data_handling import split_target_features
-from core.exploration_quantification.exploration_quantification import ArtificialPointGenerator
 
 
 def score_per_sample(

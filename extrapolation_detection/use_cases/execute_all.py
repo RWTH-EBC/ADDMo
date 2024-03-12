@@ -8,7 +8,7 @@ from extrapolation_detection.use_cases import (
     s4_true_validity_domain,
     s5_tune_detector,
     s6_detector_score_calculation,
-    s72_plotting
+    s7_2_plotting
 )
 
 config = ExtrapolationExperimentConfig()

@@ -13,12 +13,8 @@ from extrapolation_detection.use_cases.config.ed_experiment_config import (
 
 
 def exe_tune_regressor(config: ExtrapolationExperimentConfig):
-    xy_training = data_handling.read_csv(
-        "xy_train", directory=config.experiment_folder
-    )
-    xy_validation = data_handling.read_csv(
-        "xy_val", directory=config.experiment_folder
-    )
+    xy_training = data_handling.read_csv("xy_train", directory=config.experiment_folder)
+    xy_validation = data_handling.read_csv("xy_val", directory=config.experiment_folder)
 
     # Create the config object
     config_MT = config.model_tuning_config
@@ -35,10 +31,18 @@ def exe_tune_regressor(config: ExtrapolationExperimentConfig):
     regressor: AbstractMLModel = best_model
 
     # safe regressor to pickle #Todo: evtl. via onnx?
-    data_handling.write_pkl(
-        regressor,
-        "regressor",
-        directory=os.path.join(config.experiment_folder, "regressors"))
+    regressor_directory = os.path.join(config.experiment_folder, "regressors")
+    data_handling.write_pkl(regressor, "regressor", directory=regressor_directory)
+
+    data_handling.write_csv(
+        xy_train_val, "xy_regressor_fit", directory=regressor_directory
+    )
+    data_handling.write_csv(
+        x_train_val, "x_regressor_fit", directory=regressor_directory
+    )
+    data_handling.write_csv(
+        y_train_val, "y_regressor_fit", directory=regressor_directory
+    )
 
 
 if __name__ == "__main__":

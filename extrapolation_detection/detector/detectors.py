@@ -16,7 +16,7 @@ from pyod.models.mcd import MCD
 from pyod.models.knn import KNN
 from pyod.models.pca import PCA
 
-from scipy.spatial import ConvexHull
+from scipy.spatial import ConvexHull, Delaunay
 
 from sklearn.neighbors import KernelDensity
 from sklearn.mixture import GaussianMixture
@@ -786,16 +786,46 @@ class D_None(AbstractDetector):
 
 class D_ConvexHull(AbstractDetector):
     def __init__(self):
-        super(D_ConvexHull).__init__()
         self.hull = None
+        self.delny = None
 
-    def train(self, x_train):
-        self.hull = ConvexHull(x_train)
+    def train(self, X):
+        self.hull = ConvexHull(X)
 
     def score(self, x_test):
-        scores = np.zeros(len(x_test))
-        for i, point in enumerate(x_test):
-            eq = self.hull.equations.T
-            dist = np.dot(eq[:-1], point) + eq[-1]
-            scores[i] = np.max(dist)
-        return scores
+        return None
+    def predict(self, X):
+        """
+        Predict if a point is an inlier (0) or an outlier (1).
+
+        Parameters:
+        - X: Input data, numpy.ndarray of shape (n_samples, n_features)
+
+        Returns:
+        - predictions: numpy.ndarray of shape (n_samples,), 0 for inliers, 1 for outliers.
+        """
+        predictions = np.array([self._is_in_hull(point) for point in X])
+        return predictions
+
+    def _is_in_hull(self, point):
+        """
+        Check if a point is inside the convex hull.
+
+        Parameters:
+        - point: numpy.ndarray of shape (n_features,)
+
+        Returns:
+        - int, 0 if the point is an inlier, 1 otherwise.
+        """
+        new_hull = ConvexHull(np.vstack([self.hull.points, point]))
+        if np.array_equal(new_hull.vertices, self.hull.vertices):
+            return 0  # The point is an inlier
+        else:
+            return 1  # The point is an outlier
+
+    # def predict(self, X):
+    #     labels = np.array([1 if self.delny.find_simplex(x) < 0 else 0 for x in X])
+    #     return labels
+
+    # def norm(self, x_t: ndarray, init: bool = False) -> ndarray:
+    #     return x_t

@@ -4,14 +4,16 @@ from core.util.abstract_config import BaseConfig
 from core.s3_model_tuning.config.model_tuning_config import ModelTuningSetup
 
 from extrapolation_detection.detector.config.detector_config import DetectorConfig
+from exploration_quantification.config.explo_quant_config import ExploQuantConfig
+
 
 class ExtrapolationExperimentConfig(BaseConfig):
 
     def __init__(self):
         # Global Variables ########################################
-        self.simulation_data_name: str = "Carnot_mid"
+        self.simulation_data_name: str = "Boptest_TAir_mid"
 
-        self.experiment_name: str = "Carnot_Test5"
+        self.experiment_name: str = "Boptest_TAir_mid"
         self.experiment_folder: str = os.path.join("results", self.experiment_name)
 
         self.name_of_target: str = "$\dot{Q}_{heiz}$ in kW"
@@ -40,3 +42,7 @@ class ExtrapolationExperimentConfig(BaseConfig):
         self.detector_config = DetectorConfig()
         # self.extrapolation_detect_config_path: str = r"D:\\04_GitRepos\\addmo-extra\\extrapolation_detection\\use_cases\\config_ED.yaml"
         # self.extrapolation_detect_config = ModelTuningSetup().load_yaml_to_class(self.extrapolation_detect_config_path)
+
+        # Exploration Detector Variables ###############################
+        self.explo_quant_config = ExploQuantConfig()
+        self.explo_quant_config.

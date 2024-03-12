@@ -11,9 +11,9 @@ class ExtrapolationExperimentConfig(BaseConfig):
 
     def __init__(self):
         # Global Variables ########################################
-        self.simulation_data_name: str = "Boptest_TAir_mid"
+        self.simulation_data_name: str = "Carnot_mid"
 
-        self.experiment_name: str = "Boptest_TAir_mid"
+        self.experiment_name: str = "Carnot_Test6"
         self.experiment_folder: str = os.path.join("results", self.experiment_name)
 
         self.name_of_target: str = "$\dot{Q}_{heiz}$ in kW"
@@ -45,4 +45,3 @@ class ExtrapolationExperimentConfig(BaseConfig):
 
         # Exploration Detector Variables ###############################
         self.explo_quant_config = ExploQuantConfig()
-        self.explo_quant_config.

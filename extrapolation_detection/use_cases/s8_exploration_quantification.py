@@ -44,12 +44,13 @@ def exe_exploration_quantification(config: ExtrapolationExperimentConfig):
         exploration_percentage = quantifier.calculate_exploration_percentages()
 
         plots_per_axes = quantifier.plot_scatter_extrapolation_share_2D(explo_detector_name)
-        for i, plt in enumerate(plots_per_axes): #Todo: plot wird leer gespeichert
+        for i, plt in enumerate(plots_per_axes):
             plot.save_plot(
                 plt,
                 f"{explo_detector_name}_{i}",
                 config.experiment_folder,
             )
+            plot.show_plot(plt)
 
         # save
 

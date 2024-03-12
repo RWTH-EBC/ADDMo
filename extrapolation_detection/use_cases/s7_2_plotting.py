@@ -19,6 +19,7 @@ def exe_plot_2D_all(config):
             plot_data.infer_ml_model_data_splits()
             plt = plot.plot_single(plot_data)
             plot.save_plot(plt, detector_name, config.experiment_folder)
+            plot.show_plot(plt)
 
 
 def exe_plot_2D(experiment_name, detector_experiment_names:list[str]):

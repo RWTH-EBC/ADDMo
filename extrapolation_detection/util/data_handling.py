@@ -254,7 +254,7 @@ def read_csv(filename: str, directory: str = None, **kwargs) -> pd.DataFrame:
     path = _get_path(filename, directory)
 
     if os.path.exists(path):  # check for the existence of the path
-        return pd.read_csv(path, sep=";", dtype="float", encoding="unicode_escape", index_col=index_col)
+        return pd.read_csv(path, sep=";", dtype="float", encoding="utf-8", index_col=index_col)
     else:
         raise FileNotFoundError(f"The path {path} does not exist.")
 

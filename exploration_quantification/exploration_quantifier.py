@@ -75,6 +75,4 @@ class ExplorationQuantifier:
             plt.ylabel(var2)
             plt.title(f'{explo_detector_name}\n{var1} and {var2}')
             plt.colorbar(label='Extrapolation state\n averaged over the remaining dimensions (%)')
-            plt.show()
-
             yield plt

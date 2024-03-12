@@ -20,4 +20,4 @@ s4_true_validity_domain.exe_true_validity_domain(config)
 s5_tune_detector.exe_train_detector(config)
 s6_detector_score_calculation.exe_detector_score_calculation(config)
 
-s72_plotting.exe_plot_2D_all(config)
+s7_2_plotting.exe_plot_2D_all(config)

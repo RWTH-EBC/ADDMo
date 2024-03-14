@@ -8,6 +8,8 @@ from itertools import combinations
 from pandas.plotting import parallel_coordinates
 from pandas.plotting import scatter_matrix
 import plotly.express as px
+import plotly.graph_objects as go
+
 
 def plot_scatter_average_coverage_per_2D(
     x_grid: pd.DataFrame, y_grid: pd.DataFrame, title_header: str
@@ -93,9 +95,7 @@ def plot_grid_cells_average_coverage_per_2D(
         yield plt
 
 
-def plot_dataset_distribution_kde(
-    x: pd.DataFrame, title_header: str
-):
+def plot_dataset_distribution_kde(x: pd.DataFrame, bounds: dict, title_header: str):
     """
     Plots the distribution of the dataset using kernel density estimation (KDE).
     """
@@ -108,21 +108,31 @@ def plot_dataset_distribution_kde(
     # layer lines on top of the scatter
     # g.map_lower(sns.kdeplot, levels=4, color=".2")
 
+    # Iterate over the axes matrix of the PairGrid
+    for i, j in zip(*np.tril_indices_from(g.axes, -1)):
+        # Set x-axis limits for lower triangle
+        g.axes[i, j].set_xlim(bounds[x.columns[j]])
+        # Set y-axis limits for lower triangle and diagonal
+        g.axes[i, j].set_ylim(bounds[x.columns[i]])
 
+    # Iterate through the diagonal to set x-axis limits since diag_kind="hist"
+    for k in range(len(x.columns)):
+        g.axes[k, k].set_xlim(bounds[x.columns[k]])
 
     plt.suptitle(title_header)
-    plt.show()
+    return plt
 
-def plot_dataset_parallel_coordinates(
-    x: pd.DataFrame, title_header: str
-):
+
+def plot_dataset_parallel_coordinates(x: pd.DataFrame, title_header: str):
     # Create a temporary DataFrame with a dummy 'class' column because parallel_coordinates expects it
     temp_x = x.copy()
-    temp_x['class'] = 0  # Adding a dummy class label
+    temp_x["class"] = 0  # Adding a dummy class label
 
     # Create the parallel coordinates plot
     plt.figure(figsize=(12, 8))  # Optional: Adjust figure size as needed
-    parallel_coordinates(temp_x, class_column='class', colormap=plt.get_cmap("viridis"), alpha=0.5)
+    parallel_coordinates(
+        temp_x, class_column="class", colormap=plt.get_cmap("viridis"), alpha=0.5
+    )
 
     # Removing the dummy 'class' label from the legend, if not desired
     plt.legend().remove()
@@ -134,18 +144,36 @@ def plot_dataset_parallel_coordinates(
     plt.xticks(rotation=90)  # Rotate x-axis labels if they overlap
     plt.tight_layout()  # Adjust layout to make room for the rotated x-axis labels
 
-    plt.show()
+    return plt
 
 
-def plot_dataset_parallel_coordinates_plotly(x: pd.DataFrame, title_header: str):
+
+def plot_dataset_parallel_coordinates_plotly(
+    x: pd.DataFrame, bounds: dict, title_header: str
+):
     """
-    Plots the dataset using parallel coordinates with Plotly.
-
-    Parameters:
-    - x: A pandas DataFrame containing the dataset to be plotted. All columns should be float.
-    - title_header: A string representing the title of the plot.
+    Plots the dataset using parallel coordinates with Plotly, allowing for initial constrained ranges.
     """
-    fig = px.parallel_coordinates(x, color_continuous_scale=px.colors.diverging.Tealrose,
-                                  color_continuous_midpoint=2)
-    fig.update_layout(title=title_header)
-    fig.show()
+    # Prepare the dimensions for the parallel coordinates plot
+    dimensions = []
+    for col in x.columns:
+        dim = {
+            "range": [bounds[col][0], bounds[col][1]],
+            "label": col,
+            "values": x[col],
+        }
+        dimensions.append(dim)
+
+    # Create the figure with parallel coordinates
+    fig = go.Figure(
+        data=go.Parcoords(
+            dimensions=dimensions,
+            line=dict(
+                color="blue",  # Line color; customize as needed
+            ),
+        )
+    )
+
+    fig.update_layout(title=title_header, plot_bgcolor="white", paper_bgcolor="white")
+
+    return fig

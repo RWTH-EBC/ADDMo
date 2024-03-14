@@ -124,13 +124,25 @@ class PlotData2D:
 
 
 def show_plot(plt):
-    plt.show()
+    # if plt is matplotlib plot
+    if hasattr(plt, "show"):
+        plt.show()
+    # if plt is a plotly plot
+    if hasattr(plt, "show"):
+        plt.show()
 
 def save_plot(plt, file_name: str, experiment_folder: str):
     folder = os.path.join(experiment_folder, "plots")
     if not os.path.exists(folder):
         os.mkdir(folder)
-    plt.savefig(os.path.join(folder, file_name), bbox_inches="tight")
+
+    # if plt is matplotlib plot
+    if hasattr(plt, "savefig"):
+        plt.savefig(os.path.join(folder, file_name), bbox_inches="tight")
+
+    # if plt is a plotly plot, save it
+    if hasattr(plt, "write_html"):
+        plt.write_html(os.path.join(folder, file_name))
 
 def _plot_subplot(plt_data: PlotData2D, axs: axes.Axes):
     """Plots 2D UseCases"""

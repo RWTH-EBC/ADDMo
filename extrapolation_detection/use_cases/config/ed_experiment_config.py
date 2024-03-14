@@ -11,7 +11,7 @@ class ExtrapolationExperimentConfig(BaseConfig):
 
     def __init__(self):
         # Global Variables ########################################
-        self.simulation_data_name: str = "Carnot_mid"
+        self.simulation_data_name: str = "Bop"
 
         self.experiment_name: str = "Carnot_Test6"
         self.experiment_folder: str = os.path.join("results", self.experiment_name)

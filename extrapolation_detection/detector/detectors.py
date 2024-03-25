@@ -1,32 +1,21 @@
+'''This module uses lazy loading for most imports.
+This means that the module is not imported until it is actually used.
+This can help reduce the startup time of the application.'''
+
 from abc import ABC
 
 import numpy as np
 from numpy import ndarray
 
-from pyod.models.abod import ABOD
-from pyod.models.auto_encoder import AutoEncoder
-from pyod.models.deep_svdd import DeepSVDD
-from pyod.models.ecod import ECOD
-from pyod.models.feature_bagging import FeatureBagging
-from pyod.models.hbos import HBOS
-from pyod.models.lof import LOF
-from pyod.models.ocsvm import OCSVM
-from pyod.models.iforest import IForest
-from pyod.models.mcd import MCD
-from pyod.models.knn import KNN
-from pyod.models.pca import PCA
+from extrapolation_detection.detector.abstract_detector import AbstractDetector
 
-from scipy.spatial import ConvexHull, Delaunay
-
-from sklearn.neighbors import KernelDensity
-from sklearn.mixture import GaussianMixture
+# exceptions that are not meaningful for lazy imports within the class
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import RBF
 
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.utils._testing import ignore_warnings
 
-from extrapolation_detection.detector.abstract_detector import AbstractDetector
 class D_OCSVM(AbstractDetector):
     """One class support vector machine"""
 
@@ -49,6 +38,8 @@ class D_OCSVM(AbstractDetector):
         self.kernel: str = kernel
         self.gamma: float = gamma
         self.contamination: float = contamination
+
+        from pyod.models.ocsvm import OCSVM
         self.clf: OCSVM = OCSVM(nu=self.nu, kernel=self.kernel, gamma=self.gamma, contamination=contamination)
 
     @property
@@ -77,6 +68,8 @@ class D_IF(AbstractDetector):
         """
         super(D_IF).__init__()
         self.contamination: float = contamination
+
+        from pyod.models.iforest import IForest
         if random_state is not None:
             self.random_state: float = random_state
             self.clf: IForest = IForest(contamination=contamination, random_state=random_state)
@@ -107,6 +100,7 @@ class D_MCD(AbstractDetector):
         """
         super(D_MCD).__init__()
         self.contamination: float = contamination
+        from pyod.models.mcd import MCD
         self.clf: MCD = MCD(contamination=contamination)
 
     @property
@@ -133,6 +127,7 @@ class D_ECOD(AbstractDetector):
         """
         super(D_ECOD).__init__()
         self.contamination: float = contamination
+        from pyod.models.ecod import ECOD
         self.clf: ECOD = ECOD(contamination=contamination)
 
     @property
@@ -160,6 +155,7 @@ class D_DSVDD(AbstractDetector):
         super(D_DSVDD).__init__()
         self.n_neurons = n_neurons
         self.contamination: float = contamination
+        from pyod.models.deep_svdd import DeepSVDD
         self.clf: DeepSVDD = DeepSVDD(contamination=contamination, hidden_neurons=[n_neurons*2, n_neurons])
 
     @property
@@ -195,6 +191,7 @@ class D_KNN(AbstractDetector):
         self.n_neighbors: int = n_neighbors
         self.method: str = method
         self.p: int = p
+        from pyod.models.knn import KNN
         self.clf: KNN = KNN(contamination=contamination, n_neighbors=n_neighbors, method=method, p=p)
 
     @property
@@ -232,6 +229,8 @@ class D_FB_KNN(AbstractDetector):
         self.n_neighbors: int = n_neighbors
         self.method: str = method
         self.p: int = p
+        from pyod.models.knn import KNN
+        from pyod.models.feature_bagging import FeatureBagging
         self.clf: FeatureBagging = FeatureBagging(contamination=contamination, random_state=1000,
                                                   n_estimators=n_estimators,
                                                   base_estimator=KNN(contamination=contamination,
@@ -266,6 +265,7 @@ class D_ABOD(AbstractDetector):
         super(D_ABOD).__init__()
         self.contamination: float = contamination
         self.n_neigbors: int = n_neigbors
+        from pyod.models.abod import ABOD
         self.clf: ABOD = ABOD(contamination=contamination, n_neighbors=n_neigbors)
 
     def score(self, x_test: ndarray) -> ndarray:
@@ -320,6 +320,7 @@ class D_HBOS(AbstractDetector):
         super(D_HBOS).__init__()
         self.contamination: float = contamination
         self.n_bins: int = n_bins
+        from pyod.models.hbos import HBOS
         self.clf: HBOS = HBOS(contamination=contamination, n_bins=n_bins)
 
     @property
@@ -350,6 +351,7 @@ class D_RNN(AbstractDetector):
         self.contamination: float = contamination
         self.n_neurons: int = n_neurons
         self.hidden_layer = [n_neurons*2, n_neurons, n_neurons, n_neurons*2]
+        from pyod.models.auto_encoder import AutoEncoder
         self.clf: AutoEncoder = AutoEncoder(contamination=contamination, hidden_neurons=self.hidden_layer)
 
     @property
@@ -379,6 +381,7 @@ class D_PCA(AbstractDetector):
         super(D_PCA).__init__()
         self.contamination: float = contamination
         self.n_components: int = n_components
+        from pyod.models.pca import PCA
         self.clf: PCA = PCA(contamination=contamination, n_components=self.n_components)
 
     @property
@@ -411,6 +414,7 @@ class D_LOF(AbstractDetector):
         self.contamination: float = contamination
         self.n_neighbors: int = n_neighbors
         self.p: int = p
+        from pyod.models.lof import LOF
         self.clf: LOF = LOF(contamination=contamination, n_neighbors=n_neighbors, p=p, novelty=True)
 
     @property
@@ -515,6 +519,7 @@ class D_ParzenWindow(Detector_SKLearn):
         self.kernel: str = kernel
         self.contamination: float = contamination
         self.decision_scores_ = None
+        from sklearn.neighbors import KernelDensity
         self.clf: KernelDensity = KernelDensity(kernel=kernel, bandwidth=bandwith)
 
     def score(self, x_test: ndarray) -> ndarray:
@@ -560,6 +565,7 @@ class D_GMM(Detector_SKLearn):
         self.n_components: int = n_components
         self.contamination: float = contamination
         self.decision_scores_ = None
+        from sklearn.mixture import GaussianMixture
         self.clf: GaussianMixture = GaussianMixture(n_components=n_components)
 
     def score(self, x_test: ndarray) -> ndarray:
@@ -622,6 +628,7 @@ class D_GP(AbstractDetector):
         self.contamination: float = contamination
         self.decision_scores_ = None
         self.kernel = kernel
+
         self.clf: NoveltyDetectionGPR = NoveltyDetectionGPR(kernel=kernel, random_state=0)
         self.x_train_UnNormalized = None
 
@@ -785,12 +792,13 @@ class D_None(AbstractDetector):
         return self
 
 class D_ConvexHull(AbstractDetector):
+    from scipy.spatial import ConvexHull
     def __init__(self):
         self.hull = None
         self.delny = None
 
     def train(self, X):
-        self.hull = ConvexHull(X)
+        self.hull = D_ConvexHull.ConvexHull(X)
 
     def score(self, x_test):
         return None
@@ -817,15 +825,9 @@ class D_ConvexHull(AbstractDetector):
         Returns:
         - int, 0 if the point is an inlier, 1 otherwise.
         """
-        new_hull = ConvexHull(np.vstack([self.hull.points, point]))
+        new_hull = D_ConvexHull.ConvexHull(np.vstack([self.hull.points, point]))
         if np.array_equal(new_hull.vertices, self.hull.vertices):
             return 0  # The point is an inlier
         else:
             return 1  # The point is an outlier
 
-    # def predict(self, X):
-    #     labels = np.array([1 if self.delny.find_simplex(x) < 0 else 0 for x in X])
-    #     return labels
-
-    # def norm(self, x_t: ndarray, init: bool = False) -> ndarray:
-    #     return x_t

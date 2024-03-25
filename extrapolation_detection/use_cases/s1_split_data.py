@@ -13,6 +13,8 @@ def exe_split_data(config: ExtrapolationExperimentConfig):
     # Load data
     xy_tot = data_handling.read_csv(config.simulation_data_name, directory="data", index_col=False)
 
+    train_val_test_indices = range(config.train_val_test_period[0], config.train_val_test_period[1])
+
     (
         xy_training,
         xy_validation,
@@ -20,7 +22,7 @@ def exe_split_data(config: ExtrapolationExperimentConfig):
         xy_remaining,
     ) = data_handling.split_simulation_data(
         xy_tot,
-        config.train_val_test,
+        train_val_test_indices,
         config.val_fraction,
         config.test_fraction,
         config.shuffle,

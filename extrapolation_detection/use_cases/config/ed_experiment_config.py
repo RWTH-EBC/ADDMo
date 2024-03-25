@@ -11,9 +11,9 @@ class ExtrapolationExperimentConfig(BaseConfig):
 
     def __init__(self):
         # Global Variables ########################################
-        self.simulation_data_name: str = "Bop"
+        self.simulation_data_name: str = "Carnot_mid"
 
-        self.experiment_name: str = "Carnot_Test6"
+        self.experiment_name: str = "Carnot_Test7"
         self.experiment_folder: str = os.path.join("results", self.experiment_name)
 
         self.name_of_target: str = "$\dot{Q}_{heiz}$ in kW"
@@ -21,7 +21,7 @@ class ExtrapolationExperimentConfig(BaseConfig):
         # split data
 
         # Specify data indices used for training, validation and testing of regressor
-        self.train_val_test: list = list(range(0, 744))
+        self.train_val_test_period: tuple = (0, 744) # from 0 to 744
         self.val_fraction: float = 0.1
         self.test_fraction: float = 0.1
         self.shuffle: bool = True

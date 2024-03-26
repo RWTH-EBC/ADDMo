@@ -38,11 +38,11 @@ class ExtrapolationExperimentConfig(BaseModel):
     config_model_tuning: ModelTunerConfig = Field(
         ModelTunerConfig(), description="Model tuning setup, set your own config."
     )
-    detector_config: DetectorConfig = Field(
+    config_detector: DetectorConfig = Field(
         DetectorConfig(), description="Detector config, set your own config."
     )
 
-    explo_quant_config: ExploQuantConfig = Field(
+    config_explo_quant: ExploQuantConfig = Field(
         ExploQuantConfig(),
         description="Exploration quantification config, set your own config.",
     )

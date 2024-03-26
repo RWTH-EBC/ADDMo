@@ -48,12 +48,13 @@ def exe_model_tuning(config=None):
 
 if __name__ == "__main__":
     # Path to the config file
-    path_to_yaml = os.path.join(root_dir(), 'core', 's3_model_tuning', 'config',
-                                'model_tuning_config.yaml')
+    path_to_config = os.path.join(root_dir(), 'core', 's3_model_tuning', 'config',
+                                'model_tuning_config.json')
 
     # Create the config object
     config = ModelTuningExperimentConfig()
 
-    # Load the config from the yaml file
-    # config.load_yaml_to_class(path_to_yaml)
+    # Load the config from the json file
+
+    # run
     exe_model_tuning(config)

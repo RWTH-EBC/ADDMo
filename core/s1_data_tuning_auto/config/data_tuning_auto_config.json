@@ -1,0 +1,59 @@
+{
+  "name_of_raw_data": "test_raw_data",
+  "name_of_tuning": "data_tuning_experiment_auto",
+  "abs_path_to_data": "D:\\04_GitRepos\\addmo-extra\\raw_input_data\\InputData.xlsx",
+  "name_of_target": "FreshAir Temperature",
+  "create_differences": false,
+  "create_manual_target_lag": true,
+  "target_lag": [
+    1,
+    2
+  ],
+  "create_automatic_timeseries_target_lag": false,
+  "minimum_target_lag": 1,
+  "create_manual_feature_lags": false,
+  "feature_lags": {
+    "FreshAir Temperature": [
+      1,
+      2
+    ],
+    "Total active power": [
+      1,
+      2
+    ]
+  },
+  "create_automatic_feature_lags": false,
+  "minimum_feature_lag": 1,
+  "maximum_feature_lag": 20,
+  "manual_feature_selection": false,
+  "selected_features": [
+    "FreshAir Temperature",
+    "Total active power"
+  ],
+  "filter_low_variance": true,
+  "low_variance_threshold": 0.1,
+  "filter_ICA": false,
+  "filter_univariate": false,
+  "univariate_score_function": "mutual_info_regression",
+  "univariate_search_mode": "percentile",
+  "univariate_filter_params": 50,
+  "embedded_model": "RF",
+  "filter_recursive_embedded": false,
+  "recursive_embedded_number_features_to_select": 18,
+  "wrapper_sequential_feature_selection": false,
+  "sequential_direction": "forward",
+  "hyperparameter_tuning_type": "OptunaTuner",
+  "hyperparameter_tuning_kwargs": {
+    "n_trials": 5
+  },
+  "validation_score_mechanism": "cv",
+  "validation_score_mechanism_kwargs": null,
+  "validation_score_splitting": "KFold",
+  "validation_score_splitting_kwargs": {
+    "n_splits": 3
+  },
+  "validation_score_metric": "r2",
+  "validation_score_metric_kwargs": null,
+  "model": "MLP",
+  "min_increase_4_wrapper": 0.005
+}

@@ -2,6 +2,7 @@ import os
 
 import pandas as pd
 
+import extrapolation_detection.util.loading_saving
 from extrapolation_detection.util import data_handling
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
     ExtrapolationExperimentConfig,
@@ -14,23 +15,23 @@ from core.util.data_handling import split_target_features
 
 
 def exe_train_detector(config: ExtrapolationExperimentConfig):
-    xy_training = data_handling.read_csv("xy_train", directory=config.experiment_folder)
-    xy_validation = data_handling.read_csv("xy_val", directory=config.experiment_folder)
-    xy_test = data_handling.read_csv("xy_test", directory=config.experiment_folder)
-    xy_remaining = data_handling.read_csv(
+    xy_training = extrapolation_detection.util.loading_saving.read_csv("xy_train", directory=config.experiment_folder)
+    xy_validation = extrapolation_detection.util.loading_saving.read_csv("xy_val", directory=config.experiment_folder)
+    xy_test = extrapolation_detection.util.loading_saving.read_csv("xy_test", directory=config.experiment_folder)
+    xy_remaining = extrapolation_detection.util.loading_saving.read_csv(
         "xy_remaining", directory=config.experiment_folder
     )
 
-    true_validity_train = data_handling.read_csv(
+    true_validity_train = extrapolation_detection.util.loading_saving.read_csv(
         "true_validity_train", directory=config.experiment_folder
     ).squeeze()
-    true_validity_val = data_handling.read_csv(
+    true_validity_val = extrapolation_detection.util.loading_saving.read_csv(
         "true_validity_val", directory=config.experiment_folder
     ).squeeze()
-    true_validity_test = data_handling.read_csv(
+    true_validity_test = extrapolation_detection.util.loading_saving.read_csv(
         "true_validity_test", directory=config.experiment_folder
     ).squeeze()
-    true_validity_remaining = data_handling.read_csv(
+    true_validity_remaining = extrapolation_detection.util.loading_saving.read_csv(
         "true_validity_remaining", directory=config.experiment_folder
     ).squeeze()
 
@@ -50,11 +51,11 @@ def exe_train_detector(config: ExtrapolationExperimentConfig):
 
     # handle different option for the validation set
     tag = "test"
-    if config.detector_config.use_train_for_validation:
+    if config.config_detector.use_train_for_validation:
         xy_detector_val = pd.concat([xy_detector_val, xy_detector_fit])
         true_validity_detector_val = pd.concat([true_validity_detector_val, true_validity_detector_fit])
         tag = tag + "+fit"
-    if config.detector_config.use_remaining_for_validation:
+    if config.config_detector.use_remaining_for_validation:
         xy_detector_val = pd.concat([xy_detector_val, xy_remaining])
         true_validity_detector_val = pd.concat(
             [true_validity_detector_val, true_validity_remaining]
@@ -69,20 +70,20 @@ def exe_train_detector(config: ExtrapolationExperimentConfig):
     y_detector_val, _ = split_target_features(config.name_of_target, xy_detector_val)
 
     # train detectors and save them
-    for detector_name in config.detector_config.detectors:
-        if config.detector_config.tuning_bool:
+    for detector_name in config.config_detector.detectors:
+        if config.config_detector.tuning_bool:
             detector, threshold = tune_detector(
                 detector_name,
                 x_detector_fit,
                 y_detector_val,
                 true_validity_detector_val,
-                config.detector_config,
+                config.config_detector,
             )
 
             # save detector and threshold
             save_path = os.path.join(config.experiment_folder, "detectors")
-            data_handling.write_pkl(detector, f"{detector_name}_{tag}", save_path)
-            data_handling.write_csv(
+            extrapolation_detection.util.loading_saving.write_pkl(detector, f"{detector_name}_{tag}", save_path)
+            extrapolation_detection.util.loading_saving.write_csv(
                 threshold, f"{detector_name}_{tag}_threshold", save_path
             )
         else:
@@ -92,10 +93,10 @@ def exe_train_detector(config: ExtrapolationExperimentConfig):
 
             # save detector and threshold
             save_path = os.path.join(config.experiment_folder, "detectors")
-            data_handling.write_pkl(
+            extrapolation_detection.util.loading_saving.write_pkl(
                 detector, f"{detector_name}_{tag}_untuned", save_path
             )
-            data_handling.write_csv(
+            extrapolation_detection.util.loading_saving.write_csv(
                 threshold, f"{detector_name}_{tag}_untuned_threshold", save_path
             )
 

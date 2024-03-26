@@ -2,6 +2,7 @@ import os
 
 import pandas as pd
 
+import extrapolation_detection.util.loading_saving
 from extrapolation_detection.util import data_handling
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
     ExtrapolationExperimentConfig,
@@ -17,15 +18,15 @@ from exploration_quantification import coverage_plotting
 def exe_data_coverage(config: ExtrapolationExperimentConfig):
     # without target
     regressor_directory = os.path.join(config.experiment_folder, "regressors")
-    x_regressor_fit = data_handling.read_csv(
+    x_regressor_fit = extrapolation_detection.util.loading_saving.read_csv(
         "x_regressor_fit", directory=regressor_directory
     )
 
     # define bounds
-    if config.explo_quant_config.exploration_bounds == "infer":
+    if config.config_explo_quant.exploration_bounds == "infer":
         bounds = point_generator.infer_meshgrid_bounds(x_regressor_fit)
     else:
-        bounds = config.explo_quant_config.exploration_bounds
+        bounds = config.config_explo_quant.exploration_bounds
 
     # plot
     plotly_parallel_coordinates_plt = coverage_plotting.plot_dataset_parallel_coordinates_plotly(

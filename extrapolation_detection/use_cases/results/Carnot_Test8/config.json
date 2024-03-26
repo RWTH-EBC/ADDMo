@@ -1,0 +1,57 @@
+{
+    "simulation_data_name": "Carnot_mid",
+    "experiment_name": "Carnot_Test8",
+    "name_of_target": "$\\dot{Q}_{heiz}$ in kW",
+    "train_val_test_period": [
+        0,
+        744
+    ],
+    "val_fraction": 0.1,
+    "test_fraction": 0.1,
+    "shuffle": true,
+    "true_outlier_fraction": 0.1,
+    "grid_points_per_axis": 100,
+    "system_simulation": "carnot",
+    "config_model_tuning": {
+        "models": [
+            "MLP"
+        ],
+        "hyperparameter_tuning_type": "OptunaTuner",
+        "hyperparameter_tuning_kwargs": {
+            "n_trials": 2
+        },
+        "validation_score_mechanism": "cv",
+        "validation_score_mechanism_kwargs": null,
+        "validation_score_splitting": "KFold",
+        "validation_score_splitting_kwargs": null,
+        "validation_score_metric": "r2",
+        "validation_score_metric_kwargs": null
+    },
+    "config_detector": {
+        "detectors": [
+            "KNN"
+        ],
+        "detector_experiment_name": "test",
+        "use_test_for_validation": true,
+        "use_train_for_validation": false,
+        "use_remaining_for_validation": false,
+        "tuning_bool": true,
+        "beta_f_score": 1.0
+    },
+    "config_explo_quant": {
+        "detectors": "ConvexHull",
+        "exploration_bounds": "infer",
+        "explo_grid_points_per_axis": 100,
+        "test": {
+            "detectors": [
+                "KNN"
+            ],
+            "detector_experiment_name": "test",
+            "use_test_for_validation": true,
+            "use_train_for_validation": false,
+            "use_remaining_for_validation": false,
+            "tuning_bool": true,
+            "beta_f_score": 1.0
+        }
+    }
+}

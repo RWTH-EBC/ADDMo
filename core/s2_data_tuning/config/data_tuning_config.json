@@ -1,0 +1,14 @@
+{
+  "path_to_raw_data": "D:\\04_GitRepos\\addmo-extra\\raw_input_data\\InputData.xlsx",
+  "name_of_raw_data": "test_raw_data",
+  "name_of_tuning": "test_fixed_reproduction_tuning",
+  "target": "Total active power",
+  "features": [
+    "Schedule",
+    "FreshAir Temperature",
+    "FreshAir Temperature___diff",
+    "FreshAir Temperature___lag1",
+    "FreshAir Temperature___squared",
+    "Total active power___lag1"
+  ]
+}

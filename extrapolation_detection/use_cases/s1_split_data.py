@@ -1,5 +1,6 @@
 import pandas as pd
 
+import extrapolation_detection.util.loading_saving
 from extrapolation_detection.util import data_handling
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
     ExtrapolationExperimentConfig,
@@ -11,7 +12,7 @@ from exploration_quantification import point_generator
 
 def exe_split_data(config: ExtrapolationExperimentConfig):
     # Load data
-    xy_tot = data_handling.read_csv(config.simulation_data_name, directory="data", index_col=False)
+    xy_tot = extrapolation_detection.util.loading_saving.read_csv(config.simulation_data_name, directory="data", index_col=False)
 
     train_val_test_indices = range(config.train_val_test_period[0], config.train_val_test_period[1])
 
@@ -43,11 +44,11 @@ def exe_split_data(config: ExtrapolationExperimentConfig):
     xy_grid = pd.concat([x_grid, y_grid], axis=1)
 
     # save to csv
-    data_handling.write_csv(xy_training, "xy_train", directory=config.experiment_folder)
-    data_handling.write_csv(xy_validation, "xy_val", directory=config.experiment_folder)
-    data_handling.write_csv(xy_test, "xy_test", directory=config.experiment_folder)
-    data_handling.write_csv(xy_remaining, "xy_remaining", directory=config.experiment_folder)
-    data_handling.write_csv(xy_grid, "xy_grid", directory=config.experiment_folder)
+    extrapolation_detection.util.loading_saving.write_csv(xy_training, "xy_train", directory=config.experiment_folder)
+    extrapolation_detection.util.loading_saving.write_csv(xy_validation, "xy_val", directory=config.experiment_folder)
+    extrapolation_detection.util.loading_saving.write_csv(xy_test, "xy_test", directory=config.experiment_folder)
+    extrapolation_detection.util.loading_saving.write_csv(xy_remaining, "xy_remaining", directory=config.experiment_folder)
+    extrapolation_detection.util.loading_saving.write_csv(xy_grid, "xy_grid", directory=config.experiment_folder)
 
     # additionally save the features and targets separately
     x_train, y_train = split_target_features(config.name_of_target, xy_training)
@@ -56,16 +57,16 @@ def exe_split_data(config: ExtrapolationExperimentConfig):
     x_remaining, y_remaining = split_target_features(config.name_of_target, xy_remaining)
     x_grid, y_grid = split_target_features(config.name_of_target, xy_grid)
 
-    data_handling.write_csv(x_train, "x_train", directory=config.experiment_folder)
-    data_handling.write_csv(y_train, "y_train", directory=config.experiment_folder)
-    data_handling.write_csv(x_val, "x_val", directory=config.experiment_folder)
-    data_handling.write_csv(y_val, "y_val", directory=config.experiment_folder)
-    data_handling.write_csv(x_test, "x_test", directory=config.experiment_folder)
-    data_handling.write_csv(y_test, "y_test", directory=config.experiment_folder)
-    data_handling.write_csv(x_remaining, "x_remaining", directory=config.experiment_folder)
-    data_handling.write_csv(y_remaining, "y_remaining", directory=config.experiment_folder)
-    data_handling.write_csv(x_grid, "x_grid", directory=config.experiment_folder)
-    data_handling.write_csv(y_grid, "y_grid", directory=config.experiment_folder)
+    extrapolation_detection.util.loading_saving.write_csv(x_train, "x_train", directory=config.experiment_folder)
+    extrapolation_detection.util.loading_saving.write_csv(y_train, "y_train", directory=config.experiment_folder)
+    extrapolation_detection.util.loading_saving.write_csv(x_val, "x_val", directory=config.experiment_folder)
+    extrapolation_detection.util.loading_saving.write_csv(y_val, "y_val", directory=config.experiment_folder)
+    extrapolation_detection.util.loading_saving.write_csv(x_test, "x_test", directory=config.experiment_folder)
+    extrapolation_detection.util.loading_saving.write_csv(y_test, "y_test", directory=config.experiment_folder)
+    extrapolation_detection.util.loading_saving.write_csv(x_remaining, "x_remaining", directory=config.experiment_folder)
+    extrapolation_detection.util.loading_saving.write_csv(y_remaining, "y_remaining", directory=config.experiment_folder)
+    extrapolation_detection.util.loading_saving.write_csv(x_grid, "x_grid", directory=config.experiment_folder)
+    extrapolation_detection.util.loading_saving.write_csv(y_grid, "y_grid", directory=config.experiment_folder)
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()

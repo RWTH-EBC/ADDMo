@@ -2,18 +2,18 @@ import os
 import shutil
 
 import pandas as pd
-import yaml
 import json
 from pathlib import Path
-
 from pydantic import FilePath, BaseModel
 from typing import Type, TypeVar, Union
 
 
-
 ConfigT = TypeVar("ConfigT", bound=BaseModel)
+
+
 def load_config_from_json(
-    config: Union[ConfigT, FilePath, str, dict], config_type: Type[ConfigT]) -> ConfigT:
+    config: Union[ConfigT, FilePath, str, dict], config_type: Type[ConfigT]
+) -> ConfigT:
     """Generic config loader, either accepting a path to a json file, a json string, a
     dict or passing through a valid config object."""
 
@@ -35,52 +35,41 @@ def load_config_from_json(
                 ) from e
     return config_type.model_validate(config)
 
+
 def save_config_to_json(config: ConfigT, path: str):
     """Save the config to a json file."""
-    create_or_override_directory(os.path.dirname(path))
+    create_or_clean_directory(os.path.dirname(path))
     config_json = config.model_dump_json(indent=4)
     with open(path, "w") as f:
         f.write(config_json)
 
-def load_yaml_to_dict(path_to_yaml):
-    """
-    Load a yaml file to a dictionary.
-    """
-    with open(path_to_yaml, "r") as f:
-        config = yaml.safe_load(f)
-    return config
-
-def save_yaml_from_dict(path_to_yaml, dict_to_save):
-    """
-    Save a dictionary to a yaml file.
-    """
-    with open(path_to_yaml, "w") as f:
-        yaml.safe_dump(dict_to_save, f, default_flow_style=False)
 
 def load_data(abs_path: str) -> pd.DataFrame:
-
     if abs_path.endswith(".csv"):
         # Read the CSV file
-        df = pd.read_csv(abs_path, delimiter=';', index_col=[0], encoding='latin1', header=[0])
+        df = pd.read_csv(
+            abs_path, delimiter=";", index_col=[0], encoding="latin1", header=[0]
+        )
     elif abs_path.endswith(".xlsx"):
         # Read the Excel file
         df = pd.read_excel(abs_path, index_col=[0], header=[0])
 
     # Convert the index to datetime
-    df.index = pd.to_datetime(df.index, format='%d.%m.%Y %H:%M %Z')
+    df.index = pd.to_datetime(df.index, format="%d.%m.%Y %H:%M %Z")
 
     return df
+
 
 def write_data(df: pd.DataFrame, abs_path: str):
     if abs_path.endswith(".csv"):
         # Write the CSV file
-        df.to_csv(abs_path, sep=';', encoding='latin1')
+        df.to_csv(abs_path, sep=";", encoding="latin1")
     elif abs_path.endswith(".xlsx"):
         # Write the Excel file
         df.to_excel(abs_path)
 
 
-def create_or_override_directory(path: str) -> str:
+def create_or_clean_directory(path: str) -> str:
     if not os.path.exists(path):
         # Path does not exist, create it
         os.makedirs(path)
@@ -89,9 +78,11 @@ def create_or_override_directory(path: str) -> str:
         pass
     else:
         # Path exists, ask for confirmation to delete current contents
-        # response = input(f"The directory {path} already exists. Do you want to delete the current "
-        #                  f"contents? (y/n): ")
-        if True: #response.lower() == 'y': # Todo: uncomment for production
+        # response = input(f"The directory {path} already exists. Do you want to overwrite
+        # the content type <y>, for deleting the current contents type <d>")
+        response = "d" # Todo: uncomment for production
+
+        if response.lower() == 'd':
             # Delete the contents of the directory
             for filename in os.listdir(path):
                 file_path = os.path.join(path, filename)
@@ -99,6 +90,8 @@ def create_or_override_directory(path: str) -> str:
                     os.unlink(file_path)
                 elif os.path.isdir(file_path):
                     shutil.rmtree(file_path)
+        if response.lower() == 'y':
+            pass
         else:
             print("Operation cancelled.")
             return None

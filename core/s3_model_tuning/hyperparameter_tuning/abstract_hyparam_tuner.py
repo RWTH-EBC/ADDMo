@@ -1,5 +1,5 @@
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
-from core.s3_model_tuning.config.model_tuning_config import ModelTuningSetup
+from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
 from core.s3_model_tuning.scoring.abstract_scorer import ValidationScoring
 
 
@@ -10,7 +10,7 @@ class AbstractHyParamTuner:
 
     def __init__(
         self,
-        config: ModelTuningSetup,
+        config: ModelTuningExperimentConfig,
         scorer: ValidationScoring,
     ):
         self.config = config

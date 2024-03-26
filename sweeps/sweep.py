@@ -6,7 +6,7 @@ from core.util.experiment_logger import LocalLogger
 from core.util.experiment_logger import WandbLogger
 from core.util.experiment_logger import ExperimentLogger
 
-from core.s3_model_tuning.config.model_tuning_config import ModelTuningSetup
+from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
 from core.s3_model_tuning.model_tuner import ModelTuner
 from core.util.load_save import load_data
 from core.util.data_handling import split_target_features

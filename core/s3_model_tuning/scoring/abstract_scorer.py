@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from core.s3_model_tuning.config.model_tuning_config import ModelTuningSetup
+from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.scoring.metrics.abstract_metric import AbstractMetric
 from core.s3_model_tuning.scoring.metrics.metric_factory import MetricFactory
@@ -24,9 +24,9 @@ class Scoring:
 
 
 class ValidationScoring(ABC):
-    def __init__(self, config: ModelTuningSetup):
+    def __init__(self, config: ModelTuningExperimentConfig):
         self.metric = MetricFactory.metric_factory(
-            config.validation_score_metric, config.validation_score_metric_kwargs
+            config.config_model_tuner.validation_score_metric, config.config_model_tuner.validation_score_metric_kwargs
         )
         self.splitter = SplitterFactory.splitter_factory(config)
 

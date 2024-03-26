@@ -2,7 +2,7 @@ import numpy as np
 
 from sklearn.model_selection import BaseCrossValidator
 
-from core.s3_model_tuning.config.model_tuning_config import ModelTuningSetup
+from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
 
 class AbstractSplitter(BaseCrossValidator):
     """
@@ -18,7 +18,7 @@ class AbstractSplitter(BaseCrossValidator):
     by providing split and get_n_splits methods. Note that unlike estimators, these do not have fit
     methods and do not provide set_params or get_params. Parameter validation may be performed in
     __init__."""
-    def __init__(self, config: ModelTuningSetup):
+    def __init__(self, config: ModelTuningExperimentConfig):
         self.config = config
 
     def split(self, X=None, y=None, groups=None):

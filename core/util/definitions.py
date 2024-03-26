@@ -1,7 +1,7 @@
 import os
 import git
 from core.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
-from core.s3_model_tuning.config.model_tuning_config import ModelTuningSetup
+from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
 from core.util.load_save import create_or_override_directory
 
 
@@ -32,7 +32,7 @@ def results_dir_data_tuning(config: DataTuningFixedConfig):
     return create_or_override_directory(path)
 
 
-def results_dir_model_tuning(config: ModelTuningSetup):
+def results_dir_model_tuning(config: ModelTuningExperimentConfig):
     path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data,
                         config.name_of_data_tuning_experiment, config.name_of_model_tuning_experiment)
     return create_or_override_directory(path)

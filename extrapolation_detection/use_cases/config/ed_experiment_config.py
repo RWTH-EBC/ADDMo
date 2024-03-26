@@ -1,47 +1,52 @@
 import os.path
+from typing import Tuple
 
-from core.util.abstract_config import BaseConfig
-from core.s3_model_tuning.config.model_tuning_config import ModelTuningSetup
+from pydantic import BaseModel, Field
 
+from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from extrapolation_detection.detector.config.detector_config import DetectorConfig
 from exploration_quantification.config.explo_quant_config import ExploQuantConfig
 
 
-class ExtrapolationExperimentConfig(BaseConfig):
+class ExtrapolationExperimentConfig(BaseModel):
+    # experiment specifications
+    simulation_data_name: str = Field(
+        "Carnot_mid", description="Name of the simulation data"
+    )
+    experiment_name: str = Field("Carnot_Test7", description="Name of the experiment")
 
-    def __init__(self):
-        # Global Variables ########################################
-        self.simulation_data_name: str = "Carnot_mid"
+    name_of_target: str = Field(
+        "$\dot{Q}_{heiz}$ in kW", description="Name of the target variable"
+    )
 
-        self.experiment_name: str = "Carnot_Test7"
-        self.experiment_folder: str = os.path.join("results", self.experiment_name)
+    # Specify data indices used for training, validation and testing of regressor
+    train_val_test_period: Tuple[int, int] = Field(
+        (0, 744),
+        description="Indices for training, validation and testing of regressor",
+    )
+    val_fraction: float = Field(0.1, description="Fraction of data for validation")
+    test_fraction: float = Field(0.1, description="Fraction of data for testing")
+    shuffle: bool = Field(True, description="Whether to shuffle the data")
 
-        self.name_of_target: str = "$\dot{Q}_{heiz}$ in kW"
+    true_outlier_fraction: float = Field(0.1, description="Fraction of true outliers")
 
-        # split data
+    # specifications for generating the grid of artificial data
+    grid_points_per_axis: int = Field(100, description="Number of grid points per axis")
+    system_simulation: str = Field("carnot", description="System simulation type")
 
-        # Specify data indices used for training, validation and testing of regressor
-        self.train_val_test_period: tuple = (0, 744) # from 0 to 744
-        self.val_fraction: float = 0.1
-        self.test_fraction: float = 0.1
-        self.shuffle: bool = True
+    # additional configs to be imported
+    config_model_tuning: ModelTunerConfig = Field(
+        ModelTunerConfig(), description="Model tuning setup, set your own config."
+    )
+    detector_config: DetectorConfig = Field(
+        DetectorConfig(), description="Detector config, set your own config."
+    )
 
-        # True Validity Domain Variables ########################################
-        self.true_outlier_fraction: float = 0.1
+    explo_quant_config: ExploQuantConfig = Field(
+        ExploQuantConfig(),
+        description="Exploration quantification config, set your own config.",
+    )
 
-        # Model Tuning Variables ########################################
-        # self.model_tuning_config_path: str = r"D:\\04_GitRepos\\addmo-extra\\core\\s3_model_tuning\\config\\model_tuning_config.yaml"
-        # self.model_tuning_config = ModelTuningSetup().load_yaml_to_class(self.model_tuning_config_path)
-        self.model_tuning_config = ModelTuningSetup()
-
-        # Gridding Variables ########################################
-        self.grid_points_per_axis = 100
-        self.system_simulation = "carnot"
-
-        # Extrapolation Detector Variables ###############################
-        self.detector_config = DetectorConfig()
-        # self.extrapolation_detect_config_path: str = r"D:\\04_GitRepos\\addmo-extra\\extrapolation_detection\\use_cases\\config_ED.yaml"
-        # self.extrapolation_detect_config = ModelTuningSetup().load_yaml_to_class(self.extrapolation_detect_config_path)
-
-        # Exploration Detector Variables ###############################
-        self.explo_quant_config = ExploQuantConfig()
+    @property
+    def experiment_folder(self):
+        return os.path.join("results", self.experiment_name)

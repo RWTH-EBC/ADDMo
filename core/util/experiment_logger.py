@@ -7,6 +7,7 @@ import pandas as pd
 import wandb
 
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
+from core.util.load_save import save_config_to_json
 
 
 class AbstractLogger(ABC):
@@ -128,6 +129,7 @@ class LocalLogger(AbstractLogger):
     @staticmethod
     def start_experiment(config, **kwargs):
         if LocalLogger.active:
+            save_config_to_json(config, os.path.join(LocalLogger.directory, "config.json"))
             return config
 
     @staticmethod

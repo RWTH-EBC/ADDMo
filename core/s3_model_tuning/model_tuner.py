@@ -1,4 +1,4 @@
-from core.s3_model_tuning.config.model_tuning_config import ModelTuningSetup
+from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
 from core.util.load_save import load_data
 from core.s3_model_tuning.models.model_factory import ModelFactory
 from core.s3_model_tuning.hyperparameter_tuning.hyparam_tuning_factory import (
@@ -10,7 +10,7 @@ from core.util.experiment_logger import ExperimentLogger
 
 
 class ModelTuner:
-    def __init__(self, config: ModelTuningSetup):
+    def __init__(self, config: ModelTuningExperimentConfig):
         self.config = config
         self.scorer = ValidatorFactory.ValidatorFactory(self.config)
         self.tuner = HyperparameterTunerFactory.tuner_factory(self.config, self.scorer)
@@ -20,7 +20,7 @@ class ModelTuner:
         model = ModelFactory.model_factory(model_name)
 
         best_params = self.tuner.tune(
-            model, x_train_val, y_train_val, **self.config.hyperparameter_tuning_kwargs
+            model, x_train_val, y_train_val, **self.config.config_model_tuner.hyperparameter_tuning_kwargs
         )
 
         model.set_params(best_params)
@@ -30,7 +30,7 @@ class ModelTuner:
         return model
     def tune_all_models(self, x_train_val, y_train_val):
         model_dict = {}
-        for model_name in self.config.models:
+        for model_name in self.config.config_model_tuner.models:
             model = self.tune_model(
                 model_name, x_train_val, y_train_val
             )

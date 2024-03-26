@@ -17,7 +17,7 @@ def exe_tune_regressor(config: ExtrapolationExperimentConfig):
     xy_validation = data_handling.read_csv("xy_val", directory=config.experiment_folder)
 
     # Create the config object
-    config_MT = config.model_tuning_config
+    config_MT = config.config_model_tuning
 
     # training data of extrapolation experiment is used for model tuning
     xy_train_val = pd.concat([xy_training, xy_validation])

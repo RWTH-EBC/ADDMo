@@ -3,6 +3,45 @@ import shutil
 
 import pandas as pd
 import yaml
+import json
+from pathlib import Path
+
+from pydantic import FilePath, BaseModel
+from typing import Type, TypeVar, Union
+
+
+
+ConfigT = TypeVar("ConfigT", bound=BaseModel)
+def load_config_from_json(
+    config: Union[ConfigT, FilePath, str, dict], config_type: Type[ConfigT]) -> ConfigT:
+    """Generic config loader, either accepting a path to a json file, a json string, a
+    dict or passing through a valid config object."""
+
+    if isinstance(config, (str, Path)):
+        # if we have a str / path, we need to check whether it is a file or a json string
+        if Path(config).is_file():
+            # if we have a valid file pointer, we load it
+            with open(config, "r") as f:
+                config = json.load(f)
+        else:
+            # since the str is not a file path, we assume it is json and try to load it
+            try:
+                config = json.loads(config)
+            except json.JSONDecodeError as e:
+                # if we failed, we raise an error notifying the user of possibilities
+                raise TypeError(
+                    f"The config '{config:.100}' is neither an existing file path, nor a "
+                    f"valid json document."
+                ) from e
+    return config_type.model_validate(config)
+
+def save_config_to_json(config: ConfigT, path: str):
+    """Save the config to a json file."""
+    create_or_override_directory(os.path.dirname(path))
+    config_json = config.model_dump_json(indent=4)
+    with open(path, "w") as f:
+        f.write(config_json)
+
 def load_yaml_to_dict(path_to_yaml):
     """
     Load a yaml file to a dictionary.

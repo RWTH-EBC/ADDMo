@@ -4,6 +4,8 @@ from core.util.load_save import load_yaml_to_dict, save_yaml_from_dict, create_o
 
 
 class BaseConfig(ABC):
+
+
     def load_yaml_to_class(self, path_to_yaml:str):
         """
         Load data from config.yaml and dynamically assign to the class variables.

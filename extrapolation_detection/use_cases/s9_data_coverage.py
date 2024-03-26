@@ -22,10 +22,10 @@ def exe_data_coverage(config: ExtrapolationExperimentConfig):
     )
 
     # define bounds
-    if config.explo_quant_config.bounds == "infer":
+    if config.explo_quant_config.exploration_bounds == "infer":
         bounds = point_generator.infer_meshgrid_bounds(x_regressor_fit)
     else:
-        bounds = config.explo_quant_config.bounds
+        bounds = config.explo_quant_config.exploration_bounds
 
     # plot
     plotly_parallel_coordinates_plt = coverage_plotting.plot_dataset_parallel_coordinates_plotly(

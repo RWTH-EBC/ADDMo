@@ -4,7 +4,7 @@ from core.s3_model_tuning.hyperparameter_tuning.hyperparameter_tuner import (
     GridSearchTuner,
 )
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
-from core.s3_model_tuning.config.model_tuning_config import ModelTuningSetup
+from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
 from core.s3_model_tuning.hyperparameter_tuning.abstract_hyparam_tuner import (
     AbstractHyParamTuner,
 )
@@ -17,8 +17,8 @@ class HyperparameterTunerFactory:
     """
 
     @staticmethod
-    def tuner_factory(config: ModelTuningSetup, scorer: ValidationScoring
-    ) -> AbstractHyParamTuner:
+    def tuner_factory(config: ModelTuningExperimentConfig, scorer: ValidationScoring
+                      ) -> AbstractHyParamTuner:
         """
         Creates a hyperparameter tuner based on the specified type.
         :param tuner_type: Type of tuner to create (e.g., "grid", "none", "optuna").
@@ -27,11 +27,11 @@ class HyperparameterTunerFactory:
         :return: Instance of a hyperparameter tuner.
         """
 
-        if config.hyperparameter_tuning_type == "NoTuningTuner":
+        if config.config_model_tuner.hyperparameter_tuning_type == "NoTuningTuner":
             return NoTuningTuner(config, scorer)
-        elif config.hyperparameter_tuning_type == "OptunaTuner":
+        elif config.config_model_tuner.hyperparameter_tuning_type == "OptunaTuner":
             return OptunaTuner(config, scorer)
-        elif config.hyperparameter_tuning_type == "GridSearchTuner":
+        elif config.config_model_tuner.hyperparameter_tuning_type == "GridSearchTuner":
             return GridSearchTuner(config, scorer)
         else:
-            raise ValueError("Unknown tuner type: {}".format(config.hyperparameter_tuning_type))
+            raise ValueError("Unknown tuner type: {}".format(config.config_model_tuner.hyperparameter_tuning_type))

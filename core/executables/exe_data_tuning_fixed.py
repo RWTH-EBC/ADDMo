@@ -9,14 +9,14 @@ from core.s2_data_tuning.data_tuner_fixed import DataTunerByConfig
 from core.util.load_save import load_data
 from core.util.data_handling import split_target_features
 
+
 # Path to the config file
-path_to_yaml = os.path.join(root_dir(), 'core', 's2_data_tuning', 'config', 'data_tuning_config.yaml')
+path_to_config = os.path.join(root_dir(), 'core', 's2_data_tuning', 'config',
+                              'data_tuning_config.json')
 
 # Create the config object
 config = DataTuningFixedConfig()
-
-# Load the config from the yaml file
-config.load_yaml_to_class(path_to_yaml)
+# config = load_config_from_json(path_to_config, DataTuningFixedConfig)
 
 # Configure the logger
 LocalLogger.directory = results_dir_data_tuning(config)
@@ -51,7 +51,7 @@ xy_tuned = xy_tuned.dropna()
 ExperimentLogger.log({"xy_tuned": xy_tuned.iloc[[0, 1, 2, -3, -2, -1]]})
 
 # Log the tuned data
-ExperimentLogger.log_artifact(xy_tuned, name='xy_tuned', art_type='data')
+ExperimentLogger.log_artifact(xy_tuned, name='xy_tuned', art_type='pkl')
 
 # Finish logging
 ExperimentLogger.finish_experiment()

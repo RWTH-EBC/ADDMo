@@ -6,7 +6,7 @@ from core.util.experiment_logger import LocalLogger
 from core.util.experiment_logger import WandbLogger
 from core.util.experiment_logger import ExperimentLogger
 
-from core.s3_model_tuning.config.model_tuning_config import ModelTuningSetup
+from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
 from core.s3_model_tuning.model_tuner import ModelTuner
 from core.util.load_save import load_data
 from core.util.data_handling import split_target_features
@@ -52,7 +52,7 @@ if __name__ == "__main__":
                                 'model_tuning_config.yaml')
 
     # Create the config object
-    config = ModelTuningSetup()
+    config = ModelTuningExperimentConfig()
 
     # Load the config from the yaml file
     # config.load_yaml_to_class(path_to_yaml)

@@ -1,18 +1,16 @@
-from core.util.abstract_config import BaseConfig
-class DetectorConfig(BaseConfig):
+from pydantic import BaseModel, Field
 
-    def __init__(self):
-        self.detectors: list[str] = ["KNN"]
-        self.detector_experiment_name: str = "test"
+class DetectorConfig(BaseModel):
+    detectors: list[str] = Field(["KNN"], description="List of detectors to use")
+    detector_experiment_name: str = Field("test", description="Name of the detector experiment")
 
-        # for splitting train / test / validation
-        self.use_test_for_validation: bool = True # appends test data to validation data
-        self.use_train_for_validation: bool = False # appends train data to validation data
-        self.use_remaining_for_validation: bool = False # appends remaining data to validation data
+    # for splitting train / test / validation
+    use_test_for_validation: bool = Field(True, description="Appends test data to validation data if True")
+    use_train_for_validation: bool = Field(False, description="Appends train data to validation data if True")
+    use_remaining_for_validation: bool = Field(False, description="Appends remaining data to validation data if True")
 
-        # for tuning
-        self.tuning_bool: bool = True # if True, the detector will be tuned
+    # for tuning
+    tuning_bool: bool = Field(True, description="If True, the detector will be tuned")
 
-        # for scoring
-        self.beta_f_score: float = 1 # beta value for F-score
-
+    # for scoring
+    beta_f_score: float = Field(1, description="Beta value for F-score")

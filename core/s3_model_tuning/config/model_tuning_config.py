@@ -1,86 +1,71 @@
-from core.util.abstract_config import BaseConfig
+from pydantic import BaseModel, Field
 
-class ModelTuningSetup(BaseConfig):
 
-    def __init__(self):
-        # -----------------------Global Variables-------------------------------
+class ModelTunerConfig(BaseModel):
+    models: list[str] = Field(["MLP"], description="List of models to use")
 
-        self.name_of_raw_data: str = "test_data"  # Refer to the raw data connected to this
-        self.name_of_data_tuning_experiment: str = "test_data_tuning"  # Refer to the data tuning
-        # experiment
-        # aka the input data for this model tuning experiment
+    hyperparameter_tuning_type: str = Field(
+        "OptunaTuner",
+        description="Type of hyperparameter tuning, e.g., OptunaTuner, GridSearchTuner",
+    )
+    hyperparameter_tuning_kwargs: dict = Field(
+        {"n_trials": 2}, description="Kwargs for the tuner"
+    )
 
-        self.name_of_model_tuning_experiment: str = "test_model_tuning"  # Set name of the
-        # current experiment
+    validation_score_mechanism: str = Field(
+        "cv", description="Validation score mechanism, e.g., cross validation, holdout"
+    )
+    validation_score_mechanism_kwargs: dict = Field(
+        default=None, description="Kwargs for the validation score mechanism"
+    )
 
-        self.abs_path_to_data: str = r"D:\\04_GitRepos\\addmo-extra\\raw_input_data\\InputData.xlsx"  # Path to the file that has
-        # the data
+    validation_score_splitting: str = Field(
+        "KFold", description="Validation score splitting, e.g., KFold, PredefinedSplit"
+    )
+    validation_score_splitting_kwargs: dict = Field(
+        default=None, description="Kwargs for the validation score splitter"
+    )
 
-        self.name_of_target:str = "FreshAir Temperature"
-        # Name of the target variable
+    validation_score_metric: str = Field(
+        "r2", description="Validation score metric, e.g., r2, neg_mean_absolute_error"
+    )
+    validation_score_metric_kwargs: dict = Field(
+        default=None, description="Kwargs for the validation score metric"
+    )
 
-        # -----------------------Model Tuning Variables-------------------------------
 
-        self.start_train_val: str  = "2016-08-01 00:00"
-        self.stop_train_val: str  = "2016-08-14 23:45"
-        self.start_test: str  = "2016-08-15 00:00"
-        self.end_test: str  = "2016-08-16 23:45"
 
-        self.hyperparameter_tuning_type: str  = "OptunaTuner"  # e.g. OptunaTuner, GridSearchTuner, or NoTuningTuner
-        self.hyperparameter_tuning_kwargs: dict = {"n_trials": 2}  # kwargs for the tuner
+class ModelTuningExperimentConfig(BaseModel):
+    name_of_raw_data: str = Field(
+        "test_data", description="Refer to the raw data connected to this"
+    )
+    name_of_data_tuning_experiment: str = Field(
+        "test_data_tuning",
+        description="Refer to the data tuning experiment aka the input data for this model tuning experiment",
+    )
+    name_of_model_tuning_experiment: str = Field(
+        "test_model_tuning", description="Set name of the current experiment"
+    )
+    abs_path_to_data: str = Field(
+        r"D:\\04_GitRepos\\addmo-extra\\raw_input_data\\InputData.xlsx",
+        description="Path to the file that has the data",
+    )
+    name_of_target: str = Field(
+        "FreshAir Temperature", description="Name of the target variable"
+    )
 
-        self.validation_score_mechanism:str = "cv" # e.g. cross validation, holdout, etc.
-        self.validation_score_mechanism_kwargs: dict = None # kwargs for the mechanism
-
-        self.validation_score_splitting: str  = "KFold" # all custom splitters or scikit-learn
-        # splitters, e.g. KFold, PredefinedSplit, TimeSeriesSplit, etc.
-        self.validation_score_splitting_kwargs: dict = None # kwargs for the splitter
-
-        self.validation_score_metric: str  = "r2" # all custom metrics or scikit-learn metrics,
-        # e.g. r2, neg_mean_absolute_error, d2_pinball_score, etc.
-        self.validation_score_metric_kwargs: dict = None # kwargs for the metric
-
-        self.models: list[str] = ["MLP"]  # array of the models you want to use
-
-        # # -----------------------Only Predict Variables-------------------------------
-        #
-        # self.NameOfOnlyPredict = "TestNew5"
-        # self.OnlyPredictRecursive = True
-        #
-        # self.ValidationPeriod = True
-        # # Set False to have the prediction error on the whole data period (fit and test),
-        # # set True to define a test period by yourself(example the whole outhold data).
-        # # With the difference between StartTesting and EndTesting the required prediction horizon is set
-        # # (this period (StartTesting till EndTesting) is also the one being plotted and analysed with the regular measures)
-        # # The defined test period is then split into periods with the length of "horizon", for each horizon the prediction
-        # # error is computed. Of those errors the "mean", "standard deviation" and the "max error" are computed
-        # # (see "Automated Data Driven Modeling of Building Energy Systems via Machine Learning Algorithms" by Martin Rätz for more details)
-        #
-        # if self.ValidationPeriod == True:
-        #     self.StartTest_onlypredict = '2016-06-09 00:00'
-        #     self.EndTest_onlypredict = '2016-06-15 00:00'
-        #
-        # # -----------------------Auto Final Bayes Variables-------------------------------
-        #
-        # # Final bayesian optimization finds optimal combination of "Individual Model"&"Features"&"Model"
-        # # Final bayesian optimization parameter
-        # self.MaxEval_Bayes = 5
-        # self.Model_Bayes = "Baye"
-        # # possible entries
-        # # Max_eval_Bayes = int - Number of iterations the bayesian optimization should do for selecting NumberofFeatures, IndivModel, BestModel , the less the less quality but faster
-        # # Model= "SVR","ANN","GB","RF","Lasso" - choose a model for bayesian optimization (RF is by far the fastest)
-        # # "ModelSelection" - bayesian optimization is done with the score_test of the best model (hence in each iteration all models are calculated)
-        # # "Baye" - models are chosen through bayesian optimization as well (consider higher amount of Max_eval_bayes
-        #
-        # # define and set Estimator which shall be used in for the embedded feature selection
-        # rf = RandomForestRegressor(max_depth=10e17,
-        #                            random_state=0)  # have to be defined so that they return "feature_importance", more implementation have to be developed
-        # self.EstimatorEmbedded_FinalBaye = rf  # e.g. <rf>; set one of the above models to be used
-
-    # def dump_object(self):
-    #     print(
-    #         "Saving Model Tuning Setup class Object as a pickle in path: '%s'"
-    #         % os.path.join(self.ResultsFolder, "ModelTuningSetup.save")
-    #     )
-    #     # Save the object as a pickle for reuse
-    #     joblib.dump(self, os.path.join(self.ResultsFolder, "ModelTuningSetup.save"))
+    # Model Tuning Variables
+    start_train_val: str = Field(
+        "2016-08-01 00:00",
+        description="Start date and time for training and validation",
+    )
+    stop_train_val: str = Field(
+        "2016-08-14 23:45", description="Stop date and time for training and validation"
+    )
+    start_test: str = Field(
+        "2016-08-15 00:00", description="Start date and time for testing"
+    )
+    end_test: str = Field(
+        "2016-08-16 23:45", description="End date and time for testing"
+    )
+    config_model_tuner: ModelTunerConfig = Field(ModelTunerConfig(), description="Model tuner config, set your own config.")

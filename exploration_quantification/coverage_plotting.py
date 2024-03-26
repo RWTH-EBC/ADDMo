@@ -1,13 +1,10 @@
 import pandas as pd
-
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from itertools import combinations
 
 from pandas.plotting import parallel_coordinates
-from pandas.plotting import scatter_matrix
-import plotly.express as px
 import plotly.graph_objects as go
 
 
@@ -24,7 +21,7 @@ def plot_scatter_average_coverage_per_2D(
 
     for var1, var2 in variable_combinations:
         # Group by var1 and var2 and calculate the mean of the label
-        average_labels = xy_grid.groupby([var1, var2])["label"].mean()
+        average_labels = xy_grid.groupby([var1, var2])["label"].mean()*100
 
         # Reset the index to convert var1 and var2 back into columns
         average_labels_df = average_labels.reset_index()
@@ -37,7 +34,7 @@ def plot_scatter_average_coverage_per_2D(
             c=average_labels_df["label"],
             cmap="viridis",
             vmin=0,
-            vmax=1,
+            vmax=100,
         )
 
         plt.xlabel(var1)
@@ -53,7 +50,6 @@ def plot_grid_cells_average_coverage_per_2D(
     coverage_grid: np.ndarray,
     boundaries: dict,
     variable_names: list[str],
-    grid_cells_per_axis: int,
     title_header: str,
 ):
     """
@@ -61,6 +57,7 @@ def plot_grid_cells_average_coverage_per_2D(
     """
     # Get all combinations of variables
     variable_combinations = combinations(range(coverage_grid.ndim), 2)
+    grid_cells_per_axis = coverage_grid.shape[0]
 
     for var1, var2 in variable_combinations:
         # average the grid cells over the remaining dimensions
@@ -78,13 +75,27 @@ def plot_grid_cells_average_coverage_per_2D(
         # Set the ticks and labels to correspond to the original variable values not the normalized ones
         min_val1, max_val1 = boundaries[var1_name]
         min_val2, max_val2 = boundaries[var2_name]
+
+        def calibrate_axis_rounding(max_val):
+            if max_val > 100:
+                return 0
+            elif max_val > 10:
+                return 1
+            elif max_val > 1:
+                return 2
+            else:
+                return 3
+
+        rounding_axis1 = calibrate_axis_rounding(max_val1)
+        rounding_axis2 = calibrate_axis_rounding(max_val2)
+
         plt.xticks(
             np.linspace(0, grid_cells_per_axis - 1, 5),
-            np.linspace(min_val1, max_val1, 5),
+            np.round(np.linspace(min_val1, max_val1, 5), rounding_axis1)
         )
         plt.yticks(
             np.linspace(0, grid_cells_per_axis - 1, 5),
-            np.linspace(min_val2, max_val2, 5),
+            np.round(np.linspace(min_val2, max_val2, 5), rounding_axis2),
         )
 
         plt.xlabel(f"{var1_name}")

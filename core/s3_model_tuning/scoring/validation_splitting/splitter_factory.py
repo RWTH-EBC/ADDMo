@@ -3,7 +3,7 @@ import inspect
 from sklearn import model_selection
 
 from core.s3_model_tuning.scoring.validation_splitting import custom_splitters
-from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
+from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from core.s3_model_tuning.scoring.validation_splitting.abstract_splitter import (
     AbstractSplitter,
 )
@@ -15,26 +15,26 @@ class SplitterFactory:
     """
 
     @staticmethod
-    def splitter_factory(config: ModelTuningExperimentConfig) -> AbstractSplitter:
+    def splitter_factory(config: ModelTunerConfig) -> AbstractSplitter:
         """Get the custom splitter instance dynamically or use scikit-learn splitters."""
 
         # if splitter is custom
-        if hasattr(custom_splitters, config.config_model_tuner.validation_score_splitting):
+        if hasattr(custom_splitters, config.validation_score_splitting):
             custom_splitter_class = getattr(
-                custom_splitters, config.config_model_tuner.validation_score_splitting
+                custom_splitters, config.validation_score_splitting
             )
             return custom_splitter_class(config)
 
         # if splitter is from scikit-learn
-        elif hasattr(model_selection, config.config_model_tuner.validation_score_splitting):
+        elif hasattr(model_selection, config.validation_score_splitting):
             scikit_learn_splitter_class = getattr(
-                model_selection, config.config_model_tuner.validation_score_splitting
+                model_selection, config.validation_score_splitting
             )
-            if config.config_model_tuner.validation_score_splitting_kwargs is None:
+            if config.validation_score_splitting_kwargs is None:
                 return scikit_learn_splitter_class()
             else:
                 return scikit_learn_splitter_class(
-                    **config.config_model_tuner.validation_score_splitting_kwargs
+                    **config.validation_score_splitting_kwargs
                 )
 
         # if splitter is not found
@@ -49,7 +49,7 @@ class SplitterFactory:
             ]
 
             raise ValueError(
-                f"Unknown splitter type: {config.config_model_tuner.validation_score_splitting}. "
+                f"Unknown splitter type: {config.validation_score_splitting}. "
                 f"Available custom splitter are:"
                 f" {', '.join(custom_splitter_names)}. "
                 f"You can also use any splitter from scikit-learn, like KFold, "

@@ -35,7 +35,7 @@ def manual_target_lags(config: DataTuningAutoSetup, xy):
 def automatic_timeseries_target_lag_constructor(config: DataTuningAutoSetup, xy):
     x_created = pd.DataFrame()
 
-    tuner = ModelTuner(config)
+    tuner = ModelTuner(config.config_model_tuning)
 
     # prepare data
     x, y = split_target_features(config.name_of_target, xy)
@@ -78,7 +78,7 @@ def manual_feature_lags(config: DataTuningAutoSetup, xy):
 def automatic_feature_lag_constructor(config: DataTuningAutoSetup, xy):
     x_created = pd.DataFrame()
 
-    tuner = ModelTuner(config)
+    tuner = ModelTuner(config.config_model_tuning)
 
     # prepare data
     x, y = split_target_features(config.name_of_target, xy)

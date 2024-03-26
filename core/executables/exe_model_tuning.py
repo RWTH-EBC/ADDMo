@@ -22,7 +22,7 @@ def exe_model_tuning(config=None):
     ExperimentLogger.start_experiment(config=config)
 
     # Create the model tuner
-    model_tuner = ModelTuner(config=config)
+    model_tuner = ModelTuner(config=config.config_model_tuner)
 
     # Load the data
     xy_tuned = load_data(config.abs_path_to_data)

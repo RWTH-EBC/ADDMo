@@ -85,7 +85,12 @@ class GridOccupancy:
         """
         total_cells = self.occupancy_grid.size
         occupied_cells = np.sum(self.occupancy_grid)
-        return (occupied_cells / total_cells) * 100
+        coverage = (occupied_cells / total_cells) * 100
+        coverage = pd.Series(
+            (coverage, 100-coverage), index=["Inside", "Outside"]
+        )
+        return coverage
+
 
     def predict(self, new_point):
         """
@@ -116,20 +121,20 @@ class GridOccupancy:
 
 class ExplorationQuantifier:
     def __init__(self, x, points, bounds):
-        self.x = x
+        self.x: pd.DataFrame = x
         self.points: pd.DataFrame = points
         self.bounds: dict(tuple) = bounds
         self.labels: np.ndarray = None
 
     def train_exploration_classifier(
-        self, x: pd.DataFrame, classifier_name="ConvexHull"
+        self, classifier_name="ConvexHull"
     ):
         clf: AbstractDetector = DetectorFactory.detector_factory(classifier_name)
-        clf.train(x.values)
+        clf.train(self.x.values)
 
         # Set the threshold to the maximum score
         if not classifier_name == "ConvexHull":
-            scores = clf.score(x.values)
+            scores = clf.score(self.x.values)
             clf.threshold = np.max(scores)  # all points are inlier
 
         self.explo_clf = clf
@@ -146,17 +151,17 @@ class ExplorationQuantifier:
 
         return self.points_labeled
 
-    def calculate_exploration_percentages(self):
+    def calculate_coverage(self):
         # Count the number of points that fall into each region
         region_counts = np.bincount(self.points_labeled.values)
 
         # Calculate the volume percentages
-        exploration_percentages = region_counts / len(self.points) * 100
-        exploration_percentages = pd.Series(
-            exploration_percentages, index=["Inside", "Outside"]
+        coverage = region_counts / len(self.points) * 100
+        coverage = pd.Series(
+            coverage, index=["Inside", "Outside"]
         )
 
-        return exploration_percentages
+        return coverage
 
     # @staticmethod
     # def calculate_gridded_coverage(x:pd.DataFrame, boundaries:dict(tuple), grid_divisions=10):

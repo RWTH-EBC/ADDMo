@@ -30,25 +30,20 @@ def exe_data_coverage(config: ExtrapolationExperimentConfig):
 
     # plot
     plotly_parallel_coordinates_plt = coverage_plotting.plot_dataset_parallel_coordinates_plotly(
-        x_regressor_fit, bounds, "hallo"
+        x_regressor_fit, bounds, "Data coverage"
     )
-    scatter_matric_plt = coverage_plotting.plot_dataset_distribution_kde(
-        x_regressor_fit, bounds, "hallo"
+    scatter_matrix_plt = coverage_plotting.plot_dataset_distribution_kde(
+        x_regressor_fit, bounds, "Data coverage"
     )
-    pandas_parallel_coord = coverage_plotting.plot_dataset_parallel_coordinates(x_regressor_fit,
-                                                                            "hallo")
 
     # save plots
     save_path = os.path.join(config.experiment_folder, "explo_quant")
 
     plot.save_plot(plotly_parallel_coordinates_plt, "plotly_parallel_coordinates",save_path)
-    plot.save_plot(scatter_matric_plt, "scatter_matrix",save_path)
-    plot.save_plot(pandas_parallel_coord, "pandas_parallel_coord", save_path)
+    plot.save_plot(scatter_matrix_plt, "scatter_matrix",save_path)
 
     plot.show_plot(plotly_parallel_coordinates_plt)
-    plot.show_plot(scatter_matric_plt)
-    plot.show_plot(pandas_parallel_coord)
-
+    plot.show_plot(scatter_matrix_plt)
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()

@@ -35,13 +35,13 @@ num_points = 12
 
 x = xy
 
-coverage_plotting.plot_dataset_parallel_coordinates_plotly(x, bounds, "hallo")
-coverage_plotting.plot_dataset_parallel_coordinates_plotly(x, bounds, "hallo")
-coverage_plotting.plot_dataset_distribution_kde(x, bounds, "hallo")
-coverage_plotting.plot_dataset_parallel_coordinates(x, "hallo")
+# coverage_plotting.plot_dataset_parallel_coordinates_plotly(x, bounds, "hallo")
+# coverage_plotting.plot_dataset_parallel_coordinates_plotly(x, bounds, "hallo")
+# coverage_plotting.plot_dataset_distribution_kde(x, bounds, "hallo")
+# coverage_plotting.plot_dataset_parallel_coordinates(x, "hallo")
 
-# grid_occupancy = GridOccupancy(100)
-# grid_occupancy.train(x, bounds)
+grid_occupancy = GridOccupancy(100)
+grid_occupancy.train(x, bounds)
 # grid_occupancy.calculate_coverage()
 # grid_occupancy.plot_grid(x, grid_occupancy.occupancy_grid, "Occupancy Grid")
 

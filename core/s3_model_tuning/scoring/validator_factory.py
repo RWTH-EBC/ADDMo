@@ -1,6 +1,6 @@
 from core.s3_model_tuning.scoring.abstract_scorer import ValidationScoring
 from core.s3_model_tuning.scoring.validator import CrossValidation
-from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
+from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 
 class ValidatorFactory:
     """
@@ -8,8 +8,8 @@ class ValidatorFactory:
     """
 
     @staticmethod
-    def ValidatorFactory(config: ModelTuningExperimentConfig) -> ValidationScoring:
-        if config.config_model_tuner.validation_score_mechanism == 'cv':
+    def ValidatorFactory(config: ModelTunerConfig) -> ValidationScoring:
+        if config.validation_score_mechanism == 'cv':
             return CrossValidation(config)
         # Add more conditions for other scoring mechanisms or get them dynamically like in the
         # other factory methods

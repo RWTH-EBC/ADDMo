@@ -3,8 +3,8 @@ from typing import Union
 
 from extrapolation_detection.detector.config.detector_config import DetectorConfig
 class ExploQuantConfig(BaseModel):
-    detectors: str = Field(
-        "ConvexHull", description="Detector to be used for exploration " "detection."
+    detectors: list[str] = Field(
+        ["ConvexHull"], description="Detector to be used for exploration " "detection."
     )
     exploration_bounds: Union[dict, str] = Field(
         "infer",
@@ -12,7 +12,7 @@ class ExploQuantConfig(BaseModel):
         "or 'infer' to infer the bounds from the min and max of the data.",
     )
     explo_grid_points_per_axis: int = Field(
-        100, description="Number of grid points per axis for exploration"
+        20, description="Number of grid points per axis for exploration"
     )
 
     test: DetectorConfig = DetectorConfig()

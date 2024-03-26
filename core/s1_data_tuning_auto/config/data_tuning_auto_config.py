@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 
+from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 
 class DataTuningAutoSetup(BaseModel):
     # Global Variables
@@ -94,29 +95,10 @@ class DataTuningAutoSetup(BaseModel):
     )
 
     # Wrapper Model Variables
-    hyperparameter_tuning_type: str = Field(
-        "OptunaTuner", description="Type of hyperparameter tuning."
+    config_model_tuning: ModelTunerConfig = Field(
+        ModelTunerConfig(), description="Model tuning setup, set your own config."
     )
-    hyperparameter_tuning_kwargs: dict = Field(
-        {"n_trials": 5}, description="Kwargs for the tuner."
-    )
-    validation_score_mechanism: str = Field(
-        "cv", description="Validation score mechanism."
-    )
-    validation_score_mechanism_kwargs: dict = Field(
-        None, description="Kwargs for the validation score mechanism."
-    )
-    validation_score_splitting: str = Field(
-        "KFold", description="Validation score splitting method."
-    )
-    validation_score_splitting_kwargs: dict = Field(
-        {"n_splits": 3}, description="Kwargs for the validation score splitter."
-    )
-    validation_score_metric: str = Field("r2", description="Validation score metric.")
-    validation_score_metric_kwargs: dict = Field(
-        None, description="Kwargs for the validation score metric."
-    )
-    model: str = Field("MLP", description="Model to use.")
+
     min_increase_4_wrapper: float = Field(
         0.005,
         description="Minimum score increase for a feature to be considered worthy in wrapper methods.",

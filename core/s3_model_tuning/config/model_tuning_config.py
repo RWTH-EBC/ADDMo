@@ -9,7 +9,7 @@ class ModelTunerConfig(BaseModel):
         description="Type of hyperparameter tuning, e.g., OptunaTuner, GridSearchTuner",
     )
     hyperparameter_tuning_kwargs: dict = Field(
-        {"n_trials": 2}, description="Kwargs for the tuner"
+        {"n_trials": 5}, description="Kwargs for the tuner"
     )
 
     validation_score_mechanism: str = Field(
@@ -27,7 +27,7 @@ class ModelTunerConfig(BaseModel):
     )
 
     validation_score_metric: str = Field(
-        "r2", description="Validation score metric, e.g., r2, neg_mean_absolute_error"
+        "neg_root_mean_squared_error", description="Validation score metric, e.g., r2, neg_mean_absolute_error"
     )
     validation_score_metric_kwargs: dict = Field(
         default=None, description="Kwargs for the validation score metric"

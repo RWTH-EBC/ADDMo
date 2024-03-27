@@ -1,5 +1,6 @@
 import os
 
+import matplotlib.pyplot as plt
 import pandas as pd
 
 from extrapolation_detection.util import loading_saving
@@ -22,8 +23,9 @@ def exe_data_coverage(config: ExtrapolationExperimentConfig):
         "xy_regressor_fit", directory=regressor_directory
     )
 
-    # add predicted target
-    errors = loading_saving.read_csv("", directory=regressor_directory)
+    # add predicted target (optional)
+    y_pred = loading_saving.read_csv("pred_regressor_fit", directory=regressor_directory)
+    xy_regressor_fit["y_pred"] = y_pred
 
     # define bounds
     if config.config_explo_quant.exploration_bounds == "infer":
@@ -47,6 +49,7 @@ def exe_data_coverage(config: ExtrapolationExperimentConfig):
 
     plot.show_plot(plotly_parallel_coordinates_plt)
     plot.show_plot(scatter_matrix_plt)
+
 
     print(f"{__name__} executed")
 

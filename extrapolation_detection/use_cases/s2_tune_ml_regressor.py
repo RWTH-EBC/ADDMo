@@ -45,6 +45,9 @@ def exe_tune_regressor(config: ExtrapolationExperimentConfig):
     loading_saving.write_csv(
         y_train_val, "y_regressor_fit", directory=regressor_directory
     )
+    loading_saving.write_csv(
+        y_pred, "pred_regressor_fit", directory=regressor_directory
+    )
 
 
 

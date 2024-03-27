@@ -1,6 +1,6 @@
 import os
 
-import extrapolation_detection.util.loading_saving
+from extrapolation_detection.util import loading_saving
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
     ExtrapolationExperimentConfig,
 )
@@ -17,7 +17,7 @@ from exploration_quantification.coverage_plotting import (
 def exe_exploration_quantification_grid_occupancy(config: ExtrapolationExperimentConfig):
     # without target
     regressor_directory = os.path.join(config.experiment_folder, "regressors")
-    x_regressor_fit = extrapolation_detection.util.loading_saving.read_csv(
+    x_regressor_fit = loading_saving.read_csv(
         "x_regressor_fit", directory=regressor_directory
     )
 

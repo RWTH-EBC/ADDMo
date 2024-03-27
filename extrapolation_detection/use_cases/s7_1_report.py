@@ -3,7 +3,7 @@ import os
 import pandas
 
 import extrapolation_detection.util.data_handling as dh
-import extrapolation_detection.util.loading_saving
+from extrapolation_detection.util import loading_saving
 
 
 def create_cross_experiment_reports(use_cases: list[str], detectors: list[str], score: str):
@@ -22,7 +22,7 @@ def create_cross_experiment_reports(use_cases: list[str], detectors: list[str], 
             df.loc[detector_name, use_case] = float(data.loc[score].iloc[0])
 
     folder = os.path.join('results', 'cross_experiment_results')
-    extrapolation_detection.util.loading_saving.write_csv(df, score, folder)
+    loading_saving.write_csv(df, score, folder)
     print(f"Data saved to: {folder}\{score}.csv")
 
 if __name__ == '__main__':

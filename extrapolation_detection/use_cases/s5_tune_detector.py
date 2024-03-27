@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 
-import extrapolation_detection.util.loading_saving
+from extrapolation_detection.util import loading_saving
 from extrapolation_detection.util import data_handling
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
     ExtrapolationExperimentConfig,
@@ -15,23 +15,23 @@ from core.util.data_handling import split_target_features
 
 
 def exe_train_detector(config: ExtrapolationExperimentConfig):
-    xy_training = extrapolation_detection.util.loading_saving.read_csv("xy_train", directory=config.experiment_folder)
-    xy_validation = extrapolation_detection.util.loading_saving.read_csv("xy_val", directory=config.experiment_folder)
-    xy_test = extrapolation_detection.util.loading_saving.read_csv("xy_test", directory=config.experiment_folder)
-    xy_remaining = extrapolation_detection.util.loading_saving.read_csv(
+    xy_training = loading_saving.read_csv("xy_train", directory=config.experiment_folder)
+    xy_validation = loading_saving.read_csv("xy_val", directory=config.experiment_folder)
+    xy_test = loading_saving.read_csv("xy_test", directory=config.experiment_folder)
+    xy_remaining = loading_saving.read_csv(
         "xy_remaining", directory=config.experiment_folder
     )
 
-    true_validity_train = extrapolation_detection.util.loading_saving.read_csv(
+    true_validity_train = loading_saving.read_csv(
         "true_validity_train", directory=config.experiment_folder
     ).squeeze()
-    true_validity_val = extrapolation_detection.util.loading_saving.read_csv(
+    true_validity_val = loading_saving.read_csv(
         "true_validity_val", directory=config.experiment_folder
     ).squeeze()
-    true_validity_test = extrapolation_detection.util.loading_saving.read_csv(
+    true_validity_test = loading_saving.read_csv(
         "true_validity_test", directory=config.experiment_folder
     ).squeeze()
-    true_validity_remaining = extrapolation_detection.util.loading_saving.read_csv(
+    true_validity_remaining = loading_saving.read_csv(
         "true_validity_remaining", directory=config.experiment_folder
     ).squeeze()
 
@@ -82,8 +82,8 @@ def exe_train_detector(config: ExtrapolationExperimentConfig):
 
             # save detector and threshold
             save_path = os.path.join(config.experiment_folder, "detectors")
-            extrapolation_detection.util.loading_saving.write_pkl(detector, f"{detector_name}_{tag}", save_path)
-            extrapolation_detection.util.loading_saving.write_csv(
+            loading_saving.write_pkl(detector, f"{detector_name}_{tag}", save_path)
+            loading_saving.write_csv(
                 threshold, f"{detector_name}_{tag}_threshold", save_path
             )
         else:
@@ -93,10 +93,10 @@ def exe_train_detector(config: ExtrapolationExperimentConfig):
 
             # save detector and threshold
             save_path = os.path.join(config.experiment_folder, "detectors")
-            extrapolation_detection.util.loading_saving.write_pkl(
+            loading_saving.write_pkl(
                 detector, f"{detector_name}_{tag}_untuned", save_path
             )
-            extrapolation_detection.util.loading_saving.write_csv(
+            loading_saving.write_csv(
                 threshold, f"{detector_name}_{tag}_untuned_threshold", save_path
             )
 

@@ -28,6 +28,10 @@ def exe_tune_regressor(config: ExtrapolationExperimentConfig):
     best_model = model_tuner.get_best_model(model_dict)
     regressor: AbstractMLModel = best_model
 
+    # generate prediction for fit period
+    y_pred = pd.Series(regressor.predict(x_train_val))
+    y_pred.name = config.name_of_target + "_pred"
+
     # safe regressor to pickle #Todo: evtl. via onnx?
     regressor_directory = os.path.join(config.experiment_folder, "regressors")
     extrapolation_detection.util.loading_saving.write_pkl(regressor, "regressor", directory=regressor_directory)
@@ -42,6 +46,10 @@ def exe_tune_regressor(config: ExtrapolationExperimentConfig):
         y_train_val, "y_regressor_fit", directory=regressor_directory
     )
 
+
+
+
+    print(f"{__name__} executed")
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()

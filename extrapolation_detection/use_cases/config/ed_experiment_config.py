@@ -1,5 +1,5 @@
 import os.path
-from typing import Tuple
+from typing import Tuple, Optional
 
 from pydantic import BaseModel, Field
 
@@ -32,7 +32,9 @@ class ExtrapolationExperimentConfig(BaseModel):
 
     # specifications for generating the grid of artificial data
     grid_points_per_axis: int = Field(100, description="Number of grid points per axis")
-    system_simulation: str = Field("carnot", description="System simulation type")
+    system_simulation: Optional[str] = Field(
+        "carnot", description="System simulation type, None if no simulation"
+    )
 
     # additional configs to be imported
     config_model_tuning: ModelTunerConfig = Field(

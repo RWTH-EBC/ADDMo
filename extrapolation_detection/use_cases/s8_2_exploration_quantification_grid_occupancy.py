@@ -48,20 +48,7 @@ def exe_exploration_quantification_grid_occupancy(config: ExtrapolationExperimen
         )
         plot.show_plot(plt)
 
-    # # save
-    # extrapolation_detection.util.loading_saving.write_csv(
-    #     quantifier.points_labeled,
-    #     f"points_classified_{explo_detector_name}",
-    #     save_path,
-    # )
-    # extrapolation_detection.util.loading_saving.write_pkl(
-    #     quantifier.explo_clf, f"explo_clf_{explo_detector_name}", save_path
-    # )
-    # extrapolation_detection.util.loading_saving.write_csv(
-    #     exploration_percentage,
-    #     f"exploration_percentage_{explo_detector_name}",
-    #     save_path,
-    # )
+    print(f"{__name__} executed")
 
 
 if __name__ == "__main__":

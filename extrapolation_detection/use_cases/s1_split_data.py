@@ -1,6 +1,6 @@
 import pandas as pd
 
-import extrapolation_detection.util.loading_saving
+from extrapolation_detection.util import loading_saving
 from extrapolation_detection.util import data_handling
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
     ExtrapolationExperimentConfig,
@@ -12,7 +12,7 @@ from exploration_quantification import point_generator
 
 def exe_split_data(config: ExtrapolationExperimentConfig):
     # Load data
-    xy_tot = extrapolation_detection.util.loading_saving.read_csv(config.simulation_data_name, directory="data", index_col=False)
+    xy_tot = loading_saving.read_csv(config.simulation_data_name, directory="data", index_col=False)
 
     train_val_test_indices = range(config.train_val_test_period[0], config.train_val_test_period[1])
 
@@ -29,26 +29,30 @@ def exe_split_data(config: ExtrapolationExperimentConfig):
         config.shuffle,
     )
 
-    # generate meshgrid
-    x_tot, _ = split_target_features(config.name_of_target, xy_tot)
-    bounds = point_generator.infer_meshgrid_bounds(x_tot)
-    x_grid = point_generator.generate_point_grid(x_tot, bounds, config.grid_points_per_axis)
+    if config.system_simulation is None:
+        # no system simulation available, just give it some "dummy" values for the program to work
+        xy_grid = xy_tot.iloc[:5]
+    else:
+        # generate meshgrid
+        x_tot, _ = split_target_features(config.name_of_target, xy_tot)
+        bounds = point_generator.infer_meshgrid_bounds(x_tot)
+        x_grid = point_generator.generate_point_grid(x_tot, bounds, config.grid_points_per_axis)
 
-    # simulate true values for the grid via the system simulation
-    if config.system_simulation == "carnot":
-        from extrapolation_detection.system_simulations.carnot_model import carnot_model
-        system_simulation = carnot_model
+        # simulate true values for the grid via the system simulation
+        if config.system_simulation == "carnot":
+            from extrapolation_detection.system_simulations.carnot_model import carnot_model
+            system_simulation = carnot_model
 
-    y_grid = x_grid.apply(lambda row: system_simulation(*row), axis=1)
-    y_grid.name = config.name_of_target
-    xy_grid = pd.concat([x_grid, y_grid], axis=1)
+        y_grid = x_grid.apply(lambda row: system_simulation(*row), axis=1)
+        y_grid.name = config.name_of_target
+        xy_grid = pd.concat([x_grid, y_grid], axis=1)
 
     # save to csv
-    extrapolation_detection.util.loading_saving.write_csv(xy_training, "xy_train", directory=config.experiment_folder)
-    extrapolation_detection.util.loading_saving.write_csv(xy_validation, "xy_val", directory=config.experiment_folder)
-    extrapolation_detection.util.loading_saving.write_csv(xy_test, "xy_test", directory=config.experiment_folder)
-    extrapolation_detection.util.loading_saving.write_csv(xy_remaining, "xy_remaining", directory=config.experiment_folder)
-    extrapolation_detection.util.loading_saving.write_csv(xy_grid, "xy_grid", directory=config.experiment_folder)
+    loading_saving.write_csv(xy_training, "xy_train", directory=config.experiment_folder)
+    loading_saving.write_csv(xy_validation, "xy_val", directory=config.experiment_folder)
+    loading_saving.write_csv(xy_test, "xy_test", directory=config.experiment_folder)
+    loading_saving.write_csv(xy_remaining, "xy_remaining", directory=config.experiment_folder)
+    loading_saving.write_csv(xy_grid, "xy_grid", directory=config.experiment_folder)
 
     # additionally save the features and targets separately
     x_train, y_train = split_target_features(config.name_of_target, xy_training)
@@ -57,16 +61,18 @@ def exe_split_data(config: ExtrapolationExperimentConfig):
     x_remaining, y_remaining = split_target_features(config.name_of_target, xy_remaining)
     x_grid, y_grid = split_target_features(config.name_of_target, xy_grid)
 
-    extrapolation_detection.util.loading_saving.write_csv(x_train, "x_train", directory=config.experiment_folder)
-    extrapolation_detection.util.loading_saving.write_csv(y_train, "y_train", directory=config.experiment_folder)
-    extrapolation_detection.util.loading_saving.write_csv(x_val, "x_val", directory=config.experiment_folder)
-    extrapolation_detection.util.loading_saving.write_csv(y_val, "y_val", directory=config.experiment_folder)
-    extrapolation_detection.util.loading_saving.write_csv(x_test, "x_test", directory=config.experiment_folder)
-    extrapolation_detection.util.loading_saving.write_csv(y_test, "y_test", directory=config.experiment_folder)
-    extrapolation_detection.util.loading_saving.write_csv(x_remaining, "x_remaining", directory=config.experiment_folder)
-    extrapolation_detection.util.loading_saving.write_csv(y_remaining, "y_remaining", directory=config.experiment_folder)
-    extrapolation_detection.util.loading_saving.write_csv(x_grid, "x_grid", directory=config.experiment_folder)
-    extrapolation_detection.util.loading_saving.write_csv(y_grid, "y_grid", directory=config.experiment_folder)
+    loading_saving.write_csv(x_train, "x_train", directory=config.experiment_folder)
+    loading_saving.write_csv(y_train, "y_train", directory=config.experiment_folder)
+    loading_saving.write_csv(x_val, "x_val", directory=config.experiment_folder)
+    loading_saving.write_csv(y_val, "y_val", directory=config.experiment_folder)
+    loading_saving.write_csv(x_test, "x_test", directory=config.experiment_folder)
+    loading_saving.write_csv(y_test, "y_test", directory=config.experiment_folder)
+    loading_saving.write_csv(x_remaining, "x_remaining", directory=config.experiment_folder)
+    loading_saving.write_csv(y_remaining, "y_remaining", directory=config.experiment_folder)
+    loading_saving.write_csv(x_grid, "x_grid", directory=config.experiment_folder)
+    loading_saving.write_csv(y_grid, "y_grid", directory=config.experiment_folder)
+
+    print(f"{__name__} executed")
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()

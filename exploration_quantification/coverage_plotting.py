@@ -114,7 +114,7 @@ def plot_dataset_distribution_kde(x: pd.DataFrame, bounds: dict, title_header: s
     g = sns.pairplot(x, diag_kind="hist")
 
     # colorful heatmap
-    # g.map_lower(sns.kdeplot, fill=True, thresh=0, levels=100, cmap="mako")
+    g.map_lower(sns.kdeplot, fill=True, thresh=0, levels=100, cmap="mako")
 
     # layer lines on top of the scatter
     # g.map_lower(sns.kdeplot, levels=4, color=".2")

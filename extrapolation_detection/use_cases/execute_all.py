@@ -25,11 +25,15 @@ from extrapolation_detection.use_cases import (
 )
 
 # load config
-# config_path = r"D:\04_GitRepos\addmo-extra\extrapolation_detection\use_cases\config\config.json"
-# config = load_config_from_json(config_path, ExtrapolationExperimentConfig)
-
 config = ExtrapolationExperimentConfig()
-config.experiment_name = "Carnot_Test1"
+config.simulation_data_name = "Boptest_TAir_mid_reduced"
+config.experiment_name = "test_Boptest_TAir_mid_reduced"
+config.name_of_target = "delta_reaTZon_y"
+# config.grid_points_per_axis = 3
+config.system_simulation = None
+
+config.config_explo_quant.explo_grid_points_per_axis = 10
+
 
 result_folder = results_dir_extrapolation_experiment(config)
 
@@ -40,13 +44,13 @@ LocalLogger.active = True
 # Initialize logging
 ExperimentLogger.start_experiment(config=config)
 
-# s1_split_data.exe_split_data(config)
-# s2_tune_ml_regressor.exe_tune_regressor(config)
-# s3_regressor_error_calculation.exe_regressor_error_calculation(config)
-# s4_true_validity_domain.exe_true_validity_domain(config)
-# s5_tune_detector.exe_train_detector(config)
-# s6_detector_score_calculation.exe_detector_score_calculation(config)
+s1_split_data.exe_split_data(config)
+s2_tune_ml_regressor.exe_tune_regressor(config)
+s3_regressor_error_calculation.exe_regressor_error_calculation(config)
+s4_true_validity_domain.exe_true_validity_domain(config)
+s5_tune_detector.exe_train_detector(config)
+s6_detector_score_calculation.exe_detector_score_calculation(config)
 # s7_2_plotting.exe_plot_2D_all(config)
-s8_1_exploration_quantification.exe_exploration_quantification(config)
+# s8_1_exploration_quantification.exe_exploration_quantification(config)
 s8_2_exploration_quantification_grid_occupancy.exe_exploration_quantification_grid_occupancy(config)
-# s9_data_coverage.exe_data_coverage(config)
+s9_data_coverage.exe_data_coverage(config)

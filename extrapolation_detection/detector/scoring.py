@@ -4,7 +4,7 @@ from numpy import ndarray
 
 
 def score_samples(data_groundtruth: ndarray, data_nscores: ndarray, nscores_threshold: float, beta: float = None,
-                  print_opt: bool = True, advanced: bool = True) -> dict:
+                  print_opt: bool = True, advanced: bool = False) -> dict:
     """Score novelty detection algorithm
 
     Parameters
@@ -58,7 +58,11 @@ def score_samples(data_groundtruth: ndarray, data_nscores: ndarray, nscores_thre
         precision = 1
 
     # Recall
-    recall = true_positive / (true_positive+false_negative)
+    if (true_positive+false_negative) != 0:
+        recall = true_positive / (true_positive+false_negative)
+    else:
+        recall = 1
+
 
     # Fscore
     if (precision+recall) == 0:

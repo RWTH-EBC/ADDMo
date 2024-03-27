@@ -75,6 +75,8 @@ def exe_true_validity_domain(config: ExtrapolationExperimentConfig):
         true_validity_grid, "true_validity_grid", directory=config.experiment_folder
     )
 
+    print(f"{__name__} executed")
+
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()

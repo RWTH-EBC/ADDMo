@@ -100,6 +100,8 @@ def exe_train_detector(config: ExtrapolationExperimentConfig):
                 threshold, f"{detector_name}_{tag}_untuned_threshold", save_path
             )
 
+    print(f"{__name__} executed")
+
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()

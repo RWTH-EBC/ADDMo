@@ -61,6 +61,7 @@ def exe_regressor_error_calculation(config: ExtrapolationExperimentConfig):
         errors_grid, "errors_grid", directory=config.experiment_folder
     )
 
+    print(f"{__name__} executed")
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()

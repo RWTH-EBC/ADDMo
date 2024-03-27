@@ -61,7 +61,6 @@ def exe_exploration_quantification(config: ExtrapolationExperimentConfig):
             plot.show_plot(plt)
 
         # save
-
         extrapolation_detection.util.loading_saving.write_csv(
             quantifier.points_labeled,
             f"points_classified_{explo_detector_name}",
@@ -75,6 +74,8 @@ def exe_exploration_quantification(config: ExtrapolationExperimentConfig):
             f"exploration_percentage_{explo_detector_name}",
             save_path,
         )
+
+    print(f"{__name__} executed")
 
 
 if __name__ == "__main__":

@@ -122,6 +122,7 @@ def exe_detector_score_calculation(config: ExtrapolationExperimentConfig):
                 directory=config.experiment_folder,
             )
 
+    print(f"{__name__} executed")
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()

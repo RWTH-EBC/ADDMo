@@ -14,5 +14,3 @@ class ExploQuantConfig(BaseModel):
     explo_grid_points_per_axis: int = Field(
         20, description="Number of grid points per axis for exploration"
     )
-
-    test: DetectorConfig = DetectorConfig()

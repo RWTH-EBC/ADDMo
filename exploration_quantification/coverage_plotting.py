@@ -19,12 +19,15 @@ def plot_scatter_average_coverage_per_2D(
     xy_grid = x_grid.copy()
     xy_grid["label"] = y_grid
 
-    for var1, var2 in variable_combinations:
+    for var2, var1 in variable_combinations: # reversed order to match the other plots
         # Group by var1 and var2 and calculate the mean of the label
         average_labels = xy_grid.groupby([var1, var2])["label"].mean()*100
 
         # Reset the index to convert var1 and var2 back into columns
         average_labels_df = average_labels.reset_index()
+
+        # Turn notation around (100 = 100% coverage)
+        average_labels_df["label"] = 100 - average_labels_df["label"]
 
         # Create a scatter plot for each combination of variables
         plt.figure(figsize=(5, 5))
@@ -41,8 +44,9 @@ def plot_scatter_average_coverage_per_2D(
         plt.ylabel(var2)
         plt.title(f"{title_header}\n{var1} and {var2}")
         plt.colorbar(
-            label="Extrapolation state\n averaged over the remaining dimensions (%)"
+            label="Coverage\n averaged over the remaining dimensions (%)"
         )
+        plt.tight_layout()
         yield plt
 
 
@@ -59,7 +63,7 @@ def plot_grid_cells_average_coverage_per_2D(
     variable_combinations = combinations(range(coverage_grid.ndim), 2)
     grid_cells_per_axis = coverage_grid.shape[0]
 
-    for var1, var2 in variable_combinations:
+    for var2, var1 in variable_combinations: # reversed order to match the order of the axes
         # average the grid cells over the remaining dimensions
         axes = tuple(set(range(coverage_grid.ndim)) - {var1, var2})
         averaged_grid = np.mean(coverage_grid, axis=axes) * 100
@@ -69,7 +73,7 @@ def plot_grid_cells_average_coverage_per_2D(
         var2_name = variable_names[var2]
 
         plt.figure()
-        plt.imshow(averaged_grid, origin="lower")  # , vmin=0, vmax=1)
+        plt.imshow(averaged_grid, origin="lower") #, vmin=0, vmax=100)
         plt.title(f"{title_header}\n{var1_name} and {var2_name}")
 
         # Set the ticks and labels to correspond to the original variable values not the normalized ones
@@ -101,7 +105,7 @@ def plot_grid_cells_average_coverage_per_2D(
         plt.xlabel(f"{var1_name}")
         plt.ylabel(f"{var2_name}")
         plt.colorbar(
-            label="Extrapolation state\n averaged over the remaining dimensions (%)"
+            label="Coverage\n averaged over the remaining dimensions (%)"
         )
         yield plt
 

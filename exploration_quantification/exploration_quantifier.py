@@ -120,74 +120,44 @@ class GridOccupancy:
 
 
 class ExplorationQuantifier:
-    def __init__(self, x, points, bounds):
-        self.x: pd.DataFrame = x
-        self.points: pd.DataFrame = points
-        self.bounds: dict(tuple) = bounds
+    def __init__(self):
+        self.x_grid: pd.DataFrame = None
         self.labels: np.ndarray = None
+        self.explo_clf = None
 
     def train_exploration_classifier(
-        self, classifier_name="ConvexHull"
+        self, x_fit: pd.DataFrame, classifier_name="ConvexHull"
     ):
         clf: AbstractDetector = DetectorFactory.detector_factory(classifier_name)
-        clf.train(self.x.values)
+        clf.train(x_fit.values)
 
         # Set the threshold to the maximum score
         if not classifier_name == "ConvexHull":
-            scores = clf.score(self.x.values)
+            scores = clf.score(x_fit.values)
             clf.threshold = np.max(scores)  # all points are inlier
 
         self.explo_clf = clf
 
-    def calc_labels(self):
+    def calc_labels(self, x_grid):
         """Calculate the labels for the points using the exploration classifier.
 
         label = 0 means the point is inside, label = 1 means the point is outside."""
+        self.x_grid = x_grid
+        self.labels_grid = self.explo_clf.predict(self.x_grid.values)
 
-        self.points_labeled = self.explo_clf.predict(self.points.values)
+        self.labels_grid = self.labels_grid.astype(int)
+        self.labels_grid = pd.Series(self.labels_grid)
 
-        self.points_labeled = self.points_labeled.astype(int)
-        self.points_labeled = pd.Series(self.points_labeled)
-
-        return self.points_labeled
+        return self.labels_grid
 
     def calculate_coverage(self):
         # Count the number of points that fall into each region
-        region_counts = np.bincount(self.points_labeled.values)
+        region_counts = np.bincount(self.labels_grid.values)
 
         # Calculate the volume percentages
-        coverage = region_counts / len(self.points) * 100
+        coverage = region_counts / len(self.x_grid) * 100
         coverage = pd.Series(
             coverage, index=["Inside", "Outside"]
         )
 
         return coverage
-
-    # @staticmethod
-    # def calculate_gridded_coverage(x:pd.DataFrame, boundaries:dict(tuple), grid_divisions=10):
-    #     # Convert boundaries to min_boundaries and max_boundaries arrays
-    #     variables = x.columns
-    #     min_boundaries = np.array([boundaries[var][0] for var in variables])
-    #     max_boundaries = np.array([boundaries[var][1] for var in variables])
-    #
-    #     # Convert DataFrame to numpy array for calculation
-    #     dataset = x.to_numpy()
-    #
-    #     dimensions = len(variables)
-    #     grid_shape = [grid_divisions] * dimensions
-    #     grid = np.zeros(grid_shape, dtype=bool)
-    #
-    #     # Normalize dataset based on min-max boundaries
-    #     normalized_dataset = (dataset - min_boundaries) / (max_boundaries - min_boundaries)
-    #
-    #     for data_point in normalized_dataset:
-    #         cell_index = np.floor(data_point * grid_divisions).astype(int) # stretch axis so that
-    #         # each grid cell has the size of 1 integer
-    #         cell_index = np.clip(cell_index, 0, grid_divisions - 1)
-    #         grid[tuple(cell_index)] = True
-    #
-    #     occupied_cells = np.sum(grid)
-    #     total_cells = np.prod(grid_shape)
-    #     coverage_ratio = occupied_cells / total_cells
-    #
-    #     return coverage_ratio

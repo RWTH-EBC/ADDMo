@@ -40,11 +40,12 @@ def exe_exploration_quantification_grid_occupancy(config: ExtrapolationExperimen
                      f" {coverage.loc['Inside']} %",
     )
 
+    save_path = os.path.join(config.experiment_folder, "explo_quant")
     for i, plt in enumerate(plots_per_axes):
         plot.save_plot(
             plt,
-            f"{i}",
-            config.experiment_folder,
+            f"coverage_grid_occupancy_{i}",
+            save_path,
         )
         plot.show_plot(plt)
 

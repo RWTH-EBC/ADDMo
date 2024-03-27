@@ -41,37 +41,38 @@ def exe_exploration_quantification(config: ExtrapolationExperimentConfig):
     )
 
     for explo_detector_name in config.config_explo_quant.detectors:
-        quantifier = ExplorationQuantifier(x_regressor_fit, x_grid, bounds)
-        quantifier.train_exploration_classifier(explo_detector_name)
-        y_grid = quantifier.calc_labels()
-        exploration_percentage = quantifier.calculate_coverage()
+        quantifier = ExplorationQuantifier()
+        quantifier.train_exploration_classifier(x_regressor_fit, explo_detector_name)
+        y_grid = quantifier.calc_labels(x_grid)
+        coverage = quantifier.calculate_coverage()
 
         plots_per_axes = plot_scatter_average_coverage_per_2D(
             x_grid=x_grid,
             y_grid=y_grid,
-            title_header=f"{explo_detector_name}"
-                         f" with coverage = {exploration_percentage.loc['Inside']} %",
+            title_header=f"{explo_detector_name}\n"
+                         f"Coverage = {coverage.loc['Inside']:.2f} %",
         )
+        save_path = os.path.join(config.experiment_folder, "explo_quant")
         for i, plt in enumerate(plots_per_axes):
             plot.save_plot(
                 plt,
-                f"{explo_detector_name}_{i}",
-                config.experiment_folder,
+                f"coverage_{explo_detector_name}_{i}",
+                save_path,
             )
             plot.show_plot(plt)
 
         # save
         loading_saving.write_csv(
-            quantifier.points_labeled,
-            f"points_classified_{explo_detector_name}",
+            quantifier.labels_grid,
+            f"labels_grid_{explo_detector_name}",
             save_path,
         )
         loading_saving.write_pkl(
             quantifier.explo_clf, f"explo_clf_{explo_detector_name}", save_path
         )
         loading_saving.write_csv(
-            exploration_percentage,
-            f"exploration_percentage_{explo_detector_name}",
+            coverage,
+            f"coverage_percentage_{explo_detector_name}",
             save_path,
         )
 

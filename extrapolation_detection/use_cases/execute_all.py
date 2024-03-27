@@ -21,13 +21,14 @@ from extrapolation_detection.use_cases import (
     s7_2_plotting,
     s8_1_exploration_quantification,
     s8_2_exploration_quantification_grid_occupancy,
+    s8_3_exploration_quantification_extra,
     s9_data_coverage,
 )
 
 # load config
 config = ExtrapolationExperimentConfig()
 config.simulation_data_name = "Boptest_TAir_mid_reduced"
-config.experiment_name = "test_Boptest_TAir_mid_reduced_2"
+config.experiment_name = "Boptest_TAir_mid_reduced"
 config.name_of_target = "delta_reaTZon_y"
 config.train_val_test_period = (0, 1488)
 config.shuffle = False
@@ -38,6 +39,7 @@ config.config_explo_quant.explo_grid_points_per_axis = 10
 
 config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 100}
 
+config.config_detector.detectors = ["KNN", "KDE", "GP", "OCSVM", "IF"]
 
 result_folder = results_dir_extrapolation_experiment(config)
 
@@ -45,16 +47,17 @@ result_folder = results_dir_extrapolation_experiment(config)
 LocalLogger.directory = result_folder
 LocalLogger.active = True
 
-# Initialize logging
-ExperimentLogger.start_experiment(config=config)
 
-s1_split_data.exe_split_data(config)
-s2_tune_ml_regressor.exe_tune_regressor(config)
-s3_regressor_error_calculation.exe_regressor_error_calculation(config)
-s4_true_validity_domain.exe_true_validity_domain(config)
-s5_tune_detector.exe_train_detector(config)
-s6_detector_score_calculation.exe_detector_score_calculation(config)
+
+# ExperimentLogger.start_experiment(config=config) # log config
+# s1_split_data.exe_split_data(config)
+# s2_tune_ml_regressor.exe_tune_regressor(config)
+# s3_regressor_error_calculation.exe_regressor_error_calculation(config)
+# s4_true_validity_domain.exe_true_validity_domain(config)
+# s5_tune_detector.exe_train_detector(config)
+# s6_detector_score_calculation.exe_detector_score_calculation(config)
 # s7_2_plotting.exe_plot_2D_all(config)
-s8_1_exploration_quantification.exe_exploration_quantification(config)
-s8_2_exploration_quantification_grid_occupancy.exe_exploration_quantification_grid_occupancy(config)
+# s8_1_exploration_quantification.exe_exploration_quantification(config)
+# s8_2_exploration_quantification_grid_occupancy.exe_exploration_quantification_grid_occupancy(config)
+# s8_3_exploration_quantification_extra.exe_exploration_quantification_extra(config)
 s9_data_coverage.exe_data_coverage(config)

@@ -87,6 +87,7 @@ def exe_train_detector(config: ExtrapolationExperimentConfig):
                 threshold, f"{detector_name}_{tag}_threshold", save_path
             )
         else:
+            # untuned detector but ideally calculated threshold
             detector, threshold = untuned_detector(
                 detector_name, x_detector_fit, y_detector_val, config.true_outlier_fraction
             )

@@ -4,7 +4,7 @@ from numpy import ndarray
 
 
 def score_samples(data_groundtruth: ndarray, data_nscores: ndarray, nscores_threshold: float, beta: float = None,
-                  print_opt: bool = True, advanced: bool = False) -> dict:
+                  print_opt: bool = False, advanced: bool = False) -> dict:
     """Score novelty detection algorithm
 
     Parameters

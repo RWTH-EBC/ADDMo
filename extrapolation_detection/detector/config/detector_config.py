@@ -22,4 +22,9 @@ class DetectorConfig(BaseModel):
     tuning_bool: bool = Field(True, description="If True, the detector will be tuned")
 
     # for scoring
-    beta_f_score: float = Field(1, description="Beta value for F-score")
+    beta_f_score: float = Field(
+        1,
+        description="Beta value for F-score. "
+                    "Recall is beta-times more important than precision."
+                    "Recall is more important if beta > 1, precision if beta < 1.",
+    )

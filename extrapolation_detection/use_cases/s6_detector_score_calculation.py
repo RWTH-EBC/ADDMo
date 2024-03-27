@@ -23,6 +23,16 @@ def exe_detector_score_calculation(config: ExtrapolationExperimentConfig):
     )
     xy_grid = loading_saving.read_csv("xy_grid", directory=config.experiment_folder)
 
+    # load true validity
+    true_validity_train = loading_saving.read_csv(
+        "true_validity_train", directory=config.experiment_folder
+    ).squeeze()
+    true_validity_val = loading_saving.read_csv(
+        "true_validity_val", directory=config.experiment_folder
+    ).squeeze()
+    true_validity_test = loading_saving.read_csv(
+        "true_validity_test", directory=config.experiment_folder
+    ).squeeze()
     true_validity_remaining = loading_saving.read_csv(
         "true_validity_remaining", directory=config.experiment_folder
     ).squeeze()
@@ -119,6 +129,21 @@ def exe_detector_score_calculation(config: ExtrapolationExperimentConfig):
             loading_saving.write_csv(
                 detector_evaluation_grid_df,
                 f"detector_evaluation_grid_{detector_name}",
+                directory=config.experiment_folder,
+            )
+
+            true_valitidy_traintestval = pd.concat([true_validity_train, true_validity_val, true_validity_test])
+            n_score_traintestval = pd.concat([n_score_train_df, n_score_val_df, n_score_test_df])
+            detector_evaluation_traintestval = scoring.score_samples(
+                true_valitidy_traintestval.values.reshape(-1, 1),
+                n_score_traintestval.values.reshape(-1, 1),
+                novelty_threshold,
+                beta=config.config_detector.beta_f_score,
+            )
+            detector_evaluation_traintestval_df = pd.DataFrame.from_dict(detector_evaluation_traintestval, orient="index")
+            loading_saving.write_csv(
+                detector_evaluation_traintestval_df,
+                f"detector_evaluation_traintestval_{detector_name}",
                 directory=config.experiment_folder,
             )
 

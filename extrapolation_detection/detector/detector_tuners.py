@@ -156,7 +156,7 @@ class Hyper_KNN(AbstractHyper):
                            'method': hp.choice('method', ['largest', 'mean'])
                            },
                     algo=tpe.suggest,
-                    max_evals=50,
+                    max_evals=100,
                     early_stop_fn=no_progress_loss(75),
                     trials=trials)
         best['nscores_threshold'] = trials.best_trial['result']['threshold']

@@ -1,0 +1,28 @@
+2024-03-27 18:27:15,760 INFO    MainThread:16624 [wandb_setup.py:_flush():76] Current SDK version is 0.16.3
+2024-03-27 18:27:15,760 INFO    MainThread:16624 [wandb_setup.py:_flush():76] Configure stats pid to 16624
+2024-03-27 18:27:15,760 INFO    MainThread:16624 [wandb_setup.py:_flush():76] Loading settings from C:\Users\mre\.config\wandb\settings
+2024-03-27 18:27:15,760 INFO    MainThread:16624 [wandb_setup.py:_flush():76] Loading settings from D:\04_GitRepos\addmo-extra\core\executables\wandb\settings
+2024-03-27 18:27:15,760 INFO    MainThread:16624 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2024-03-27 18:27:15,760 INFO    MainThread:16624 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2024-03-27 18:27:15,760 INFO    MainThread:16624 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'core\\executables\\exe_model_tuning.py', 'program_abspath': 'D:\\04_GitRepos\\addmo-extra\\core\\executables\\exe_model_tuning.py', 'program': 'D:\\04_GitRepos\\addmo-extra\\core\\executables\\exe_model_tuning.py'}
+2024-03-27 18:27:15,760 INFO    MainThread:16624 [wandb_init.py:_log_setup():526] Logging user logs to D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240327_182715-m73joojy\logs\debug.log
+2024-03-27 18:27:15,760 INFO    MainThread:16624 [wandb_init.py:_log_setup():527] Logging internal logs to D:\04_GitRepos\addmo-extra\results\test_data\test_data_tuning\test_model_tuning\wandb\run-20240327_182715-m73joojy\logs\debug-internal.log
+2024-03-27 18:27:15,760 INFO    MainThread:16624 [wandb_init.py:init():566] calling init triggers
+2024-03-27 18:27:15,760 INFO    MainThread:16624 [wandb_init.py:init():573] wandb.init called with sweep_config: {}
+config: {'name_of_raw_data': 'test_data', 'name_of_data_tuning_experiment': 'test_data_tuning', 'name_of_model_tuning_experiment': 'test_model_tuning', 'abs_path_to_data': 'D:\\\\04_GitRepos\\\\addmo-extra\\\\raw_input_data\\\\InputData.xlsx', 'name_of_target': 'FreshAir Temperature', 'start_train_val': '2016-08-01 00:00', 'stop_train_val': '2016-08-14 23:45', 'start_test': '2016-08-15 00:00', 'end_test': '2016-08-16 23:45', 'config_model_tuner': ModelTunerConfig(models=['MLP'], hyperparameter_tuning_type='NoTuningTuner', hyperparameter_tuning_kwargs={'hidden_layer_sizes': [10], 'activation': 'relu', 'max_iter': 2000}, validation_score_mechanism='cv', validation_score_mechanism_kwargs=None, validation_score_splitting='KFold', validation_score_splitting_kwargs=None, validation_score_metric='r2', validation_score_metric_kwargs=None)}
+2024-03-27 18:27:15,769 INFO    MainThread:16624 [wandb_init.py:init():616] starting backend
+2024-03-27 18:27:15,769 INFO    MainThread:16624 [wandb_init.py:init():620] setting up manager
+2024-03-27 18:27:15,771 INFO    MainThread:16624 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=spawn, using: spawn
+2024-03-27 18:27:15,771 INFO    MainThread:16624 [wandb_init.py:init():628] backend started and connected
+2024-03-27 18:27:15,781 INFO    MainThread:16624 [wandb_init.py:init():720] updated telemetry
+2024-03-27 18:27:16,150 INFO    MainThread:16624 [wandb_init.py:init():753] communicating run to backend with 90.0 second timeout
+2024-03-27 18:27:17,011 INFO    MainThread:16624 [wandb_run.py:_on_init():2262] communicating current version
+2024-03-27 18:27:17,570 INFO    MainThread:16624 [wandb_run.py:_on_init():2271] got version response upgrade_message: "wandb version 0.16.5 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2024-03-27 18:27:17,570 INFO    MainThread:16624 [wandb_init.py:init():804] starting run threads in backend
+2024-03-27 18:27:17,841 INFO    MainThread:16624 [wandb_run.py:_console_start():2241] atexit reg
+2024-03-27 18:27:17,841 INFO    MainThread:16624 [wandb_run.py:_redirect():2096] redirect: wrap_raw
+2024-03-27 18:27:17,843 INFO    MainThread:16624 [wandb_run.py:_redirect():2161] Wrapping output streams.
+2024-03-27 18:27:17,843 INFO    MainThread:16624 [wandb_run.py:_redirect():2186] Redirects installed.
+2024-03-27 18:27:17,843 INFO    MainThread:16624 [wandb_init.py:init():847] run started, returning control to user process
+2024-03-27 18:29:28,174 WARNING MsgRouterThr:16624 [router.py:message_loop():77] message_loop has been closed

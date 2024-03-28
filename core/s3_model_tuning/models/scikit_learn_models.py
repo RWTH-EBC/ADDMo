@@ -75,14 +75,17 @@ class MLP(BaseScikitLearnModel):
         # Suggest hyperparameters
         n_layers = trial.suggest_int("n_layers", 1, 3)
         hidden_layer_sizes = tuple(
-            trial.suggest_int(f"n_units_l{i}", 10, 100) for i in range(n_layers)
+            trial.suggest_int(f"n_units_l{i}", 1, 100) for i in range(n_layers)
         )
 
         # Dynamic hidden layer sizes based on the number of layers
         hyperparameters["hidden_layer_sizes"] = hidden_layer_sizes
 
+        # activation function
+        hyperparameters["activation"] = trial.suggest_categorical("activation", ["logistic", "relu"])
+
         # Other hyperparameters
-        hyperparameters["activation"] = "relu"
+        # hyperparameters["activation"] = "logistic" # "relu"
         hyperparameters["max_iter"] = 2000
 
         return hyperparameters

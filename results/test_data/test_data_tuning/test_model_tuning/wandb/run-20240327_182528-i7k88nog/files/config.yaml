@@ -1,0 +1,64 @@
+wandb_version: 1
+
+name_of_raw_data:
+  desc: null
+  value: test_data
+name_of_data_tuning_experiment:
+  desc: null
+  value: test_data_tuning
+name_of_model_tuning_experiment:
+  desc: null
+  value: test_model_tuning
+abs_path_to_data:
+  desc: null
+  value: D:\\04_GitRepos\\addmo-extra\\raw_input_data\\InputData.xlsx
+name_of_target:
+  desc: null
+  value: FreshAir Temperature
+start_train_val:
+  desc: null
+  value: 2016-08-01 00:00
+stop_train_val:
+  desc: null
+  value: 2016-08-14 23:45
+start_test:
+  desc: null
+  value: 2016-08-15 00:00
+end_test:
+  desc: null
+  value: 2016-08-16 23:45
+config_model_tuner:
+  desc: null
+  value: 'models=[''MLP''] hyperparameter_tuning_type=''NoTuning'' hyperparameter_tuning_kwargs={''hidden_layer_sizes'':
+    [10], ''activation'': ''relu'', ''max_iter'': 2000} validation_score_mechanism=''cv''
+    validation_score_mechanism_kwargs=None validation_score_splitting=''KFold'' validation_score_splitting_kwargs=None
+    validation_score_metric=''r2'' validation_score_metric_kwargs=None'
+_wandb:
+  desc: null
+  value:
+    python_version: 3.11.7
+    cli_version: 0.16.3
+    framework: sklearn
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1711560328.628396
+    t:
+      1:
+      - 5
+      - 35
+      - 53
+      - 55
+      2:
+      - 5
+      - 35
+      - 53
+      - 55
+      3:
+      - 16
+      - 23
+      4: 3.11.7
+      5: 0.16.3
+      8:
+      - 3
+      - 5
+      13: windows-amd64

@@ -26,6 +26,7 @@ class NoTuningTuner(AbstractHyParamTuner):
         hyperparameter_set = kwargs.get("hyperparameter_set", None)
         if hyperparameter_set is None:
             hyperparameter_set = model.default_hyperparameter()
+            print("No hyperparameter set given, will use default hyperparameters.")
         return hyperparameter_set
 
 

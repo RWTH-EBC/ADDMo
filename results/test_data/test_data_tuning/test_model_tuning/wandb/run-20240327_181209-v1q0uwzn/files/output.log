@@ -1,0 +1,8 @@
+
+[I 2024-03-27 18:12:13,969] A new study created in memory with name: no-name-7782606b-eb18-4b56-9bd7-3afea128698b
+[I 2024-03-27 18:13:55,472] Trial 4 finished with value: -1.4389369710149298 and parameters: {'n_layers': 1, 'n_units_l0': 88, 'activation': 'relu'}. Best is trial 4 with value: -1.4389369710149298.
+[I 2024-03-27 18:13:55,590] Trial 1 finished with value: -1.4950308781738983 and parameters: {'n_layers': 3, 'n_units_l0': 53, 'n_units_l1': 66, 'n_units_l2': 45, 'activation': 'relu'}. Best is trial 4 with value: -1.4389369710149298.
+[I 2024-03-27 18:13:55,648] Trial 3 finished with value: -1.539435815824564 and parameters: {'n_layers': 3, 'n_units_l0': 2, 'n_units_l1': 99, 'n_units_l2': 48, 'activation': 'logistic'}. Best is trial 4 with value: -1.4389369710149298.
+[I 2024-03-27 18:13:59,328] Trial 2 finished with value: -1.4870050744734862 and parameters: {'n_layers': 2, 'n_units_l0': 2, 'n_units_l1': 51, 'activation': 'logistic'}. Best is trial 4 with value: -1.4389369710149298.
+[I 2024-03-27 18:14:09,961] Trial 0 finished with value: -1.4066906457917667 and parameters: {'n_layers': 3, 'n_units_l0': 28, 'n_units_l1': 29, 'n_units_l2': 79, 'activation': 'logistic'}. Best is trial 0 with value: -1.4066906457917667.
+Finished

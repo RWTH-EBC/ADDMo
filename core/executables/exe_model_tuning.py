@@ -7,8 +7,10 @@ from core.util.experiment_logger import WandbLogger
 from core.util.experiment_logger import ExperimentLogger
 
 from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
+from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from core.s3_model_tuning.model_tuner import ModelTuner
 from core.util.load_save import load_data
+from core.util.load_save import load_config_from_json
 from core.util.data_handling import split_target_features
 def exe_model_tuning(config=None):
     # Configure the logger
@@ -47,14 +49,14 @@ def exe_model_tuning(config=None):
     print("Finished")
 
 if __name__ == "__main__":
-    # Path to the config file
-    path_to_config = os.path.join(root_dir(), 'core', 's3_model_tuning', 'config',
-                                'model_tuning_config.json')
-
     # Create the config object
     config = ModelTuningExperimentConfig()
 
     # Load the config from the json file
+    path_to_config = os.path.join(root_dir(), 'core', 's3_model_tuning', 'config',
+                                'model_tuner_config_no_tuning.json')
+    model_tuning_config = load_config_from_json(path_to_config, ModelTunerConfig)
+    config.config_model_tuner = model_tuning_config
 
     # run
     exe_model_tuning(config)

@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-
+from typing import Optional
 
 class ModelTunerConfig(BaseModel):
     models: list[str] = Field(["MLP"], description="List of models to use")
@@ -8,28 +8,28 @@ class ModelTunerConfig(BaseModel):
         "OptunaTuner",
         description="Type of hyperparameter tuning, e.g., OptunaTuner, GridSearchTuner",
     )
-    hyperparameter_tuning_kwargs: dict = Field(
+    hyperparameter_tuning_kwargs: Optional[dict] = Field(
         {"n_trials": 5}, description="Kwargs for the tuner"
     )
 
     validation_score_mechanism: str = Field(
         "cv", description="Validation score mechanism, e.g., cross validation, holdout"
     )
-    validation_score_mechanism_kwargs: dict = Field(
+    validation_score_mechanism_kwargs: Optional[dict] = Field(
         default=None, description="Kwargs for the validation score mechanism"
     )
 
     validation_score_splitting: str = Field(
         "KFold", description="Validation score splitting, e.g., KFold, PredefinedSplit"
     )
-    validation_score_splitting_kwargs: dict = Field(
+    validation_score_splitting_kwargs: Optional[dict] = Field(
         default=None, description="Kwargs for the validation score splitter"
     )
 
     validation_score_metric: str = Field(
         "neg_root_mean_squared_error", description="Validation score metric, e.g., r2, neg_mean_absolute_error"
     )
-    validation_score_metric_kwargs: dict = Field(
+    validation_score_metric_kwargs: Optional[dict] = Field(
         default=None, description="Kwargs for the validation score metric"
     )
 

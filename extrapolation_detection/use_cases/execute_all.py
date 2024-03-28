@@ -14,7 +14,7 @@ from extrapolation_detection.use_cases.config.ed_experiment_config import (
 from extrapolation_detection.use_cases import (
     s1_split_data,
     s2_tune_ml_regressor,
-    s3_0_regressor_error_calculation,
+    s3_regressor_error_calculation,
     s4_true_validity_domain,
     s5_tune_detector,
     s6_detector_score_calculation,
@@ -27,14 +27,13 @@ from extrapolation_detection.use_cases import (
 
 # configure config
 config = ExtrapolationExperimentConfig()
-config.simulation_data_name = "Boptest_TAir_mid_reduced"
-config.experiment_name = "Boptest_TAir_mid_reduced_big_ANN_fix_threshold"
+config.simulation_data_name = "Boptest_TAir_mid_ODE"
+config.experiment_name = "Boptest_TAir_mid_ODE_small_ANN"
 config.name_of_target = "delta_reaTZon_y"
 config.train_val_test_period = (0, 1488)
 config.shuffle = False
 # config.grid_points_per_axis = 3
 config.system_simulation = None
-config.true_outlier_threshold = 0.09276474957482335  # like of small ann
 
 config.config_explo_quant.explo_grid_points_per_axis = 10
 
@@ -60,19 +59,19 @@ LocalLogger.directory = result_folder
 LocalLogger.active = True
 
 # Run scripts
-ExperimentLogger.start_experiment(config=config)  # log config
-s1_split_data.exe_split_data(config)
-s2_tune_ml_regressor.exe_tune_regressor(config)
-s3_0_regressor_error_calculation.exe_regressor_error_calculation(config)
-s4_true_validity_domain.exe_true_validity_domain(config)
-s5_tune_detector.exe_train_detector(config)
-s6_detector_score_calculation.exe_detector_score_calculation(config)
-s8_1_exploration_quantification.exe_exploration_quantification(config)
-s8_2_exploration_quantification_grid_occupancy.exe_exploration_quantification_grid_occupancy(
-    config
-)
-s8_3_exploration_quantification_extra.exe_exploration_quantification_extra(config)
-s9_data_coverage.exe_data_coverage(config)
+# ExperimentLogger.start_experiment(config=config)  # log config
+# s1_split_data.exe_split_data(config)
+# s2_tune_ml_regressor.exe_tune_regressor(config)
+s3_regressor_error_calculation.exe_regressor_error_calculation(config)
+# s4_true_validity_domain.exe_true_validity_domain(config)
+# s5_tune_detector.exe_train_detector(config)
+# s6_detector_score_calculation.exe_detector_score_calculation(config)
+# s8_1_exploration_quantification.exe_exploration_quantification(config)
+# s8_2_exploration_quantification_grid_occupancy.exe_exploration_quantification_grid_occupancy(
+#     config
+# )
+# s8_3_exploration_quantification_extra.exe_exploration_quantification_extra(config)
+# s9_data_coverage.exe_data_coverage(config)
 
 
 # s7_2_plotting.exe_plot_2D_all(config)

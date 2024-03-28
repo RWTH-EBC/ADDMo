@@ -38,10 +38,13 @@ def exe_split_data(config: ExtrapolationExperimentConfig):
         bounds = point_generator.infer_meshgrid_bounds(x_tot)
         x_grid = point_generator.generate_point_grid(x_tot, bounds, config.grid_points_per_axis)
 
-        # simulate true values for the grid via the system simulation
+        # simulate true values for the grid via the system simulation # Todo: put into a factory
         if config.system_simulation == "carnot":
-            from extrapolation_detection.system_simulations.carnot_model import carnot_model
+            from extrapolation_detection.system_simulations.system_simulations import carnot_model
             system_simulation = carnot_model
+        if config.system_simulation == "BopTest_TAir_ODE":
+            from extrapolation_detection.system_simulations.system_simulations import boptest_delta_T_air_physical_approximation
+            system_simulation = boptest_delta_T_air_physical_approximation
 
         y_grid = x_grid.apply(lambda row: system_simulation(*row), axis=1)
         y_grid.name = config.name_of_target

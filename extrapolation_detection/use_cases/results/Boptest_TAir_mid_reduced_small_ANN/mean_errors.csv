@@ -1,0 +1,2 @@
+;mean_errors_train;mean_errors_val;mean_errors_test;mean_errors_remaining;mean_errors_grid
+mae;0.045343296589312326;0.0487791716850709;0.04317385092673834;0.10958539728899484;0.0634658290569859

@@ -13,7 +13,7 @@ class ExtrapolationExperimentConfig(BaseModel):
     simulation_data_name: str = Field(
         "Carnot_mid", description="Name of the simulation data"
     )
-    experiment_name: str = Field("Carnot_Test7", description="Name of the experiment")
+    experiment_name: str = Field("Carnot_Test", description="Name of the experiment")
 
     name_of_target: str = Field(
         "$\dot{Q}_{heiz}$ in kW", description="Name of the target variable"
@@ -43,7 +43,7 @@ class ExtrapolationExperimentConfig(BaseModel):
     )
 
     # specifications for generating the grid of artificial data
-    grid_points_per_axis: int = Field(100, description="Number of grid points per axis")
+    grid_points_per_axis: int = Field(10, description="Number of grid points per axis")
     system_simulation: Optional[str] = Field(
         "carnot", description="System simulation type, None if no simulation"
     )

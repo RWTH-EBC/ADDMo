@@ -13,7 +13,7 @@ from extrapolation_detection.use_cases.config.ed_experiment_config import (
 )
 
 
-def exe_tune_regressor(config: ExtrapolationExperimentConfig):
+def exe(config: ExtrapolationExperimentConfig):
     xy_training = loading_saving.read_csv(
         "xy_train", directory=config.experiment_folder
     )
@@ -61,4 +61,4 @@ def exe_tune_regressor(config: ExtrapolationExperimentConfig):
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()
-    exe_tune_regressor(config)
+    exe(config)

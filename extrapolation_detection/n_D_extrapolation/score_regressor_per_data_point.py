@@ -33,17 +33,3 @@ def score_per_sample(
 
     return df
 
-
-def score_meshgrid(
-    regressor: AbstractMLModel,
-    system_simulation: Callable,
-    x_tot: pd.DataFrame,
-    mesh_points_per_axis: int = 100,
-    metric: str = "mae",
-) -> dict:
-    """Calculates the error on a meshgrid for plotting purposes"""
-
-
-    df_grid_scores = score_per_sample(regressor, x_grid, y_grid, metric)
-
-    return xy_grid, df_grid_scores

@@ -1,3 +1,18 @@
+
+
+def simulate(x_grid, simulation_name):
+    '''Simulate the true values for the grid via the system simulation. Important note: Order of
+    arguments must be identical to the order in the csv file.'''
+
+    if simulation_name == "carnot":
+        system_simulation = carnot_model
+    elif simulation_name == "BopTest_TAir_ODE":
+        system_simulation = boptest_delta_T_air_physical_approximation
+
+    y_grid = x_grid.apply(lambda row: system_simulation(*row), axis=1)
+
+    return y_grid
+
 def carnot_model(t_amb: float, p_el: float, supply_temp: float = 40) -> float:
     """Carnot model
 
@@ -17,7 +32,7 @@ def carnot_model(t_amb: float, p_el: float, supply_temp: float = 40) -> float:
     """
     return supply_temp + (t_amb - supply_temp) * (1 - 1 / (1 + p_el))
 
-def boptest_delta_T_air_physical_approximation(t_amb, TAirRoom, rad_dir, u_hp) -> float:
+def boptest_delta_T_air_physical_approximation(t_amb, rad_dir, u_hp, t_room) -> float:
     """
     This is a physical representation of the delta_T_air model for the BopTest.
     It is a simplified version of the model that is used in the BopTest.
@@ -27,7 +42,7 @@ def boptest_delta_T_air_physical_approximation(t_amb, TAirRoom, rad_dir, u_hp) -
     ----------
     t_amb : float
         Ambient temperature in Kelvin or degrees Celsius.
-    TAirRoom : float
+    t_room : float
         Air room temperature in Kelvin or degrees Celsius.
     rad_dir : float
         Direct radiation in W/m^2.
@@ -40,4 +55,4 @@ def boptest_delta_T_air_physical_approximation(t_amb, TAirRoom, rad_dir, u_hp) -
         The calculated value based on the input parameters.
 
     """
-    return (15000 / 35 * (t_amb - TAirRoom) + 24 * rad_dir + 15000 * u_hp) * 900 / 70476480
+    return (15000 / 35 * (t_amb - t_room) + 24 * rad_dir + 15000 * u_hp) * 900 / 70476480

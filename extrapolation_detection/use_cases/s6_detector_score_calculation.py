@@ -13,7 +13,7 @@ from extrapolation_detection.use_cases.config.ed_experiment_config import (
 from extrapolation_detection.detector.detectors import AbstractDetector
 
 
-def exe_detector_score_calculation(config: ExtrapolationExperimentConfig):
+def exe(config: ExtrapolationExperimentConfig):
     # load data
     xy_training = loading_saving.read_csv("xy_train", directory=config.experiment_folder)
     xy_validation = loading_saving.read_csv("xy_val", directory=config.experiment_folder)
@@ -151,4 +151,4 @@ def exe_detector_score_calculation(config: ExtrapolationExperimentConfig):
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()
-    exe_detector_score_calculation(config)
+    exe(config)

@@ -1,0 +1,2 @@
+;activation;alpha;batch_size;beta_1;beta_2;early_stopping;epsilon;hidden_layer_sizes;learning_rate;learning_rate_init;max_fun;max_iter;momentum;n_iter_no_change;nesterovs_momentum;power_t;random_state;shuffle;solver;tol;validation_fraction;verbose;warm_start;best_model_name;best_model_val_score
+0;relu;0.0001;auto;0.9;0.999;False;1e-08;[10, 10];constant;0.001;15000;2000;0.9;10;True;0.5;;True;adam;0.0001;0.1;False;False;MLP;0.12266332790404237

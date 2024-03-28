@@ -21,16 +21,6 @@ def exe_plot_2D_all(config):
             plot.save_plot(plt, detector_name, config.experiment_folder)
             plot.show_plot(plt)
 
-
-def exe_plot_2D(experiment_name, detector_experiment_names:list[str]):
-    for detector in detector_experiment_names:
-        plot_data = plot.PlotData2D()
-        plot_data.load_plot_data(experiment_name, detector)
-        plot_data.infer_ml_model_data_splits()
-        plt = plot.plot_single(plot_data)
-        plot.show_plot(plt)
-
-
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()
     exe_plot_2D_all(config)

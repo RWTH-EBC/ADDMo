@@ -12,7 +12,7 @@ from exploration_quantification import point_generator
 from exploration_quantification import coverage_plotting
 
 
-def exe_data_coverage(config: ExtrapolationExperimentConfig):
+def exe(config: ExtrapolationExperimentConfig):
     # without target
     regressor_directory = os.path.join(config.experiment_folder, "regressors")
     xy_regressor_fit = loading_saving.read_csv(
@@ -61,4 +61,4 @@ def exe_data_coverage(config: ExtrapolationExperimentConfig):
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()
-    exe_data_coverage(config)
+    exe(config)

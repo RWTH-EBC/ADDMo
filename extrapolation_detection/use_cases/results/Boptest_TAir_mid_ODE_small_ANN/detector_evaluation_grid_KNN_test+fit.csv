@@ -1,0 +1,9 @@
+;0
+true_positive;10000.0
+true_negative;0.0
+false_positive;0.0
+false_negative;0.0
+precision;1.0
+recall;1.0
+f;1.0
+fbeta;1.0

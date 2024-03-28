@@ -14,7 +14,7 @@ from extrapolation_detection.detector.tuning_mechanisms import (
 from core.util.data_handling import split_target_features
 
 
-def exe_train_detector(config: ExtrapolationExperimentConfig):
+def exe(config: ExtrapolationExperimentConfig):
     xy_training = loading_saving.read_csv("xy_train", directory=config.experiment_folder)
     xy_validation = loading_saving.read_csv("xy_val", directory=config.experiment_folder)
     xy_test = loading_saving.read_csv("xy_test", directory=config.experiment_folder)
@@ -106,4 +106,4 @@ def exe_train_detector(config: ExtrapolationExperimentConfig):
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()
-    exe_train_detector(config)
+    exe(config)

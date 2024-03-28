@@ -5,12 +5,13 @@ from extrapolation_detection.util import data_handling
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
     ExtrapolationExperimentConfig,
 )
+from extrapolation_detection.system_simulations import system_simulations
 
 from core.util.data_handling import split_target_features
 from exploration_quantification import point_generator
 
 
-def exe_split_data(config: ExtrapolationExperimentConfig):
+def exe(config: ExtrapolationExperimentConfig):
     # Load data
     xy_tot = loading_saving.read_csv(config.simulation_data_name, directory="data", index_col=False)
 
@@ -38,15 +39,8 @@ def exe_split_data(config: ExtrapolationExperimentConfig):
         bounds = point_generator.infer_meshgrid_bounds(x_tot)
         x_grid = point_generator.generate_point_grid(x_tot, bounds, config.grid_points_per_axis)
 
-        # simulate true values for the grid via the system simulation # Todo: put into a factory
-        if config.system_simulation == "carnot":
-            from extrapolation_detection.system_simulations.system_simulations import carnot_model
-            system_simulation = carnot_model
-        if config.system_simulation == "BopTest_TAir_ODE":
-            from extrapolation_detection.system_simulations.system_simulations import boptest_delta_T_air_physical_approximation
-            system_simulation = boptest_delta_T_air_physical_approximation
-
-        y_grid = x_grid.apply(lambda row: system_simulation(*row), axis=1)
+        # generate y values for the grid
+        y_grid = system_simulations.simulate(x_grid, config.system_simulation)
         y_grid.name = config.name_of_target
         xy_grid = pd.concat([x_grid, y_grid], axis=1)
 
@@ -79,4 +73,4 @@ def exe_split_data(config: ExtrapolationExperimentConfig):
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()
-    exe_split_data(config)
+    exe(config)

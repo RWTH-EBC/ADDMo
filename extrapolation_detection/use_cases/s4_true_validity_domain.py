@@ -8,7 +8,7 @@ from extrapolation_detection.use_cases.config.ed_experiment_config import (
 from extrapolation_detection.n_D_extrapolation import true_validity_domain
 
 
-def exe_true_validity_domain(config: ExtrapolationExperimentConfig):
+def exe(config: ExtrapolationExperimentConfig):
     """Classifies the data points to be in the true validity domain or not based on the
     regressor-error."""
 
@@ -83,4 +83,4 @@ def exe_true_validity_domain(config: ExtrapolationExperimentConfig):
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()
-    exe_true_validity_domain(config)
+    exe(config)

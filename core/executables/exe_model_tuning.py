@@ -40,7 +40,8 @@ def exe_model_tuning(config=None):
     model_dict = model_tuner.tune_all_models(x_train_val, y_train_val)
 
     # Get the best model
-    best_model = model_tuner.get_best_model(model_dict)
+    best_model_name = model_tuner.get_best_model_name(model_dict)
+    best_model = model_tuner.get_model(model_dict, best_model_name)
 
     # Log the best model
     ExperimentLogger.log_artifact(best_model, name='best_model', art_type='onnx')

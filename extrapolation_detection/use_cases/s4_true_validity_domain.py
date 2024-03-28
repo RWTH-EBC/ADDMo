@@ -26,11 +26,14 @@ def exe_true_validity_domain(config: ExtrapolationExperimentConfig):
         "errors_grid", directory=config.experiment_folder
     )
 
-    # infer threshold
+    # if needed, infer threshold
     errors_train_val_test = pd.concat([errors_train, errors_val, errors_test])
-    true_validity_threshold = true_validity_domain.infer_threshold(
-        config.true_outlier_fraction, errors_train_val_test["error"]
-    )
+    if config.true_outlier_threshold is None:
+        true_validity_threshold = true_validity_domain.infer_threshold(
+            config.true_outlier_fraction, errors_train_val_test["error"]
+        )
+    else:
+        true_validity_threshold = config.true_outlier_threshold
 
 
     # classify errors to validity boolean

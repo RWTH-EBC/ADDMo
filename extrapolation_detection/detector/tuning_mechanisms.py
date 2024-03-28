@@ -55,7 +55,7 @@ def untuned_detector(detector_name: str, x_train, x_val, outlier_fraction):
 
     # get novelty detection score threshold
     scores = pd.Series(scores)
-    nd_threshold = infer_threshold(outlier_fraction, scores)
+    nd_threshold = infer_threshold(outlier_fraction, scores) # Todo: check if this is correct. It seems to use a function meant for true validity, could work anyway. Though if giving the true_validity_threshold directly and not the fraction, this need to be recoded.
 
     # to dataframe for saving in human readable csv format
     nd_threshold = pd.DataFrame([nd_threshold])

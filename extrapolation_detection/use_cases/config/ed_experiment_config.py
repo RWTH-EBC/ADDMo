@@ -28,7 +28,19 @@ class ExtrapolationExperimentConfig(BaseModel):
     test_fraction: float = Field(0.1, description="Fraction of data for testing")
     shuffle: bool = Field(True, description="Whether to shuffle the data")
 
-    true_outlier_fraction: float = Field(0.1, description="Fraction of true outliers")
+    true_outlier_fraction: Optional[float] = Field(
+        0.1, description="Fraction of true outliers."
+    )
+    true_outlier_threshold_error_metric: str = Field(
+        "mae",
+        description="Error metric used to calculate the errors of the regressor and consequently "
+                    "the unit for the true outlier threshold",
+    )
+    true_outlier_threshold: Optional[float] = Field(
+        default=None,
+        description="Threshold for true outliers. None if it should be inferred through "
+        "true_outlier_fraction. If not None it will overwrite true_outlier_fraction.",
+    )
 
     # specifications for generating the grid of artificial data
     grid_points_per_axis: int = Field(100, description="Number of grid points per axis")

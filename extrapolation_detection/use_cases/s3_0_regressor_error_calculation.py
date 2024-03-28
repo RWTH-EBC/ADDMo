@@ -1,5 +1,7 @@
 import os
 
+import pandas as pd
+
 from extrapolation_detection.util import loading_saving
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.util.data_handling import split_target_features
@@ -51,6 +53,7 @@ def exe_regressor_error_calculation(config: ExtrapolationExperimentConfig):
     errors_test = score_per_sample(
         regressor, x_test, y_test, metric=config.true_outlier_threshold_error_metric
     )
+
     loading_saving.write_csv(
         errors_test, "errors_test", directory=config.experiment_folder
     )
@@ -75,6 +78,24 @@ def exe_regressor_error_calculation(config: ExtrapolationExperimentConfig):
     loading_saving.write_csv(
         errors_grid, "errors_grid", directory=config.experiment_folder
     )
+
+    # calc mean errors and save them in one csv with index indicating the period
+    mean_errors = pd.DataFrame(
+        {
+            "mean_errors_train": errors_train["error"].mean(),
+            "mean_errors_val": errors_val["error"].mean(),
+            "mean_errors_test": errors_test["error"].mean(),
+            "mean_errors_remaining": errors_remaining["error"].mean(),
+            "mean_errors_grid": errors_grid["error"].mean(),
+        },
+        index=[config.true_outlier_threshold_error_metric],
+    )
+
+    loading_saving.write_csv(mean_errors, "mean_errors", directory=config.experiment_folder)
+
+
+
+
 
     print(f"{__name__} executed")
 

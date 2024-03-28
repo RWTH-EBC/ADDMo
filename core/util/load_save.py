@@ -78,10 +78,8 @@ def create_or_clean_directory(path: str) -> str:
         pass
     else:
         # Path exists, ask for confirmation to delete current contents
-        # response = input(f"The directory {path} already exists. Do you want to overwrite
-        # the content type <y>, for deleting the current contents type <d>")
-        response = "y" # Todo: uncomment for production
-
+        response = input(f"The directory {path} already exists. Do you want to overwrite"
+        "the content type <y>, for deleting the current contents type <d>")
         if response.lower() == 'd':
             # Delete the contents of the directory
             for filename in os.listdir(path):

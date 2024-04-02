@@ -30,7 +30,7 @@ def carnot_model(t_amb: float, p_el: float, supply_temp: float = 40) -> float:
     float
         Carnot model result
     """
-    return supply_temp + (t_amb - supply_temp) * (1 - 1 / (1 + p_el))
+    return p_el * (273.15 + supply_temp) / (supply_temp - t_amb)
 
 def boptest_delta_T_air_physical_approximation(t_amb, rad_dir, u_hp, t_room) -> float:
     """

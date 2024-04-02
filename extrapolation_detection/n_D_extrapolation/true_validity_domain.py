@@ -8,8 +8,9 @@ def infer_threshold(outlier_fraction: float, errors_train_val_test: pd.Series) -
 
 def classify_errors_2_true_validity(errors: pd.Series, absolute_validity_threshold: float):
     '''The regressor error is used to classify the data points to be in the true validity domain
-    or not
-    absolute error in respective error metric
+    or not. Absolute error in respective error metric.
+    0: in true validity domain
+    1: not in true validity domain
     '''
     true_validity = errors.gt(absolute_validity_threshold)
 

@@ -32,16 +32,16 @@ def plot_scatter_average_coverage_per_2D(
         # Create a scatter plot for each combination of variables
         plt.figure(figsize=(5, 5))
         plt.scatter(
-            average_labels_df[var1],
             average_labels_df[var2],
+            average_labels_df[var1],
             c=average_labels_df["label"],
             cmap="viridis",
             vmin=0,
             vmax=100,
         )
 
-        plt.xlabel(var1)
-        plt.ylabel(var2)
+        plt.xlabel(var2)
+        plt.ylabel(var1)
         plt.title(f"{title_header}\n{var1} and {var2}")
         plt.colorbar(
             label="Coverage\n averaged over the remaining dimensions (%)"
@@ -118,10 +118,10 @@ def plot_dataset_distribution_kde(x: pd.DataFrame, bounds: dict, title_header: s
     g = sns.pairplot(x, diag_kind="hist")
 
     # colorful heatmap
-    g.map_lower(sns.kdeplot, fill=True, thresh=0, levels=100, cmap="mako")
+    # g.map_upper(sns.kdeplot, fill=True, thresh=0, levels=100, cmap="mako")
 
     # layer lines on top of the scatter
-    # g.map_lower(sns.kdeplot, levels=4, color=".2")
+    g.map_upper(sns.kdeplot, levels=4, color=".2")
 
     # Iterate over the axes matrix of the PairGrid
     for i, j in zip(*np.tril_indices_from(g.axes, -1)):

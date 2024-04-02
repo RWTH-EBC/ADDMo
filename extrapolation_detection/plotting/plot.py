@@ -54,25 +54,43 @@ class PlotData2D:
         self.y_val = loading_saving.read_csv("y_val", directory=experiment_folder)
         self.x_test = loading_saving.read_csv("x_test", directory=experiment_folder)
         self.y_test = loading_saving.read_csv("y_test", directory=experiment_folder)
-        self.x_remaining = loading_saving.read_csv("x_remaining", directory=experiment_folder)
-        self.y_remaining = loading_saving.read_csv("y_remaining", directory=experiment_folder)
+        self.x_remaining = loading_saving.read_csv(
+            "x_remaining", directory=experiment_folder
+        )
+        self.y_remaining = loading_saving.read_csv(
+            "y_remaining", directory=experiment_folder
+        )
         self.x_grid = loading_saving.read_csv("x_grid", directory=experiment_folder)
         self.y_grid = loading_saving.read_csv("y_grid", directory=experiment_folder)
 
-        self.xy_training = loading_saving.read_csv("xy_train", directory=experiment_folder)
-        self.xy_validation = loading_saving.read_csv("xy_val", directory=experiment_folder)
+        self.xy_training = loading_saving.read_csv(
+            "xy_train", directory=experiment_folder
+        )
+        self.xy_validation = loading_saving.read_csv(
+            "xy_val", directory=experiment_folder
+        )
         self.xy_test = loading_saving.read_csv("xy_test", directory=experiment_folder)
-        self.xy_remaining = loading_saving.read_csv("xy_remaining", directory=experiment_folder)
+        self.xy_remaining = loading_saving.read_csv(
+            "xy_remaining", directory=experiment_folder
+        )
         self.xy_grid = loading_saving.read_csv("xy_grid", directory=experiment_folder)
 
         # read errors
-        self.errors_train = loading_saving.read_csv("errors_train", directory=experiment_folder)
-        self.errors_val = loading_saving.read_csv("errors_val", directory=experiment_folder)
-        self.errors_test = loading_saving.read_csv("errors_test", directory=experiment_folder)
+        self.errors_train = loading_saving.read_csv(
+            "errors_train", directory=experiment_folder
+        )
+        self.errors_val = loading_saving.read_csv(
+            "errors_val", directory=experiment_folder
+        )
+        self.errors_test = loading_saving.read_csv(
+            "errors_test", directory=experiment_folder
+        )
         self.errors_remaining = loading_saving.read_csv(
             "errors_remaining", directory=experiment_folder
         )
-        self.errors_grid = loading_saving.read_csv("errors_grid", directory=experiment_folder)
+        self.errors_grid = loading_saving.read_csv(
+            "errors_grid", directory=experiment_folder
+        )
 
         # read true_validity
         self.true_validity_train = loading_saving.read_csv(
@@ -115,6 +133,16 @@ class PlotData2D:
             directory=os.path.join(experiment_folder, "detectors"),
         ).iloc[0, 0]
 
+        # read detector data
+        self.x_train_detector = loading_saving.read_csv(
+            f"{detector}_x_fit",
+            directory=os.path.join(experiment_folder, "detectors"),
+        )
+        self.x_val_detector = loading_saving.read_csv(
+            f"{detector}_x_val",
+            directory=os.path.join(experiment_folder, "detectors"),
+        )
+
     def infer_ml_model_data_splits(self):
         """Use if the model is tuned on train and validiation data, and after tuning trained on
         the same train+val split."""
@@ -122,6 +150,30 @@ class PlotData2D:
         self.errors_train_ml_model = pd.concat([self.errors_train, self.errors_val])
         self.x_test_ml_model = self.x_test
         self.errors_test_ml_model = self.errors_test
+
+    def infer_detector_data_splits(self):
+        index_fit = self.x_train_detector.index
+        index_val = self.x_val_detector.index
+
+        x_train_ml_model = self.x_train_ml_model.loc[index_fit]
+        errors_train_ml_model = self.errors_train_ml_model.loc[index_fit]
+        x_test_ml_model = pd.concat([self.x_train, self.x_val, self.x_test]).loc[
+            index_val
+        ]
+        errors_test_ml_model = pd.concat(
+            [self.errors_train, self.errors_val, self.errors_test]
+        ).loc[index_val]
+        # self.x_test_ml_model = self.x_train_ml_model
+        # self.errors_test_ml_model = self.errors_train_ml_model
+        #
+        # self.x_test_ml_model = pd.DataFrame(columns=self.x_train_ml_model.columns)
+        # self.errors_test_ml_model = pd.DataFrame(columns=self.errors_train_ml_model.columns)
+
+        # for better visualization switch train and test
+        self.x_train_ml_model = x_test_ml_model
+        self.errors_train_ml_model = errors_test_ml_model
+        self.x_test_ml_model = x_train_ml_model
+        self.errors_test_ml_model = errors_train_ml_model
 
 
 def show_plot(plt):
@@ -131,6 +183,7 @@ def show_plot(plt):
     # if plt is a plotly plot
     if hasattr(plt, "show"):
         plt.show()
+
 
 def save_plot(plt, file_name: str, experiment_folder: str):
     folder = os.path.join(experiment_folder, "plots")
@@ -144,6 +197,7 @@ def save_plot(plt, file_name: str, experiment_folder: str):
     # if plt is a plotly plot, save it
     if hasattr(plt, "write_html"):
         plt.write_html(os.path.join(folder, file_name))
+
 
 def _plot_subplot(plt_data: PlotData2D, axs: axes.Axes):
     """Plots 2D UseCases"""
@@ -175,7 +229,7 @@ def _plot_subplot(plt_data: PlotData2D, axs: axes.Axes):
             np.amin(plt_data.errors_test["error"]),
             np.amin(plt_data.errors_remaining["error"]),
         ),
-        vcenter=plt_data.n_score_threshold,
+        vcenter=plt_data.true_validity_threshold,
         vmax=max(
             np.amax(plt_data.errors_train["error"]),
             np.amax(plt_data.errors_val["error"]),
@@ -269,6 +323,7 @@ def _plot_subplot(plt_data: PlotData2D, axs: axes.Axes):
 
     return labels, handles, divnorm, color_dict
 
+
 def plot_single(plt_data: PlotData2D):
     # Subplots
     fig, axs = plt.subplots(1, 1, figsize=(5.4, 4.1))
@@ -332,6 +387,7 @@ def plot_single(plt_data: PlotData2D):
     # axs.set_ylabel(r"$\mathrm{P}_\mathrm{el}$ in kW")
 
     return plt
+
 
 def plot_3(plt_data_list: list[PlotData2D]):
     assert len(plt_data_list) == 3
@@ -406,6 +462,7 @@ def plot_3(plt_data_list: list[PlotData2D]):
     cb.ax.xaxis.set_label_position("top")
 
     return plt
+
 
 def plot_5(plt_data_list: list[PlotData2D]):
     assert len(plt_data_list) == 5
@@ -482,6 +539,7 @@ def plot_5(plt_data_list: list[PlotData2D]):
     cb.ax.xaxis.set_label_position("top")
 
     return plt
+
 
 def plot_bar_plot(bars, clf_labels, bars_ideal=None, labels=None, ylabel=None):
     # todo:

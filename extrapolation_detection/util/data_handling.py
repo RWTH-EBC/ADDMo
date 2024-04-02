@@ -73,12 +73,12 @@ def move_true_invalid_from_training_2_validation(
     true_validity_val = true_validity_val.astype(bool).squeeze()
 
     # Select the "true invalid" data points from xy_train
-    invalid_data = xy_train[~true_validity_train]
-    invalid_labels = true_validity_train[~true_validity_train]
+    invalid_data = xy_train[true_validity_train]
+    invalid_labels = true_validity_train[true_validity_train]
 
     # Remove the "true invalid" data points from xy_train
-    xy_train_new = xy_train[true_validity_train]
-    true_validity_train_new = true_validity_train[true_validity_train]
+    xy_train_new = xy_train[~true_validity_train]
+    true_validity_train_new = true_validity_train[~true_validity_train]
 
     # Append the "true invalid" data points to xy_val
     xy_val_new = pd.concat([xy_val, invalid_data])

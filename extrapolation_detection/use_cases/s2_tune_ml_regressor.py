@@ -38,7 +38,7 @@ def exe(config: ExtrapolationExperimentConfig):
     regressor: AbstractMLModel = best_model
 
     # generate prediction for fit period
-    y_pred = pd.Series(regressor.predict(x_train_val))
+    y_pred = pd.Series(regressor.predict(x_train_val), index=x_train_val.index)
     y_pred.name = config.name_of_target + "_pred"
 
     # safe regressor to pickle #Todo: evtl. via onnx?

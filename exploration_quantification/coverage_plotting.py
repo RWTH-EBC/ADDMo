@@ -67,11 +67,14 @@ def plot_grid_cells_average_coverage_per_2D(
         # average the grid cells over the remaining dimensions
         axes = tuple(set(range(coverage_grid.ndim)) - {var1, var2})
         averaged_grid = np.mean(coverage_grid, axis=axes) * 100
+        # transpose to match the order of axes of the other plots
+        averaged_grid = np.transpose(averaged_grid)
 
-        # plot this averaged grid occupancy for var1 and var2
+        # Get the variable names
         var1_name = variable_names[var1]
         var2_name = variable_names[var2]
 
+        # plot this averaged grid occupancy for var1 and var2
         plt.figure()
         plt.imshow(averaged_grid, origin="lower") #, vmin=0, vmax=100)
         plt.title(f"{title_header}\n{var1_name} and {var2_name}")
@@ -93,17 +96,17 @@ def plot_grid_cells_average_coverage_per_2D(
         rounding_axis1 = calibrate_axis_rounding(max_val1)
         rounding_axis2 = calibrate_axis_rounding(max_val2)
 
-        plt.xticks(
+        plt.yticks(
             np.linspace(0, grid_cells_per_axis - 1, 5),
             np.round(np.linspace(min_val1, max_val1, 5), rounding_axis1)
         )
-        plt.yticks(
+        plt.xticks(
             np.linspace(0, grid_cells_per_axis - 1, 5),
             np.round(np.linspace(min_val2, max_val2, 5), rounding_axis2),
         )
 
-        plt.xlabel(f"{var1_name}")
-        plt.ylabel(f"{var2_name}")
+        plt.ylabel(f"{var1_name}")
+        plt.xlabel(f"{var2_name}")
         plt.colorbar(
             label="Coverage\n averaged over the remaining dimensions (%)"
         )

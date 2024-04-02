@@ -1,5 +1,7 @@
 import os
 
+from core.util.load_save import load_config_from_json
+
 from extrapolation_detection.util import loading_saving
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
     ExtrapolationExperimentConfig,
@@ -53,4 +55,7 @@ def exe(config: ExtrapolationExperimentConfig):
 
 if __name__ == "__main__":
     config = ExtrapolationExperimentConfig()
+
+    path = r"D:\04_GitRepos\addmo-extra\extrapolation_detection\use_cases\results\Boptest_TAir_mid_ODE_test1_supersmallANN\config.json"
+    config = load_config_from_json(path, ExtrapolationExperimentConfig())
     exe(config)

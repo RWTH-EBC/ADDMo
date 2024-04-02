@@ -24,24 +24,26 @@ from extrapolation_detection.use_cases import (
     s8_3_coverage_tuned_ND,
     s8_4_coverage_true_validity,
     s9_data_coverage,
+    s9_data_coverage_grid,
 )
 
 # configure config
 config = ExtrapolationExperimentConfig()
-# config.simulation_data_name = "Boptest_TAir_mid_ODE"
-config.experiment_name = "Carnot_Test_transformed_target_supersmallANN"
-# config.name_of_target = "delta_reaTZon_y"
-# config.train_val_test_period = (0, 1488)
-# config.shuffle = False
-config.grid_points_per_axis = 100
-# config.system_simulation = "BopTest_TAir_ODE" # "carnot
-# #
-config.config_explo_quant.explo_grid_points_per_axis = 100
-config.config_explo_quant.exploration_bounds = {
-    "$T_{umg}$ in °C": (-7.5, 20),
-    "$P_{el}$ in kW": (0, 4.5),
-    "$\dot{Q}_{heiz}$ in kW": (0, 35),
-}
+config.simulation_data_name = "Boptest_TAir_mid_ODE"
+config.experiment_name = "Boptest_TAir_mid_ODE_test1_bigANN_same_threshold"
+config.name_of_target = "delta_reaTZon_y"
+config.train_val_test_period = (0, 1488)
+config.shuffle = False
+config.grid_points_per_axis = 20
+config.system_simulation = "BopTest_TAir_ODE" # "carnot
+config.true_outlier_threshold = 0.111819189397924
+
+config.config_explo_quant.explo_grid_points_per_axis = 20
+# config.config_explo_quant.exploration_bounds = {
+#     "$T_{umg}$ in °C": (-7.5, 20),
+#     "$P_{el}$ in kW": (0, 4.5),
+#     "$\dot{Q}_{heiz}$ in kW": (0, 35),
+# }
 # #
 # # # Load the config from the json file
 path_to_config = os.path.join(
@@ -52,7 +54,7 @@ config.config_model_tuning.models = ["MLP_TargetTransformed"]
 # config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 100}
 config.config_model_tuning.hyperparameter_tuning_kwargs = {
     "hyperparameter_set": {
-        "hidden_layer_sizes": [10],
+        "hidden_layer_sizes": [100, 100],
         "activation": "relu",
         "max_iter": 2000,
     }
@@ -77,12 +79,13 @@ LocalLogger.active = True
 # s8_2_coverage_grid_occupancy.exe(config)
 # s8_3_coverage_tuned_ND.exe(config)
 # s8_4_coverage_true_validity.exe(config)
-s9_data_coverage.exe(config)
-
+# s9_data_coverage.exe(config)
+s9_data_coverage_grid.exe(config)
+#
 # s7_2_plotting.exe_plot_2D_all(config)
 # s7_2_plotting.exe_plot_2D_detector(config)
 
-from extrapolation_detection.use_cases import s9_data_coverage_debug
-s9_data_coverage_debug.exe(config)
+# from extrapolation_detection.use_cases import s9_data_coverage_debug
+# s9_data_coverage_debug.exe(config)
 
 

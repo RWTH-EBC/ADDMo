@@ -38,7 +38,6 @@ def load_config_from_json(
 
 def save_config_to_json(config: ConfigT, path: str):
     """Save the config to a json file."""
-    create_or_clean_directory(os.path.dirname(path))
     config_json = config.model_dump_json(indent=4)
     with open(path, "w") as f:
         f.write(config_json)
@@ -78,7 +77,7 @@ def create_or_clean_directory(path: str) -> str:
         pass
     else:
         # Path exists, ask for confirmation to delete current contents
-        response = input(f"The directory {path} already exists. Do you want to overwrite"
+        response = input(f"The directory {path} already exists. To overwrite "
         "the content type <y>, for deleting the current contents type <d>")
         if response.lower() == 'd':
             # Delete the contents of the directory

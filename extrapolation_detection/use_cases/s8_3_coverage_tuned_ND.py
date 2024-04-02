@@ -16,7 +16,7 @@ from exploration_quantification.coverage_plotting import (
 
 def exe(config: ExtrapolationExperimentConfig):
 
-    grid_path = os.path.join(config.experiment_folder)
+    grid_path = os.path.join(config.experiment_folder, "explo_quant")
     x_grid = loading_saving.read_csv(f"grid_points", grid_path)
 
 

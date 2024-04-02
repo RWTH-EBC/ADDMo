@@ -337,7 +337,7 @@ def plot_single(plt_data: PlotData2D):
     ticks = (
         np.linspace(divnorm.vmin + 0.01, divnorm.vcenter, 3).tolist()
         + np.linspace(divnorm.vcenter, divnorm.vmax - 0.01, 3).tolist()
-    )  # Todo: true validity centered ticks
+    )
     # ticks = [0.01, 0.05, 0.1, 2, 4] # custom ticks
     cb = plt.colorbar(
         ScalarMappable(
@@ -385,6 +385,8 @@ def plot_single(plt_data: PlotData2D):
     # axs.set_xlabel(r"$\mathrm{T}_\mathrm{amb}$ in °C")
     axs.set_ylabel(plt_data.x_train.columns[1])
     # axs.set_ylabel(r"$\mathrm{P}_\mathrm{el}$ in kW")
+
+    plt.title(plt_data.plot_title)
 
     return plt
 

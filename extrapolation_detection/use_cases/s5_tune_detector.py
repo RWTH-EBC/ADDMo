@@ -39,7 +39,7 @@ def exe(config: ExtrapolationExperimentConfig):
     xy_detector_fit = pd.concat([xy_training, xy_validation])
     true_validity_detector_fit = pd.concat([true_validity_train, true_validity_val])
 
-    # Todo: check if moving outlier from train to validiation is a good idea
+    # move true invalid data from training to validation (methodology)
     (
         xy_detector_fit,
         xy_detector_val,
@@ -67,7 +67,7 @@ def exe(config: ExtrapolationExperimentConfig):
 
     # delete target, as it is not needed for the detector
     x_detector_fit, _ = split_target_features(config.name_of_target, xy_detector_fit)
-    y_detector_val, _ = split_target_features(config.name_of_target, xy_detector_val)
+    x_detector_val, _ = split_target_features(config.name_of_target, xy_detector_val)
 
     # train detectors and save them
     for detector_name in config.config_detector.detectors:
@@ -75,7 +75,7 @@ def exe(config: ExtrapolationExperimentConfig):
             detector, threshold = tune_detector(
                 detector_name,
                 x_detector_fit,
-                y_detector_val,
+                x_detector_val,
                 true_validity_detector_val,
                 config.config_detector,
             )
@@ -89,7 +89,7 @@ def exe(config: ExtrapolationExperimentConfig):
         else:
             # untuned detector but ideally calculated threshold
             detector, threshold = untuned_detector(
-                detector_name, x_detector_fit, y_detector_val, config.true_outlier_fraction
+                detector_name, x_detector_fit, x_detector_val, config.true_outlier_fraction
             )
 
             # save detector and threshold
@@ -100,6 +100,13 @@ def exe(config: ExtrapolationExperimentConfig):
             loading_saving.write_csv(
                 threshold, f"{detector_name}_{tag}_untuned_threshold", save_path
             )
+
+        loading_saving.write_csv(
+            x_detector_fit, f"{detector_name}_{tag}_x_fit", save_path
+        )
+        loading_saving.write_csv(
+            x_detector_val, f"{detector_name}_{tag}_x_val", save_path
+        )
 
     print(f"{__name__} executed")
 

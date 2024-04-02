@@ -20,7 +20,7 @@ from extrapolation_detection.detector.scoring import score_samples
 class AbstractHyper(ABC):
     """Abstract class for hyperparameter optimization"""
 
-    def __init__(self, outlier_fraction: float= 0.05, beta: float = 1, score_name: str = 'fbeta'):
+    def __init__(self, outlier_fraction: float= 0.0000001, beta: float = 1, score_name: str = 'fbeta'):
         """
 
         Parameters

@@ -3,9 +3,9 @@ from abc import ABC
 from sklearn.neural_network import MLPRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
+from sklearn.compose import TransformedTargetRegressor
 import onnx
 import skl2onnx
-
 
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 
@@ -99,3 +99,23 @@ class MLP(BaseScikitLearnModel):
             "learning_rate": ["constant", "adaptive"],
         }
         return hyperparameter_grid
+
+class MLP_TargetTransformed(MLP):
+    def __init__(self):
+        # Create an instance of the scikit-learn model including a scaler
+        self.model = Pipeline(
+            steps=[
+                ("scaler", StandardScaler()),  # scale the features
+                ("model", TransformedTargetRegressor(regressor=MLPRegressor())) # scaling the target variable through TransformedTargetRegressor
+                # is not compatible with ONNX
+            ]
+        )
+
+    def set_params(self, hyperparameters):
+        # access the hyperparameters of the model within the pipeline within the
+        # TransformedTargetRegressor
+        self.model.named_steps["model"].regressor.set_params(**hyperparameters)
+
+    def get_params(self, deep=True):
+        # Get the hyperparameters of the model
+        return self.model.named_steps["model"].regressor.get_params(deep=deep)

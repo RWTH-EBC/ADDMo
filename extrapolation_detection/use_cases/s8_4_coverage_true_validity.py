@@ -54,16 +54,17 @@ def exe(config: ExtrapolationExperimentConfig):
         title_header=f"true validity\n"
                      f"Coverage = {coverage.loc['Inside']:.2f} %",
     )
-    save_path = os.path.join(config.experiment_folder, "explo_quant")
+
     for i, plt in enumerate(plots_per_axes):
         plot.save_plot(
             plt,
             f"coverage_true validity_{i}",
-            save_path,
+            config.experiment_folder,
         )
         plot.show_plot(plt)
 
     # save
+    save_path = os.path.join(config.experiment_folder, "explo_quant")
     loading_saving.write_csv(
         quantifier.labels_grid,
         f"labels_grid_true validity",

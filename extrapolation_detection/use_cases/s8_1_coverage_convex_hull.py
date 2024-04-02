@@ -57,7 +57,7 @@ def exe(config: ExtrapolationExperimentConfig):
             plot.save_plot(
                 plt,
                 f"coverage_{explo_detector_name}_{i}",
-                save_path,
+                config.experiment_folder,
             )
             plot.show_plot(plt)
 

@@ -16,7 +16,7 @@ from exploration_quantification.coverage_plotting import (
 
 def exe(config: ExtrapolationExperimentConfig):
 
-    grid_path = os.path.join(config.experiment_folder, "explo_quant")
+    grid_path = os.path.join(config.experiment_folder)
     x_grid = loading_saving.read_csv(f"grid_points", grid_path)
 
 
@@ -38,16 +38,17 @@ def exe(config: ExtrapolationExperimentConfig):
             title_header=f"Extra-{detector_name}\n"
                          f"Coverage = {coverage.loc['Inside']:.2f} %",
         )
-        save_path = os.path.join(config.experiment_folder, "explo_quant")
+
         for i, plt in enumerate(plots_per_axes):
             plot.save_plot(
                 plt,
                 f"coverage_extra_{detector_name}_{i}",
-                save_path,
+                config.experiment_folder,
             )
             plot.show_plot(plt)
 
         # save
+        save_path = os.path.join(config.experiment_folder, "explo_quant")
         loading_saving.write_csv(
             quantifier.labels_grid,
             f"labels_grid_extra_{detector_name}",

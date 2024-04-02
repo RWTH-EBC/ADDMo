@@ -28,10 +28,11 @@ def exe(config: ExtrapolationExperimentConfig):
     # define bounds
     if config.config_explo_quant.exploration_bounds == "infer":
         bounds = point_generator.infer_meshgrid_bounds(xy_regressor_fit)
-        if "y_pred" in xy_regressor_fit.columns:
-            bounds["y_pred"] = bounds[config.name_of_target]
     else:
         bounds = config.config_explo_quant.exploration_bounds
+    if "y_pred" in xy_regressor_fit.columns:
+        bounds["y_pred"] = bounds[config.name_of_target]
+
 
 
 
@@ -46,7 +47,7 @@ def exe(config: ExtrapolationExperimentConfig):
     )
 
     # save plots
-    save_path = os.path.join(config.experiment_folder, "explo_quant")
+    save_path = os.path.join(config.experiment_folder)
 
     plot.save_plot(
         plotly_parallel_coordinates_plt, "plotly_parallel_coordinates", save_path

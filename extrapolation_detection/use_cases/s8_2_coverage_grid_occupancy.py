@@ -1,5 +1,6 @@
 import os
 
+from core.util.experiment_logger import ExperimentLogger
 from core.util.load_save import load_config_from_json
 
 from extrapolation_detection.util import loading_saving
@@ -49,6 +50,9 @@ def exe(config: ExtrapolationExperimentConfig):
             config.experiment_folder,
         )
         plot.show_plot(plt)
+
+    # log coverage
+    ExperimentLogger.log({f"coverage_grid_occupancy": coverage.loc["Inside"]})
 
     print(f"{__name__} executed")
 

@@ -2,6 +2,7 @@ import os
 
 import pandas as pd
 
+from core.util.experiment_logger import ExperimentLogger
 from extrapolation_detection.util import loading_saving
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.util.data_handling import split_target_features
@@ -80,22 +81,23 @@ def exe(config: ExtrapolationExperimentConfig):
     )
 
     # calc mean errors and save them in one csv with index indicating the period
+    mean_errors_dict = {
+        "mean_errors_train": errors_train["error"].mean(),
+        "mean_errors_val": errors_val["error"].mean(),
+        "mean_errors_test": errors_test["error"].mean(),
+        "mean_errors_remaining": errors_remaining["error"].mean(),
+        "mean_errors_grid": errors_grid["error"].mean(),
+    }
     mean_errors = pd.DataFrame(
-        {
-            "mean_errors_train": errors_train["error"].mean(),
-            "mean_errors_val": errors_val["error"].mean(),
-            "mean_errors_test": errors_test["error"].mean(),
-            "mean_errors_remaining": errors_remaining["error"].mean(),
-            "mean_errors_grid": errors_grid["error"].mean(),
-        },
+        mean_errors_dict,
         index=[config.true_outlier_threshold_error_metric],
     )
 
-    loading_saving.write_csv(mean_errors, "mean_errors", directory=config.experiment_folder)
+    loading_saving.write_csv(
+        mean_errors, "mean_errors", directory=config.experiment_folder
+    )
 
-
-
-
+    ExperimentLogger.log(mean_errors_dict)
 
     print(f"{__name__} executed")
 

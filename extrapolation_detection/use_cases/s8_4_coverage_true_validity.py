@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 
+from core.util.experiment_logger import ExperimentLogger
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from extrapolation_detection.n_D_extrapolation.score_regressor_per_data_point import score_per_sample
 from extrapolation_detection.n_D_extrapolation import true_validity_domain
@@ -75,6 +76,9 @@ def exe(config: ExtrapolationExperimentConfig):
         f"coverage_percentage_true validity",
         save_path,
     )
+
+    # log coverage
+    ExperimentLogger.log({f"coverage_true_validity": coverage.loc["Inside"]})
 
     print(f"{__name__} executed")
 

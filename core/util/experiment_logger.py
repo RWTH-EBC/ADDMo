@@ -7,6 +7,7 @@ import wandb
 
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.util.load_save import save_config_to_json
+from core.util.load_save import create_or_clean_directory
 
 
 class AbstractLogger(ABC):
@@ -47,7 +48,7 @@ class WandbLogger(AbstractLogger):
         if WandbLogger.active:
             wandb.init(
                 project=WandbLogger.project,
-                config=config,
+                config=config.dict(),
                 dir=WandbLogger.directory,
                 **kwargs,
             )
@@ -70,8 +71,8 @@ class WandbLogger(AbstractLogger):
                     processed_log[name] = wandb.Table(dataframe=data)
                 elif isinstance(data, list):
                     processed_log[name] = wandb.Histogram(data)
-                elif isinstance(data, str):
-                    processed_log[name] = wandb.Html(data)
+                # elif isinstance(data, str):
+                #     processed_log[name] = wandb.Html(data)
                 elif isinstance(data, dict):
                     # flatten the dictionary
                     for key, value in data.items():
@@ -128,7 +129,9 @@ class LocalLogger(AbstractLogger):
     @staticmethod
     def start_experiment(config, **kwargs):
         if LocalLogger.active:
-            save_config_to_json(config, os.path.join(LocalLogger.directory, "config.json"))
+            create_or_clean_directory(LocalLogger.directory)
+            path = os.path.join(LocalLogger.directory, "config.json")
+            save_config_to_json(config, path)
             return config
 
     @staticmethod

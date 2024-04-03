@@ -1,5 +1,6 @@
 import pandas as pd
 
+from core.util.experiment_logger import ExperimentLogger
 from extrapolation_detection.util import loading_saving
 from extrapolation_detection.util import data_handling
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
@@ -77,6 +78,9 @@ def exe(config: ExtrapolationExperimentConfig):
     loading_saving.write_csv(
         true_validity_grid, "true_validity_grid", directory=config.experiment_folder
     )
+
+    # log true_validity_threshold
+    ExperimentLogger.log({"true_validity_threshold": true_validity_threshold.iloc[0,0]})
 
     print(f"{__name__} executed")
 

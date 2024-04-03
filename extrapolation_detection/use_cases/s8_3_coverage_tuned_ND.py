@@ -1,5 +1,6 @@
 import os
 
+from core.util.experiment_logger import ExperimentLogger
 from extrapolation_detection.util import loading_saving
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
     ExtrapolationExperimentConfig,
@@ -59,6 +60,9 @@ def exe(config: ExtrapolationExperimentConfig):
             f"coverage_percentage_extra_{detector_name}",
             save_path,
         )
+
+        # log coverage
+        ExperimentLogger.log({f"coverage_extra_{detector_name}": coverage.loc["Inside"]})
 
     print(f"{__name__} executed")
 

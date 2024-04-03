@@ -2,6 +2,8 @@ import os
 
 import pandas as pd
 
+from core.util.experiment_logger import ExperimentLogger
+
 from extrapolation_detection.util import loading_saving
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.model_tuner import ModelTuner
@@ -55,6 +57,9 @@ def exe(config: ExtrapolationExperimentConfig):
     model_infos.loc[0, "best_model_name"] = best_model_name
     model_infos.loc[0, "best_model_val_score"] = best_model_val_score
     loading_saving.write_csv(model_infos, "model_infos", directory=regressor_directory)
+
+    # log model infos with experiment logger in one dict
+    ExperimentLogger.log(model_infos.to_dict(orient="records")[0])
 
     print(f"{__name__} executed")
 

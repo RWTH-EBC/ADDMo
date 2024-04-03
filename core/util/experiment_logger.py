@@ -70,9 +70,9 @@ class WandbLogger(AbstractLogger):
                     data = data.reset_index()
                     processed_log[name] = wandb.Table(dataframe=data)
                 elif isinstance(data, list):
-                    processed_log[name] = wandb.Histogram(data)
-                # elif isinstance(data, str):
-                #     processed_log[name] = wandb.Html(data)
+                    processed_log[name] = str(data)
+                elif isinstance(data, tuple):
+                    processed_log[name] = str(data)
                 elif isinstance(data, dict):
                     # flatten the dictionary
                     for key, value in data.items():

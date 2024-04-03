@@ -38,11 +38,11 @@ def _infer_meshgrid_bounds(df: pd.DataFrame):
 
 def infer_or_forward_bounds(bounds: dict, df: pd.DataFrame)-> dict:
     '''Return bounds or infer bounds if desired. Also check if bounds are valid.'''
-    _check_bounds(bounds, df)
 
     if bounds == "infer":
-        bounds = point_generator._infer_meshgrid_bounds(df)
+        bounds = _infer_meshgrid_bounds(df)
     else:
+        _check_bounds(bounds, df)
         bounds = bounds
 
     return bounds

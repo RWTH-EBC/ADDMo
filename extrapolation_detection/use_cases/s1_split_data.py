@@ -36,7 +36,7 @@ def exe(config: ExtrapolationExperimentConfig):
     else:
         # generate meshgrid
         x_tot, _ = split_target_features(config.name_of_target, xy_tot)
-        bounds = point_generator.infer_meshgrid_bounds(x_tot)
+        bounds = point_generator.infer_or_forward_bounds(config.exploration_bounds, x_tot)
         x_grid = point_generator.generate_point_grid(x_tot, bounds, config.grid_points_per_axis)
 
         # generate y values for the grid

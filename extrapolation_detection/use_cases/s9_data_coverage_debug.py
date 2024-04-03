@@ -20,10 +20,9 @@ def exe(config: ExtrapolationExperimentConfig):
     )
 
     # define bounds
-    if config.config_explo_quant.exploration_bounds == "infer":
-        bounds = point_generator.infer_meshgrid_bounds(xy_regressor_fit)
-    else:
-        bounds = config.config_explo_quant.exploration_bounds
+    bounds = point_generator.infer_or_forward_bounds(
+        config.config_explo_quant.exploration_bounds, xy_regressor_fit
+    )
 
 
 

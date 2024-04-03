@@ -26,11 +26,7 @@ def exe(config: ExtrapolationExperimentConfig):
         "y_regressor_fit", directory=regressor_directory
     )
 
-    # define bounds
-    if config.config_explo_quant.exploration_bounds == "infer":
-        bounds = point_generator.infer_meshgrid_bounds(x_regressor_fit)
-    else:
-        bounds = config.config_explo_quant.exploration_bounds
+    bounds = point_generator.infer_or_forward_bounds(config.config_explo_quant.exploration_bounds, x_regressor_fit)
 
     # generate meshgrid
     x_grid = point_generator.generate_point_grid(

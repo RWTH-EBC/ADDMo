@@ -25,10 +25,9 @@ def exe(config: ExtrapolationExperimentConfig):
     )
 
     # define bounds
-    if config.config_explo_quant.exploration_bounds == "infer":
-        bounds = point_generator.infer_meshgrid_bounds(x_regressor_fit)
-    else:
-        bounds = config.config_explo_quant.exploration_bounds
+    bounds = point_generator.infer_or_forward_bounds(
+        config.config_explo_quant.exploration_bounds, x_regressor_fit
+    )
 
     grid_occupancy = GridOccupancy(config.config_explo_quant.explo_grid_points_per_axis)
     grid_occupancy.train(x_regressor_fit, bounds)

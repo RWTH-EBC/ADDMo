@@ -26,10 +26,9 @@ def exe(config: ExtrapolationExperimentConfig):
     xy_regressor_fit["y_pred"] = y_pred
 
     # define bounds
-    if config.config_explo_quant.exploration_bounds == "infer":
-        bounds = point_generator.infer_meshgrid_bounds(xy_regressor_fit)
-    else:
-        bounds = config.config_explo_quant.exploration_bounds
+    bounds = point_generator.infer_or_forward_bounds(
+        config.config_explo_quant.exploration_bounds, xy_regressor_fit
+    )
     if "y_pred" in xy_regressor_fit.columns:
         bounds["y_pred"] = bounds[config.name_of_target]
 

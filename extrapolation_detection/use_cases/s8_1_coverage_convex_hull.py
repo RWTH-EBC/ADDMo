@@ -26,7 +26,9 @@ def exe(config: ExtrapolationExperimentConfig):
         "y_regressor_fit", directory=regressor_directory
     )
 
-    bounds = point_generator.infer_or_forward_bounds(config.config_explo_quant.exploration_bounds, x_regressor_fit)
+    bounds = point_generator.infer_or_forward_bounds(
+        config.config_explo_quant.exploration_bounds, x_regressor_fit
+    )
 
     # generate meshgrid
     x_grid = point_generator.generate_point_grid(
@@ -34,9 +36,7 @@ def exe(config: ExtrapolationExperimentConfig):
     )
 
     save_path = os.path.join(config.experiment_folder, "explo_quant")
-    loading_saving.write_csv(
-        x_grid, f"grid_points", save_path
-    )
+    loading_saving.write_csv(x_grid, f"grid_points", save_path)
 
     for explo_detector_name in config.config_explo_quant.detectors:
         quantifier = ExplorationQuantifier()
@@ -48,7 +48,7 @@ def exe(config: ExtrapolationExperimentConfig):
             x_grid=x_grid,
             y_grid=y_grid,
             title_header=f"{explo_detector_name}\n"
-                         f"Coverage = {coverage.loc['Inside']:.2f} %",
+            f"Coverage = {coverage.loc['Inside']:.2f} %",
         )
         save_path = os.path.join(config.experiment_folder, "explo_quant")
         for i, plt in enumerate(plots_per_axes):
@@ -75,7 +75,9 @@ def exe(config: ExtrapolationExperimentConfig):
         )
 
         # log coverage
-        ExperimentLogger.log({f"coverage_{explo_detector_name}": coverage.loc["Inside"]})
+        ExperimentLogger.log(
+            {f"coverage_{explo_detector_name}": coverage.loc["Inside"]}
+        )
         ExperimentLogger.log({"bounds": bounds})
 
     print(f"{__name__} executed")

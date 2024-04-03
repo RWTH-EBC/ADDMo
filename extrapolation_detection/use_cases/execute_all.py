@@ -71,13 +71,13 @@ WandbLogger.directory = result_folder
 WandbLogger.active = True
 
 # Run scripts
-# ExperimentLogger.start_experiment(config=config)  # log config
-# s1_split_data.exe(config)
-# s2_tune_ml_regressor.exe(config)
-# s3_regressor_error_calculation.exe(config)
-# s4_true_validity_domain.exe(config)
-# s5_tune_detector.exe(config)
-# s6_detector_score_calculation.exe(config)
+ExperimentLogger.start_experiment(config=config)  # log config
+s1_split_data.exe(config)
+s2_tune_ml_regressor.exe(config)
+s3_regressor_error_calculation.exe(config)
+s4_true_validity_domain.exe(config)
+s5_tune_detector.exe(config)
+s6_detector_score_calculation.exe(config)
 s8_1_coverage_convex_hull.exe(config)
 s8_2_coverage_grid_occupancy.exe(config)
 s8_3_coverage_tuned_ND.exe(config)

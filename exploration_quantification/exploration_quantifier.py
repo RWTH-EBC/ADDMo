@@ -151,13 +151,11 @@ class ExplorationQuantifier:
         return self.labels_grid
 
     def calculate_coverage(self):
-        # Count the number of points that fall into each region
-        region_counts = np.bincount(self.labels_grid.values)
-
         # Calculate the volume percentages
-        coverage = region_counts / len(self.x_grid) * 100
-        coverage = pd.Series(
-            coverage, index=["Inside", "Outside"]
-        )
+        coverage = self.labels_grid.value_counts(normalize=True) * 100
+
+        # Handle situations where one labels misses completely (e.g. all data inside)
+        coverage.loc["Inside"] = coverage.get(0, 0) # get the value if it exists, otherwise 0
+        coverage.loc["Outside"] = coverage.get(1, 0) # get the value if it exists, otherwise 0
 
         return coverage

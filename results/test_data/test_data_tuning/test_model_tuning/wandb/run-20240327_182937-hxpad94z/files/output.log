@@ -1,3 +1,0 @@
-D:\01_Anaconda\envs\ADDMo-Extra\Lib\site-packages\sklearn\neural_network\_multilayer_perceptron.py:691: ConvergenceWarning: Stochastic Optimizer: Maximum iterations (2000) reached and the optimization hasn't converged yet.
-  warnings.warn(
-Finished

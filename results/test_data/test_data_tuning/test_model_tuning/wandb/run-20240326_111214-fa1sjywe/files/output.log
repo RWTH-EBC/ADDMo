@@ -1,8 +1,0 @@
-
-[I 2024-03-26 11:12:18,852] A new study created in memory with name: no-name-623574cc-b85a-41dc-982d-98e33390cb92
-[I 2024-03-26 11:12:44,901] Trial 1 finished with value: 0.7956754549248888 and parameters: {'n_layers': 1, 'n_units_l0': 34}. Best is trial 1 with value: 0.7956754549248888.
-[I 2024-03-26 11:12:45,009] Trial 0 finished with value: 0.8264656180674951 and parameters: {'n_layers': 1, 'n_units_l0': 22}. Best is trial 0 with value: 0.8264656180674951.
-[W 2024-03-26 11:12:46,273] Param n_layers unique value length is less than 2.
-D:\01_Anaconda\envs\ADDMo-Extra\Lib\site-packages\sklearn\neural_network\_multilayer_perceptron.py:691: ConvergenceWarning:
-Stochastic Optimizer: Maximum iterations (2000) reached and the optimization hasn't converged yet.
-Finished

@@ -1,9 +1,0 @@
-;0
-true_positive;5732.0
-true_negative;55.0
-false_positive;10177.0
-false_negative;13.0
-precision;0.36029920170972407
-recall;0.9977371627502176
-f;0.5294171977463749
-fbeta;0.5294171977463749

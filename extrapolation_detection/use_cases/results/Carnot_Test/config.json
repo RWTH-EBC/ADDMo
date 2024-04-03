@@ -12,7 +12,7 @@
     "true_outlier_fraction": 0.1,
     "true_outlier_threshold_error_metric": "mae",
     "true_outlier_threshold": null,
-    "grid_points_per_axis": 10,
+    "grid_points_per_axis": 20,
     "system_simulation": "carnot",
     "config_model_tuning": {
         "models": [

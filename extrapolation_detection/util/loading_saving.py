@@ -5,6 +5,8 @@ from typing import Any
 import pandas as pd
 
 
+
+
 def write_pkl(data, filename: str, directory: str = None, override: bool = True):
     """Writes data to a pickle file.
 
@@ -22,11 +24,6 @@ def write_pkl(data, filename: str, directory: str = None, override: bool = True)
     filename = filename + ".pkl"
 
     path = _get_path(filename, directory)
-
-    # make sure the directory does exist
-    if directory is not None:
-        if not os.path.exists(directory):
-            os.mkdir(directory)
 
     # make sure the file does not already exist
     if os.path.exists(path) and not override:
@@ -83,7 +80,7 @@ def _get_path(filename: str, directory: str) -> str:
     if directory is not None:  # check if directory is none
         if not os.path.exists(directory):  # check if path exists
             os.makedirs(directory)  # create new directory
-        return str(directory + "\\" + filename)  # calculate full path
+        return os.path.join(directory, filename)  # calculate full path
     else:
         return filename
 
@@ -126,11 +123,6 @@ def write_csv(data: pd.DataFrame, filename: str, directory: str = None, overwrit
     filename = filename + ".csv"
 
     path = _get_path(filename, directory)
-
-    # make sure the directory does exist
-    if directory is not None:
-        if not os.path.exists(directory):
-            os.mkdir(directory)
 
     # make sure the file does not already exist
     if os.path.exists(path) and not overwrite:

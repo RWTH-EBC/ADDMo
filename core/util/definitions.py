@@ -4,7 +4,6 @@ import git
 from core.util.load_save import create_or_clean_directory
 from core.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
 from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
-from extrapolation_detection.use_cases.config.ed_experiment_config import ExtrapolationExperimentConfig
 
 def root_dir():
     # Finds the root directory of the git repository
@@ -36,11 +35,14 @@ def results_dir_model_tuning(config: ModelTuningExperimentConfig):
                         config.name_of_data_tuning_experiment, config.name_of_model_tuning_experiment)
     return create_or_clean_directory(path)
 
-def results_dir_extrapolation_experiment(config: ExtrapolationExperimentConfig):
+def ed_use_case_dir():
+    return os.path.join(root_dir(), 'extrapolation_detection', 'use_cases')
+
+def results_dir_extrapolation_experiment(experiment_name: str):
     path = os.path.join(
-        root_dir(),
-        "extrapolation_detection",
-        "use_cases",
-        config.experiment_folder
+        ed_use_case_dir(),
+        "results",
+        experiment_name
     )
     return create_or_clean_directory(path)
+

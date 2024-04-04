@@ -1,0 +1,10 @@
+wandb_version: 1
+
+config_model_tuning:
+  value:
+    hyperparameter_tuning_kwargs:
+      hyperparameter_set:
+        hidden_layer_sizes:
+        - 10
+repetition:
+  value: 2

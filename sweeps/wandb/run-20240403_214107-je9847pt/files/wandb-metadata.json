@@ -1,0 +1,45 @@
+{
+    "os": "Windows-10-10.0.19045-SP0",
+    "python": "3.11.7",
+    "heartbeatAt": "2024-04-03T19:41:09.226113",
+    "startedAt": "2024-04-03T19:41:07.765786",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "D:\\04_GitRepos\\addmo-extra\\sweeps\\sweep_ed_usecase.py",
+    "codePathLocal": "sweep_ed_usecase.py",
+    "codePath": "sweeps\\sweep_ed_usecase.py",
+    "git": {
+        "remote": "https://git-ce.rwth-aachen.de/ebc/ebc-general/machine-learning/addmo-automated-ml-regression.git",
+        "commit": "2d3cf24b29e9d2e39f19244e5a01ac75fb6634e8"
+    },
+    "email": "mraetz@eonerc.rwth-aachen.de",
+    "root": "D:/04_GitRepos/addmo-extra",
+    "host": "Laptop-EBC203",
+    "username": "mre",
+    "executable": "D:\\01_Anaconda\\envs\\ADDMo-Extra\\python.exe",
+    "cpu_count": 8,
+    "cpu_count_logical": 16,
+    "cpu_freq": {
+        "current": 1901.0,
+        "min": 0.0,
+        "max": 1901.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 1901.0,
+            "min": 0.0,
+            "max": 1901.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 703.2060508728027,
+            "used": 51.480445861816406
+        }
+    },
+    "memory": {
+        "total": 27.82659149169922
+    }
+}

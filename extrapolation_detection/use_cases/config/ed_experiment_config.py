@@ -3,6 +3,7 @@ from typing import Tuple, Optional
 
 from pydantic import BaseModel, Field
 
+from core.util.definitions import ed_use_case_dir
 from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from extrapolation_detection.detector.config.detector_config import DetectorConfig
 from exploration_quantification.config.explo_quant_config import ExploQuantConfig
@@ -63,4 +64,4 @@ class ExtrapolationExperimentConfig(BaseModel):
 
     @property
     def experiment_folder(self):
-        return os.path.join("results", self.experiment_name)
+        return os.path.join(ed_use_case_dir(), "results", self.experiment_name)

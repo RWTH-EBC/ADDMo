@@ -1,0 +1,112 @@
+wandb_version: 1
+
+simulation_data_name:
+  desc: null
+  value: Boptest_TAir_mid_ODE
+experiment_name:
+  desc: null
+  value: toasty-sweep-3
+name_of_target:
+  desc: null
+  value: delta_reaTZon_y
+train_val_test_period:
+  desc: null
+  value:
+  - 0
+  - 1488
+val_fraction:
+  desc: null
+  value: 0.1
+test_fraction:
+  desc: null
+  value: 0.1
+shuffle:
+  desc: null
+  value: false
+true_outlier_fraction:
+  desc: null
+  value: 0.1
+true_outlier_threshold_error_metric:
+  desc: null
+  value: mae
+true_outlier_threshold:
+  desc: null
+  value: 0.03
+grid_points_per_axis:
+  desc: null
+  value: 5
+system_simulation:
+  desc: null
+  value: BopTest_TAir_ODE
+config_model_tuning:
+  desc: null
+  value:
+    models:
+    - MLP_TargetTransformed
+    hyperparameter_tuning_type: NoTuningTuner
+    hyperparameter_tuning_kwargs:
+      hyperparameter_set:
+        hidden_layer_sizes:
+        - 5
+        activation: relu
+        max_iter: 2000
+    validation_score_mechanism: cv
+    validation_score_mechanism_kwargs: null
+    validation_score_splitting: KFold
+    validation_score_splitting_kwargs: null
+    validation_score_metric: r2
+    validation_score_metric_kwargs: null
+config_detector:
+  desc: null
+  value:
+    detectors:
+    - KNN
+    - GP
+    - OCSVM
+    detector_experiment_name: detector_experiment1
+    use_test_for_validation: true
+    use_train_for_validation: true
+    use_remaining_for_validation: false
+    tuning_bool: true
+    beta_f_score: 1
+config_explo_quant:
+  desc: null
+  value:
+    detectors:
+    - ConvexHull
+    exploration_bounds: infer
+    explo_grid_points_per_axis: 5
+_wandb:
+  desc: null
+  value:
+    python_version: 3.11.7
+    cli_version: 0.16.3
+    framework: sklearn
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1712170171.566858
+    t:
+      1:
+      - 5
+      - 35
+      - 53
+      - 55
+      2:
+      - 5
+      - 35
+      - 53
+      - 55
+      3:
+      - 2
+      - 16
+      - 23
+      - 37
+      4: 3.11.7
+      5: 0.16.3
+      8:
+      - 3
+      - 5
+      13: windows-amd64
+repetition:
+  desc: null
+  value: 3

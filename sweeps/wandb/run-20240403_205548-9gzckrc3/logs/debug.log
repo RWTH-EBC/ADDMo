@@ -1,0 +1,36 @@
+2024-04-03 20:55:48,029 INFO    Thread-19 (_run_job):19120 [wandb_setup.py:_flush():76] Current SDK version is 0.16.3
+2024-04-03 20:55:48,030 INFO    Thread-19 (_run_job):19120 [wandb_setup.py:_flush():76] Configure stats pid to 19120
+2024-04-03 20:55:48,030 INFO    Thread-19 (_run_job):19120 [wandb_setup.py:_flush():76] Loading settings from C:\Users\mre\.config\wandb\settings
+2024-04-03 20:55:48,030 INFO    Thread-19 (_run_job):19120 [wandb_setup.py:_flush():76] Loading settings from D:\04_GitRepos\addmo-extra\sweeps\wandb\settings
+2024-04-03 20:55:48,030 INFO    Thread-19 (_run_job):19120 [wandb_setup.py:_flush():76] Loading settings from environment variables: {'project': 'ED_Boptest_TAir_mid_ODE_sweeps', 'entity': 'team-martinraetz', 'root_dir': 'D:\\04_GitRepos\\addmo-extra\\sweeps', 'run_id': '9gzckrc3', 'sweep_param_path': 'D:\\04_GitRepos\\addmo-extra\\sweeps\\wandb\\sweep-xjige6n4\\config-9gzckrc3.yaml', 'sweep_id': 'xjige6n4'}
+2024-04-03 20:55:48,035 INFO    Thread-19 (_run_job):19120 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2024-04-03 20:55:48,035 INFO    Thread-19 (_run_job):19120 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'sweeps\\sweep_ed_usecase.py', 'program_abspath': 'D:\\04_GitRepos\\addmo-extra\\sweeps\\sweep_ed_usecase.py', 'program': 'D:\\04_GitRepos\\addmo-extra\\sweeps\\sweep_ed_usecase.py'}
+2024-04-03 20:55:48,035 INFO    Thread-19 (_run_job):19120 [wandb_init.py:_log_setup():526] Logging user logs to D:\04_GitRepos\addmo-extra\sweeps\wandb\run-20240403_205548-9gzckrc3\logs\debug.log
+2024-04-03 20:55:48,035 INFO    Thread-19 (_run_job):19120 [wandb_init.py:_log_setup():527] Logging internal logs to D:\04_GitRepos\addmo-extra\sweeps\wandb\run-20240403_205548-9gzckrc3\logs\debug-internal.log
+2024-04-03 20:55:48,035 INFO    Thread-19 (_run_job):19120 [wandb_init.py:init():566] calling init triggers
+2024-04-03 20:55:48,035 INFO    Thread-19 (_run_job):19120 [wandb_init.py:init():573] wandb.init called with sweep_config: {'config_model_tuning': {'hyperparameter_tuning_kwargs': {'hyperparameter_set': {'hidden_layer_sizes': [5]}}}, 'repetition': 2}
+config: {'simulation_data_name': 'Boptest_TAir_mid_ODE', 'experiment_name': 'B', 'name_of_target': 'delta_reaTZon_y', 'train_val_test_period': (0, 1488), 'val_fraction': 0.1, 'test_fraction': 0.1, 'shuffle': False, 'true_outlier_fraction': 0.1, 'true_outlier_threshold_error_metric': 'mae', 'true_outlier_threshold': 0.03, 'grid_points_per_axis': 5, 'system_simulation': 'BopTest_TAir_ODE', 'config_model_tuning': {'models': ['MLP_TargetTransformed'], 'hyperparameter_tuning_type': 'NoTuningTuner', 'hyperparameter_tuning_kwargs': {'hyperparameter_set': {'hidden_layer_sizes': [5], 'activation': 'relu', 'max_iter': 2000}}, 'validation_score_mechanism': 'cv', 'validation_score_mechanism_kwargs': None, 'validation_score_splitting': 'KFold', 'validation_score_splitting_kwargs': None, 'validation_score_metric': 'r2', 'validation_score_metric_kwargs': None}, 'config_detector': {'detectors': ['KNN', 'GP', 'OCSVM'], 'detector_experiment_name': 'detector_experiment1', 'use_test_for_validation': True, 'use_train_for_validation': True, 'use_remaining_for_validation': False, 'tuning_bool': True, 'beta_f_score': 1}, 'config_explo_quant': {'detectors': ['ConvexHull'], 'exploration_bounds': 'infer', 'explo_grid_points_per_axis': 5}}
+2024-04-03 20:55:48,036 INFO    Thread-19 (_run_job):19120 [wandb_init.py:init():616] starting backend
+2024-04-03 20:55:48,036 INFO    Thread-19 (_run_job):19120 [wandb_init.py:init():620] setting up manager
+2024-04-03 20:55:48,046 INFO    Thread-19 (_run_job):19120 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=spawn, using: spawn
+2024-04-03 20:55:48,046 INFO    Thread-19 (_run_job):19120 [wandb_init.py:init():628] backend started and connected
+2024-04-03 20:55:48,063 INFO    Thread-19 (_run_job):19120 [wandb_run.py:_config_callback():1343] config_cb None None {'config_model_tuning': {'models': ['MLP_TargetTransformed'], 'hyperparameter_tuning_type': 'NoTuningTuner', 'hyperparameter_tuning_kwargs': {'hyperparameter_set': {'hidden_layer_sizes': [5], 'activation': 'relu', 'max_iter': 2000}}, 'validation_score_mechanism': 'cv', 'validation_score_mechanism_kwargs': None, 'validation_score_splitting': 'KFold', 'validation_score_splitting_kwargs': None, 'validation_score_metric': 'r2', 'validation_score_metric_kwargs': None}, 'repetition': 2}
+2024-04-03 20:55:48,064 INFO    Thread-19 (_run_job):19120 [wandb_init.py:init():720] updated telemetry
+2024-04-03 20:55:48,138 INFO    Thread-19 (_run_job):19120 [wandb_init.py:init():753] communicating run to backend with 90.0 second timeout
+2024-04-03 20:55:48,923 INFO    Thread-19 (_run_job):19120 [wandb_run.py:_on_init():2262] communicating current version
+2024-04-03 20:55:49,526 INFO    Thread-19 (_run_job):19120 [wandb_run.py:_on_init():2271] got version response upgrade_message: "wandb version 0.16.5 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2024-04-03 20:55:49,526 INFO    Thread-19 (_run_job):19120 [wandb_init.py:init():804] starting run threads in backend
+2024-04-03 20:55:49,779 INFO    Thread-19 (_run_job):19120 [wandb_run.py:_console_start():2241] atexit reg
+2024-04-03 20:55:49,779 INFO    Thread-19 (_run_job):19120 [wandb_run.py:_redirect():2096] redirect: wrap_raw
+2024-04-03 20:55:49,779 INFO    Thread-19 (_run_job):19120 [wandb_run.py:_redirect():2161] Wrapping output streams.
+2024-04-03 20:55:49,779 INFO    Thread-19 (_run_job):19120 [wandb_run.py:_redirect():2186] Redirects installed.
+2024-04-03 20:55:49,780 INFO    Thread-19 (_run_job):19120 [wandb_init.py:init():847] run started, returning control to user process
+2024-04-03 20:55:49,780 INFO    Thread-19 (_run_job):19120 [wandb_run.py:_config_callback():1343] config_cb None None {'experiment_name': 'stellar-sweep-2'}
+2024-04-03 20:56:59,021 INFO    Thread-19 (_run_job):19120 [wandb_run.py:_finish():1970] finishing run team-martinraetz/ED_Boptest_TAir_mid_ODE_sweeps/9gzckrc3
+2024-04-03 20:56:59,021 INFO    Thread-19 (_run_job):19120 [wandb_run.py:_atexit_cleanup():2210] got exitcode: 0
+2024-04-03 20:56:59,021 INFO    Thread-19 (_run_job):19120 [wandb_run.py:_restore():2193] restore
+2024-04-03 20:56:59,021 INFO    Thread-19 (_run_job):19120 [wandb_run.py:_restore():2199] restore done
+2024-04-03 20:57:04,681 INFO    Thread-19 (_run_job):19120 [wandb_run.py:_footer_history_summary_info():3866] rendering history
+2024-04-03 20:57:04,682 INFO    Thread-19 (_run_job):19120 [wandb_run.py:_footer_history_summary_info():3898] rendering summary
+2024-04-03 20:57:04,690 INFO    Thread-19 (_run_job):19120 [wandb_run.py:_footer_sync_info():3825] logging synced files

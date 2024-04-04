@@ -1,5 +1,8 @@
+import os.path
+
 import pandas as pd
 
+from core.util.definitions import ed_use_case_dir
 from extrapolation_detection.util import loading_saving
 from extrapolation_detection.util import data_handling
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
@@ -14,7 +17,7 @@ from exploration_quantification import point_generator
 def exe(config: ExtrapolationExperimentConfig):
     # Load data
     xy_tot = loading_saving.read_csv(
-        config.simulation_data_name, directory="data", index_col=False
+        config.simulation_data_name, directory=os.path.join(ed_use_case_dir(), "data"), index_col=False
     )
 
     train_val_test_indices = range(

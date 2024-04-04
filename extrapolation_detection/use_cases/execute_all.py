@@ -30,7 +30,7 @@ from extrapolation_detection.use_cases import (
 # configure config
 config = ExtrapolationExperimentConfig()
 config.simulation_data_name = "Boptest_TAir_mid_ODE"
-config.experiment_name = "Boptest_wandb_test_5"
+config.experiment_name = "Boptest_wandb_test_17"
 config.name_of_target = "delta_reaTZon_y"
 config.train_val_test_period = (0, 1488)
 config.shuffle = False
@@ -39,36 +39,38 @@ config.system_simulation = "BopTest_TAir_ODE" # "carnot
 config.true_outlier_threshold = 0.1
 #
 config.config_explo_quant.explo_grid_points_per_axis = 5
-config.config_explo_quant.exploration_bounds = {
-    "$T_{umg}$ in °C": (-7.5, 20),
-    "$P_{el}$ in kW": (0, 4.5),
-    "$\dot{Q}_{heiz}$ in kW": (0, 35),
-}
+# config.config_explo_quant.exploration_bounds = {
+#     "$T_{umg}$ in °C": (-7.5, 20),
+#     "$P_{el}$ in kW": (0, 4.5),
+#     "$\dot{Q}_{heiz}$ in kW": (0, 35),
+# }
 # # #
 # # # # Load the config from the json file
-path_to_config = os.path.join(
-    root_dir(), "core", "s3_model_tuning", "config", "model_tuner_config_no_tuning.json"
-)
-config.config_model_tuning = load_config_from_json(path_to_config, ModelTunerConfig)
+# path_to_config = os.path.join(
+#     root_dir(), "core", "s3_model_tuning", "config", "model_tuner_config_no_tuning.json"
+# )
+# config.config_model_tuning = load_config_from_json(path_to_config, ModelTunerConfig)
 config.config_model_tuning.models = ["MLP_TargetTransformed"]
-# config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 50}
-config.config_model_tuning.hyperparameter_tuning_kwargs = {
-    "hyperparameter_set": {
-        "hidden_layer_sizes": [100, 100],
-        "activation": "relu",
-        "max_iter": 2000,
-    }
-}
+config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 100}
+# config.config_model_tuning.hyperparameter_tuning_kwargs = {
+#     "hyperparameter_set": {
+#         "hidden_layer_sizes": [5],
+#         "activation": "relu",
+#         "max_iter": 2000,
+#     }
+# }
 #
 config.config_detector.detectors = ["KNN", "GP", "OCSVM"]
 
 # Configure the logger
-result_folder = results_dir_extrapolation_experiment(config)
+result_folder = results_dir_extrapolation_experiment(config.experiment_name)
 LocalLogger.directory = os.path.join(result_folder, "local_logger")
 LocalLogger.active = True
 WandbLogger.project = f"ED_{config.simulation_data_name}"
 WandbLogger.directory = result_folder
-WandbLogger.active = True
+WandbLogger.active = False
+
+
 
 # Run scripts
 ExperimentLogger.start_experiment(config=config)  # log config
@@ -91,4 +93,5 @@ s8_4_coverage_true_validity.exe(config)
 # from extrapolation_detection.use_cases import s9_data_coverage_debug
 # s9_data_coverage_debug.exe(config)
 
+ExperimentLogger.finish_experiment()
 

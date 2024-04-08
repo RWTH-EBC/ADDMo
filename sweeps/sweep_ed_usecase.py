@@ -33,16 +33,16 @@ from extrapolation_detection.use_cases import (
 def define_config():
     # configure config
     config = ExtrapolationExperimentConfig()
-    config.simulation_data_name = "Boptest_TAir_mid_ODE"
-    config.experiment_name = "B"
-    config.name_of_target = "delta_reaTZon_y"
-    config.train_val_test_period = (0, 1488)
+    # config.simulation_data_name = ""
+    # config.experiment_name = "B"
+    # config.name_of_target = "delta_reaTZon_y"
+    # config.train_val_test_period = (0, 1488)
     config.shuffle = False
-    config.grid_points_per_axis = 5
-    config.system_simulation = "BopTest_TAir_ODE"  # "carnot
-    config.true_outlier_threshold = 0.03
+    config.grid_points_per_axis = 100
+    # config.system_simulation = "BopTest_TAir_ODE"  # "carnot
+    config.true_outlier_threshold = 0.1
     #
-    config.config_explo_quant.explo_grid_points_per_axis = 5
+    config.config_explo_quant.explo_grid_points_per_axis = 10
 
     path_to_config = os.path.join(
         root_dir(),
@@ -73,7 +73,7 @@ def run_all():
     run = wandb.init(config=config.dict())
 
     # update config with the experiment name of wandb run
-    wandb.config.update({"experiment_name": run.name}, allow_val_change=True)
+    wandb.config.update({"experiment_name": f"carnot1_{run.name}"}, allow_val_change=True)
 
     # convert config dict back to pydantic object
     config = ExtrapolationExperimentConfig(**wandb.config)
@@ -105,6 +105,9 @@ def run_all():
     s8_3_coverage_tuned_ND.exe(config)
     s8_4_coverage_true_validity.exe(config)
 
+    s7_2_plotting.exe_plot_2D_all(config)
+    s7_2_plotting.exe_plot_2D_detector(config)
+
     ExperimentLogger.finish_experiment()
 
 
@@ -124,7 +127,7 @@ sweep_configuration = {
     "method": "grid",
     "metric": {"name": "coverage_true_validity", "goal": "maximize"},
     "parameters": {
-        "repetition": {"values": [1, 2, 3]},
+        "repetition": {"values": [1, 2, 3, 4, 5, 6, 7, 8]},
         "config_model_tuning": {
             "parameters": {
                 "hyperparameter_tuning_kwargs": {
@@ -141,7 +144,7 @@ sweep_configuration = {
     },
 }
 
-project_name = "ED_Boptest_TAir_mid_ODE"
+project_name = "Carnot_ED"
 
 sweep_id = wandb.sweep(sweep_configuration, project=project_name)
 

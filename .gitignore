@@ -17,6 +17,7 @@
 # Output-Files #
 ########################
 /results/*
+/sweeps/wandb/*
 /extrapolation_detection/use_cases/results/*
 
 #Eclipse Settings #

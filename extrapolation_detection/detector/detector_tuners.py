@@ -151,7 +151,7 @@ class Hyper_KNN(AbstractHyper):
         # Parameterize hyper optimization
         trials = Trials()
         best = fmin(self.objective,
-                    space={'n_neighbors': scope.int(hp.quniform('n_neighbors', 2, 25, 1)),
+                    space={'n_neighbors': scope.int(hp.quniform('n_neighbors', 1, 25, 1)),
                            'p': hp.choice('p', [1, 2]),
                            'method': hp.choice('method', ['largest', 'mean'])
                            },
@@ -1198,14 +1198,14 @@ class Hyper_OCSVM(AbstractHyper):
         trials = Trials()
         best = fmin(self.objective,
                     space={'gamma': hp.uniform('gamma', 0.1, 150),
-                           # 'nu': hp.uniform('nu', 0.001, 0.99)
+                           'nu': hp.uniform('nu', 0.001, 0.99),
                            },
                     algo=tpe.suggest,
                     max_evals=120,
                     early_stop_fn=no_progress_loss(60),
                     trials=trials)
         best['nscores_threshold'] = trials.best_trial['result']['threshold']
-        best['nu'] = self.outlier_fraction
+        # best['nu'] = self.outlier_fraction
         return best
 
     def objective(self, space: dict) -> dict:
@@ -1221,8 +1221,8 @@ class Hyper_OCSVM(AbstractHyper):
         dict
             Scoring results
         """
-        # nu = space['nu']
-        nu = self.outlier_fraction
+        nu = space['nu']
+        # nu = self.outlier_fraction
         gamma = space['gamma']
         # Create classifier
         self.clf: D_OCSVM = D_OCSVM(contamination=self.outlier_fraction, nu=nu, gamma=gamma)

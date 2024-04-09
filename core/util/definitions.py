@@ -1,5 +1,4 @@
 import os
-import git
 
 from core.util.load_save import create_or_clean_directory
 from core.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
@@ -7,7 +6,7 @@ from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimen
 
 def root_dir():
     # Finds the root directory of the git repository
-    return git.Repo('.', search_parent_directories=True).working_tree_dir
+    return os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 def raw_data_path(path: str = None):
     if path is None:

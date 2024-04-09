@@ -33,14 +33,14 @@ from extrapolation_detection.use_cases import (
 def define_config():
     # configure config
     config = ExtrapolationExperimentConfig()
-    # config.simulation_data_name = ""
-    # config.experiment_name = "B"
-    # config.name_of_target = "delta_reaTZon_y"
-    # config.train_val_test_period = (0, 1488)
+    config.simulation_data_name = "Boptest_TAir_mid_ODE"
+    config.experiment_name = "Empty"
+    config.name_of_target = "delta_reaTZon_y"
+    config.train_val_test_period = (0, 1488)
     config.shuffle = False
-    config.grid_points_per_axis = 100
-    # config.system_simulation = "BopTest_TAir_ODE"  # "carnot
-    config.true_outlier_threshold = 0.2
+    config.grid_points_per_axis = 10
+    config.system_simulation = "BopTest_TAir_ODE"  # "carnot
+    config.true_outlier_threshold = 0.1
     #
     config.config_explo_quant.explo_grid_points_per_axis = 10
 
@@ -102,8 +102,8 @@ def run_all():
     s8_3_coverage_tuned_ND.exe(config)
     s8_4_coverage_true_validity.exe(config)
 
-    s7_2_plotting.exe_plot_2D_all(config)
-    s7_2_plotting.exe_plot_2D_detector(config)
+    # s7_2_plotting.exe_plot_2D_all(config)
+    # s7_2_plotting.exe_plot_2D_detector(config)
 
     ExperimentLogger.finish_experiment()
 

@@ -40,7 +40,7 @@ def define_config():
     config.shuffle = False
     config.grid_points_per_axis = 100
     # config.system_simulation = "BopTest_TAir_ODE"  # "carnot
-    config.true_outlier_threshold = 0.1
+    config.true_outlier_threshold = 0.2
     #
     config.config_explo_quant.explo_grid_points_per_axis = 10
 

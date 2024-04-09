@@ -144,7 +144,7 @@ sweep_configuration = {
     },
 }
 
-project_name = "Carnot_ED"
+project_name = "Test"
 
 sweep_id = wandb.sweep(sweep_configuration, project=project_name)
 

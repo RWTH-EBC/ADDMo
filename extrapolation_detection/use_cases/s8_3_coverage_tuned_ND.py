@@ -64,6 +64,7 @@ def exe(config: ExtrapolationExperimentConfig):
         # log coverage
         ExperimentLogger.log({f"coverage_extra_{detector_name}": coverage.loc["Inside"]})
 
+
     print(f"{__name__} executed")
 
 

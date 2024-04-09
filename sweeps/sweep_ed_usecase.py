@@ -73,7 +73,7 @@ def run_all():
     run = wandb.init(config=config.dict())
 
     # update config with the experiment name of wandb run
-    wandb.config.update({"experiment_name": f"carnot1_{run.name}"}, allow_val_change=True)
+    wandb.config.update({"experiment_name": f"{config.simulation_data_name}_1_{run.name}"}, allow_val_change=True)
 
     # convert config dict back to pydantic object
     config = ExtrapolationExperimentConfig(**wandb.config)
@@ -144,7 +144,10 @@ sweep_configuration = {
     },
 }
 
+config_temp = define_config()
+
 project_name = "Test"
+project_name = config_temp.simulation_data_name
 
 sweep_id = wandb.sweep(sweep_configuration, project=project_name)
 

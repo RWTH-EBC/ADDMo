@@ -193,6 +193,7 @@ def save_plot(plt, file_name: str, experiment_folder: str):
     # if plt is matplotlib plot
     if hasattr(plt, "savefig"):
         plt.savefig(os.path.join(folder, file_name), bbox_inches="tight")
+        plt.close()
 
     # if plt is a plotly plot, save it
     if hasattr(plt, "write_html"):

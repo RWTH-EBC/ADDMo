@@ -20,7 +20,7 @@ def exe_plot_2D_all(config):
             plot_data.infer_ml_model_data_splits()
             plt = plot.plot_single(plot_data)
             plot.save_plot(plt, detector_name, config.experiment_folder)
-            plot.show_plot(plt)
+            # plot.show_plot(plt)
 
 def exe_plot_2D_detector(config):
     # plot for all detectors that are saved in the directory
@@ -37,7 +37,7 @@ def exe_plot_2D_detector(config):
             plot_data.infer_detector_data_splits()
             plt = plot.plot_single(plot_data)
             plot.save_plot(plt, f"{detector_name}_detector", config.experiment_folder)
-            plot.show_plot(plt)
+            # plot.show_plot(plt)
 
 
 if __name__ == "__main__":

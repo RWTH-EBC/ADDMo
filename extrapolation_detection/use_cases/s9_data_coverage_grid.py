@@ -47,7 +47,7 @@ def exe(config: ExtrapolationExperimentConfig):
         plotly_parallel_coordinates_plt, "plotly_parallel_coordinates_grid", save_path
     )
 
-    plot.show_plot(plotly_parallel_coordinates_plt)
+    # plot.show_plot(plotly_parallel_coordinates_plt)
 
     print(f"{__name__} executed")
 

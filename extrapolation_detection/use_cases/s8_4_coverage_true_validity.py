@@ -62,7 +62,7 @@ def exe(config: ExtrapolationExperimentConfig):
             f"coverage_true validity_{i}",
             config.experiment_folder,
         )
-        plot.show_plot(plt)
+        # plot.show_plot(plt)
 
     # save
     save_path = os.path.join(config.experiment_folder, "explo_quant")

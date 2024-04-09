@@ -53,8 +53,8 @@ def exe(config: ExtrapolationExperimentConfig):
     )
     plot.save_plot(scatter_matrix_plt, "scatter_matrix", save_path)
 
-    plot.show_plot(plotly_parallel_coordinates_plt)
-    plot.show_plot(scatter_matrix_plt)
+    # plot.show_plot(plotly_parallel_coordinates_plt)
+    # plot.show_plot(scatter_matrix_plt)
 
     print(f"{__name__} executed")
 

@@ -57,7 +57,7 @@ def exe(config: ExtrapolationExperimentConfig):
                 f"coverage_{explo_detector_name}_{i}",
                 config.experiment_folder,
             )
-            plot.show_plot(plt)
+            # plot.show_plot(plt)
 
         # save
         loading_saving.write_csv(

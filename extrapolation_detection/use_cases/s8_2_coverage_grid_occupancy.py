@@ -48,7 +48,7 @@ def exe(config: ExtrapolationExperimentConfig):
             f"coverage_grid_occupancy_{i}",
             config.experiment_folder,
         )
-        plot.show_plot(plt)
+        # plot.show_plot(plt)
 
     # log coverage
     ExperimentLogger.log({f"coverage_grid_occupancy": coverage.loc["Inside"]})

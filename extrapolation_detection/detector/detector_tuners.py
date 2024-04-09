@@ -1389,7 +1389,8 @@ class Hyper_GP(AbstractHyper):
         # Parameterize hyper optimization
         trials = Trials()
         best = fmin(self.objective,
-                    space={'length_scale': hp.uniform('length_scale', 0.01, 1100)},
+                    space={'length_scale': hp.uniform('length_scale', 0.01, 1100),
+                           'alpha': hp.uniform('alpha', 1e-10, 1.5)},
                     algo=tpe.suggest,
                     max_evals=120,
                     early_stop_fn=no_progress_loss(60),
@@ -1413,7 +1414,8 @@ class Hyper_GP(AbstractHyper):
         length_scale = space['length_scale']
         # Create classifier
         self.clf: D_GP = D_GP(contamination=self.outlier_fraction,
-                              kernel=1.0 * RBF(length_scale=length_scale, length_scale_bounds='fixed'))
+                              kernel=1.0 * RBF(length_scale=length_scale, length_scale_bounds='fixed'),
+                              alpha=space['alpha'])
         return self.score()
 
     def get_clf(self, x_train: ndarray, x_val: ndarray, groundtruth_val: ndarray) \
@@ -1449,9 +1451,11 @@ class Hyper_GP(AbstractHyper):
         # Create classifier
         gp_length_scale = best['length_scale']
         print('GP Length_Scale : ' + str(gp_length_scale))
+        print('GP Alpha : ' + str(best['alpha']))
         nscores_threshold = best['nscores_threshold']
         clf = D_GP(contamination=self.outlier_fraction,
-                   kernel=1.0 * RBF(length_scale=gp_length_scale, length_scale_bounds='fixed'))
+                   kernel=1.0 * RBF(length_scale=gp_length_scale, length_scale_bounds='fixed'),
+                   alpha=best['alpha'])
         clf.threshold = nscores_threshold
         return clf, nscores_threshold
 

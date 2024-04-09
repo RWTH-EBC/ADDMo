@@ -614,7 +614,8 @@ class D_GP(AbstractDetector):
     """Outlier detection with gaussian process regression"""
 
     def __init__(self, contamination: float = 0.01,
-                 kernel=1.0 * RBF(length_scale=1.0, length_scale_bounds=(1e-1, 10.0))):
+                 kernel=1.0 * RBF(length_scale=1.0, length_scale_bounds=(1e-1, 10.0)),
+                 alpha=1e-10):
         """
 
         Parameters
@@ -628,8 +629,9 @@ class D_GP(AbstractDetector):
         self.contamination: float = contamination
         self.decision_scores_ = None
         self.kernel = kernel
+        self.alpha = alpha
 
-        self.clf: NoveltyDetectionGPR = NoveltyDetectionGPR(kernel=kernel, random_state=0)
+        self.clf: NoveltyDetectionGPR = NoveltyDetectionGPR(kernel=kernel, alpha=alpha, random_state=2)
         self.x_train_UnNormalized = None
 
     def train(self, x_train: ndarray):

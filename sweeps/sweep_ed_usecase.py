@@ -78,9 +78,6 @@ def run_all():
     # convert config dict back to pydantic object
     config = ExtrapolationExperimentConfig(**wandb.config)
 
-    # random_number for safety
-
-
     result_folder = results_dir_extrapolation_experiment(config.experiment_name)
     LocalLogger.directory = os.path.join(result_folder, "local_logger")
     WandbLogger.directory = result_folder

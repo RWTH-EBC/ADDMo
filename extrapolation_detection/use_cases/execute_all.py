@@ -28,13 +28,13 @@ from extrapolation_detection.use_cases import (
 )
 
 # configure config
-# config = ExtrapolationExperimentConfig()
+config = ExtrapolationExperimentConfig()
 # config.simulation_data_name = "Boptest_TAir_mid_ODE"
 # config.experiment_name = "Boptest_wandb_test_17"
 # config.name_of_target = "delta_reaTZon_y"
 # config.train_val_test_period = (0, 1488)
 # config.shuffle = False
-# config.grid_points_per_axis = 5
+config.grid_points_per_axis = 100
 # config.system_simulation = "BopTest_TAir_ODE"  # "carnot
 # config.true_outlier_threshold = 0.1
 # #
@@ -61,35 +61,36 @@ from extrapolation_detection.use_cases import (
 # }
 #
 # config.config_detector.detectors = ["KNN", "GP", "OCSVM"]
+config.config_detector.detectors = ["GP"]
 
-
-# # # Load the config from the json file
-experiment = "carnot1_expert-sweep-37"
-path_to_config = os.path.join(
-    root_dir(),
-    "extrapolation_detection",
-    "use_cases",
-    "results",
-    experiment,
-    "local_logger",
-    "config.json",
-)
-config = load_config_from_json(path_to_config, ExtrapolationExperimentConfig)
-config.experiment_name = config.experiment_name + "OCSVMTune1"
-
-# Configure the logger
-result_folder = results_dir_extrapolation_experiment(config.experiment_name)
-LocalLogger.directory = os.path.join(result_folder, "local_logger")
-LocalLogger.active = True
-WandbLogger.project = f"ED_{config.simulation_data_name}"
-WandbLogger.directory = result_folder
-WandbLogger.active = False
+#
+# # # # Load the config from the json file
+# experiment = "carnot1_expert-sweep-37"
+# path_to_config = os.path.join(
+#     root_dir(),
+#     "extrapolation_detection",
+#     "use_cases",
+#     "results",
+#     experiment,
+#     "local_logger",
+#     "config.json",
+# )
+# config = load_config_from_json(path_to_config, ExtrapolationExperimentConfig)
+# config.experiment_name = config.experiment_name + "OCSVMTune1"
+#
+# # Configure the logger
+# result_folder = results_dir_extrapolation_experiment(config.experiment_name)
+# LocalLogger.directory = os.path.join(result_folder, "local_logger")
+# LocalLogger.active = True
+# WandbLogger.project = f"ED_{config.simulation_data_name}"
+# WandbLogger.directory = result_folder
+# WandbLogger.active = False
 
 
 # Run scripts
-# ExperimentLogger.start_experiment(config=config)  # log config
-# s1_split_data.exe(config)
-# s2_tune_ml_regressor.exe(config)
+ExperimentLogger.start_experiment(config=config)  # log config
+s1_split_data.exe(config)
+s2_tune_ml_regressor.exe(config)
 s3_regressor_error_calculation.exe(config)
 s4_true_validity_domain.exe(config)
 s5_tune_detector.exe(config)

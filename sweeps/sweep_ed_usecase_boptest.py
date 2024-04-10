@@ -33,7 +33,7 @@ from extrapolation_detection.use_cases import (
 def define_config():
     # configure config
     config = ExtrapolationExperimentConfig()
-    config.simulation_data_name = "Boptest_TAir_mid_ODE"
+    config.simulation_data_name = "Boptest_TAir_mid_ODE_noise_m0_std0.01"
     config.experiment_name = "Empty"
     config.name_of_target = "delta_reaTZon_y"
     config.train_val_test_period = (0, 1488)

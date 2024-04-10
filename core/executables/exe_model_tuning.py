@@ -18,7 +18,7 @@ def exe_model_tuning(config=None):
     LocalLogger.active = False
     WandbLogger.project = "addmo-test_model_tuning"
     WandbLogger.directory = results_dir_model_tuning(config)
-    WandbLogger.active = True
+    WandbLogger.active = False
 
     # Initialize logging
     ExperimentLogger.start_experiment(config=config)
@@ -54,10 +54,10 @@ if __name__ == "__main__":
     config = ModelTuningExperimentConfig()
 
     # Load the config from the json file
-    path_to_config = os.path.join(root_dir(), 'core', 's3_model_tuning', 'config',
-                                'model_tuner_config_no_tuning.json')
-    model_tuning_config = load_config_from_json(path_to_config, ModelTunerConfig)
-    config.config_model_tuner = model_tuning_config
+    # path_to_config = os.path.join(root_dir(), 'core', 's3_model_tuning', 'config',
+    #                             'model_tuner_config_no_tuning.json')
+    # model_tuning_config = load_config_from_json(path_to_config, ModelTunerConfig)
+    # config.config_model_tuner = model_tuning_config
 
     # run
     exe_model_tuning(config)

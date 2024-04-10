@@ -9,8 +9,8 @@ class DataTuningFixedConfig(BaseModel):
     name_of_raw_data: str = Field(
         "test_raw_data", description="Name of the raw data set"
     )
-    name_of_tuning: str = Field(
-        "test_fixed_reproduction_tuning", description="Name of the tuning configuration"
+    name_of_data_tuning: str = Field(
+        "test_data_tuning", description="Name of the data tuning configuration"
     )
     target: str = Field("Total active power", description="Output of prediction")
     features: list[str] = Field(
@@ -22,5 +22,5 @@ class DataTuningFixedConfig(BaseModel):
             "FreshAir Temperature___squared",
             "Total active power___lag1",
         ],
-        description="List of features to be used in tuning",
+        description="List of features which the tuning shall result in.",
     )

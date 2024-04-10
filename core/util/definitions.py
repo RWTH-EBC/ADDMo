@@ -25,7 +25,7 @@ def results_dir_wandb():
     return os.path.join(results_dir(), 'wandb')
 
 def results_dir_data_tuning(config: DataTuningFixedConfig):
-    path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, config.name_of_tuning)
+    path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, config.name_of_data_tuning)
     return create_or_clean_directory(path)
 
 

@@ -37,7 +37,7 @@ class ModelTunerConfig(BaseModel):
 
 class ModelTuningExperimentConfig(BaseModel):
     name_of_raw_data: str = Field(
-        "test_data", description="Refer to the raw data connected to this"
+        "test_raw_data", description="Refer to the raw data connected to this"
     )
     name_of_data_tuning_experiment: str = Field(
         "test_data_tuning",

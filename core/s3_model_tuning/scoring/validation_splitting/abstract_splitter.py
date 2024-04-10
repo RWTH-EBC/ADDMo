@@ -1,8 +1,11 @@
 import numpy as np
 
+import pandas as pd
+
 from sklearn.model_selection import BaseCrossValidator
 
 from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
+
 
 class AbstractSplitter(BaseCrossValidator):
     """
@@ -18,10 +21,11 @@ class AbstractSplitter(BaseCrossValidator):
     by providing split and get_n_splits methods. Note that unlike estimators, these do not have fit
     methods and do not provide set_params or get_params. Parameter validation may be performed in
     __init__."""
+
     def __init__(self, config: ModelTuningExperimentConfig):
         self.config = config
 
-    def split(self, X=None, y=None, groups=None):
+    def split(self, X: pd.DataFrame = None, y: pd.Series = None, groups=None):
         """Generate indices to split data into training and test sets. This dummy implementation
         is copied from scikit-learn. It ensures that the train set always contains the remaining
         indices compared to the test set. If you don't want this behavior, you can override this
@@ -34,11 +38,11 @@ class AbstractSplitter(BaseCrossValidator):
             test_index = indices[test_index]
             yield train_index, test_index
 
-    def get_n_splits(self, X=None, y=None, groups=None):
+    def get_n_splits(self, X: pd.DataFrame=None, y: pd.Series=None, groups=None):
         """Return the number of splitting iterations in the cross-validator."""
         raise NotImplementedError
 
-    def _iter_test_masks(self, X=None, y=None, groups=None):
+    def _iter_test_masks(self, X: pd.DataFrame=None, y: pd.Series=None, groups=None):
         """Generates boolean masks corresponding to test sets.
 
         By default, delegates to _iter_test_indices(X, y, groups)
@@ -48,6 +52,6 @@ class AbstractSplitter(BaseCrossValidator):
             test_mask[test_index] = True
             yield test_mask
 
-    def _iter_test_indices(self, X=None, y=None, groups=None):
+    def _iter_test_indices(self, X: pd.DataFrame=None, y=None, groups=None):
         """Generates integer indices corresponding to test sets."""
         raise NotImplementedError

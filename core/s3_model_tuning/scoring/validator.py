@@ -22,7 +22,7 @@ class CrossValidation(ValidationScoring):
         )
 
         # log the dataset splits for specific splitters which are important to check
-        if self.splitter.__class__.__name__ == "KrasserSplitter":
+        if self.splitter.__class__.__name__ == "UnivariateSplitter":
             splitter_indices: dict = cv_info["indices"]
             # convert indices to datetime indices
             splitter_indices["train"] = [
@@ -33,7 +33,7 @@ class CrossValidation(ValidationScoring):
                 x.iloc[splitter_indices["test"][i]].index
                 for i in range(len(splitter_indices["test"]))
             ]
-            WandbLogger(splitter_indices)
+            # WandbLogger(splitter_indices)
 
         scores = cv_info["test_score"]
         return scores.mean()

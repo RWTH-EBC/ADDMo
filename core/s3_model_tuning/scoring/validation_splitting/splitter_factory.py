@@ -23,7 +23,10 @@ class SplitterFactory:
             custom_splitter_class = getattr(
                 custom_splitters, config.validation_score_splitting
             )
-            return custom_splitter_class(config)
+            if config.validation_score_splitting_kwargs is None:
+                return custom_splitter_class()
+            else:
+                return custom_splitter_class(**config.validation_score_splitting_kwargs)
 
         # if splitter is from scikit-learn
         elif hasattr(model_selection, config.validation_score_splitting):

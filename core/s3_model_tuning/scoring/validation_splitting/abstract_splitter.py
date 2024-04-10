@@ -4,8 +4,6 @@ import pandas as pd
 
 from sklearn.model_selection import BaseCrossValidator
 
-from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
-
 
 class AbstractSplitter(BaseCrossValidator):
     """
@@ -22,8 +20,8 @@ class AbstractSplitter(BaseCrossValidator):
     methods and do not provide set_params or get_params. Parameter validation may be performed in
     __init__."""
 
-    def __init__(self, config: ModelTuningExperimentConfig):
-        self.config = config
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs
 
     def split(self, X: pd.DataFrame = None, y: pd.Series = None, groups=None):
         """Generate indices to split data into training and test sets. This dummy implementation
@@ -38,11 +36,13 @@ class AbstractSplitter(BaseCrossValidator):
             test_index = indices[test_index]
             yield train_index, test_index
 
-    def get_n_splits(self, X: pd.DataFrame=None, y: pd.Series=None, groups=None):
+    def get_n_splits(self, X: pd.DataFrame = None, y: pd.Series = None, groups=None):
         """Return the number of splitting iterations in the cross-validator."""
         raise NotImplementedError
 
-    def _iter_test_masks(self, X: pd.DataFrame=None, y: pd.Series=None, groups=None):
+    def _iter_test_masks(
+        self, X: pd.DataFrame = None, y: pd.Series = None, groups=None
+    ):
         """Generates boolean masks corresponding to test sets.
 
         By default, delegates to _iter_test_indices(X, y, groups)
@@ -52,6 +52,8 @@ class AbstractSplitter(BaseCrossValidator):
             test_mask[test_index] = True
             yield test_mask
 
-    def _iter_test_indices(self, X: pd.DataFrame=None, y=None, groups=None):
+    def _iter_test_indices(
+        self, X: pd.DataFrame = None, y=None, groups=None
+    ) -> np.ndarray:
         """Generates integer indices corresponding to test sets."""
         raise NotImplementedError

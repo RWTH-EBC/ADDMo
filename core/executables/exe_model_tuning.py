@@ -59,5 +59,10 @@ if __name__ == "__main__":
     # model_tuning_config = load_config_from_json(path_to_config, ModelTunerConfig)
     # config.config_model_tuner = model_tuning_config
 
+    config.config_model_tuner.models = ['MLP_TargetTransformed']
+
+    config.config_model_tuner.validation_score_splitting = 'UnivariateSplitter'
+    config.config_model_tuner.validation_score_splitting_kwargs = None
+
     # run
     exe_model_tuning(config)

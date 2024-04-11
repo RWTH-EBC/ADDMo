@@ -10,6 +10,9 @@ from core.util.load_save import load_config_from_json
 from core.util.definitions import results_dir_extrapolation_experiment
 from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 
+from sweeps import sweep_configs
+from sweeps import config_blueprints
+
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
     ExtrapolationExperimentConfig,
 )
@@ -41,27 +44,9 @@ def define_config():
     config.grid_points_per_axis = 10
     config.system_simulation = "BopTest_TAir_ODE"  # "carnot
     config.true_outlier_threshold = 0.1
-    #
-    config.config_explo_quant.explo_grid_points_per_axis = 10
 
-    path_to_config = os.path.join(
-        root_dir(),
-        "core",
-        "s3_model_tuning",
-        "config",
-        "model_tuner_config_no_tuning.json",
-    )
-    config.config_model_tuning = load_config_from_json(path_to_config, ModelTunerConfig)
-    config.config_model_tuning.models = ["MLP_TargetTransformed"]
-    config.config_model_tuning.hyperparameter_tuning_kwargs = {
-        "hyperparameter_set": {
-            "hidden_layer_sizes": [5],
-            "activation": "relu",
-            "max_iter": 2000,
-        }
-    }
+    config = config_blueprints.tuning_config_id2(config)
 
-    config.config_detector.detectors = ["KNN", "GP", "OCSVM"]
     return config
 
 
@@ -73,7 +58,7 @@ def run_all():
     run = wandb.init(config=config.dict())
 
     # update config with the experiment name of wandb run
-    wandb.config.update({"experiment_name": f"{config.simulation_data_name}_1_{run.name}"}, allow_val_change=True)
+    wandb.config.update({"experiment_name": f"{config.simulation_data_name}_2_{run.name}"}, allow_val_change=True)
 
     # convert config dict back to pydantic object
     config = ExtrapolationExperimentConfig(**wandb.config)
@@ -102,44 +87,11 @@ def run_all():
     s8_3_coverage_tuned_ND.exe(config)
     s8_4_coverage_true_validity.exe(config)
 
-    # s7_2_plotting.exe_plot_2D_all(config)
-    # s7_2_plotting.exe_plot_2D_detector(config)
 
     ExperimentLogger.finish_experiment()
 
 
-hidden_layer_sizes = []
-
-# Single layer possibilities
-for neurons in [5, 10, 100, 1000]:
-    hidden_layer_sizes.append([neurons])
-
-# Two layer possibilities
-for neurons1 in [5, 10, 100, 1000]:
-    for neurons2 in [5, 10, 100, 1000]:
-        hidden_layer_sizes.append([neurons1, neurons2])
-
-sweep_configuration = {
-    "name": "trial_sweep_ed_usecase",
-    "method": "grid",
-    "metric": {"name": "coverage_true_validity", "goal": "maximize"},
-    "parameters": {
-        "repetition": {"values": [1, 2, 3, 4, 5, 6, 7, 8]},
-        "config_model_tuning": {
-            "parameters": {
-                "hyperparameter_tuning_kwargs": {
-                    "parameters": {
-                        "hyperparameter_set": {
-                            "parameters": {
-                                "hidden_layer_sizes": {"values": hidden_layer_sizes}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-    },
-}
+sweep_configuration = sweep_configs.sweep_several_tunings()
 
 config_temp = define_config()
 

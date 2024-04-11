@@ -39,3 +39,13 @@ class ModelFactory:
                 f"Unknown model type: {model_type}. "
                 f"Available custom models are: {', '.join(custom_model_names)}. "
             )
+
+    def load_serialized_model(self, path):
+        '''#TODO'''
+        # get addmo class name from metadata
+
+        # get addmo model class from factory
+
+        # load serialized model, e.g. scikit, to addmo model class
+
+        return model (addmo model)

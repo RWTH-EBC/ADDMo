@@ -38,13 +38,14 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         return self.model.predict(x)  # Make predictions
 
     def save_model(self, abs_path):
-        # Convert the entire pipeline to ONNX
+        # Convert the entire pipeline to joblib
         onnx_model = skl2onnx.to_onnx(self.model, self.x[:1])
         onnx.save_model(onnx_model, abs_path)
+        #create metadata file
 
     def load_model(self, abs_path):
         # Implement model loading
-
+        self.model = load(abs_path)
         pass
 
     def to_scikit_learn(self):

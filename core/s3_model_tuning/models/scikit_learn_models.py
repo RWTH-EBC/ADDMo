@@ -1,12 +1,14 @@
 from abc import ABC
-
+import os
+import sklearn
 from sklearn.neural_network import MLPRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import TransformedTargetRegressor
-import onnx
-import skl2onnx
-
+#import onnx
+#import skl2onnx
+import joblib
+import json
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 
 
@@ -39,13 +41,32 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
 
     def save_model(self, abs_path):
         # Convert the entire pipeline to joblib
-        onnx_model = skl2onnx.to_onnx(self.model, self.x[:1])
-        onnx.save_model(onnx_model, abs_path)
+        joblib.dump(self.model, abs_path)
+        #name of class where save model is being called
+        addmo_class = type(self).__name__
+        #onnx_model = skl2onnx.to_onnx(self.model, self.x[:1])
+        #onnx.save_model(onnx_model, abs_path)
         #create metadata file
+        metadata = {
+            "addmo_class": addmo_class,
+            #"addmo_commit_id": "askfdjöasdkfjölkadf",
+            'library': 'scikit-learn',
+            'library_model_type': type(self.model.named_steps['model']).__name__,
+            'library_version': sklearn.__version__,
+            #"target_name": "targetname",
+            #'feature_order': ['feature1', 'feature2', 'feature3'],
+            'preprocessing': ['StandardScaler for all features'],
+            #'instructions': 'Pass a single or multiple observations with features in the order listed above.'
+        }
+        metadata_path = abs_path + '.json'
+        with open(metadata_path, 'w') as f:
+            json.dump(metadata, f)
+
+        print("Model and metadata saved successfully.")
 
     def load_model(self, abs_path):
         # Implement model loading
-        self.model = load(abs_path)
+        self.model = joblib.load(abs_path)
         pass
 
     def to_scikit_learn(self):
@@ -117,3 +138,9 @@ class MLP_TargetTransformed(MLP):
     def get_params(self, deep=True):
         # Get the hyperparameters of the model
         return self.model.named_steps["model"].regressor.get_params(deep=deep)
+
+
+b1= MLP()
+current_directory = os.getcwd()
+save_path = os.path.join(current_directory, 'model.joblib')
+b1.save_model(save_path)

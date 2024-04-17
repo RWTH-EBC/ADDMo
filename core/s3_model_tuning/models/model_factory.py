@@ -1,8 +1,8 @@
 import inspect
-
+import sys
 from core.s3_model_tuning.models import scikit_learn_models
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
-
+import json
 
 class ModelFactory:
     """
@@ -41,11 +41,29 @@ class ModelFactory:
             )
 
     def load_serialized_model(self, path):
+
+        #dynamically create instances of apt addmo class based on the info extracted from the metadata and then load it
+
         '''#TODO'''
         # get addmo class name from metadata
+        if not path.endswith('.joblib'):
+            raise ValueError(" '.joblib' path expected")
+
+        metadata_path = path + '.json'
+        with open(metadata_path) as f:
+            metadata = json.load(f)
+
+        addmo_class = metadata.get('addmo_class')
 
         # get addmo model class from factory
+        addmo_model_class=  ModelFactory.model_factory(addmo_class)
 
         # load serialized model, e.g. scikit, to addmo model class
+        addmo_model_class.load_model(path)
 
-        return model (addmo model)
+        return addmo_model_class
+
+
+m= ModelFactory()
+m= m.load_serialized_model(r'C:\Users\mre-rpa\PycharmProjects\pythonProject\addmo-automated-ml-regression\model.joblib')
+

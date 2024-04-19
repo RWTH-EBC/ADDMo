@@ -60,10 +60,7 @@ class ModelFactory:
 
         # load serialized model, e.g. scikit, to addmo model class
         addmo_model_class.load_model(path)
+        print('loaded addmo class model')
 
         return addmo_model_class
-
-
-m= ModelFactory()
-m= m.load_serialized_model(r'C:\Users\mre-rpa\PycharmProjects\pythonProject\addmo-automated-ml-regression\model.joblib')
 

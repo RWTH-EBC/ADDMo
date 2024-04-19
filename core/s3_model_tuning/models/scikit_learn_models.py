@@ -43,14 +43,13 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         # Convert the entire pipeline to joblib
         joblib.dump(self.model, abs_path)
         #name of class where save model is being called
-        addmo_class = type(self).__name__
         #onnx_model = skl2onnx.to_onnx(self.model, self.x[:1])
         #onnx.save_model(onnx_model, abs_path)
         #create metadata file
         metadata = {
-            "addmo_class": addmo_class,
+            "addmo_class": type(self).__name__,
             #"addmo_commit_id": "askfdjöasdkfjölkadf",
-            'library': 'scikit-learn',
+            'library': sklearn.__name__,  #dynamic: if we add keras class later
             'library_model_type': type(self.model.named_steps['model']).__name__,
             'library_version': sklearn.__version__,
             #"target_name": "targetname",
@@ -61,8 +60,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         metadata_path = abs_path + '.json'
         with open(metadata_path, 'w') as f:
             json.dump(metadata, f)
-
-        print("Model and metadata saved successfully.")
+            print("Model and metadata saved successfully.")
 
     def load_model(self, abs_path):
         # Implement model loading
@@ -140,7 +138,18 @@ class MLP_TargetTransformed(MLP):
         return self.model.named_steps["model"].regressor.get_params(deep=deep)
 
 
-b1= MLP()
-current_directory = os.getcwd()
-save_path = os.path.join(current_directory, 'model.joblib')
-b1.save_model(save_path)
+from sklearn.linear_model import LinearRegression
+
+
+class LinearReg(BaseScikitLearnModel):
+    "Linear Regression model"
+
+    def __init__(self):
+        super().__init__(LinearRegression())
+
+    def grid_search_hyperparameter(self):
+        pass
+
+    def optuna_hyperparameter_suggest(self, trial):
+        pass
+

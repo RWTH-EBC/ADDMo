@@ -5,12 +5,14 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import TransformedTargetRegressor
-#import onnx
-#import skl2onnx
+import onnx
+import skl2onnx
+from skl2onnx import to_onnx
 import joblib
 import json
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
-
+import onnxruntime as rt
+import numpy
 
 class BaseScikitLearnModel(AbstractMLModel, ABC):
     """
@@ -62,10 +64,38 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             json.dump(metadata, f)
             print("Model and metadata saved successfully.")
 
+    def save_model_onnx(self, path):
+        onx= to_onnx(self.model,self.x[:1])
+        with open(path, "wb") as f:
+            f.write(onx.SerializeToString())
+        metadata = {
+            "addmo_class": type(self).__name__,
+            # "addmo_commit_id": "askfdjöasdkfjölkadf",
+            'library': sklearn.__name__,  # dynamic: if we add keras class later
+            'library_model_type': type(self.model.named_steps['model']).__name__,
+            'library_version': sklearn.__version__,
+            # "target_name": "targetname",
+            # 'feature_order': ['feature1', 'feature2', 'feature3'],
+            'preprocessing': ['StandardScaler for all features'],
+            # 'instructions': 'Pass a single or multiple observations with features in the order listed above.'
+        }
+        metadata_path = path + '.json'
+        with open(metadata_path, 'w') as f:
+            json.dump(metadata, f)
+            print("Model and metadata saved successfully.")
+
+
     def load_model(self, abs_path):
         # Implement model loading
         self.model = joblib.load(abs_path)
         pass
+    def load_onnx_model(self, path):
+        self.session= rt.InferenceSession(path, providers=['CPUExecutionProvider'])
+        self.inputs= self.session.get_inputs()[0].name
+        self.labels= self.session.get_outputs()[0].name
+
+    def predict_onnx(self, x):
+        return self.session.run([self.labels], {self.inputs: x.astype(numpy.double)})[0]
 
     def to_scikit_learn(self):
         return self.model
@@ -146,6 +176,7 @@ class LinearReg(BaseScikitLearnModel):
 
     def __init__(self):
         super().__init__(LinearRegression())
+
 
     def grid_search_hyperparameter(self):
         pass

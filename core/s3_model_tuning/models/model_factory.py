@@ -3,6 +3,7 @@ import sys
 from core.s3_model_tuning.models import scikit_learn_models
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 import json
+import onnxruntime as rt
 
 class ModelFactory:
     """
@@ -63,4 +64,22 @@ class ModelFactory:
         print('loaded addmo class model')
 
         return addmo_model_class
+
+    def load_onnx(self, path):
+
+        if not path.endswith('.onnx'):
+            raise ValueError(" '.onnx' path expected")
+
+        metadata_path = path + '.json'
+        with open(metadata_path) as f:
+            metadata = json.load(f)
+
+        addmo_class = metadata.get('addmo_class')
+        addmo_model_class=  ModelFactory.model_factory(addmo_class)
+        addmo_model_class.load_onnx_model(path)
+        print('loaded addmo onnx')
+
+        return(addmo_model_class)
+
+
 

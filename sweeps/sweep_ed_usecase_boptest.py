@@ -102,7 +102,7 @@ def run_all():
 
 config_temp = define_config()
 
-project_name = config_temp.simulation_data_name
+project_name = f"1_{config_temp.simulation_data_name}"
 # project_name = "Test"
 
 # sweep

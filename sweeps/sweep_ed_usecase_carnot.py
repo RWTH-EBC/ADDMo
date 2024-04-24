@@ -42,7 +42,7 @@ def define_config():
     config.true_outlier_threshold = 0.2
 
     config.config_explo_quant.exploration_bounds = {
-        "$T_{umg}$ in °C": (263.15, 303.15),
+        "$T_{umg}$ in °C": (-10, 30),
         "$P_{el}$ in kW": (0, 5),
     }
 

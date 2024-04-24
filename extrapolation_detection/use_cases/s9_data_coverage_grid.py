@@ -25,13 +25,12 @@ def exe(config: ExtrapolationExperimentConfig):
         "errors_grid", directory=config.experiment_folder
     )["y_pred"]
     xy_grid["y_pred"] = y_pred
+    config.config_explo_quant.exploration_bounds["y_pred"] = config.config_explo_quant.exploration_bounds[config.name_of_target]
 
     # define bounds
     bounds = point_generator.infer_or_forward_bounds(
         config.config_explo_quant.exploration_bounds, xy_grid
     )
-    if "y_pred" in xy_grid.columns:
-        bounds["y_pred"] = bounds[config.name_of_target]
 
     # plot
     plotly_parallel_coordinates_plt = (

@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 import pandas as pd
 
@@ -14,7 +16,7 @@ def _check_bounds(bounds, df):
     '''
     for var in df.columns:
         if var not in bounds:
-            raise ValueError(f"Variable {var} is not in the bounds.")
+            warnings.warn(f"Variable {var} is not defined in the bounds.")
         if not isinstance(bounds[var], (tuple, list)):
             raise ValueError(f"Bounds for variable {var} should be a tuple.")
         if len(bounds[var]) != 2:

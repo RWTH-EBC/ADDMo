@@ -1,18 +1,18 @@
-from abc import ABC
 import os
+import skl2onnx
+import joblib
+import json
 import sklearn
+import subprocess
+from abc import ABC
 from sklearn.neural_network import MLPRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import TransformedTargetRegressor
-import onnx
-import skl2onnx
+from core.s3_model_tuning.models.metadata.metadata import Metadata
 from skl2onnx import to_onnx
-import joblib
-import json
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
-import onnxruntime as rt
-import numpy
+from sklearn.linear_model import LinearRegression
 
 class BaseScikitLearnModel(AbstractMLModel, ABC):
     """
@@ -29,73 +29,55 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         self.model = Pipeline(
             steps=[
                 ("scaler", StandardScaler()),  # scale the features
-                ("model", model) # scaling the target variable through TransformedTargetRegressor
+                ("model", model)  # scaling the target variable through TransformedTargetRegressor
                 # is not compatible with ONNX
             ]
         )
 
     def fit(self, x, y):
         self.x = x  # Save the training data to be used later for ONNX conversion
+        self.y = y  # save target column for metadata
         self.model.fit(x, y)  # Train the model
 
     def predict(self, x):
         return self.model.predict(x)  # Make predictions
 
-    def save_model(self, abs_path):
-        # Convert the entire pipeline to joblib
-        joblib.dump(self.model, abs_path)
-        #name of class where save model is being called
-        #onnx_model = skl2onnx.to_onnx(self.model, self.x[:1])
-        #onnx.save_model(onnx_model, abs_path)
-        #create metadata file
-        metadata = {
-            "addmo_class": type(self).__name__,
-            #"addmo_commit_id": "askfdjöasdkfjölkadf",
-            'library': sklearn.__name__,  #dynamic: if we add keras class later
-            'library_model_type': type(self.model.named_steps['model']).__name__,
-            'library_version': sklearn.__version__,
-            #"target_name": "targetname",
-            #'feature_order': ['feature1', 'feature2', 'feature3'],
-            'preprocessing': ['StandardScaler for all features'],
-            #'instructions': 'Pass a single or multiple observations with features in the order listed above.'
-        }
-        metadata_path = abs_path + '.json'
+    def save_metadata(self, path):
+
+        self.metadata = Metadata(
+            addmo_class=type(self).__name__,
+            addmo_commit_id = subprocess.check_output(["git", "describe", "--always"]).strip().decode(),
+            library=sklearn.__name__,  # dynamic: if we add keras class later
+            library_model_type=type(self.model.named_steps['model']).__name__,
+            library_version=sklearn.__version__,
+            target_name='self.y.name',
+            feature_order=['list(self.x.columns)'],
+            preprocessing=['StandardScaler for all features'],
+            instructions='Pass a single or multiple observations with features in the order listed above.')
+
+        metadata_path = os.path.join('core/s3_model_tuning/models/metadata', path + '.json')
         with open(metadata_path, 'w') as f:
-            json.dump(metadata, f)
-            print("Model and metadata saved successfully.")
-
-    def save_model_onnx(self, path):
-        onx= to_onnx(self.model,self.x[:1])
-        with open(path, "wb") as f:
-            f.write(onx.SerializeToString())
-        metadata = {
-            "addmo_class": type(self).__name__,
-            # "addmo_commit_id": "askfdjöasdkfjölkadf",
-            'library': sklearn.__name__,  # dynamic: if we add keras class later
-            'library_model_type': type(self.model.named_steps['model']).__name__,
-            'library_version': sklearn.__version__,
-            # "target_name": "targetname",
-            # 'feature_order': ['feature1', 'feature2', 'feature3'],
-            'preprocessing': ['StandardScaler for all features'],
-            # 'instructions': 'Pass a single or multiple observations with features in the order listed above.'
-        }
-        metadata_path = path + '.json'
-        with open(metadata_path, 'w') as f:
-            json.dump(metadata, f)
-            print("Model and metadata saved successfully.")
+            json.dump(self.metadata.dict(), f)
+            print('metadata saved as', metadata_path)
 
 
-    def load_model(self, abs_path):
-        # Implement model loading
-        self.model = joblib.load(abs_path)
-        pass
-    def load_onnx_model(self, path):
-        self.session= rt.InferenceSession(path, providers=['CPUExecutionProvider'])
-        self.inputs= self.session.get_inputs()[0].name
-        self.labels= self.session.get_outputs()[0].name
+    def save_model(self, path):
 
-    def predict_onnx(self, x):
-        return self.session.run([self.labels], {self.inputs: x.astype(numpy.double)})[0]
+        self.save_metadata(path)
+
+        if path.endswith('.joblib'):
+            joblib.dump(self.model, path)
+            print("Model saved successfully.")
+
+        elif path.endswith('.onnx'):
+            onx = to_onnx(self.model, self.x[:1])
+            with open(path, "wb") as f:
+                f.write(onx.SerializeToString())
+                print('model saved successfully')
+
+    # def load_model(self, path):
+    # Implement model loading
+    # self.model = joblib.load(path)
 
     def to_scikit_learn(self):
         return self.model
@@ -147,13 +129,15 @@ class MLP(BaseScikitLearnModel):
         }
         return hyperparameter_grid
 
+
 class MLP_TargetTransformed(MLP):
     def __init__(self):
         # Create an instance of the scikit-learn model including a scaler
         self.model = Pipeline(
             steps=[
                 ("scaler", StandardScaler()),  # scale the features
-                ("model", TransformedTargetRegressor(regressor=MLPRegressor())) # scaling the target variable through TransformedTargetRegressor
+                ("model", TransformedTargetRegressor(regressor=MLPRegressor()))
+                # scaling the target variable through TransformedTargetRegressor
                 # is not compatible with ONNX
             ]
         )
@@ -168,19 +152,14 @@ class MLP_TargetTransformed(MLP):
         return self.model.named_steps["model"].regressor.get_params(deep=deep)
 
 
-from sklearn.linear_model import LinearRegression
-
-
 class LinearReg(BaseScikitLearnModel):
-    "Linear Regression model"
+    """Linear Regression model"""
 
     def __init__(self):
         super().__init__(LinearRegression())
-
 
     def grid_search_hyperparameter(self):
         pass
 
     def optuna_hyperparameter_suggest(self, trial):
         pass
-

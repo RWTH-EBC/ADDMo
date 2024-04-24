@@ -1,9 +1,12 @@
 import inspect
 import sys
+import json
+import joblib
+import os
 from core.s3_model_tuning.models import scikit_learn_models
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
-import json
-import onnxruntime as rt
+from core.s3_model_tuning.models.abstract_model import PredictorOnnx
+
 
 class ModelFactory:
     """
@@ -32,8 +35,8 @@ class ModelFactory:
                 name
                 for name, obj in inspect.getmembers(scikit_learn_models)
                 if inspect.isclass(obj)
-                and issubclass(obj, AbstractMLModel)
-                and not inspect.isabstract(obj)
+                   and issubclass(obj, AbstractMLModel)
+                   and not inspect.isabstract(obj)
             ]
 
             raise ValueError(
@@ -41,45 +44,23 @@ class ModelFactory:
                 f"Available custom models are: {', '.join(custom_model_names)}. "
             )
 
-    def load_serialized_model(self, path):
+    def load_model(self, path):
 
-        #dynamically create instances of apt addmo class based on the info extracted from the metadata and then load it
-
-        '''#TODO'''
-        # get addmo class name from metadata
-        if not path.endswith('.joblib'):
-            raise ValueError(" '.joblib' path expected")
-
-        metadata_path = path + '.json'
+        metadata_path = os.path.join('core/s3_model_tuning/models/metadata', path + '.json')
         with open(metadata_path) as f:
             metadata = json.load(f)
 
         addmo_class = metadata.get('addmo_class')
 
-        # get addmo model class from factory
-        addmo_model_class=  ModelFactory.model_factory(addmo_class)
+        if path.endswith('.joblib'):
+            addmo_model_class = ModelFactory.model_factory(addmo_class)
+            addmo_model_class = joblib.load(path)
 
-        # load serialized model, e.g. scikit, to addmo model class
-        addmo_model_class.load_model(path)
-        print('loaded addmo class model')
+        elif path.endswith('.onnx'):
+            addmo_model_class = PredictorOnnx()
+            addmo_model_class.load_model(path)
 
-        return addmo_model_class
+        else:
+            raise ValueError(" '.joblib' or '.onnx' path expected")
 
-    def load_onnx(self, path):
-
-        if not path.endswith('.onnx'):
-            raise ValueError(" '.onnx' path expected")
-
-        metadata_path = path + '.json'
-        with open(metadata_path) as f:
-            metadata = json.load(f)
-
-        addmo_class = metadata.get('addmo_class')
-        addmo_model_class=  ModelFactory.model_factory(addmo_class)
-        addmo_model_class.load_onnx_model(path)
-        print('loaded addmo onnx')
-
-        return(addmo_model_class)
-
-
-
+        return (addmo_model_class)

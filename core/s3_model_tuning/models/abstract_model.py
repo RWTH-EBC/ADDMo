@@ -1,3 +1,5 @@
+import onnxruntime as rt
+import numpy
 from abc import ABC, abstractmethod
 
 
@@ -52,8 +54,8 @@ class AbstractMLModel(ABC):
         """
         pass
 
-    @abstractmethod
-    def load_model(self, path): #Todo: delete this method possibly
+        # @abstractmethod
+        # def load_model(self, path): #Todo: delete this method possibly
         """
         Load a model including scaler from a file.
         An ONNX format is expected.
@@ -61,7 +63,8 @@ class AbstractMLModel(ABC):
         Args:
             path: File path from which the model will be loaded.
         """
-        pass
+
+    # pass
 
     @abstractmethod
     def to_scikit_learn(self):
@@ -127,4 +130,54 @@ class AbstractMLModel(ABC):
         Returns:
             A dictionary with a default set of hyperparameters.
         """
+        pass
+
+
+class PredictorOnnx(AbstractMLModel, ABC):
+    """overwrites predict and load function for onnx format """
+
+    def __init__(self):
+        super().__init__()
+        self.labels = None
+        self.inputs = None
+        self.session = None
+
+    def load_model(self, path):
+        self.session = rt.InferenceSession(path, providers=['CPUExecutionProvider'])
+        self.inputs = self.session.get_inputs()[0].name
+        self.labels = self.session.get_outputs()[0].name
+
+    def predict(self, x):
+        return self.session.run([self.labels], {self.inputs: x.astype(numpy.double)})[0]
+
+    def default_hyperparameter(self):
+        # Implement default hyperparameters
+        pass
+
+    def fit(self, x, y):
+        # Implement model fitting
+        pass
+
+    def get_params(self):
+        # Implement getting model hyperparameters
+        pass
+
+    def grid_search_hyperparameter(self):
+        # Implement defining hyperparameters for grid search
+        pass
+
+    def optuna_hyperparameter_suggest(self, trial):
+        # Implement suggesting hyperparameters using Optuna
+        pass
+
+    def save_model(self, path):
+        # Implement saving the model
+        pass
+
+    def set_params(self, **params):
+        # Implement setting model hyperparameters
+        pass
+
+    def to_scikit_learn(self):
+        # Implement converting the model to scikit-learn compatible format
         pass

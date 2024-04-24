@@ -1,1 +1,0 @@
-{"addmo_class": "LinearReg", "library": "sklearn", "library_model_type": "LinearRegression", "library_version": "0.24.2", "preprocessing": ["StandardScaler for all features"]}

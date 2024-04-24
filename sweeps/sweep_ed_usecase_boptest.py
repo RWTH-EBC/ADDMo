@@ -42,10 +42,17 @@ def define_config():
     config.train_val_test_period = (0, 1488)
     config.shuffle = False
     config.grid_points_per_axis = 10
-    config.system_simulation = "BopTest_TAir_ODE"  # "carnot
+    config.system_simulation = "BopTest_TAir_ODE"
     config.true_outlier_threshold = 0.1
 
-    config = config_blueprints.tuning_config_id2(config)
+    config.config_explo_quant.exploration_bounds = {
+        "TDryBul": (263.15, 303.15),
+        "HDirNor": (0, 1000),
+        "oveHeaPumY_u": (0, 1),
+        "reaTZon_y": (290.15, 300.15),
+    }
+
+    config = config_blueprints.no_tuning_config(config)
 
     return config
 
@@ -58,7 +65,10 @@ def run_all():
     run = wandb.init(config=config.dict())
 
     # update config with the experiment name of wandb run
-    wandb.config.update({"experiment_name": f"{config.simulation_data_name}_2_{run.name}"}, allow_val_change=True)
+    wandb.config.update(
+        {"experiment_name": f"1_{config.simulation_data_name}_{run.name}"},
+        allow_val_change=True,
+    )
 
     # convert config dict back to pydantic object
     config = ExtrapolationExperimentConfig(**wandb.config)
@@ -87,17 +97,15 @@ def run_all():
     s8_3_coverage_tuned_ND.exe(config)
     s8_4_coverage_true_validity.exe(config)
 
-
     ExperimentLogger.finish_experiment()
 
 
-sweep_configuration = sweep_configs.sweep_several_tunings()
-
 config_temp = define_config()
 
-# project_name = "Test"
 project_name = config_temp.simulation_data_name
+# project_name = "Test"
 
+# sweep
+sweep_configuration = sweep_configs.sweep_hidden_layer_sizes()
 sweep_id = wandb.sweep(sweep_configuration, project=project_name)
-
 wandb.agent(sweep_id, function=run_all, project=project_name)

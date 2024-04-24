@@ -41,7 +41,12 @@ def define_config():
     config.grid_points_per_axis = 100
     config.true_outlier_threshold = 0.2
 
-    config = config_blueprints.tuning_config_id2(config)
+    config.config_explo_quant.exploration_bounds = {
+        "$T_{umg}$ in °C": (263.15, 303.15),
+        "$P_{el}$ in kW": (0, 5),
+    }
+
+    config = config_blueprints.no_tuning_config(config)
 
     return config
 
@@ -54,7 +59,10 @@ def run_all():
     run = wandb.init(config=config.dict())
 
     # update config with the experiment name of wandb run
-    wandb.config.update({"experiment_name": f"{config.simulation_data_name}_2_{run.name}"}, allow_val_change=True)
+    wandb.config.update(
+        {"experiment_name": f"1_{config.simulation_data_name}_{run.name}"},
+        allow_val_change=True,
+    )
 
     # convert config dict back to pydantic object
     config = ExtrapolationExperimentConfig(**wandb.config)
@@ -89,14 +97,14 @@ def run_all():
     ExperimentLogger.finish_experiment()
 
 
-sweep_configuration = sweep_configs.sweep_several_tunings()
-
 config_temp = define_config()
 
 
 project_name = config_temp.simulation_data_name
 # project_name = "Test"
 
+# sweep
+sweep_configuration = sweep_configs.sweep_hidden_layer_sizes()
 sweep_id = wandb.sweep(sweep_configuration, project=project_name)
-
 wandb.agent(sweep_id, function=run_all, project=project_name)
+

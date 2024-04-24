@@ -44,6 +44,7 @@ def define_config():
     config.config_explo_quant.exploration_bounds = {
         "$T_{umg}$ in °C": (-10, 30),
         "$P_{el}$ in kW": (0, 5),
+        "$\dot{Q}_{heiz}$ in kW": (0, 35)
     }
 
     config = config_blueprints.no_tuning_config(config)

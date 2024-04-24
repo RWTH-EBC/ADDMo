@@ -50,6 +50,7 @@ def define_config():
         "HDirNor": (0, 1000),
         "oveHeaPumY_u": (0, 1),
         "reaTZon_y": (290.15, 300.15),
+        "delta_reaTZon_y": (-0.5, 0.5),
     }
 
     config = config_blueprints.tuning_config(config)

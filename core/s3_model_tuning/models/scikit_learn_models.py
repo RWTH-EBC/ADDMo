@@ -73,7 +73,7 @@ class MLP(BaseScikitLearnModel):
         hyperparameters = {}
 
         # Suggest hyperparameters
-        n_layers = trial.suggest_int("n_layers", 1, 2)
+        n_layers = trial.suggest_int("n_layers", 0, 2)
         hidden_layer_sizes = tuple(
             trial.suggest_int(f"n_units_l{i}", 1, 1000) for i in range(n_layers)
         )

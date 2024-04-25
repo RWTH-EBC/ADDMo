@@ -54,7 +54,8 @@ class ModelFactory:
 
         if path.endswith('.joblib'):
             addmo_model_class = ModelFactory.model_factory(addmo_class)
-            addmo_model_class = joblib.load(path)
+            model = joblib.load(path)
+            addmo_model_class.load_model(model)
 
         elif path.endswith('.onnx'):
             addmo_model_class = PredictorOnnx()

@@ -54,17 +54,14 @@ class AbstractMLModel(ABC):
         """
         pass
 
-        # @abstractmethod
-        # def load_model(self, path): #Todo: delete this method possibly
+    def load_model(self, model_instance): #Todo: delete this method possibly
         """
-        Load a model including scaler from a file.
-        An ONNX format is expected.
+        Load a model including scaler.
 
         Args:
-            path: File path from which the model will be loaded.
+            model_instance: model that is loaded.
         """
-
-    # pass
+        self.model = model_instance
 
     @abstractmethod
     def to_scikit_learn(self):

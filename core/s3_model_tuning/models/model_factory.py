@@ -6,6 +6,7 @@ import os
 from core.s3_model_tuning.models import scikit_learn_models
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import PredictorOnnx
+from core.util.definitions import root_dir
 
 
 class ModelFactory:
@@ -45,14 +46,21 @@ class ModelFactory:
             )
 
     def load_model(self, path):
-
-        metadata_path = os.path.join('core/s3_model_tuning/models/metadata', path + '.json') #Todo: this is not dynamic! Here should be something like "if directory of path contains metadata load it, else print a raise an descriptive error", also this whole meta data thing is only required for joblib, not for ONNX, so put it into the respective if clause.
-        with open(metadata_path) as f:
-            metadata = json.load(f)
-
-        addmo_class = metadata.get('addmo_class')
+ #Todo:
+        # this is not dynamic! Here should be something like "if directory of path
+        # contains metadata load it, else print a raise an descriptive error", also this whole meta data
+        # thing is only required for joblib, not for ONNX, so put it into the respective if clause.
 
         if path.endswith('.joblib'):
+
+            metadata_path = os.path.join(root_dir(), 'core', 's3_model_tuning', 'models',
+                                         'metadata', path + '.json')
+            if Path(metadata_path).is_file():
+                with open(metadata_path) as f:
+                    metadata = json.load(f)
+            else:
+                raise FileNotFoundError(f'The metadata file {metadata_path} does not exist. ')
+            addmo_class = metadata.get('addmo_class')
             addmo_model_class = ModelFactory.model_factory(addmo_class)
             model = joblib.load(path)
             addmo_model_class.load_regressor(model)

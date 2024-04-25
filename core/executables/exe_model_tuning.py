@@ -44,7 +44,7 @@ def exe_model_tuning(config=None):
     best_model = model_tuner.get_model(model_dict, best_model_name)
 
     # Log the best model
-    ExperimentLogger.log_artifact(best_model, name='best_model', art_type='onnx')
+    ExperimentLogger.log_artifact(best_model, name='best_model', art_type='onnx') #Todo: not implemented yet, possibly my job (mre)
 
 
     print("Finished")

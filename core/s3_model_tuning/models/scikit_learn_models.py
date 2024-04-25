@@ -9,7 +9,7 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import TransformedTargetRegressor
-from core.s3_model_tuning.models.metadata.metadata import Metadata
+from core.s3_model_tuning.models.metadata.modelmetadata import ModelMetadata
 from skl2onnx import to_onnx
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from sklearn.linear_model import LinearRegression
@@ -34,7 +34,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             ]
         )
 
-    def fit(self, x, y):
+    def fit(self, x, y): #Todo catch exception if x or y is not a pandas dataframe / update comments
         self.x = x  # Save the training data to be used later for ONNX conversion
         self.y = y  # save target column for metadata
         self.model.fit(x, y)  # Train the model
@@ -43,15 +43,16 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         return self.model.predict(x)  # Make predictions
 
     def save_metadata(self, path):
+        #Todo: metadata should be saved at same directory as the model, having the same file name with suffix <modelname_metadata>
 
-        self.metadata = Metadata(
+        self.metadata = ModelMetadata( #Todo:
             addmo_class=type(self).__name__,
             addmo_commit_id = subprocess.check_output(["git", "describe", "--always"]).strip().decode(),
             library=sklearn.__name__,  # dynamic: if we add keras class later
             library_model_type=type(self.model.named_steps['model']).__name__,
             library_version=sklearn.__version__,
             target_name='self.y.name',
-            feature_order=['list(self.x.columns)'],
+            features_ordered=['list(self.x.columns)'],
             preprocessing=['StandardScaler for all features'],
             instructions='Pass a single or multiple observations with features in the order listed above.')
 
@@ -61,19 +62,20 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             print('metadata saved as', metadata_path)
 
 
-    def save_regressor(self, path):
+    def save_regressor(self, directory, filename=None, type='joblib'): #Todo: change accordingly
+        #Todo: if filename none use the name of the model class
 
-        self.save_metadata(path)
+        self.save_metadata(directory)
 
-        if path.endswith('.joblib'):
-            joblib.dump(self.model, path)
+        if directory.endswith('.joblib'):
+            joblib.dump(self.model, directory)
             print("Model saved successfully.")
 
-        elif path.endswith('.onnx'):
+        elif directory.endswith('.onnx'):
             onx = to_onnx(self.model, self.x[:1])
-            with open(path, "wb") as f:
+            with open(directory, "wb") as f:
                 f.write(onx.SerializeToString())
-                print('model saved successfully')
+                print('model saved successfully') #Todo: print: model saved to {path+filename+type}
 
     # def load_model(self, path):
     # Implement model loading

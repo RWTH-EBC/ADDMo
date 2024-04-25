@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 class Metadata(BaseModel):
     addmo_class: str = Field(description='model method called for training')
-    addmo_commit_id: str = Field ( description= 'commit id')
+    addmo_commit_id: str = Field ( description= 'github commit id')
     library: str = Field(description='library used')
     library_model_type: str = Field(description='type of model within library')
     library_version: str = Field(description='library version used')

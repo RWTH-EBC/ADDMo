@@ -46,7 +46,7 @@ class ModelFactory:
 
     def load_model(self, path):
 
-        metadata_path = os.path.join('core/s3_model_tuning/models/metadata', path + '.json')
+        metadata_path = os.path.join('core/s3_model_tuning/models/metadata', path + '.json') #Todo: this is not dynamic! Here should be something like "if directory of path contains metadata load it, else print a raise an descriptive error", also this whole meta data thing is only required for joblib, not for ONNX, so put it into the respective if clause.
         with open(metadata_path) as f:
             metadata = json.load(f)
 
@@ -54,11 +54,12 @@ class ModelFactory:
 
         if path.endswith('.joblib'):
             addmo_model_class = ModelFactory.model_factory(addmo_class)
-            addmo_model_class = joblib.load(path)
+            model = joblib.load(path)
+            addmo_model_class.load_regressor(model)
 
         elif path.endswith('.onnx'):
             addmo_model_class = PredictorOnnx()
-            addmo_model_class.load_model(path)
+            addmo_model_class.load_regressor(path)
 
         else:
             raise ValueError(" '.joblib' or '.onnx' path expected")

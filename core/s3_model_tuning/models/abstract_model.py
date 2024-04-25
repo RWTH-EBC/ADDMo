@@ -1,3 +1,5 @@
+import warnings
+
 import onnxruntime as rt
 import numpy
 from abc import ABC, abstractmethod
@@ -11,13 +13,13 @@ class AbstractMLModel(ABC):
     a scaler.
 
     Attributes:
-        model: An instance of the machine learning model, usually including the scaler.
+        regressor: An instance of the machine learning model, usually including the scaler.
     """
 
     @abstractmethod
     def __init__(self):
         """Initializes the machine learning model."""
-        self.model = None
+        self.regressor = None
 
     @abstractmethod
     def fit(self, x, y):
@@ -44,7 +46,7 @@ class AbstractMLModel(ABC):
         pass
 
     @abstractmethod
-    def save_model(self, path):
+    def save_regressor(self, path):
         """
         Save the trained model including scaler to a file.
         This is done using the ONNX format.
@@ -54,17 +56,14 @@ class AbstractMLModel(ABC):
         """
         pass
 
-        # @abstractmethod
-        # def load_model(self, path): #Todo: delete this method possibly
+    def load_regressor(self, model_instance):
         """
-        Load a model including scaler from a file.
-        An ONNX format is expected.
+        Load a model including scaler.
 
         Args:
-            path: File path from which the model will be loaded.
+            model_instance: model that is loaded.
         """
-
-    # pass
+        self.regressor = model_instance
 
     @abstractmethod
     def to_scikit_learn(self):
@@ -140,44 +139,36 @@ class PredictorOnnx(AbstractMLModel, ABC):
         super().__init__()
         self.labels = None
         self.inputs = None
-        self.session = None
+        self.model = None
 
-    def load_model(self, path):
-        self.session = rt.InferenceSession(path, providers=['CPUExecutionProvider'])
-        self.inputs = self.session.get_inputs()[0].name
-        self.labels = self.session.get_outputs()[0].name
+    def load_regressor(self, path):
+        self.model = rt.InferenceSession(path, providers=['CPUExecutionProvider'])
+        self.inputs = self.model.get_inputs()[0].name
+        self.labels = self.model.get_outputs()[0].name
 
     def predict(self, x):
-        return self.session.run([self.labels], {self.inputs: x.astype(numpy.double)})[0]
+        return self.model.run([self.labels], {self.inputs: x.astype(numpy.double)})[0]
 
     def default_hyperparameter(self):
-        # Implement default hyperparameters
-        pass
+        warnings.warn(f"This function is not implemented for ONNX models")
 
     def fit(self, x, y):
-        # Implement model fitting
-        pass
+        warnings.warn(f"This function is not implemented for ONNX models")
 
     def get_params(self):
-        # Implement getting model hyperparameters
-        pass
+        warnings.warn(f"This function is not implemented for ONNX models")
 
     def grid_search_hyperparameter(self):
-        # Implement defining hyperparameters for grid search
-        pass
+        warnings.warn(f"This function is not implemented for ONNX models")
 
     def optuna_hyperparameter_suggest(self, trial):
-        # Implement suggesting hyperparameters using Optuna
-        pass
+        warnings.warn(f"This function is not implemented for ONNX models")
 
-    def save_model(self, path):
-        # Implement saving the model
-        pass
+    def save_regressor(self, path):
+        warnings.warn(f"This function is not implemented for ONNX models")
 
     def set_params(self, **params):
-        # Implement setting model hyperparameters
-        pass
+        warnings.warn(f"This function is not implemented for ONNX models")
 
     def to_scikit_learn(self):
-        # Implement converting the model to scikit-learn compatible format
-        pass
+        warnings.warn(f"This function is not implemented for ONNX models")

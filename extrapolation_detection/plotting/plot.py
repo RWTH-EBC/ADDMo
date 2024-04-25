@@ -312,8 +312,10 @@ def _plot_subplot(plt_data: PlotData2D, axs: axes.Axes):
     labels.append("Extrapolation Boundary")
 
     # Axs limits
-    axs.set_xlim(-7.5, 20)
-    axs.set_ylim(0, 4.5)
+    axs.set_xlim(-10, 30)
+    # axs.set_xlim(-7.5, 20)
+    axs.set_ylim(0, 5)
+    # axs.set_ylim(0, 4.5)
 
     axs.set_title(plt_data.plot_title)
     print(plt_data.plot_title)

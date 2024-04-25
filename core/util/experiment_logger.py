@@ -99,7 +99,7 @@ class WandbLogger(AbstractLogger):
             if art_type == "onnx":
                 model: AbstractMLModel = data
                 filepath = os.path.join(WandbLogger.directory, name + ".onnx")
-                model.save_model(filepath)
+                model.save_regressor(filepath)
 
             # create artifact object
             artifact = wandb.Artifact(

@@ -70,7 +70,7 @@ def recursive_feature_selection_embedded(config: DataTuningAutoSetup, x, y):
 
     model: AbstractMLModel = ModelFactory.model_factory(config.wrapper_model)
 
-    scikit_model = model.model
+    scikit_model = model.regressor
 
     if config.recursive_embedded_number_features_to_select == 0:
         selector = RFECV(estimator=scikit_model).set_output(transform="pandas")

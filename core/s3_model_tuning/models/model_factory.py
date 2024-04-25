@@ -55,11 +55,11 @@ class ModelFactory:
         if path.endswith('.joblib'):
             addmo_model_class = ModelFactory.model_factory(addmo_class)
             model = joblib.load(path)
-            addmo_model_class.load_model(model)
+            addmo_model_class.load_regressor(model)
 
         elif path.endswith('.onnx'):
             addmo_model_class = PredictorOnnx()
-            addmo_model_class.load_model(path)
+            addmo_model_class.load_regressor(path)
 
         else:
             raise ValueError(" '.joblib' or '.onnx' path expected")

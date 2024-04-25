@@ -61,7 +61,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             print('metadata saved as', metadata_path)
 
 
-    def save_model(self, path):
+    def save_regressor(self, path):
 
         self.save_metadata(path)
 

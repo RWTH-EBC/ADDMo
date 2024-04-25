@@ -15,8 +15,8 @@ print(data.feature_names)
 model1 = MLP()
 
 model1.fit(X_train, y_train)
-model1.save_model("linear.joblib")
-model1.save_model("linear.onnx")
+model1.save_regressor("linear.joblib")
+model1.save_regressor("linear.onnx")
 # Load the serialized model
 m2= ModelFactory()
 m3= ModelFactory()

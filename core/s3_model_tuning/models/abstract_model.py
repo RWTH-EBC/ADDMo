@@ -11,13 +11,13 @@ class AbstractMLModel(ABC):
     a scaler.
 
     Attributes:
-        model: An instance of the machine learning model, usually including the scaler.
+        regressor: An instance of the machine learning model, usually including the scaler.
     """
 
     @abstractmethod
     def __init__(self):
         """Initializes the machine learning model."""
-        self.model = None
+        self.regressor = None
 
     @abstractmethod
     def fit(self, x, y):
@@ -44,7 +44,7 @@ class AbstractMLModel(ABC):
         pass
 
     @abstractmethod
-    def save_model(self, path):
+    def save_regressor(self, path):
         """
         Save the trained model including scaler to a file.
         This is done using the ONNX format.
@@ -54,14 +54,14 @@ class AbstractMLModel(ABC):
         """
         pass
 
-    def load_model(self, model_instance): #Todo: delete this method possibly
+    def load_regressor(self, model_instance):
         """
         Load a model including scaler.
 
         Args:
             model_instance: model that is loaded.
         """
-        self.model = model_instance
+        self.regressor = model_instance
 
     @abstractmethod
     def to_scikit_learn(self):
@@ -139,7 +139,7 @@ class PredictorOnnx(AbstractMLModel, ABC):
         self.inputs = None
         self.session = None
 
-    def load_model(self, path):
+    def load_regressor(self, path):
         self.session = rt.InferenceSession(path, providers=['CPUExecutionProvider'])
         self.inputs = self.session.get_inputs()[0].name
         self.labels = self.session.get_outputs()[0].name
@@ -167,7 +167,7 @@ class PredictorOnnx(AbstractMLModel, ABC):
         # Implement suggesting hyperparameters using Optuna
         pass
 
-    def save_model(self, path):
+    def save_regressor(self, path):
         # Implement saving the model
         pass
 

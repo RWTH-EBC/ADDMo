@@ -60,7 +60,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         return self.model.named_steps["model"].get_params(deep=deep)
 
     def default_hyperparameter(self):
-        return self.model.get_params()
+        return self.get_params()
 
 
 class MLP(BaseScikitLearnModel):

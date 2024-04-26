@@ -1,6 +1,6 @@
 import pandas as pd
 from core.s3_model_tuning.models.scikit_learn_models import BaseScikitLearnModel
-from core.s3_model_tuning.models.scikit_learn_models import MLP, LinearReg
+from core.s3_model_tuning.models.scikit_learn_models import ScikitMLP, LinearReg
 from core.s3_model_tuning.models.model_factory import ModelFactory
 from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
@@ -14,7 +14,7 @@ print(df.head())
 X_train, X_test, y_train, y_test = train_test_split(df, df['price'], test_size=0.2, random_state=42)
 #instance of the model
 model1 = LinearReg()
-model2= MLP()
+model2= ScikitMLP()
 
 model1.fit(X_train, y_train)
 model2.fit(X_train, y_train)

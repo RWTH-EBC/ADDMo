@@ -108,7 +108,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         return self.regressor.get_params()
 
 
-class MLP(BaseScikitLearnModel):
+class ScikitMLP(BaseScikitLearnModel):
     """Scikit-learn MLPRegressor model."""
 
     def __init__(self):
@@ -143,7 +143,7 @@ class MLP(BaseScikitLearnModel):
         return hyperparameter_grid
 
 
-class MLP_TargetTransformed(MLP):
+class ScikitMLP_TargetTransformed(ScikitMLP):
     def __init__(self):
         # Create an instance of the scikit-learn model including a scaler
         self.regressor = Pipeline(

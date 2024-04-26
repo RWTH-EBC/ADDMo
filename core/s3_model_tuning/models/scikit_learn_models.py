@@ -1,18 +1,18 @@
 import os
-import skl2onnx
+
 import joblib
 import json
 import sklearn
-import subprocess
+
 import pandas as pd
 from abc import ABC
 from sklearn.neural_network import MLPRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import TransformedTargetRegressor
-from core.s3_model_tuning.models.metadata.modelmetadata import ModelMetadata
 from skl2onnx import to_onnx
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
+from core.s3_model_tuning.models.abstract_model import ModelMetadata
 from sklearn.linear_model import LinearRegression
 from core.util.definitions import get_commit_id
 
@@ -90,7 +90,6 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
                 print(f"Model saved to {path}.")
 
     def load_regressor(self, regressor):
-        # Implement model loading
         self.regressor = regressor
 
     def to_scikit_learn(self):

@@ -46,20 +46,25 @@ class ModelFactory:
             )
 
     def load_model(self, path):
- #Todo:
+        # Todo:
         # this is not dynamic! Here should be something like "if directory of path
         # contains metadata load it, else print a raise an descriptive error", also this whole meta data
         # thing is only required for joblib, not for ONNX, so put it into the respective if clause.
 
         if path.endswith('.joblib'):
 
-            metadata_path = os.path.join(root_dir(), 'core', 's3_model_tuning', 'models',
-                                         'metadata', path + '.json')
-            if Path(metadata_path).is_file():
+            directory = os.path.dirname(path)
+            filename = os.path.basename(path)
+            metadata_filename = os.path.splitext(filename)[0] + '_metadata.json'
+            metadata_path = os.path.join(directory, metadata_filename)
+
+            if os.path.exists(metadata_path):
                 with open(metadata_path) as f:
                     metadata = json.load(f)
             else:
-                raise FileNotFoundError(f'The metadata file {metadata_path} does not exist. ')
+                raise FileNotFoundError(
+                    f'The metadata file {metadata_path} does not exist. Try saving the model before loading it or specify the path where model is saved ')
+
             addmo_class = metadata.get('addmo_class')
             addmo_model_class = ModelFactory.model_factory(addmo_class)
             model = joblib.load(path)

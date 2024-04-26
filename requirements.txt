@@ -1,5 +1,5 @@
 pandas==2.2.1
-scikit-learn==1.4.1
+scikit-learn==1.4.0
 hyperopt==0.2.7
 optuna==3.6.1
 matplotlib==3.8.4
@@ -11,3 +11,5 @@ skl2onnx==1.16.0
 seaborn==0.13.2
 plotly==5.20.0
 numpy==1.23.3
+onnxruntime==1.17.3
+

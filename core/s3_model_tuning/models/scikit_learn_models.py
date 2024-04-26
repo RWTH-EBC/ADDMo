@@ -4,6 +4,7 @@ import joblib
 import json
 import sklearn
 import subprocess
+import pandas as pd
 from abc import ABC
 from sklearn.neural_network import MLPRegressor
 from sklearn.pipeline import Pipeline
@@ -13,6 +14,8 @@ from core.s3_model_tuning.models.metadata.modelmetadata import ModelMetadata
 from skl2onnx import to_onnx
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from sklearn.linear_model import LinearRegression
+from core.util.definitions import get_commit_id
+
 
 class BaseScikitLearnModel(AbstractMLModel, ABC):
     """
@@ -24,77 +27,95 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         model (Pipeline): A scikit-learn Pipeline object containing the scaler and the provided model.
     """
 
-    def __init__(self, model):
+    def __init__(self, regressor):
         # Create an instance of the scikit-learn model including a scaler
-        self.model = Pipeline(
+        self.regressor = Pipeline(
             steps=[
                 ("scaler", StandardScaler()),  # scale the features
-                ("model", model)  # scaling the target variable through TransformedTargetRegressor
+                ("model", regressor)  # scaling the target variable through TransformedTargetRegressor
                 # is not compatible with ONNX
             ]
         )
 
-    def fit(self, x, y): #Todo catch exception if x or y is not a pandas dataframe / update comments
+    def fit(self, x, y):  # Todo catch exception if x or y is not a pandas dataframe / update comments
+
+        if not isinstance(x, pd.DataFrame):
+            raise TypeError('x should be a pandas dataframe and not of type', type(x))
+        if not isinstance(y, (pd.Series, pd.DataFrame)):
+            raise TypeError('y should be a pandas dataframe/series and not of type', type(y))
         self.x = x  # Save the training data to be used later for ONNX conversion
-        self.y = y  # save target column for metadata
-        self.model.fit(x, y)  # Train the model
+        self.y = y  # Save the target column to get target name for metadata
+        self.regressor.fit(x, y)  # Train the model
 
     def predict(self, x):
-        return self.model.predict(x)  # Make predictions
+        return self.regressor.predict(x)  # Make predictions
 
-    def save_metadata(self, path):
-        #Todo: metadata should be saved at same directory as the model, having the same file name with suffix <modelname_metadata>
+    def addmo_class(self):
+        return type(self).__name__
 
-        self.metadata = ModelMetadata( #Todo:
-            addmo_class=type(self).__name__,
-            addmo_commit_id = subprocess.check_output(["git", "describe", "--always"]).strip().decode(),
+    def save_metadata(self, directory, filename):
+        # Todo: metadata should be saved at same directory as the model, having the same file name with suffix <modelname_metadata>
+
+        self.metadata = ModelMetadata(  # Todo:
+            addmo_class=self.addmo_class(),
+            addmo_commit_id=get_commit_id(),
             library=sklearn.__name__,  # dynamic: if we add keras class later
-            library_model_type=type(self.model.named_steps['model']).__name__,
+            library_model_type=type(self.regressor.named_steps['model']).__name__,
             library_version=sklearn.__version__,
-            target_name='self.y.name',
-            features_ordered=['list(self.x.columns)'],
+            target_name=self.y.name,
+            features_ordered=list(self.x.columns),
             preprocessing=['StandardScaler for all features'],
             instructions='Pass a single or multiple observations with features in the order listed above.')
 
-        metadata_path = os.path.join('core/s3_model_tuning/models/metadata', path + '.json')
+        filename = os.path.splitext(filename)[0]
+        if filename == self.addmo_class():
+            metadata_path = os.path.join(directory, filename + '_metadata.json')
+        else:
+            metadata_path = os.path.join(directory, filename + '_metadata.json')  # + self.addmo_class()
+
         with open(metadata_path, 'w') as f:
             json.dump(self.metadata.dict(), f)
-            print('metadata saved as', metadata_path)
+            # print('Metadata saved to', metadata_path)
 
+    def save_regressor(self, directory, filename=None, file_type='joblib'):  # Todo: change accordingly
+        # Todo: if filename none use the name of the model class
 
-    def save_regressor(self, directory, filename=None, type='joblib'): #Todo: change accordingly
-        #Todo: if filename none use the name of the model class
+        if filename is None:
+            filename = self.addmo_class() + '.' + file_type
 
-        self.save_metadata(directory)
+        if filename.endswith('.joblib'):
+            joblib.dump(self.regressor, os.path.join(directory, filename))
+            self.save_metadata(directory, filename)
+            print('Model saved to', os.path.join(directory, filename))
 
-        if directory.endswith('.joblib'):
-            joblib.dump(self.model, directory)
-            print("Model saved successfully.")
-
-        elif directory.endswith('.onnx'):
-            onx = to_onnx(self.model, self.x[:1])
-            with open(directory, "wb") as f:
+        elif filename.endswith('.onnx'):
+            onx = to_onnx(self.regressor, self.x[:1])
+            with open(os.path.join(directory, filename), "wb") as f:
                 f.write(onx.SerializeToString())
-                print('model saved successfully') #Todo: print: model saved to {path+filename+type}
+                print('Model saved to',
+                      os.path.join(directory, filename))  # Todo: print: model saved to {path+filename+type}
 
-    # def load_model(self, path):
-    # Implement model loading
-    # self.model = joblib.load(path)
+    # def get_filename(self, filename):
+    # return
+
+    def load_regressor(self, regressor):
+        # Implement model loading
+        self.regressor = regressor
 
     def to_scikit_learn(self):
-        return self.model
+        return self.regressor
 
     def set_params(self, hyperparameters):
         # access the hyperparameters of the model within the pipeline within the
         # TransformedTargetRegressor
-        self.model.named_steps["model"].set_params(**hyperparameters)
+        self.regressor.named_steps["model"].set_params(**hyperparameters)
 
     def get_params(self, deep=True):
         # Get the hyperparameters of the model
-        return self.model.named_steps["model"].get_params(deep=deep)
+        return self.regressor.named_steps["model"].get_params(deep=deep)
 
     def default_hyperparameter(self):
-        return self.model.get_params()
+        return self.regressor.get_params()
 
 
 class MLP(BaseScikitLearnModel):
@@ -135,7 +156,7 @@ class MLP(BaseScikitLearnModel):
 class MLP_TargetTransformed(MLP):
     def __init__(self):
         # Create an instance of the scikit-learn model including a scaler
-        self.model = Pipeline(
+        self.regressor = Pipeline(
             steps=[
                 ("scaler", StandardScaler()),  # scale the features
                 ("model", TransformedTargetRegressor(regressor=MLPRegressor()))
@@ -147,11 +168,11 @@ class MLP_TargetTransformed(MLP):
     def set_params(self, hyperparameters):
         # access the hyperparameters of the model within the pipeline within the
         # TransformedTargetRegressor
-        self.model.named_steps["model"].regressor.set_params(**hyperparameters)
+        self.regressor.named_steps["model"].regressor.set_params(**hyperparameters)
 
     def get_params(self, deep=True):
         # Get the hyperparameters of the model
-        return self.model.named_steps["model"].regressor.get_params(deep=deep)
+        return self.regressor.named_steps["model"].regressor.get_params(deep=deep)
 
 
 class LinearReg(BaseScikitLearnModel):

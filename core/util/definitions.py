@@ -1,5 +1,5 @@
 import os
-
+import subprocess
 from core.util.load_save import create_or_clean_directory
 from core.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
 from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
@@ -45,3 +45,10 @@ def results_dir_extrapolation_experiment(experiment_name: str):
     )
     return create_or_clean_directory(path)
 
+def get_commit_id():
+
+    try:
+        commit_id= subprocess.check_output(["git", "describe", "--always"]).strip().decode()
+    except subprocess.CalledProcessError:
+        commit_id = 'Unknown'
+    return commit_id

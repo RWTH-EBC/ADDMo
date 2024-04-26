@@ -45,18 +45,13 @@ class ModelFactory:
                 f"Available custom models are: {', '.join(custom_model_names)}. "
             )
 
-    def load_model(self, path):
-        # Todo:
-        # this is not dynamic! Here should be something like "if directory of path
-        # contains metadata load it, else print a raise an descriptive error", also this whole meta data
-        # thing is only required for joblib, not for ONNX, so put it into the respective if clause.
+    @staticmethod
+    def load_model(abs_path: str) -> AbstractMLModel:
+        '''Load the model from the specified path and return the model instance.'''
 
-        if path.endswith('.joblib'):
-
-            directory = os.path.dirname(path)
-            filename = os.path.basename(path)
-            metadata_filename = os.path.splitext(filename)[0] + '_metadata.json'
-            metadata_path = os.path.join(directory, metadata_filename)
+        # Load regressor from joblib file to addmo model class
+        if abs_path.endswith('.joblib'):
+            metadata_path = f"{abs_path}_metadata.json"
 
             if os.path.exists(metadata_path):
                 with open(metadata_path) as f:
@@ -65,16 +60,17 @@ class ModelFactory:
                 raise FileNotFoundError(
                     f'The metadata file {metadata_path} does not exist. Try saving the model before loading it or specify the path where model is saved ')
 
-            addmo_class = metadata.get('addmo_class')
-            addmo_model_class = ModelFactory.model_factory(addmo_class)
-            model = joblib.load(path)
-            addmo_model_class.load_regressor(model)
+            addmo_class_name = metadata.get('addmo_class')
+            addmo_class = ModelFactory.model_factory(addmo_class_name)
+            regressor = joblib.load(abs_path)
+            addmo_class.load_regressor(regressor)
 
-        elif path.endswith('.onnx'):
-            addmo_model_class = PredictorOnnx()
-            addmo_model_class.load_regressor(path)
+        # Load the regressor from onnx file to PredictorOnnx class
+        elif abs_path.endswith('.onnx'):
+            addmo_class = PredictorOnnx()
+            addmo_class.load_regressor(abs_path)
 
         else:
             raise ValueError(" '.joblib' or '.onnx' path expected")
 
-        return (addmo_model_class)
+        return addmo_class

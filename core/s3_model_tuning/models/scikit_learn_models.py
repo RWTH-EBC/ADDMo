@@ -38,11 +38,6 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         )
 
     def fit(self, x, y):  # Todo catch exception if x or y is not a pandas dataframe / update comments
-
-        if not isinstance(x, pd.DataFrame):
-            raise TypeError('x should be a pandas dataframe and not of type', type(x))
-        if not isinstance(y, (pd.Series, pd.DataFrame)):
-            raise TypeError('y should be a pandas dataframe/series and not of type', type(y))
         self.x = x  # Save the training data to be used later for ONNX conversion
         self.y = y  # Save the target column to get target name for metadata
         self.regressor.fit(x, y)  # Train the model
@@ -50,53 +45,49 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
     def predict(self, x):
         return self.regressor.predict(x)  # Make predictions
 
-    def addmo_class(self):
-        return type(self).__name__
+    def _save_metadata(self, directory, regressor_filename):
 
-    def save_metadata(self, directory, filename):
-        # Todo: metadata should be saved at same directory as the model, having the same file name with suffix <modelname_metadata>
+        # feature names can only be extracted if x and y are pandas dataframes
+        if not isinstance(self.x, pd.DataFrame):
+            raise TypeError('x should be a pandas dataframe and not of type', type(self.x))
+        if not isinstance(self.y, (pd.Series, pd.DataFrame)):
+            raise TypeError('y should be a pandas dataframe/series and not of type', type(self.y))
 
-        self.metadata = ModelMetadata(  # Todo:
-            addmo_class=self.addmo_class(),
+        # define metadata
+        self.metadata = ModelMetadata(
+            addmo_class=type(self).__name__,
             addmo_commit_id=get_commit_id(),
-            library=sklearn.__name__,  # dynamic: if we add keras class later
+            library=sklearn.__name__,
             library_model_type=type(self.regressor.named_steps['model']).__name__,
             library_version=sklearn.__version__,
             target_name=self.y.name,
             features_ordered=list(self.x.columns),
-            preprocessing=['StandardScaler for all features'],
-            instructions='Pass a single or multiple observations with features in the order listed above.')
+            preprocessing=['StandardScaler for all features'])
 
-        filename = os.path.splitext(filename)[0]
-        if filename == self.addmo_class():
-            metadata_path = os.path.join(directory, filename + '_metadata.json')
-        else:
-            metadata_path = os.path.join(directory, filename + '_metadata.json')  # + self.addmo_class()
-
+        # save metadata
+        regressor_filename = os.path.splitext(regressor_filename)[0]
+        metadata_path = os.path.join(directory, regressor_filename + '_metadata.json')
         with open(metadata_path, 'w') as f:
             json.dump(self.metadata.dict(), f)
-            # print('Metadata saved to', metadata_path)
 
-    def save_regressor(self, directory, filename=None, file_type='joblib'):  # Todo: change accordingly
-        # Todo: if filename none use the name of the model class
+    def save_regressor(self, directory, filename=None, file_type='joblib'):
 
         if filename is None:
-            filename = self.addmo_class() + '.' + file_type
+            filename = type(self).__name__
 
-        if filename.endswith('.joblib'):
-            joblib.dump(self.regressor, os.path.join(directory, filename))
-            self.save_metadata(directory, filename)
-            print('Model saved to', os.path.join(directory, filename))
+        path = os.path.join(directory, f"{filename}.{file_type}")
 
-        elif filename.endswith('.onnx'):
+        if file_type == 'joblib':
+            joblib.dump(self.regressor, path)
+            self._save_metadata(directory, filename)
+            print(f"Model saved to {path}")
+
+        elif file_type == 'onnx':
             onx = to_onnx(self.regressor, self.x[:1])
-            with open(os.path.join(directory, filename), "wb") as f:
+            self._save_metadata(directory, filename)
+            with open(path, "wb") as f:
                 f.write(onx.SerializeToString())
-                print('Model saved to',
-                      os.path.join(directory, filename))  # Todo: print: model saved to {path+filename+type}
-
-    # def get_filename(self, filename):
-    # return
+                print(f"Model saved to {path}.")
 
     def load_regressor(self, regressor):
         # Implement model loading

@@ -133,7 +133,7 @@ class AbstractMLModel(ABC):
 
 
 class PredictorOnnx(AbstractMLModel, ABC):
-    """overwrites predict and load function for onnx format """
+    """overwrites predict and load function for onnx format"""
 
     def __init__(self):
         super().__init__()
@@ -142,7 +142,7 @@ class PredictorOnnx(AbstractMLModel, ABC):
         self.model = None
 
     def load_regressor(self, path):
-        self.model = rt.InferenceSession(path, providers=['CPUExecutionProvider'])
+        self.model = rt.InferenceSession(path, providers=["CPUExecutionProvider"])
         self.inputs = self.model.get_inputs()[0].name
         self.labels = self.model.get_outputs()[0].name
 
@@ -174,31 +174,25 @@ class PredictorOnnx(AbstractMLModel, ABC):
         warnings.warn(f"This function is not implemented for ONNX models")
 
 
-
 class ModelMetadata(BaseModel):
-    """
-        ModelMetadata class represents metadata associated with the trained machine learning model when saved in joblib format.
+    """ModelMetadata class represents metadata associated with the trained machine
+    learning model when saved in joblib format."""
 
-        Attributes:
-            addmo_class (str): ADDMo model class type, from which the regressor was saved.
-            addmo_commit_id (str): Current commit id when the model is saved.
-            library (str): ML library origin of the regressor.
-            library_model_type (str): Type of regressor within library.
-            library_version (str): Library version used.
-            target_name (str): Name of the target variable.
-            features_ordered (list): Name and order of features.
-            preprocessing (list): Preprocessing steps applied to the features.
-            instructions (str): Instructions for passing input data for making predictions.
-        """
-
-    addmo_class: str = Field(description='ADDMo model class type, from which the regressor was saved.')
-    addmo_commit_id: str = Field ( description= 'Current commit id when the model is saved.')
-    library: str = Field(description='ML library origin of the regressor')
-    library_model_type: str = Field(description='Type of regressor within library')
-    library_version: str = Field(description='library version used')
+    addmo_class: str = Field(
+        description="ADDMo model class type, from which the regressor was saved."
+    )
+    addmo_commit_id: str = Field(
+        description="Current commit id when the model is saved."
+    )
+    library: str = Field(description="ML library origin of the regressor")
+    library_model_type: str = Field(description="Type of regressor within library")
+    library_version: str = Field(description="library version used")
     target_name: str = Field(description="Name of the target variable")
-    features_ordered: list = Field(description='Name and order of features')
-    preprocessing: list = Field('StandardScaler for all features',
-                                description="Preprocessing steps applied to the features.")
-    instructions: str = Field('Pass a single or multiple observations with features in the order listed above',
-                              description="Instructions for passing input data for making predictions.")
+    features_ordered: list = Field(description="Name and order of features")
+    preprocessing: list = Field(
+        description="Preprocessing steps applied to the features."
+    )
+    instructions: str = Field(
+        "Pass a single or multiple observations with features in the order listed above",
+        description="Instructions for passing input data for making predictions.",
+    )

@@ -66,6 +66,16 @@ class AbstractMLModel(ABC):
         self.regressor = model_instance
 
     @abstractmethod
+    def build_regressor(self):
+        """""
+        Build model for Keras by defining the architecture of the model
+
+        Returns:
+            A Keras model
+        """
+        pass
+
+    @abstractmethod
     def to_scikit_learn(self):
         """
         Convert the model including scaler to a scikit-learn compatible model.
@@ -130,6 +140,8 @@ class AbstractMLModel(ABC):
             A dictionary with a default set of hyperparameters.
         """
         pass
+
+
 
 
 class PredictorOnnx(AbstractMLModel, ABC):

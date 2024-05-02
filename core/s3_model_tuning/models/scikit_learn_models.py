@@ -106,6 +106,8 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
 
     def default_hyperparameter(self):
         return self.regressor.get_params()
+    def build_regressor(self):
+        pass
 
 
 class ScikitMLP(BaseScikitLearnModel):

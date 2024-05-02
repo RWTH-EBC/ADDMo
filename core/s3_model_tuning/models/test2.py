@@ -6,16 +6,17 @@ from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
+import numpy as np
 
 data = fetch_california_housing()
 df = pd.DataFrame(data.data, columns=data.feature_names)
 df['price'] = pd.Series(data.target)
-print(df.head())
 X_train, X_test, y_train, y_test = train_test_split(df.iloc[:,:-1], df['price'], test_size=0.2, random_state=42)
 #instance of the model
 model1 = LinearReg()
 model2= ScikitMLP()
-
+a= df['Longitude'].values.astype(np.double)
+print(a.ndim)
 model1.fit(X_train, y_train)
 model2.fit(X_train, y_train)
 model1.save_regressor(r'C:\Users\mre-rpa\PycharmProjects\addmo\addmo-automated-ml-regression\0000_testfiles', file_type='joblib')
@@ -29,8 +30,8 @@ m3= m3.load_model(r"C:\Users\mre-rpa\PycharmProjects\addmo\addmo-automated-ml-re
 print(m2)
 y_pred= m2.predict(X_test)
 print(m3)
-#y_pred1=m3.predict(X_test)
+y_pred1=m3.predict(X_test)
 r_squared = r2_score(y_test, y_pred)
-#r_squared2= r2_score(y_test, y_pred1)
+r_squared2= r2_score(y_test, y_pred1)
 print("R-squared (1):", r_squared)
-#print(" R-squared (2):", r_squared2)
+print(" R-squared (2):", r_squared2)

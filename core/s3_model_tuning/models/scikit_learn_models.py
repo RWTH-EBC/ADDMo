@@ -62,7 +62,10 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             library_version=sklearn.__version__,
             target_name=self.y.name,
             features_ordered=list(self.x.columns),
-            preprocessing=['StandardScaler for all features'])
+            input_shape=self.x.shape[1],
+            output_shape=len(set(self.y)),
+            preprocessing=['StandardScaler for all features'],
+            learning_rate= 0)
 
         # save metadata
         regressor_filename = os.path.splitext(regressor_filename)[0]

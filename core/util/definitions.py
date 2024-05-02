@@ -59,7 +59,8 @@ def load_metadata(abs_path: str):
 
     # Load metadata from a JSON file associated with the specified absolute path.
 
-    metadata_path = f"{abs_path}_metadata.json"
+    filename= os.path.splitext(abs_path)[0]
+    metadata_path = f"{filename}_metadata.json"
 
     if os.path.exists(metadata_path):
         with open(metadata_path) as f:

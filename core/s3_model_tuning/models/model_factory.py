@@ -8,8 +8,8 @@ from core.s3_model_tuning.models import keras_model
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import PredictorOnnx
 from core.util.definitions import load_metadata
+from tensorflow import keras
 from tensorflow.keras.models import load_model
-
 
 class ModelFactory:
     """
@@ -17,17 +17,19 @@ class ModelFactory:
     """
 
     @staticmethod
-    def model_factory(model_type: str) -> AbstractMLModel:
+    def model_factory(model_type: str, **kwargs) -> AbstractMLModel:
         """Get the model instance dynamically."""
 
         # If model is based on scikit-learn
         if hasattr(scikit_learn_models, model_type):
+            if kwargs:
+                raise ValueError("No keyword arguments allowed for scikit-learn models.")
             custom_model_class = getattr(scikit_learn_models, model_type)
             return custom_model_class()
 
         #  If model is based on e.g. Keras
-        elif hasattr(keras_models, model_type):
-             custom_model_class = getattr(keras_models, model_type)
+        elif hasattr(keras_model, model_type):
+             custom_model_class = getattr(keras_model, model_type)
              return custom_model_class(**kwargs)
 
         # If model is not found
@@ -66,9 +68,13 @@ class ModelFactory:
         elif abs_path.endswith('.keras'):
             metadata = load_metadata(abs_path)
             addmo_class_name = metadata.get('addmo_class')
-            addmo_class = ModelFactory.model_factory(addmo_class_name)
-            regressor= keras.saving.load_model(filepath, custom_objects=None, compile=True, safe_mode=True)
-            addmo_class.load_regressor(regressor)
+            input_shape = metadata.get('input_shape')
+            output_shape= metadata.get('output_shape')
+            learning_rate= metadata.get('learning_rate')
+            kwargs = {'input_shape': input_shape, 'output_shape': output_shape}
+            #addmo_class = ModelFactory.model_factory(addmo_class_name, **kwargs)
+            #regressor= keras.models.load_model(abs_path, custom_objects=None, compile=True, safe_mode=True)
+            addmo_class= keras.models.load_model(abs_path, custom_objects=None, compile=True, safe_mode=True)
 
         else:
             raise ValueError(" '.joblib', '.onnx' or '.keras' path expected")

@@ -1,5 +1,8 @@
 from abc import ABC
 import keras
+import os
+import pandas as pd
+import json
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Activation
 from tensorflow.keras.optimizers import Adam
@@ -16,10 +19,10 @@ class BaseKerasModel(AbstractMLModel, ABC):
     common functionalities specific to keras sequential model.
 
     Attributes:
-        model (Pipeline): A keras model.  #ask: should be a pipeline like scikit or just model?
+        model: A keras model.  #ask: should be a pipeline like scikit or just model?
     """
 
-    def __init__(self):
+    def __init__(self, input_shape, output_shape):
         # Create an instance of keras model
         self.input_shape = input_shape
         self.output_shape = output_shape
@@ -29,18 +32,20 @@ class BaseKerasModel(AbstractMLModel, ABC):
         # Add layers to model
         #ask: can we make it dynamic and will it be better to make it private?
         regressor = Sequential()
-        regressor.add(Dense(units=64, input_shape=self.input_shape))
+        regressor.add(Dense(units=64, input_shape=(self.input_shape,)))
         regressor.add(Activation('relu'))
-        regressor.add(Dropout=0.5)
-        regressor.add(Dense(self.output_shape))
-        regressor.add(Activation('softmax'))
+        regressor.add(Dropout(0.5))
+        regressor.add(Dense(self.output_shape, activation='softmax'))
         return regressor
 
     def compile_model(self, learning_rate=0.0001, epochs=10):
         #optimizer = Adam(lr=learning_rate)
-        self.regressor.compile(loss='mse', optimizer= 'sgd', metrics=['accuracy'])
+        self.learning_rate= learning_rate
+        self.regressor.compile(loss='sparse_categorical_crossentropy', optimizer= 'sgd', metrics=['accuracy'])
 
     def  fit(self, x, y, epochs=10, batch_size=32, validation_data= None):
+        self.x= x   # Save the training data to get feature order for metadata
+        self.y = y  # Save the target column to get target name for metadata
         self.regressor.fit(x, y, epochs=epochs, batch_size=batch_size, validation_data=validation_data)
 
     def predict(self, x):
@@ -59,11 +64,15 @@ class BaseKerasModel(AbstractMLModel, ABC):
             addmo_class=type(self).__name__,
             addmo_commit_id=get_commit_id(),
             library=keras.__name__,
-            library_model_type=type(self.regressor.named_steps['model']).__name__,
+            library_model_type='Sequential',
             library_version=keras.__version__,
             target_name=self.y.name,
             features_ordered=list(self.x.columns),
-            preprocessing=['We can use this to define the architecture maybe?'])
+            input_shape= self.x.shape[1],  # kwargs for keras model factory
+            output_shape = len(set(self.y)) , # kwargs for keras model factory
+            preprocessing=['We can use this to define the architecture maybe?'],
+            learning_rate= self.learning_rate )
+
 
         # save metadata
         regressor_filename = os.path.splitext(regressor_filename)[0]

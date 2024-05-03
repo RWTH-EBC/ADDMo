@@ -13,16 +13,22 @@ class ModelFactory:
     def model_factory(model_type: str) -> AbstractMLModel:
         """Get the model instance dynamically."""
 
+        custom_model_class = None
+
         # If model is based on scikit-learn
         if hasattr(scikit_learn_models, model_type):
+            # Check if the model is a subclass of AbstractMLModel
             custom_model_class = getattr(scikit_learn_models, model_type)
-            return custom_model_class()
 
         # You may add something like:
         # # If model is based on e.g. Keras
         # elif hasattr(keras_models, model_type):
         #     custom_model_class = getattr(keras_models, model_type)
         #     return custom_model_class(**kwargs)
+
+        # Return model if valid and a subclass of AbstractMLModel
+        if (custom_model_class is not None) and (issubclass(custom_model_class, AbstractMLModel)):
+            return custom_model_class()
 
         # If model is not found
         else:

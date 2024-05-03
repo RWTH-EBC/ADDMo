@@ -24,12 +24,12 @@ class BaseKerasModel(AbstractMLModel, ABC):
 
     def __init__(self, input_shape, output_shape):
         # Create an instance of keras model
-        self.input_shape = input_shape
-        self.output_shape = output_shape
+        self.input_shape = input_shape  # Required for first layer of MLP
+        self.output_shape = output_shape # Required for final layer of MLP
         self.regressor= self.build_regressor()
 
     def build_regressor(self):
-        # Add layers to model
+        # Add layers to model : similar to MLP
         #ask: can we make it dynamic and will it be better to make it private?
         regressor = Sequential()
         regressor.add(Dense(units=64, input_shape=(self.input_shape,)))
@@ -75,7 +75,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
 
 
         # save metadata
-        regressor_filename = os.path.splitext(regressor_filename)[0]
+        regressor_filename = os.path.splitext(regressor_filename)[0] # Remove file extension
         metadata_path = os.path.join(directory, regressor_filename + '_metadata.json')
         with open(metadata_path, 'w') as f:
             json.dump(self.metadata.dict(), f)
@@ -99,16 +99,47 @@ class BaseKerasModel(AbstractMLModel, ABC):
         # Implement setting hyperparameters if needed
         pass
 
-    def get_params(self):
-        # Implement getting hyperparameters if needed
-        pass
+    def get_params(self): # No built-in method
+        return{
+            'input_shape': self.input_shape,
+            'output_shape': self.output_shape,
+            'learning_rate': self.learning_rate,
+            'epochs': self.epochs,
+            'batch_size': self.batch_size,
+             'dropout':
+            }
 
-    def optuna_hyperparameter_suggest(self, trial):
-        # Implement hyperparameter suggestions for Optuna if needed
+
+
+
+    def optuna_hyperparameter_suggest(self, trial):  #ask martin
+        hyperparameters = {}
+
+        # Suggest hyperparameters
+        n_layers = trial.suggest_int("n_layers", 1, 3)
+        hidden_layer_sizes = tuple(
+            trial.suggest_int(f"n_units_l{i}", 1, 100) for i in range(n_layers)
+        )
+
+        # Dynamic hidden layer sizes based on the number of layers
+        hyperparameters["hidden_layer_sizes"] = hidden_layer_sizes
+
+        # Other hyperparameters
+        hyperparameters["activation"] = "relu"
+        hyperparameters["learning_rate"] = trial.suggest_float("learning_rate", 1e-5, 1e-1)
+
+        return hyperparameters
         pass
 
     def grid_search_hyperparameter(self):
-        # Implement defining hyperparameters for grid search if needed
+        hyperparameter_grid = {
+            "hidden_layer_sizes": [(50,), (100,), (50, 50), (100, 100)],
+            "activation": ["tanh", "relu", "softmax", "leaky_relu", "sigmoid", "exponential"],
+            "optimizer": [SGD(), Adam(), RMSprop(), Adagrad()],
+            "epochs": [10,50,100,150],
+            "learning_rate": [0.0001, 0.001, 0.01],
+        }
+        return hyperparameter_grid
         pass
 
     def default_hyperparameter(self):

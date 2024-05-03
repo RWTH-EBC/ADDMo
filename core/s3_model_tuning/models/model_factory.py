@@ -72,9 +72,9 @@ class ModelFactory:
             output_shape= metadata.get('output_shape')
             learning_rate= metadata.get('learning_rate')
             kwargs = {'input_shape': input_shape, 'output_shape': output_shape}
-            #addmo_class = ModelFactory.model_factory(addmo_class_name, **kwargs)
-            #regressor= keras.models.load_model(abs_path, custom_objects=None, compile=True, safe_mode=True)
-            addmo_class= keras.models.load_model(abs_path, custom_objects=None, compile=True, safe_mode=True)
+            addmo_class = ModelFactory.model_factory(addmo_class_name, **kwargs)
+            regressor= keras.models.load_model(abs_path)
+            addmo_class= load_regressor(regressor)
 
         else:
             raise ValueError(" '.joblib', '.onnx' or '.keras' path expected")

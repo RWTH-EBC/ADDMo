@@ -29,10 +29,10 @@ model.compile_model()
 
 # Step 6: Fit the model on training data
 model.fit(X_train, y_train)
-model.save_regressor(r'C:\Users\mre-rpa\PycharmProjects\addmo\addmo-automated-ml-regression\0000_testfiles', 'kera1', file_type='keras')
+model.save_regressor(r'D:\PyCharm 2023.3.5\pythonProject\addmo-automated-ml-regression\0000_testfiles', 'kera1', file_type='keras')
 # Step 7: Use the trained model for prediction
 model2= ModelFactory()
-model2.load_model(r"C:\Users\mre-rpa\PycharmProjects\addmo\addmo-automated-ml-regression\0000_testfiles\kera1.keras")
+model2.load_model(r"D:\PyCharm 2023.3.5\pythonProject\addmo-automated-ml-regression\0000_testfiles\kera1.keras")
 print(model2)
 print(model)
 predictions = model2.predict(X_test)

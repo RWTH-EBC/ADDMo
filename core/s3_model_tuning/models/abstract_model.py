@@ -155,16 +155,17 @@ class PredictorOnnx(AbstractMLModel, ABC):
 
     def load_regressor(self, path):
         self.model = rt.InferenceSession(path, providers=["CPUExecutionProvider"])
-        self.inputs = [input.name for input in self.model.get_inputs()]
+        self.inputs = self.model.get_inputs()[0].name
+        #self.inputs = [input.name for input in self.model.get_inputs()]
         self.labels = self.model.get_outputs()[0].name
 
-    def predict(self, x):
-        input_feed = {}
-        for input_name in self.inputs:
-            input_feed[input_name] = x[input_name].values.astype(np.double)
 
-        print(input_feed)
-        return self.model.run([self.labels], input_feed)
+    def predict(self, x):
+        #input_feed = {}
+        #for input_name in self.inputs:
+            #input_feed[input_name] = x[input_name].values.astype(np.double)
+
+        return self.model.run([self.labels], {self.inputs: x.astype(np.double)})[0]
 
     def default_hyperparameter(self):
         warnings.warn(f"This function is not implemented for ONNX models")

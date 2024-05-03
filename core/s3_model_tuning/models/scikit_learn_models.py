@@ -40,9 +40,15 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
     def fit(self, x, y):  # Todo catch exception if x or y is not a pandas dataframe / update comments
         self.x = x  # Save the training data to be used later for ONNX conversion
         self.y = y  # Save the target column to get target name for metadata
+        if isinstance(x, pd.DataFrame):
+            x = x.values
+        if isinstance(y, (pd.Series, pd.DataFrame)):
+            y = y.values
         self.regressor.fit(x, y)  # Train the model
 
     def predict(self, x):
+        if isinstance(x, pd.DataFrame):
+            x = x.values
         return self.regressor.predict(x)  # Make predictions
 
     def _save_metadata(self, directory, regressor_filename):
@@ -87,7 +93,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
 
         elif file_type == 'onnx':
             onx = to_onnx(self.regressor, self.x[:1])
-            self._save_metadata(directory, filename)
+            #self._save_metadata(directory, filename)
             with open(path, "wb") as f:
                 f.write(onx.SerializeToString())
                 print(f"Model saved to {path}.")

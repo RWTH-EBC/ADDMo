@@ -58,3 +58,14 @@ def sweep_several_tunings():
     }
 
     return sweep_configuration
+
+def sweep_repetitions_only():
+    sweep_configuration = {
+        "name": "tuned_splitting_sweep",
+        "method": "grid",
+        "metric": {"name": "coverage_true_validity", "goal": "maximize"},
+        "parameters": {
+            "repetition": {"values": [1, 2, 3, 4, 5]},
+        }
+    }
+    return sweep_configuration

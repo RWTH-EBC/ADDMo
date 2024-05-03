@@ -47,7 +47,7 @@ def define_config():
         "$\dot{Q}_{heiz}$ in kW": (0, 35)
     }
 
-    config = config_blueprints.no_tuning_config(config)
+    config = config_blueprints.linear_regression_config(config)
 
     return config
 
@@ -101,11 +101,11 @@ def run_all():
 config_temp = define_config()
 
 
-project_name = f"1_{config_temp.simulation_data_name}"
+project_name = f"2_{config_temp.simulation_data_name}"
 # project_name = "Test"
 
 # sweep
-sweep_configuration = sweep_configs.sweep_hidden_layer_sizes()
+sweep_configuration = sweep_configs.sweep_repetitions_only()
 sweep_id = wandb.sweep(sweep_configuration, project=project_name)
 wandb.agent(sweep_id, function=run_all, project=project_name)
 

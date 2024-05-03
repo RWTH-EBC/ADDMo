@@ -22,6 +22,13 @@ def no_tuning_config(config: ExtrapolationExperimentConfig):
     config.config_detector.detectors = ["KNN", "GP", "OCSVM"]
     return config
 
+def linear_regression_config(config: ExtrapolationExperimentConfig):
+    config = no_tuning_config(config)
+    config.config_model_tuning.models = ["ScikitLasso"]
+    config.config_model_tuning.hyperparameter_tuning_kwargs = {"hyperparameter_set": None}
+    return config
+
+
 def tuning_config(config: ExtrapolationExperimentConfig):
     config = no_tuning_config(config)
     config.config_model_tuning.hyperparameter_tuning_type= "OptunaTuner"

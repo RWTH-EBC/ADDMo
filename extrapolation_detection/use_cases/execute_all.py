@@ -32,7 +32,7 @@ from extrapolation_detection.use_cases import (
 # configure config
 config = ExtrapolationExperimentConfig()
 config.simulation_data_name = "Carnot_mid_noise_m0_std0.02"
-config.experiment_name = "000_Carnot_Noise_Tuned"
+config.experiment_name = "00_Lasso2"
 config.shuffle = False
 config.grid_points_per_axis = 300
 config.true_outlier_threshold = 0.2
@@ -43,7 +43,7 @@ config.config_explo_quant.exploration_bounds = {
     "$\dot{Q}_{heiz}$ in kW": (0, 35)
 }
 
-config = config_blueprints.tuning_config(config)
+config = config_blueprints.linear_regression_config(config)
 #
 # Configure the logger
 result_folder = results_dir_extrapolation_experiment(config.experiment_name)

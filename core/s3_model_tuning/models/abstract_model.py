@@ -156,14 +156,16 @@ class PredictorOnnx(AbstractMLModel, ABC):
     def load_regressor(self, path):
         self.model = rt.InferenceSession(path, providers=["CPUExecutionProvider"])
         self.inputs = self.model.get_inputs()[0].name
-        #self.inputs = [input.name for input in self.model.get_inputs()]
+        #self.inputs = [input.name for input in self.model.get_inputs()]  #for dataframe input
         self.labels = self.model.get_outputs()[0].name
 
 
     def predict(self, x):
-        #input_feed = {}
+        #input_feed = {}   #dictionary input for dataframe
         #for input_name in self.inputs:
-            #input_feed[input_name] = x[input_name].values.astype(np.double)
+           # input_feed[input_name] = x[input_name].values.astype(np.double)
+
+        #print(input_feed)
 
         return self.model.run([self.labels], {self.inputs: x.astype(np.double)})[0]
 
@@ -208,7 +210,7 @@ class ModelMetadata(BaseModel):
     library: str = Field(description="ML library origin of the regressor")
     library_model_type: str = Field(description="Type of regressor within library")
     library_version: str = Field(description="library version used")
-    target_name: str = Field(description="Name of the target variable")
+    target_name: list = Field(description="Name of the target variable")
     features_ordered: list = Field(description="Name and order of features")
     input_shape: int = Field(description="Number of columns in training dataset")
     output_shape: int = Field(description="Number of categories in target column")
@@ -219,5 +221,4 @@ class ModelMetadata(BaseModel):
         "Pass a single or multiple observations with features in the order listed above",
         description="Instructions for passing input data for making predictions.",
     )
-    learning_rate: float = Field (description= "Learning rate for keras model")
 

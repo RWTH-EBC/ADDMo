@@ -65,16 +65,18 @@ class ModelFactory:
             addmo_class = PredictorOnnx()
             addmo_class.load_regressor(abs_path)
 
+        # Load the regressor from keras file to addmo model class
         elif abs_path.endswith('.keras'):
             metadata = load_metadata(abs_path)
             addmo_class_name = metadata.get('addmo_class')
             input_shape = metadata.get('input_shape')
             output_shape= metadata.get('output_shape')
-            learning_rate= metadata.get('learning_rate')
             kwargs = {'input_shape': input_shape, 'output_shape': output_shape}
             addmo_class = ModelFactory.model_factory(addmo_class_name, **kwargs)
             regressor= keras.models.load_model(abs_path)
-            addmo_class= load_regressor(regressor)
+            print(regressor)
+            addmo_class.load_regressor(regressor)
+            print(addmo_class)
 
         else:
             raise ValueError(" '.joblib', '.onnx' or '.keras' path expected")

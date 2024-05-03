@@ -40,15 +40,15 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
     def fit(self, x, y):  # Todo catch exception if x or y is not a pandas dataframe / update comments
         self.x = x  # Save the training data to be used later for ONNX conversion
         self.y = y  # Save the target column to get target name for metadata
-        if isinstance(x, pd.DataFrame):
-            x = x.values
-        if isinstance(y, (pd.Series, pd.DataFrame)):
-            y = y.values
+        #if isinstance(x, pd.DataFrame):
+            #x = x.values
+        #if isinstance(y, (pd.Series, pd.DataFrame)):
+            #y = y.values
         self.regressor.fit(x, y)  # Train the model
 
     def predict(self, x):
-        if isinstance(x, pd.DataFrame):
-            x = x.values
+        #if isinstance(x, pd.DataFrame):
+            #x = x.values
         return self.regressor.predict(x)  # Make predictions
 
     def _save_metadata(self, directory, regressor_filename):
@@ -66,12 +66,11 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             library=sklearn.__name__,
             library_model_type=type(self.regressor.named_steps['model']).__name__,
             library_version=sklearn.__version__,
-            target_name=self.y.name,
+            target_name=[(self.y.name)],
             features_ordered=list(self.x.columns),
             input_shape=self.x.shape[1],
             output_shape=len(set(self.y)),
-            preprocessing=['StandardScaler for all features'],
-            learning_rate= 0)
+            preprocessing=['StandardScaler for all features'])
 
         # save metadata
         regressor_filename = os.path.splitext(regressor_filename)[0]
@@ -115,7 +114,8 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
 
     def default_hyperparameter(self):
         return self.regressor.get_params()
-    def build_regressor(self):
+
+    def build_regressor(self):       # For keras model
         pass
 
 

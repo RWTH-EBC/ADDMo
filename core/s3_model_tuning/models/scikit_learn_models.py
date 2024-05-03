@@ -1,6 +1,8 @@
 from abc import ABC
 
 from sklearn.neural_network import MLPRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Lasso
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import TransformedTargetRegressor
@@ -116,3 +118,28 @@ class MLP_TargetTransformed(MLP):
     def get_params(self, deep=True):
         # Get the hyperparameters of the model
         return self.model.named_steps["model"].regressor.get_params(deep=deep)
+
+
+class ScikitLinearRegression(BaseScikitLearnModel):
+    """Linear Regression model"""
+
+    def __init__(self):
+        super().__init__(LinearRegression())
+
+    def grid_search_hyperparameter(self):
+        pass
+
+    def optuna_hyperparameter_suggest(self, trial):
+        pass
+
+class ScikitLasso(BaseScikitLearnModel):
+    """Lasso model"""
+
+    def __init__(self):
+        super().__init__(Lasso())
+
+    def grid_search_hyperparameter(self):
+        pass
+
+    def optuna_hyperparameter_suggest(self, trial):
+        pass

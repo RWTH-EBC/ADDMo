@@ -13,7 +13,7 @@ from core.s3_model_tuning.models.keras_model import BaseKerasModel
 from core.util.definitions import root_dir
 
 
-def test_save_load_model(model, dir_path, X_test, y_test, file_type='joblib'):
+def test_save_load_model(model, dir_path, X_test, y_test, file_type):
     """
     Test saving and loading of model.
 
@@ -41,6 +41,7 @@ def test_save_load_model(model, dir_path, X_test, y_test, file_type='joblib'):
 
     # Clean up saved files
     os.remove(os.path.join(dir_path, f"{type(model).__name__}.{file_type}"))
+    os.remove(os.path.join(dir_path, f"{type(model).__name__}{'_metadata.json'}"))
 
 
 class TestModels(unittest.TestCase):
@@ -62,7 +63,7 @@ class TestModels(unittest.TestCase):
         model.fit(self.X_train, self.y_train)
 
         # Testing saving and loading of model
-        test_save_load_model(model, self.dir_path, self.X_test, self.y_test)
+        test_save_load_model(model, self.dir_path, self.X_test, self.y_test, file_type= 'joblib')
 
     def test_scikit_mlp(self):
         # Testing MLP model saved in .onnx format

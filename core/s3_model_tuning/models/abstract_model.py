@@ -1,6 +1,7 @@
 import warnings
 import onnxruntime as rt
 import numpy as np
+import subprocess
 from abc import ABC, abstractmethod
 from pydantic import BaseModel, Field
 
@@ -64,16 +65,6 @@ class AbstractMLModel(ABC):
             model_instance: model that is loaded.
         """
         self.regressor = model_instance
-
-    @abstractmethod
-    def build_regressor(self):
-        """""
-        Build model for Keras by defining the architecture of the model
-
-        Returns:
-            A Keras model
-        """
-        pass
 
     @abstractmethod
     def to_scikit_learn(self):
@@ -156,18 +147,11 @@ class PredictorOnnx(AbstractMLModel, ABC):
     def load_regressor(self, path):
         self.model = rt.InferenceSession(path, providers=["CPUExecutionProvider"])
         self.inputs = self.model.get_inputs()[0].name
-        #self.inputs = [input.name for input in self.model.get_inputs()]  #for dataframe input
         self.labels = self.model.get_outputs()[0].name
 
-
     def predict(self, x):
-        #input_feed = {}   #dictionary input for dataframe
-        #for input_name in self.inputs:
-           # input_feed[input_name] = x[input_name].values.astype(np.double)
-
-        #print(input_feed)
-
-        return self.model.run([self.labels], {self.inputs: x.astype(np.double)})[0]
+        x_ONNX= x.values  # Converts dataframe to numpy array
+        return self.model.run([self.labels], {self.inputs: x_ONNX.astype(np.double)})[0]
 
     def default_hyperparameter(self):
         warnings.warn(f"This function is not implemented for ONNX models")
@@ -177,9 +161,6 @@ class PredictorOnnx(AbstractMLModel, ABC):
 
     def get_params(self):
         warnings.warn(f"This function is not implemented for ONNX models")
-
-    def build_regressor(self):
-        Warnings.warn(f"This function is not implemented for ONNX models")
 
     def grid_search_hyperparameter(self):
         warnings.warn(f"This function is not implemented for ONNX models")
@@ -210,10 +191,8 @@ class ModelMetadata(BaseModel):
     library: str = Field(description="ML library origin of the regressor")
     library_model_type: str = Field(description="Type of regressor within library")
     library_version: str = Field(description="library version used")
-    target_name: list = Field(description="Name of the target variable")
+    target_name: str = Field(description="Name of the target variable")
     features_ordered: list = Field(description="Name and order of features")
-    input_shape: int = Field(description="Number of columns in training dataset")
-    output_shape: int = Field(description="Number of categories in target column")
     preprocessing: list = Field(
         description="Preprocessing steps applied to the features."
     )
@@ -222,3 +201,11 @@ class ModelMetadata(BaseModel):
         description="Instructions for passing input data for making predictions.",
     )
 
+def get_commit_id():
+        """Get the commit id for metadata when model is saved. """
+
+        try:
+            commit_id = subprocess.check_output(["git", "describe", "--always"]).strip().decode()
+        except subprocess.CalledProcessError:
+            commit_id = 'Unknown'
+        return commit_id

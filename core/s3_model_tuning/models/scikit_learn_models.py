@@ -13,8 +13,8 @@ from sklearn.compose import TransformedTargetRegressor
 from skl2onnx import to_onnx
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import ModelMetadata
+from core.s3_model_tuning.models.abstract_model import get_commit_id
 from sklearn.linear_model import LinearRegression
-from core.util.definitions import get_commit_id
 
 
 class BaseScikitLearnModel(AbstractMLModel, ABC):
@@ -38,26 +38,15 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         )
 
     def fit(self, x, y):  # Todo catch exception if x or y is not a pandas dataframe / update comments
-        self.x = x  # Save the training data to be used later for ONNX conversion
-        self.y = y  # Save the target column to get target name for metadata
-        #if isinstance(x, pd.DataFrame):
-            #x = x.values
-        #if isinstance(y, (pd.Series, pd.DataFrame)):
-            #y = y.values
-        self.regressor.fit(x, y)  # Train the model
+        self.feature_names = x.columns  # Save the training data to be used later for ONNX conversion
+        self.target_name = y.name  # Save the target column to get target name for metadata
+        self.x_ONNX = x.values
+        self.regressor.fit(self.x_ONNX, y)  # Train the model
 
     def predict(self, x):
-        #if isinstance(x, pd.DataFrame):
-            #x = x.values
         return self.regressor.predict(x)  # Make predictions
 
     def _save_metadata(self, directory, regressor_filename):
-
-        # feature names can only be extracted if x and y are pandas dataframes
-        if not isinstance(self.x, pd.DataFrame):
-            raise TypeError('x should be a pandas dataframe and not of type', type(self.x))
-        if not isinstance(self.y, (pd.Series, pd.DataFrame)):
-            raise TypeError('y should be a pandas dataframe/series and not of type', type(self.y))
 
         # define metadata
         self.metadata = ModelMetadata(
@@ -66,10 +55,8 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             library=sklearn.__name__,
             library_model_type=type(self.regressor.named_steps['model']).__name__,
             library_version=sklearn.__version__,
-            target_name=[(self.y.name)],
-            features_ordered=list(self.x.columns),
-            input_shape=self.x.shape[1],
-            output_shape=len(set(self.y)),
+            target_name=self.target_name,
+            features_ordered=list(self.feature_names),
             preprocessing=['StandardScaler for all features'])
 
         # save metadata
@@ -91,8 +78,8 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             print(f"Model saved to {path}")
 
         elif file_type == 'onnx':
-            onx = to_onnx(self.regressor, self.x[:1])
-            #self._save_metadata(directory, filename)
+            onx = to_onnx(self.regressor, self.x_ONNX)
+            self._save_metadata(directory, filename)
             with open(path, "wb") as f:
                 f.write(onx.SerializeToString())
                 print(f"Model saved to {path}.")
@@ -115,8 +102,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
     def default_hyperparameter(self):
         return self.regressor.get_params()
 
-    def build_regressor(self):       # For keras model
-        pass
+
 
 
 class ScikitMLP(BaseScikitLearnModel):

@@ -5,10 +5,11 @@ import keras
 import pandas as pd
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Activation
+from keras.losses import MeanSquaredError
 from tensorflow.keras.optimizers import SGD, Adam, RMSprop, Adagrad
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import ModelMetadata
-from core.util.definitions import get_commit_id
+from core.s3_model_tuning.models.abstract_model import get_commit_id
 
 
 class BaseKerasModel(AbstractMLModel, ABC):
@@ -21,43 +22,37 @@ class BaseKerasModel(AbstractMLModel, ABC):
         model: A keras model.
     """
 
-    def __init__(self, input_shape, output_shape):
-        # Create an instance of keras model
-        self.input_shape = input_shape  # Required for first layer of MLP
-        self.output_shape = output_shape  # Required for final layer of MLP
-        self.regressor = self.build_regressor()
+    def __init__(self):
+        # ask Martin: what should be the initialisation?
+        self.regressor = None
 
-    def build_regressor(self):
+    def _build_regressor(self):
         # Add layers to model : similar to MLP
         regressor = Sequential()
-        regressor.add(Dense(units=64, input_shape=(self.input_shape,)))
+        regressor.add(Dense(units=64, input_shape=(len(self.feature_names),)))
         regressor.add(Activation('relu'))
         regressor.add(Dropout(0.5))
-        regressor.add(Dense(self.output_shape, activation='softmax'))
+        regressor.add(Dense(1, activation='linear'))   # Output shape = 1 for continuous variable
         return regressor
 
     def compile_model(self, learning_rate=0.0001, epochs=10):
         self.learning_rate = learning_rate  # Save hyperparameters for get_hyperparameters()
         self.epochs = epochs  # Save hyperparameters for get_hyperparameters()
         self.optimizer = SGD(learning_rate=learning_rate)  # Create an instance of SGD optimizer
-        self.regressor.compile(loss='categorical_crossentropy', optimizer=self.optimizer, metrics=[keras.metrics.Accuracy()])
+        self.batch_size= 128
+        self.regressor.compile(loss='mean_squared_error', optimizer=self.optimizer, metrics=[MeanSquaredError()])  # Change loss function and metrics for regression
 
-    def fit(self, x, y, epochs=10, batch_size=32, validation_data=None):
-        self.x = x  # Save the training data to get feature order for metadata
-        self.y = y  # Save the target column to get target name for metadata
-        self.batch_size = batch_size
-        self.regressor.fit(x, y, epochs=epochs, batch_size=batch_size, validation_data=validation_data)
+    def fit(self, x, y):
+        self.feature_names = x.columns  # Save the feature names of training data for metadata
+        self.target_name = y.name  # Save the target name for metadata
+        self.regressor = self._build_regressor()
+        self.compile_model()
+        self.regressor.fit(x, y, batch_size=self.batch_size, epochs=self.epochs)
 
     def predict(self, x):
         return self.regressor.predict(x)
 
     def _save_metadata(self, directory, regressor_filename):
-
-        # feature names can only be extracted if x and y are pandas dataframes
-        if not isinstance(self.x, pd.DataFrame):
-            raise TypeError(f"x should be a pandas dataframe/series and not of type {type(self.x)}")
-        if not isinstance(self.y, (pd.Series, pd.DataFrame)):
-            raise TypeError(f"y should be a pandas dataframe/series and not of type {type(self.y)}")
 
         # define metadata
         self.metadata = ModelMetadata(
@@ -66,10 +61,8 @@ class BaseKerasModel(AbstractMLModel, ABC):
             library=keras.__name__,
             library_model_type='Sequential',
             library_version=keras.__version__,
-            target_name=list(self.y.columns),
-            features_ordered=list(self.x.columns),
-            input_shape=self.x.shape[1],  # kwargs for keras model factory
-            output_shape=len(set(self.y)),  # kwargs for keras model factory
+            target_name=self.target_name,
+            features_ordered=list(self.feature_names),
             preprocessing=['We can use this to define the architecture maybe?'])
 
         # save metadata

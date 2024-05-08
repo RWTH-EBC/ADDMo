@@ -7,7 +7,6 @@ from core.s3_model_tuning.models import scikit_learn_models
 from core.s3_model_tuning.models import keras_model
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import PredictorOnnx
-from core.util.definitions import load_metadata
 from tensorflow import keras
 from tensorflow.keras.models import load_model
 
@@ -48,13 +47,27 @@ class ModelFactory:
                 f"Available custom models are: {', '.join(custom_model_names)}. "
             )
 
+    def _load_metadata(abs_path: str):
+        """Read metatdata file when model is loaded."""
+
+        filename = os.path.splitext(abs_path)[0]
+        metadata_path = f"{filename}_metadata.json"
+
+        if os.path.exists(metadata_path):
+            with open(metadata_path) as f:
+                metadata = json.load(f)
+            return metadata
+        else:
+            raise FileNotFoundError (f'The metadata file {metadata_path} does not exist. Try saving the model before loading it or specify the path where the model is saved.')
+
+
     @staticmethod
     def load_model(abs_path: str) -> AbstractMLModel:
         '''Load the model from the specified path and return the model instance.'''
 
         # Load regressor from joblib file to addmo model class
         if abs_path.endswith('.joblib'):
-            metadata = load_metadata(abs_path)
+            metadata = ModelFactory._load_metadata(abs_path)
             addmo_class_name = metadata.get('addmo_class')
             addmo_class = ModelFactory.model_factory(addmo_class_name)
             regressor = joblib.load(abs_path)
@@ -67,16 +80,11 @@ class ModelFactory:
 
         # Load the regressor from keras file to addmo model class
         elif abs_path.endswith('.keras'):
-            metadata = load_metadata(abs_path)
+            metadata = ModelFactory._load_metadata(abs_path)
             addmo_class_name = metadata.get('addmo_class')
-            input_shape = metadata.get('input_shape')
-            output_shape= metadata.get('output_shape')
-            kwargs = {'input_shape': input_shape, 'output_shape': output_shape}
-            addmo_class = ModelFactory.model_factory(addmo_class_name, **kwargs)
+            addmo_class = ModelFactory.model_factory(addmo_class_name)
             regressor= keras.models.load_model(abs_path)
-            print(regressor)
             addmo_class.load_regressor(regressor)
-            print(addmo_class)
 
         else:
             raise ValueError(" '.joblib', '.onnx' or '.keras' path expected")

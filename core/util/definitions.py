@@ -1,6 +1,5 @@
 import os
 import json
-import subprocess
 from core.util.load_save import create_or_clean_directory
 from core.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
 from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
@@ -46,27 +45,6 @@ def results_dir_extrapolation_experiment(experiment_name: str):
     )
     return create_or_clean_directory(path)
 
-def get_commit_id():
-
-    try:
-        commit_id= subprocess.check_output(["git", "describe", "--always"]).strip().decode()
-    except subprocess.CalledProcessError:
-        commit_id = 'Unknown'
-    return commit_id
 
 
-def load_metadata(abs_path: str):
 
-    # Load metadata from a JSON file associated with the specified absolute path.
-
-    filename= os.path.splitext(abs_path)[0]
-    metadata_path = f"{filename}_metadata.json"
-
-    if os.path.exists(metadata_path):
-        with open(metadata_path) as f:
-            metadata = json.load(f)
-        return metadata
-    else:
-        raise FileNotFoundError(
-            f'The metadata file {metadata_path} does not exist. Try saving the model before loading it or specify the path where the model is saved.'
-        )

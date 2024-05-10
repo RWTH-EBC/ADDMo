@@ -1,9 +1,11 @@
 import os
 import json
+import optuna
 from abc import ABC
 import keras
 import pandas as pd
 from tensorflow.keras.models import Sequential
+from scikeras.wrappers import KerasRegressor
 from tensorflow.keras.layers import Dense, Dropout, Activation
 from keras.losses import MeanSquaredError
 from tensorflow.keras.optimizers import SGD, Adam, RMSprop, Adagrad
@@ -25,6 +27,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
     def __init__(self):
         # ask Martin: what should be the initialisation?
         self.regressor = None
+        self.sklearn_regressor = None
 
     def _build_regressor(self):
         # Add layers to model : similar to MLP
@@ -36,7 +39,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
         return regressor
 
     def compile_model(self, learning_rate=0.0001, epochs=10):
-        self.learning_rate = learning_rate  # Save hyperparameters for get_hyperparameters()
+        self.learning_rate = learning_rate  # ask martin: can set params directly?
         self.epochs = epochs  # Save hyperparameters for get_hyperparameters()
         self.optimizer = SGD(learning_rate=learning_rate)  # Create an instance of SGD optimizer
         self.batch_size= 128
@@ -83,87 +86,60 @@ class BaseKerasModel(AbstractMLModel, ABC):
     def load_regressor(self, regressor):
         self.regressor = regressor
 
-    def to_scikit_learn(self):
-        pass
+    def to_scikit_learn(self, learning_rate=0.0001, epochs=10, batch_size=128, dropout=0.5):
+    # Wrap the keras model to scikit in order to use Optuna Tuner
 
-    def set_params(self, **params):   #ask martin if this is needed, improve code readability
+        # set default hyperparameters:
+        self.learning_rate = learning_rate
+        self.epochs = epochs
+        self.batch_size = batch_size
+        self.dropout = dropout
+        self.optimizer = SGD(learning_rate=learning_rate)
 
-        for param, value in params.items():
-            if param == 'learning_rate':
-                self.learning_rate = value
-            elif param == 'epochs':
-                self.epochs = value
-            elif param == 'batch_size':
-                self.batch_size = value
-            elif param == 'dropout':
-                # Set dropout rate for all dropout layers in the model
-                for layer in self.regressor.layers:
-                    if isinstance(layer, Dropout):
-                        layer.rate = value
-            elif param == 'optimizer':
-                if value == 'SGD':
-                    self.optimizer = SGD(learning_rate=self.learning_rate)
-                elif value == 'Adam':
-                    self.optimizer = Adam(learning_rate=self.learning_rate)
-                elif value == 'RMSprop':
-                    self.optimizer = RMSprop(learning_rate=self.learning_rate)
-                elif value == 'Adagrad':
-                    self.optimizer = Adagrad(learning_rate=self.learning_rate)
-            elif param == 'activation':
-                # Set activation function for all layers in the model
-                for layer in self.regressor.layers:
-                    if isinstance(layer, Activation):
-                        layer.activation = value
-            elif param == 'loss_function':
-                # Example: set loss function during model compilation or define self.loss?
-                self.regressor.compile(loss=value, optimizer=self.optimizer, metrics=['accuracy'])
-            elif param == 'metrics':
-                # Example: set evaluation metrics during model compilation
-                self.regressor.compile(loss=self.regressor.loss, optimizer=self.optimizer, metrics=value)
-            elif param == 'model_architecture':
-                self.regressor = keras.models.model_from_json(value)
+        self.sklearn_regressor = KerasRegressor(
+                                model=self.regressor,
+                                optimizer=self.optimizer,
+                                epochs=self.epochs,
+                                batch_size=self.batch_size,
+                                optimizer__learning_rate=self.learning_rate,
+                                loss= "mean_squared_error",
+                                dropout= 0.5
+        )
 
+        return self.sklearn_regressor
 
-    def get_params(self):  # No built-in method
+    def set_params(self, **params):
+        # Set hyperparameters and re-compile the model with best hyperparameters returned by Optuna.
 
-        # For Layers:
-        # layer_params = []
-        #     for layer in self.regressor.layers:
-        #         layer_info = {
-        #             'layer_type': layer.__class__.__name__,
-        #             'config': layer.get_config()
-        #         }
-        #         layer_params.append(layer_info)
+       # self.to_scikit_learn()
+        self.sklearn_regressor.set_params(**params)
 
-        return {
-            'input_shape': self.input_shape,
-            'output_shape': self.output_shape,
-            'learning_rate': self.learning_rate,
-            'epochs': self.epochs,
-            'batch_size': self.batch_size,
-            'dropout': 0.5,
-            'optimizer': self.optimizer,    #ask: how to set parameters for different layers
-            'activation': ['relu', 'softmax'],  #ask: how to set parameters for different layers
-            'loss_function': 'categorical_crossentropy',
-            'metrics': ['accuracy'],
-            'model_architecture': self.regressor.to_json()
-        }
+        # Updating keras model with new parameters.
+        self.regressor = self.sklearn_regressor.model
+        # Re-compile Keras model with the updated parameters.
+        self.compile_model()
+
+    def get_params(self):
+        # Get hyperaparameters of the model.
+
+        return self.regressor.get_params()
+
 
     def optuna_hyperparameter_suggest(self, trial):  # ask martin
         hyperparameters = {}
 
         # Suggest hyperparameters
+
         n_layers = trial.suggest_int("n_layers", 1, 3)
-        hidden_layer_sizes = tuple(
-            trial.suggest_int(f"n_units_l{i}", 1, 100) for i in range(n_layers)
-        )
+        hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 100) for i in range(n_layers))
 
         # Dynamic hidden layer sizes based on the number of layers
         hyperparameters["hidden_layer_sizes"] = hidden_layer_sizes
 
         # Other hyperparameters
-        hyperparameters["activation"] = "relu"
+        hyperparameters["activation"] = trial.suggest_categorical("activation", ["relu", "sigmoid", "tanh"])
         hyperparameters["learning_rate"] = trial.suggest_float("learning_rate", 1e-5, 1e-1)
+        hyperparameters["loss"]= trial.suggest_categorical("loss", ["mse", "mae"])
 
         return hyperparameters
 
@@ -178,5 +154,5 @@ class BaseKerasModel(AbstractMLModel, ABC):
         return hyperparameter_grid
 
     def default_hyperparameter(self):
-        return self.regressor.get_params()
+        return self.sklearn_regressor.get_params()
 

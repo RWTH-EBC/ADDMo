@@ -29,6 +29,7 @@ def test_save_load_model(model, dir_path, X_test, y_test, file_type='joblib'):
 
     # Load the model
     loaded_model = ModelFactory().load_model(os.path.join(dir_path, f"{type(model).__name__}.{file_type}"))
+    print(f"Loaded model is :  {loaded_model}")
 
     # Make predictions
     y_pred_loaded = loaded_model.predict(X_test)
@@ -36,11 +37,19 @@ def test_save_load_model(model, dir_path, X_test, y_test, file_type='joblib'):
     # Calculate R-squared
     r_squared_loaded = r2_score(y_test, y_pred_loaded)
 
+    if file_type is  "keras":
+        loaded_model = loaded_model.to_scikit_learn()
+
+    params = loaded_model.get_params()
+    print(f"The parameters of the model are: {params}")
+
     # Check if R-squared is a number
     assert isinstance(r_squared_loaded, (int, float))
 
     # Clean up saved files
     os.remove(os.path.join(dir_path, f"{type(model).__name__}.{file_type}"))
+    os.remove(os.path.join(dir_path, f"{type(model).__name__}{'_metadata.json'}"))
+
 
 
 class TestModels(unittest.TestCase):
@@ -50,8 +59,7 @@ class TestModels(unittest.TestCase):
         data = fetch_california_housing()
         df = pd.DataFrame(data.data, columns=data.feature_names)
         df['price'] = pd.Series(data.target)
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(df.iloc[:, :-1], df['price'],
-                                                                                test_size=0.2, random_state=42)
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(df.iloc[:, :-1], df['price'], test_size=0.2, random_state=42)
         self.dir_path = os.path.join(root_dir(), "0000_testfiles")
 
 
@@ -80,6 +88,7 @@ class TestModels(unittest.TestCase):
 
         # Testing saving and loading of model
         test_save_load_model(model, self.dir_path, self.X_test, self.y_test, file_type='keras')
+
 
 
 if __name__ == '__main__':

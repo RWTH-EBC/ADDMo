@@ -37,7 +37,7 @@ def test_save_load_model(model, dir_path, X_test, y_test, file_type='joblib'):
     # Calculate R-squared
     r_squared_loaded = r2_score(y_test, y_pred_loaded)
 
-    if file_type is  "keras":
+    if file_type is "keras":
         loaded_model = loaded_model.to_scikit_learn()
 
     params = loaded_model.get_params()

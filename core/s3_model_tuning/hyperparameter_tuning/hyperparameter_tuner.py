@@ -1,9 +1,7 @@
 import inspect
-
 import optuna
 import wandb
 from sklearn.model_selection import GridSearchCV
-
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.hyperparameter_tuning.abstract_hyparam_tuner import (
     AbstractHyParamTuner,
@@ -38,6 +36,7 @@ class OptunaTuner(AbstractHyParamTuner):
 
         def objective(trial):
             hyperparameters = model.optuna_hyperparameter_suggest(trial)
+            print(hyperparameters)
             model.set_params(hyperparameters)
             score = self.scorer.score_validation(model, x_train_val, y_train_val)
             return score

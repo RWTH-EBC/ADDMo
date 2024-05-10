@@ -16,12 +16,12 @@ from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimen
 from core.s3_model_tuning.scoring.abstract_scorer import Scoring
 from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from core.executables.exe_model_tuning import exe_model_tuning
+from core.s3_model_tuning.model_tuner import ModelTuner
 
 data = fetch_california_housing()
 df = pd.DataFrame(data.data, columns=data.feature_names)
 df.head()
 df['price'] = pd.Series(data.target)
-df.to_csv('california_housing.csv', index=False)
 X_train, X_test, y_train, y_test = train_test_split(df.iloc[:, :-1], df['price'], test_size=0.2, random_state=42)
 dir_path = os.path.join(root_dir(), "0000_testfiles")
 
@@ -30,22 +30,18 @@ model.fit(X_train, y_train)
 
 model.save_regressor(dir_path, file_type="keras")
 
-    # Load the model
+# Load the model
 loaded_model = ModelFactory().load_model(os.path.join(dir_path, f"{type(model).__name__}.{'keras'}"))
 
-    # Make predictions
+# Make predictions
 y_pred_loaded = loaded_model.predict(X_test)
 
-    # Calculate R-squared
+# Calculate R-squared
 r_squared_loaded = r2_score(y_test, y_pred_loaded)
 
-sk=loaded_model.to_scikit_learn()
 
-def create_keras_config() -> ModelTunerConfig:
-    """
-    Create a ModelTunerConfig instance for tuning Keras models.
-    """
-    return ModelTunerConfig(
+def setup_model_tuning_config() -> ModelTunerConfig:
+    config_model_tuner = ModelTunerConfig(
         models=["BaseKerasModel"],
         hyperparameter_tuning_type="OptunaTuner",
         hyperparameter_tuning_kwargs={"n_trials": 10},  # Adjust the number of trials as needed
@@ -54,8 +50,9 @@ def create_keras_config() -> ModelTunerConfig:
         validation_score_metric="neg_mean_squared_error"
     )
 
-# Example usage:
-config = create_keras_config()
-scoring = Scoring('neg_mean_squared_error')
-params= OptunaTuner.tune(loaded_model, X_train, y_train)
-print(params)
+    return config_model_tuner
+
+config= setup_model_tuning_config()
+
+tuner = ModelTuner(config)
+model_dict = tuner.tune_model(model_name='BaseKerasModel', x_train_val=X_train, y_train_val=y_train)

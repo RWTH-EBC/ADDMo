@@ -1,6 +1,5 @@
 import os
 import json
-import optuna
 from abc import ABC
 import keras
 import pandas as pd
@@ -108,16 +107,12 @@ class BaseKerasModel(AbstractMLModel, ABC):
 
         return self.sklearn_regressor
 
-    def set_params(self, **params):
+    def set_params(self, hyperparameters):
         # Set hyperparameters and re-compile the model with best hyperparameters returned by Optuna.
 
-       # self.to_scikit_learn()
-        self.sklearn_regressor.set_params(**params)
+        self.sklearn_regressor= self.to_scikit_learn()
+        self.sklearn_regressor.set_params(**hyperparameters)
 
-        # Updating keras model with new parameters.
-        self.regressor = self.sklearn_regressor.model
-        # Re-compile Keras model with the updated parameters.
-        self.compile_model()
 
     def get_params(self):
         # Get hyperaparameters of the model.
@@ -130,11 +125,11 @@ class BaseKerasModel(AbstractMLModel, ABC):
 
         # Suggest hyperparameters
 
-        n_layers = trial.suggest_int("n_layers", 1, 3)
-        hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 100) for i in range(n_layers))
+        #n_layers = trial.suggest_int("n_layers", 1, 3)
+        #layers = tuple(trial.suggest_int(f"n_units_l{i}", 1, 100) for i in range(n_layers))
 
         # Dynamic hidden layer sizes based on the number of layers
-        hyperparameters["hidden_layer_sizes"] = hidden_layer_sizes
+        #hyperparameters["layers"] = layers
 
         # Other hyperparameters
         hyperparameters["activation"] = trial.suggest_categorical("activation", ["relu", "sigmoid", "tanh"])

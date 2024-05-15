@@ -79,7 +79,7 @@ class ModelFactory:
             addmo_class.load_regressor(abs_path)
 
         # Load the regressor from keras file to addmo model class
-        elif abs_path.endswith('.keras'):
+        elif abs_path.endswith('.h5'):
             metadata = ModelFactory._load_metadata(abs_path)
             addmo_class_name = metadata.get('addmo_class')
             addmo_class = ModelFactory.model_factory(addmo_class_name)

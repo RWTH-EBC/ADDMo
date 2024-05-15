@@ -91,7 +91,7 @@ class TestModels(unittest.TestCase):
         model.fit(self.X_train, self.y_train)
 
         # Testing saving and loading of model
-        loaded_model= test_save_load_model(model, self.dir_path, self.X_test, self.y_test, file_type='keras')
+        loaded_model= test_save_load_model(model, self.dir_path, self.X_test, self.y_test, file_type='h5')
         print('loaded model is : ', loaded_model)
 
 

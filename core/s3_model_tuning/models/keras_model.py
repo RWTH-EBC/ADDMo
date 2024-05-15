@@ -3,6 +3,7 @@ import json
 from abc import ABC
 import keras
 import pandas as pd
+import h5py
 from tensorflow.keras.layers import Input
 from tensorflow.keras.models import Sequential
 from scikeras.wrappers import KerasRegressor
@@ -87,7 +88,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
         with open(metadata_path, 'w') as f:
             json.dump(self.metadata.dict(), f)
 
-    def save_regressor(self, directory, filename=None, file_type='keras'):
+    def save_regressor(self, directory, filename=None, file_type='h5'):
         # Save model as a `.keras` file
         if filename is None:
             filename = type(self).__name__

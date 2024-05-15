@@ -31,7 +31,6 @@ def test_save_load_model(model, dir_path, X_test, y_test, file_type='joblib'):
 
     # Load the model
     loaded_model = ModelFactory().load_model(os.path.join(dir_path, f"{type(model).__name__}.{file_type}"))
-    print(f"Loaded model is :  {loaded_model}")
 
     # Make predictions
     y_pred_loaded = loaded_model.predict(X_test)

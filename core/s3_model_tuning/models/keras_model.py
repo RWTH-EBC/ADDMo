@@ -44,7 +44,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
         # self.input_shape = None
         self.regressor = None
         # Create instance of keras model as a pipeline.
-        self.sklearn_regressor = self._to_scikeras()
+        self.sklearn_regressor = self.to_scikit_learn()
 
     def _build_regressor(self, hyperparameters):
         # Add layers to model.

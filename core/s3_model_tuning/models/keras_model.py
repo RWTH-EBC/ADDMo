@@ -27,48 +27,23 @@ class BaseKerasModel(AbstractMLModel, ABC):
         model: A keras model in ScikitLearn Pipeline.
     """
 
-    def __init__(self):
-        # Default hyperparameters.
-        # (ask martin: is it ok to define here, we initialise it here because it's needed for to_scikeras() )
-        self.hyperparameters = {
-            'activation': 'relu',
-            'dropout_rate': 0.5,
-            'optimizer': 'sgd',
-            'learning_rate': 0.00001,
-            'epochs': 10,
-            'batch_size': 128,
-        }
-        self.epochs = self.hyperparameters['epochs']
-        self.learning_rate = self.hyperparameters['learning_rate']
-        self.batch_size = self.hyperparameters['batch_size']
-        self.regressor = None
-        # Create instance of keras model as a pipeline.
-        self.sklearn_regressor = self._to_scikeras()
-
-    def _build_regressor(self, hyperparameters, input_shape):
-        # Add layers to model.
-        regressor = Sequential()
-        regressor.add(Input(shape=(input_shape,)))
-        regressor.add(Dense(units=64, activation=hyperparameters.get('activation', 'relu')))
-        regressor.add(Dropout(0.5))
-        regressor.add(Dense(1, activation='linear'))  # Output shape = 1 for continuous variable
-        return regressor
-
-    def compile_model(self, loss='mean_squared_error'):
-        self.optimizer = SGD(learning_rate=self.learning_rate)  # Create an instance of SGD optimizer
-        self.loss = loss
-        self.regressor.compile(optimizer=self.optimizer, loss=self.loss)
-
-    def fit(self, x, y):
-        self.feature_names = x.columns  # Save the training data to be used later for metadata
-        self.target_name = y.name  # Save the target column to get target name for metadata
-        self.input_shape = len(x.columns)
-        self.regressor = self._build_regressor(self.hyperparameters, self.input_shape)
-        self.compile_model()
-        self.regressor.fit(x, y, batch_size=128, epochs=self.epochs)
-
-    def predict(self, x):
-        return self.regressor.predict(x)
+    # def __init__(self):
+    #     # Default hyperparameters.
+    #     # (ask martin: is it ok to define here, we initialise it here because it's needed for to_scikeras() ) #Todo: no, this is model specific and should be defined in the subclasses of basekeras, like in scikit learn models but its okay in the init!
+    #     self.hyperparameters = {
+    #         'activation': 'relu',
+    #         'dropout_rate': 0.5,
+    #         'optimizer': 'sgd',
+    #         'learning_rate': 0.00001,
+    #         'epochs': 10,
+    #         'batch_size': 128,
+    #     }
+    #     self.epochs = self.hyperparameters['epochs']
+    #     self.learning_rate = self.hyperparameters['learning_rate']
+    #     self.batch_size = self.hyperparameters['batch_size']
+    #     self.regressor = None
+    #     # Create instance of keras model as a pipeline.
+    #     self.sklearn_regressor = self._to_scikeras()
 
     def _save_metadata(self, directory, regressor_filename):
         # Define Metadata.
@@ -101,38 +76,78 @@ class BaseKerasModel(AbstractMLModel, ABC):
         # Load trained model for serialisation.
         self.regressor = regressor
 
-    def to_scikit_learn(self, x):
-        # Convert Keras Model to Scikit Learn Pipeline.
-        self.input_shape = len(x.columns)
-        self.regressor = Pipeline([
-            ("scaler", StandardScaler()),  # Feature scaling
-            ("model",
-             KerasRegressor(model=lambda: self._build_regressor(self.hyperparameters, self.input_shape),
-                            loss='mean_squared_error',
-                            epochs=self.epochs,
-                            batch_size=self.batch_size, verbose=0))
+    # def to_scikit_learn(self, x):
+    #     # Convert Keras Model to Scikit Learn Pipeline.
+    #     self.input_shape = len(x.columns)
+    #     self.regressor = Pipeline([
+    #         ("scaler", StandardScaler()),  # Feature scaling #Todo: i think you can have the scaler directly as a layer in the model in keras (normalization layer or something like this)
+    #         ("model",
+    #          KerasRegressor(model=lambda: self._build_regressor(self.hyperparameters, self.input_shape),
+    #                         loss='mean_squared_error',
+    #                         epochs=self.epochs,
+    #                         batch_size=self.batch_size, verbose=0))
+    #
+    #     ])
+    #     return self.regressor
 
-        ])
-        return self.regressor
+    # def _to_scikeras(self):
+    #     # Wrap the keras model to scikit in order to use Optuna Tuner
+    #     return KerasRegressor(
+    #         model=lambda: self._build_regressor(self.hyperparameters),
+    #         optimizer=self.hyperparameters['optimizer'],
+    #         loss="mean_squared_error",
+    #         epochs=self.hyperparameters['epochs'],
+    #         batch_size=self.hyperparameters['batch_size'],
+    #         verbose=0)
 
-    def _to_scikeras(self):
-        # Wrap the keras model to scikit in order to use Optuna Tuner
-        return KerasRegressor(
-            model=lambda: self._build_regressor(self.hyperparameters),
-            optimizer=self.hyperparameters['optimizer'],
-            loss="mean_squared_error",
-            epochs=self.hyperparameters['epochs'],
-            batch_size=self.hyperparameters['batch_size'],
-            verbose=0)
 
-    def set_params(self, hyperparameters):
-        # Update hyperparameters for current regressor and recreate the sklearn regressor
-        self.hyperparameters.update(hyperparameters)
-        self.sklearn_regressor = self._to_scikeras()
+
+
+
+class SciKerasSequential(BaseKerasModel):
+    def __init__(self):
+        self.regressor = KerasRegressor() #Todo: alternatively call _build_reg
+    def fit(self, x, y):
+        self.feature_names = x.columns  # Save the training data to be used later for metadata #TODO This can actually go into the abstract class as function, as this is always the same, correct?
+        self.target_name = y.name  # Save the target column to get target name for metadata
+
+        self.regressor.fit(x, y, batch_size=128, epochs=self.epochs) # Todo: if possible set these params batch/epochs with the set_params function and delete here.
+
+    def predict(self, x):
+        return self.regressor.predict(x)
 
     def get_params(self, deep=True):
         # Get the hyperparameters of the model
-        return self.sklearn_regressor.get_params()
+        return self.regressor.get_params()
+
+    def _build_regressor_architecture(self, hyperparameters, input_shape):
+        # Add layers to model.
+        regressor = Sequential()
+        regressor.add(Input(shape=(input_shape,)))
+        regressor.add(Dense(units=64, activation=hyperparameters.get('activation', 'relu')))
+        regressor.add(Dropout(0.5))
+        regressor.add(Dense(1, activation='linear'))  # Output shape = 1 for continuous variable
+        self.regressor = regressor
+
+    def _compile_model(self, hyperparameters):
+        #TODO: maybe  this works as well?
+        # self.optimizer = SGD(**hyperparameters)
+        optimizer = SGD(learning_rate=hyperparameters.get("learning_rate", 0.00001))  # Create an instance of SGD optimizer
+        loss = hyperparameters.get("loss", MeanSquaredError())  # Create an instance of Mean Squared Error loss function
+        self.regressor.compile(optimizer=optimizer, loss=loss)
+
+    def _build_regressor(self, hyperparameters, input_shape):
+        self._build_regressor_architecture(hyperparameters, input_shape)
+        self._compile_model(hyperparameters)
+
+    def set_params(self, hyperparameters, x=None): #TOdo: update this in baseclass/scikit and everywhere its used-> I think this is a more logic approach, as i expect the model to be usable after setting the params
+        input_shape = len(x.columns)
+        self._build_regressor(hyperparameters, input_shape)
+        self._compile_model(hyperparameters)
+    def default_hyperparameter(self):
+        return self.regressor.get_params()
+    def to_scikit_learn(self):
+        return self.regressor
 
     def optuna_hyperparameter_suggest(self, trial):
         hyperparameters = {
@@ -153,5 +168,4 @@ class BaseKerasModel(AbstractMLModel, ABC):
         }
         return hyperparameter_grid
 
-    def default_hyperparameter(self):
-        return self.sklearn_regressor.get_params()
+

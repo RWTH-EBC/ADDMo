@@ -36,7 +36,6 @@ class OptunaTuner(AbstractHyParamTuner):
 
         def objective(trial):
             hyperparameters = model.optuna_hyperparameter_suggest(trial)
-            print(hyperparameters)
             model.set_params(hyperparameters)
             score = self.scorer.score_validation(model, x_train_val, y_train_val)
             return score

@@ -18,7 +18,7 @@ class CrossValidation(ValidationScoring):
             y,
             scoring=self.metric,
             cv=self.splitter,
-            return_indices=True,
+            return_indices=True
         )
 
         # log the dataset splits for specific splitters which are important to check

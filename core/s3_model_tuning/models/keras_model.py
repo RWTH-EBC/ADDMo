@@ -3,6 +3,7 @@ import json
 from abc import ABC
 import keras
 import pandas as pd
+from tensorflow.keras.layers import Input
 from tensorflow.keras.models import Sequential
 from scikeras.wrappers import KerasRegressor
 from tensorflow.keras.layers import Dense, Dropout, Activation
@@ -11,7 +12,8 @@ from tensorflow.keras.optimizers import SGD, Adam, RMSprop, Adagrad
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import ModelMetadata
 from core.s3_model_tuning.models.abstract_model import get_commit_id
-
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 
 class BaseKerasModel(AbstractMLModel, ABC):
     """
@@ -20,43 +22,55 @@ class BaseKerasModel(AbstractMLModel, ABC):
     common functionalities specific to keras sequential model.
 
     Attributes:
-        model: A keras model.
+        model: A keras model in ScikitLearn Pipeline.
     """
 
     def __init__(self):
-        # ask Martin: what should be the initialisation?
+        # Default hyperparameters.
+        # (ask martin: is it ok to define here, we initialise it here because it's needed for to_scikeras() )
+        self.hyperparameters = {
+            'activation': 'relu',
+            'dropout_rate': 0.5,
+            'optimizer': 'sgd',
+            'learning_rate': 0.00001,
+            'epochs': 10,
+            'batch_size': 128,
+        }
+        self.epochs = self.hyperparameters['epochs']
+        self.learning_rate = self.hyperparameters['learning_rate']
+        self.batch_size = self.hyperparameters['batch_size']
+        #self.input_shape = None
         self.regressor = None
-        self.sklearn_regressor = None
+        # Create instance of keras model as a pipeline.
+        self.sklearn_regressor = self._to_scikeras()
 
-    def _build_regressor(self):
-        # Add layers to model : similar to MLP
+    def _build_regressor(self, hyperparameters):
+        # Add layers to model.
         regressor = Sequential()
-        regressor.add(Dense(units=64, input_shape=(len(self.feature_names),)))
-        regressor.add(Activation('relu'))
+        regressor.add(Input(shape=(8,)))
+        regressor.add(Dense(units=64, activation=self.hyperparameters.get('activation', 'relu')))
         regressor.add(Dropout(0.5))
-        regressor.add(Dense(1, activation='linear'))   # Output shape = 1 for continuous variable
+        regressor.add(Dense(1, activation='linear'))  # Output shape = 1 for continuous variable
         return regressor
 
-    def compile_model(self, learning_rate=0.0001, epochs=10):
-        self.learning_rate = learning_rate  # ask martin: can set params directly?
-        self.epochs = epochs  # Save hyperparameters for get_hyperparameters()
-        self.optimizer = SGD(learning_rate=learning_rate)  # Create an instance of SGD optimizer
-        self.batch_size= 128
-        self.regressor.compile(loss='mean_squared_error', optimizer=self.optimizer, metrics=[MeanSquaredError()])  # Change loss function and metrics for regression
+    def compile_model(self, learning_rate=0.0001, optimizer='sgd', loss='mean_squared_error'):
+        self.optimizer = SGD(learning_rate=self.learning_rate)  # Create an instance of SGD optimizer
+        self.batch_size = 128
+        self.loss = loss
+        self.regressor.compile(optimizer=self.optimizer, loss=self.loss)
 
     def fit(self, x, y):
-        self.feature_names = x.columns  # Save the feature names of training data for metadata
-        self.target_name = y.name  # Save the target name for metadata
-        self.regressor = self._build_regressor()
-        self.compile_model()
-        self.regressor.fit(x, y, batch_size=self.batch_size, epochs=self.epochs)
+        self.feature_names = x.columns  # Save the training data to be used later for metadata
+        self.target_name = y.name  # Save the target column to get target name for metadata
+        self.regressor = self._build_regressor(self.hyperparameters) #, self.feature_names)
+        self.compile_model(self.epochs)
+        self.regressor.fit(x, y, batch_size=128, epochs=self.epochs)
 
     def predict(self, x):
         return self.regressor.predict(x)
 
     def _save_metadata(self, directory, regressor_filename):
-
-        # define metadata
+        # Define Metadata.
         self.metadata = ModelMetadata(
             addmo_class=type(self).__name__,
             addmo_commit_id=get_commit_id(),
@@ -67,7 +81,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
             features_ordered=list(self.feature_names),
             preprocessing=['We can use this to define the architecture maybe?'])
 
-        # save metadata
+        # Save Metadata.
         regressor_filename = os.path.splitext(regressor_filename)[0]  # Remove file extension
         metadata_path = os.path.join(directory, regressor_filename + '_metadata.json')
         with open(metadata_path, 'w') as f:
@@ -83,59 +97,46 @@ class BaseKerasModel(AbstractMLModel, ABC):
         print(f"Model saved to {path}")
 
     def load_regressor(self, regressor):
+        # Load trained model for serialisation.
         self.regressor = regressor
 
-    def to_scikit_learn(self, learning_rate=0.0001, epochs=10, batch_size=128, dropout=0.5):
+    def to_scikit_learn(self):
+    # Convert Keras Model to Scikit Learn Pipeline.
+        self.regressor = Pipeline([
+        ("scaler", StandardScaler()),  # Feature scaling
+        ("model", KerasRegressor(model=lambda: self._build_regressor(self.hyperparameters), loss='mean_squared_error', epochs=self.epochs,
+                            batch_size=self.batch_size, verbose=0))
+
+        ])
+        return self.regressor
+
+    def _to_scikeras(self):
     # Wrap the keras model to scikit in order to use Optuna Tuner
-
-        # set default hyperparameters:
-        self.learning_rate = learning_rate
-        self.epochs = epochs
-        self.batch_size = batch_size
-        self.dropout = dropout
-        self.optimizer = SGD(learning_rate=learning_rate)
-
-        self.sklearn_regressor = KerasRegressor(
-                                model=self.regressor,
-                                optimizer=self.optimizer,
-                                epochs=self.epochs,
-                                batch_size=self.batch_size,
-                                optimizer__learning_rate=self.learning_rate,
-                                loss= "mean_squared_error",
-                                dropout= 0.5
-        )
-
-        return self.sklearn_regressor
+        return KerasRegressor(
+            model=lambda: self._build_regressor(self.hyperparameters),
+            optimizer=self.hyperparameters['optimizer'],
+            loss="mean_squared_error",
+            epochs=self.hyperparameters['epochs'],
+            batch_size=self.hyperparameters['batch_size'],
+            verbose=0)
 
     def set_params(self, hyperparameters):
-        # Set hyperparameters and re-compile the model with best hyperparameters returned by Optuna.
-
-        self.sklearn_regressor= self.to_scikit_learn()
-        self.sklearn_regressor.set_params(**hyperparameters)
-
-
-    def get_params(self):
-        # Get hyperaparameters of the model.
-
-        return self.regressor.get_params()
+        # Update hyperparameters for current regressor and recreate the sklearn regressor
+        self.hyperparameters.update(hyperparameters)
+        self.sklearn_regressor = self._to_scikeras()
 
 
-    def optuna_hyperparameter_suggest(self, trial):  # ask martin
-        hyperparameters = {}
+    def get_params(self, deep= True):
+        # Get the hyperparameters of the model
+        return self.sklearn_regressor.get_params()
 
-        # Suggest hyperparameters
-
-        #n_layers = trial.suggest_int("n_layers", 1, 3)
-        #layers = tuple(trial.suggest_int(f"n_units_l{i}", 1, 100) for i in range(n_layers))
-
-        # Dynamic hidden layer sizes based on the number of layers
-        #hyperparameters["layers"] = layers
-
-        # Other hyperparameters
-        hyperparameters["activation"] = trial.suggest_categorical("activation", ["relu", "sigmoid", "tanh"])
-        hyperparameters["learning_rate"] = trial.suggest_float("learning_rate", 1e-5, 1e-1)
-        hyperparameters["loss"]= trial.suggest_categorical("loss", ["mse", "mae"])
-
+    def optuna_hyperparameter_suggest(self, trial):
+        hyperparameters = {
+            "activation": trial.suggest_categorical("activation", ["relu", "sigmoid", "linear", "tanh"]),
+            "learning_rate": trial.suggest_loguniform("learning_rate", 1e-5, 1e-1),
+            "dropout_rate": trial.suggest_float("dropout_rate", 0.1, 0.5, step=0.1),
+            "optimizer": trial.suggest_categorical("optimizer", ["sgd", "adam", "rmsprop"])
+        }
         return hyperparameters
 
     def grid_search_hyperparameter(self):
@@ -149,5 +150,5 @@ class BaseKerasModel(AbstractMLModel, ABC):
         return hyperparameter_grid
 
     def default_hyperparameter(self):
-        return self.sklearn_regressor.get_params()
+        return self.hyperparameters
 

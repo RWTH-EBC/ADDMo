@@ -11,7 +11,9 @@ from sklearn.metrics import r2_score
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.keras_model import BaseKerasModel
 from core.util.definitions import root_dir
-
+from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
+from core.executables.exe_model_tuning import exe_model_tuning
+from core.s3_model_tuning.model_tuner import ModelTuner
 
 def test_save_load_model(model, dir_path, X_test, y_test, file_type='joblib'):
     """
@@ -50,6 +52,7 @@ def test_save_load_model(model, dir_path, X_test, y_test, file_type='joblib'):
     os.remove(os.path.join(dir_path, f"{type(model).__name__}.{file_type}"))
     os.remove(os.path.join(dir_path, f"{type(model).__name__}{'_metadata.json'}"))
 
+    return loaded_model
 
 
 class TestModels(unittest.TestCase):
@@ -62,15 +65,15 @@ class TestModels(unittest.TestCase):
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(df.iloc[:, :-1], df['price'], test_size=0.2, random_state=42)
         self.dir_path = os.path.join(root_dir(), "0000_testfiles")
 
-
-
     def test_linear_regression(self):
         # Testing Linear Regression model saved in .joblib format
         model = LinearReg()
         model.fit(self.X_train, self.y_train)
 
         # Testing saving and loading of model
-        test_save_load_model(model, self.dir_path, self.X_test, self.y_test)
+        loaded_model= test_save_load_model(model, self.dir_path, self.X_test, self.y_test)
+        print('loaded model is : ', loaded_model)
+
 
     def test_scikit_mlp(self):
         # Testing MLP model saved in .onnx format
@@ -78,7 +81,8 @@ class TestModels(unittest.TestCase):
         model.fit(self.X_train, self.y_train)
 
         # Testing saving and loading of model
-        test_save_load_model(model, self.dir_path, self.X_test, self.y_test,  file_type='onnx')
+        loaded_model= test_save_load_model(model, self.dir_path, self.X_test, self.y_test,  file_type='onnx')
+        print('loaded model is : ', loaded_model)
 
 
     def test_keras_model(self):
@@ -87,9 +91,43 @@ class TestModels(unittest.TestCase):
         model.fit(self.X_train, self.y_train)
 
         # Testing saving and loading of model
-        test_save_load_model(model, self.dir_path, self.X_test, self.y_test, file_type='keras')
+        loaded_model= test_save_load_model(model, self.dir_path, self.X_test, self.y_test, file_type='keras')
+        print('loaded model is : ', loaded_model)
 
 
+class TestKerasTuning(unittest.TestCase):
+
+    def setUp(self):
+        # Load and prepare data
+        data = fetch_california_housing()
+        df = pd.DataFrame(data.data, columns=data.feature_names)
+        df['price'] = pd.Series(data.target)
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(df.iloc[:, :-1], df['price'], test_size=0.2, random_state=42)
+        self.dir_path = os.path.join(root_dir(), "0000_testfiles")
+        self.config = self.setup_model_tuning_config()
+
+    def setup_model_tuning_config(self):
+        # Configures and returns a ModelTunerConfig instance
+        return ModelTunerConfig(
+            models=["BaseKerasModel"],
+            hyperparameter_tuning_type="OptunaTuner",
+            hyperparameter_tuning_kwargs={"n_trials": 10},
+            validation_score_mechanism="cv",
+            validation_score_splitting="KFold",
+            validation_score_metric="neg_mean_squared_error"
+        )
+
+    def test_model_tuning(self):
+        # Create a tuner instance and perform tuning
+        tuner = ModelTuner(self.config)
+        model_dict = tuner.tune_all_models(x_train_val=self.X_train, y_train_val=self.y_train)
+        best_model_name = tuner.get_best_model_name(model_dict)
+        best_model = tuner.get_model(model_dict, best_model_name)
+        score = tuner.get_model_validation_score(model_dict, best_model_name)
+
+        print('Best Model is: ', best_model_name, best_model)
+        print('Score is: ', score)
+        self.assertIsInstance(score, float)
 
 if __name__ == '__main__':
     unittest.main()

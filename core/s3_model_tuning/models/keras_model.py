@@ -120,14 +120,12 @@ class SciKerasSequential(BaseKerasModel):
         # Get the hyperparameters of the model
         return self.regressor.get_params()
 
-    def _build_regressor_architecture(self, hyperparameters, input_shape):
+    def _build_regressor_architecture(self, hyperparameters):
         # Add layers to model.
-        regressor = Sequential()
-        regressor.add(Input(shape=(input_shape,)))
-        regressor.add(Dense(units=64, activation=hyperparameters.get('activation', 'relu')))
-        regressor.add(Dropout(0.5))
-        regressor.add(Dense(1, activation='linear'))  # Output shape = 1 for continuous variable
-        self.regressor = regressor
+        self.regressor = Sequential([
+            Dense(64, activation=hyperparameters.get('activation', 'relu')),
+            Dense(1, activation='linear'),
+            ])
 
     def _compile_model(self, hyperparameters):
         #TODO: maybe  this works as well?
@@ -136,13 +134,12 @@ class SciKerasSequential(BaseKerasModel):
         loss = hyperparameters.get("loss", MeanSquaredError())  # Create an instance of Mean Squared Error loss function
         self.regressor.compile(optimizer=optimizer, loss=loss)
 
-    def _build_regressor(self, hyperparameters, input_shape):
-        self._build_regressor_architecture(hyperparameters, input_shape)
+    def _build_regressor(self, hyperparameters):
+        self._build_regressor_architecture(hyperparameters)
         self._compile_model(hyperparameters)
 
-    def set_params(self, hyperparameters, x=None): #TOdo: update this in baseclass/scikit and everywhere its used-> I think this is a more logic approach, as i expect the model to be usable after setting the params
-        input_shape = len(x.columns)
-        self._build_regressor(hyperparameters, input_shape)
+    def set_params(self, hyperparameters):
+        self._build_regressor(hyperparameters)
         self._compile_model(hyperparameters)
     def default_hyperparameter(self):
         return self.regressor.get_params()

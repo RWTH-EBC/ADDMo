@@ -16,6 +16,7 @@ from core.s3_model_tuning.models.abstract_model import get_commit_id
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
+
 class BaseKerasModel(AbstractMLModel, ABC):
     """
     Base class for Keras models.
@@ -40,7 +41,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
         self.epochs = self.hyperparameters['epochs']
         self.learning_rate = self.hyperparameters['learning_rate']
         self.batch_size = self.hyperparameters['batch_size']
-        #self.input_shape = None
+        # self.input_shape = None
         self.regressor = None
         # Create instance of keras model as a pipeline.
         self.sklearn_regressor = self._to_scikeras()
@@ -49,22 +50,21 @@ class BaseKerasModel(AbstractMLModel, ABC):
         # Add layers to model.
         regressor = Sequential()
         regressor.add(Input(shape=(8,)))
-        regressor.add(Dense(units=64, activation=self.hyperparameters.get('activation', 'relu')))
+        regressor.add(Dense(units=64, activation=hyperparameters.get('activation', 'relu')))
         regressor.add(Dropout(0.5))
         regressor.add(Dense(1, activation='linear'))  # Output shape = 1 for continuous variable
         return regressor
 
-    def compile_model(self, learning_rate=0.0001, optimizer='sgd', loss='mean_squared_error'):
+    def compile_model(self, loss='mean_squared_error'):
         self.optimizer = SGD(learning_rate=self.learning_rate)  # Create an instance of SGD optimizer
-        self.batch_size = 128
         self.loss = loss
         self.regressor.compile(optimizer=self.optimizer, loss=self.loss)
 
     def fit(self, x, y):
         self.feature_names = x.columns  # Save the training data to be used later for metadata
         self.target_name = y.name  # Save the target column to get target name for metadata
-        self.regressor = self._build_regressor(self.hyperparameters) #, self.feature_names)
-        self.compile_model(self.epochs)
+        self.regressor = self._build_regressor(self.hyperparameters)
+        self.compile_model()
         self.regressor.fit(x, y, batch_size=128, epochs=self.epochs)
 
     def predict(self, x):
@@ -102,17 +102,19 @@ class BaseKerasModel(AbstractMLModel, ABC):
         self.regressor = regressor
 
     def to_scikit_learn(self):
-    # Convert Keras Model to Scikit Learn Pipeline.
+        # Convert Keras Model to Scikit Learn Pipeline.
         self.regressor = Pipeline([
-        ("scaler", StandardScaler()),  # Feature scaling
-        ("model", KerasRegressor(model=lambda: self._build_regressor(self.hyperparameters), loss='mean_squared_error', epochs=self.epochs,
+            ("scaler", StandardScaler()),  # Feature scaling
+            ("model",
+             KerasRegressor(model=lambda: self._build_regressor(self.hyperparameters), loss='mean_squared_error',
+                            epochs=self.epochs,
                             batch_size=self.batch_size, verbose=0))
 
         ])
         return self.regressor
 
     def _to_scikeras(self):
-    # Wrap the keras model to scikit in order to use Optuna Tuner
+        # Wrap the keras model to scikit in order to use Optuna Tuner
         return KerasRegressor(
             model=lambda: self._build_regressor(self.hyperparameters),
             optimizer=self.hyperparameters['optimizer'],
@@ -126,8 +128,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
         self.hyperparameters.update(hyperparameters)
         self.sklearn_regressor = self._to_scikeras()
 
-
-    def get_params(self, deep= True):
+    def get_params(self, deep=True):
         # Get the hyperparameters of the model
         return self.sklearn_regressor.get_params()
 
@@ -142,7 +143,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
 
     def grid_search_hyperparameter(self):
         hyperparameter_grid = {
-            "hidden_layer_sizes":  [(32,), (64,), (32, 32), (64, 64)],
+            "hidden_layer_sizes": [(32,), (64,), (32, 32), (64, 64)],
             "activation": ["tanh", "relu", "softmax", "leaky_relu", "sigmoid", "exponential"],
             "optimizer": [SGD(), Adam(), RMSprop(), Adagrad()],
             "epochs": [10, 50, 100, 150],
@@ -152,4 +153,3 @@ class BaseKerasModel(AbstractMLModel, ABC):
 
     def default_hyperparameter(self):
         return self.hyperparameters
-

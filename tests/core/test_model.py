@@ -39,9 +39,6 @@ def test_save_load_model(model, dir_path, X_test, y_test, file_type='joblib'):
     # Calculate R-squared
     r_squared_loaded = r2_score(y_test, y_pred_loaded)
 
-    if file_type is "keras":
-        loaded_model = loaded_model.to_scikit_learn()
-
     params = loaded_model.get_params()
     print(f"The parameters of the model are: {params}")
 
@@ -94,7 +91,6 @@ class TestModels(unittest.TestCase):
         loaded_model= test_save_load_model(model, self.dir_path, self.X_test, self.y_test, file_type='h5')
         print('loaded model is : ', loaded_model)
 
-
 class TestKerasTuning(unittest.TestCase):
 
     def setUp(self):
@@ -128,6 +124,7 @@ class TestKerasTuning(unittest.TestCase):
         print('Best Model is: ', best_model_name, best_model)
         print('Score is: ', score)
         self.assertIsInstance(score, float)
+
 
 if __name__ == '__main__':
     unittest.main()

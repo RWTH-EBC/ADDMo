@@ -87,7 +87,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
     def load_regressor(self, regressor):
         self.regressor = regressor
 
-    def to_scikit_learn(self):
+    def to_scikit_learn(self,x=None):
         return self.regressor
 
     def set_params(self, hyperparameters):

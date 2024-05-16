@@ -44,7 +44,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
             library_version=keras.__version__,
             target_name=self.target_name,
             features_ordered=list(self.feature_names),
-            preprocessing=['We can use this to define the architecture maybe?'])
+            preprocessing=['preprocessing steps for data defined here'])
 
         # Save Metadata.
         regressor_filename = os.path.splitext(regressor_filename)[0]  # Remove file extension
@@ -81,12 +81,13 @@ class SciKerasSequential(BaseKerasModel):
         self.learning_rate = self.hyperparameters['learning_rate']
         self.batch_size = self.hyperparameters['batch_size']
         # Create instance of Keras regressor as a scikeras wrapper.
-        self.regressor = self._to_scikeras() #instead if =KerasRegressor() incase we want default arguments
+        self.regressor = self._to_scikeras()
        #  self.regressor = KerasRegressor()
 
     def fit(self, x, y):
         self.save_features(x, y)
         self._build_regressor(self.hyperparameters, self.input_shape)
+        #self.regressor.layers[0].adapt(x)
         self.regressor.fit(x, y, batch_size= self.batch_size, epochs= self.epochs) # Todo: if possible set these params batch/epochs with the set_params function and delete here.
 
     def predict(self, x):
@@ -99,7 +100,7 @@ class SciKerasSequential(BaseKerasModel):
     def _build_regressor_architecture(self, hyperparameters, input_shape):
         # Add layers to model.
         regressor = Sequential()
-        # norm_layer = Normalization(input_shape=input_shape)
+        # norm_layer = Normalization()
         # norm_layer.adapt(x)  # Normalise the training data
         # regressor.add(norm_layer)
         regressor.add(Input(shape=input_shape))
@@ -110,8 +111,6 @@ class SciKerasSequential(BaseKerasModel):
 
 
     def _compile_model(self, hyperparameters):
-        #TODO: maybe  this works as well?
-        #self.optimizer = SGD(**hyperparameters) doesnt work
         self.optimizer = SGD(learning_rate=hyperparameters.get("learning_rate", 0.00001))  # Create an instance of SGD optimizer
         loss = hyperparameters.get("loss", MeanSquaredError())  # Create an instance of Mean Squared Error loss function
         self.regressor.compile(optimizer=self.optimizer, loss=loss)
@@ -136,7 +135,6 @@ class SciKerasSequential(BaseKerasModel):
         # Convert Keras Model to Scikit Learn Pipeline.
         self.input_shape = (len(x.columns),)
         self.regressor = Pipeline([
-            # ("scaler", StandardScaler()),
             ("model",
              KerasRegressor(model=lambda: self._build_regressor_architecture(self.hyperparameters, self.input_shape),
                             loss='mean_squared_error',

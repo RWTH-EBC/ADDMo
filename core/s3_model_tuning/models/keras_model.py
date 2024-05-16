@@ -79,7 +79,7 @@ class SciKerasSequential(BaseKerasModel):
     def fit(self, x, y):
         self.feature_names = x.columns  # Save the training data to be used later for metadata #TODO This can actually go into the abstract class as function, as this is always the same, correct?
         self.target_name = y.name  # Save the target column to get target name for metadata
-        #self._build_regressor(self.hyperparameters)
+        self.regressor = self._build_regressor(self.hyperparameters)
         self.regressor.fit(x, y, batch_size= self.batch_size, epochs=self.epochs) # Todo: if possible set these params batch/epochs with the set_params function and delete here.
 
     def predict(self, x):
@@ -90,11 +90,14 @@ class SciKerasSequential(BaseKerasModel):
         return self.regressor.get_params()
 
     def _build_regressor_architecture(self, hyperparameters):
+        self.optimizer = SGD(learning_rate=hyperparameters.get("learning_rate", 0.00001))  # Create an instance of SGD optimizer
+        loss = hyperparameters.get("loss", MeanSquaredError())
         # Add layers to model.
         self.regressor = Sequential([
             Dense(64, activation=hyperparameters.get('activation', 'relu')),
             Dense(1, activation='linear'),
             ])
+        self.regressor.compile(optimizer=self.optimizer, loss=loss)
         return self.regressor
 
     def _compile_model(self, hyperparameters):
@@ -110,17 +113,16 @@ class SciKerasSequential(BaseKerasModel):
         self.optimizer = SGD(learning_rate=hyperparameters.get("learning_rate", 0.00001))  # Create an instance of SGD optimizer
         loss = hyperparameters.get("loss", MeanSquaredError())  # Create an instance of Mean Squared Error loss function
         self.regressor.compile(optimizer=self.optimizer, loss=loss)
-        return self.regressor
-
 
     def _build_regressor(self, hyperparameters):
-        def build_fn():
-            self.regressor = self._build_regressor_architecture(hyperparameters)
-            self.regressor= self._compile_model(hyperparameters)
-            return self.regressor
 
-        return KerasRegressor(model=build_fn, epochs=self.epochs,
-                              batch_size=self.batch_size, verbose=0)
+        keras_regressor = self._build_regressor_architecture(hyperparameters)
+        #self._compile_model(hyperparameters)
+        self.regressor = KerasRegressor(model=self._build_regressor_architecture(hyperparameters), epochs=self.epochs, batch_size=self.batch_size, verbose=0)
+        return self.regressor
+
+        # return KerasRegressor(model=build_fn, epochs=self.epochs,
+        #                       batch_size=self.batch_size, verbose=0)
         # self.regressor = self._build_regressor_architecture(hyperparameters)
         # self._compile_model(hyperparameters)
 
@@ -150,8 +152,8 @@ class SciKerasSequential(BaseKerasModel):
         return self.regressor.get_params()
 
     def to_scikit_learn(self):
-        return KerasRegressor( model= self._build_regressor(self.hyperparameters), epochs=self.epochs,
-                              batch_size=self.batch_size, verbose=0)
+
+        return self.regressor
 
     def optuna_hyperparameter_suggest(self, trial):
         hyperparameters = {

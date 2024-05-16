@@ -12,6 +12,7 @@ class CrossValidation(ValidationScoring):
         x and y include train and evaluation period.
         CV is shuffle=False by default, so the splits will be same across calls."""
 
+
         cv_info = cross_validate(
             model.to_scikit_learn(),
             x,

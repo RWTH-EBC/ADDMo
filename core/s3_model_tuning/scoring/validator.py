@@ -13,7 +13,7 @@ class CrossValidation(ValidationScoring):
         CV is shuffle=False by default, so the splits will be same across calls."""
 
         cv_info = cross_validate(
-            model.to_scikit_learn(x),
+            model.to_scikit_learn(),
             x,
             y,
             scoring=self.metric,

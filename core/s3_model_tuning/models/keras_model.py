@@ -4,7 +4,6 @@ from abc import ABC
 import keras
 import pandas as pd
 import h5py
-from keras.src.layers import Normalization
 from tensorflow.keras.layers import Input
 from tensorflow.keras.models import Sequential
 from scikeras.wrappers import KerasRegressor
@@ -28,12 +27,6 @@ class BaseKerasModel(AbstractMLModel, ABC):
         model: A keras model in ScikitLearn Pipeline.
     """
 
-    def save_features(self, x, y):
-        # Save feature name and target name metadata from training data.
-        self.feature_names = x.columns # Save the feature names
-        self.target_name = y.name  # Save the target name
-        self.input_shape = (len(x.columns),)  # Save shape of training data for building regressor as a tuple
-
     def _save_metadata(self, directory, regressor_filename):
         # Define Metadata.
         self.metadata = ModelMetadata(
@@ -53,7 +46,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
             json.dump(self.metadata.dict(), f)
 
     def save_regressor(self, directory, filename=None, file_type='h5'):
-        # Save model as a `.h5` file
+        # Save model as a `.keras` file
         if filename is None:
             filename = type(self).__name__
         path = os.path.join(directory, f"{filename}.{file_type}")
@@ -80,14 +73,14 @@ class SciKerasSequential(BaseKerasModel):
         self.epochs = self.hyperparameters['epochs']
         self.learning_rate = self.hyperparameters['learning_rate']
         self.batch_size = self.hyperparameters['batch_size']
-        # Create instance of Keras regressor as a scikeras wrapper.
-        self.regressor = self._to_scikeras() #instead if =KerasRegressor() incase we want default arguments
-       #  self.regressor = KerasRegressor()
+        #self.regressor = KerasRegressor() #Todo: alternatively call _build_reg
+        self.regressor = self._build_regressor(self.hyperparameters)
 
     def fit(self, x, y):
-        self.save_features(x, y)
-        self._build_regressor(self.hyperparameters, self.input_shape)
-        self.regressor.fit(x, y, batch_size= self.batch_size, epochs= self.epochs) # Todo: if possible set these params batch/epochs with the set_params function and delete here.
+        self.feature_names = x.columns  # Save the training data to be used later for metadata #TODO This can actually go into the abstract class as function, as this is always the same, correct?
+        self.target_name = y.name  # Save the target column to get target name for metadata
+        #self._build_regressor(self.hyperparameters)
+        self.regressor.fit(x, y, batch_size= self.batch_size, epochs=self.epochs) # Todo: if possible set these params batch/epochs with the set_params function and delete here.
 
     def predict(self, x):
         return self.regressor.predict(x)
@@ -96,65 +89,69 @@ class SciKerasSequential(BaseKerasModel):
         # Get the hyperparameters of the model
         return self.regressor.get_params()
 
-    def _build_regressor_architecture(self, hyperparameters, input_shape):
+    def _build_regressor_architecture(self, hyperparameters):
         # Add layers to model.
-        regressor = Sequential()
-        # norm_layer = Normalization(input_shape=input_shape)
-        # norm_layer.adapt(x)  # Normalise the training data
-        # regressor.add(norm_layer)
-        regressor.add(Input(shape=input_shape))
-        regressor.add(Dense(units=64, activation=hyperparameters.get('activation', 'relu')))
-        regressor.add(Dropout(0.5))
-        regressor.add(Dense(1, activation='linear'))  # Output shape = 1 for continuous variable
-        return regressor
-
+        self.regressor = Sequential([
+            Dense(64, activation=hyperparameters.get('activation', 'relu')),
+            Dense(1, activation='linear'),
+            ])
+        return self.regressor
 
     def _compile_model(self, hyperparameters):
         #TODO: maybe  this works as well?
-        #self.optimizer = SGD(**hyperparameters) doesnt work
+        # self.optimizer = SGD(**hyperparameters)
+        # optimizer_mapping = {
+        #     'sgd': SGD,
+        #     'adam': Adam,
+        #     'rmsprop': RMSprop
+        # }
+        # optimizer_cls = optimizer_mapping.get(hyperparameters.get('optimizer', 'sgd'))
+        # optimizer = optimizer_cls(learning_rate=hyperparameters.get("learning_rate", 0.00001))
         self.optimizer = SGD(learning_rate=hyperparameters.get("learning_rate", 0.00001))  # Create an instance of SGD optimizer
         loss = hyperparameters.get("loss", MeanSquaredError())  # Create an instance of Mean Squared Error loss function
         self.regressor.compile(optimizer=self.optimizer, loss=loss)
-
-    def _build_regressor(self, hyperparameters, input_shape):
-        self.regressor = self._build_regressor_architecture(self.hyperparameters, input_shape)
-        self._compile_model(self.hyperparameters)
-
-
-    def _to_scikeras(self):
-        # Wrap the keras model to scikit in order to use Optuna Tuner
-        self.regressor= KerasRegressor(
-            model=lambda: self._build_regressor_architecture(self.hyperparameters),
-            optimizer=self.hyperparameters['optimizer'],
-            loss="mean_squared_error",
-            epochs=self.hyperparameters['epochs'],
-            batch_size=self.hyperparameters['batch_size'],
-            verbose=0)
         return self.regressor
 
-    def to_scikit_learn(self, x):
-        # Convert Keras Model to Scikit Learn Pipeline.
-        self.input_shape = (len(x.columns),)
-        self.regressor = Pipeline([
-            # ("scaler", StandardScaler()),
-            ("model",
-             KerasRegressor(model=lambda: self._build_regressor_architecture(self.hyperparameters, self.input_shape),
-                            loss='mean_squared_error',
-                            epochs=self.epochs,
-                            batch_size=self.batch_size, verbose=0))])
 
-        return self.regressor
+    def _build_regressor(self, hyperparameters):
+        def build_fn():
+            self.regressor = self._build_regressor_architecture(hyperparameters)
+            self.regressor= self._compile_model(hyperparameters)
+            return self.regressor
 
+        return KerasRegressor(model=build_fn, epochs=self.epochs,
+                              batch_size=self.batch_size, verbose=0)
+        # self.regressor = self._build_regressor_architecture(hyperparameters)
+        # self._compile_model(hyperparameters)
+
+        # self.regressor=self._build_regressor_architecture(hyperparameters)
+        # self.regressor= self._compile_model(hyperparameters)
+        # return KerasRegressor(
+        #     model=self.regressor,
+        #     optimizer=self.hyperparameters['optimizer'],
+        #     loss="mean_squared_error",
+        #     epochs=self.hyperparameters['epochs'],
+        #     batch_size=self.hyperparameters['batch_size'],
+        #     verbose=0)
 
     def set_params(self, hyperparameters):
-        # self._build_regressor(hyperparameters,self.input_shape) #will have to pass input_shape here
-        # self._compile_model(hyperparameters)
         self.hyperparameters.update(hyperparameters)
-        self.regressor = self._to_scikeras()
+        self.regressor = self._build_regressor(self.hyperparameters)
+        return self
+        # self.regressor = KerasRegressor(
+        #     model=self._build_regressor_architecture(self.hyperparameters),
+        #     optimizer=self.hyperparameters['optimizer'],
+        #     loss="mean_squared_error",
+        #     epochs=self.hyperparameters['epochs'],
+        #     batch_size=self.hyperparameters['batch_size'],
+        #     verbose=0)
 
     def default_hyperparameter(self):
         return self.regressor.get_params()
 
+    def to_scikit_learn(self):
+        return KerasRegressor( model= self._build_regressor(self.hyperparameters), epochs=self.epochs,
+                              batch_size=self.batch_size, verbose=0)
 
     def optuna_hyperparameter_suggest(self, trial):
         hyperparameters = {
@@ -174,6 +171,3 @@ class SciKerasSequential(BaseKerasModel):
             "learning_rate": [0.0001, 0.001, 0.01],
         }
         return hyperparameter_grid
-
-
-

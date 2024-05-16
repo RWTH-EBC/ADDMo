@@ -8,7 +8,7 @@ from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
-from core.s3_model_tuning.models.keras_model import BaseKerasModel, SciKerasSequential
+from core.s3_model_tuning.models.keras_model_w import BaseKerasModel, SciKerasSequential
 from core.util.definitions import root_dir
 from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from core.executables.exe_model_tuning import exe_model_tuning

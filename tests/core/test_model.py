@@ -9,7 +9,7 @@ from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
-from core.s3_model_tuning.models.keras_model import BaseKerasModel
+from core.s3_model_tuning.models.keras_model import BaseKerasModel, SciKerasSequential
 from core.util.definitions import root_dir
 from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from core.executables.exe_model_tuning import exe_model_tuning
@@ -83,7 +83,7 @@ class TestModels(unittest.TestCase):
 
     def test_keras_model(self):
         # Testing Keras model saved in .keras format
-        model = BaseKerasModel()
+        model = SciKerasSequential()
         model.fit(self.X_train, self.y_train)
 
         # Testing saving and loading of model
@@ -104,9 +104,9 @@ class TestKerasTuning(unittest.TestCase):
     def setup_model_tuning_config(self):
         # Configures and returns a ModelTunerConfig instance
         return ModelTunerConfig(
-            models=["BaseKerasModel"],
+            models=["SciKerasSequential"],
             hyperparameter_tuning_type="OptunaTuner",
-            hyperparameter_tuning_kwargs={"n_trials": 10},
+            hyperparameter_tuning_kwargs={"n_trials": 2},
             validation_score_mechanism="cv",
             validation_score_splitting="KFold",
             validation_score_metric="neg_mean_squared_error"

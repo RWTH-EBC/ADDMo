@@ -4,7 +4,7 @@ import json
 import joblib
 import os
 from core.s3_model_tuning.models import scikit_learn_models
-from core.s3_model_tuning.models import keras_model
+from core.s3_model_tuning.models import keras_models
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import PredictorOnnx
 from tensorflow import keras
@@ -28,8 +28,8 @@ class ModelFactory:
             custom_model_class = getattr(scikit_learn_models, model_type)
 
         #  If model is based on e.g. Keras
-        elif hasattr(keras_model, model_type):
-             custom_model_class = getattr(keras_model, model_type)
+        elif hasattr(keras_models, model_type):
+             custom_model_class = getattr(keras_models, model_type)
              return custom_model_class(**kwargs)
 
         # Return model if found and a subclass of AbstractMLModel
@@ -41,7 +41,7 @@ class ModelFactory:
             # Get the names of all custom models for error message
             custom_model_names = [
                 name
-                for name, obj in inspect.getmembers(scikit_learn_models)
+                for name, obj in inspect.getmembers(scikit_learn_models) + inspect.getmembers(keras_models)
                 if inspect.isclass(obj)
                    and issubclass(obj, AbstractMLModel)
                    and not inspect.isabstract(obj)

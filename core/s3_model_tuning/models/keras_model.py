@@ -43,7 +43,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
             json.dump(self.metadata.dict(), f)
 
     def save_regressor(self, directory, filename=None, file_type='h5'):
-        # Save model as a `.h5` file #TODO proper doc string! also onnx possible!?
+        # Save model as a `.h5` file #TODO proper doc string! also onnx should be possible!
         if filename is None:
             filename = type(self).__name__
         path = os.path.join(directory, f"{filename}.{file_type}")
@@ -76,7 +76,7 @@ class SciKerasSequential(BaseKerasModel):
         return self.regressor.predict(x)
 
     def get_params(self, deep=True):
-        # Get the hyperparameters of the model. #Todo: in general, these should all be doc strings not comments, if describing the function
+        # Get the hyperparameters of the model. #Todo: in general, these should all be doc strings not comments if describing the function. I know i have not been consistent with this, but i will be in the future.
         return self.regressor.get_params()
 
     def _build_regressor_architecture(self, hyperparameters, input_shape): #Todo: sometimes you take hyperparameter from self and sometimes passed to function, clean up be consistent
@@ -122,10 +122,12 @@ class SciKerasSequential(BaseKerasModel):
         self.regressor = self._to_scikeras() # how will this work if not compiled? can you compile it afterwards? clean up with keras and scikeras
 
     def default_hyperparameter(self):
-        if params "loss" = None -> define
-        return self.regressor.get_params()
+        params = self.regressor.get_params()
+        if params "loss" = None -> define #Todo: see init, why not here?
 
-    def optuna_hyperparameter_suggest(self, trial):
+        return params
+
+    def optuna_hyperparameter_suggest(self, trial): #TODO: try to cover roughly the same hyperparameter options as for the scikit learn ANN
         hyperparameters = {
             "activation": trial.suggest_categorical("activation", ["relu", "sigmoid", "linear", "tanh"]),
             "learning_rate": trial.suggest_float("learning_rate", 1e-5, 1e-1, log=True),

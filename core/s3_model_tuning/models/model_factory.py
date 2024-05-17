@@ -87,6 +87,6 @@ class ModelFactory:
             addmo_class.load_regressor(regressor)
 
         else:
-            raise ValueError(" '.joblib', '.onnx' or '.keras' path expected")
+            raise ValueError(" '.joblib', '.onnx' or '.h5' path expected")
 
         return addmo_class

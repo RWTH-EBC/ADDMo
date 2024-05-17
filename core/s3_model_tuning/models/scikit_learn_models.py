@@ -7,6 +7,8 @@ import sklearn
 import pandas as pd
 from abc import ABC
 from sklearn.neural_network import MLPRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Lasso
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import TransformedTargetRegressor
@@ -114,9 +116,9 @@ class ScikitMLP(BaseScikitLearnModel):
         hyperparameters = {}
 
         # Suggest hyperparameters
-        n_layers = trial.suggest_int("n_layers", 1, 3)
+        n_layers = trial.suggest_int("n_layers", 1, 2)
         hidden_layer_sizes = tuple(
-            trial.suggest_int(f"n_units_l{i}", 1, 100) for i in range(n_layers)
+            trial.suggest_int(f"n_units_l{i}", 1, 1000) for i in range(n_layers)
         )
 
         # Dynamic hidden layer sizes based on the number of layers
@@ -124,7 +126,7 @@ class ScikitMLP(BaseScikitLearnModel):
 
         # Other hyperparameters
         hyperparameters["activation"] = "relu"
-        hyperparameters["max_iter"] = 2000
+        hyperparameters["max_iter"] = 5000
 
         return hyperparameters
 

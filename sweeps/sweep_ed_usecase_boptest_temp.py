@@ -53,7 +53,7 @@ def define_config():
         "delta_reaTZon_y": (-0.5, 0.5),
     }
 
-    config = config_blueprints.linear_regression_config(config)
+    config = config_blueprints.tuning_config(config)
 
     return config
 
@@ -103,10 +103,10 @@ def run_all():
 
 config_temp = define_config()
 
-project_name = f"2_{config_temp.simulation_data_name}"
+project_name = f"1_{config_temp.simulation_data_name}"
 # project_name = "Test"
 
 # sweep
-sweep_configuration = sweep_configs.sweep_repetitions_only()
+sweep_configuration = sweep_configs.sweep_several_tunings()
 sweep_id = wandb.sweep(sweep_configuration, project=project_name)
 wandb.agent(sweep_id, function=run_all, project=project_name)

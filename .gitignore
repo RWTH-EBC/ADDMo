@@ -19,6 +19,7 @@
 /results/*
 /sweeps/wandb/*
 /extrapolation_detection/use_cases/results/*
+/extrapolation_detection/use_cases/wandb/*
 
 #Eclipse Settings #
 #####################

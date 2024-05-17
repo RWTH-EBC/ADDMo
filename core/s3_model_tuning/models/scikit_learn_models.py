@@ -13,7 +13,6 @@ from sklearn.compose import TransformedTargetRegressor
 from skl2onnx import to_onnx
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import ModelMetadata
-from core.s3_model_tuning.models.abstract_model import get_commit_id
 from sklearn.linear_model import LinearRegression
 
 
@@ -37,7 +36,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             ]
         )
 
-    def fit(self, x, y):  # Todo catch exception if x or y is not a pandas dataframe / update comments
+    def fit(self, x, y):
         self.feature_names = x.columns  # Save the training data to be used later for ONNX conversion
         self.target_name = y.name  # Save the target column to get target name for metadata
         self.x_ONNX = x.values
@@ -48,10 +47,10 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
 
     def _save_metadata(self, directory, regressor_filename):
 
-        # define metadata
+        # Define metadata.
         self.metadata = ModelMetadata(
             addmo_class=type(self).__name__,
-            addmo_commit_id=get_commit_id(),
+            addmo_commit_id=ModelMetadata.get_commit_id(),
             library=sklearn.__name__,
             library_model_type=type(self.regressor.named_steps['model']).__name__,
             library_version=sklearn.__version__,

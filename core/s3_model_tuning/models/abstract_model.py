@@ -201,7 +201,7 @@ class ModelMetadata(BaseModel):
         description="Instructions for passing input data for making predictions.",
     )
 
-def get_commit_id():
+    def get_commit_id():
         """Get the commit id for metadata when model is saved. """
 
         try:

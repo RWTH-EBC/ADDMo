@@ -9,7 +9,7 @@ from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
-from core.s3_model_tuning.models.keras_model_w import BaseKerasModel, SciKerasSequential
+from core.s3_model_tuning.models.keras_model import BaseKerasModel, SciKerasSequential
 from core.util.definitions import root_dir
 from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from core.executables.exe_model_tuning import exe_model_tuning
@@ -38,9 +38,6 @@ def test_save_load_model(model, dir_path, X_test, y_test, file_type='joblib'):
     # Calculate R-squared
     r_squared_loaded = r2_score(y_test, y_pred_loaded)
 
-    params = loaded_model.get_params()
-    print(f"The parameters of the model are: {params}")
-
     # Check if R-squared is a number
     assert isinstance(r_squared_loaded, (int, float))
 
@@ -67,7 +64,7 @@ class TestModels(unittest.TestCase):
         model.fit(self.X_train, self.y_train)
 
         # Testing saving and loading of model
-        loaded_model= test_save_load_model(model, self.dir_path, self.X_test, self.y_test)
+        loaded_model = test_save_load_model(model, self.dir_path, self.X_test, self.y_test)
         print('loaded model is : ', loaded_model)
 
 
@@ -77,7 +74,7 @@ class TestModels(unittest.TestCase):
         model.fit(self.X_train, self.y_train)
 
         # Testing saving and loading of model
-        loaded_model= test_save_load_model(model, self.dir_path, self.X_test, self.y_test,  file_type='onnx')
+        loaded_model = test_save_load_model(model, self.dir_path, self.X_test, self.y_test,  file_type='onnx')
         print('loaded model is : ', loaded_model)
 
 
@@ -87,10 +84,10 @@ class TestModels(unittest.TestCase):
         model.fit(self.X_train, self.y_train)
 
         # Testing saving and loading of model
-        loaded_model= test_save_load_model(model, self.dir_path, self.X_test, self.y_test, file_type='h5')
+        loaded_model = test_save_load_model(model, self.dir_path, self.X_test, self.y_test, file_type='h5')
         print('loaded model is : ', loaded_model)
 
-class TestKerasTuning(unittest.TestCase):
+class TestKerasOptunaTuning(unittest.TestCase):
 
     def setUp(self):
         # Load and prepare data

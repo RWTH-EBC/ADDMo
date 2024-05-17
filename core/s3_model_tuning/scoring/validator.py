@@ -14,7 +14,7 @@ class CrossValidation(ValidationScoring):
 
 
         cv_info = cross_validate(
-            model.to_scikit_learn(),
+            model.to_scikit_learn(x),
             x,
             y,
             scoring=self.metric,

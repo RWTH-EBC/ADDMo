@@ -100,10 +100,6 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         # Get the hyperparameters of the model
         return self.regressor.named_steps["model"].get_params(deep=deep)
 
-    def default_hyperparameter(self):
-        return self.regressor.get_params()
-
-
 
 
 class ScikitMLP(BaseScikitLearnModel):
@@ -139,6 +135,9 @@ class ScikitMLP(BaseScikitLearnModel):
             "learning_rate": ["constant", "adaptive"],
         }
         return hyperparameter_grid
+
+    def default_hyperparameter(self):
+        return MLPRegressor().get_params()
 
 
 class ScikitMLP_TargetTransformed(ScikitMLP):

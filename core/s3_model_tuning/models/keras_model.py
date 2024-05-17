@@ -123,7 +123,7 @@ class SciKerasSequential(BaseKerasModel):
 
     def default_hyperparameter(self):
         params = self.regressor.get_params()
-        if params "loss" = None -> define #Todo: see init, why not here?
+        # if params "loss" = None -> define #Todo: see init, why not here?
 
         return params
 

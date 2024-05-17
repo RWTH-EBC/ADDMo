@@ -36,24 +36,18 @@ from extrapolation_detection.use_cases import (
 def define_config():
     # configure config
     config = ExtrapolationExperimentConfig()
-    config.simulation_data_name = "Boptest_TAir_mid_ODE_noise_m0_std0.01"
-    config.experiment_name = "Empty"
-    config.name_of_target = "delta_reaTZon_y"
-    config.train_val_test_period = (0, 1488)
+    config.simulation_data_name = "Carnot_mid_noise_m0_std0.02"
     config.shuffle = False
-    config.grid_points_per_axis = 10
-    config.system_simulation = "BopTest_TAir_ODE"
-    config.true_outlier_threshold = 0.1
+    config.grid_points_per_axis = 100
+    config.true_outlier_threshold = 0.2
 
     config.config_explo_quant.exploration_bounds = {
-        "TDryBul": (263.15, 303.15),
-        "HDirNor": (0, 1000),
-        "oveHeaPumY_u": (0, 1),
-        "reaTZon_y": (290.15, 300.15),
-        "delta_reaTZon_y": (-0.5, 0.5),
+        "$T_{umg}$ in °C": (-10, 30),
+        "$P_{el}$ in kW": (0, 5),
+        "$\dot{Q}_{heiz}$ in kW": (0, 35)
     }
 
-    config = config_blueprints.linear_regression_config(config)
+    config = config_blueprints.tuning_config(config)
 
     return config
 
@@ -98,15 +92,20 @@ def run_all():
     s8_3_coverage_tuned_ND.exe(config)
     s8_4_coverage_true_validity.exe(config)
 
+    s7_2_plotting.exe_plot_2D_all(config)
+    s7_2_plotting.exe_plot_2D_detector(config)
+
     ExperimentLogger.finish_experiment()
 
 
 config_temp = define_config()
 
-project_name = f"2_{config_temp.simulation_data_name}"
+
+project_name = f"1_{config_temp.simulation_data_name}"
 # project_name = "Test"
 
 # sweep
-sweep_configuration = sweep_configs.sweep_repetitions_only()
+sweep_configuration = sweep_configs.sweep_several_tunings()
 sweep_id = wandb.sweep(sweep_configuration, project=project_name)
 wandb.agent(sweep_id, function=run_all, project=project_name)
+

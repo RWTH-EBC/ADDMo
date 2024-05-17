@@ -24,13 +24,13 @@ def exe(config: ExtrapolationExperimentConfig):
         "pred_regressor_fit", directory=regressor_directory
     )
     xy_regressor_fit["y_pred"] = y_pred
+    config.config_explo_quant.exploration_bounds["y_pred"] = config.config_explo_quant.exploration_bounds[config.name_of_target]
 
     # define bounds
     bounds = point_generator.infer_or_forward_bounds(
         config.config_explo_quant.exploration_bounds, xy_regressor_fit
     )
-    if "y_pred" in xy_regressor_fit.columns:
-        bounds["y_pred"] = bounds[config.name_of_target]
+
 
 
 

@@ -43,9 +43,9 @@ def exe(config: ExtrapolationExperimentConfig):
     y_pred = pd.Series(regressor.predict(x_train_val), index=x_train_val.index)
     y_pred.name = config.name_of_target + "_pred"
 
-    # safe regressor to pickle #Todo: evtl. via onnx?
+    # safe regressor
     regressor_directory = os.path.join(config.experiment_folder, "regressors")
-    loading_saving.write_pkl(regressor, "regressor", directory=regressor_directory)
+    loading_saving.write_pkl(regressor, "regressor", directory=regressor_directory) #TODO: save via joblib/h5 or onnx and also load the regressor in the same way in later scripts
 
     loading_saving.write_csv(xy_train_val, "xy_regressor_fit", directory=regressor_directory)
     loading_saving.write_csv(x_train_val, "x_regressor_fit", directory=regressor_directory)

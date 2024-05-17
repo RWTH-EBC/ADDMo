@@ -10,6 +10,9 @@ from core.util.load_save import load_config_from_json
 from core.util.definitions import results_dir_extrapolation_experiment
 from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 
+from sweeps import sweep_configs
+from sweeps import config_blueprints
+
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
     ExtrapolationExperimentConfig,
 )
@@ -34,34 +37,18 @@ def define_config():
     # configure config
     config = ExtrapolationExperimentConfig()
     config.simulation_data_name = "Carnot_mid_noise_m0_std0.02"
-    # config.experiment_name = "B"
-    # config.name_of_target = "delta_reaTZon_y"
-    # config.train_val_test_period = (0, 1488)
     config.shuffle = False
     config.grid_points_per_axis = 100
-    # config.system_simulation = "BopTest_TAir_ODE"  # "carnot
     config.true_outlier_threshold = 0.2
-    #
-    config.config_explo_quant.explo_grid_points_per_axis = 10
 
-    path_to_config = os.path.join(
-        root_dir(),
-        "core",
-        "s3_model_tuning",
-        "config",
-        "model_tuner_config_no_tuning.json",
-    )
-    config.config_model_tuning = load_config_from_json(path_to_config, ModelTunerConfig)
-    config.config_model_tuning.models = ["MLP_TargetTransformed"]
-    config.config_model_tuning.hyperparameter_tuning_kwargs = {
-        "hyperparameter_set": {
-            "hidden_layer_sizes": [5],
-            "activation": "relu",
-            "max_iter": 2000,
-        }
+    config.config_explo_quant.exploration_bounds = {
+        "$T_{umg}$ in °C": (-10, 30),
+        "$P_{el}$ in kW": (0, 5),
+        "$\dot{Q}_{heiz}$ in kW": (0, 35)
     }
 
-    config.config_detector.detectors = ["KNN", "GP", "OCSVM"]
+    config = config_blueprints.linear_regression_config(config)
+
     return config
 
 
@@ -73,7 +60,10 @@ def run_all():
     run = wandb.init(config=config.dict())
 
     # update config with the experiment name of wandb run
-    wandb.config.update({"experiment_name": f"{config.simulation_data_name}_1_{run.name}"}, allow_val_change=True)
+    wandb.config.update(
+        {"experiment_name": f"1_{config.simulation_data_name}_{run.name}"},
+        allow_val_change=True,
+    )
 
     # convert config dict back to pydantic object
     config = ExtrapolationExperimentConfig(**wandb.config)
@@ -108,44 +98,14 @@ def run_all():
     ExperimentLogger.finish_experiment()
 
 
-hidden_layer_sizes = []
-
-# Single layer possibilities
-for neurons in [5, 10, 100, 1000]:
-    hidden_layer_sizes.append([neurons])
-
-# Two layer possibilities
-for neurons1 in [5, 10, 100, 1000]:
-    for neurons2 in [5, 10, 100, 1000]:
-        hidden_layer_sizes.append([neurons1, neurons2])
-
-sweep_configuration = {
-    "name": "trial_sweep_ed_usecase",
-    "method": "grid",
-    "metric": {"name": "coverage_true_validity", "goal": "maximize"},
-    "parameters": {
-        "repetition": {"values": [1, 2, 3, 4, 5, 6, 7, 8]},
-        "config_model_tuning": {
-            "parameters": {
-                "hyperparameter_tuning_kwargs": {
-                    "parameters": {
-                        "hyperparameter_set": {
-                            "parameters": {
-                                "hidden_layer_sizes": {"values": hidden_layer_sizes}
-                            }
-                        }
-                    }
-                }
-            }
-        },
-    },
-}
-
 config_temp = define_config()
 
+
+project_name = f"2_{config_temp.simulation_data_name}"
 # project_name = "Test"
-project_name = config_temp.simulation_data_name
 
+# sweep
+sweep_configuration = sweep_configs.sweep_repetitions_only()
 sweep_id = wandb.sweep(sweep_configuration, project=project_name)
-
 wandb.agent(sweep_id, function=run_all, project=project_name)
+

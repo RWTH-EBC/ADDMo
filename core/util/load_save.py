@@ -1,18 +1,18 @@
 import os
 import shutil
-
 import pandas as pd
 import json
 from pathlib import Path
 from pydantic import FilePath, BaseModel
 from typing import Type, TypeVar, Union
-
+import glob
+from core.s3_model_tuning.models.model_factory import ModelFactory
 
 ConfigT = TypeVar("ConfigT", bound=BaseModel)
 
 
 def load_config_from_json(
-    config: Union[ConfigT, FilePath, str, dict], config_type: Type[ConfigT]
+        config: Union[ConfigT, FilePath, str, dict], config_type: Type[ConfigT]
 ) -> ConfigT:
     """Generic config loader, either accepting a path to a json file, a json string, a
     dict or passing through a valid config object."""
@@ -78,7 +78,7 @@ def create_or_clean_directory(path: str) -> str:
     else:
         # Path exists, ask for confirmation to delete current contents
         response = input(f"The directory {path} already exists. To overwrite "
-        "the content type <y>, for deleting the current contents type <d>")
+                         "the content type <y>, for deleting the current contents type <d>")
         if response.lower() == 'd':
             # Delete the contents of the directory
             for filename in os.listdir(path):
@@ -94,3 +94,20 @@ def create_or_clean_directory(path: str) -> str:
             return None
 
     return path
+
+
+def read_regressor(filename, directory):
+    """Reads a regressor model from a file, automatically determining the file type."""
+    file_types = ['h5', 'joblib', 'onnx']
+    files_found = []
+
+    for file_type in file_types:
+        path_pattern = os.path.join(directory, f"{filename}.{file_type}")
+        files_found.extend(glob.glob(path_pattern))
+
+    if not files_found:
+        raise FileNotFoundError(f"No model file found for {filename} in {directory} with supported types {file_types}")
+
+    latest_file = max(files_found, key=os.path.getmtime)  # Use the last saved file for loading the regressor
+    loaded_model = ModelFactory().load_model(latest_file)
+    return loaded_model

@@ -2,7 +2,6 @@ import os
 import json
 import keras
 import tensorflow as tf
-import tf2onnx
 import onnx
 import pandas as pd
 import h5py
@@ -83,8 +82,8 @@ class SciKerasSequential(BaseKerasModel):
         # Normalisation of first layer (input data).
         sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation initialisation works only on np arrays
         self.regressor = KerasRegressor(model=sequential_regressor,
-                                        optimizer=self.hyperparameters['optimizer'],
                                         loss=self.hyperparameters['loss'],
+                                        epochs=self.hyperparameters['max_iter'],
                                         verbose=0)
         self.regressor.fit(x, y)
 
@@ -105,8 +104,11 @@ class SciKerasSequential(BaseKerasModel):
         normalizer = Normalization(axis=-1)  # Preprocessing layer
         sequential_regressor.add(Input(shape=input_shape))
         sequential_regressor.add(normalizer)
-        sequential_regressor.add(Dense(units=64, activation=self.hyperparameters.get('activation')))
-        sequential_regressor.add(Dropout(0.5))
+        # Adding hidden layers based on hyperparameters
+        for units in self.hyperparameters['hidden_layer_sizes']:
+            sequential_regressor.add(Dense(units=units, activation='relu'))
+            sequential_regressor.add(Dropout(0.5))
+
         sequential_regressor.add(Dense(1, activation='linear'))  # Output shape = 1 for continuous variable
         return sequential_regressor
 
@@ -115,7 +117,7 @@ class SciKerasSequential(BaseKerasModel):
         Returns a compiled sequential model.
         """
         sequential_regressor = self._build_regressor_architecture(input_shape)
-        sequential_regressor.compile(optimizer=self.hyperparameters['optimizer'], loss=self.hyperparameters['loss'])
+        sequential_regressor.compile(loss=self.hyperparameters['loss'])
         return sequential_regressor
 
     def to_scikit_learn(self, x):
@@ -125,8 +127,8 @@ class SciKerasSequential(BaseKerasModel):
         input_shape = (len(x.columns),)
         # proper compilation of the model is necessary for the conversion
         self.regressor = KerasRegressor(model=self._build_regressor_architecture(input_shape),
-                                        optimizer=self.hyperparameters['optimizer'],
                                         loss=self.hyperparameters['loss'],
+                                        epochs=self.hyperparameters['max_iter'],
                                         verbose=0)
 
         return self.regressor
@@ -138,7 +140,6 @@ class SciKerasSequential(BaseKerasModel):
         """
         self.hyperparameters = hyperparameters
 
-
     def default_hyperparameter(self):
         """"
         Return default hyperparameters.
@@ -147,24 +148,27 @@ class SciKerasSequential(BaseKerasModel):
         # Define default loss if not present
         if hyperparameters['loss'] is None:
             hyperparameters['loss'] = MeanSquaredError()
+        hyperparameters['hidden_layer_sizes'] = (64,)  # Set default hidden layer size
+        hyperparameters['max_iter'] = hyperparameters['epochs']  # Keras uses epochs as max_iterations
 
         return hyperparameters
 
     def optuna_hyperparameter_suggest(self, trial):
+
+        n_layers = trial.suggest_int("n_layers", 1, 2)
+        hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 10) for i in range(n_layers))
         hyperparameters = {
-            "activation": trial.suggest_categorical("activation", ["relu", "sigmoid", "linear", "tanh"]),
-            "learning_rate": trial.suggest_float("learning_rate", 1e-5, 1e-1, log=True),
-            "optimizer": trial.suggest_categorical("optimizer", ["sgd", "adam", "rmsprop"]),
-            "loss": MeanSquaredError()
+            "hidden_layer_sizes": hidden_layer_sizes,
+            "loss": MeanSquaredError(),
+            "max_iter": 5
         }
         return hyperparameters
 
     def grid_search_hyperparameter(self):
+
         hyperparameter_grid = {
-            "activation": ["tanh", "relu", "softmax", "leaky_relu", "sigmoid", "exponential"],
-            "optimizer": [SGD(), Adam(), RMSprop(), Adagrad()],
-            "learning_rate": [0.0001, 0.001, 0.01],
-            "loss": MeanSquaredError()
+            "hidden_layer_sizes": [(64,), (128, 64), (256, 128, 64)],
+            "loss": [MeanSquaredError()],
+            "max_iter": [5000]
         }
         return hyperparameter_grid
-

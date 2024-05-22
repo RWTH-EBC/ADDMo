@@ -2,7 +2,6 @@ import os
 import pickle
 from typing import Any
 import pandas as pd
-from core.s3_model_tuning.models.keras_models import SciKerasSequential
 import glob
 from core.s3_model_tuning.models.model_factory import ModelFactory
 
@@ -166,29 +165,3 @@ def read_csv(filename: str, directory: str = None, **kwargs) -> pd.DataFrame:
         raise FileNotFoundError(f"The path {path} does not exist.")
 
 
-def write_regressor(regressor, directory, filename, file_type=None):
-    """Writes a regressor to a file based on its class type."""
-    if isinstance(regressor, SciKerasSequential):  # Save as .h5 if regressor is Keras
-        file_type = 'h5'
-        regressor.save_regressor(directory=directory, filename=filename, file_type=file_type)
-    else:
-        if file_type is None:
-            file_type = 'joblib'
-        regressor.save_regressor(directory=directory, filename=filename, file_type=file_type)
-
-
-def read_regressor(filename, directory): #Todo: move to load_save.py as this belongs more to the core of ML than to extrapolation detection (move or delete write_regressor as well)
-    """Reads a regressor model from a file, automatically determining the file type."""
-    file_types = ['h5', 'joblib', 'onnx']
-    files_found = []
-
-    for file_type in file_types:
-        path_pattern = os.path.join(directory, f"{filename}.{file_type}")
-        files_found.extend(glob.glob(path_pattern))
-
-    if not files_found:
-        raise FileNotFoundError(f"No model file found for {filename} in {directory} with supported types {file_types}")
-
-    latest_file = max(files_found, key=os.path.getmtime)  # Use the last saved file for loading the regressor
-    loaded_model = ModelFactory().load_model(latest_file)
-    return loaded_model

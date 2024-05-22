@@ -39,9 +39,9 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         )
 
     def fit(self, x, y):
-        self.feature_names = x.columns  # Save the training data to be used later for ONNX conversion #TODO: Also convert to x_fit and y_fit to have it consistent over all models
-        self.target_name = y.name  # Save the target column to get target name for metadata
-        self.x_ONNX = x.values
+        self.x_fit = x
+        self.y_fit = y
+        self.x_ONNX = x.values  # Save the training data to be used later for ONNX conversion
         self.regressor.fit(self.x_ONNX, y)  # Train the model
 
     def predict(self, x):
@@ -57,8 +57,8 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             library=sklearn.__name__,
             library_model_type=type(self.regressor.named_steps['model']).__name__,
             library_version=sklearn.__version__,
-            target_name=self.target_name,
-            features_ordered=list(self.feature_names),
+            target_name=self.y_fit.name,
+            features_ordered=list(self.x_fit.columns),
             preprocessing=['StandardScaler for all features'])
 
         # save metadata

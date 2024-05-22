@@ -50,7 +50,7 @@ config.config_explo_quant.exploration_bounds = {
 
 config.config_model_tuning.models = ["SciKerasSequential"] # it does work with e.g. ScikitMLP_TargetTransformed
 config.config_model_tuning.hyperparameter_tuning_type = "OptunaTuner"
-config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 5}
+config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 2}
 config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"
 
 config.config_detector.detectors = ["KNN", "GP", "OCSVM"]

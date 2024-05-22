@@ -8,6 +8,8 @@ from extrapolation_detection.util import loading_saving
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.model_tuner import ModelTuner
 from core.util.data_handling import split_target_features
+from core.s3_model_tuning.models.keras_models import BaseKerasModel
+from core.s3_model_tuning.models.scikit_learn_models import BaseScikitLearnModel
 
 from extrapolation_detection.util import data_handling
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
@@ -45,10 +47,9 @@ def exe(config: ExtrapolationExperimentConfig):
 
     # safe regressor
     regressor_directory = os.path.join(config.experiment_folder, "regressors")
-    loading_saving.write_pkl(regressor, "regressor", directory=regressor_directory) #TODO: save via joblib/h5 or onnx and also load the regressor in the same way in later scripts
-
     loading_saving.write_csv(xy_train_val, "xy_regressor_fit", directory=regressor_directory)
     loading_saving.write_csv(x_train_val, "x_regressor_fit", directory=regressor_directory)
+    loading_saving.write_regressor(regressor, regressor_directory, "regressor")
     loading_saving.write_csv(y_train_val, "y_regressor_fit", directory=regressor_directory)
     loading_saving.write_csv(y_pred, "pred_regressor_fit", directory=regressor_directory)
 

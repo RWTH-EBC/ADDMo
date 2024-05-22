@@ -33,11 +33,12 @@ class ModelTuner:
             validation_score = self.scorer.score_validation(
                 model, x_train_val, y_train_val
             )
-
+            model.fit(x_train_val, y_train_val)
             model_dict[model_name] = {
                 "model": model,
                 "validation_score": validation_score,
             }
+
         return model_dict
 
     def get_best_model_name(self, model_dict):

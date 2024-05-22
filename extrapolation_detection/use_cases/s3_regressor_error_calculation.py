@@ -18,7 +18,7 @@ from extrapolation_detection.use_cases.config.ed_experiment_config import (
 
 def exe(config: ExtrapolationExperimentConfig):
     # load model
-    regressor: AbstractMLModel = loading_saving.read_pkl(
+    regressor: AbstractMLModel = loading_saving.read_regressor(
         "regressor", directory=os.path.join(config.experiment_folder, "regressors")
     )
 

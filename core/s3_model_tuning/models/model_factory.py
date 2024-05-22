@@ -68,7 +68,7 @@ class ModelFactory:
 
     @staticmethod
     def load_model(abs_path: str) -> AbstractMLModel:
-        '''Load the model from the specified path and return the model instance.'''
+        """Load the model from the specified path and return the model instance."""
 
         # Load regressor from joblib file to addmo model class
         if abs_path.endswith('.joblib'):
@@ -88,7 +88,7 @@ class ModelFactory:
             metadata = ModelFactory._load_metadata(abs_path)
             addmo_class_name = metadata.get('addmo_class')
             addmo_class = ModelFactory.model_factory(addmo_class_name)
-            regressor= keras.models.load_model(abs_path)
+            regressor = keras.models.load_model(abs_path)
             addmo_class.load_regressor(regressor)
 
         else:

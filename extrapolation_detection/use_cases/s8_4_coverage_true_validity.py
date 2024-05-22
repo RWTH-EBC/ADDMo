@@ -24,7 +24,7 @@ def exe(config: ExtrapolationExperimentConfig):
     grid_path = os.path.join(config.experiment_folder, "explo_quant")
     x_grid = loading_saving.read_csv(f"grid_points", grid_path)
 
-    regressor: AbstractMLModel = loading_saving.read_pkl(
+    regressor: AbstractMLModel = loading_saving.read_regressor(
         "regressor", directory=os.path.join(config.experiment_folder, "regressors")
     )
 

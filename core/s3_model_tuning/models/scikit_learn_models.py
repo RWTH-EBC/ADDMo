@@ -1,9 +1,7 @@
 import os
-
 import joblib
 import json
 import sklearn
-
 import pandas as pd
 from abc import ABC
 from sklearn.neural_network import MLPRegressor
@@ -29,7 +27,9 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
     """
 
     def __init__(self, regressor):
-        # Create an instance of the scikit-learn model including a scaler
+        """
+        Create an instance of the scikit-learn model including a scaler
+        """
         self.regressor = Pipeline(
             steps=[
                 ("scaler", StandardScaler()),  # scale the features
@@ -47,9 +47,10 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
     def predict(self, x):
         return self.regressor.predict(x)  # Make predictions
 
-    def _save_metadata(self, directory, regressor_filename):
-
-        # Define metadata.
+    def _define_metadata(self, directory, regressor_filename):
+        """
+        Define metadata.
+        """
         self.metadata = ModelMetadata(
             addmo_class=type(self).__name__,
             addmo_commit_id=ModelMetadata.get_commit_id(),
@@ -67,6 +68,9 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             json.dump(self.metadata.dict(), f)
 
     def save_regressor(self, directory, filename=None, file_type='joblib'):
+        """"
+        Save regressor as .joblib or .onnx file
+        """
 
         if filename is None:
             filename = type(self).__name__
@@ -75,12 +79,12 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
 
         if file_type == 'joblib':
             joblib.dump(self.regressor, path)
-            self._save_metadata(directory, filename)
+            self._define_metadata(directory, filename)
             print(f"Model saved to {path}")
 
         elif file_type == 'onnx':
             onx = to_onnx(self.regressor, self.x_ONNX)
-            self._save_metadata(directory, filename)
+            self._define_metadata(directory, filename)
             with open(path, "wb") as f:
                 f.write(onx.SerializeToString())
                 print(f"Model saved to {path}.")
@@ -92,12 +96,15 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         return self.regressor
 
     def set_params(self, hyperparameters):
-        # access the hyperparameters of the model within the pipeline within the
-        # TransformedTargetRegressor
+        """
+        access the hyperparameters of the model within the pipeline within the TransformedTargetRegressor
+        """
         self.regressor.named_steps["model"].set_params(**hyperparameters)
 
     def get_params(self, deep=True):
-        # Get the hyperparameters of the model
+        """
+        Get the hyperparameters of the model
+        """
         return self.regressor.named_steps["model"].get_params(deep=deep)
 
 

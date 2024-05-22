@@ -78,8 +78,8 @@ class SciKerasSequential(BaseKerasModel):
         """
         self.x = x
         self.y = y
-        self.input_shape = (len(x.columns),)
-        sequential_regressor = self._build_regressor(self.input_shape)
+        input_shape = (len(x.columns),)
+        sequential_regressor = self._build_regressor(input_shape)
         # Normalisation of first layer (input data).
         sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation works on np arrays
         self.keras_regressor = KerasRegressor(model=sequential_regressor,
@@ -118,12 +118,12 @@ class SciKerasSequential(BaseKerasModel):
         sequential_regressor.compile(optimizer=self.hyperparameters['optimizer'], loss=self.hyperparameters['loss'])
         return sequential_regressor
 
-    def to_scikit_learn(self,x):
+    def to_scikit_learn(self, x):
         """""
         Convert Keras Model to Scikeras Regressor for tuning.
         """
-        self.input_shape = (len(x.columns),)
-        self.keras_regressor = KerasRegressor(model=self._build_regressor_architecture(self.input_shape),
+        input_shape = (len(x.columns),)
+        self.keras_regressor = KerasRegressor(model=self._build_regressor_architecture(input_shape),
                                               optimizer=self.hyperparameters['optimizer'],
                                               loss=self.hyperparameters['loss'],
                                               verbose=0)

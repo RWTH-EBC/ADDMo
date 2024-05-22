@@ -39,7 +39,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         )
 
     def fit(self, x, y):
-        self.feature_names = x.columns  # Save the training data to be used later for ONNX conversion
+        self.feature_names = x.columns  # Save the training data to be used later for ONNX conversion #TODO: Also convert to x_fit and y_fit to have it consistent over all models
         self.target_name = y.name  # Save the target column to get target name for metadata
         self.x_ONNX = x.values
         self.regressor.fit(self.x_ONNX, y)  # Train the model

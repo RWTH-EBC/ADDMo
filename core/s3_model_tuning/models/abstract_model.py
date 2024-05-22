@@ -3,6 +3,8 @@ import onnxruntime as rt
 import numpy as np
 import subprocess
 from abc import ABC, abstractmethod
+
+import pandas as pd
 from pydantic import BaseModel, Field
 
 
@@ -21,6 +23,8 @@ class AbstractMLModel(ABC):
     def __init__(self):
         """Initializes the machine learning model."""
         self.regressor = None
+        self.x_fit: pd.DataFrame = None
+        self.y_fit: pd.DataFrame = None
 
     @abstractmethod
     def fit(self, x, y):

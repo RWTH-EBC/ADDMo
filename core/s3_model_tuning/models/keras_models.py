@@ -32,8 +32,8 @@ class BaseKerasModel(AbstractMLModel, ABC):
             library=keras.__name__,
             library_model_type='Sequential',
             library_version=keras.__version__,
-            target_name=self.y.name,
-            features_ordered=list(self.x.columns),
+            target_name=self.y_fit.name,
+            features_ordered=list(self.x_fit.columns),
             preprocessing=['Scaling as layer of the ANN.'])
 
         # Save Metadata.
@@ -76,8 +76,8 @@ class SciKerasSequential(BaseKerasModel):
         """""
         Build, compile and fit the sequential model.
         """
-        self.x = x
-        self.y = y
+        self.x_fit = x
+        self.y_fit = y
         input_shape = (len(x.columns),)
         sequential_regressor = self._build_regressor(input_shape)
         # Normalisation of first layer (input data).

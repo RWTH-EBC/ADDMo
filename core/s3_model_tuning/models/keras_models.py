@@ -5,7 +5,9 @@ import tensorflow as tf
 import onnx
 import pandas as pd
 import h5py
+import tf2onnx
 from abc import ABC
+from packaging import version
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Input, Dense, Normalization, Dropout, Activation
 from scikeras.wrappers import KerasRegressor
@@ -50,12 +52,15 @@ class BaseKerasModel(AbstractMLModel, ABC):
         if file_type in ['h5', 'keras']:
             path = os.path.join(directory, f"{filename}.{file_type}")
             self.regressor.model_.save(path, overwrite=True)
+            print(f"Model saved to {path}")
         elif file_type == "onnx":
+            if version.parse(keras.__version__).major != 2:  # Checking version compatibility
+                raise ImportError("ONNX is only supported with Keras version 2")
             path = os.path.join(directory, f"{filename}.{file_type}")
-            onnx_model, _ = tf2onnx.convert.from_keras(self.regressor)
+            spec = (tf.TensorSpec((None,) + self.regressor.model_.input_shape[1:], tf.float32, name="input"),)
+            onnx_model, _ = tf2onnx.convert.from_keras(self.regressor.model_, input_signature=spec, opset=13)
             onnx.save(onnx_model, path)
-
-        print(f"Model saved to {path}")
+            print(f"Model saved to {path}")
 
     def load_regressor(self, regressor):
         """""

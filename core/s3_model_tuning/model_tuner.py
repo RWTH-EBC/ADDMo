@@ -33,7 +33,7 @@ class ModelTuner:
             validation_score = self.scorer.score_validation(
                 model, x_train_val, y_train_val
             )
-            model.fit(x_train_val, y_train_val) # TODO: Why?? This is already done in tune_model
+            model.fit(x_train_val, y_train_val) # TODO: Why?? This is already done in tune_model -> explain to me tomorrow
             model_dict[model_name] = {
                 "model": model,
                 "validation_score": validation_score,

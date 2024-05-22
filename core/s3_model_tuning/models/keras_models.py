@@ -50,7 +50,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
         self._define_metadata(directory, filename)
         if file_type in ['h5', 'keras']:
             path = os.path.join(directory, f"{filename}.{file_type}")
-            self.keras_regressor.model_.save(path, overwrite=True)
+            self.regressor.model_.save(path, overwrite=True)
         elif file_type == "onnx":
             path = os.path.join(directory, f"{filename}.{file_type}")
             onnx_model, _ = tf2onnx.convert.from_keras(self.regressor)
@@ -62,14 +62,14 @@ class BaseKerasModel(AbstractMLModel, ABC):
         """""
         Load trained model for serialisation.
         """
-        self.keras_regressor = regressor
+        self.regressor = regressor
 
 
 class SciKerasSequential(BaseKerasModel):
     """"" SciKeras Sequential model. """
 
     def __init__(self):
-        self.keras_regressor = KerasRegressor()  # SciKeras Regressor
+        self.regressor = KerasRegressor()  # SciKeras Regressor
         self.hyperparameters = self.default_hyperparameter()
 
     def fit(self, x, y):
@@ -81,21 +81,21 @@ class SciKerasSequential(BaseKerasModel):
         input_shape = (len(x.columns),)
         sequential_regressor = self._build_regressor(input_shape)
         # Normalisation of first layer (input data).
-        sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation works on np arrays
-        self.keras_regressor = KerasRegressor(model=sequential_regressor,
-                                              optimizer=self.hyperparameters['optimizer'],
-                                              loss=self.hyperparameters['loss'],
-                                              verbose=0)
-        self.keras_regressor.fit(x, y)
+        sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation initialisation works only on np arrays
+        self.regressor = KerasRegressor(model=sequential_regressor,
+                                        optimizer=self.hyperparameters['optimizer'],
+                                        loss=self.hyperparameters['loss'],
+                                        verbose=0)
+        self.regressor.fit(x, y)
 
     def predict(self, x):
-        return self.keras_regressor.predict(x)
+        return self.regressor.predict(x)
 
     def get_params(self, deep=True):
         """
         Get the hyperparameters of the model.
         """
-        return self.keras_regressor.get_params()
+        return self.regressor.get_params()
 
     def _build_regressor_architecture(self, input_shape):
         """
@@ -123,15 +123,18 @@ class SciKerasSequential(BaseKerasModel):
         Convert Keras Model to Scikeras Regressor for tuning.
         """
         input_shape = (len(x.columns),)
-        self.keras_regressor = KerasRegressor(model=self._build_regressor_architecture(input_shape),
-                                              optimizer=self.hyperparameters['optimizer'],
-                                              loss=self.hyperparameters['loss'],
-                                              verbose=0)
-        return self.keras_regressor
+        # proper compilation of the model is necessary for the conversion
+        self.regressor = KerasRegressor(model=self._build_regressor_architecture(input_shape),
+                                        optimizer=self.hyperparameters['optimizer'],
+                                        loss=self.hyperparameters['loss'],
+                                        verbose=0)
+
+        return self.regressor
 
     def set_params(self, hyperparameters):
         """""
-        Update the hyperparameters and regressor.
+        Update the hyperparameters in internal storage, which is accessed while building the
+        regressor. Not done here, because compilation requires the input_shape to be available.
         """
         self.hyperparameters = hyperparameters
 
@@ -140,7 +143,7 @@ class SciKerasSequential(BaseKerasModel):
         """"
         Return default hyperparameters.
         """
-        hyperparameters = self.keras_regressor.get_params()
+        hyperparameters = self.regressor.get_params()
         # Define default loss if not present
         if hyperparameters['loss'] is None:
             hyperparameters['loss'] = MeanSquaredError()

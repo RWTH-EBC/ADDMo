@@ -6,6 +6,8 @@ import glob
 from core.s3_model_tuning.models.model_factory import ModelFactory
 
 
+
+
 def write_pkl(data, filename: str, directory: str = None, override: bool = True):
     """Writes data to a pickle file.
 
@@ -22,14 +24,7 @@ def write_pkl(data, filename: str, directory: str = None, override: bool = True)
 
     filename = filename + ".pkl"
 
-    path = _get_path(filename, directory)
-
-    # make sure the file does not already exist
-    if os.path.exists(path) and not override:
-        if not _get_bool(
-                f'The file "{path}" already exists. Do you want to override it?\n'
-        ):
-            return 0
+    path = create_path_or_ask_to_override(filename, directory, override)
 
     # open the path and write the file
     pkl_file = open(path, "wb")
@@ -71,39 +66,6 @@ def read_pkl(filename: str, directory: str = None) -> Any:
     else:
         raise FileNotFoundError(f"The path {path} does not exist.")
 
-
-def _get_path(filename: str, directory: str) -> str:
-    """
-    Returns the full path for a given filename and directory.
-    """
-    if directory is not None:  # check if directory is none
-        if not os.path.exists(directory):  # check if path exists
-            os.makedirs(directory)  # create new directory
-        return os.path.join(directory, filename)  # calculate full path
-    else:
-        return filename
-
-
-def _get_bool(message: str, true: list = None, false: list = None) -> bool or str:
-    if false is None:
-        false = ["no", "nein", "false", "1", "n"]
-    if true is None:
-        true = ["yes", "ja", "true", "wahr", "0", "y"]
-
-    val = input(message).lower()
-    if val in true:
-        return True
-    elif val in false:
-        return False
-    else:
-        print("Please try again.")
-        print("True:", true)
-        print("False:", false)
-        _get_bool(message, true, false)
-
-    return val
-
-
 def write_csv(data: pd.DataFrame, filename: str, directory: str = None, overwrite: bool = True):
     """Writes data to a CSV file.
 
@@ -121,14 +83,7 @@ def write_csv(data: pd.DataFrame, filename: str, directory: str = None, overwrit
 
     filename = filename + ".csv"
 
-    path = _get_path(filename, directory)
-
-    # make sure the file does not already exist
-    if os.path.exists(path) and not overwrite:
-        if not _get_bool(
-                f'The file "{path}" already exists. Do you want to override it?\n'
-        ):
-            return 0
+    path = create_path_or_ask_to_override(filename, directory, overwrite)
 
     # Write DataFrame to CSV
     data.to_csv(path, sep=";", index=True, header=True, encoding="utf-8")
@@ -165,3 +120,48 @@ def read_csv(filename: str, directory: str = None, **kwargs) -> pd.DataFrame:
         raise FileNotFoundError(f"The path {path} does not exist.")
 
 
+def create_path_or_ask_to_override(filename, directory, override: bool = True) -> str: # Todo: move all this "handling" to the core util load_save_utils
+    path = _get_path(filename, directory)
+    _overwrite_file(path, override)
+    return path
+
+def _overwrite_file(path: str, overwrite: bool):
+    """
+    Checks if a file exists and if it should be overwritten.
+    """
+    if os.path.exists(path) and not overwrite:
+        if not _get_bool(
+                f'The file "{path}" already exists. Do you want to override it?\n'
+        ):
+            return 0
+
+def _get_path(filename: str, directory: str) -> str:
+    """
+    Returns the full path for a given filename and directory.
+    """
+    if directory is not None:  # check if directory is none
+        if not os.path.exists(directory):  # check if path exists
+            os.makedirs(directory)  # create new directory
+        return os.path.join(directory, filename)  # calculate full path
+    else:
+        return filename
+
+
+def _get_bool(message: str, true: list = None, false: list = None) -> bool or str:
+    if false is None:
+        false = ["no", "nein", "false", "1", "n"]
+    if true is None:
+        true = ["yes", "ja", "true", "wahr", "0", "y"]
+
+    val = input(message).lower()
+    if val in true:
+        return True
+    elif val in false:
+        return False
+    else:
+        print("Please try again.")
+        print("True:", true)
+        print("False:", false)
+        _get_bool(message, true, false)
+
+    return val

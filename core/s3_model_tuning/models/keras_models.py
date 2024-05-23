@@ -16,6 +16,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import SGD, Adam, RMSprop, Adagrad
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import ModelMetadata
+from extrapolation_detection.util.loading_saving import create_path_or_ask_to_override
 
 
 class BaseKerasModel(AbstractMLModel, ABC):
@@ -49,22 +50,26 @@ class BaseKerasModel(AbstractMLModel, ABC):
         if filename is None:
             filename = type(self).__name__
         self._define_metadata(directory, filename)
+        full_filename = f"{filename}.{file_type}"
+
+        path = create_path_or_ask_to_override(full_filename, directory) # Todo: check if works, also implement for scikit
+
         if file_type in ['h5', 'keras']:
-            path = os.path.join(directory, f"{filename}.{file_type}")
             self.regressor.model_.save(path, overwrite=True)
-            print(f"Model saved to {path}")
         elif file_type == "onnx":
+            # catch exceptions
             if version.parse(keras.__version__).major != 2:  # Checking version compatibility
                 raise ImportError("ONNX is only supported with Keras version 2")
             try:
                 import tf2onnx
             except ImportError:
                 raise ImportError("tf2onnx is required to save the model in ONNX format")
-            path = os.path.join(directory, f"{filename}.{file_type}")
+
+            # actually save onnx
             spec = (tf.TensorSpec((None,) + self.regressor.model_.input_shape[1:], tf.float32, name="input"),)
             onnx_model, _ = tf2onnx.convert.from_keras(self.regressor.model_, input_signature=spec, opset=13)
             onnx.save(onnx_model, path)
-            print(f"Model saved to {path}")
+        print(f"Model saved to {path}")
 
     def load_regressor(self, regressor):
         """""

@@ -68,7 +68,7 @@ def write_data(df: pd.DataFrame, abs_path: str):
         df.to_excel(abs_path)
 
 
-def create_or_clean_directory(path: str) -> str:
+def create_or_clean_directory(path: str) -> str: # Todo : move to load_save_utils
     if not os.path.exists(path):
         # Path does not exist, create it
         os.makedirs(path)

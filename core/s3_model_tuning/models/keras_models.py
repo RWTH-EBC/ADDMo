@@ -5,7 +5,7 @@ import tensorflow as tf
 import onnx
 import pandas as pd
 import h5py
-import tf2onnx
+
 from abc import ABC
 from packaging import version
 from tensorflow.keras.models import Sequential
@@ -56,6 +56,10 @@ class BaseKerasModel(AbstractMLModel, ABC):
         elif file_type == "onnx":
             if version.parse(keras.__version__).major != 2:  # Checking version compatibility
                 raise ImportError("ONNX is only supported with Keras version 2")
+            try:
+                import tf2onnx
+            except ImportError:
+                raise ImportError("tf2onnx is required to save the model in ONNX format")
             path = os.path.join(directory, f"{filename}.{file_type}")
             spec = (tf.TensorSpec((None,) + self.regressor.model_.input_shape[1:], tf.float32, name="input"),)
             onnx_model, _ = tf2onnx.convert.from_keras(self.regressor.model_, input_signature=spec, opset=13)
@@ -101,6 +105,13 @@ class SciKerasSequential(BaseKerasModel):
         """
         return self.regressor.get_params()
 
+    def set_params(self, hyperparameters):
+        """""
+        Update the hyperparameters in internal storage, which is accessed while building the
+        regressor. Not done here, because compilation requires the input_shape to be available.
+        """
+        self.hyperparameters = hyperparameters
+
     def _build_regressor_architecture(self, input_shape):
         """
         Builds a sequential model.
@@ -131,19 +142,14 @@ class SciKerasSequential(BaseKerasModel):
         """
         input_shape = (len(x.columns),)
         # proper compilation of the model is necessary for the conversion
-        self.regressor = KerasRegressor(model=self._build_regressor_architecture(input_shape),
+        regressor_scikit = KerasRegressor(model=self._build_regressor_architecture(input_shape),
                                         loss=self.hyperparameters['loss'],
                                         epochs=self.hyperparameters['max_iter'],
                                         verbose=0)
 
-        return self.regressor
+        return regressor_scikit
 
-    def set_params(self, hyperparameters):
-        """""
-        Update the hyperparameters in internal storage, which is accessed while building the
-        regressor. Not done here, because compilation requires the input_shape to be available.
-        """
-        self.hyperparameters = hyperparameters
+
 
     def default_hyperparameter(self):
         """"
@@ -161,7 +167,7 @@ class SciKerasSequential(BaseKerasModel):
     def optuna_hyperparameter_suggest(self, trial):
 
         n_layers = trial.suggest_int("n_layers", 1, 2)
-        hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 10) for i in range(n_layers))
+        hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 10) for i in range(1, n_layers+1, 1))
         hyperparameters = {
             "hidden_layer_sizes": hidden_layer_sizes,
             "loss": MeanSquaredError(),

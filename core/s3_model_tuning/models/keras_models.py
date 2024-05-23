@@ -5,18 +5,15 @@ import tensorflow as tf
 import onnx
 import pandas as pd
 import h5py
-
 from abc import ABC
 from packaging import version
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Input, Dense, Normalization, Dropout, Activation
+from tensorflow.keras.layers import Input, Dense, Normalization, Activation
 from scikeras.wrappers import KerasRegressor
 from keras.losses import MeanSquaredError
-from tensorflow.keras.models import load_model
-from tensorflow.keras.optimizers import SGD, Adam, RMSprop, Adagrad
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import ModelMetadata
-from extrapolation_detection.util.loading_saving import create_path_or_ask_to_override
+from core.util.load_save_utils import create_path_or_ask_to_override
 
 
 class BaseKerasModel(AbstractMLModel, ABC):
@@ -52,7 +49,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
         self._define_metadata(directory, filename)
         full_filename = f"{filename}.{file_type}"
 
-        path = create_path_or_ask_to_override(full_filename, directory) # Todo: check if works, also implement for scikit
+        path = create_path_or_ask_to_override(full_filename, directory)
 
         if file_type in ['h5', 'keras']:
             self.regressor.model_.save(path, overwrite=True)
@@ -128,7 +125,6 @@ class SciKerasSequential(BaseKerasModel):
         # Adding hidden layers based on hyperparameters
         for units in self.hyperparameters['hidden_layer_sizes']:
             sequential_regressor.add(Dense(units=units, activation='relu'))
-            sequential_regressor.add(Dropout(0.5))
 
         sequential_regressor.add(Dense(1, activation='linear'))  # Output shape = 1 for continuous variable
         return sequential_regressor
@@ -148,13 +144,10 @@ class SciKerasSequential(BaseKerasModel):
         input_shape = (len(x.columns),)
         # proper compilation of the model is necessary for the conversion
         regressor_scikit = KerasRegressor(model=self._build_regressor_architecture(input_shape),
-                                        loss=self.hyperparameters['loss'],
-                                        epochs=self.hyperparameters['max_iter'],
-                                        verbose=0)
-
+                                          loss=self.hyperparameters['loss'],
+                                          epochs=self.hyperparameters['max_iter'],
+                                          verbose=0)
         return regressor_scikit
-
-
 
     def default_hyperparameter(self):
         """"
@@ -166,13 +159,12 @@ class SciKerasSequential(BaseKerasModel):
             hyperparameters['loss'] = MeanSquaredError()
         hyperparameters['hidden_layer_sizes'] = (64,)  # Set default hidden layer size
         hyperparameters['max_iter'] = hyperparameters['epochs']  # Keras uses epochs as max_iterations
-
         return hyperparameters
 
     def optuna_hyperparameter_suggest(self, trial):
 
         n_layers = trial.suggest_int("n_layers", 1, 2)
-        hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 10) for i in range(1, n_layers+1, 1))
+        hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 10) for i in range(1, n_layers + 1, 1))
         hyperparameters = {
             "hidden_layer_sizes": hidden_layer_sizes,
             "loss": MeanSquaredError(),

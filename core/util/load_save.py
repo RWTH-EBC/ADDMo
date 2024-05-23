@@ -2,10 +2,10 @@ import os
 import shutil
 import pandas as pd
 import json
+import glob
 from pathlib import Path
 from pydantic import FilePath, BaseModel
 from typing import Type, TypeVar, Union
-import glob
 from core.s3_model_tuning.models.model_factory import ModelFactory
 
 ConfigT = TypeVar("ConfigT", bound=BaseModel)
@@ -68,39 +68,12 @@ def write_data(df: pd.DataFrame, abs_path: str):
         df.to_excel(abs_path)
 
 
-def create_or_clean_directory(path: str) -> str: # Todo : move to load_save_utils
-    if not os.path.exists(path):
-        # Path does not exist, create it
-        os.makedirs(path)
-    elif not os.listdir(path):
-        # Path exists, but is empty
-        pass
-    else:
-        # Path exists, ask for confirmation to delete current contents
-        response = input(f"The directory {path} already exists. To overwrite "
-                         "the content type <y>, for deleting the current contents type <d>")
-        if response.lower() == 'd':
-            # Delete the contents of the directory
-            for filename in os.listdir(path):
-                file_path = os.path.join(path, filename)
-                if os.path.isfile(file_path) or os.path.islink(file_path):
-                    os.unlink(file_path)
-                elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)
-        elif response.lower() == 'y':
-            pass
-        else:
-            print("Operation cancelled.")
-            return None
-
-    return path
-
-
-def read_regressor(filename, directory):
-    """Reads a regressor model from a file, automatically determining the file type."""
+def load_regressor(filename, directory):
+    """Loads a regressor model from a file, automatically determining the file type."""
     file_types = ['h5', 'joblib', 'onnx']
     files_found = []
 
+    # Find complete filepath
     for file_type in file_types:
         path_pattern = os.path.join(directory, f"{filename}.{file_type}")
         files_found.extend(glob.glob(path_pattern))
@@ -108,6 +81,5 @@ def read_regressor(filename, directory):
     if not files_found:
         raise FileNotFoundError(f"No model file found for {filename} in {directory} with supported types {file_types}")
 
-    latest_file = max(files_found, key=os.path.getmtime)  # Use the last saved file for loading the regressor
-    loaded_model = ModelFactory().load_model(latest_file)
+    loaded_model = ModelFactory().load_model(files_found[0])
     return loaded_model

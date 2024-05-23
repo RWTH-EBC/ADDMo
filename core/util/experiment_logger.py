@@ -1,13 +1,11 @@
 import os
 from abc import ABC, abstractmethod
 import pickle
-
 import pandas as pd
 import wandb
-
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.util.load_save import save_config_to_json
-from core.util.load_save import create_or_clean_directory
+from core.util.load_save_utils import create_or_clean_directory
 
 
 class AbstractLogger(ABC):

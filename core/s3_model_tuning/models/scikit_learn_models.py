@@ -14,6 +14,7 @@ from skl2onnx import to_onnx
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import ModelMetadata
 from sklearn.linear_model import LinearRegression
+from extrapolation_detection.util.loading_saving import create_path_or_ask_to_override
 
 
 class BaseScikitLearnModel(AbstractMLModel, ABC):
@@ -75,24 +76,25 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         if filename is None:
             filename = type(self).__name__
 
-        path = os.path.join(directory, f"{filename}.{file_type}")
+        full_filename = f"{filename}.{file_type}"
+        path = create_path_or_ask_to_override(full_filename, directory)
 
         if file_type == 'joblib':
             joblib.dump(self.regressor, path)
             self._define_metadata(directory, filename)
-            print(f"Model saved to {path}")
 
         elif file_type == 'onnx':
             onx = to_onnx(self.regressor, self.x_ONNX)
             self._define_metadata(directory, filename)
             with open(path, "wb") as f:
                 f.write(onx.SerializeToString())
-                print(f"Model saved to {path}.")
+
+        print(f"Model saved to {path}.")
 
     def load_regressor(self, regressor):
         self.regressor = regressor
 
-    def to_scikit_learn(self,x=None):
+    def to_scikit_learn(self, x=None):
         return self.regressor
 
     def set_params(self, hyperparameters):
@@ -106,7 +108,6 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         Get the hyperparameters of the model
         """
         return self.regressor.named_steps["model"].get_params(deep=deep)
-
 
 
 class ScikitMLP(BaseScikitLearnModel):

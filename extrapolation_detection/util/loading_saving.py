@@ -3,9 +3,7 @@ import pickle
 from typing import Any
 import pandas as pd
 import glob
-from core.s3_model_tuning.models.model_factory import ModelFactory
-
-
+from core.util.load_save_utils import create_path_or_ask_to_override, get_path
 
 
 def write_pkl(data, filename: str, directory: str = None, override: bool = True):
@@ -52,7 +50,7 @@ def read_pkl(filename: str, directory: str = None) -> Any:
 
     filename = filename + ".pkl"
 
-    path = _get_path(filename, directory)
+    path = get_path(filename, directory)
 
     if os.path.exists(path):  # check for the existence of the path
         pkl_file = open(path, "rb")  # open path
@@ -65,6 +63,7 @@ def read_pkl(filename: str, directory: str = None) -> Any:
             raise FileNotFoundError(f"No data at {path} found.")
     else:
         raise FileNotFoundError(f"The path {path} does not exist.")
+
 
 def write_csv(data: pd.DataFrame, filename: str, directory: str = None, overwrite: bool = True):
     """Writes data to a CSV file.
@@ -112,56 +111,9 @@ def read_csv(filename: str, directory: str = None, **kwargs) -> pd.DataFrame:
 
     filename = filename + ".csv"
 
-    path = _get_path(filename, directory)
+    path = get_path(filename, directory)
 
     if os.path.exists(path):  # check for the existence of the path
         return pd.read_csv(path, sep=";", dtype="float", encoding="utf-8", index_col=index_col)
     else:
         raise FileNotFoundError(f"The path {path} does not exist.")
-
-
-def create_path_or_ask_to_override(filename, directory, override: bool = True) -> str: # Todo: move all this "handling" to the core util load_save_utils
-    path = _get_path(filename, directory)
-    _overwrite_file(path, override)
-    return path
-
-def _overwrite_file(path: str, overwrite: bool):
-    """
-    Checks if a file exists and if it should be overwritten.
-    """
-    if os.path.exists(path) and not overwrite:
-        if not _get_bool(
-                f'The file "{path}" already exists. Do you want to override it?\n'
-        ):
-            return 0
-
-def _get_path(filename: str, directory: str) -> str:
-    """
-    Returns the full path for a given filename and directory.
-    """
-    if directory is not None:  # check if directory is none
-        if not os.path.exists(directory):  # check if path exists
-            os.makedirs(directory)  # create new directory
-        return os.path.join(directory, filename)  # calculate full path
-    else:
-        return filename
-
-
-def _get_bool(message: str, true: list = None, false: list = None) -> bool or str:
-    if false is None:
-        false = ["no", "nein", "false", "1", "n"]
-    if true is None:
-        true = ["yes", "ja", "true", "wahr", "0", "y"]
-
-    val = input(message).lower()
-    if val in true:
-        return True
-    elif val in false:
-        return False
-    else:
-        print("Please try again.")
-        print("True:", true)
-        print("False:", false)
-        _get_bool(message, true, false)
-
-    return val

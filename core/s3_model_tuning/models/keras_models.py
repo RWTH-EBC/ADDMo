@@ -72,7 +72,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
         """""
         Load trained model for serialisation.
         """
-        self.regressor = regressor
+        self.regressor = regressor  # Todo: this should convert directly to scikeras, so both load and save are scikeras specific, move to class accordingly.
 
 
 class SciKerasSequential(BaseKerasModel):

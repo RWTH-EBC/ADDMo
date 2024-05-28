@@ -24,7 +24,7 @@ def no_tuning_config(config: ExtrapolationExperimentConfig):
 
 def linear_regression_config(config: ExtrapolationExperimentConfig):
     config = no_tuning_config(config)
-    config.config_model_tuning.models = ["ScikitLasso"]
+    config.config_model_tuning.models = ["ScikitLinearRegression"]
     config.config_model_tuning.hyperparameter_tuning_kwargs = {"hyperparameter_set": None}
     return config
 

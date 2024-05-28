@@ -61,7 +61,7 @@ def run_all():
 
     # update config with the experiment name of wandb run
     wandb.config.update(
-        {"experiment_name": f"1_{config.simulation_data_name}_{run.name}"},
+        {"experiment_name": f"2_{config.simulation_data_name}_{run.name}"},
         allow_val_change=True,
     )
 

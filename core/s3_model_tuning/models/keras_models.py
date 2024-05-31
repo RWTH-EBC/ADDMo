@@ -37,11 +37,6 @@ class BaseKerasModel(AbstractMLModel, ABC):
             features_ordered=list(self.x_fit.columns),
             preprocessing=['Scaling as layer of the ANN.'])
 
-        # Save Metadata.
-        metadata_path = os.path.join(directory, regressor_filename + '_metadata.json')
-        with open(metadata_path, 'w') as f:
-            json.dump(self.metadata.dict(), f)
-
 
 class SciKerasSequential(BaseKerasModel):
     """"" SciKeras Sequential model. """
@@ -83,7 +78,7 @@ class SciKerasSequential(BaseKerasModel):
         """
         self.hyperparameters = hyperparameters
 
-    def save_regressor(self, directory, filename=None, file_type='h5'):
+    def _save_regressor(self, directory, filename=None, file_type='h5'):
         """
         Save regressor as a .h5 or .keras file.
         """

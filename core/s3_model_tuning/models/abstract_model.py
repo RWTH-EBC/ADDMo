@@ -1,3 +1,5 @@
+import os
+import json
 import warnings
 import onnxruntime as rt
 import numpy as np
@@ -7,6 +9,38 @@ from abc import ABC, abstractmethod
 import pandas as pd
 from pydantic import BaseModel, Field
 
+class ModelMetadata(BaseModel):
+    """ModelMetadata class represents metadata associated with the trained machine
+    learning model when saved in joblib format."""
+
+    addmo_class: str = Field(
+        description="ADDMo model class type, from which the regressor was saved."
+    )
+    addmo_commit_id: str = Field(
+        description="Current commit id when the model is saved."
+    )
+    library: str = Field(description="ML library origin of the regressor")
+    library_model_type: str = Field(description="Type of regressor within library")
+    library_version: str = Field(description="library version used")
+    target_name: str = Field(description="Name of the target variable")
+    features_ordered: list = Field(description="Name and order of features")
+    preprocessing: list = Field(
+        description="Preprocessing steps applied to the features."
+    )
+    instructions: str = Field(
+        "Pass a single or multiple observations with features in the order listed above",
+        description="Instructions for passing input data for making predictions.",
+    )
+
+    @staticmethod
+    def get_commit_id():
+        """Get the commit id for metadata when model is saved. """
+
+        try:
+            commit_id = subprocess.check_output(["git", "describe", "--always"]).strip().decode()
+        except subprocess.CalledProcessError:
+            commit_id = 'Unknown'
+        return commit_id
 
 class AbstractMLModel(ABC):
     """
@@ -27,7 +61,7 @@ class AbstractMLModel(ABC):
         self.y_fit: pd.DataFrame = None
 
     @abstractmethod
-    def fit(self, x, y):
+    def fit(self, x: pd.DataFrame, y: pd.Series): #todo: double check that all functions in abstract have same attributes as in the inherited classes
         """
         Train the model on the provided data.
 
@@ -51,15 +85,42 @@ class AbstractMLModel(ABC):
         pass
 
     @abstractmethod
-    def save_regressor(self, path):
+    def _save_regressor(self, path):
+        pass
+
+    def save_regressor(self, directory, regressor_filename=None, file_type=None):
         """
         Save the trained model including scaler to a file.
-        This is done using the ONNX format.
+        """
 
-        Args:
-            path: File path where the model will be saved.
+        if filename is None:
+            filename = type(self).__name__
+        self._define_metadata(directory, filename)
+        full_filename = f"{filename}.{file_type}"
+
+        path = create_path_or_ask_to_override(full_filename, directory)
+
+        self._save_regressor(path)
+
+            # actually save onnx
+            spec = (tf.TensorSpec((None,) + self.regressor.model_.input_shape[1:], tf.float32, name="input"),)
+            onnx_model, _ = tf2onnx.convert.from_keras(self.regressor.model_, input_signature=spec, opset=13)
+            onnx.save(onnx_model, path)
+        print(f"Model saved to {path}")
+        pass
+
+    @abstractmethod
+    def _define_metadata(self) -> ModelMetadata:
+        """
+        Define metadata for the model. To be saved with save_regressor as json file.
         """
         pass
+
+    def _save_metadata(self, directory, regressor_filename):
+        # Save Metadata.
+        metadata_path = os.path.join(directory, regressor_filename + '_metadata.json')
+        with open(metadata_path, 'w') as f:
+            json.dump(self.metadata.dict(), f)
 
     def load_regressor(self, model_instance):
         """
@@ -182,34 +243,3 @@ class PredictorOnnx(AbstractMLModel, ABC):
         warnings.warn(f"This function is not implemented for ONNX models")
 
 
-class ModelMetadata(BaseModel):
-    """ModelMetadata class represents metadata associated with the trained machine
-    learning model when saved in joblib format."""
-
-    addmo_class: str = Field(
-        description="ADDMo model class type, from which the regressor was saved."
-    )
-    addmo_commit_id: str = Field(
-        description="Current commit id when the model is saved."
-    )
-    library: str = Field(description="ML library origin of the regressor")
-    library_model_type: str = Field(description="Type of regressor within library")
-    library_version: str = Field(description="library version used")
-    target_name: str = Field(description="Name of the target variable")
-    features_ordered: list = Field(description="Name and order of features")
-    preprocessing: list = Field(
-        description="Preprocessing steps applied to the features."
-    )
-    instructions: str = Field(
-        "Pass a single or multiple observations with features in the order listed above",
-        description="Instructions for passing input data for making predictions.",
-    )
-
-    def get_commit_id():
-        """Get the commit id for metadata when model is saved. """
-
-        try:
-            commit_id = subprocess.check_output(["git", "describe", "--always"]).strip().decode()
-        except subprocess.CalledProcessError:
-            commit_id = 'Unknown'
-        return commit_id

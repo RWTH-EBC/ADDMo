@@ -42,13 +42,12 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
     def fit(self, x, y):
         self.x_fit = x
         self.y_fit = y
-        self.x_ONNX = x.values  # Save the training data to be used later for ONNX conversion
-        self.regressor.fit(self.x_ONNX, y)  # Train the model
+        self.regressor.fit(x.values, y)  # Train the model
 
     def predict(self, x):
         return self.regressor.predict(x)  # Make predictions
 
-    def _define_metadata(self, directory, regressor_filename):
+    def _define_metadata(self, directory, regressor_filename): # Todo: make this consistent, defining model
         """
         Define metadata.
         """
@@ -63,7 +62,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             preprocessing=['StandardScaler for all features'])
 
         # save metadata
-        regressor_filename = os.path.splitext(regressor_filename)[0]
+        regressor_filename = os.path.splitext(regressor_filename)[0] #todo: for scikit and keras both delete, put to abstract
         metadata_path = os.path.join(directory, regressor_filename + '_metadata.json')
         with open(metadata_path, 'w') as f:
             json.dump(self.metadata.dict(), f)
@@ -81,13 +80,13 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
 
         if file_type == 'joblib':
             joblib.dump(self.regressor, path)
-            self._define_metadata(directory, filename)
+            self._define_metadata(directory, filename) # todo: not in if
 
         elif file_type == 'onnx':
-            onx = to_onnx(self.regressor, self.x_ONNX)
+            onnx_model = to_onnx(self.regressor, self.x_fit.values)
             self._define_metadata(directory, filename)
             with open(path, "wb") as f:
-                f.write(onx.SerializeToString())
+                f.write(onnx_model.SerializeToString())
 
         print(f"Model saved to {path}.")
 

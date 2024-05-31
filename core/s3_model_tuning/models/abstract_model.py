@@ -155,7 +155,7 @@ class PredictorOnnx(AbstractMLModel, ABC):
 
     def predict(self, x):
         x_ONNX= x.values  # Converts dataframe to numpy array
-        return self.model.run([self.labels], {self.inputs: x_ONNX.astype(np.double)})[0]
+        return self.model.run([self.labels], {self.inputs: x_ONNX.astype(np.float32)})[0]
 
     def default_hyperparameter(self):
         warnings.warn(f"This function is not implemented for ONNX models")

@@ -88,8 +88,9 @@ class ModelFactory:
             metadata = ModelFactory._load_metadata(abs_path)
             addmo_class_name = metadata.get('addmo_class')
             addmo_class = ModelFactory.model_factory(addmo_class_name)
+            input_shape = len(metadata.get('features_ordered'))
             regressor = keras.models.load_model(abs_path)
-            addmo_class.load_regressor(regressor)
+            addmo_class.load_regressor(regressor, input_shape)
 
         else:
             raise ValueError(" '.joblib', '.onnx' or '.h5' path expected")

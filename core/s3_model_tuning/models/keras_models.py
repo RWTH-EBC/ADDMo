@@ -3,14 +3,16 @@ import json
 import keras
 import tensorflow as tf
 import onnx
+import numpy as np
 import pandas as pd
 import h5py
 from abc import ABC
 from packaging import version
 from tensorflow.keras.models import Sequential
+from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.layers import Input, Dense, Normalization, Activation
 from scikeras.wrappers import KerasRegressor
-from keras.losses import MeanSquaredError
+from tensorflow.keras.losses import MeanSquaredError
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import ModelMetadata
 from core.util.load_save_utils import create_path_or_ask_to_override
@@ -40,6 +42,47 @@ class BaseKerasModel(AbstractMLModel, ABC):
         with open(metadata_path, 'w') as f:
             json.dump(self.metadata.dict(), f)
 
+
+class SciKerasSequential(BaseKerasModel):
+    """"" SciKeras Sequential model. """
+
+    def __init__(self):
+        self.regressor = KerasRegressor()  # SciKeras Regressor
+        self.hyperparameters = self.default_hyperparameter()
+
+    def fit(self, x, y):
+        """""
+        Build, compile and fit the sequential model.
+        """
+        self.x_fit = x
+        self.y_fit = y
+        input_shape = (len(x.columns),)
+        sequential_regressor = self._build_regressor(input_shape)
+        # Normalisation of first layer (input data).
+        sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation initialisation works only on np arrays
+        self.regressor = KerasRegressor(model=sequential_regressor,
+                                        loss=self.hyperparameters['loss'],
+                                        optimizer=self.hyperparameters['optimizer'],
+                                        epochs=self.hyperparameters['max_iter'],
+                                        verbose=0)
+        self.regressor.fit(x, y)
+
+    def predict(self, x):
+        return self.regressor.predict(x)
+
+    def get_params(self, deep=True):
+        """
+        Get the hyperparameters of the model.
+        """
+        return self.regressor.get_params()
+
+    def set_params(self, hyperparameters):
+        """""
+        Update the hyperparameters in internal storage, which is accessed while building the
+        regressor. Not done here, because compilation requires the input_shape to be available.
+        """
+        self.hyperparameters = hyperparameters
+
     def save_regressor(self, directory, filename=None, file_type='h5'):
         """
         Save regressor as a .h5 or .keras file.
@@ -68,51 +111,16 @@ class BaseKerasModel(AbstractMLModel, ABC):
             onnx.save(onnx_model, path)
         print(f"Model saved to {path}")
 
-    def load_regressor(self, regressor):
+    def load_regressor(self, regressor, input_shape):
         """""
         Load trained model for serialisation.
         """
-        self.regressor = regressor
-
-
-class SciKerasSequential(BaseKerasModel):
-    """"" SciKeras Sequential model. """
-
-    def __init__(self):
-        self.regressor = KerasRegressor()  # SciKeras Regressor
-        self.hyperparameters = self.default_hyperparameter()
-
-    def fit(self, x, y):
-        """""
-        Build, compile and fit the sequential model.
-        """
-        self.x_fit = x
-        self.y_fit = y
-        input_shape = (len(x.columns),)
-        sequential_regressor = self._build_regressor(input_shape)
-        # Normalisation of first layer (input data).
-        sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation initialisation works only on np arrays
-        self.regressor = KerasRegressor(model=sequential_regressor,
-                                        loss=self.hyperparameters['loss'],
-                                        epochs=self.hyperparameters['max_iter'],
-                                        verbose=0)
-        self.regressor.fit(x, y)
-
-    def predict(self, x):
-        return self.regressor.predict(x)
-
-    def get_params(self, deep=True):
-        """
-        Get the hyperparameters of the model.
-        """
-        return self.regressor.get_params()
-
-    def set_params(self, hyperparameters):
-        """""
-        Update the hyperparameters in internal storage, which is accessed while building the
-        regressor. Not done here, because compilation requires the input_shape to be available.
-        """
-        self.hyperparameters = hyperparameters
+        # Create dummy data for initialization of loaded model
+        x = np.zeros((1, input_shape))
+        y = np.zeros((1,))
+        self.regressor = KerasRegressor(regressor)
+        # Initialize model to avoid re-fitting
+        self.regressor.initialize(x, y)
 
     def _build_regressor_architecture(self, input_shape):
         """
@@ -134,7 +142,7 @@ class SciKerasSequential(BaseKerasModel):
         Returns a compiled sequential model.
         """
         sequential_regressor = self._build_regressor_architecture(input_shape)
-        sequential_regressor.compile(loss=self.hyperparameters['loss'])
+        sequential_regressor.compile(optimizer=self.hyperparameters['optimizer'], loss=self.hyperparameters['loss'])
         return sequential_regressor
 
     def to_scikit_learn(self, x):
@@ -143,8 +151,9 @@ class SciKerasSequential(BaseKerasModel):
         """
         input_shape = (len(x.columns),)
         # proper compilation of the model is necessary for the conversion
-        regressor_scikit = KerasRegressor(model=self._build_regressor_architecture(input_shape),
+        regressor_scikit = KerasRegressor(model=self._build_regressor(input_shape),
                                           loss=self.hyperparameters['loss'],
+                                          optimizer=self.hyperparameters['optimizer'],
                                           epochs=self.hyperparameters['max_iter'],
                                           verbose=0)
         return regressor_scikit
@@ -153,12 +162,14 @@ class SciKerasSequential(BaseKerasModel):
         """"
         Return default hyperparameters.
         """
-        hyperparameters = self.regressor.get_params()
+        regressor = KerasRegressor()
+        hyperparameters = regressor.get_params()
         # Define default loss if not present
         if hyperparameters['loss'] is None:
             hyperparameters['loss'] = MeanSquaredError()
         hyperparameters['hidden_layer_sizes'] = (64,)  # Set default hidden layer size
         hyperparameters['max_iter'] = hyperparameters['epochs']  # Keras uses epochs as max_iterations
+        hyperparameters['optimizer'] = RMSprop()
         return hyperparameters
 
     def optuna_hyperparameter_suggest(self, trial):
@@ -168,7 +179,8 @@ class SciKerasSequential(BaseKerasModel):
         hyperparameters = {
             "hidden_layer_sizes": hidden_layer_sizes,
             "loss": MeanSquaredError(),
-            "max_iter": 5
+            "max_iter": 5,
+            "optimizer": RMSprop()
         }
         return hyperparameters
 
@@ -177,6 +189,7 @@ class SciKerasSequential(BaseKerasModel):
         hyperparameter_grid = {
             "hidden_layer_sizes": [(64,), (128, 64), (256, 128, 64)],
             "loss": [MeanSquaredError()],
-            "max_iter": [5000]
+            "max_iter": [5000],
+            "optimizer": RMSprop()
         }
         return hyperparameter_grid

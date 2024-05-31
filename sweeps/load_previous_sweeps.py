@@ -12,7 +12,13 @@ def yield_runs_per_sweep(project_name, sweep_id):
 
     for run in sweep.runs:
         yield run
+        # info to retrieve data from run
+        # summary_logs = run.summary._json_dict
+        # run_name = run.name
+        # run_config = run.config
 
+def load_data_from_drive(run):
+    pass
 
 def main():
     # Login to wandb
@@ -26,6 +32,7 @@ def main():
         # Fetch the logs (history) of the run
         summary_logs = run.summary._json_dict
         name = run.name
+        config = run.config
 
 if __name__ == "__main__":
     main()

@@ -70,7 +70,7 @@ def write_data(df: pd.DataFrame, abs_path: str):
 
 def load_regressor(filename, directory):
     """Loads a regressor model from a file, automatically determining the file type."""
-    file_types = ['h5', 'joblib', 'onnx']
+    file_types = ['h5', 'joblib', 'onnx', 'keras']
     files_found = []
 
     # Find complete filepath

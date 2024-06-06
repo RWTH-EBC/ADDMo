@@ -15,7 +15,6 @@ from scikeras.wrappers import KerasRegressor
 from tensorflow.keras.losses import MeanSquaredError
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import ModelMetadata
-from core.util.load_save_utils import create_path_or_ask_to_override
 
 
 class BaseKerasModel(AbstractMLModel, ABC):
@@ -23,7 +22,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
     Base class for Keras models.
     """
 
-    def _define_metadata(self, directory, regressor_filename):
+    def _define_metadata(self):
         """
         Define metadata.
         """
@@ -36,6 +35,10 @@ class BaseKerasModel(AbstractMLModel, ABC):
             target_name=self.y_fit.name,
             features_ordered=list(self.x_fit.columns),
             preprocessing=['Scaling as layer of the ANN.'])
+
+    @property
+    def default_file_type(self):
+        return 'h5'
 
 
 class SciKerasSequential(BaseKerasModel):
@@ -58,7 +61,7 @@ class SciKerasSequential(BaseKerasModel):
         self.regressor = KerasRegressor(model=sequential_regressor,
                                         loss=self.hyperparameters['loss'],
                                         optimizer=self.hyperparameters['optimizer'],
-                                        epochs=self.hyperparameters['max_iter'],
+                                        epochs=self.hyperparameters['epochs'],
                                         verbose=0)
         self.regressor.fit(x, y)
 
@@ -78,19 +81,14 @@ class SciKerasSequential(BaseKerasModel):
         """
         self.hyperparameters = hyperparameters
 
-    def _save_regressor(self, directory, filename=None, file_type='h5'):
+    def _save_regressor(self, path, file_type):
         """
         Save regressor as a .h5 or .keras file.
         """
-        if filename is None:
-            filename = type(self).__name__
-        self._define_metadata(directory, filename)
-        full_filename = f"{filename}.{file_type}"
-
-        path = create_path_or_ask_to_override(full_filename, directory)
 
         if file_type in ['h5', 'keras']:
-            self.regressor.model_.save(path, overwrite=True)
+            self.regressor.model.save(path, overwrite=True)
+
         elif file_type == "onnx":
             # catch exceptions
             if version.parse(keras.__version__).major != 2:  # Checking version compatibility
@@ -104,6 +102,7 @@ class SciKerasSequential(BaseKerasModel):
             spec = (tf.TensorSpec((None,) + self.regressor.model_.input_shape[1:], tf.float32, name="input"),)
             onnx_model, _ = tf2onnx.convert.from_keras(self.regressor.model_, input_signature=spec, opset=13)
             onnx.save(onnx_model, path)
+
         print(f"Model saved to {path}")
 
     def load_regressor(self, regressor, input_shape):
@@ -137,7 +136,7 @@ class SciKerasSequential(BaseKerasModel):
         Returns a compiled sequential model.
         """
         sequential_regressor = self._build_regressor_architecture(input_shape)
-        sequential_regressor.compile(optimizer=self.hyperparameters['optimizer'], loss=self.hyperparameters['loss'])
+        sequential_regressor.compile(optimizer= self.hyperparameters['optimizer'], loss=self.hyperparameters['loss'])
         return sequential_regressor
 
     def to_scikit_learn(self, x):
@@ -149,7 +148,7 @@ class SciKerasSequential(BaseKerasModel):
         regressor_scikit = KerasRegressor(model=self._build_regressor(input_shape),
                                           loss=self.hyperparameters['loss'],
                                           optimizer=self.hyperparameters['optimizer'],
-                                          epochs=self.hyperparameters['max_iter'],
+                                          epochs=self.hyperparameters['epochs'],
                                           verbose=0)
         return regressor_scikit
 
@@ -163,19 +162,19 @@ class SciKerasSequential(BaseKerasModel):
         if hyperparameters['loss'] is None:
             hyperparameters['loss'] = MeanSquaredError()
         hyperparameters['hidden_layer_sizes'] = (64,)  # Set default hidden layer size
-        hyperparameters['max_iter'] = hyperparameters['epochs']  # Keras uses epochs as max_iterations
         hyperparameters['optimizer'] = RMSprop()
         return hyperparameters
 
     def optuna_hyperparameter_suggest(self, trial):
 
         n_layers = trial.suggest_int("n_layers", 1, 2)
-        hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 10) for i in range(1, n_layers + 1, 1))
+        hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 1000) for i in range(1, n_layers + 1, 1))
         hyperparameters = {
             "hidden_layer_sizes": hidden_layer_sizes,
             "loss": MeanSquaredError(),
-            "max_iter": 5,
+            "epochs": 5000,
             "optimizer": RMSprop()
+
         }
         return hyperparameters
 
@@ -184,7 +183,7 @@ class SciKerasSequential(BaseKerasModel):
         hyperparameter_grid = {
             "hidden_layer_sizes": [(64,), (128, 64), (256, 128, 64)],
             "loss": [MeanSquaredError()],
-            "max_iter": [5000],
+            "epochs": [5000],
             "optimizer": RMSprop()
         }
         return hyperparameter_grid

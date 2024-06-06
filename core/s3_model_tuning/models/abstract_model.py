@@ -5,9 +5,10 @@ import onnxruntime as rt
 import numpy as np
 import subprocess
 from abc import ABC, abstractmethod
-
 import pandas as pd
 from pydantic import BaseModel, Field
+from core.util.load_save_utils import create_path_or_ask_to_override
+
 
 class ModelMetadata(BaseModel):
     """ModelMetadata class represents metadata associated with the trained machine
@@ -42,6 +43,7 @@ class ModelMetadata(BaseModel):
             commit_id = 'Unknown'
         return commit_id
 
+
 class AbstractMLModel(ABC):
     """
     Abstract base class for machine learning models.
@@ -61,7 +63,7 @@ class AbstractMLModel(ABC):
         self.y_fit: pd.DataFrame = None
 
     @abstractmethod
-    def fit(self, x: pd.DataFrame, y: pd.Series): #todo: double check that all functions in abstract have same attributes as in the inherited classes
+    def fit(self, x: pd.DataFrame,y: pd.Series):
         """
         Train the model on the provided data.
 
@@ -72,7 +74,7 @@ class AbstractMLModel(ABC):
         pass
 
     @abstractmethod
-    def predict(self, x):
+    def predict(self, x: pd.DataFrame):
         """
         Make predictions on the given input data.
 
@@ -85,59 +87,97 @@ class AbstractMLModel(ABC):
         pass
 
     @abstractmethod
-    def _save_regressor(self, path):
+    def _save_regressor(self, path, file_type):
+        """""
+        Save the trained model to the specified file path in the given file format.
+
+        Args:
+            path: full path where the trained model is saved.
+            file_type: file type used for saving the model.
+
+        Notes
+        -----
+        - For Keras models:
+            - Supports 'h5' and 'keras' formats using `tf.keras.models.save_model`.
+            - Supports 'onnx' format if `tf2onnx` is installed and Keras version is compatible(2.15).
+        - For Scikit-learn models:
+            - Supports 'joblib' format using `joblib.dump`.
+            -Supports 'onnx' format using 'SerializeToString'.
+        """
         pass
 
-    def save_regressor(self, directory, regressor_filename=None, file_type=None):
+    @property
+    @abstractmethod
+    def default_file_type(self):
+        """""
+        Set default file type for saving the trained model.
         """
-        Save the trained model including scaler to a file.
-        """
-
-        if filename is None:
-            filename = type(self).__name__
-        self._define_metadata(directory, filename)
-        full_filename = f"{filename}.{file_type}"
-
-        path = create_path_or_ask_to_override(full_filename, directory)
-
-        self._save_regressor(path)
-
-            # actually save onnx
-            spec = (tf.TensorSpec((None,) + self.regressor.model_.input_shape[1:], tf.float32, name="input"),)
-            onnx_model, _ = tf2onnx.convert.from_keras(self.regressor.model_, input_signature=spec, opset=13)
-            onnx.save(onnx_model, path)
-        print(f"Model saved to {path}")
         pass
 
     @abstractmethod
     def _define_metadata(self) -> ModelMetadata:
         """
-        Define metadata for the model. To be saved with save_regressor as json file.
+        Define metadata for the model.
         """
         pass
 
     def _save_metadata(self, directory, regressor_filename):
-        # Save Metadata.
+        """
+        Save metadata for the model. To be saved with save_regressor as json file.
+
+        Args:
+            directory: directory where the trained model is saved.
+            regressor_filename: file name used for saving the model.
+
+        """
         metadata_path = os.path.join(directory, regressor_filename + '_metadata.json')
         with open(metadata_path, 'w') as f:
             json.dump(self.metadata.dict(), f)
 
-    def load_regressor(self, model_instance):
+    def save_regressor(self, directory, regressor_filename=None, file_type=None):
+        """
+        Save the trained model including scaler to a file.
+
+        Args:
+            directory: directory where the trained model is saved.
+            regressor_filename: file name used for saving the model.
+            file_type: file type used for saving the model.
+
+        """
+
+        if regressor_filename is None:
+            regressor_filename = type(self).__name__
+
+        self._define_metadata()
+
+        if file_type is None:
+            file_type = self.default_file_type
+
+        full_filename = f"{regressor_filename}.{file_type}"
+        path = create_path_or_ask_to_override(full_filename, directory)
+        self._save_regressor(path, file_type)
+        self._save_metadata(directory, regressor_filename)
+
+    def load_regressor(self, model_instance, input_shape=None):
         """
         Load a model including scaler.
 
         Args:
             model_instance: model that is loaded.
+            input_shape: input data shape which is used to initialize loaded model.
         """
         self.regressor = model_instance
 
     @abstractmethod
-    def to_scikit_learn(self):
+    def to_scikit_learn(self, x=None):
         """
         Convert the model including scaler to a scikit-learn compatible model.
         E.g. a scikit-learn pipeline.
 
         Most ML frameworks provide a converter to adapt models for scikit-learn specific tasks.
+
+        Args:
+            x: Input data used for building the regressor. (Only needed for Keras)
 
         Returns:
             A scikit-learn compatible version of the model including scaler.
@@ -198,8 +238,6 @@ class AbstractMLModel(ABC):
         pass
 
 
-
-
 class PredictorOnnx(AbstractMLModel, ABC):
     """overwrites predict and load function for onnx format"""
 
@@ -215,8 +253,8 @@ class PredictorOnnx(AbstractMLModel, ABC):
         self.labels = self.model.get_outputs()[0].name
 
     def predict(self, x):
-        x_ONNX= x.values  # Converts dataframe to numpy array
-        return self.model.run([self.labels], {self.inputs: x_ONNX.astype(np.float32)})[0]
+        x_ONNX = x.values  # Converts dataframe to numpy array
+        return self.model.run([self.labels], {self.inputs: x_ONNX.astype(np.double)})[0]
 
     def default_hyperparameter(self):
         warnings.warn(f"This function is not implemented for ONNX models")
@@ -242,4 +280,12 @@ class PredictorOnnx(AbstractMLModel, ABC):
     def to_scikit_learn(self):
         warnings.warn(f"This function is not implemented for ONNX models")
 
+    def _define_metadata(self):
+        warnings.warn(f"This function is not implemented for ONNX models")
+
+    def _save_regressor(self, path, file_type):
+        warnings.warn(f"This function is not implemented for ONNX models")
+
+    def default_file_type(self):
+        warnings.warn(f"This function is not implemented for ONNX models")
 

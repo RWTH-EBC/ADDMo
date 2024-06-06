@@ -29,44 +29,50 @@ X_train, X_test, y_train, y_test = train_test_split(df.iloc[:, :-1], df['price']
                                                                             random_state=42)
 dir_path = os.path.join(root_dir(), "0000_testfiles")
 
-model = SciKerasSequential()
-model.get_params()
-model.fit(X_train, y_train)
-model.save_regressor(dir_path, "regressor", "h5")
-model1 = ModelFactory.load_model(r"D:\PyCharm 2023.3.5\pythonProject\addmo-automated-ml-regression\0000_testfiles\regressor.h5")
+model2 = ScikitMLP()
+model2.fit(X_train, y_train)
+model2.save_regressor(dir_path, "regressor")
+model1 = ModelFactory.load_model(r"C:\Users\mre-rpa\PycharmProjects\addmo\addmo-automated-ml-regression\0000_testfiles\regressor.joblib")
 print(model1)
-y_pred1= model1.predict(X_test)
-y_pred = model.predict(X_test)
-r1= r2_score(y_test, y_pred)
-r2= r2_score(y_test, y_pred1 )
-print("model loaded: ", r1, "model: ", r2)
+pred_loaded= model1.predict(X_test)
+y_pred = model2.predict(X_test)
+r_loaded= r2_score(y_test, pred_loaded)
+r2= r2_score(y_test, y_pred )
+print("model loaded r2 score: ", r_loaded, "trained model r2 score: ", r2)
 
-# print(y_pred)
-# print(keras.__version__)
-# print(tensorflow.__version__)
-# print(scikeras.__version__)
-# def setup_model_tuning_config():
-#     # Configures and returns a ModelTunerConfig instance
-#     return ModelTunerConfig(
-#         models=["SciKerasSequential"],
-#         hyperparameter_tuning_type="OptunaTuner",
-#         hyperparameter_tuning_kwargs={"n_trials": 3},
-#         validation_score_mechanism="cv",
-#         validation_score_splitting="KFold",
-#         validation_score_metric="neg_mean_squared_error"
-#     )
-#
-# config = setup_model_tuning_config()
-# tuner = ModelTuner(config)
-# model_dict = tuner.tune_all_models(X_train, y_train)
-# print(model_dict)
-# best_model_name = tuner.get_best_model_name(model_dict)
-# best_model = tuner.get_model(model_dict, "SciKerasSequential")
-# print("best model name is: ", best_model_name)
-# print("best model is: ", best_model)
-# regressor=best_model
-# p= regressor.get_params()
-# print(p)
-# y_pred= regressor.predict(X_test)
-# r_score= r2_score(y_test, y_pred)
-# print(r_score)
+print(y_pred)
+print(keras.__version__)
+print(tensorflow.__version__)
+print(scikeras.__version__)
+def setup_model_tuning_config():
+    # Configures and returns a ModelTunerConfig instance
+    return ModelTunerConfig(
+        models=["ScikitMLP"],
+        hyperparameter_tuning_type="OptunaTuner",
+        hyperparameter_tuning_kwargs={"n_trials": 2},
+        validation_score_mechanism="cv",
+        validation_score_splitting="KFold",
+        validation_score_metric="neg_mean_squared_error"
+    )
+
+config = setup_model_tuning_config()
+tuner = ModelTuner(config)
+model_dict = tuner.tune_all_models(X_train, y_train)
+print(model_dict)
+best_model_name = tuner.get_best_model_name(model_dict)
+best_model = tuner.get_model(model_dict, "ScikitMLP")
+print("best model name is: ", best_model_name)
+print("best model is: ", best_model)
+regressor=best_model
+p= regressor.get_params()
+print(p)
+y_pred= regressor.predict(X_test)
+r_score= r2_score(y_test, y_pred)
+print(r_score)
+regressor.save_regressor(dir_path, "tuned_regressor")
+new_model= ModelFactory.load_model(r"C:\Users\mre-rpa\PycharmProjects\addmo\addmo-automated-ml-regression\0000_testfiles\tuned_regressor.joblib")
+y1= new_model.predict(X_test)
+y2= regressor.predict(X_test)
+r_loaded= r2_score(y_test, y1)
+r2= r2_score(y_test, y2 )
+print("model loaded r2 score: ", r_loaded, "trained model r2 score: ", r2)

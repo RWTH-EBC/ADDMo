@@ -84,12 +84,13 @@ class ModelFactory:
             addmo_class.load_regressor(abs_path)
 
         # Load the regressor from keras file to addmo model class
-        elif abs_path.endswith('.h5'):
+        elif abs_path.endswith(('.h5', '.keras')):
             metadata = ModelFactory._load_metadata(abs_path)
             addmo_class_name = metadata.get('addmo_class')
             addmo_class = ModelFactory.model_factory(addmo_class_name)
             input_shape = len(metadata.get('features_ordered'))
             regressor = keras.models.load_model(abs_path)
+            regressor.load_weights(abs_path)
             addmo_class.load_regressor(regressor, input_shape)
 
         else:

@@ -40,14 +40,20 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         )
 
     def fit(self, x, y):
+        """
+        Train the model.
+        """
         self.x_fit = x
         self.y_fit = y
-        self.regressor.fit(x.values, y)  # Train the model
+        self.regressor.fit(x.values, y)
 
     def predict(self, x):
-        return self.regressor.predict(x)  # Make predictions
+        """
+        Make predictions.
+        """
+        return self.regressor.predict(x)
 
-    def _define_metadata(self, directory, regressor_filename): # Todo: make this consistent, defining model
+    def _define_metadata(self):
         """
         Define metadata.
         """
@@ -61,36 +67,32 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             features_ordered=list(self.x_fit.columns),
             preprocessing=['StandardScaler for all features'])
 
-        # save metadata
-        regressor_filename = os.path.splitext(regressor_filename)[0] #todo: for scikit and keras both delete, put to abstract
-        metadata_path = os.path.join(directory, regressor_filename + '_metadata.json')
-        with open(metadata_path, 'w') as f:
-            json.dump(self.metadata.dict(), f)
+    @property
+    def default_file_type(self):
+        """"
+        Default file type for saving regressor.
+        """
+        return 'joblib'
 
-    def save_regressor(self, directory, filename=None, file_type='joblib'):
+    def _save_regressor(self, path, file_type):
         """"
         Save regressor as .joblib or .onnx file
         """
 
-        if filename is None:
-            filename = type(self).__name__
-
-        full_filename = f"{filename}.{file_type}"
-        path = create_path_or_ask_to_override(full_filename, directory)
-
         if file_type == 'joblib':
             joblib.dump(self.regressor, path)
-            self._define_metadata(directory, filename) # todo: not in if
 
         elif file_type == 'onnx':
             onnx_model = to_onnx(self.regressor, self.x_fit.values)
-            self._define_metadata(directory, filename)
             with open(path, "wb") as f:
                 f.write(onnx_model.SerializeToString())
 
         print(f"Model saved to {path}.")
 
     def load_regressor(self, regressor):
+        """""
+        Load trained model for serialisation.
+        """
         self.regressor = regressor
 
     def to_scikit_learn(self, x=None):
@@ -98,7 +100,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
 
     def set_params(self, hyperparameters):
         """
-        access the hyperparameters of the model within the pipeline within the TransformedTargetRegressor
+        Access the hyperparameters of the model within the pipeline within the TransformedTargetRegressor
         """
         self.regressor.named_steps["model"].set_params(**hyperparameters)
 
@@ -121,7 +123,7 @@ class ScikitMLP(BaseScikitLearnModel):
         # Suggest hyperparameters
         n_layers = trial.suggest_int("n_layers", 1, 2)
         hidden_layer_sizes = tuple(
-            trial.suggest_int(f"n_units_l{i}", 1, 1000) for i in range(n_layers)
+            trial.suggest_int(f"n_units_l{i}", 1, 10) for i in range(n_layers)
         )
 
         # Dynamic hidden layer sizes based on the number of layers
@@ -129,7 +131,7 @@ class ScikitMLP(BaseScikitLearnModel):
 
         # Other hyperparameters
         hyperparameters["activation"] = "relu"
-        hyperparameters["max_iter"] = 5000
+        hyperparameters["max_iter"] = 5
 
         return hyperparameters
 
@@ -144,12 +146,17 @@ class ScikitMLP(BaseScikitLearnModel):
         return hyperparameter_grid
 
     def default_hyperparameter(self):
+        """"
+        Return default hyperparameters.
+        """
         return MLPRegressor().get_params()
 
 
 class ScikitMLP_TargetTransformed(ScikitMLP):
     def __init__(self):
-        # Create an instance of the scikit-learn model including a scaler
+        """
+        Create an instance of the scikit-learn model including a scaler.
+        """
         self.regressor = Pipeline(
             steps=[
                 ("scaler", StandardScaler()),  # scale the features
@@ -160,12 +167,15 @@ class ScikitMLP_TargetTransformed(ScikitMLP):
         )
 
     def set_params(self, hyperparameters):
-        # access the hyperparameters of the model within the pipeline within the
-        # TransformedTargetRegressor
+        """
+        Access the hyperparameters of the model within the pipeline within the TransformedTargetRegressor.
+        """
         self.regressor.named_steps["model"].regressor.set_params(**hyperparameters)
 
     def get_params(self, deep=True):
-        # Get the hyperparameters of the model
+        """
+        Get the hyperparameters of the model.
+        """
         return self.regressor.named_steps["model"].regressor.get_params(deep=deep)
 
 

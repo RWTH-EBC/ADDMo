@@ -3,7 +3,7 @@ import pandas as pd
 
 from core.util.experiment_logger import ExperimentLogger
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
-from core.util.load_save import load_regressor
+from extrapolation_detection.util.loading_saving import load_regressor
 from extrapolation_detection.n_D_extrapolation.score_regressor_per_data_point import score_per_sample
 from extrapolation_detection.n_D_extrapolation import true_validity_domain
 from extrapolation_detection.util import loading_saving

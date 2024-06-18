@@ -5,7 +5,7 @@ from core.util.experiment_logger import LocalLogger
 from core.util.experiment_logger import WandbLogger
 from core.util.definitions import root_dir
 from core.util.load_save import load_config_from_json
-from core.util.definitions import results_dir_extrapolation_experiment
+from core.util.definitions import create_or_clean_directory
 from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 
 from sweeps import config_blueprints
@@ -56,11 +56,11 @@ config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_erro
 config.config_detector.detectors = ["KNN", "GP", "OCSVM"]
 #
 # Configure the logger
-result_folder = results_dir_extrapolation_experiment(config.experiment_name)
-LocalLogger.directory = os.path.join(result_folder, "local_logger")
+create_or_clean_directory(config.experiment_folder)
+LocalLogger.directory = os.path.join(config.experiment_folder, "local_logger")
 LocalLogger.active = True
 WandbLogger.project = f"ED_{config.simulation_data_name}"
-WandbLogger.directory = result_folder
+WandbLogger.directory = config.experiment_folder
 WandbLogger.active = False
 
 

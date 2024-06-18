@@ -43,12 +43,3 @@ def results_dir_model_tuning(config: ModelTuningExperimentConfig):
 
 def ed_use_case_dir():
     return os.path.join(root_dir(), 'extrapolation_detection', 'use_cases')
-
-
-def results_dir_extrapolation_experiment(experiment_name: str):
-    path = os.path.join(
-        ed_use_case_dir(),
-        "results",
-        experiment_name
-    )
-    return create_or_clean_directory(path)

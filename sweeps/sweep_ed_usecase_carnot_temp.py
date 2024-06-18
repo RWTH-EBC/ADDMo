@@ -7,7 +7,7 @@ from core.util.experiment_logger import LocalLogger
 from core.util.experiment_logger import WandbLogger
 from core.util.definitions import root_dir
 from core.util.load_save import load_config_from_json
-from core.util.definitions import results_dir_extrapolation_experiment
+from core.util.definitions import create_or_clean_directory
 from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 
 from sweeps import sweep_configs
@@ -68,9 +68,9 @@ def run_all():
     # convert config dict back to pydantic object
     config = ExtrapolationExperimentConfig(**wandb.config)
 
-    result_folder = results_dir_extrapolation_experiment(config.experiment_name)
-    LocalLogger.directory = os.path.join(result_folder, "local_logger")
-    WandbLogger.directory = result_folder
+    create_or_clean_directory(config.experiment_folder)
+    LocalLogger.directory = os.path.join(config.experiment_folder, "local_logger")
+    WandbLogger.directory = config.experiment_folder
 
     # locally log the config as well
     LocalLogger.active = True

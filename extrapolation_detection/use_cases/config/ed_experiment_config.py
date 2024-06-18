@@ -66,5 +66,3 @@ class ExtrapolationExperimentConfig(BaseModel):
     def experiment_folder(self):
         return os.path.join(ed_use_case_dir(), "results", self.experiment_name)
 
-    @property
-    def

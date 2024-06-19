@@ -17,9 +17,7 @@ from extrapolation_detection.use_cases.config.ed_experiment_config import (
 
 def exe(config: ExtrapolationExperimentConfig):
     # load model
-    regressor: AbstractMLModel = load_regressor(
-        "regressor", directory=os.path.join(config.experiment_folder, "regressors")
-    )
+    regressor: AbstractMLModel = ExperimentLogger.use_artifact("regressor")
 
     xy_training = loading_saving.read_csv(
         "xy_train", directory=config.experiment_folder

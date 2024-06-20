@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 
-from extrapolation_detection.util import loading_saving
+from extrapolation_detection.util import loading_saving_ED
 from core.util.data_handling import split_target_features
 
 from extrapolation_detection.util import data_handling

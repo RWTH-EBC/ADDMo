@@ -14,7 +14,7 @@ from skl2onnx import to_onnx
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import ModelMetadata
 from sklearn.linear_model import LinearRegression
-from extrapolation_detection.util.loading_saving import create_path_or_ask_to_override
+from extrapolation_detection.util.loading_saving_ED import create_path_or_ask_to_override
 
 
 class BaseScikitLearnModel(AbstractMLModel, ABC):

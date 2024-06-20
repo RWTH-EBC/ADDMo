@@ -4,7 +4,7 @@ import pandas as pd
 
 from core.util.experiment_logger import ExperimentLogger
 
-from extrapolation_detection.util import loading_saving
+from extrapolation_detection.util import loading_saving_ED
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.model_tuner import ModelTuner
 from core.util.data_handling import split_target_features

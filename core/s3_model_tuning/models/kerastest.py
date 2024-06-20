@@ -18,7 +18,7 @@ from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from core.executables.exe_model_tuning import exe_model_tuning
 from core.s3_model_tuning.model_tuner import ModelTuner
 
-from extrapolation_detection.util import loading_saving
+from extrapolation_detection.util import loading_saving_ED
 
 
     # Load and prepare data

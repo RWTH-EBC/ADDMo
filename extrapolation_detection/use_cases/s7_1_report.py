@@ -3,7 +3,7 @@ import os
 import pandas
 
 import extrapolation_detection.util.data_handling as dh
-from extrapolation_detection.util import loading_saving
+from extrapolation_detection.util import loading_saving_ED
 
 
 def create_cross_experiment_reports(use_cases: list[str], detectors: list[str], score: str):

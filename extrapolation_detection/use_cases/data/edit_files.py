@@ -1,6 +1,6 @@
 import os
 
-from extrapolation_detection.util import loading_saving
+from extrapolation_detection.util import loading_saving_ED
 
 simulation_data_name = "Carnot_mid"
 new_simulation_data_name = "Boptest_TAir_mid_reduced"

@@ -2,10 +2,10 @@ import os
 import pandas as pd
 
 from core.util.experiment_logger import ExperimentLogger
-from extrapolation_detection.util import loading_saving
+from extrapolation_detection.util import loading_saving_ED
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.util.data_handling import split_target_features
-from extrapolation_detection.util.loading_saving import load_regressor
+from extrapolation_detection.util.loading_saving_ED import load_regressor
 from extrapolation_detection.util import data_handling
 from extrapolation_detection.n_D_extrapolation.score_regressor_per_data_point import (
     score_per_sample,

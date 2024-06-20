@@ -5,7 +5,7 @@ import pandas as pd
 
 from core.util.load_save import load_config_from_json
 
-from extrapolation_detection.util import loading_saving
+from extrapolation_detection.util import loading_saving_ED
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
     ExtrapolationExperimentConfig,
 )

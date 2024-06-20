@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt, colors, axes
 from matplotlib.cm import ScalarMappable
 from matplotlib.tri import Triangulation
 
-from extrapolation_detection.util import loading_saving
+from extrapolation_detection.util import loading_saving_ED
 from extrapolation_detection.util import data_handling as dh
 
 

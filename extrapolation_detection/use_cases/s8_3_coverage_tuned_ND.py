@@ -1,7 +1,7 @@
 import os
 
 from core.util.experiment_logger import ExperimentLogger
-from extrapolation_detection.util import loading_saving
+from extrapolation_detection.util import loading_saving_ED
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
     ExtrapolationExperimentConfig,
 )

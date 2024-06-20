@@ -67,8 +67,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             features_ordered=list(self.x_fit.columns),
             preprocessing=['StandardScaler for all features'])
 
-
-    def _save_regressor(self, path, file_type='joblib'):
+    def _save_regressor(self, path, file_type="joblib"):
         """"
         Save regressor as .joblib or .onnx file
         """

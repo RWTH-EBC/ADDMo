@@ -3,7 +3,7 @@ import pandas as pd
 
 from core.util.experiment_logger import ExperimentLogger
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
-from extrapolation_detection.util.loading_saving import load_regressor
+from core.util.load_save import load_regressor
 from extrapolation_detection.n_D_extrapolation.score_regressor_per_data_point import score_per_sample
 from extrapolation_detection.n_D_extrapolation import true_validity_domain
 from extrapolation_detection.util import loading_saving
@@ -25,9 +25,7 @@ def exe(config: ExtrapolationExperimentConfig):
     grid_path = os.path.join(config.experiment_folder, "explo_quant")
     x_grid = loading_saving.read_csv(f"grid_points", grid_path)
 
-    regressor: AbstractMLModel = load_regressor(
-        "regressor", directory=os.path.join(config.experiment_folder, "regressors")
-    )
+    regressor: AbstractMLModel = ExperimentLogger.use_artifact("regressor1")
 
     # generate y values for the grid
     y_grid = system_simulations.simulate(x_grid, config.system_simulation)

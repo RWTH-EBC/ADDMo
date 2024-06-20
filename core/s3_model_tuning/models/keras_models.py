@@ -30,11 +30,12 @@ class BaseKerasModel(AbstractMLModel, ABC):
             addmo_class=type(self).__name__,
             addmo_commit_id=ModelMetadata.get_commit_id(),
             library=keras.__name__,
-            library_model_type='Sequential',
+            library_model_type=type(self.regressor.model).__name__,
             library_version=keras.__version__,
             target_name=self.y_fit.name,
             features_ordered=list(self.x_fit.columns),
             preprocessing=['Scaling as layer of the ANN.'])
+
 
 class SciKerasSequential(BaseKerasModel):
     """"" SciKeras Sequential model. """
@@ -55,7 +56,6 @@ class SciKerasSequential(BaseKerasModel):
         sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation initialisation works only on np arrays
         self.regressor = KerasRegressor(model=sequential_regressor,
                                         loss=self.hyperparameters['loss'],
-                                        optimizer=self.hyperparameters['optimizer'],
                                         epochs=self.hyperparameters['epochs'],
                                         verbose=0)
         self.regressor.fit(x, y)
@@ -131,7 +131,7 @@ class SciKerasSequential(BaseKerasModel):
         Returns a compiled sequential model.
         """
         sequential_regressor = self._build_regressor_architecture(input_shape)
-        sequential_regressor.compile(optimizer= self.hyperparameters['optimizer'], loss=self.hyperparameters['loss'])
+        sequential_regressor.compile(loss=self.hyperparameters['loss'])
         return sequential_regressor
 
     def to_scikit_learn(self, x):
@@ -142,7 +142,6 @@ class SciKerasSequential(BaseKerasModel):
         # proper compilation of the model is necessary for the conversion
         regressor_scikit = KerasRegressor(model=self._build_regressor(input_shape),
                                           loss=self.hyperparameters['loss'],
-                                          optimizer=self.hyperparameters['optimizer'],
                                           epochs=self.hyperparameters['epochs'],
                                           verbose=0)
         return regressor_scikit
@@ -157,19 +156,17 @@ class SciKerasSequential(BaseKerasModel):
         if hyperparameters['loss'] is None:
             hyperparameters['loss'] = MeanSquaredError()
         hyperparameters['hidden_layer_sizes'] = (64,)  # Set default hidden layer size
-        hyperparameters['optimizer'] = RMSprop()
+
         return hyperparameters
 
     def optuna_hyperparameter_suggest(self, trial):
 
         n_layers = trial.suggest_int("n_layers", 1, 2)
-        hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 1000) for i in range(1, n_layers + 1, 1))
+        hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 32) for i in range(1, n_layers + 1, 1))
         hyperparameters = {
             "hidden_layer_sizes": hidden_layer_sizes,
             "loss": MeanSquaredError(),
-            "epochs": 5000,
-            "optimizer": RMSprop()
-
+            "epochs": 50
         }
         return hyperparameters
 
@@ -178,7 +175,6 @@ class SciKerasSequential(BaseKerasModel):
         hyperparameter_grid = {
             "hidden_layer_sizes": [(64,), (128, 64), (256, 128, 64)],
             "loss": [MeanSquaredError()],
-            "epochs": [5000],
-            "optimizer": RMSprop()
+            "epochs": [50]
         }
         return hyperparameter_grid

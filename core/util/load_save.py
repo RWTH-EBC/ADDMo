@@ -3,7 +3,10 @@ import json
 from pathlib import Path
 from pydantic import FilePath, BaseModel
 from typing import Type, TypeVar, Union
-
+from core.s3_model_tuning.models.model_factory import ModelFactory
+import os
+import pickle
+import glob
 ConfigT = TypeVar("ConfigT", bound=BaseModel)
 
 
@@ -64,3 +67,18 @@ def write_data(df: pd.DataFrame, abs_path: str):
         df.to_excel(abs_path)
 
 
+def load_regressor(filename, directory):
+    """Loads a regressor model from a file, automatically determining the file type."""
+    file_types = ['h5', 'joblib', 'onnx', 'keras']
+    files_found = []
+
+    # Find complete filepath
+    for file_type in file_types:
+        path_pattern = os.path.join(directory, f"{filename}.{file_type}")
+        files_found.extend(glob.glob(path_pattern))
+
+    if not files_found:
+        raise FileNotFoundError(f"No model file found for {filename} in {directory} with supported types {file_types}")
+
+    loaded_model = ModelFactory().load_model(files_found[0])
+    return loaded_model

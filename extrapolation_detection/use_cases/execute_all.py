@@ -7,7 +7,6 @@ from core.util.definitions import root_dir
 from core.util.load_save import load_config_from_json
 from core.util.definitions import results_dir_extrapolation_experiment
 from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
-
 from sweeps import config_blueprints
 
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
@@ -47,21 +46,21 @@ config.config_explo_quant.exploration_bounds = {
     "reaTZon_y": (290.15, 300.15),
     "delta_reaTZon_y": (-0.5, 0.5),
 }
-
+# config= config_blueprints.no_tuning_config()
 config.config_model_tuning.models = ["SciKerasSequential"]
 config.config_model_tuning.hyperparameter_tuning_type = "OptunaTuner"
-config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 20}
+config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 50}
 config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"
 
 config.config_detector.detectors = ["KNN", "GP", "OCSVM"]
-#
+
 # Configure the logger
 result_folder = results_dir_extrapolation_experiment(config.experiment_name)
 LocalLogger.directory = os.path.join(result_folder, "local_logger")
 LocalLogger.active = True
 WandbLogger.project = f"ED_{config.simulation_data_name}"
 WandbLogger.directory = result_folder
-WandbLogger.active = False
+WandbLogger.active = True
 
 
 # Run scripts

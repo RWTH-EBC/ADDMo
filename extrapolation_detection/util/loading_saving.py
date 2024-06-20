@@ -4,6 +4,7 @@ from typing import Any
 import pandas as pd
 import glob
 from core.util.load_save_utils import create_path_or_ask_to_override, get_path
+# from core.s3_model_tuning.models.model_factory import ModelFactory
 
 
 def write_pkl(data, filename: str, directory: str = None, override: bool = True):
@@ -117,3 +118,20 @@ def read_csv(filename: str, directory: str = None, **kwargs) -> pd.DataFrame:
         return pd.read_csv(path, sep=";", dtype="float", encoding="utf-8", index_col=index_col)
     else:
         raise FileNotFoundError(f"The path {path} does not exist.")
+
+
+# def load_regressor(filename, directory):
+#     """Loads a regressor model from a file, automatically determining the file type."""
+#     file_types = ['h5', 'joblib', 'onnx', 'keras']
+#     files_found = []
+#
+#     # Find complete filepath
+#     for file_type in file_types:
+#         path_pattern = os.path.join(directory, f"{filename}.{file_type}")
+#         files_found.extend(glob.glob(path_pattern))
+#
+#     if not files_found:
+#         raise FileNotFoundError(f"No model file found for {filename} in {directory} with supported types {file_types}")
+#
+#     loaded_model = ModelFactory().load_model(files_found[0])
+#     return loaded_model

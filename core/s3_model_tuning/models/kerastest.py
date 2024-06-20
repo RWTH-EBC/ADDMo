@@ -23,17 +23,16 @@ from core.util.experiment_logger import LocalLogger
 from core.util.experiment_logger import WandbLogger
 from extrapolation_detection.util import loading_saving
 from sweeps import config_blueprints
-
+LocalLogger.directory = r'C:\Users\mre-rpa\PycharmProjects\addmo\addmo-automated-ml-regression\0000_testfiles'
+LocalLogger.active = False
 WandbLogger.active = True
-WandbLogger.project = 'MLP'
+WandbLogger.project = 'keras'
 WandbLogger.directory = r'C:\Users\mre-rpa\PycharmProjects\addmo\addmo-automated-ml-regression\0000_testfiles'
-config = {
-    'model': 'ScikitMLP',
-    'test_size': 0.2,
-    'random_state': 42
-}
+config = ExtrapolationExperimentConfig()
+config.simulation_data_name = "testkeras"
+config.experiment_name = "test"
+
 ExperimentLogger.start_experiment(config=config)
-#
     # Load and prepare data
 data = fetch_california_housing()
 df = pd.DataFrame(data.data, columns=data.feature_names)
@@ -41,11 +40,12 @@ df['price'] = pd.Series(data.target)
 X_train, X_test, y_train, y_test = train_test_split(df.iloc[:, :-1], df['price'], test_size=0.2, random_state=42)
 dir_path = os.path.join(root_dir(), "0000_testfiles")
 #
-model2 = ScikitMLP()
+model2 = SciKerasSequential()
 model2.fit(X_train, y_train)
-ExperimentLogger.log_artifact(model2, "MLPreg", "joblib")
+# model2.save_regressor(dir_path, "regressor", "keras")
+ExperimentLogger.log_artifact(model2, "reg", "keras")
 
-model1 = ExperimentLogger.use_artifact("MLPreg")
+model1 = ExperimentLogger.use_artifact("reg")
 print(model1)
 pred_loaded= model1.predict(X_test)
 y_pred = model2.predict(X_test)

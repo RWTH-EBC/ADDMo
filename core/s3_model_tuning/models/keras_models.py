@@ -36,14 +36,6 @@ class BaseKerasModel(AbstractMLModel, ABC):
             features_ordered=list(self.x_fit.columns),
             preprocessing=['Scaling as layer of the ANN.'])
 
-    @property
-    def default_file_type(self):
-
-        if version.parse(keras.__version__) >= version.parse("3.2"):
-            return 'keras'
-        else:
-            return 'h5'
-
 
 class SciKerasSequential(BaseKerasModel):
     """"" SciKeras Sequential model. """
@@ -84,7 +76,7 @@ class SciKerasSequential(BaseKerasModel):
         """
         self.hyperparameters = hyperparameters
 
-    def _save_regressor(self, path, file_type):
+    def _save_regressor(self, path, file_type="h5"):
         """
         Save regressor as a .h5 or .keras file.
         """
@@ -183,6 +175,6 @@ class SciKerasSequential(BaseKerasModel):
         hyperparameter_grid = {
             "hidden_layer_sizes": [(64,), (128, 64), (256, 128, 64)],
             "loss": [MeanSquaredError()],
-            "epochs": [5000]
+            "epochs": [50]
         }
         return hyperparameter_grid

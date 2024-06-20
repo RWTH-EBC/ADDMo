@@ -99,7 +99,7 @@ class WandbLogger(AbstractLogger):
                 model: AbstractMLModel = data
                 filepath = os.path.join(WandbLogger.directory, name + "." + art_type)
                 metadata_filepath = os.path.join(WandbLogger.directory, name + "_metadata.json")
-                model.save_regressor(WandbLogger.directory, name)
+                model.save_regressor(WandbLogger.directory, name, art_type)
             # create artifact object
             artifact = wandb.Artifact(
                 name=name, type=art_type, description=description, metadata=metadata
@@ -129,8 +129,6 @@ class WandbLogger(AbstractLogger):
             metadata_path = os.path.join(artifact_dir, metadata_file)
             loaded_model = ModelFactory().load_model(model_path)
             return loaded_model
-
-
 
 class LocalLogger(AbstractLogger):
     active: bool = False  # Activate local logging
@@ -167,8 +165,13 @@ class LocalLogger(AbstractLogger):
     @staticmethod
     def use_artifact(name: str, alias: str = "latest"):
         if LocalLogger.active:
-            filename = name  # Assuming filename logic is handled appropriately
-            return read_pkl(filename, LocalLogger.directory)
+            filename = name + '.csv'
+            file_path = os.path.join(LocalLogger.directory, filename)
+            if os.path.exists(file_path):  # Check if the file exists
+                return pd.read_csv(file_path)
+            else:
+                # If the file does not exist, return None silently
+                return None
 
 
 class ExperimentLogger(AbstractLogger):
@@ -199,5 +202,5 @@ class ExperimentLogger(AbstractLogger):
     @staticmethod
     def use_artifact(name: str, alias: str = "latest"):
         data_wandb = WandbLogger.use_artifact(name, alias)
-        # data_local = LocalLogger.use_artifact(name, alias)
+        data_local = LocalLogger.use_artifact(name, alias)
         return data_wandb

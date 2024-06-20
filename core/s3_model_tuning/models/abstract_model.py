@@ -94,23 +94,6 @@ class AbstractMLModel(ABC):
         Args:
             path: full path where the trained model is saved.
             file_type: file type used for saving the model.
-
-        Notes
-        -----
-        - For Keras models:
-            - Supports 'h5' and 'keras' formats using `tf.keras.models.save_model`.
-            - Supports 'onnx' format if `tf2onnx` is installed and Keras version is compatible(2.15).
-        - For Scikit-learn models:
-            - Supports 'joblib' format using `joblib.dump`.
-            -Supports 'onnx' format using 'SerializeToString'.
-        """
-        pass
-
-    @property
-    @abstractmethod
-    def default_file_type(self):
-        """""
-        Set default file type for saving the trained model.
         """
         pass
 
@@ -145,18 +128,13 @@ class AbstractMLModel(ABC):
 
         """
 
-        if regressor_filename is None:
-            regressor_filename = type(self).__name__
-
-        self._define_metadata()
-
-        if file_type is None:
-            file_type = self.default_file_type
-
         full_filename = f"{regressor_filename}.{file_type}"
         path = create_path_or_ask_to_override(full_filename, directory)
+
         self._save_regressor(path, file_type)
+        self._define_metadata()
         self._save_metadata(directory, regressor_filename)
+
 
     def load_regressor(self, model_instance, input_shape=None):
         """

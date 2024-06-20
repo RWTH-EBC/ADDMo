@@ -94,6 +94,7 @@ class ModelFactory:
             addmo_class.load_regressor(regressor, input_shape)
 
         else:
-            raise ValueError(" '.joblib', '.onnx' or '.h5' path expected")
+            raise FileNotFoundError(
+                f"No model file found at {abs_path}.")
 
         return addmo_class

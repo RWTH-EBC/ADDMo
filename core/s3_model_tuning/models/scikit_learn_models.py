@@ -73,7 +73,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         """
         return 'joblib'
 
-    def _save_regressor(self, path, file_type="joblib"):
+    def _save_regressor(self, path, file_type):
         """"
         Save regressor as .joblib or .onnx file
         """

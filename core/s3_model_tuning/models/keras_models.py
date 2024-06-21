@@ -86,7 +86,7 @@ class SciKerasSequential(BaseKerasModel):
         """
         self.hyperparameters = hyperparameters
 
-    def _save_regressor(self, path, file_type=None):
+    def _save_regressor(self, path, file_type):
         """
         Save regressor as a .h5 or .keras file.
         """
@@ -165,7 +165,7 @@ class SciKerasSequential(BaseKerasModel):
         # Define default loss if not present
         if hyperparameters['loss'] is None:
             hyperparameters['loss'] = MeanSquaredError()
-        hyperparameters['hidden_layer_sizes'] = (64,)  # Set default hidden layer size
+        hyperparameters['hidden_layer_sizes'] = (32,)  # Set default hidden layer size
 
         return hyperparameters
 

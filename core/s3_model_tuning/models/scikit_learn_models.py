@@ -69,7 +69,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
     @property
     def default_file_type(self):
         """
-        Set filetype according to the version.
+        Set filetype for saving trained model.
         """
         return 'joblib'
 

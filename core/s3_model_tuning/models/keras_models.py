@@ -39,7 +39,7 @@ class BaseKerasModel(AbstractMLModel, ABC):
     @property
     def default_file_type(self):
         """
-        Set filetype according to the version.
+        Set filetype for saving trained model according to library version.
         """
         if version.parse(keras.__version__) >= version.parse("3.2"):
             return 'keras'

@@ -15,7 +15,7 @@ from scikeras.wrappers import KerasRegressor
 from tensorflow.keras.losses import MeanSquaredError
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import ModelMetadata
-
+from keras.callbacks import EarlyStopping
 
 class BaseKerasModel(AbstractMLModel, ABC):
     """
@@ -64,10 +64,13 @@ class SciKerasSequential(BaseKerasModel):
         sequential_regressor = self._build_regressor(input_shape)
         # Normalisation of first layer (input data).
         sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation initialisation works only on np arrays
+        early_stopping = EarlyStopping(monitor='loss', patience=5, restore_best_weights=True)
         self.regressor = KerasRegressor(model=sequential_regressor,
+                                        batch_size=200,
                                         loss=self.hyperparameters['loss'],
                                         epochs=self.hyperparameters['epochs'],
-                                        verbose=0)
+                                        verbose=10,
+                                        callbacks=[early_stopping])
         self.regressor.fit(x, y)
 
     def predict(self, x):
@@ -172,7 +175,7 @@ class SciKerasSequential(BaseKerasModel):
     def optuna_hyperparameter_suggest(self, trial):
 
         n_layers = trial.suggest_int("n_layers", 1, 2)
-        hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 32) for i in range(1, n_layers + 1, 1))
+        hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 50) for i in range(1, n_layers + 1, 1))
         hyperparameters = {
             "hidden_layer_sizes": hidden_layer_sizes,
             "loss": MeanSquaredError(),

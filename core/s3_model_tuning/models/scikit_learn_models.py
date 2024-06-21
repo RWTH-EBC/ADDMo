@@ -14,7 +14,6 @@ from skl2onnx import to_onnx
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.s3_model_tuning.models.abstract_model import ModelMetadata
 from sklearn.linear_model import LinearRegression
-from extrapolation_detection.util.loading_saving import create_path_or_ask_to_override
 
 
 class BaseScikitLearnModel(AbstractMLModel, ABC):
@@ -66,6 +65,13 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             target_name=self.y_fit.name,
             features_ordered=list(self.x_fit.columns),
             preprocessing=['StandardScaler for all features'])
+
+    @property
+    def default_file_type(self):
+        """
+        Set filetype according to the version.
+        """
+        return 'joblib'
 
     def _save_regressor(self, path, file_type="joblib"):
         """"

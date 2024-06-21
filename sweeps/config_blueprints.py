@@ -2,12 +2,13 @@ import os
 
 from core.util.definitions import root_dir
 from core.util.load_save import load_config_from_json
-
+from tensorflow.keras.losses import MeanSquaredError
 from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from extrapolation_detection.use_cases.config.ed_experiment_config import ExtrapolationExperimentConfig
 
-def no_tuning_config(config: ExtrapolationExperimentConfig):
-    #Todo: Ask Martin about no config on Thurs, cant figure out
+def no_tuning_config(config: ExtrapolationExperimentConfig)->  ModelTunerConfig:
+    #Todo: Ask Martin about no config on Thurs, cant figure out dynamic initialisation and return config
+
     config.config_explo_quant.explo_grid_points_per_axis = 10
 
     config.config_model_tuning.models = ["SciKerasSequential"]
@@ -15,14 +16,15 @@ def no_tuning_config(config: ExtrapolationExperimentConfig):
     config.config_model_tuning.hyperparameter_tuning_kwargs = {
         "hyperparameter_set": {
             "hidden_layer_sizes": [5],
-            "activation": "relu",
+            "loss": MeanSquaredError(),
             "max_iter": 5,
+            "epochs": 5
         }
     }
     config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"
-    config.config_model_tuning.validation_score_mechanism= "cv"
+    config.config_model_tuning.validation_score_mechanism = "cv"
     config.config_detector.detectors = ["KNN", "GP", "OCSVM"]
-    return config
+    return config.config_model_tuning
 
 def linear_regression_config(config: ExtrapolationExperimentConfig):
     config = no_tuning_config(config)

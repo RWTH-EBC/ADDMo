@@ -24,7 +24,7 @@ from core.util.experiment_logger import WandbLogger
 from extrapolation_detection.util import loading_saving
 from sweeps import config_blueprints
 LocalLogger.directory = r'C:\Users\mre-rpa\PycharmProjects\addmo\addmo-automated-ml-regression\0000_testfiles'
-LocalLogger.active = False
+LocalLogger.active = True
 WandbLogger.active = True
 WandbLogger.project = 'keras'
 WandbLogger.directory = r'C:\Users\mre-rpa\PycharmProjects\addmo\addmo-automated-ml-regression\0000_testfiles'
@@ -42,9 +42,9 @@ dir_path = os.path.join(root_dir(), "0000_testfiles")
 #
 model2 = SciKerasSequential()
 model2.fit(X_train, y_train)
-# model2.save_regressor(dir_path, "regressor", "keras")
+# model2.save_regressor(dir_path, "regressor")
 ExperimentLogger.log_artifact(model2, "reg", "keras")
-
+#
 model1 = ExperimentLogger.use_artifact("reg")
 print(model1)
 pred_loaded= model1.predict(X_test)
@@ -89,3 +89,10 @@ print( "trained model r2 score: ", r2, "loaded: ", r_loaded)
 # ExperimentLogger.start_experiment(config=config)
 # regressor: AbstractMLModel = ExperimentLogger.use_artifact("regressor")
 # print(regressor.regressor.model.summary())
+# model_config = config_blueprints.no_tuning_config(config)
+# print(model_config)
+# config=model_config
+# tuner = ModelTuner(config)
+#
+# model_dict = tuner.tune_all_models(X_train, y_train)
+# print(model_dict)

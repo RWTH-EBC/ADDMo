@@ -5,7 +5,7 @@ from core.util.experiment_logger import ExperimentLogger
 from extrapolation_detection.util import loading_saving
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.util.data_handling import split_target_features
-from core.util.load_save import load_regressor
+from extrapolation_detection.util.loading_saving import load_regressor
 from extrapolation_detection.util import data_handling
 from extrapolation_detection.n_D_extrapolation.score_regressor_per_data_point import (
     score_per_sample,
@@ -17,7 +17,7 @@ from extrapolation_detection.use_cases.config.ed_experiment_config import (
 
 def exe(config: ExtrapolationExperimentConfig):
     # load model
-    regressor: AbstractMLModel = ExperimentLogger.use_artifact("regressor1")
+    regressor: AbstractMLModel = load_regressor("regressor", directory=os.path.join(config.experiment_folder, "regressors"))
 
     xy_training = loading_saving.read_csv(
         "xy_train", directory=config.experiment_folder

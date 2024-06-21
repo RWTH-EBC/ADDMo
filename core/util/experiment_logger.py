@@ -82,11 +82,11 @@ class WandbLogger(AbstractLogger):
 
     @staticmethod
     def log_artifact(
-        data,
-        name: str,
-        art_type: str,
-        description: str = None,
-        metadata: dict = None
+            data,
+            name: str,
+            art_type: str,
+            description: str = None,
+            metadata: dict = None
     ):
         if WandbLogger.active:
             # save data to disk first
@@ -120,15 +120,19 @@ class WandbLogger(AbstractLogger):
 
             # Find the model and metadata files
             for file in os.listdir(artifact_dir):
-                if file.endswith("_metadata.json"):
-                    metadata_file = file
-                elif file.endswith(('.joblib', '.onnx', '.h5', '.keras')):
+                if file.endswith(('.joblib', '.onnx', '.h5', '.keras', '.pkl')):
                     model_file = file
 
             model_path = os.path.join(artifact_dir, model_file)
-            metadata_path = os.path.join(artifact_dir, metadata_file)
-            loaded_model = ModelFactory().load_model(model_path)
+
+            if model_file.endswith('.pkl'):
+                with open(model_path, "rb") as f:
+                    loaded_model = pickle.load(f)
+            else:
+                loaded_model = ModelFactory().load_model(model_path)
+
             return loaded_model
+
 
 class LocalLogger(AbstractLogger):
     active: bool = False  # Activate local logging

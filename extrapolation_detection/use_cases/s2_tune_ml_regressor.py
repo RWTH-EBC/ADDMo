@@ -49,8 +49,7 @@ def exe(config: ExtrapolationExperimentConfig):
 
     loading_saving.write_csv(xy_train_val, "xy_regressor_fit", directory=regressor_directory)
     loading_saving.write_csv(x_train_val, "x_regressor_fit", directory=regressor_directory)
-    # regressor.save_regressor(regressor_directory, 'regressor')
-    ExperimentLogger.log_artifact(regressor, "regressor1", "keras")
+    regressor.save_regressor(regressor_directory, 'regressor')
     loading_saving.write_csv(y_train_val, "y_regressor_fit", directory=regressor_directory)
     loading_saving.write_csv(y_pred, "pred_regressor_fit", directory=regressor_directory)
 
@@ -62,6 +61,7 @@ def exe(config: ExtrapolationExperimentConfig):
 
     # log model infos with experiment logger in one dict
     ExperimentLogger.log(model_infos.to_dict(orient="records")[0])
+    ExperimentLogger.log_artifact(regressor, "regressor", "h5")
 
     print(f"{__name__} executed")
 

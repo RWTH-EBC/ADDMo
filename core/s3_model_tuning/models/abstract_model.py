@@ -86,6 +86,14 @@ class AbstractMLModel(ABC):
         """
         pass
 
+    @property
+    @abstractmethod
+    def default_file_type(self):
+        """""
+        Set default file type for saving the trained model.
+        """
+        pass
+
     @abstractmethod
     def _save_regressor(self, path, file_type):
         """""
@@ -127,6 +135,8 @@ class AbstractMLModel(ABC):
             file_type: file type used for saving the model.
 
         """
+        if file_type is None:
+            file_type = self.default_file_type
 
         full_filename = f"{regressor_filename}.{file_type}"
         path = create_path_or_ask_to_override(full_filename, directory)

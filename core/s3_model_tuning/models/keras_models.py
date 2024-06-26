@@ -60,17 +60,7 @@ class SciKerasSequential(BaseKerasModel):
         """
         self.x_fit = x
         self.y_fit = y
-        input_shape = (len(x.columns),)
-        sequential_regressor = self._build_regressor(input_shape)
-        # Normalisation of first layer (input data).
-        sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation initialisation works only on np arrays
-        early_stopping = EarlyStopping(monitor='loss', patience=5, restore_best_weights=True)
-        self.regressor = KerasRegressor(model=sequential_regressor,
-                                        batch_size=200,
-                                        loss=self.hyperparameters['loss'],
-                                        epochs=self.hyperparameters['epochs'],
-                                        verbose=10,
-                                        callbacks=[early_stopping])
+        self.regressor = self.to_scikit_learn(x)
         self.regressor.fit(x, y)
 
     def predict(self, x):
@@ -152,11 +142,16 @@ class SciKerasSequential(BaseKerasModel):
         Convert Keras Model to Scikeras Regressor for tuning.
         """
         input_shape = (len(x.columns),)
-        # proper compilation of the model is necessary for the conversion
-        regressor_scikit = KerasRegressor(model=self._build_regressor(input_shape),
-                                          loss=self.hyperparameters['loss'],
-                                          epochs=self.hyperparameters['epochs'],
-                                          verbose=0)
+        sequential_regressor = self._build_regressor(input_shape)
+        # Normalisation of first layer (input data).
+        sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation initialisation works only on np arrays
+        early_stopping = EarlyStopping(monitor='loss', patience=5, restore_best_weights=True)
+        regressor_scikit = KerasRegressor(model=sequential_regressor,
+                                        batch_size=200,
+                                        loss=self.hyperparameters['loss'],
+                                        epochs=self.hyperparameters['epochs'],
+                                        verbose=10,
+                                        callbacks=[early_stopping])
         return regressor_scikit
 
     def default_hyperparameter(self):

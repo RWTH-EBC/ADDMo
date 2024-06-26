@@ -111,7 +111,7 @@ class WandbLogger(AbstractLogger):
 
             # actually log the artifact
             wandb.run.log_artifact(artifact)
-            # artifact.wait()
+            artifact.wait()
 
     @staticmethod
     def use_artifact(name: str, alias: str = "latest"):

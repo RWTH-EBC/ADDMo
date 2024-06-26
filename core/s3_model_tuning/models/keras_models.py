@@ -150,7 +150,7 @@ class SciKerasSequential(BaseKerasModel):
                                         batch_size=200,
                                         loss=self.hyperparameters['loss'],
                                         epochs=self.hyperparameters['epochs'],
-                                        verbose=10,
+                                        verbose=0,
                                         callbacks=[early_stopping])
         return regressor_scikit
 

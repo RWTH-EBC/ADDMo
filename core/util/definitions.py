@@ -1,12 +1,14 @@
 import os
-
-from core.util.load_save import create_or_clean_directory
+import json
+from core.util.load_save_utils import create_or_clean_directory
 from core.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
 from core.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
+
 
 def root_dir():
     # Finds the root directory of the git repository
     return os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+
 
 def raw_data_path(path: str = None):
     if path is None:
@@ -19,10 +21,14 @@ def raw_data_path(path: str = None):
         # If the provided path is relative, join it with the 'raw_input_data' directory
         return os.path.join(root_dir(), 'raw_input_data', path)
 
+
 def results_dir():
     return os.path.join(root_dir(), 'results')
+
+
 def results_dir_wandb():
     return os.path.join(results_dir(), 'wandb')
+
 
 def results_dir_data_tuning(config: DataTuningFixedConfig):
     path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, config.name_of_data_tuning)
@@ -34,8 +40,10 @@ def results_dir_model_tuning(config: ModelTuningExperimentConfig):
                         config.name_of_data_tuning_experiment, config.name_of_model_tuning_experiment)
     return create_or_clean_directory(path)
 
+
 def ed_use_case_dir():
     return os.path.join(root_dir(), 'extrapolation_detection', 'use_cases')
+
 
 def results_dir_extrapolation_experiment(experiment_name: str):
     path = os.path.join(
@@ -44,4 +52,3 @@ def results_dir_extrapolation_experiment(experiment_name: str):
         experiment_name
     )
     return create_or_clean_directory(path)
-

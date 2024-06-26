@@ -1,13 +1,12 @@
 import os
 from abc import ABC, abstractmethod
 import pickle
-
 import pandas as pd
 import wandb
-
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.util.load_save import save_config_to_json
-from core.util.load_save import create_or_clean_directory
+from core.util.load_save_utils import create_or_clean_directory
+from core.s3_model_tuning.models.model_factory import ModelFactory
 
 
 class AbstractLogger(ABC):
@@ -48,7 +47,7 @@ class WandbLogger(AbstractLogger):
         if WandbLogger.active:
             wandb.init(
                 project=WandbLogger.project,
-                config=config.dict(),
+                config=config,
                 dir=WandbLogger.directory,
                 **kwargs,
             )
@@ -83,11 +82,11 @@ class WandbLogger(AbstractLogger):
 
     @staticmethod
     def log_artifact(
-        data,
-        name: str,
-        art_type: str,
-        description: str = None,
-        metadata: dict = None,
+            data,
+            name: str,
+            art_type: str,
+            description: str = None,
+            metadata: dict = None
     ):
         if WandbLogger.active:
             # save data to disk first
@@ -96,20 +95,20 @@ class WandbLogger(AbstractLogger):
                 filepath = os.path.join(WandbLogger.directory, name + ".pkl")
                 with open(filepath, "wb") as f:
                     pickle.dump(data, f)
-            if art_type == "onnx":
+            elif art_type in ["h5", "keras", "joblib", "onnx"]:
                 model: AbstractMLModel = data
-                filepath = os.path.join(WandbLogger.directory, name + ".onnx")
-                model.save_model(filepath)
-
+                filepath = os.path.join(WandbLogger.directory, name + "." + art_type)
+                metadata_filepath = os.path.join(WandbLogger.directory, name + "_metadata.json")
+                model.save_regressor(WandbLogger.directory, name, art_type)
             # create artifact object
             artifact = wandb.Artifact(
                 name=name, type=art_type, description=description, metadata=metadata
             )
-
-            # add saved file to the artifact, you may also add a whole directory to the artifact
+            # add saved file to the artifact
             artifact.add_file(filepath)
+            if art_type in ["h5", "keras", "onnx", "joblib"]:  # add metadata file if regressor is saved
+                artifact.add_file(metadata_filepath)
 
-            # actually log the artifact
             wandb.run.log_artifact(artifact)
             artifact.wait()
 
@@ -117,8 +116,22 @@ class WandbLogger(AbstractLogger):
     def use_artifact(name: str, alias: str = "latest"):
         if WandbLogger.active:
             artifact = wandb.use_artifact(f"{name}:{alias}")
-            filename = artifact.download() + "\\" + name + ".pkl"
-            return read_pkl(filename)
+            artifact_dir = artifact.download()
+
+            # Find the model and metadata files
+            for file in os.listdir(artifact_dir):
+                if file.endswith(('.joblib', '.onnx', '.h5', '.keras', '.pkl')):
+                    model_file = file
+
+            model_path = os.path.join(artifact_dir, model_file)
+
+            if model_file.endswith('.pkl'):
+                with open(model_path, "rb") as f:
+                    loaded_model = pickle.load(f)
+            else:
+                loaded_model = ModelFactory().load_model(model_path)
+
+            return loaded_model
 
 
 class LocalLogger(AbstractLogger):
@@ -156,8 +169,13 @@ class LocalLogger(AbstractLogger):
     @staticmethod
     def use_artifact(name: str, alias: str = "latest"):
         if LocalLogger.active:
-            filename = name  # Assuming filename logic is handled appropriately
-            return read_pkl(filename, LocalLogger.directory)
+            filename = name + '.csv'
+            file_path = os.path.join(LocalLogger.directory, filename)
+            if os.path.exists(file_path):  # Check if the file exists
+                return pd.read_csv(file_path)
+            else:
+                # If the file does not exist, return None silently
+                return None
 
 
 class ExperimentLogger(AbstractLogger):
@@ -189,4 +207,4 @@ class ExperimentLogger(AbstractLogger):
     def use_artifact(name: str, alias: str = "latest"):
         data_wandb = WandbLogger.use_artifact(name, alias)
         data_local = LocalLogger.use_artifact(name, alias)
-        return data_wandb or data_local
+        return data_wandb

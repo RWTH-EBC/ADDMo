@@ -1,10 +1,10 @@
 import os
 import pickle
 from typing import Any
-
 import pandas as pd
-
-
+import glob
+from core.util.load_save_utils import create_path_or_ask_to_override, get_path
+from core.s3_model_tuning.models.model_factory import ModelFactory
 
 
 def write_pkl(data, filename: str, directory: str = None, override: bool = True):
@@ -23,14 +23,7 @@ def write_pkl(data, filename: str, directory: str = None, override: bool = True)
 
     filename = filename + ".pkl"
 
-    path = _get_path(filename, directory)
-
-    # make sure the file does not already exist
-    if os.path.exists(path) and not override:
-        if not _get_bool(
-            f'The file "{path}" already exists. Do you want to override it?\n'
-        ):
-            return 0
+    path = create_path_or_ask_to_override(filename, directory, override)
 
     # open the path and write the file
     pkl_file = open(path, "wb")
@@ -58,7 +51,7 @@ def read_pkl(filename: str, directory: str = None) -> Any:
 
     filename = filename + ".pkl"
 
-    path = _get_path(filename, directory)
+    path = get_path(filename, directory)
 
     if os.path.exists(path):  # check for the existence of the path
         pkl_file = open(path, "rb")  # open path
@@ -71,38 +64,6 @@ def read_pkl(filename: str, directory: str = None) -> Any:
             raise FileNotFoundError(f"No data at {path} found.")
     else:
         raise FileNotFoundError(f"The path {path} does not exist.")
-
-
-def _get_path(filename: str, directory: str) -> str:
-    """
-    Returns the full path for a given filename and directory.
-    """
-    if directory is not None:  # check if directory is none
-        if not os.path.exists(directory):  # check if path exists
-            os.makedirs(directory)  # create new directory
-        return os.path.join(directory, filename)  # calculate full path
-    else:
-        return filename
-
-
-def _get_bool(message: str, true: list = None, false: list = None) -> bool or str:
-    if false is None:
-        false = ["no", "nein", "false", "1", "n"]
-    if true is None:
-        true = ["yes", "ja", "true", "wahr", "0", "y"]
-
-    val = input(message).lower()
-    if val in true:
-        return True
-    elif val in false:
-        return False
-    else:
-        print("Please try again.")
-        print("True:", true)
-        print("False:", false)
-        _get_bool(message, true, false)
-
-    return val
 
 
 def write_csv(data: pd.DataFrame, filename: str, directory: str = None, overwrite: bool = True):
@@ -122,14 +83,7 @@ def write_csv(data: pd.DataFrame, filename: str, directory: str = None, overwrit
 
     filename = filename + ".csv"
 
-    path = _get_path(filename, directory)
-
-    # make sure the file does not already exist
-    if os.path.exists(path) and not overwrite:
-        if not _get_bool(
-            f'The file "{path}" already exists. Do you want to override it?\n'
-        ):
-            return 0
+    path = create_path_or_ask_to_override(filename, directory, overwrite)
 
     # Write DataFrame to CSV
     data.to_csv(path, sep=";", index=True, header=True, encoding="utf-8")
@@ -158,9 +112,26 @@ def read_csv(filename: str, directory: str = None, **kwargs) -> pd.DataFrame:
 
     filename = filename + ".csv"
 
-    path = _get_path(filename, directory)
+    path = get_path(filename, directory)
 
     if os.path.exists(path):  # check for the existence of the path
         return pd.read_csv(path, sep=";", dtype="float", encoding="utf-8", index_col=index_col)
     else:
         raise FileNotFoundError(f"The path {path} does not exist.")
+
+
+def load_regressor(filename, directory):
+    """Loads a regressor model from a file, automatically determining the file type."""
+    file_types = ['h5', 'joblib', 'onnx', 'keras']
+    files_found = []
+
+    # Find complete filepath
+    for file_type in file_types:
+        path_pattern = os.path.join(directory, f"{filename}.{file_type}")
+        files_found.extend(glob.glob(path_pattern))
+
+    if not files_found:
+        raise FileNotFoundError(f"No model file found for {filename} in {directory} with supported types {file_types}")
+
+    loaded_model = ModelFactory().load_model(files_found[0])
+    return loaded_model

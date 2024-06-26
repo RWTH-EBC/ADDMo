@@ -7,7 +7,6 @@ from core.util.definitions import root_dir
 from core.util.load_save import load_config_from_json
 from core.util.definitions import results_dir_extrapolation_experiment
 from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
-
 from sweeps import config_blueprints
 
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
@@ -31,27 +30,37 @@ from extrapolation_detection.use_cases import (
 
 # configure config
 config = ExtrapolationExperimentConfig()
-config.simulation_data_name = "Carnot_mid_noise_m0_std0.02"
-config.experiment_name = "00_Lasso2"
+config.simulation_data_name = "Boptest_TAir_mid_ODE_noise_m0_std0.01"
+config.experiment_name = "RISHIKA_TEST"
+config.name_of_target = "delta_reaTZon_y"
+config.train_val_test_period = (0, 1488)
 config.shuffle = False
-config.grid_points_per_axis = 300
-config.true_outlier_threshold = 0.2
+config.grid_points_per_axis = 10
+config.system_simulation = "BopTest_TAir_ODE"
+config.true_outlier_threshold = 0.1
 
 config.config_explo_quant.exploration_bounds = {
-    "$T_{umg}$ in °C": (-10, 30),
-    "$P_{el}$ in kW": (0, 5),
-    "$\dot{Q}_{heiz}$ in kW": (0, 35)
+    "TDryBul": (263.15, 303.15),
+    "HDirNor": (0, 1000),
+    "oveHeaPumY_u": (0, 1),
+    "reaTZon_y": (290.15, 300.15),
+    "delta_reaTZon_y": (-0.5, 0.5),
 }
+# config= config_blueprints.no_tuning_config()
+config.config_model_tuning.models = ["SciKerasSequential"]
+config.config_model_tuning.hyperparameter_tuning_type = "OptunaTuner"
+config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 50}
+config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"
 
-config = config_blueprints.linear_regression_config(config)
-#
+config.config_detector.detectors = ["KNN", "GP", "OCSVM"]
+
 # Configure the logger
 result_folder = results_dir_extrapolation_experiment(config.experiment_name)
 LocalLogger.directory = os.path.join(result_folder, "local_logger")
 LocalLogger.active = True
 WandbLogger.project = f"ED_{config.simulation_data_name}"
 WandbLogger.directory = result_folder
-WandbLogger.active = False
+WandbLogger.active = True
 
 
 # Run scripts

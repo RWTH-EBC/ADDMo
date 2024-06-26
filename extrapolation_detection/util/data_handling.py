@@ -1,3 +1,5 @@
+import warnings
+
 import pandas as pd
 from pandas import DataFrame
 
@@ -66,7 +68,8 @@ def split_simulation_data(
 def move_true_invalid_from_training_2_validation(
     xy_train, xy_val, true_validity_train, true_validity_val
 ):
-    """Moves true invalid from training data to validation data"""
+    """Moves true invalid from training data to validation data."""
+
 
     # Convert 0s and 1s to False and True first for easier handling, as well df to series via squeeze
     true_validity_train = true_validity_train.astype(bool).squeeze()
@@ -83,5 +86,15 @@ def move_true_invalid_from_training_2_validation(
     # Append the "true invalid" data points to xy_val
     xy_val_new = pd.concat([xy_val, invalid_data])
     true_validity_val_new = pd.concat([true_validity_val, invalid_labels])
+
+    # warn if one of the returned dataframes is empty
+    if xy_train_new.empty:
+        warnings.warn("Warning: xy_train_new is empty.")
+    if xy_val_new.empty:
+        warnings.warn("Warning: xy_val_new is empty.")
+    if true_validity_train_new.empty:
+        warnings.warn("Warning: true_validity_train_new is empty.")
+    if true_validity_val_new.empty:
+        warnings.warn("Warning: true_validity_val_new is empty.")
 
     return xy_train_new, xy_val_new, true_validity_train_new, true_validity_val_new

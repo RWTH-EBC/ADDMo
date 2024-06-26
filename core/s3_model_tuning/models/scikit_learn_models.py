@@ -1,15 +1,19 @@
+import os
+import joblib
+import json
+import sklearn
+import pandas as pd
 from abc import ABC
-
 from sklearn.neural_network import MLPRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Lasso
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import TransformedTargetRegressor
-import onnx
-import skl2onnx
-
+from skl2onnx import to_onnx
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
+from core.s3_model_tuning.models.abstract_model import ModelMetadata
+from sklearn.linear_model import LinearRegression
 
 
 class BaseScikitLearnModel(AbstractMLModel, ABC):
@@ -22,50 +26,91 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         model (Pipeline): A scikit-learn Pipeline object containing the scaler and the provided model.
     """
 
-    def __init__(self, model):
-        # Create an instance of the scikit-learn model including a scaler
-        self.model = Pipeline(
+    def __init__(self, regressor):
+        """
+        Create an instance of the scikit-learn model including a scaler
+        """
+        self.regressor = Pipeline(
             steps=[
                 ("scaler", StandardScaler()),  # scale the features
-                ("model", model) # scaling the target variable through TransformedTargetRegressor
+                ("model", regressor)  # scaling the target variable through TransformedTargetRegressor
                 # is not compatible with ONNX
             ]
         )
 
     def fit(self, x, y):
-        self.x = x  # Save the training data to be used later for ONNX conversion
-        self.model.fit(x, y)  # Train the model
+        """
+        Train the model.
+        """
+        self.x_fit = x
+        self.y_fit = y
+        self.regressor.fit(x.values, y)
 
     def predict(self, x):
-        return self.model.predict(x)  # Make predictions
+        """
+        Make predictions.
+        """
+        return self.regressor.predict(x)
 
-    def save_model(self, abs_path):
-        # Convert the entire pipeline to ONNX
-        onnx_model = skl2onnx.to_onnx(self.model, self.x[:1])
-        onnx.save_model(onnx_model, abs_path)
+    def _define_metadata(self):
+        """
+        Define metadata.
+        """
+        self.metadata = ModelMetadata(
+            addmo_class=type(self).__name__,
+            addmo_commit_id=ModelMetadata.get_commit_id(),
+            library=sklearn.__name__,
+            library_model_type=type(self.regressor.named_steps['model']).__name__,
+            library_version=sklearn.__version__,
+            target_name=self.y_fit.name,
+            features_ordered=list(self.x_fit.columns),
+            preprocessing=['StandardScaler for all features'])
 
-    def load_model(self, abs_path):
-        # Implement model loading
+    @property
+    def default_file_type(self):
+        """
+        Set filetype for saving trained model.
+        """
+        return 'joblib'
 
-        pass
+    def _save_regressor(self, path, file_type):
+        """"
+        Save regressor as .joblib or .onnx file
+        """
 
-    def to_scikit_learn(self):
-        return self.model
+        if file_type == 'joblib':
+            joblib.dump(self.regressor, path)
+
+        elif file_type == 'onnx':
+            onnx_model = to_onnx(self.regressor, self.x_fit.values)
+            with open(path, "wb") as f:
+                f.write(onnx_model.SerializeToString())
+
+        print(f"Model saved to {path}.")
+
+    def load_regressor(self, regressor):
+        """""
+        Load trained model for serialisation.
+        """
+        self.regressor = regressor
+
+    def to_scikit_learn(self, x=None):
+        return self.regressor
 
     def set_params(self, hyperparameters):
-        # access the hyperparameters of the model within the pipeline within the
-        # TransformedTargetRegressor
-        self.model.named_steps["model"].set_params(**hyperparameters)
+        """
+        Access the hyperparameters of the model within the pipeline within the TransformedTargetRegressor
+        """
+        self.regressor.named_steps["model"].set_params(**hyperparameters)
 
     def get_params(self, deep=True):
-        # Get the hyperparameters of the model
-        return self.model.named_steps["model"].get_params(deep=deep)
+        """
+        Get the hyperparameters of the model
+        """
+        return self.regressor.named_steps["model"].get_params(deep=deep)
 
-    def default_hyperparameter(self):
-        return self.get_params()
 
-
-class MLP(BaseScikitLearnModel):
+class ScikitMLP(BaseScikitLearnModel):
     """Scikit-learn MLPRegressor model."""
 
     def __init__(self):
@@ -77,7 +122,7 @@ class MLP(BaseScikitLearnModel):
         # Suggest hyperparameters
         n_layers = trial.suggest_int("n_layers", 1, 2)
         hidden_layer_sizes = tuple(
-            trial.suggest_int(f"n_units_l{i}", 1, 1000) for i in range(n_layers)
+            trial.suggest_int(f"n_units_l{i}", 1, 10) for i in range(n_layers)
         )
 
         # Dynamic hidden layer sizes based on the number of layers
@@ -85,7 +130,7 @@ class MLP(BaseScikitLearnModel):
 
         # Other hyperparameters
         hyperparameters["activation"] = "relu"
-        hyperparameters["max_iter"] = 5000
+        hyperparameters["max_iter"] = 5
 
         return hyperparameters
 
@@ -99,44 +144,45 @@ class MLP(BaseScikitLearnModel):
         }
         return hyperparameter_grid
 
-class MLP_TargetTransformed(MLP):
+    def default_hyperparameter(self):
+        """"
+        Return default hyperparameters.
+        """
+        return MLPRegressor().get_params()
+
+
+class ScikitMLP_TargetTransformed(ScikitMLP):
     def __init__(self):
-        # Create an instance of the scikit-learn model including a scaler
-        self.model = Pipeline(
+        """
+        Create an instance of the scikit-learn model including a scaler.
+        """
+        self.regressor = Pipeline(
             steps=[
                 ("scaler", StandardScaler()),  # scale the features
-                ("model", TransformedTargetRegressor(regressor=MLPRegressor())) # scaling the target variable through TransformedTargetRegressor
+                ("model", TransformedTargetRegressor(regressor=MLPRegressor()))
+                # scaling the target variable through TransformedTargetRegressor
                 # is not compatible with ONNX
             ]
         )
 
     def set_params(self, hyperparameters):
-        # access the hyperparameters of the model within the pipeline within the
-        # TransformedTargetRegressor
-        self.model.named_steps["model"].regressor.set_params(**hyperparameters)
+        """
+        Access the hyperparameters of the model within the pipeline within the TransformedTargetRegressor.
+        """
+        self.regressor.named_steps["model"].regressor.set_params(**hyperparameters)
 
     def get_params(self, deep=True):
-        # Get the hyperparameters of the model
-        return self.model.named_steps["model"].regressor.get_params(deep=deep)
+        """
+        Get the hyperparameters of the model.
+        """
+        return self.regressor.named_steps["model"].regressor.get_params(deep=deep)
 
 
-class ScikitLinearRegression(BaseScikitLearnModel):
+class LinearReg(BaseScikitLearnModel):
     """Linear Regression model"""
 
     def __init__(self):
         super().__init__(LinearRegression())
-
-    def grid_search_hyperparameter(self):
-        pass
-
-    def optuna_hyperparameter_suggest(self, trial):
-        pass
-
-class ScikitLasso(BaseScikitLearnModel):
-    """Lasso model"""
-
-    def __init__(self):
-        super().__init__(Lasso())
 
     def grid_search_hyperparameter(self):
         pass

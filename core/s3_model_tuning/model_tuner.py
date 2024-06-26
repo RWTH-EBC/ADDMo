@@ -38,6 +38,7 @@ class ModelTuner:
                 "model": model,
                 "validation_score": validation_score,
             }
+
         return model_dict
 
     def get_best_model_name(self, model_dict):

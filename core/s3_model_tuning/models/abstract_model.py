@@ -1,4 +1,47 @@
+import os
+import json
+import warnings
+import onnxruntime as rt
+import numpy as np
+import subprocess
 from abc import ABC, abstractmethod
+import pandas as pd
+from pydantic import BaseModel, Field
+from core.util.load_save_utils import create_path_or_ask_to_override
+
+
+class ModelMetadata(BaseModel):
+    """ModelMetadata class represents metadata associated with the trained machine
+    learning model when saved in joblib format."""
+
+    addmo_class: str = Field(
+        description="ADDMo model class type, from which the regressor was saved."
+    )
+    addmo_commit_id: str = Field(
+        description="Current commit id when the model is saved."
+    )
+    library: str = Field(description="ML library origin of the regressor")
+    library_model_type: str = Field(description="Type of regressor within library")
+    library_version: str = Field(description="library version used")
+    target_name: str = Field(description="Name of the target variable")
+    features_ordered: list = Field(description="Name and order of features")
+    preprocessing: list = Field(
+        description="Preprocessing steps applied to the features."
+    )
+    instructions: str = Field(
+        "Pass a single or multiple observations with features in the order listed above",
+        description="Instructions for passing input data for making predictions.",
+    )
+
+    @staticmethod
+    def get_commit_id():
+        """Get the commit id for metadata when model is saved. """
+
+        try:
+            commit_id = subprocess.check_output(["git", "describe", "--always"]).strip().decode()
+        except subprocess.CalledProcessError:
+            commit_id = 'Unknown'
+        return commit_id
 
 
 class AbstractMLModel(ABC):
@@ -9,16 +52,18 @@ class AbstractMLModel(ABC):
     a scaler.
 
     Attributes:
-        model: An instance of the machine learning model, usually including the scaler.
+        regressor: An instance of the machine learning model, usually including the scaler.
     """
 
     @abstractmethod
     def __init__(self):
         """Initializes the machine learning model."""
-        self.model = None
+        self.regressor = None
+        self.x_fit: pd.DataFrame = None
+        self.y_fit: pd.DataFrame = None
 
     @abstractmethod
-    def fit(self, x, y):
+    def fit(self, x: pd.DataFrame,y: pd.Series):
         """
         Train the model on the provided data.
 
@@ -29,7 +74,7 @@ class AbstractMLModel(ABC):
         pass
 
     @abstractmethod
-    def predict(self, x):
+    def predict(self, x: pd.DataFrame):
         """
         Make predictions on the given input data.
 
@@ -41,35 +86,86 @@ class AbstractMLModel(ABC):
         """
         pass
 
+    @property
     @abstractmethod
-    def save_model(self, path):
+    def default_file_type(self):
+        """""
+        Set default file type for saving the trained model.
+        """
+        pass
+
+    @abstractmethod
+    def _save_regressor(self, path, file_type):
+        """""
+        Save the trained model to the specified file path in the given file format.
+
+        Args:
+            path: full path where the trained model is saved.
+            file_type: file type used for saving the model.
+        """
+        pass
+
+    @abstractmethod
+    def _define_metadata(self) -> ModelMetadata:
+        """
+        Define metadata for the model.
+        """
+        pass
+
+    def _save_metadata(self, directory, regressor_filename):
+        """
+        Save metadata for the model. To be saved with save_regressor as json file.
+
+        Args:
+            directory: directory where the trained model is saved.
+            regressor_filename: file name used for saving the model.
+
+        """
+        metadata_path = os.path.join(directory, regressor_filename + '_metadata.json')
+        with open(metadata_path, 'w') as f:
+            json.dump(self.metadata.dict(), f)
+
+    def save_regressor(self, directory, regressor_filename=None, file_type=None):
         """
         Save the trained model including scaler to a file.
-        This is done using the ONNX format.
 
         Args:
-            path: File path where the model will be saved.
-        """
-        pass
+            directory: directory where the trained model is saved.
+            regressor_filename: file name used for saving the model.
+            file_type: file type used for saving the model.
 
-    @abstractmethod
-    def load_model(self, path): #Todo: delete this method possibly
         """
-        Load a model including scaler from a file.
-        An ONNX format is expected.
+        if file_type is None:
+            file_type = self.default_file_type
+
+        full_filename = f"{regressor_filename}.{file_type}"
+        path = create_path_or_ask_to_override(full_filename, directory)
+
+        self._save_regressor(path, file_type)
+        self._define_metadata()
+        self._save_metadata(directory, regressor_filename)
+
+
+    def load_regressor(self, model_instance, input_shape=None):
+        """
+        Load a model including scaler.
 
         Args:
-            path: File path from which the model will be loaded.
+            model_instance: model that is loaded.
+            input_shape: input data shape which is used to initialize loaded model.
         """
-        pass
+        self.regressor = model_instance
 
     @abstractmethod
-    def to_scikit_learn(self):
+    def to_scikit_learn(self, x=None):
         """
         Convert the model including scaler to a scikit-learn compatible model.
         E.g. a scikit-learn pipeline.
 
         Most ML frameworks provide a converter to adapt models for scikit-learn specific tasks.
+
+        Args:
+            x: Input data used for building the regressor. (Only needed for Keras)
 
         Returns:
             A scikit-learn compatible version of the model including scaler.
@@ -128,3 +224,56 @@ class AbstractMLModel(ABC):
             A dictionary with a default set of hyperparameters.
         """
         pass
+
+
+class PredictorOnnx(AbstractMLModel, ABC):
+    """overwrites predict and load function for onnx format"""
+
+    def __init__(self):
+        super().__init__()
+        self.labels = None
+        self.inputs = None
+        self.model = None
+
+    def load_regressor(self, path):
+        self.model = rt.InferenceSession(path, providers=["CPUExecutionProvider"])
+        self.inputs = self.model.get_inputs()[0].name
+        self.labels = self.model.get_outputs()[0].name
+
+    def predict(self, x):
+        x_ONNX = x.values  # Converts dataframe to numpy array
+        return self.model.run([self.labels], {self.inputs: x_ONNX.astype(np.double)})[0]
+
+    def default_hyperparameter(self):
+        warnings.warn(f"This function is not implemented for ONNX models")
+
+    def fit(self, x, y):
+        warnings.warn(f"This function is not implemented for ONNX models")
+
+    def get_params(self):
+        warnings.warn(f"This function is not implemented for ONNX models")
+
+    def grid_search_hyperparameter(self):
+        warnings.warn(f"This function is not implemented for ONNX models")
+
+    def optuna_hyperparameter_suggest(self, trial):
+        warnings.warn(f"This function is not implemented for ONNX models")
+
+    def save_regressor(self, path):
+        warnings.warn(f"This function is not implemented for ONNX models")
+
+    def set_params(self, **params):
+        warnings.warn(f"This function is not implemented for ONNX models")
+
+    def to_scikit_learn(self):
+        warnings.warn(f"This function is not implemented for ONNX models")
+
+    def _define_metadata(self):
+        warnings.warn(f"This function is not implemented for ONNX models")
+
+    def _save_regressor(self, path, file_type):
+        warnings.warn(f"This function is not implemented for ONNX models")
+
+    def default_file_type(self):
+        warnings.warn(f"This function is not implemented for ONNX models")
+

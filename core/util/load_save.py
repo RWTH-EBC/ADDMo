@@ -1,18 +1,14 @@
-import os
-import shutil
-
 import pandas as pd
 import json
 from pathlib import Path
 from pydantic import FilePath, BaseModel
 from typing import Type, TypeVar, Union
 
-
 ConfigT = TypeVar("ConfigT", bound=BaseModel)
 
 
 def load_config_from_json(
-    config: Union[ConfigT, FilePath, str, dict], config_type: Type[ConfigT]
+        config: Union[ConfigT, FilePath, str, dict], config_type: Type[ConfigT]
 ) -> ConfigT:
     """Generic config loader, either accepting a path to a json file, a json string, a
     dict or passing through a valid config object."""
@@ -68,29 +64,3 @@ def write_data(df: pd.DataFrame, abs_path: str):
         df.to_excel(abs_path)
 
 
-def create_or_clean_directory(path: str) -> str:
-    if not os.path.exists(path):
-        # Path does not exist, create it
-        os.makedirs(path)
-    elif not os.listdir(path):
-        # Path exists, but is empty
-        pass
-    else:
-        # Path exists, ask for confirmation to delete current contents
-        response = input(f"The directory {path} already exists. To overwrite "
-        "the content type <y>, for deleting the current contents type <d>")
-        if response.lower() == 'd':
-            # Delete the contents of the directory
-            for filename in os.listdir(path):
-                file_path = os.path.join(path, filename)
-                if os.path.isfile(file_path) or os.path.islink(file_path):
-                    os.unlink(file_path)
-                elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)
-        elif response.lower() == 'y':
-            pass
-        else:
-            print("Operation cancelled.")
-            return None
-
-    return path

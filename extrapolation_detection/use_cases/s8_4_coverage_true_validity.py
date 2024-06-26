@@ -26,8 +26,8 @@ def exe(config: ExtrapolationExperimentConfig):
     x_grid = loading_saving.read_csv(f"grid_points", grid_path)
 
     regressor: AbstractMLModel = load_regressor(
-        "regressor", directory=os.path.join(config.experiment_folder, "regressors")
-    )
+        "regressor", directory=os.path.join(config.experiment_folder, "regressors"))
+
 
     # generate y values for the grid
     y_grid = system_simulations.simulate(x_grid, config.system_simulation)

@@ -86,6 +86,25 @@ class AbstractMLModel(ABC):
         """
         pass
 
+    @property
+    @abstractmethod
+    def default_file_type(self):
+        """""
+        Set default file type for saving the trained model.
+        """
+        pass
+
+    @abstractmethod
+    def _save_regressor(self, path, file_type):
+        """""
+        Save the trained model to the specified file path in the given file format.
+
+        Args:
+            path: full path where the trained model is saved.
+            file_type: file type used for saving the model.
+        """
+        pass
+
     @abstractmethod
     def _define_metadata(self) -> ModelMetadata:
         """
@@ -106,17 +125,6 @@ class AbstractMLModel(ABC):
         with open(metadata_path, 'w') as f:
             json.dump(self.metadata.dict(), f)
 
-    @abstractmethod
-    def _save_regressor(self, path, file_type=None):
-        """""
-        Save the trained model to the specified file path in the given file format.
-
-        Args:
-            path: full path where the trained model is saved.
-            file_type: file type used for saving the model. Set a default.
-        """
-        pass
-
     def save_regressor(self, directory, regressor_filename=None, file_type=None):
         """
         Save the trained model including scaler to a file.
@@ -127,17 +135,16 @@ class AbstractMLModel(ABC):
             file_type: file type used for saving the model.
 
         """
-
-        if regressor_filename is None:
-            regressor_filename = type(self).__name__
+        if file_type is None:
+            file_type = self.default_file_type
 
         full_filename = f"{regressor_filename}.{file_type}"
         path = create_path_or_ask_to_override(full_filename, directory)
 
         self._save_regressor(path, file_type)
-
         self._define_metadata()
         self._save_metadata(directory, regressor_filename)
+
 
     def load_regressor(self, model_instance, input_shape=None):
         """

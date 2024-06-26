@@ -67,7 +67,7 @@ def run_all():
 
     # update config with the experiment name of wandb run
     wandb.config.update(
-        {"experiment_name": f"1_{config.simulation_data_name}_{run.name}"},
+        {"experiment_name": f"2_linear_{config.simulation_data_name}_{run.name}"},
         allow_val_change=True,
     )
 
@@ -103,7 +103,7 @@ def run_all():
 
 config_temp = define_config()
 
-project_name = f"2_{config_temp.simulation_data_name}"
+project_name = f"2_linear_{config_temp.simulation_data_name}"
 # project_name = "Test"
 
 # sweep

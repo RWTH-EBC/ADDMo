@@ -7,7 +7,6 @@ from core.util.definitions import root_dir
 from core.util.load_save import load_config_from_json
 from core.util.definitions import create_or_clean_directory
 from core.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
-
 from sweeps import config_blueprints
 
 from extrapolation_detection.use_cases.config.ed_experiment_config import (
@@ -47,14 +46,14 @@ config.config_explo_quant.exploration_bounds = {
     "reaTZon_y": (290.15, 300.15),
     "delta_reaTZon_y": (-0.5, 0.5),
 }
-
+# config= config_blueprints.no_tuning_config()
 config.config_model_tuning.models = ["SciKerasSequential"]
 config.config_model_tuning.hyperparameter_tuning_type = "OptunaTuner"
-config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 20}
+config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 50}
 config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"
 
 config.config_detector.detectors = ["KNN", "GP", "OCSVM"]
-#
+
 # Configure the logger
 create_or_clean_directory(config.experiment_folder)
 LocalLogger.directory = os.path.join(config.experiment_folder, "local_logger")

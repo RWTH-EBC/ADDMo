@@ -18,9 +18,11 @@
 ########################
 /results/*
 /sweeps/wandb/*
+/sweeps/artifacts/*
 /extrapolation_detection/use_cases/results/*
+/extrapolation_detection/use_cases/artifacts/*
 /extrapolation_detection/use_cases/wandb/*
-
+/0000_testfiles/wandb/*
 #Eclipse Settings #
 #####################
 /.settings

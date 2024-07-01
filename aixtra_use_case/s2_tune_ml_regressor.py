@@ -58,7 +58,7 @@ def exe(config: ExtrapolationExperimentConfig):
 
     # log model infos with experiment logger in one dict
     ExperimentLogger.log(model_infos.to_dict(orient="records")[0])
-    ExperimentLogger.log_artifact(regressor, "regressor", "h5")
+    ExperimentLogger.log_artifact(regressor, "regressor1", "keras")
 
     print(f"{__name__} executed")
 

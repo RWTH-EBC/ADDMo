@@ -67,7 +67,15 @@ class SciKerasSequential(BaseKerasModel):
         """
         Get the hyperparameters of the model.
         """
-        return self.regressor.get_params()
+        # get scikeras params
+        params =  self.regressor.get_params(deep=deep)
+        # additional params not covered by scikeras (update only if not present)
+        for key, value in self.hyperparameters.items():
+            if key not in params:
+                params[key] = value
+
+        return params
+
 
     def set_params(self, hyperparameters):
         """""
@@ -141,15 +149,15 @@ class SciKerasSequential(BaseKerasModel):
         """
         input_shape = (len(x.columns),)
         sequential_regressor = self._build_regressor(input_shape)
+
         # Normalisation of first layer (input system_data).
         sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation initialisation works only on np arrays
-        early_stopping = EarlyStopping(monitor='loss', patience=5, restore_best_weights=True)
         regressor_scikit = KerasRegressor(model=sequential_regressor,
-                                        batch_size=200,
+                                        batch_size=self.hyperparameters['batch_size'],
                                         loss=self.hyperparameters['loss'],
                                         epochs=self.hyperparameters['epochs'],
                                         verbose=0,
-                                        callbacks=[early_stopping])
+                                        callbacks=self.hyperparameters['callbacks'])
         return regressor_scikit
 
     def default_hyperparameter(self):
@@ -161,8 +169,13 @@ class SciKerasSequential(BaseKerasModel):
         # Define default loss if not present
         if hyperparameters['loss'] is None:
             hyperparameters['loss'] = MeanSquaredError()
-        hyperparameters['hidden_layer_sizes'] = [32]  # Set default hidden layer size
-        hyperparameters['epochs'] = 200  # Set default epochs
+        hyperparameters['hidden_layer_sizes'] = [32]
+        hyperparameters['batch_size'] = 200
+        hyperparameters['epochs'] = 200
+        hyperparameters['callbacks'] = [EarlyStopping(monitor='loss',
+                                                      min_delta=0.0000001,
+                                                      verbose=1,
+                                                      patience=5)]
 
 
         return hyperparameters

@@ -161,7 +161,9 @@ class SciKerasSequential(BaseKerasModel):
         # Define default loss if not present
         if hyperparameters['loss'] is None:
             hyperparameters['loss'] = MeanSquaredError()
-        hyperparameters['hidden_layer_sizes'] = (32,)  # Set default hidden layer size
+        hyperparameters['hidden_layer_sizes'] = [32]  # Set default hidden layer size
+        hyperparameters['epochs'] = 200  # Set default epochs
+
 
         return hyperparameters
 
@@ -171,8 +173,6 @@ class SciKerasSequential(BaseKerasModel):
         hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 50) for i in range(1, n_layers + 1, 1))
         hyperparameters = {
             "hidden_layer_sizes": hidden_layer_sizes,
-            "loss": MeanSquaredError(),
-            "epochs": 50
         }
         return hyperparameters
 

@@ -10,8 +10,6 @@ def no_tuning_config(config: ExtrapolationExperimentConfig) :
     config.config_model_tuning.hyperparameter_tuning_kwargs = {
         "hyperparameter_set": {
             "hidden_layer_sizes": [10],
-            "loss": MeanSquaredError(),
-            "epochs": 200
         }
     }
     config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"

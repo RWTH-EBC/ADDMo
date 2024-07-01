@@ -22,7 +22,7 @@ def create_cross_experiment_reports(use_cases: list[str], detectors: list[str], 
             df.loc[detector_name, use_case] = float(data.loc[score].iloc[0])
 
     folder = os.path.join('results', 'cross_experiment_results')
-    loading_saving.write_csv(df, score, folder)
+    loading_saving_ED.write_csv(df, score, folder)
     print(f"Data saved to: {folder}\{score}.csv")
 
 if __name__ == '__main__':

@@ -15,28 +15,28 @@ from extrapolation_detection.detector.detectors import AbstractDetector
 
 def exe(config: ExtrapolationExperimentConfig):
     # load data
-    xy_training = loading_saving.read_csv("xy_train", directory=config.experiment_folder)
-    xy_validation = loading_saving.read_csv("xy_val", directory=config.experiment_folder)
-    xy_test = loading_saving.read_csv("xy_test", directory=config.experiment_folder)
-    xy_remaining = loading_saving.read_csv(
+    xy_training = loading_saving_ED.read_csv("xy_train", directory=config.experiment_folder)
+    xy_validation = loading_saving_ED.read_csv("xy_val", directory=config.experiment_folder)
+    xy_test = loading_saving_ED.read_csv("xy_test", directory=config.experiment_folder)
+    xy_remaining = loading_saving_ED.read_csv(
         "xy_remaining", directory=config.experiment_folder
     )
-    xy_grid = loading_saving.read_csv("xy_grid", directory=config.experiment_folder)
+    xy_grid = loading_saving_ED.read_csv("xy_grid", directory=config.experiment_folder)
 
     # load true validity
-    true_validity_train = loading_saving.read_csv(
+    true_validity_train = loading_saving_ED.read_csv(
         "true_validity_train", directory=config.experiment_folder
     ).squeeze()
-    true_validity_val = loading_saving.read_csv(
+    true_validity_val = loading_saving_ED.read_csv(
         "true_validity_val", directory=config.experiment_folder
     ).squeeze()
-    true_validity_test = loading_saving.read_csv(
+    true_validity_test = loading_saving_ED.read_csv(
         "true_validity_test", directory=config.experiment_folder
     ).squeeze()
-    true_validity_remaining = loading_saving.read_csv(
+    true_validity_remaining = loading_saving_ED.read_csv(
         "true_validity_remaining", directory=config.experiment_folder
     ).squeeze()
-    true_valitidy_grid = loading_saving.read_csv(
+    true_valitidy_grid = loading_saving_ED.read_csv(
         "true_validity_grid", directory=config.experiment_folder
     ).squeeze()
 
@@ -48,7 +48,7 @@ def exe(config: ExtrapolationExperimentConfig):
             detector_name = detector_file.split(".")[0]
 
             # load detector
-            detector: AbstractDetector = loading_saving.read_pkl(
+            detector: AbstractDetector = loading_saving_ED.read_pkl(
                 detector_name, directory=directory
             )
 
@@ -56,7 +56,7 @@ def exe(config: ExtrapolationExperimentConfig):
             x_train, y_train = split_target_features(config.name_of_target, xy_training)
             n_score_train = detector.score(x_train.values)
             n_score_train_df = pd.DataFrame(n_score_train, index=x_train.index)
-            loading_saving.write_csv(
+            loading_saving_ED.write_csv(
                 n_score_train_df,
                 f"n_score_train_{detector_name}",
                 directory=config.experiment_folder,
@@ -65,7 +65,7 @@ def exe(config: ExtrapolationExperimentConfig):
             x_val, y_val = split_target_features(config.name_of_target, xy_validation)
             n_score_val = detector.score(x_val.values)
             n_score_val_df = pd.DataFrame(n_score_val, index=x_val.index)
-            loading_saving.write_csv(
+            loading_saving_ED.write_csv(
                 n_score_val_df,
                 f"n_score_val_{detector_name}",
                 directory=config.experiment_folder,
@@ -74,7 +74,7 @@ def exe(config: ExtrapolationExperimentConfig):
             x_test, y_test = split_target_features(config.name_of_target, xy_test)
             n_score_test = detector.score(x_test.values)
             n_score_test_df = pd.DataFrame(n_score_test, index=x_test.index)
-            loading_saving.write_csv(
+            loading_saving_ED.write_csv(
                 n_score_test_df,
                 f"n_score_test_{detector_name}",
                 directory=config.experiment_folder,
@@ -87,7 +87,7 @@ def exe(config: ExtrapolationExperimentConfig):
             n_score_remaining_df = pd.DataFrame(
                 n_score_remaining, index=x_remaining.index
             )
-            loading_saving.write_csv(
+            loading_saving_ED.write_csv(
                 n_score_remaining_df,
                 f"n_score_remaining_{detector_name}",
                 directory=config.experiment_folder,
@@ -96,14 +96,14 @@ def exe(config: ExtrapolationExperimentConfig):
             x_grid, y_grid = split_target_features(config.name_of_target, xy_grid)
             n_score_grid = detector.score(x_grid.values)
             n_score_grid_df = pd.DataFrame(n_score_grid, index=x_grid.index)
-            loading_saving.write_csv(
+            loading_saving_ED.write_csv(
                 n_score_grid_df,
                 f"n_score_grid_{detector_name}",
                 directory=config.experiment_folder,
             )
 
             # calculate the evaluation of the detector
-            novelty_threshold = loading_saving.read_csv(
+            novelty_threshold = loading_saving_ED.read_csv(
                 f"{detector_name}_threshold", directory=directory
             ).iloc[0, 0]
             detector_evaluation_remaining = scoring.score_samples(
@@ -113,7 +113,7 @@ def exe(config: ExtrapolationExperimentConfig):
                 beta=config.config_detector.beta_f_score,
             )
             detector_evaluation_remaining_df = pd.DataFrame.from_dict(detector_evaluation_remaining, orient="index")
-            loading_saving.write_csv(
+            loading_saving_ED.write_csv(
                 detector_evaluation_remaining_df,
                 f"detector_evaluation_remaining_{detector_name}",
                 directory=config.experiment_folder,
@@ -126,7 +126,7 @@ def exe(config: ExtrapolationExperimentConfig):
                 beta=config.config_detector.beta_f_score,
             )
             detector_evaluation_grid_df = pd.DataFrame.from_dict(detector_evaluation_grid, orient="index")
-            loading_saving.write_csv(
+            loading_saving_ED.write_csv(
                 detector_evaluation_grid_df,
                 f"detector_evaluation_grid_{detector_name}",
                 directory=config.experiment_folder,
@@ -141,7 +141,7 @@ def exe(config: ExtrapolationExperimentConfig):
                 beta=config.config_detector.beta_f_score,
             )
             detector_evaluation_traintestval_df = pd.DataFrame.from_dict(detector_evaluation_traintestval, orient="index")
-            loading_saving.write_csv(
+            loading_saving_ED.write_csv(
                 detector_evaluation_traintestval_df,
                 f"detector_evaluation_traintestval_{detector_name}",
                 directory=config.experiment_folder,

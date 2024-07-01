@@ -48,97 +48,97 @@ class PlotData2D:
 
     def load_plot_data(self, experiment_folder: str, detector: str):
         # read experiment data
-        self.x_train = loading_saving.read_csv("x_train", directory=experiment_folder)
-        self.y_train = loading_saving.read_csv("y_train", directory=experiment_folder)
-        self.x_val = loading_saving.read_csv("x_val", directory=experiment_folder)
-        self.y_val = loading_saving.read_csv("y_val", directory=experiment_folder)
-        self.x_test = loading_saving.read_csv("x_test", directory=experiment_folder)
-        self.y_test = loading_saving.read_csv("y_test", directory=experiment_folder)
-        self.x_remaining = loading_saving.read_csv(
+        self.x_train = loading_saving_ED.read_csv("x_train", directory=experiment_folder)
+        self.y_train = loading_saving_ED.read_csv("y_train", directory=experiment_folder)
+        self.x_val = loading_saving_ED.read_csv("x_val", directory=experiment_folder)
+        self.y_val = loading_saving_ED.read_csv("y_val", directory=experiment_folder)
+        self.x_test = loading_saving_ED.read_csv("x_test", directory=experiment_folder)
+        self.y_test = loading_saving_ED.read_csv("y_test", directory=experiment_folder)
+        self.x_remaining = loading_saving_ED.read_csv(
             "x_remaining", directory=experiment_folder
         )
-        self.y_remaining = loading_saving.read_csv(
+        self.y_remaining = loading_saving_ED.read_csv(
             "y_remaining", directory=experiment_folder
         )
-        self.x_grid = loading_saving.read_csv("x_grid", directory=experiment_folder)
-        self.y_grid = loading_saving.read_csv("y_grid", directory=experiment_folder)
+        self.x_grid = loading_saving_ED.read_csv("x_grid", directory=experiment_folder)
+        self.y_grid = loading_saving_ED.read_csv("y_grid", directory=experiment_folder)
 
-        self.xy_training = loading_saving.read_csv(
+        self.xy_training = loading_saving_ED.read_csv(
             "xy_train", directory=experiment_folder
         )
-        self.xy_validation = loading_saving.read_csv(
+        self.xy_validation = loading_saving_ED.read_csv(
             "xy_val", directory=experiment_folder
         )
-        self.xy_test = loading_saving.read_csv("xy_test", directory=experiment_folder)
-        self.xy_remaining = loading_saving.read_csv(
+        self.xy_test = loading_saving_ED.read_csv("xy_test", directory=experiment_folder)
+        self.xy_remaining = loading_saving_ED.read_csv(
             "xy_remaining", directory=experiment_folder
         )
-        self.xy_grid = loading_saving.read_csv("xy_grid", directory=experiment_folder)
+        self.xy_grid = loading_saving_ED.read_csv("xy_grid", directory=experiment_folder)
 
         # read errors
-        self.errors_train = loading_saving.read_csv(
+        self.errors_train = loading_saving_ED.read_csv(
             "errors_train", directory=experiment_folder
         )
-        self.errors_val = loading_saving.read_csv(
+        self.errors_val = loading_saving_ED.read_csv(
             "errors_val", directory=experiment_folder
         )
-        self.errors_test = loading_saving.read_csv(
+        self.errors_test = loading_saving_ED.read_csv(
             "errors_test", directory=experiment_folder
         )
-        self.errors_remaining = loading_saving.read_csv(
+        self.errors_remaining = loading_saving_ED.read_csv(
             "errors_remaining", directory=experiment_folder
         )
-        self.errors_grid = loading_saving.read_csv(
+        self.errors_grid = loading_saving_ED.read_csv(
             "errors_grid", directory=experiment_folder
         )
 
         # read true_validity
-        self.true_validity_train = loading_saving.read_csv(
+        self.true_validity_train = loading_saving_ED.read_csv(
             "true_validity_train", experiment_folder
         ).squeeze()
-        self.true_validity_val = loading_saving.read_csv(
+        self.true_validity_val = loading_saving_ED.read_csv(
             "true_validity_val", experiment_folder
         ).squeeze()
-        self.true_validity_test = loading_saving.read_csv(
+        self.true_validity_test = loading_saving_ED.read_csv(
             "true_validity_test", experiment_folder
         ).squeeze()
-        self.true_validity_remaining = loading_saving.read_csv(
+        self.true_validity_remaining = loading_saving_ED.read_csv(
             "true_validity_remaining", experiment_folder
         ).squeeze()
-        self.true_validity_grid = loading_saving.read_csv(
+        self.true_validity_grid = loading_saving_ED.read_csv(
             "true_validity_grid", experiment_folder
         ).squeeze()
-        self.true_validity_threshold = loading_saving.read_csv(
+        self.true_validity_threshold = loading_saving_ED.read_csv(
             "true_validity_threshold", experiment_folder
         ).iloc[0, 0]
 
         # read detector data
-        self.n_score_train = loading_saving.read_csv(
+        self.n_score_train = loading_saving_ED.read_csv(
             f"n_score_train_{detector}", directory=experiment_folder
         ).squeeze()
-        self.n_score_val = loading_saving.read_csv(
+        self.n_score_val = loading_saving_ED.read_csv(
             f"n_score_val_{detector}", directory=experiment_folder
         ).squeeze()
-        self.n_score_test = loading_saving.read_csv(
+        self.n_score_test = loading_saving_ED.read_csv(
             f"n_score_test_{detector}", directory=experiment_folder
         ).squeeze()
-        self.n_score_remaining = loading_saving.read_csv(
+        self.n_score_remaining = loading_saving_ED.read_csv(
             f"n_score_remaining_{detector}", directory=experiment_folder
         ).squeeze()
-        self.n_score_grid = loading_saving.read_csv(
+        self.n_score_grid = loading_saving_ED.read_csv(
             f"n_score_grid_{detector}", directory=experiment_folder
         ).squeeze()
-        self.n_score_threshold = loading_saving.read_csv(
+        self.n_score_threshold = loading_saving_ED.read_csv(
             f"{detector}_threshold",
             directory=os.path.join(experiment_folder, "detectors"),
         ).iloc[0, 0]
 
         # read detector data
-        self.x_train_detector = loading_saving.read_csv(
+        self.x_train_detector = loading_saving_ED.read_csv(
             f"{detector}_x_fit",
             directory=os.path.join(experiment_folder, "detectors"),
         )
-        self.x_val_detector = loading_saving.read_csv(
+        self.x_val_detector = loading_saving_ED.read_csv(
             f"{detector}_x_val",
             directory=os.path.join(experiment_folder, "detectors"),
         )

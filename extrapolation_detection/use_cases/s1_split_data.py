@@ -16,7 +16,7 @@ from exploration_quantification import point_generator
 
 def exe(config: ExtrapolationExperimentConfig):
     # Load data
-    xy_tot = loading_saving.read_csv(
+    xy_tot = loading_saving_ED.read_csv(
         config.simulation_data_name, directory=os.path.join(ed_use_case_dir(), "data"), index_col=False
     )
 
@@ -56,17 +56,17 @@ def exe(config: ExtrapolationExperimentConfig):
         xy_grid = pd.concat([x_grid, y_grid], axis=1)
 
     # save to csv
-    loading_saving.write_csv(
+    loading_saving_ED.write_csv(
         xy_training, "xy_train", directory=config.experiment_folder
     )
-    loading_saving.write_csv(
+    loading_saving_ED.write_csv(
         xy_validation, "xy_val", directory=config.experiment_folder
     )
-    loading_saving.write_csv(xy_test, "xy_test", directory=config.experiment_folder)
-    loading_saving.write_csv(
+    loading_saving_ED.write_csv(xy_test, "xy_test", directory=config.experiment_folder)
+    loading_saving_ED.write_csv(
         xy_remaining, "xy_remaining", directory=config.experiment_folder
     )
-    loading_saving.write_csv(xy_grid, "xy_grid", directory=config.experiment_folder)
+    loading_saving_ED.write_csv(xy_grid, "xy_grid", directory=config.experiment_folder)
 
     # additionally save the features and targets separately
     x_train, y_train = split_target_features(config.name_of_target, xy_training)
@@ -77,20 +77,20 @@ def exe(config: ExtrapolationExperimentConfig):
     )
     x_grid, y_grid = split_target_features(config.name_of_target, xy_grid)
 
-    loading_saving.write_csv(x_train, "x_train", directory=config.experiment_folder)
-    loading_saving.write_csv(y_train, "y_train", directory=config.experiment_folder)
-    loading_saving.write_csv(x_val, "x_val", directory=config.experiment_folder)
-    loading_saving.write_csv(y_val, "y_val", directory=config.experiment_folder)
-    loading_saving.write_csv(x_test, "x_test", directory=config.experiment_folder)
-    loading_saving.write_csv(y_test, "y_test", directory=config.experiment_folder)
-    loading_saving.write_csv(
+    loading_saving_ED.write_csv(x_train, "x_train", directory=config.experiment_folder)
+    loading_saving_ED.write_csv(y_train, "y_train", directory=config.experiment_folder)
+    loading_saving_ED.write_csv(x_val, "x_val", directory=config.experiment_folder)
+    loading_saving_ED.write_csv(y_val, "y_val", directory=config.experiment_folder)
+    loading_saving_ED.write_csv(x_test, "x_test", directory=config.experiment_folder)
+    loading_saving_ED.write_csv(y_test, "y_test", directory=config.experiment_folder)
+    loading_saving_ED.write_csv(
         x_remaining, "x_remaining", directory=config.experiment_folder
     )
-    loading_saving.write_csv(
+    loading_saving_ED.write_csv(
         y_remaining, "y_remaining", directory=config.experiment_folder
     )
-    loading_saving.write_csv(x_grid, "x_grid", directory=config.experiment_folder)
-    loading_saving.write_csv(y_grid, "y_grid", directory=config.experiment_folder)
+    loading_saving_ED.write_csv(x_grid, "x_grid", directory=config.experiment_folder)
+    loading_saving_ED.write_csv(y_grid, "y_grid", directory=config.experiment_folder)
 
     print(f"{__name__} executed")
 

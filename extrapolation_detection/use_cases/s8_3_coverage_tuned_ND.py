@@ -18,7 +18,7 @@ from exploration_quantification.coverage_plotting import (
 def exe(config: ExtrapolationExperimentConfig):
 
     grid_path = os.path.join(config.experiment_folder, "explo_quant")
-    x_grid = loading_saving.read_csv(f"grid_points", grid_path)
+    x_grid = loading_saving_ED.read_csv(f"grid_points", grid_path)
 
 
     directory = os.path.join(config.experiment_folder, "detectors")
@@ -26,7 +26,7 @@ def exe(config: ExtrapolationExperimentConfig):
         if detector_file.endswith(".pkl"):
             # get name without file ending
             detector_name = detector_file.split(".")[0]
-            detector = loading_saving.read_pkl(detector_name, directory=directory)
+            detector = loading_saving_ED.read_pkl(detector_name, directory=directory)
 
             quantifier = ExplorationQuantifier()
             quantifier.explo_clf = detector # set the tuned extrapolation detector as the classifier
@@ -50,12 +50,12 @@ def exe(config: ExtrapolationExperimentConfig):
 
         # save
         save_path = os.path.join(config.experiment_folder, "explo_quant")
-        loading_saving.write_csv(
+        loading_saving_ED.write_csv(
             quantifier.labels_grid,
             f"labels_grid_extra_{detector_name}",
             save_path,
         )
-        loading_saving.write_csv(
+        loading_saving_ED.write_csv(
             coverage,
             f"coverage_percentage_extra_{detector_name}",
             save_path,

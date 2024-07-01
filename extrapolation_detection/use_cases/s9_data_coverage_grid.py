@@ -16,12 +16,12 @@ from exploration_quantification import coverage_plotting
 
 
 def exe(config: ExtrapolationExperimentConfig):
-    xy_grid = loading_saving.read_csv(
+    xy_grid = loading_saving_ED.read_csv(
         "xy_grid", directory=config.experiment_folder
     )
 
     # add predicted target (optional)
-    y_pred = loading_saving.read_csv(
+    y_pred = loading_saving_ED.read_csv(
         "errors_grid", directory=config.experiment_folder
     )["y_pred"]
     xy_grid["y_pred"] = y_pred

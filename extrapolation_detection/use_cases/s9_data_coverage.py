@@ -15,12 +15,12 @@ from exploration_quantification import coverage_plotting
 def exe(config: ExtrapolationExperimentConfig):
     # without target
     regressor_directory = os.path.join(config.experiment_folder, "regressors")
-    xy_regressor_fit = loading_saving.read_csv(
+    xy_regressor_fit = loading_saving_ED.read_csv(
         "xy_regressor_fit", directory=regressor_directory
     )
 
     # add predicted target (optional)
-    y_pred = loading_saving.read_csv(
+    y_pred = loading_saving_ED.read_csv(
         "pred_regressor_fit", directory=regressor_directory
     )
     xy_regressor_fit["y_pred"] = y_pred

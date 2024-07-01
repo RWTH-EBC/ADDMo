@@ -23,7 +23,7 @@ from exploration_quantification.coverage_plotting import (
 def exe(config: ExtrapolationExperimentConfig):
 
     grid_path = os.path.join(config.experiment_folder, "explo_quant")
-    x_grid = loading_saving.read_csv(f"grid_points", grid_path)
+    x_grid = loading_saving_ED.read_csv(f"grid_points", grid_path)
 
     regressor: AbstractMLModel = load_regressor(
         "regressor", directory=os.path.join(config.experiment_folder, "regressors"))
@@ -37,7 +37,7 @@ def exe(config: ExtrapolationExperimentConfig):
         regressor, x_grid, y_grid, metric=config.true_outlier_threshold_error_metric
     )
 
-    true_validity_threshold = loading_saving.read_csv(
+    true_validity_threshold = loading_saving_ED.read_csv(
         "true_validity_threshold", directory=config.experiment_folder
     ).iloc[0, 0]
     true_validity_grid = true_validity_domain.classify_errors_2_true_validity(
@@ -67,12 +67,12 @@ def exe(config: ExtrapolationExperimentConfig):
 
     # save
     save_path = os.path.join(config.experiment_folder, "explo_quant")
-    loading_saving.write_csv(
+    loading_saving_ED.write_csv(
         quantifier.labels_grid,
         f"labels_grid_true validity",
         save_path,
     )
-    loading_saving.write_csv(
+    loading_saving_ED.write_csv(
         coverage,
         f"coverage_percentage_true validity",
         save_path,

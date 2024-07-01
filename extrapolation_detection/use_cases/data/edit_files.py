@@ -6,7 +6,7 @@ simulation_data_name = "Carnot_mid"
 new_simulation_data_name = "Boptest_TAir_mid_reduced"
 path = os.path.join("edited", new_simulation_data_name + ".csv")
 
-xy_tot = loading_saving.read_csv(simulation_data_name, directory=None, index_col=False)
+xy_tot = loading_saving_ED.read_csv(simulation_data_name, directory=None, index_col=False)
 print("min:")
 print(xy_tot.min())
 print("max:")

@@ -7,7 +7,7 @@ from extrapolation_detection.util import loading_saving_ED
 
 simulation_data_name = "Carnot_mid"
 
-xy_tot: pd.DataFrame = loading_saving.read_csv(simulation_data_name, directory=None, index_col=False)
+xy_tot: pd.DataFrame = loading_saving_ED.read_csv(simulation_data_name, directory=None, index_col=False)
 
 # add uncertainty to last feature (normally the target)
 # uncertainty with a normal distribution with mean 0 and std dev 1

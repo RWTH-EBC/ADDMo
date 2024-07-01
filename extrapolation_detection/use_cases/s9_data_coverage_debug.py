@@ -15,7 +15,7 @@ from exploration_quantification import coverage_plotting
 def exe(config: ExtrapolationExperimentConfig):
     # without target
     regressor_directory = os.path.join(config.experiment_folder, "detectors")
-    xy_regressor_fit = loading_saving.read_csv(
+    xy_regressor_fit = loading_saving_ED.read_csv(
         "KNN_test+fit_x_fit", directory=regressor_directory
     )
 

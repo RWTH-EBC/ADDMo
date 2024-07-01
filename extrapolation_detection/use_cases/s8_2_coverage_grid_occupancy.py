@@ -20,7 +20,7 @@ from exploration_quantification.coverage_plotting import (
 def exe(config: ExtrapolationExperimentConfig):
     # without target
     regressor_directory = os.path.join(config.experiment_folder, "regressors")
-    x_regressor_fit = loading_saving.read_csv(
+    x_regressor_fit = loading_saving_ED.read_csv(
         "x_regressor_fit", directory=regressor_directory
     )
 

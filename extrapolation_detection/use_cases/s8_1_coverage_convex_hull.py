@@ -19,10 +19,10 @@ from exploration_quantification.coverage_plotting import (
 def exe(config: ExtrapolationExperimentConfig):
     # without target
     regressor_directory = os.path.join(config.experiment_folder, "regressors")
-    x_regressor_fit = loading_saving.read_csv(
+    x_regressor_fit = loading_saving_ED.read_csv(
         "x_regressor_fit", directory=regressor_directory
     )
-    y_regressor_fit = loading_saving.read_csv(
+    y_regressor_fit = loading_saving_ED.read_csv(
         "y_regressor_fit", directory=regressor_directory
     )
 
@@ -36,7 +36,7 @@ def exe(config: ExtrapolationExperimentConfig):
     )
 
     save_path = os.path.join(config.experiment_folder, "explo_quant")
-    loading_saving.write_csv(x_grid, f"grid_points", save_path)
+    loading_saving_ED.write_csv(x_grid, f"grid_points", save_path)
 
     for explo_detector_name in config.config_explo_quant.detectors:
         quantifier = ExplorationQuantifier()
@@ -60,15 +60,15 @@ def exe(config: ExtrapolationExperimentConfig):
             # plot.show_plot(plt)
 
         # save
-        loading_saving.write_csv(
+        loading_saving_ED.write_csv(
             quantifier.labels_grid,
             f"labels_grid_{explo_detector_name}",
             save_path,
         )
-        loading_saving.write_pkl(
+        loading_saving_ED.write_pkl(
             quantifier.explo_clf, f"explo_clf_{explo_detector_name}", save_path
         )
-        loading_saving.write_csv(
+        loading_saving_ED.write_csv(
             coverage,
             f"coverage_percentage_{explo_detector_name}",
             save_path,

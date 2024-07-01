@@ -5,7 +5,6 @@ from core.util.experiment_logger import ExperimentLogger
 from extrapolation_detection.util import loading_saving_ED
 from core.s3_model_tuning.models.abstract_model import AbstractMLModel
 from core.util.data_handling import split_target_features
-from extrapolation_detection.util.loading_saving_ED import load_regressor
 from extrapolation_detection.util import data_handling
 from extrapolation_detection.n_D_extrapolation.score_regressor_per_data_point import (
     score_per_sample,
@@ -17,25 +16,25 @@ from extrapolation_detection.use_cases.config.ed_experiment_config import (
 
 def exe(config: ExtrapolationExperimentConfig):
     # load model
-    regressor: AbstractMLModel = load_regressor("regressor", directory=os.path.join(config.experiment_folder, "regressors"))
+    regressor: AbstractMLModel = loading_saving_ED.load_regressor("regressor", directory=os.path.join(config.experiment_folder, "regressors"))
 
-    xy_training = loading_saving.read_csv(
+    xy_training = loading_saving_ED.read_csv(
         "xy_train", directory=config.experiment_folder
     )
-    xy_validation = loading_saving.read_csv(
+    xy_validation = loading_saving_ED.read_csv(
         "xy_val", directory=config.experiment_folder
     )
-    xy_test = loading_saving.read_csv("xy_test", directory=config.experiment_folder)
-    xy_remaining = loading_saving.read_csv(
+    xy_test = loading_saving_ED.read_csv("xy_test", directory=config.experiment_folder)
+    xy_remaining = loading_saving_ED.read_csv(
         "xy_remaining", directory=config.experiment_folder
     )
-    xy_grid = loading_saving.read_csv("xy_grid", directory=config.experiment_folder)
+    xy_grid = loading_saving_ED.read_csv("xy_grid", directory=config.experiment_folder)
 
     x_train, y_train = split_target_features(config.name_of_target, xy_training)
     errors_train = score_per_sample(
         regressor, x_train, y_train, metric=config.true_outlier_threshold_error_metric
     )
-    loading_saving.write_csv(
+    loading_saving_ED.write_csv(
         errors_train, "errors_train", directory=config.experiment_folder
     )
 
@@ -43,7 +42,7 @@ def exe(config: ExtrapolationExperimentConfig):
     errors_val = score_per_sample(
         regressor, x_val, y_val, metric=config.true_outlier_threshold_error_metric
     )
-    loading_saving.write_csv(
+    loading_saving_ED.write_csv(
         errors_val, "errors_val", directory=config.experiment_folder
     )
 
@@ -52,7 +51,7 @@ def exe(config: ExtrapolationExperimentConfig):
         regressor, x_test, y_test, metric=config.true_outlier_threshold_error_metric
     )
 
-    loading_saving.write_csv(
+    loading_saving_ED.write_csv(
         errors_test, "errors_test", directory=config.experiment_folder
     )
 
@@ -65,7 +64,7 @@ def exe(config: ExtrapolationExperimentConfig):
         y_remaining,
         metric=config.true_outlier_threshold_error_metric,
     )
-    loading_saving.write_csv(
+    loading_saving_ED.write_csv(
         errors_remaining, "errors_remaining", directory=config.experiment_folder
     )
 
@@ -73,7 +72,7 @@ def exe(config: ExtrapolationExperimentConfig):
     errors_grid = score_per_sample(
         regressor, x_grid, y_grid, metric=config.true_outlier_threshold_error_metric
     )
-    loading_saving.write_csv(
+    loading_saving_ED.write_csv(
         errors_grid, "errors_grid", directory=config.experiment_folder
     )
 
@@ -90,7 +89,7 @@ def exe(config: ExtrapolationExperimentConfig):
         index=[config.true_outlier_threshold_error_metric],
     )
 
-    loading_saving.write_csv(
+    loading_saving_ED.write_csv(
         mean_errors, "mean_errors", directory=config.experiment_folder
     )
 

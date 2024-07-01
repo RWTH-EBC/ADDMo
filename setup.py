@@ -8,7 +8,7 @@ if os.path.exists('requirements.txt'):
         with open('README.md', 'r', encoding='utf-8') as f:
             long_description = f.read()
     except FileNotFoundError:
-        long_description = "Automated data driven modeling using regression machine learning"
+        long_description = "Automated system_data driven modeling using regression machine learning"
 
     setup(
         name='ADDMo',
@@ -18,7 +18,7 @@ if os.path.exists('requirements.txt'):
         license=' ',
         author='mre',
         author_email=' ',
-        description='Automated data driven modeling using regression machine learning',
+        description='Automated system_data driven modeling using regression machine learning',
         long_description=long_description,
         install_requires=packages,
     )

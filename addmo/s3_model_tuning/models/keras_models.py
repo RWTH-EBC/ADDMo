@@ -135,24 +135,29 @@ class SciKerasSequential(BaseKerasModel):
         sequential_regressor.add(Dense(1, activation='linear'))  # Output shape = 1 for continuous variable
         return sequential_regressor
 
-    def _build_regressor(self, input_shape):
+    def _build_regressor(self, x):
         """""
         Returns a compiled sequential model.
         """
+        input_shape = (len(x.columns),)
         sequential_regressor = self._build_regressor_architecture(input_shape)
-        sequential_regressor.compile(loss=self.hyperparameters['loss'])
+
+        # Normalisation of first layer (input system_data).
+        sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation initialisation works only on np arrays
+
+        # define optimizer explicitly to avoid user warnings that optimizer could not be loaded
+        optimizer = tf.keras.optimizers.RMSprop()
+        optimizer.build(sequential_regressor.trainable_variables)
+
+        sequential_regressor.compile(loss=self.hyperparameters['loss'], optimizer=optimizer)
         return sequential_regressor
 
     def to_scikit_learn(self, x):
         """""
         Convert Keras Model to Scikeras Regressor for tuning.
         """
-        input_shape = (len(x.columns),)
-        sequential_regressor = self._build_regressor(input_shape)
 
-        # Normalisation of first layer (input system_data).
-        sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation initialisation works only on np arrays
-        regressor_scikit = KerasRegressor(model=sequential_regressor,
+        regressor_scikit = KerasRegressor(model=self._build_regressor(x),
                                         batch_size=self.hyperparameters['batch_size'],
                                         loss=self.hyperparameters['loss'],
                                         epochs=self.hyperparameters['epochs'],

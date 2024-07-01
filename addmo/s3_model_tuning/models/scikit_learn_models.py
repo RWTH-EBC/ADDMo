@@ -173,7 +173,7 @@ class ScikitMLP_TargetTransformed(ScikitMLP):
         return self.regressor.named_steps["model"].regressor.get_params(deep=deep)
 
 
-class LinearReg(BaseScikitLearnModel):
+class ScikitLinearReg(BaseScikitLearnModel):
     """Linear Regression model"""
 
     def __init__(self):
@@ -184,3 +184,9 @@ class LinearReg(BaseScikitLearnModel):
 
     def optuna_hyperparameter_suggest(self, trial):
         pass
+
+    def default_hyperparameter(self):
+        """"
+        Return default hyperparameters.
+        """
+        return LinearRegression().get_params()

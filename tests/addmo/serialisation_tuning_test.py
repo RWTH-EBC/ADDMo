@@ -1,7 +1,7 @@
 import unittest
 import pandas as pd
 import os
-from addmo.s3_model_tuning.models.scikit_learn_models import ScikitMLP, LinearReg
+from addmo.s3_model_tuning.models.scikit_learn_models import ScikitMLP, ScikitLinearReg
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
 from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
@@ -56,7 +56,7 @@ class TestModels(unittest.TestCase):
 
     def test_linear_regression(self):
         # Testing Linear Regression model saved in .joblib format
-        model = LinearReg()
+        model = ScikitLinearReg()
         model.fit(self.X_train, self.y_train)
 
         # Testing saving and loading of model

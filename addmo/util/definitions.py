@@ -31,7 +31,7 @@ def results_dir_wandb():
 
 
 def results_dir_data_tuning(config: DataTuningFixedConfig):
-    path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, config.name_of_data_tuning)
+    path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, config.name_of_tuning)
     return create_or_clean_directory(path)
 
 
@@ -42,4 +42,4 @@ def results_dir_model_tuning(config: ModelTuningExperimentConfig):
 
 
 def ed_use_case_dir():
-    return os.path.join(root_dir(), 'extrapolation_detection', 'aixtra_use_case')
+    return os.path.join(root_dir(), 'aixtra_use_case')

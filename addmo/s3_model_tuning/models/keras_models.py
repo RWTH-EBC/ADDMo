@@ -1,21 +1,18 @@
-import os
-import json
 import keras
 import tensorflow as tf
 import onnx
 import numpy as np
-import pandas as pd
-import h5py
 from abc import ABC
 from packaging import version
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.optimizers import RMSprop
-from tensorflow.keras.layers import Input, Dense, Normalization, Activation
+
+from keras.src.models.sequential import Sequential
+from keras.src.layers import Input, Dense, Normalization, Activation
+from keras.src.losses import MeanSquaredError
+from keras.src.callbacks import EarlyStopping
 from scikeras.wrappers import KerasRegressor
-from tensorflow.keras.losses import MeanSquaredError
 from addmo.s3_model_tuning.models.abstract_model import AbstractMLModel
 from addmo.s3_model_tuning.models.abstract_model import ModelMetadata
-from keras.callbacks import EarlyStopping
+
 
 class BaseKerasModel(AbstractMLModel, ABC):
     """
@@ -77,7 +74,8 @@ class SciKerasSequential(BaseKerasModel):
         Update the hyperparameters in internal storage, which is accessed while building the
         regressor. Not done here, because compilation requires the input_shape to be available.
         """
-        self.hyperparameters = hyperparameters
+        for key, value in hyperparameters.items():
+            self.hyperparameters[key] = value
 
     def _save_regressor(self, path, file_type):
         """

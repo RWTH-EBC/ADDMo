@@ -54,14 +54,6 @@ if __name__ == "__main__":
     # Create the config object
     config = ModelTuningExperimentConfig()
 
-    # Load the config from the json file
-    # path_to_config = os.path.join(root_dir(), 'addmo', 's3_model_tuning', 'config',
-    #                             'model_tuner_config_no_tuning.json')
-    # model_tuning_config = load_config_from_json(path_to_config, ModelTunerConfig)
-    # config.config_model_tuner = model_tuning_config
-
-    config.config_model_tuner.models = ['MLP_TargetTransformed']
-
     config.config_model_tuner.validation_score_splitting = 'UnivariateSplitter'
     config.config_model_tuner.validation_score_splitting_kwargs = None
 

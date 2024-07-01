@@ -134,7 +134,7 @@ class WandbLogger(AbstractLogger):
             return loaded_model
 
 
-class LocalLogger(AbstractLogger):
+class LocalLogger(AbstractLogger): #Todo: evtl. komplett löschen und auf normale speicher funktionen umstellen?
     active: bool = False  # Activate local logging
     directory = None  # Directory to store artifacts locally
     run_time_storage = {}  # Storage for the current run

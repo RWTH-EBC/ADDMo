@@ -20,10 +20,10 @@ config = DataTuningFixedConfig()
 
 # Configure the logger
 LocalLogger.directory = results_dir_data_tuning(config)
-LocalLogger.active = False
+LocalLogger.active = True
 WandbLogger.project = "addmo-tests_data_tuning_fixed"
 WandbLogger.directory = results_dir_data_tuning(config)
-WandbLogger.active = True
+WandbLogger.active = False
 
 # Initialize logging
 ExperimentLogger.start_experiment(config=config)

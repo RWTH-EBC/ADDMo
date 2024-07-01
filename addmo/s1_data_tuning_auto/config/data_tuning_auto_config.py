@@ -12,7 +12,7 @@ class DataTuningAutoSetup(BaseModel):
         "data_tuning_experiment_auto", description="Set name of the experiments series."
     )
     abs_path_to_data: str = Field(
-        r"D:\04_GitRepos\addmo-extra\raw_input_data\InputData.xlsx",
+        r"D:\04_GitRepos\addmo-extra\addmo_examples\raw_input_data\InputData.xlsx",
         description="Path to the file that has the system_data.",
     )
     name_of_target: str = Field(

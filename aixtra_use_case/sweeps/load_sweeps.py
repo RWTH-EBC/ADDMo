@@ -1,9 +1,8 @@
 import wandb
 import pandas as pd
-from core.s3_model_tuning.models.model_factory import ModelFactory
+from addmo.s3_model_tuning.models.model_factory import ModelFactory
 
 #Todo: clean up: maybe move some general functions to utils? Depending on what we have in DDMPC Repo.
-
 
 def yield_runs_per_sweep(project_name, sweep_id):
     # Initialize the API
@@ -82,8 +81,6 @@ def main():
     dir = best_model.download()
     regressor = ModelFactory.load_model(f"{dir}/regressor1.keras")
     regressor.regressor.model.summary()
-
-
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,4 @@
-from tensorflow.keras.losses import MeanSquaredError
-from addmo.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
+from keras.src.losses import MeanSquaredError
 from aixtra_use_case.config.ed_experiment_config import ExtrapolationExperimentConfig
 
 
@@ -12,7 +11,7 @@ def no_tuning_config(config: ExtrapolationExperimentConfig) :
         "hyperparameter_set": {
             "hidden_layer_sizes": [10],
             "loss": MeanSquaredError(),
-            "epochs": 50
+            "epochs": 200
         }
     }
     config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"
@@ -23,7 +22,7 @@ def no_tuning_config(config: ExtrapolationExperimentConfig) :
 
 def linear_regression_config(config: ExtrapolationExperimentConfig):
     config = no_tuning_config(config)
-    config.config_model_tuning.models = ["ScikitLinearRegression"]
+    config.config_model_tuning.models = ["ScikitLinearReg"]
     config.config_model_tuning.hyperparameter_tuning_kwargs = {"hyperparameter_set": None}
     return config
 
@@ -31,6 +30,6 @@ def linear_regression_config(config: ExtrapolationExperimentConfig):
 def tuning_config(config: ExtrapolationExperimentConfig):
     config = no_tuning_config(config)
     config.config_model_tuning.hyperparameter_tuning_type = "OptunaTuner"
-    config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 20}
+    config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 2}
     config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"
     return config

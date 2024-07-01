@@ -38,7 +38,7 @@ def define_config():
         "delta_reaTZon_y": (-0.5, 0.5),
     }
 
-    config = config_blueprints.linear_regression_config(config)
+    config = config_blueprints.no_tuning_config(config)
 
     return config
 
@@ -52,7 +52,7 @@ def run_all():
 
     # update config with the experiment name of wandb run
     wandb.config.update(
-        {"experiment_name": f"2_linear_{config.simulation_data_name}_{run.name}"},
+        {"experiment_name": f"test_keras_{config.simulation_data_name}_{run.name}"},
         allow_val_change=True,
     )
 
@@ -88,10 +88,10 @@ def run_all():
 
 config_temp = define_config()
 
-project_name = f"2_linear_{config_temp.simulation_data_name}"
-# project_name = "Test"
+# project_name = f"2_linear_{config_temp.simulation_data_name}"
+project_name = "Test"
 
 # sweep
-sweep_configuration = sweep_configs.sweep_repetitions_only()
+sweep_configuration = sweep_configs.sweep_hidden_layer_sizes()
 sweep_id = wandb.sweep(sweep_configuration, project=project_name)
 wandb.agent(sweep_id, function=run_all, project=project_name)

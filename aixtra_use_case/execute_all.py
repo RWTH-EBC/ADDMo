@@ -17,7 +17,7 @@ from aixtra_use_case import s2_tune_ml_regressor, s4_true_validity_domain, \
 # configure config
 config = ExtrapolationExperimentConfig()
 config.simulation_data_name = "Boptest_TAir_mid_ODE_noise_m0_std0.01"
-config.experiment_name = "RISHIKA_TEST"
+config.experiment_name = "RISHIKA_TEST2"
 config.name_of_target = "delta_reaTZon_y"
 config.train_val_test_period = (0, 1488)
 config.shuffle = False
@@ -53,19 +53,19 @@ WandbLogger.active = False
 ExperimentLogger.start_experiment(config=config)  # log config
 s1_split_data.exe(config)
 s2_tune_ml_regressor.exe(config)
-s3_regressor_error_calculation.exe(config)
-s4_true_validity_domain.exe(config)
-s5_tune_detector.exe(config)
-s6_detector_score_calculation.exe(config)
-s8_1_coverage_convex_hull.exe(config)
-s8_2_coverage_grid_occupancy.exe(config)
-s8_3_coverage_tuned_ND.exe(config)
-s8_4_coverage_true_validity.exe(config)
-s9_data_coverage.exe(config)
-s9_data_coverage_grid.exe(config)
-# #
-s7_2_plotting.exe_plot_2D_all(config)
-s7_2_plotting.exe_plot_2D_detector(config)
+# s3_regressor_error_calculation.exe(config)
+# s4_true_validity_domain.exe(config)
+# s5_tune_detector.exe(config)
+# s6_detector_score_calculation.exe(config)
+# s8_1_coverage_convex_hull.exe(config)
+# s8_2_coverage_grid_occupancy.exe(config)
+# s8_3_coverage_tuned_ND.exe(config)
+# s8_4_coverage_true_validity.exe(config)
+# s9_data_coverage.exe(config)
+# s9_data_coverage_grid.exe(config)
+# # #
+# s7_2_plotting.exe_plot_2D_all(config)
+# s7_2_plotting.exe_plot_2D_detector(config)
 
 # from extrapolation_detection.aixtra_use_case import s9_data_coverage_debug
 # s9_data_coverage_debug.exe(config)

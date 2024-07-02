@@ -88,30 +88,43 @@ class WandbLogger(AbstractLogger):
             description: str = None,
             metadata: dict = None
     ):
-        if WandbLogger.active:
-            # save system_data to disk first
-            filepath = None
-            if art_type == "pkl":
-                filepath = os.path.join(WandbLogger.directory, name + ".pkl")
-                with open(filepath, "wb") as f:
-                    pickle.dump(data, f)
-            elif art_type in ["h5", "keras", "joblib", "onnx"]:
-                model: AbstractMLModel = data
-                filepath = os.path.join(WandbLogger.directory, name + "." + art_type)
-                metadata_filepath = os.path.join(WandbLogger.directory, name + "_metadata.json")
-                model.save_regressor(WandbLogger.directory, name, art_type)
-            # create artifact object
-            artifact = wandb.Artifact(
-                name=name, type=art_type, description=description, metadata=metadata
-            )
-            # add saved file to the artifact
-            artifact.add_file(filepath)
-            if art_type in ["h5", "keras", "onnx", "joblib"]:  # add metadata file if regressor is saved
-                artifact.add_file(metadata_filepath)
+        if not WandbLogger.active:
+            return
 
-            wandb.run.log_artifact(artifact)
-            artifact.wait()
+        def handle_pkl(data, filepath):
+            with open(filepath, "wb") as f:
+                pickle.dump(data, f)
+            return "pkl", [filepath]
 
+        def handle_model(data, filepath):
+            model: AbstractMLModel = data
+            metadata_filepath = os.path.join(WandbLogger.directory, f"{name}_metadata.json")
+            model.save_regressor(WandbLogger.directory, name, art_type)
+            return "regressor", [filepath, metadata_filepath]
+
+        type_handlers = {
+            "pkl": handle_pkl,
+            "h5": handle_model,
+            "keras": handle_model,
+            "joblib": handle_model,
+            "onnx": handle_model,
+        }
+
+        if art_type not in type_handlers:
+            raise ValueError(f"Unsupported artifact type: {art_type}")
+
+        filepath = os.path.join(WandbLogger.directory, f"{name}.{art_type}")
+        artifact_type, files_to_add = type_handlers[art_type](data, filepath)
+
+        artifact = wandb.Artifact(
+            name=name, type=artifact_type, description=description, metadata=metadata
+        )
+
+        for file in files_to_add:
+            artifact.add_file(file)
+
+        wandb.run.log_artifact(artifact)
+        artifact.wait()
     @staticmethod
     def use_artifact(name: str, alias: str = "latest"):
         if WandbLogger.active:

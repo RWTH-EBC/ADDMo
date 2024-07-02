@@ -57,7 +57,7 @@ def run_all():
 
     create_or_clean_directory(config.experiment_folder)
     LocalLogger.directory = os.path.join(config.experiment_folder, "local_logger")
-    WandbLogger.directory = config.experiment_folder
+    WandbLogger.directory = os.path.join(config.experiment_folder, "wandb_logger")
 
     # locally log the config as well
     LocalLogger.active = True

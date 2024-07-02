@@ -145,6 +145,8 @@ class AbstractMLModel(ABC):
         self._define_metadata()
         self._save_metadata(directory, regressor_filename)
 
+        return file_type
+
 
     def load_regressor(self, model_instance, input_shape=None):
         """

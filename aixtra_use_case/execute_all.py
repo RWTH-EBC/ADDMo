@@ -45,7 +45,7 @@ create_or_clean_directory(config.experiment_folder)
 LocalLogger.directory = os.path.join(config.experiment_folder, "local_logger")
 LocalLogger.active = True
 WandbLogger.project = f"ED_{config.simulation_data_name}"
-WandbLogger.directory = config.experiment_folder
+WandbLogger.directory = os.path.join(config.experiment_folder, "wandb_logger")
 WandbLogger.active = False
 
 

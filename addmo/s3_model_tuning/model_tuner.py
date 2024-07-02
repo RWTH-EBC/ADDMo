@@ -22,6 +22,11 @@ class ModelTuner:
 
         model.set_params(best_params)
 
+        # due to refitting on each fold, the validation score must be calculated before fitting
+        model.validation_score = self.scorer.score_validation(
+            model, x_train_val, y_train_val
+        )
+
         model.fit(x_train_val, y_train_val)
 
         return model
@@ -30,24 +35,18 @@ class ModelTuner:
         model_dict = {}
         for model_name in self.config.models:
             model = self.tune_model(model_name, x_train_val, y_train_val)
-            validation_score = self.scorer.score_validation(
-                model, x_train_val, y_train_val
-            )
-
-            model_dict[model_name] = {
-                "model": model,
-                "validation_score": validation_score,
-            }
-
+            model_dict[model_name] = model
         return model_dict
+
+    def get_model_validation_score(self, model_dict, model_name):
+        return model_dict[model_name].validation_score
 
     def get_best_model_name(self, model_dict):
         best_model_name = max(
-            model_dict, key=lambda x: model_dict[x]["validation_score"]
+            model_dict, key=lambda x: self.get_model_validation_score(model_dict, x)
         )
         return best_model_name
     def get_model(self, model_dict, model_name):
-        return model_dict[model_name]["model"]
-    def get_model_validation_score(self, model_dict, model_name):
-        return model_dict[model_name]["validation_score"]
+        return model_dict[model_name]
+
 

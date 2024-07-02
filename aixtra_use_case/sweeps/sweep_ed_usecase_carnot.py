@@ -32,7 +32,7 @@ def define_config():
         "$\dot{Q}_{heiz}$ in kW": (0, 35)
     }
 
-    config = config_blueprints.linear_regression_config(config)
+    config = config_function(config)
 
     return config
 
@@ -46,7 +46,7 @@ def run_all():
 
     # update config with the experiment name of wandb run
     wandb.config.update(
-        {"experiment_name": f"2_linear_{config.simulation_data_name}_{run.name}"},
+        {"experiment_name": f"{project_name}_{run.name}"},
         allow_val_change=True,
     )
 
@@ -83,14 +83,17 @@ def run_all():
     ExperimentLogger.finish_experiment()
 
 
+####################################################################################################
+config_function = config_blueprints.no_tuning_config # Todo: Set
+
 config_temp = define_config()
 
-
-project_name = f"2_linear_{config_temp.simulation_data_name}"
+project_name = f"3_{config_temp.simulation_data_name}" #Todo: Set
 # project_name = "Test"
 
 # sweep
-sweep_configuration = sweep_configs.sweep_repetitions_only()
+sweep_configuration = sweep_configs.sweep_hidden_layer_sizes() #Todo: Set
+
 sweep_id = wandb.sweep(sweep_configuration, project=project_name)
 wandb.agent(sweep_id, function=run_all, project=project_name)
 

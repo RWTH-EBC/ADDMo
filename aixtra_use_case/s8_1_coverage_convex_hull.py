@@ -22,21 +22,13 @@ def exe(config: ExtrapolationExperimentConfig):
     x_regressor_fit = loading_saving_aixtra.read_csv(
         "x_regressor_fit", directory=regressor_directory
     )
-    y_regressor_fit = loading_saving_aixtra.read_csv(
-        "y_regressor_fit", directory=regressor_directory
-    )
 
     bounds = point_generator.infer_or_forward_bounds(
         config.config_explo_quant.exploration_bounds, x_regressor_fit
     )
 
-    # generate meshgrid
-    x_grid = point_generator.generate_point_grid(
-        x_regressor_fit, bounds, config.config_explo_quant.explo_grid_points_per_axis
-    )
-
-    save_path = os.path.join(config.experiment_folder, "explo_quant")
-    loading_saving_aixtra.write_csv(x_grid, f"grid_points", save_path)
+    grid_path = os.path.join(config.experiment_folder, "explo_quant")
+    x_grid = loading_saving_aixtra.read_csv(f"grid_points", grid_path)
 
     for explo_detector_name in config.config_explo_quant.detectors:
         quantifier = ExplorationQuantifier()

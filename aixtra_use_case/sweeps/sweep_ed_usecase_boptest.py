@@ -15,7 +15,7 @@ from aixtra_use_case.config.ed_experiment_config import (
 from aixtra_use_case import s2_tune_ml_regressor, s4_true_validity_domain, \
     s8_1_coverage_convex_hull, s3_regressor_error_calculation, s8_3_coverage_tuned_ND, \
     s5_tune_detector, s1_split_data, s8_4_coverage_true_validity, s6_detector_score_calculation, \
-    s8_2_coverage_grid_occupancy
+    s8_2_coverage_grid_occupancy, s8_0_generate_grid
 
 
 def define_config():
@@ -52,7 +52,7 @@ def run_all():
 
     # update config with the experiment name of wandb run
     wandb.config.update(
-        {"experiment_name": f"test_keras_{config.simulation_data_name}_{run.name}"},
+        {"experiment_name": f"3_keras_{config.simulation_data_name}_{run.name}"},
         allow_val_change=True,
     )
 
@@ -78,6 +78,7 @@ def run_all():
     s4_true_validity_domain.exe(config)
     s5_tune_detector.exe(config)
     s6_detector_score_calculation.exe(config)
+    s8_0_generate_grid.exe(config)
     s8_1_coverage_convex_hull.exe(config)
     s8_2_coverage_grid_occupancy.exe(config)
     s8_3_coverage_tuned_ND.exe(config)
@@ -88,8 +89,8 @@ def run_all():
 
 config_temp = define_config()
 
-# project_name = f"2_linear_{config_temp.simulation_data_name}"
-project_name = "Test"
+project_name = f"2_keras_{config_temp.simulation_data_name}"
+# project_name = "Test"
 
 # sweep
 sweep_configuration = sweep_configs.sweep_hidden_layer_sizes()

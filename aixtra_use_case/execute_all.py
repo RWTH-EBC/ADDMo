@@ -12,7 +12,7 @@ from aixtra_use_case import s2_tune_ml_regressor, s4_true_validity_domain, \
     s8_1_coverage_convex_hull, s3_regressor_error_calculation, s8_3_coverage_tuned_ND, \
     s5_tune_detector, s1_split_data, s7_2_plotting, s8_4_coverage_true_validity, \
     s6_detector_score_calculation, s8_2_coverage_grid_occupancy, s9_data_coverage_grid, \
-    s9_data_coverage
+    s9_data_coverage, s8_0_generate_grid
 
 # configure config
 config = ExtrapolationExperimentConfig()
@@ -35,7 +35,7 @@ config.config_explo_quant.exploration_bounds = {
 # config= config_blueprints.no_tuning_config()
 config.config_model_tuning.models = ["SciKerasSequential"]
 config.config_model_tuning.hyperparameter_tuning_type = "OptunaTuner"
-config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 50}
+config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 10}
 config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"
 
 config.config_detector.detectors = ["KNN", "GP", "OCSVM"]
@@ -53,14 +53,15 @@ WandbLogger.active = False
 ExperimentLogger.start_experiment(config=config)  # log config
 s1_split_data.exe(config)
 s2_tune_ml_regressor.exe(config)
-# s3_regressor_error_calculation.exe(config)
-# s4_true_validity_domain.exe(config)
+s3_regressor_error_calculation.exe(config)
+s4_true_validity_domain.exe(config)
 # s5_tune_detector.exe(config)
 # s6_detector_score_calculation.exe(config)
+s8_0_generate_grid.exe(config)
 # s8_1_coverage_convex_hull.exe(config)
 # s8_2_coverage_grid_occupancy.exe(config)
 # s8_3_coverage_tuned_ND.exe(config)
-# s8_4_coverage_true_validity.exe(config)
+s8_4_coverage_true_validity.exe(config)
 # s9_data_coverage.exe(config)
 # s9_data_coverage_grid.exe(config)
 # # #

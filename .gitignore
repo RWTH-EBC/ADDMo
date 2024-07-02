@@ -16,13 +16,13 @@
 
 # Output-Files #
 ########################
-/results/*
-/sweeps/wandb/*
-/sweeps/artifacts/*
-/extrapolation_detection/use_cases/results/*
-/extrapolation_detection/use_cases/artifacts/*
-/extrapolation_detection/use_cases/wandb/*
-/0000_testfiles/wandb/*
+/addmo_examples/results/**
+/aixtra_use_case/sweeps/wandb/**
+/aixtra_use_case/sweeps/artifacts/**
+/aixtra_use_case/results/**
+/aixtra_use_case/artifacts/**
+/aixtra_use_case/wandb/**
+/0000_testfiles/wandb/**
 #Eclipse Settings #
 #####################
 /.settings
@@ -56,3 +56,5 @@ dist
 #####################
 
 doc/_build
+
+extrapolation_detection/aixtra_use_case/results/RISHIKA_TEST/local_logger/config.json

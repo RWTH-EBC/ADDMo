@@ -132,7 +132,7 @@ class SciKerasSequential(BaseKerasModel):
         for units in self.hyperparameters['hidden_layer_sizes']:
             sequential_regressor.add(Dense(units=units, activation='relu'))
 
-        sequential_regressor.add(Dense(1, activation='linear'))  # Output shape = 1 for continuous variable
+        sequential_regressor.add(Dense(1, activation='linear'))
         return sequential_regressor
 
     def _build_regressor(self, x):
@@ -176,11 +176,11 @@ class SciKerasSequential(BaseKerasModel):
             hyperparameters['loss'] = MeanSquaredError()
         hyperparameters['hidden_layer_sizes'] = [32]
         hyperparameters['batch_size'] = 200
-        hyperparameters['epochs'] = 200
+        hyperparameters['epochs'] = 5000
         hyperparameters['callbacks'] = [EarlyStopping(monitor='loss',
-                                                      min_delta=0.0000001,
+                                                      min_delta=0.0001,
                                                       verbose=1,
-                                                      patience=5)]
+                                                      patience=10)]
 
 
         return hyperparameters

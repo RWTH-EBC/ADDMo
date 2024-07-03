@@ -3,7 +3,7 @@ import sklearn
 from abc import ABC
 from sklearn.neural_network import MLPRegressor
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MaxAbsScaler
 from sklearn.compose import TransformedTargetRegressor
 from skl2onnx import to_onnx
 from addmo.s3_model_tuning.models.abstract_model import AbstractMLModel
@@ -45,7 +45,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         """
         Make predictions.
         """
-        return self.regressor.predict(x)
+        return self.regressor.predict(x.values)
 
     def _define_metadata(self):
         """
@@ -110,6 +110,7 @@ class ScikitMLP(BaseScikitLearnModel):
 
     def __init__(self):
         super().__init__(MLPRegressor())
+        self.set_params(self.default_hyperparameter())
 
     def optuna_hyperparameter_suggest(self, trial):
         hyperparameters = {}
@@ -122,10 +123,6 @@ class ScikitMLP(BaseScikitLearnModel):
 
         # Dynamic hidden layer sizes based on the number of layers
         hyperparameters["hidden_layer_sizes"] = hidden_layer_sizes
-
-        # Other hyperparameters
-        hyperparameters["activation"] = "relu"
-        hyperparameters["max_iter"] = 5
 
         return hyperparameters
 
@@ -143,8 +140,10 @@ class ScikitMLP(BaseScikitLearnModel):
         """"
         Return default hyperparameters.
         """
-        return MLPRegressor().get_params()
-
+        hyperparameter = MLPRegressor().get_params()
+        hyperparameter["max_iter"] = 5000
+        hyperparameter["early_stopping"] = True
+        return hyperparameter
 
 class ScikitMLP_TargetTransformed(ScikitMLP):
     def __init__(self):
@@ -159,6 +158,7 @@ class ScikitMLP_TargetTransformed(ScikitMLP):
                 # is not compatible with ONNX
             ]
         )
+        self.set_params(self.default_hyperparameter())
 
     def set_params(self, hyperparameters):
         """
@@ -172,6 +172,21 @@ class ScikitMLP_TargetTransformed(ScikitMLP):
         """
         return self.regressor.named_steps["model"].regressor.get_params(deep=deep)
 
+
+class ScikitMLP_TargetTransformed_MaxAbsScaler(ScikitMLP_TargetTransformed):
+    def __init__(self):
+        """
+        Create an instance of the scikit-learn model including a scaler.
+        """
+        self.regressor = Pipeline(
+            steps=[
+                ("scaler", MaxAbsScaler()),  # scale the features
+                ("model", TransformedTargetRegressor(regressor=MLPRegressor()))
+                # scaling the target variable through TransformedTargetRegressor
+                # is not compatible with ONNX
+            ]
+        )
+        self.set_params(self.default_hyperparameter())
 
 class ScikitLinearReg(BaseScikitLearnModel):
     """Linear Regression model"""

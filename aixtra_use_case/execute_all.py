@@ -17,7 +17,7 @@ from aixtra_use_case import s2_tune_ml_regressor, s4_true_validity_domain, \
 # configure config
 config = ExtrapolationExperimentConfig()
 config.simulation_data_name = "Carnot_mid_noise_m0_std0.02"
-config.experiment_name = "TEST"
+config.experiment_name = "TEST2"
 config.name_of_target = "$\dot{Q}_{heiz}$ in kW"
 config.train_val_test_period = (0, 744)
 config.shuffle = False
@@ -33,7 +33,7 @@ config.config_explo_quant.exploration_bounds = {
 
 from aixtra_use_case.sweeps import config_blueprints
 config = config_blueprints.no_tuning_config(config)
-config.config_model_tuning.models = ["ScikitMLP_TargetTransformed"]
+# config.config_model_tuning.models = ["ScikitMLP_TargetTransformed"]
 config.config_model_tuning.hyperparameter_tuning_kwargs = {
     "hyperparameter_set": {
         "hidden_layer_sizes": [5],
@@ -46,7 +46,7 @@ config.config_model_tuning.hyperparameter_tuning_kwargs = {
 create_or_clean_directory(config.experiment_folder)
 LocalLogger.directory = os.path.join(config.experiment_folder, "local_logger")
 LocalLogger.active = True
-WandbLogger.project = f"ED_{config.simulation_data_name}"
+WandbLogger.project = f"TEST_{config.simulation_data_name}"
 WandbLogger.directory = os.path.join(config.experiment_folder, "wandb_logger")
 WandbLogger.active = False
 

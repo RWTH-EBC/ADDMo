@@ -45,6 +45,8 @@ class WandbLogger(AbstractLogger):
     def start_experiment(config=None, **kwargs):
         """Starts a new experiment and logs the config to wandb."""
         if WandbLogger.active:
+            if not os.path.exists(WandbLogger.directory):
+                os.makedirs(WandbLogger.directory)
             wandb.init(
                 project=WandbLogger.project,
                 config=config,

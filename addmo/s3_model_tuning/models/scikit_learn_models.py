@@ -172,22 +172,6 @@ class ScikitMLP_TargetTransformed(ScikitMLP):
         """
         return self.regressor.named_steps["model"].regressor.get_params(deep=deep)
 
-
-class ScikitMLP_TargetTransformed_MaxAbsScaler(ScikitMLP_TargetTransformed):
-    def __init__(self):
-        """
-        Create an instance of the scikit-learn model including a scaler.
-        """
-        self.regressor = Pipeline(
-            steps=[
-                ("scaler", MaxAbsScaler()),  # scale the features
-                ("model", TransformedTargetRegressor(regressor=MLPRegressor()))
-                # scaling the target variable through TransformedTargetRegressor
-                # is not compatible with ONNX
-            ]
-        )
-        self.set_params(self.default_hyperparameter())
-
 class ScikitLinearReg(BaseScikitLearnModel):
     """Linear Regression model"""
 

@@ -90,7 +90,7 @@ def run_all():
 
 
 ####################################################################################################
-config_function = config_blueprints.tuning_config() # Todo: Set
+config_function = config_blueprints.tuning_config # Todo: Set
 
 config_temp = define_config()
 

@@ -188,7 +188,7 @@ class SciKerasSequential(BaseKerasModel):
     def optuna_hyperparameter_suggest(self, trial):
 
         n_layers = trial.suggest_int("n_layers", 1, 2)
-        hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 50) for i in range(1, n_layers + 1, 1))
+        hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 1000) for i in range(1, n_layers + 1, 1))
         hyperparameters = {
             "hidden_layer_sizes": hidden_layer_sizes,
         }

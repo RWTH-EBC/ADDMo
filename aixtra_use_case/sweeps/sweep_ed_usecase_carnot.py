@@ -22,8 +22,12 @@ def define_config():
     # configure config
     config = ExtrapolationExperimentConfig()
     config.simulation_data_name = "Carnot_mid_noise_m0_std0.02"
+    config.experiment_name = "Empty"
+    config.name_of_target = "$\dot{Q}_{heiz}$ in kW"
+    config.train_val_test_period = (0, 744)
     config.shuffle = False
     config.grid_points_per_axis = 100
+    config.system_simulation = "carnot"
     config.true_outlier_threshold = 0.2
 
     config.config_explo_quant.exploration_bounds = {

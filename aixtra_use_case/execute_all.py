@@ -16,29 +16,31 @@ from aixtra_use_case import s2_tune_ml_regressor, s4_true_validity_domain, \
 
 # configure config
 config = ExtrapolationExperimentConfig()
-config.simulation_data_name = "Boptest_TAir_mid_ODE_noise_m0_std0.01"
-config.experiment_name = "RISHIKA_TEST2"
-config.name_of_target = "delta_reaTZon_y"
-config.train_val_test_period = (0, 1488)
+config.simulation_data_name = "Carnot_mid_noise_m0_std0.02"
+config.experiment_name = "TEST"
+config.name_of_target = "$\dot{Q}_{heiz}$ in kW"
+config.train_val_test_period = (0, 744)
 config.shuffle = False
-config.grid_points_per_axis = 10
-config.system_simulation = "BopTest_TAir_ODE"
-config.true_outlier_threshold = 0.1
+config.grid_points_per_axis = 100
+config.system_simulation = "carnot"
+config.true_outlier_threshold = 0.2
 
 config.config_explo_quant.exploration_bounds = {
-    "TDryBul": (263.15, 303.15),
-    "HDirNor": (0, 1000),
-    "oveHeaPumY_u": (0, 1),
-    "reaTZon_y": (290.15, 300.15),
-    "delta_reaTZon_y": (-0.5, 0.5),
+    "$T_{umg}$ in °C": (-10, 30),
+    "$P_{el}$ in kW": (0, 5),
+    "$\dot{Q}_{heiz}$ in kW": (0, 35)
 }
-# config= config_blueprints.no_tuning_config()
-config.config_model_tuning.models = ["SciKerasSequential"]
-config.config_model_tuning.hyperparameter_tuning_type = "OptunaTuner"
-config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 10}
-config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"
 
-config.config_detector.detectors = ["KNN", "GP", "OCSVM"]
+from aixtra_use_case.sweeps import config_blueprints
+config = config_blueprints.no_tuning_config(config)
+config.config_model_tuning.models = ["ScikitMLP_TargetTransformed"]
+config.config_model_tuning.hyperparameter_tuning_kwargs = {
+    "hyperparameter_set": {
+        "hidden_layer_sizes": [5],
+    }
+}
+
+
 
 # Configure the logger
 create_or_clean_directory(config.experiment_folder)
@@ -55,7 +57,7 @@ s1_split_data.exe(config)
 s2_tune_ml_regressor.exe(config)
 s3_regressor_error_calculation.exe(config)
 s4_true_validity_domain.exe(config)
-# s5_tune_detector.exe(config)
+s5_tune_detector.exe(config)
 # s6_detector_score_calculation.exe(config)
 s8_0_generate_grid.exe(config)
 # s8_1_coverage_convex_hull.exe(config)

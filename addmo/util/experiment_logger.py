@@ -6,6 +6,7 @@ import wandb
 from addmo.s3_model_tuning.models.abstract_model import AbstractMLModel
 from addmo.util.load_save import save_config_to_json
 from addmo.util.load_save_utils import create_or_clean_directory
+from addmo.util.load_save_utils import create_path_or_ask_to_override
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
 
 
@@ -95,6 +96,7 @@ class WandbLogger(AbstractLogger):
 
         def handle_pkl(data, filepath):
             with open(filepath, "wb") as f:
+                create_path_or_ask_to_override(f"{name}.{art_type}", WandbLogger.directory)
                 pickle.dump(data, f)
             return "pkl", [filepath]
 

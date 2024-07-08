@@ -3,7 +3,7 @@ import pickle
 from typing import Any
 import pandas as pd
 import glob
-from addmo.util.load_save_utils import create_path_or_ask_to_override, get_path
+from addmo.util.load_save_utils import create_path_or_ask_to_override, create_dir_and_get_path
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
 
 
@@ -51,7 +51,7 @@ def read_pkl(filename: str, directory: str = None) -> Any:
 
     filename = filename + ".pkl"
 
-    path = get_path(filename, directory)
+    path = create_dir_and_get_path(filename, directory)
 
     if os.path.exists(path):  # check for the existence of the path
         pkl_file = open(path, "rb")  # open path
@@ -112,7 +112,7 @@ def read_csv(filename: str, directory: str = None, **kwargs) -> pd.DataFrame:
 
     filename = filename + ".csv"
 
-    path = get_path(filename, directory)
+    path = create_dir_and_get_path(filename, directory)
 
     if os.path.exists(path):  # check for the existence of the path
         return pd.read_csv(path, sep=";", dtype="float", encoding="utf-8", index_col=index_col)

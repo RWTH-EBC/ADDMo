@@ -31,12 +31,12 @@ def create_or_clean_directory(path: str) -> str:
 
 
 def create_path_or_ask_to_override(filename, directory, override: bool = True) -> str:
-    path = get_path(filename, directory)
+    path = create_dir_and_get_path(filename, directory)
     _overwrite_file(path, override)
     return path
 
 
-def get_path(filename: str, directory: str) -> str:
+def create_dir_and_get_path(filename: str, directory: str) -> str:
     """
     Returns the full path for a given filename and directory.
     """

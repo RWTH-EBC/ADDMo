@@ -94,14 +94,17 @@ class WandbLogger(AbstractLogger):
         if not WandbLogger.active:
             return
 
-        def handle_pkl(data, filepath):
+        def handle_pkl(data):
+            filename = f"{name}.{art_type}"
+            create_path_or_ask_to_override(filename, WandbLogger.directory)
+            filepath = os.path.join(WandbLogger.directory, filename)
             with open(filepath, "wb") as f:
-                create_path_or_ask_to_override(f"{name}.{art_type}", WandbLogger.directory)
                 pickle.dump(data, f)
             return "pkl", [filepath]
 
-        def handle_model(data, filepath):
+        def handle_model(data):
             model: AbstractMLModel = data
+            filepath = os.path.join(WandbLogger.directory, f"{name}.{art_type}")
             metadata_filepath = os.path.join(WandbLogger.directory, f"{name}_metadata.json")
             model.save_regressor(WandbLogger.directory, name, art_type)
             return "regressor", [filepath, metadata_filepath]
@@ -117,8 +120,7 @@ class WandbLogger(AbstractLogger):
         if art_type not in type_handlers:
             raise ValueError(f"Unsupported artifact type: {art_type}")
 
-        filepath = os.path.join(WandbLogger.directory, f"{name}.{art_type}")
-        artifact_type, files_to_add = type_handlers[art_type](data, filepath)
+        artifact_type, files_to_add = type_handlers[art_type](data)
 
         artifact = wandb.Artifact(
             name=name, type=artifact_type, description=description, metadata=metadata

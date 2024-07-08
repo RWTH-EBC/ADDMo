@@ -32,13 +32,14 @@ config.config_explo_quant.exploration_bounds = {
 }
 
 from aixtra_use_case.sweeps import config_blueprints
-config = config_blueprints.no_tuning_config(config)
+config = config_blueprints.tuning_config(config)
 # config.config_model_tuning.models = ["ScikitMLP_TargetTransformed"]
-config.config_model_tuning.hyperparameter_tuning_kwargs = {
-    "hyperparameter_set": {
-        "hidden_layer_sizes": [5],
-    }
-}
+# config.config_model_tuning.hyperparameter_tuning_kwargs = {
+#     "hyperparameter_set": {
+#         "hidden_layer_sizes": [5],
+#     }
+# }
+config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 5}
 
 
 
@@ -48,7 +49,7 @@ LocalLogger.directory = os.path.join(config.experiment_folder, "local_logger")
 LocalLogger.active = True
 WandbLogger.project = f"TEST_{config.simulation_data_name}"
 WandbLogger.directory = os.path.join(config.experiment_folder, "wandb_logger")
-WandbLogger.active = False
+WandbLogger.active = True
 
 
 # Run scripts
@@ -57,7 +58,7 @@ s1_split_data.exe(config)
 s2_tune_ml_regressor.exe(config)
 s3_regressor_error_calculation.exe(config)
 s4_true_validity_domain.exe(config)
-s5_tune_detector.exe(config)
+# s5_tune_detector.exe(config)
 # s6_detector_score_calculation.exe(config)
 s8_0_generate_grid.exe(config)
 # s8_1_coverage_convex_hull.exe(config)

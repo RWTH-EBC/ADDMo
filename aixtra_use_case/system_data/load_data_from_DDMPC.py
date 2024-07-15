@@ -1,0 +1,27 @@
+import os
+import pandas as pd
+
+# Read the CSV file
+df = pd.read_csv(r"D:\04_GitRepos\DDMPC_GitLab\Examples\BopTest_TAir_ODE\stored_data\data\training_data.csv")
+
+# Select and rename the columns we need
+df_new = df[['t_amb', 'rad_dir', 'u_hp', 't_room', 'Change(T Room)']].rename(columns={
+    't_amb': 'TDryBul',
+    'rad_dir': 'HDirNor',
+    'u_hp': 'oveHeaPumY_u',
+    't_room': 'reaTZon_y',
+    'Change(T Room)': 'delta_reaTZon_y'
+})
+
+# Save the new dataframe to a CSV file with semicolon separator and no index
+new_simulation_data_name = f"Boptest_ODE_DDMPC_steady_50days"
+path = os.path.join("edited", new_simulation_data_name + ".csv")
+
+
+# save to folder
+df_new.to_csv(path, sep=";", index=False, header=True, encoding="utf-8")
+
+# df_new.to_csv('converted_data.csv', sep=';', index=False)
+
+# Display the first few rows of the new dataframe
+print(df_new.head())

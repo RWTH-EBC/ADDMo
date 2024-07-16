@@ -1,3 +1,4 @@
+import numpy as np
 from sklearn.model_selection import cross_validate
 
 from addmo.s3_model_tuning.scoring.abstract_scorer import ValidationScoring
@@ -15,8 +16,8 @@ class CrossValidation(ValidationScoring):
 
         cv_info = cross_validate(
             model.to_scikit_learn(x),
-            x,
-            y,
+            x.values.astype(np.float32),
+            y.values.astype(np.float32),
             scoring=self.metric,
             cv=self.splitter,
             return_indices=True

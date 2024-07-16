@@ -58,7 +58,7 @@ class SciKerasSequential(BaseKerasModel):
         self.x_fit = x
         self.y_fit = y
         self.regressor = self.to_scikit_learn(x)
-        self.regressor.fit(x, y)
+        self.regressor.fit(x.values.astype(np.float32), y.values.astype(np.float32))
 
     def predict(self, x):
         return self.regressor.predict(x)

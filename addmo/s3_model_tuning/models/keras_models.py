@@ -91,7 +91,7 @@ class SciKerasSequential(BaseKerasModel):
         """
 
         if file_type in ['h5', 'keras']:
-            self.regressor.model.save(path, overwrite=True)
+            self.regressor.model_.save(path, overwrite=True)
 
         elif file_type == "onnx":
             # catch exceptions

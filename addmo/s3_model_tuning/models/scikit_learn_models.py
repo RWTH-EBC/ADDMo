@@ -1,3 +1,4 @@
+import numpy as np
 import joblib
 import sklearn
 from abc import ABC
@@ -39,13 +40,13 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         """
         self.x_fit = x
         self.y_fit = y
-        self.regressor.fit(x.values, y)
+        self.regressor.fit(x.values.astype(np.float32), y.values.astype(np.float32))
 
     def predict(self, x):
         """
         Make predictions.
         """
-        return self.regressor.predict(x.values)
+        return self.regressor.predict(x.values.astype(np.float32))
 
     def _define_metadata(self):
         """

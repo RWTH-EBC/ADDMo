@@ -61,7 +61,7 @@ class SciKerasSequential(BaseKerasModel):
         self.regressor.fit(x.values.astype(np.float32), y.values.astype(np.float32))
 
     def predict(self, x):
-        return self.regressor.predict(x)
+        return self.regressor.predict(x.values.astype(np.float32))
 
     def get_params(self, deep=True):
         """

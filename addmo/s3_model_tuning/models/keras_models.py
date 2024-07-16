@@ -146,7 +146,7 @@ class SciKerasSequential(BaseKerasModel):
         # sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation initialisation works only on np arrays
 
         # define optimizer explicitly to avoid user warnings that optimizer could not be loaded
-        optimizer = tf.keras.optimizers.RMSprop()
+        optimizer = tf.keras.optimizers.Adam()
         optimizer.build(sequential_regressor.trainable_variables)
 
         sequential_regressor.compile(loss=self.hyperparameters['loss'], optimizer=optimizer)

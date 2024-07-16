@@ -125,9 +125,9 @@ class SciKerasSequential(BaseKerasModel):
         Builds a sequential model.
         """
         sequential_regressor = Sequential()
-        normalizer = Normalization(axis=-1)  # Preprocessing layer
+        # normalizer = Normalization(axis=-1)  # Preprocessing layer
         sequential_regressor.add(Input(shape=input_shape))
-        sequential_regressor.add(normalizer)
+        # sequential_regressor.add(normalizer)
         # Adding hidden layers based on hyperparameters
         for units in self.hyperparameters['hidden_layer_sizes']:
             sequential_regressor.add(Dense(units=units, activation='relu'))
@@ -143,7 +143,7 @@ class SciKerasSequential(BaseKerasModel):
         sequential_regressor = self._build_regressor_architecture(input_shape)
 
         # Normalisation of first layer (input system_data).
-        sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation initialisation works only on np arrays
+        # sequential_regressor.layers[0].adapt(x.to_numpy())  # Normalisation initialisation works only on np arrays
 
         # define optimizer explicitly to avoid user warnings that optimizer could not be loaded
         optimizer = tf.keras.optimizers.RMSprop()

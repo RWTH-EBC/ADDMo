@@ -174,9 +174,9 @@ class SciKerasSequential(BaseKerasModel):
         # Define default loss if not present
         if hyperparameters['loss'] is None:
             hyperparameters['loss'] = MeanSquaredError()
-        hyperparameters['hidden_layer_sizes'] = [32]
+        hyperparameters['hidden_layer_sizes'] = [16]
         hyperparameters['batch_size'] = 200
-        hyperparameters['epochs'] = 5000
+        hyperparameters['epochs'] = 1000
         hyperparameters['callbacks'] = [EarlyStopping(monitor='loss',
                                                       min_delta=0.0001,
                                                       verbose=1,

@@ -9,7 +9,7 @@ def no_tuning_config(config: ExtrapolationExperimentConfig) :
     config.config_model_tuning.hyperparameter_tuning_type = "NoTuningTuner"
     config.config_model_tuning.hyperparameter_tuning_kwargs = {
         "hyperparameter_set": {
-            "hidden_layer_sizes": [10],
+            "hidden_layer_sizes": [16],
         }
     }
     config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"

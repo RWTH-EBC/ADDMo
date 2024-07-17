@@ -24,7 +24,7 @@ def define_config():
     config.simulation_data_name = "ODE_steady"
     config.experiment_name = "Empty"
     config.name_of_target = "delta_reaTZon_y"
-    config.train_val_test_period = (2, 1344)
+    config.train_val_test_period = (29185, 35040) #November und Dezember
     config.shuffle = False
     config.grid_points_per_axis = 10
     config.system_simulation = "BopTest_TAir_ODE"

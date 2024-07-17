@@ -33,16 +33,6 @@ class BaseKerasModel(AbstractMLModel, ABC):
             features_ordered=list(self.x_fit.columns),
             preprocessing=['Scaling as layer of the ANN.'])
 
-    @property
-    def default_file_type(self):
-        """
-        Set filetype for saving trained model according to library version.
-        """
-        if version.parse(keras.__version__) >= version.parse("3.2"):
-            return 'keras'
-        else:
-            return 'h5'
-
 
 class SciKerasSequential(BaseKerasModel):
     """"" SciKeras Sequential model. """
@@ -68,14 +58,13 @@ class SciKerasSequential(BaseKerasModel):
         Get the hyperparameters of the model.
         """
         # get scikeras params
-        params =  self.regressor.get_params(deep=deep)
+        params = self.regressor.get_params(deep=deep)
         # additional params not covered by scikeras (update only if not present)
         for key, value in self.hyperparameters.items():
             if key not in params:
                 params[key] = value
 
         return params
-
 
     def set_params(self, hyperparameters):
         """""
@@ -85,12 +74,12 @@ class SciKerasSequential(BaseKerasModel):
         for key, value in hyperparameters.items():
             self.hyperparameters[key] = value
 
-    def _save_regressor(self, path, file_type):
+    def _save_regressor(self, path, file_type='keras'):
         """
-        Save regressor as a .h5 or .keras file.
+        Save regressor as a .keras or .onnx file.
         """
 
-        if file_type in ['h5', 'keras']:
+        if file_type == 'keras':
             self.regressor.model_.save(path, overwrite=True)
 
         elif file_type == "onnx":
@@ -158,11 +147,11 @@ class SciKerasSequential(BaseKerasModel):
         """
 
         regressor_scikit = KerasRegressor(model=self._build_regressor(x),
-                                        batch_size=self.hyperparameters['batch_size'],
-                                        loss=self.hyperparameters['loss'],
-                                        epochs=self.hyperparameters['epochs'],
-                                        verbose=0,
-                                        callbacks=self.hyperparameters['callbacks'])
+                                          batch_size=self.hyperparameters['batch_size'],
+                                          loss=self.hyperparameters['loss'],
+                                          epochs=self.hyperparameters['epochs'],
+                                          verbose=0,
+                                          callbacks=self.hyperparameters['callbacks'])
         return regressor_scikit
 
     def default_hyperparameter(self):
@@ -181,7 +170,6 @@ class SciKerasSequential(BaseKerasModel):
                                                       min_delta=0.0001,
                                                       verbose=1,
                                                       patience=10)]
-
 
         return hyperparameters
 

@@ -53,6 +53,12 @@ def exe(config: ExtrapolationExperimentConfig):
         errors_grid["error"], true_validity_threshold
     )
 
+    # warn about to few true valid system_data points
+    true_valid_points = true_validity_train.sum() + true_validity_val.sum()
+    if true_valid_points < 20:
+        print(f"Warning: Only {true_valid_points} true valid system_data points in training and validation set")
+
+
     # Save to csv
     # to dataframe for saving in human readable csv format
     true_validity_threshold = pd.DataFrame([true_validity_threshold])

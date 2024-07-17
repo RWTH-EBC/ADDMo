@@ -2,12 +2,12 @@ def sweep_hidden_layer_sizes():
     hidden_layer_sizes = []
 
     # Single layer possibilities
-    for neurons in [5, 10, 50, 100, 1000]:
+    for neurons in [5, 10, 50, 100]:
         hidden_layer_sizes.append([neurons])
 
     # Two layer possibilities
-    for neurons1 in [5, 10, 50, 100, 1000]:
-        for neurons2 in [5, 10, 50, 100, 1000]:
+    for neurons1 in [5, 10, 50, 100]:
+        for neurons2 in [5, 10, 50, 100]:
             hidden_layer_sizes.append([neurons1, neurons2])
 
     # # Three layer possibilities
@@ -21,7 +21,7 @@ def sweep_hidden_layer_sizes():
         "method": "grid",
         "metric": {"name": "coverage_true_validity", "goal": "maximize"},
         "parameters": {
-            "repetition": {"values": [1, 2, 3, 4, 5]},
+            "repetition": {"values": [1, 2, 3]},
             "config_model_tuning": {
                 "parameters": {
                     "hyperparameter_tuning_kwargs": {

@@ -162,8 +162,7 @@ class SciKerasSequential(BaseKerasModel):
                                         loss=self.hyperparameters['loss'],
                                         epochs=self.hyperparameters['epochs'],
                                         verbose=0,
-                                        callbacks=self.hyperparameters['callbacks'],
-                                        optimizer=tf.keras.optimizers.Adam()) # hotfix: manually set optimizer equal to the one used in _build_regressor
+                                        callbacks=self.hyperparameters['callbacks'])
         return regressor_scikit
 
     def default_hyperparameter(self):

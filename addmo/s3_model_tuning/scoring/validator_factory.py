@@ -1,5 +1,6 @@
 from addmo.s3_model_tuning.scoring.abstract_scorer import ValidationScoring
 from addmo.s3_model_tuning.scoring.validator import CrossValidation
+from addmo.s3_model_tuning.scoring.validator import NoValidation
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 
 class ValidatorFactory:
@@ -11,6 +12,8 @@ class ValidatorFactory:
     def ValidatorFactory(config: ModelTunerConfig) -> ValidationScoring:
         if config.validation_score_mechanism == 'cv':
             return CrossValidation(config)
+        if config.validation_score_mechanism == 'none':
+            return NoValidation(config)
         # Add more conditions for other scoring mechanisms or get them dynamically like in the
         # other factory methods
         else:

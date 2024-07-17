@@ -13,8 +13,9 @@ def no_tuning_config(config: ExtrapolationExperimentConfig) :
         }
     }
     config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"
-    config.config_model_tuning.validation_score_mechanism = "cv"
+    config.config_model_tuning.validation_score_mechanism = "none"
     config.config_detector.detectors = ["KNN", "GP", "OCSVM"]
+
     return config
 
 

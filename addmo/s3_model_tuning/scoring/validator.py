@@ -6,6 +6,10 @@ from addmo.s3_model_tuning.models.abstract_model import AbstractMLModel
 
 from addmo.util.experiment_logger import WandbLogger
 
+class NoValidation(ValidationScoring):
+    def score_validation(self, model: AbstractMLModel, x, y):
+        """Returns 0. Avoids fitting and validation, e.g. in the case of NoTuning."""
+        return 0
 
 class CrossValidation(ValidationScoring):
     def score_validation(self, model: AbstractMLModel, x, y):
@@ -39,3 +43,4 @@ class CrossValidation(ValidationScoring):
 
         scores = cv_info["test_score"]
         return scores.mean()
+

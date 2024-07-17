@@ -29,6 +29,7 @@ def linear_regression_config(config: ExtrapolationExperimentConfig):
 def tuning_config(config: ExtrapolationExperimentConfig):
     config = no_tuning_config(config)
     config.config_model_tuning.hyperparameter_tuning_type = "OptunaTuner"
+    config.config_model_tuning.validation_score_mechanism = "cv"
     config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 200}
     config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"
     return config

@@ -74,7 +74,7 @@ class SciKerasSequential(BaseKerasModel):
         for key, value in hyperparameters.items():
             self.hyperparameters[key] = value
 
-    def _save_regressor(self, path, file_type='keras'):
+    def _save_regressor(self, path, file_type):
         """
         Save regressor as a .keras or .onnx file.
         """

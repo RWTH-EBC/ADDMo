@@ -28,7 +28,7 @@ def define_config():
     config.shuffle = False
     config.grid_points_per_axis = 10
     config.system_simulation = "BopTest_TAir_ODE"
-    config.true_outlier_threshold = 0.05
+    config.true_outlier_threshold = 0.1
 
     config.config_explo_quant.exploration_bounds = {
         "TDryBul": (263.15, 303.15),

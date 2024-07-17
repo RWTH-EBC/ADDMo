@@ -1,25 +1,25 @@
 import pandas as pd
 import datetime
 import os
+import pytz
 
 # Read the CSV file
 input_file_path = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\Boptest900_2019_defaultControl\training_data.csv"
 df = pd.read_csv(input_file_path)
 
-# Set the start datetime (00:15 on 01.01.2019)
-start_datetime = datetime.datetime(2019, 1, 1, 0, 0, 0)
+# Convert 'time' column to datetime
+df['UTC_time'] = pd.to_datetime(df['time'], unit='s')
 
-# Generate timestamps
-timestamps = [start_datetime + datetime.timedelta(minutes=15*i) for i in range(len(df))]
+# Create local time column (UTC+1)
+local_tz = pytz.FixedOffset(60)  # UTC+1
+df['local_time'] = df['UTC_time'].dt.tz_localize(pytz.UTC).dt.tz_convert(local_tz)
 
-# Add timestamp columns
-df['Human_Readable_Timestamp'] = timestamps
-df['Seconds_from_Start'] = [int((t - start_datetime).total_seconds()) for t in timestamps]
-df['Unix_Timestamp'] = [int(t.timestamp()) for t in timestamps]
+# Calculate seconds from start
+start_time = df['time'].iloc[0]
+df['seconds_from_start'] = df['time'] - start_time
 
-# Reorder columns to put new timestamp columns at the beginning
-cols = df.columns.tolist()
-new_cols = ['Human_Readable_Timestamp', 'Seconds_from_Start', 'Unix_Timestamp'] + [col for col in cols if col not in ['Human_Readable_Timestamp', 'Seconds_from_Start', 'Unix_Timestamp']]
+# Reorder columns
+new_cols = ['UTC_time', 'local_time', 'seconds_from_start'] + [col for col in df.columns if col not in ['UTC_time', 'local_time', 'seconds_from_start']]
 df = df[new_cols]
 
 # Create a new file name
@@ -29,6 +29,6 @@ output_filename = 'timestamped_' + input_filename
 output_file_path = os.path.join(input_dir, output_filename)
 
 # Save the updated CSV to the new file
-df.to_csv(output_file_path, index=True, sep=';', encoding='utf-8')
+df.to_csv(output_file_path, index=False)
 
 print(f"Updated CSV file saved as: {output_file_path}")

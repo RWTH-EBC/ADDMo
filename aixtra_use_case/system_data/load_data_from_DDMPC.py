@@ -14,7 +14,7 @@ df_new = df[['t_amb', 'rad_dir', 'u_hp', 't_room', 'Change(T Room)']].rename(col
 })
 
 # Save the new dataframe to a CSV file with semicolon separator and no index
-new_simulation_data_name = f"Boptest_ODE_DDMPC_steady_50days"
+new_simulation_data_name = f"ODE_steady"
 path = os.path.join("edited", new_simulation_data_name + ".csv")
 
 

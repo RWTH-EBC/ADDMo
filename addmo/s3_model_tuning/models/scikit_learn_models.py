@@ -74,6 +74,8 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             onnx_model = to_onnx(self.regressor, self.x_fit.values)
             with open(path, "wb") as f:
                 f.write(onnx_model.SerializeToString())
+        else:
+            raise ValueError(f'The supported file types for saving the model are: .joblib and .onnx')
 
         print(f"Model saved to {path}.")
 

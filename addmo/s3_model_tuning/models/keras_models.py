@@ -82,7 +82,7 @@ class SciKerasSequential(BaseKerasModel):
         if file_type == 'keras':
             self.regressor.model_.save(path, overwrite=True)
 
-        elif file_type == "onnx":
+        elif file_type == 'onnx':
             # catch exceptions
             if version.parse(keras.__version__).major != 2:  # Checking version compatibility
                 raise ImportError("ONNX is only supported with Keras version 2")
@@ -95,6 +95,9 @@ class SciKerasSequential(BaseKerasModel):
             spec = (tf.TensorSpec((None,) + self.regressor.model_.input_shape[1:], tf.float32, name="input"),)
             onnx_model, _ = tf2onnx.convert.from_keras(self.regressor.model_, input_signature=spec, opset=13)
             onnx.save(onnx_model, path)
+
+        else:
+            raise ValueError(f'The supported file types for saving the model are: .keras and .onnx')
 
         print(f"Model saved to {path}")
 

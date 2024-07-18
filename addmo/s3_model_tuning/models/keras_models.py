@@ -12,6 +12,7 @@ from keras.src.callbacks import EarlyStopping
 from scikeras.wrappers import KerasRegressor
 from addmo.s3_model_tuning.models.abstract_model import AbstractMLModel
 from addmo.s3_model_tuning.models.abstract_model import ModelMetadata
+from addmo.util.load_save_utils import create_path_or_ask_to_override
 
 
 class BaseKerasModel(AbstractMLModel, ABC):
@@ -74,10 +75,13 @@ class SciKerasSequential(BaseKerasModel):
         for key, value in hyperparameters.items():
             self.hyperparameters[key] = value
 
-    def _save_regressor(self, path, file_type):
+    def save_regressor(self, directory, regressor_filename, file_type='keras'):
         """
-        Save regressor as a .keras or .onnx file.
+        Save trained model as a .keras or .onnx including scaler to a file.
         """
+
+        full_filename = f"{regressor_filename}.{file_type}"
+        path = create_path_or_ask_to_override(full_filename, directory)
 
         if file_type == 'keras':
             self.regressor.model_.save(path, overwrite=True)
@@ -98,6 +102,10 @@ class SciKerasSequential(BaseKerasModel):
 
         else:
             raise ValueError(f'The supported file types for saving the model are: .keras and .onnx')
+
+        # Saving metadata
+        self._define_metadata()
+        self._save_metadata(directory, regressor_filename)
 
         print(f"Model saved to {path}")
 

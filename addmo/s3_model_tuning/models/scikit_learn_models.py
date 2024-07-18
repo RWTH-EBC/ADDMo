@@ -10,6 +10,7 @@ from skl2onnx import to_onnx
 from addmo.s3_model_tuning.models.abstract_model import AbstractMLModel
 from addmo.s3_model_tuning.models.abstract_model import ModelMetadata
 from sklearn.linear_model import LinearRegression
+from addmo.util.load_save_utils import create_path_or_ask_to_override
 
 
 class BaseScikitLearnModel(AbstractMLModel, ABC):
@@ -62,10 +63,12 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
             features_ordered=list(self.x_fit.columns),
             preprocessing=['StandardScaler for all features'])
 
-    def _save_regressor(self, path, file_type):
+    def save_regressor(self, directory, regressor_filename, file_type='joblib'):
         """"
-        Save regressor as .joblib or .onnx file
+        Save regressor as .joblib or .onnx including scaler to a file.
         """
+        full_filename = f"{regressor_filename}.{file_type}"
+        path = create_path_or_ask_to_override(full_filename, directory)
 
         if file_type == 'joblib':
             joblib.dump(self.regressor, path)
@@ -76,6 +79,10 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
                 f.write(onnx_model.SerializeToString())
         else:
             raise ValueError(f'The supported file types for saving the model are: .joblib and .onnx')
+
+        # Saving metadata
+        self._define_metadata()
+        self._save_metadata(directory, regressor_filename)
 
         print(f"Model saved to {path}.")
 

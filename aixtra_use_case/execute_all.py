@@ -58,7 +58,7 @@ WandbLogger.active = False
 ExperimentLogger.start_experiment(config=config)  # log config
 s1_split_data.exe(config)
 s2_tune_ml_regressor.exe(config)
-# s3_regressor_error_calculation.exe(config)
+s3_regressor_error_calculation.exe(config)
 # s4_true_validity_domain.exe(config)
 # s5_tune_detector.exe(config)
 # s6_detector_score_calculation.exe(config)
@@ -67,7 +67,7 @@ s2_tune_ml_regressor.exe(config)
 # s8_2_coverage_grid_occupancy.exe(config)
 # s8_3_coverage_tuned_ND.exe(config)
 # s8_4_coverage_true_validity.exe(config)
-# s9_data_coverage.exe(config)
+# # s9_data_coverage.exe(config)
 # s9_data_coverage_grid.exe(config)
 # # #
 # s7_2_plotting.exe_plot_2D_all(config)

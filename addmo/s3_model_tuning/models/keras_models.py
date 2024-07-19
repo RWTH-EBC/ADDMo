@@ -68,7 +68,7 @@ class SciKerasSequential(BaseKerasModel):
         Get the hyperparameters of the model.
         """
         # get scikeras params
-        params =  self.regressor.get_params(deep=deep)
+        params = self.regressor.get_params(deep=deep)
 
         # just info params
         model = self.regressor.model_

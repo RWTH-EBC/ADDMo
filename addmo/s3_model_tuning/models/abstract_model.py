@@ -89,7 +89,7 @@ class AbstractMLModel(ABC):
     @abstractmethod
     def save_regressor(self, directory, regressor_filename, file_type):
         """""
-        Save the trained model to the specified file path in the given file format.
+        Save the trained model and metadata to the specified file path in the given file format.
 
         Args:
             directory: directory where the trained model is saved.

@@ -69,6 +69,12 @@ class SciKerasSequential(BaseKerasModel):
         """
         # get scikeras params
         params =  self.regressor.get_params(deep=deep)
+
+        # just info params
+        model = self.regressor.model_
+        total_connections = model.count_params() - sum(layer.output_shape[-1] for layer in model.layers)
+        params['model_complexity'] = total_connections
+
         # additional params not covered by scikeras (update only if not present)
         for key, value in self.hyperparameters.items():
             if key not in params:

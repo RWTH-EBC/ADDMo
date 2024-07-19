@@ -2,7 +2,7 @@ def sweep_hidden_layer_sizes():
     hidden_layer_sizes = []
 
     # Single layer possibilities
-    for neurons in [5, 10, 50, 100]:
+    for neurons in [5, 10, 50, 100, 1000]:
         hidden_layer_sizes.append([neurons])
 
     # Two layer possibilities

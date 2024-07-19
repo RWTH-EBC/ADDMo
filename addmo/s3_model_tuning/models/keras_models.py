@@ -184,7 +184,7 @@ class SciKerasSequential(BaseKerasModel):
         hyperparameters['batch_size'] = 200
         hyperparameters['epochs'] = 1000
         hyperparameters['callbacks'] = [EarlyStopping(monitor='loss',
-                                                      min_delta=0.00001,
+                                                      min_delta=0.000001,
                                                       verbose=1,
                                                       patience=50)]
 

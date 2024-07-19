@@ -21,13 +21,13 @@ from aixtra_use_case import s2_tune_ml_regressor, s4_true_validity_domain, \
 def define_config():
     # configure config
     config = ExtrapolationExperimentConfig()
-    config.simulation_data_name = "ODE_steady"
+    config.simulation_data_name = "ODEel_steady"
     config.experiment_name = "Empty"
     config.name_of_target = "delta_reaTZon_y"
     config.train_val_test_period = (29185, 35040) #November und Dezember
     config.shuffle = False
     config.grid_points_per_axis = 10
-    config.system_simulation = "BopTest_TAir_ODE"
+    config.system_simulation = "BopTest_TAir_ODEel"
     config.true_outlier_threshold = 0.1
 
     config.config_explo_quant.exploration_bounds = {
@@ -92,7 +92,7 @@ config_function = config_blueprints.no_tuning_config # Todo: Set
 
 config_temp = define_config()
 
-project_name = f"4_{config_temp.simulation_data_name}" #Todo: Set
+project_name = f"5_{config_temp.simulation_data_name}" #Todo: Set
 # project_name = "Test"
 
 # sweep

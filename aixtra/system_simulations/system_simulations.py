@@ -8,7 +8,7 @@ def simulate(x_grid, simulation_name):
         system_simulation = carnot_model
     elif simulation_name == "BopTest_TAir_ODE":
         system_simulation = boptest_delta_T_air_physical_approximation
-    elif simulation_name == "BopTest_TAir_ODE_elcontrol":
+    elif simulation_name == "BopTest_TAir_ODEel":
         system_simulation = boptest_delta_T_air_physical_approximation_elcontrol
 
     y_grid = x_grid.apply(lambda row: system_simulation(*row), axis=1)

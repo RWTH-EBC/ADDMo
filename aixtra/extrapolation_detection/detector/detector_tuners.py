@@ -155,8 +155,8 @@ class Hyper_KNN(AbstractHyper):
                            'method': hp.choice('method', ['largest', 'mean'])
                            },
                     algo=tpe.suggest,
-                    max_evals=100,
-                    early_stop_fn=no_progress_loss(75),
+                    max_evals=30,
+                    early_stop_fn=no_progress_loss(20),
                     trials=trials)
         best['nscores_threshold'] = trials.best_trial['result']['threshold']
         return best
@@ -1200,8 +1200,8 @@ class Hyper_OCSVM(AbstractHyper):
                            'nu': hp.uniform('nu', 0.001, 0.99),
                            },
                     algo=tpe.suggest,
-                    max_evals=120,
-                    early_stop_fn=no_progress_loss(60),
+                    max_evals=40,
+                    early_stop_fn=no_progress_loss(20),
                     trials=trials)
         best['nscores_threshold'] = trials.best_trial['result']['threshold']
         # best['nu'] = self.outlier_fraction
@@ -1391,8 +1391,8 @@ class Hyper_GP(AbstractHyper):
                     space={'length_scale': hp.uniform('length_scale', 0.01, 1100),
                            'alpha': hp.uniform('alpha', 1e-10, 1.5)},
                     algo=tpe.suggest,
-                    max_evals=120,
-                    early_stop_fn=no_progress_loss(60),
+                    max_evals=30,
+                    early_stop_fn=no_progress_loss(20),
                     trials=trials)
         best['nscores_threshold'] = trials.best_trial['result']['threshold']
         return best

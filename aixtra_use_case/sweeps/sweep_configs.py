@@ -46,7 +46,7 @@ def sweep_several_tunings():
         "method": "grid",
         "metric": {"name": "coverage_true_validity", "goal": "maximize"},
         "parameters": {
-            "repetition": {"values": [1, 2, 3, 4, 5]},
+            "repetition": {"values": [1, 2, 3]},
             "config_model_tuning": {
                 "parameters": {
                     "validation_score_splitting": {
@@ -65,7 +65,7 @@ def sweep_repetitions_only():
         "method": "grid",
         "metric": {"name": "coverage_true_validity", "goal": "maximize"},
         "parameters": {
-            "repetition": {"values": [1, 2, 3, 4, 5]},
+            "repetition": {"values": [1, 2, 3]},
         }
     }
     return sweep_configuration

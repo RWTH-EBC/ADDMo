@@ -88,7 +88,7 @@ def run_all():
 
 
 ####################################################################################################
-config_function = config_blueprints.no_tuning_config # Todo: Set
+config_function = config_blueprints.linear_regression_config # Todo: Set without brackets
 
 config_temp = define_config()
 
@@ -96,7 +96,7 @@ project_name = f"5_{config_temp.simulation_data_name}" #Todo: Set
 # project_name = "Test"
 
 # sweep
-sweep_configuration = sweep_configs.sweep_hidden_layer_sizes() #Todo: Set
+sweep_configuration = sweep_configs.sweep_repetitions_only() #Todo: Set
 
 sweep_id = wandb.sweep(sweep_configuration, project=project_name)
 wandb.agent(sweep_id, function=run_all, project=project_name)

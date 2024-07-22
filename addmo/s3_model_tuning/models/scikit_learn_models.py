@@ -105,7 +105,6 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         """
         return self.regressor.named_steps["model"].get_params(deep=deep)
 
-
 class ScikitMLP(BaseScikitLearnModel):
     """Scikit-learn MLPRegressor model."""
 
@@ -190,3 +189,42 @@ class ScikitLinearReg(BaseScikitLearnModel):
         Return default hyperparameters.
         """
         return LinearRegression().get_params()
+
+class ScikitLinearRegNoScaler(ScikitLinearReg):
+    def __init__(self):
+        """
+        Create an instance of the scikit-learn model including a scaler
+        """
+        self.regressor = Pipeline(
+            steps=[
+                ("model", LinearRegression())
+            ]
+        )
+
+    def fit(self, x, y):
+        """
+        Train the model.
+        """
+        self.x_fit = x
+        self.y_fit = y
+        self.regressor.fit(x, y)
+
+    def predict(self, x):
+        """
+        Make predictions.
+        """
+        return self.regressor.predict(x)
+
+    def _define_metadata(self):
+        """
+        Define metadata.
+        """
+        self.metadata = ModelMetadata(
+            addmo_class=type(self).__name__,
+            addmo_commit_id=ModelMetadata.get_commit_id(),
+            library=sklearn.__name__,
+            library_model_type=type(self.regressor).__name__,
+            library_version=sklearn.__version__,
+            target_name=self.y_fit.name,
+            features_ordered=list(self.x_fit.columns),
+            preprocessing=['No scaling'])

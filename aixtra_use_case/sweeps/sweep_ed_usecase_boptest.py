@@ -15,7 +15,7 @@ from aixtra_use_case.config.ed_experiment_config import (
 from aixtra_use_case import s2_tune_ml_regressor, s4_true_validity_domain, \
     s8_1_coverage_convex_hull, s3_regressor_error_calculation, s8_3_coverage_tuned_ND, \
     s5_tune_detector, s1_split_data, s8_4_coverage_true_validity, s6_detector_score_calculation, \
-    s8_2_coverage_grid_occupancy, s8_0_generate_grid
+    s8_2_coverage_grid_occupancy, s8_0_generate_grid, s9_data_coverage_grid, s9_data_coverage
 
 
 def define_config():
@@ -79,10 +79,12 @@ def run_all():
     s5_tune_detector.exe(config)
     s6_detector_score_calculation.exe(config)
     s8_0_generate_grid.exe(config)
-    # s8_1_coverage_convex_hull.exe(config)
-    # s8_2_coverage_grid_occupancy.exe(config)
+    s8_1_coverage_convex_hull.exe(config)
+    s8_2_coverage_grid_occupancy.exe(config)
     s8_3_coverage_tuned_ND.exe(config)
     s8_4_coverage_true_validity.exe(config)
+    s9_data_coverage.exe(config)
+    s9_data_coverage_grid.exe(config)
 
     ExperimentLogger.finish_experiment()
 

@@ -1,5 +1,5 @@
 import wandb
-from typing import Dict, Any, Iterator
+from typing import Dict, Any, Iterator, List
 
 
 def yield_runs_per_sweep(user_name: str, project_name: str, sweep_id: str) -> Iterator[
@@ -12,32 +12,70 @@ def yield_runs_per_sweep(user_name: str, project_name: str, sweep_id: str) -> It
     yield from sweep.runs
 
 
-def update_run_summary(run: wandb.apis.public.Run, update_dict: Dict[str, Any]) -> None:
-    """Update the summary of a single run with multiple key-value pairs."""
+def update_run(run: wandb.apis.public.Run, summary_dict: Dict[str, Any],
+               config_dict: Dict[str, Any]) -> None:
+    """Update the summary and config of a single run."""
     try:
-        run.summary.update(update_dict)
-        print(f"Updated run {run.id} with: {update_dict}")
+        if summary_dict:
+            run.summary.update(summary_dict)
+            run.summary.update()  # Explicitly update to ensure changes are saved
+            print(f"Updated run {run.id} summary with: {summary_dict}")
+
+        if config_dict:
+            for key, value in config_dict.items():
+                run.config[key] = value
+            run.update()  # Save the changes
+            print(f"Updated run {run.id} config with: {config_dict}")
+
     except Exception as e:
         print(f"Error updating run {run.id}: {str(e)}")
 
 
+def get_user_confirmation(runs: List[wandb.apis.public.Run], summary_dict: Dict[str, Any],
+                          config_dict: Dict[str, Any]) -> bool:
+    """Display warning and get user confirmation."""
+    print("\nWARNING: You are about to update the following runs:")
+    for run in runs:
+        print(f"- {run.name}")
+
+    print("\nThe following keys will be updated:")
+    print("Summary keys:")
+    for key in summary_dict.keys():
+        print(f"- {key}")
+    print("Config keys:")
+    for key in config_dict.keys():
+        print(f"- {key}")
+
+    confirmation = input("\nDo you want to proceed with these updates? (y/n): ").strip().lower()
+    return confirmation == 'y'
+
+
 def batch_update_sweep_runs(user_name: str, project_name: str, sweep_id: str,
-                            update_dict: Dict[str, Any]) -> None:
-    """Update all runs in a sweep with the same summary updates."""
-    for run in yield_runs_per_sweep(user_name, project_name, sweep_id):
-        update_run_summary(run, update_dict)
+                            summary_dict: Dict[str, Any], config_dict: Dict[str, Any]) -> None:
+    """Update all runs in a sweep with the same summary and config updates after confirmation."""
+    runs = list(yield_runs_per_sweep(user_name, project_name, sweep_id))
+
+    if get_user_confirmation(runs, summary_dict, config_dict):
+        for run in runs:
+            update_run(run, summary_dict, config_dict)
+        print("Finished updating all runs in the sweep.")
+    else:
+        print("Update cancelled.")
 
 
 if __name__ == '__main__':
     USER_NAME = "team-martinraetz"
     PROJECT_NAME = "5_ODEel_steady"
-    SWEEP_ID = "fns7vs0n"
+    SWEEP_ID = "xxxxx"
 
-    UPDATE_DICT = {
+    SUMMARY_UPDATE_DICT = {
         "hidden_layer_sizes": "[]",
-        "model_complexity": 0
+        "model_complexity": 0,
     }
 
-    batch_update_sweep_runs(USER_NAME, PROJECT_NAME, SWEEP_ID, UPDATE_DICT)
+    CONFIG_UPDATE_DICT = {
+        # "config_model_tuning.validation_score_splitting": "None"
+    }
 
-    print("Finished updating all runs in the sweep.")
+    batch_update_sweep_runs(USER_NAME, PROJECT_NAME, SWEEP_ID, SUMMARY_UPDATE_DICT,
+                            CONFIG_UPDATE_DICT)

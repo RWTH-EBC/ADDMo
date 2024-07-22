@@ -56,6 +56,9 @@ def run_all():
         allow_val_change=True,
     )
 
+    if config.config_model_tuning.models == ["ScikitLinearRegNoScaler"]:
+        wandb.run.name = f"LinReg_{run.name}"
+
     # convert config dict back to pydantic object
     config = ExtrapolationExperimentConfig(**wandb.config)
 

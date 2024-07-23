@@ -12,6 +12,7 @@ from keras.src.callbacks import EarlyStopping
 from scikeras.wrappers import KerasRegressor
 from addmo.s3_model_tuning.models.abstract_model import AbstractMLModel
 from addmo.s3_model_tuning.models.abstract_model import ModelMetadata
+from addmo.util.load_save_utils import create_path_or_ask_to_override
 
 
 class BaseKerasModel(AbstractMLModel, ABC):
@@ -32,16 +33,6 @@ class BaseKerasModel(AbstractMLModel, ABC):
             target_name=self.y_fit.name,
             features_ordered=list(self.x_fit.columns),
             preprocessing=['Scaling as layer of the ANN.'])
-
-    @property
-    def default_file_type(self):
-        """
-        Set filetype for saving trained model according to library version.
-        """
-        if version.parse(keras.__version__) >= version.parse("3.2"):
-            return 'keras'
-        else:
-            return 'h5'
 
 
 class SciKerasSequential(BaseKerasModel):
@@ -82,7 +73,6 @@ class SciKerasSequential(BaseKerasModel):
 
         return params
 
-
     def set_params(self, hyperparameters):
         """""
         Update the hyperparameters in internal storage, which is accessed while building the
@@ -91,15 +81,18 @@ class SciKerasSequential(BaseKerasModel):
         for key, value in hyperparameters.items():
             self.hyperparameters[key] = value
 
-    def _save_regressor(self, path, file_type):
+    def save_regressor(self, directory, regressor_filename, file_type='keras'):
         """
-        Save regressor as a .h5 or .keras file.
+        Save trained model as a .keras or .onnx including scaler to a file.
         """
 
-        if file_type in ['h5', 'keras']:
+        full_filename = f"{regressor_filename}.{file_type}"
+        path = create_path_or_ask_to_override(full_filename, directory)
+
+        if file_type == 'keras':
             self.regressor.model_.save(path, overwrite=True)
 
-        elif file_type == "onnx":
+        elif file_type == 'onnx':
             # catch exceptions
             if version.parse(keras.__version__).major != 2:  # Checking version compatibility
                 raise ImportError("ONNX is only supported with Keras version 2")
@@ -112,6 +105,13 @@ class SciKerasSequential(BaseKerasModel):
             spec = (tf.TensorSpec((None,) + self.regressor.model_.input_shape[1:], tf.float32, name="input"),)
             onnx_model, _ = tf2onnx.convert.from_keras(self.regressor.model_, input_signature=spec, opset=13)
             onnx.save(onnx_model, path)
+
+        else:
+            raise ValueError(f'The supported file types for saving the model are: .keras and .onnx')
+
+        # Saving metadata
+        self._define_metadata()
+        self._save_metadata(directory, regressor_filename)
 
         print(f"Model saved to {path}")
 
@@ -164,11 +164,11 @@ class SciKerasSequential(BaseKerasModel):
         """
 
         regressor_scikit = KerasRegressor(model=self._build_regressor(x),
-                                        batch_size=self.hyperparameters['batch_size'],
-                                        loss=self.hyperparameters['loss'],
-                                        epochs=self.hyperparameters['epochs'],
-                                        verbose=0,
-                                        callbacks=self.hyperparameters['callbacks'])
+                                          batch_size=self.hyperparameters['batch_size'],
+                                          loss=self.hyperparameters['loss'],
+                                          epochs=self.hyperparameters['epochs'],
+                                          verbose=0,
+                                          callbacks=self.hyperparameters['callbacks'])
         return regressor_scikit
 
     def default_hyperparameter(self):
@@ -187,7 +187,6 @@ class SciKerasSequential(BaseKerasModel):
         #                                               min_delta=0.000001,
         #                                               verbose=1,
         #                                               patience=50)]
-
 
         return hyperparameters
 

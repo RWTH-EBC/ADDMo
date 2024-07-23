@@ -122,7 +122,7 @@ def read_csv(filename: str, directory: str = None, **kwargs) -> pd.DataFrame:
 
 def load_regressor(filename, directory):
     """Loads a regressor model from a file, automatically determining the file type."""
-    file_types = ['h5', 'joblib', 'onnx', 'keras']
+    file_types = ['joblib', 'onnx', 'keras']
     files_found = []
 
     # Find complete filepath

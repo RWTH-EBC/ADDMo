@@ -23,6 +23,7 @@
 /aixtra_use_case/artifacts/**
 /aixtra_use_case/wandb/**
 /0000_testfiles/wandb/**
+/parallel_sweeps/wandb/**
 #Eclipse Settings #
 #####################
 /.settings

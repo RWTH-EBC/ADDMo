@@ -63,7 +63,7 @@ class AbstractMLModel(ABC):
         self.y_fit: pd.DataFrame = None
 
     @abstractmethod
-    def fit(self, x: pd.DataFrame,y: pd.Series):
+    def fit(self, x: pd.DataFrame, y: pd.Series):
         """
         Train the model on the provided system_data.
 
@@ -86,21 +86,14 @@ class AbstractMLModel(ABC):
         """
         pass
 
-    @property
     @abstractmethod
-    def default_file_type(self):
+    def save_regressor(self, directory, regressor_filename, file_type):
         """""
-        Set default file type for saving the trained model.
-        """
-        pass
-
-    @abstractmethod
-    def _save_regressor(self, path, file_type):
-        """""
-        Save the trained model to the specified file path in the given file format.
+        Save the trained model and metadata to the specified file path in the given file format.
 
         Args:
-            path: full path where the trained model is saved.
+            directory: directory where the trained model is saved.
+            regressor_filename: file name used for saving the model.
             file_type: file type used for saving the model.
         """
         pass
@@ -121,32 +114,9 @@ class AbstractMLModel(ABC):
             regressor_filename: file name used for saving the model.
 
         """
-        metadata_path = os.path.join(directory, regressor_filename + '_metadata.json')
+        metadata_path = create_path_or_ask_to_override(regressor_filename + '_metadata.json', directory)
         with open(metadata_path, 'w') as f:
             json.dump(self.metadata.dict(), f)
-
-    def save_regressor(self, directory, regressor_filename=None, file_type=None):
-        """
-        Save the trained model including scaler to a file.
-
-        Args:
-            directory: directory where the trained model is saved.
-            regressor_filename: file name used for saving the model.
-            file_type: file type used for saving the model.
-
-        """
-        if file_type is None:
-            file_type = self.default_file_type
-
-        full_filename = f"{regressor_filename}.{file_type}"
-        path = create_path_or_ask_to_override(full_filename, directory)
-
-        self._save_regressor(path, file_type)
-        self._define_metadata()
-        self._save_metadata(directory, regressor_filename)
-
-        return file_type
-
 
     def load_regressor(self, model_instance, input_shape=None):
         """
@@ -278,4 +248,3 @@ class PredictorOnnx(AbstractMLModel, ABC):
 
     def default_file_type(self):
         warnings.warn(f"This function is not implemented for ONNX models")
-

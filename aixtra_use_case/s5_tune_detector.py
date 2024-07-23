@@ -70,7 +70,14 @@ def exe(config: ExtrapolationExperimentConfig):
 
     # train detectors and save them
     for detector_name in config.config_detector.detectors:
-        if config.config_detector.tuning_bool:
+        # temporarily hacked tuning bool
+        if detector_name.endswith("_untuned"):
+            tuning = False
+            detector_name = detector_name.removesuffix("_untuned")
+        else:
+            tuning = config.config_detector.tuning_bool
+
+        if tuning:
             detector, threshold = tune_detector(
                 detector_name,
                 x_detector_fit,
@@ -86,9 +93,11 @@ def exe(config: ExtrapolationExperimentConfig):
                 threshold, f"{detector_name}_{tag}_threshold", save_path
             )
         else:
-            # untuned detector but ideally calculated threshold
+            # untuned detector with calculated nd_threshold
+            # infer the actual fraction of outliers from the validation set
+            actual_outlier_fraction = true_validity_detector_val.mean()
             detector, threshold = untuned_detector(
-                detector_name, x_detector_fit, x_detector_val, config.true_outlier_fraction
+                detector_name, x_detector_fit, x_detector_val, actual_outlier_fraction
             )
 
             # save detector and threshold

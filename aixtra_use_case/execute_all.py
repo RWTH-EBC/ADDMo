@@ -18,6 +18,7 @@ from aixtra_use_case import s2_tune_ml_regressor, s4_true_validity_domain, \
 from aixtra_use_case.sweeps import config_blueprints, sweep_ed_usecase_boptest
 
 config = sweep_ed_usecase_boptest.define_config(config_blueprints.linear_regression_config)
+config.config_detector.detectors = ["KNN_untuned"]
 
 
 # Configure the logger

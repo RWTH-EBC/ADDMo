@@ -88,6 +88,13 @@ def create_sweep():
     print(f"   cd /d {root_dir()}")
     print(f"   python -m aixtra_use_case.sweeps.sweep_ed_usecase_boptest {sweep_id} {project_name}")
 
+    # info to run through multiprocessing python script
+    # Get the full sweep path
+    entity = wandb.api.default_entity
+    full_sweep_path = f"{entity}/{project_name}/{sweep_id}"
+    print("\nTo run an agent from a multiprocessing Python script, copy the sweep ID:")
+    print(f"   {full_sweep_path}")
+
     return sweep_id
 
 

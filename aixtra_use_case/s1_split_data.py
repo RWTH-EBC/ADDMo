@@ -19,9 +19,15 @@ def exe(config: ExtrapolationExperimentConfig):
         config.simulation_data_name, directory=os.path.join(ed_use_case_dir(), "system_data"), index_col=False
     )
 
-    train_val_test_indices = range(
-        config.train_val_test_period[0], config.train_val_test_period[1]
-    )
+    def get_indices_from_multiple_periods(periods):
+        '''Converts a list of periods into a list of indices. For example, if periods = [0, 5,
+        10, 15], the function will return [0, 1, 2, 3, 4, 10, 11, 12, 13, 14]'''
+        indices = []
+        for start, end in zip(periods[::2], periods[1::2]):
+            indices.extend(range(start, end))
+        return indices
+
+    train_val_test_indices = get_indices_from_multiple_periods(config.train_val_test_period)
 
     (
         xy_training,

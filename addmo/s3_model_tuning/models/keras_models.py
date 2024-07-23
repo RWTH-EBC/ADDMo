@@ -115,6 +115,8 @@ class SciKerasSequential(BaseKerasModel):
 
         print(f"Model saved to {path}")
 
+        return file_type
+
     def load_regressor(self, regressor, input_shape):
         """""
         Load trained model for serialisation.

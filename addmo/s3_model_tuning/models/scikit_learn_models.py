@@ -85,6 +85,7 @@ class BaseScikitLearnModel(AbstractMLModel, ABC):
         self._save_metadata(directory, regressor_filename)
 
         print(f"Model saved to {path}.")
+        return file_type
 
     def load_regressor(self, regressor):
         """""

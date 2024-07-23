@@ -85,6 +85,7 @@ def create_sweep():
 
     print("\nTo run an agent from the Anaconda command prompt, follow these steps:")
     print("   conda activate ADDMo-Extra")
+    print("   conda activate py311_addmoextra")
     print(f"   cd /d {root_dir()}")
     print(f"   python -m aixtra_use_case.sweeps.sweep_ed_usecase_boptest {sweep_id} {project_name}")
 

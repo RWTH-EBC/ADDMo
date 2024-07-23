@@ -55,16 +55,16 @@ def create_sweep():
     # Set up the base configuration
     config = ExtrapolationExperimentConfig()
     config = config_blueprints_systems.config_ODEel_steady(config)
-    config = config_blueprints.linear_regression_config(config)
-    config.config_detector.detectors = ["KNN_untuned"]
+    config = config_blueprints.no_tuning_config(config)
+    # config.config_detector.detectors = ["KNN_untuned"]
 
     # Set up the project name
-    project_name = f"TEST_{config.simulation_data_name}"
+    project_name = f"6_{config.simulation_data_name}"
 
     config.experiment_name = project_name
 
     # Set up the sweep configuration
-    sweep_configuration = sweep_configs.sweep_repetitions_only()
+    sweep_configuration = sweep_configs.sweep_hidden_layer_sizes()
 
 
     # Add the config parameters to the sweep configuration

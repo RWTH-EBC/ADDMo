@@ -54,7 +54,7 @@ def exe(config: ExtrapolationExperimentConfig):
     )
 
     # warn about to few true valid system_data points
-    true_valid_points = true_validity_train.sum() + true_validity_val.sum()
+    true_valid_points = (true_validity_train == 0).sum() + (true_validity_val == 0).sum()
     if true_valid_points < 20:
         print(f"Warning: Only {true_valid_points} true valid system_data points in training and validation set")
 
@@ -86,11 +86,11 @@ def exe(config: ExtrapolationExperimentConfig):
 
     # calc true validity fraction (mean of true validity) and save them in one csv with index indicating the period
     true_valid_fraction_dict = {
-        "true_valid_fraction_train": true_validity_train.mean(),
-        "true_valid_fraction_val": true_validity_val.mean(),
-        "true_valid_fraction_test": true_validity_test.mean(),
-        "true_valid_fraction_remaining": true_validity_remaining.mean(),
-        "true_valid_fraction_grid": true_validity_grid.mean(),
+        "true_valid_fraction_train": (true_validity_train == 0).mean(),
+        "true_valid_fraction_val": (true_validity_val == 0).mean(),
+        "true_valid_fraction_test": (true_validity_test == 0).mean(),
+        "true_valid_fraction_remaining": (true_validity_remaining == 0).mean(),
+        "true_valid_fraction_grid": (true_validity_grid == 0).mean(),
     }
     true_valid_fraction = pd.DataFrame(
         true_valid_fraction_dict,

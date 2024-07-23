@@ -84,24 +84,24 @@ def exe(config: ExtrapolationExperimentConfig):
         true_validity_grid, "true_validity_grid", directory=config.experiment_folder
     )
 
-    # calc true_outlier_fraction and save them in one csv with index indicating the period
-    true_outlier_fraction_dict = {
-        "true_outlier_fraction_train": 1 - true_validity_train.mean(),
-        "true_outlier_fraction_val": 1 - true_validity_val.mean(),
-        "true_outlier_fraction_test": 1 - true_validity_test.mean(),
-        "true_outlier_fraction_remaining": 1 - true_validity_remaining.mean(),
-        "true_outlier_fraction_grid": 1 - true_validity_grid.mean(),
+    # calc true validity fraction (mean of true validity) and save them in one csv with index indicating the period
+    true_valid_fraction_dict = {
+        "true_valid_fraction_train": true_validity_train.mean(),
+        "true_valid_fraction_val": true_validity_val.mean(),
+        "true_valid_fraction_test": true_validity_test.mean(),
+        "true_valid_fraction_remaining": true_validity_remaining.mean(),
+        "true_valid_fraction_grid": true_validity_grid.mean(),
     }
-    true_outlier_fraction = pd.DataFrame(
-        true_outlier_fraction_dict,
+    true_valid_fraction = pd.DataFrame(
+        true_valid_fraction_dict,
         index=[config.true_outlier_threshold_error_metric],
     )
 
     loading_saving_aixtra.write_csv(
-        true_outlier_fraction, "true_outlier_fraction", directory=config.experiment_folder
+        true_valid_fraction, "true_valid_fraction", directory=config.experiment_folder
     )
 
-    ExperimentLogger.log(true_outlier_fraction_dict)
+    ExperimentLogger.log(true_valid_fraction_dict)
 
     # log true_validity_threshold
     ExperimentLogger.log({"true_validity_threshold": true_validity_threshold.iloc[0,0]})

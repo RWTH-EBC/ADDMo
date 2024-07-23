@@ -215,6 +215,18 @@ class ScikitLinearRegNoScaler(ScikitLinearReg):
         """
         return self.regressor.predict(x)
 
+    def get_params(self, deep=True):
+        """
+        Get the hyperparameters of the model
+        """
+        # get model parameter
+        param = self.regressor.named_steps["model"].get_params(deep=deep)
+
+        # just info params
+        param['model_complexity'] = 1
+        param['hidden_layer_sizes'] = []
+        return param
+
     def _define_metadata(self):
         """
         Define metadata.

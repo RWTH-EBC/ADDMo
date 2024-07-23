@@ -34,7 +34,7 @@ config.config_explo_quant.exploration_bounds = {
 }
 
 from aixtra_use_case.sweeps import config_blueprints
-config = config_blueprints.no_tuning_config(config)
+config = config_blueprints.linear_regression_config(config)
 # config.config_model_tuning.models = ["ScikitMLP_TargetTransformed"]
 # config.config_model_tuning.hyperparameter_tuning_kwargs = {
 #     "hyperparameter_set": {

@@ -18,7 +18,7 @@ from aixtra_use_case import s2_tune_ml_regressor, s4_true_validity_domain, \
     s8_2_coverage_grid_occupancy, s8_0_generate_grid, s9_data_coverage_grid, s9_data_coverage
 
 
-def define_config():
+def define_config(config_function):
     # configure config
     config = ExtrapolationExperimentConfig()
     config.simulation_data_name = "ODEel_steady"
@@ -93,15 +93,19 @@ def run_all():
 
 
 ####################################################################################################
-config_function = config_blueprints.linear_regression_config # Todo: Set without brackets
+def main():
+    config_function = config_blueprints.linear_regression_config # Todo: Set without brackets
 
-config_temp = define_config()
+    config_temp = define_config(config_function)
 
-project_name = f"5_{config_temp.simulation_data_name}" #Todo: Set
-# project_name = "Test"
+    project_name = f"5_{config_temp.simulation_data_name}" #Todo: Set
+    # project_name = "Test"
 
-# sweep
-sweep_configuration = sweep_configs.sweep_repetitions_only() #Todo: Set
+    # sweep
+    sweep_configuration = sweep_configs.sweep_repetitions_only() #Todo: Set
 
-sweep_id = wandb.sweep(sweep_configuration, project=project_name)
-wandb.agent(sweep_id, function=run_all, project=project_name)
+    sweep_id = wandb.sweep(sweep_configuration, project=project_name)
+    wandb.agent(sweep_id, function=run_all, project=project_name)
+
+if __name__ == '__main__':
+    main()

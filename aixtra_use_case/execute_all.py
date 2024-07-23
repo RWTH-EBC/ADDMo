@@ -15,9 +15,11 @@ from aixtra_use_case import s2_tune_ml_regressor, s4_true_validity_domain, \
     s9_data_coverage, s8_0_generate_grid
 
 # configure config
-from aixtra_use_case.sweeps import config_blueprints, sweep_ed_usecase_boptest
+from aixtra_use_case.sweeps import config_blueprints, config_blueprints_systems
+config = ExtrapolationExperimentConfig()
+config = config_blueprints_systems.config_ODEel_steady(config)
+config = config_blueprints.linear_regression_config(config)
 
-config = sweep_ed_usecase_boptest.define_config(config_blueprints.linear_regression_config)
 config.config_detector.detectors = ["KNN_untuned"]
 
 
@@ -27,7 +29,7 @@ LocalLogger.directory = os.path.join(config.experiment_folder, "local_logger")
 LocalLogger.active = True
 WandbLogger.project = f"TEST_{config.simulation_data_name}"
 WandbLogger.directory = os.path.join(config.experiment_folder, "wandb_logger")
-WandbLogger.active = False
+WandbLogger.active = True
 
 
 # Run scripts

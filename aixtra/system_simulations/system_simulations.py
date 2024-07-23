@@ -1,4 +1,4 @@
-import math
+import numpy as np
 
 def simulate(x_grid, simulation_name):
     '''Simulate the true values for the grid via the system simulation. Important note: Order of
@@ -57,7 +57,7 @@ def boptest_delta_T_air_physical_approximation(t_amb, rad_dir, u_hp, t_room) -> 
         The calculated value based on the input parameters.
 
     """
-    return (15000 / 35 * (t_amb - t_room) + 24 * rad_dir + 15000 * (1 / (1 + math.exp(-5 * (u_hp - 0.5))))) * 900 / 70476480
+    return (15000 / 35 * (t_amb - t_room) + 24 * rad_dir + 15000 * u_hp) * 900 / 70476480
 
 def boptest_delta_T_air_physical_approximation_elcontrol(t_amb, rad_dir, u_hp, t_room) -> float:
     """
@@ -82,4 +82,4 @@ def boptest_delta_T_air_physical_approximation_elcontrol(t_amb, rad_dir, u_hp, t
         The calculated value based on the input parameters.
 
     """
-    return (15000 / 35 * (t_amb - t_room) + 24 * rad_dir + 15000 * (1 / (1 + math.exp(-5 * (u_hp - 0.5))))) * 900 / 70476480
+    return (((15000 / 35) * (t_amb - t_room)) + (24 * rad_dir) + (15000 * u_hp * (((t_amb)/(273.15+35 - t_amb)) * 0.45/3) * (1 / (1 + np.exp(-(u_hp - 0.01) * 500))))) * 900 / 70476480

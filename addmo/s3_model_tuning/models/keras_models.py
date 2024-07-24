@@ -193,12 +193,12 @@ class SciKerasSequential(BaseKerasModel):
 
         n_layers = trial.suggest_int("n_layers", 1, 2)
         if n_layers == 1:
-            hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l1", 1, 1000))
+            hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 1000) for i in range(1, n_layers + 1, 1))
         if n_layers == 2:
             hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 100) for i in range(1, n_layers + 1, 1))
         hyperparameters = {
             "hidden_layer_sizes": hidden_layer_sizes,
-            "callbacks": [EarlyStopping(monitor="loss", min_delta=0.000001, verbose=1,
+            "callbacks": [EarlyStopping(monitor="loss", min_delta=0.0000001, verbose=1,
                                          patience=50)],
         }
         return hyperparameters

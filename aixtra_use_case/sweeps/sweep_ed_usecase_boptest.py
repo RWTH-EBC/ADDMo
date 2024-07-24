@@ -75,7 +75,7 @@ def create_config():  # Todo set
     config = ExtrapolationExperimentConfig()
     config = config_blueprints_systems.config_ODEel_steady(config)
     config = config_blueprints.no_tuning_config(config)
-    config.experiment_name = f"6_{config.simulation_data_name}"
+    config.experiment_name = f"6_{config.simulation_data_name}_NovDez"
     return config
 
 

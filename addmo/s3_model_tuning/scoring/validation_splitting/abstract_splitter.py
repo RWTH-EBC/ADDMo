@@ -30,6 +30,12 @@ class AbstractSplitter(BaseCrossValidator):
         method in your custom splitter. Otherwise, I recommend keeping this method as it is and
         making changes to the _iter_test_indices method.
         """
+        # Convert from numpy to pandas, as custom splitters may work with pandas
+        if isinstance(X, np.ndarray):
+            X = pd.DataFrame(X)
+        if isinstance(y, np.ndarray):
+            y = pd.Series(y)
+
         indices = np.arange(len(X))
         for test_index in self._iter_test_masks(X, y, groups):
             train_index = indices[np.logical_not(test_index)]

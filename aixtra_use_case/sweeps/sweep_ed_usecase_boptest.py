@@ -74,7 +74,7 @@ def run_all():
 def create_config():  # Todo set
     config = ExtrapolationExperimentConfig()
     config = config_blueprints_systems.config_ODEel_steady(config)
-    config = config_blueprints.linear_regression_config(config)
+    config = config_blueprints.tuning_config(config)
     config.experiment_name = f"6_{config.simulation_data_name}_NovDez"
     return config
 
@@ -82,7 +82,7 @@ def create_config():  # Todo set
 def create_sweep():
     config = create_config()
 
-    sweep_configuration = sweep_configs.sweep_repetitions_only()  # Todo set
+    sweep_configuration = sweep_configs.sweep_several_tunings()  # Todo set
 
     entity = wandb.api.default_entity
     project_name = config.experiment_name

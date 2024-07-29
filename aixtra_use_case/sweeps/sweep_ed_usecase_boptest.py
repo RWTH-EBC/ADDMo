@@ -65,7 +65,7 @@ def run_all():
     s8_0_generate_grid.exe(config)
     # s8_1_coverage_convex_hull.exe(config)
     # s8_2_coverage_grid_occupancy.exe(config)
-    s8_3_coverage_tuned_ND.exe(config
+    s8_3_coverage_tuned_ND.exe(config)
     s8_4_coverage_true_validity.exe(config)
 
     ExperimentLogger.finish_experiment()
@@ -74,15 +74,15 @@ def run_all():
 def create_config():  # Todo set
     config = ExtrapolationExperimentConfig()
     config = config_blueprints_systems.config_ODEel_steady(config)
-    config = config_blueprints.tuning_config(config)
-    config.experiment_name = f"6_{config.simulation_data_name}_NovDez"
+    config = config_blueprints.no_tuning_config(config)
+    config.experiment_name = f"7_{config.simulation_data_name}_NovDez"
     return config
 
 
 def create_sweep():
     config = create_config()
 
-    sweep_configuration = sweep_configs.sweep_several_tunings()  # Todo set
+    sweep_configuration = sweep_configs.sweep_hidden_layer_sizes()  # Todo set
 
     entity = wandb.api.default_entity
     project_name = config.experiment_name

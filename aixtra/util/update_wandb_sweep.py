@@ -65,16 +65,18 @@ def batch_update_sweep_runs(user_name: str, project_name: str, sweep_id: str,
 
 if __name__ == '__main__':
     USER_NAME = "team-martinraetz"
-    PROJECT_NAME = "5_MPC_ODEel_steady_TYP2D"
-    SWEEP_ID = "l2ux83em"
+    PROJECT_NAME = "7_Carnot_mid_noise_m0_std0.02"
+    SWEEP_ID = "uksqmubn"
 
-    SUMMARY_UPDATE_DICT = {
-        "hidden_layer_sizes": "[]",
-        "model_complexity": 1,
-    }
+
+
+    SUMMARY_UPDATE_DICT = {}
+    #     "hidden_layer_sizes": "[]",
+    #     "model_complexity": 1,
+    # }
 
     CONFIG_UPDATE_DICT = {
-        # "config_model_tuning.validation_score_splitting": "None"
+        "config_model_tuning.validation_score_splitting": "none"
     }
 
     batch_update_sweep_runs(USER_NAME, PROJECT_NAME, SWEEP_ID, SUMMARY_UPDATE_DICT,

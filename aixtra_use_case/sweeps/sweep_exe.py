@@ -100,7 +100,7 @@ def create_sweep():
     print("   conda activate ADDMo-Extra")
     print("   conda activate py311_addmoextra")
     print(f"   cd /d {root_dir()}")
-    print(f"   python -m aixtra_use_case.sweeps.sweep_ed_usecase_boptest {full_sweep_path}")
+    print(f"   python -m aixtra_use_case.sweeps.sweep_exe {full_sweep_path}")
 
     return sweep_id
 

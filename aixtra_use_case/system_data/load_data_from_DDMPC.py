@@ -13,11 +13,6 @@ df_new = df[['t_amb', 'rad_dir', 'u_hp', 't_room', 'Change(T Room)']].rename(col
     'Change(T Room)': 'delta_reaTZon_y'
 })
 
-
-# temp internal loading
-df_new = pd.read_csv(r"D:\04_GitRepos\addmo-extra\aixtra_use_case\system_data\UNSHIFTEDDELTA_WRONG_ODEel_steady.csv", sep=";")
-df = df_new
-
 # shift the 'delta_reaTZon_y' column by one row to the top to make prediction be in the same row as the input sample
 df_new['delta_reaTZon_y'] = df_new['delta_reaTZon_y'].shift(-1)
 

@@ -74,7 +74,7 @@ def run_all():
 def create_config():  # Todo set
     config = ExtrapolationExperimentConfig()
     config = config_blueprints_systems.config_carnot(config)
-    config = config_blueprints.no_tuning_config(config)
+    config = config_blueprints.tuning_config(config)
     config.experiment_name = f"7_{config.simulation_data_name}"
     return config
 
@@ -82,7 +82,7 @@ def create_config():  # Todo set
 def create_sweep():
     config = create_config()
 
-    sweep_configuration = config_sweep.sweep_hidden_layer_sizes()  # Todo set
+    sweep_configuration = config_sweep.sweep_several_tunings()  # Todo set
 
     entity = wandb.api.default_entity
     project_name = config.experiment_name

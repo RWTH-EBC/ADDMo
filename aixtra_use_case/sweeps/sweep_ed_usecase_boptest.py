@@ -65,7 +65,7 @@ def run_all():
     s8_0_generate_grid.exe(config)
     # s8_1_coverage_convex_hull.exe(config)
     # s8_2_coverage_grid_occupancy.exe(config)
-    s8_3_coverage_tuned_ND.exe(config)
+    s8_3_coverage_tuned_ND.exe(config
     s8_4_coverage_true_validity.exe(config)
 
     ExperimentLogger.finish_experiment()

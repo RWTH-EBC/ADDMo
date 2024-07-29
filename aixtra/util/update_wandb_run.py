@@ -51,19 +51,25 @@ def get_user_confirmation(run_paths: List[str], summary_dict: Dict[str, Any],
 
 if __name__ == '__main__':
     RUN_PATHS = [
-        "team-martinraetz/5_ODEel_steady/xxxxx"
+        "team-martinraetz/6_ODEel_steady_NovDez___MPC_Typ2D/r5cez6iq"
     ]
 
     SUMMARY_UPDATE_DICT = {
-        "hidden_layer_sizes": "[]",
-        "model_complexity": 0,
-        "best_model_name": "WHITEBOX",
-        "mean_errors_grid": 0,
-        "mean_errors_remaining": 0,
-        "mean_errors_test": 0,
-        "mean_errors_train": 0,
-        "mean_errors_val": 0
-    }
+                "hidden_layer_sizes": "[]",
+                "model_complexity": 0,
+                "best_model_name": "whitebox",
+                "mean_errors_grid": 0,
+                "mean_errors_remaining": 0,
+                "mean_errors_test": 0,
+                "mean_errors_train": 0,
+                "mean_errors_val": 0,
+                "true_valid_fraction_grid": 1,
+                "true_valid_fraction_remaining": 1,
+                "true_valid_fraction_test": 1,
+                "true_valid_fraction_train": 1,
+                "true_valid_fraction_val": 1,
+                "coverage_true_validity": 100,
+            }
 
     CONFIG_UPDATE_DICT = {
         # "config_model_tuning.validation_score_splitting": "None"

@@ -26,7 +26,7 @@ def config_carnot(config: ExtrapolationExperimentConfig):
     config.name_of_target = "$\dot{Q}_{heiz}$ in kW"
     config.train_val_test_period = (0, 744)
     config.shuffle = False
-    config.grid_points_per_axis = 100
+    config.grid_points_per_axis = 10
     config.system_simulation = "carnot"
     config.true_outlier_threshold = 0.2
 

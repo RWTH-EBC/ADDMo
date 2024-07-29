@@ -73,9 +73,9 @@ def run_all():
 
 def create_config():  # Todo set
     config = ExtrapolationExperimentConfig()
-    config = config_blueprints_systems.config_ODEel_steady(config)
+    config = config_blueprints_systems.config_carnot(config)
     config = config_blueprints.linear_regression_config(config)
-    config.experiment_name = f"7_{config.simulation_data_name}_NovDez"
+    config.experiment_name = f"7_{config.simulation_data_name}"
     return config
 
 

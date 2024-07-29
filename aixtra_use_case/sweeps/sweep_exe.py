@@ -3,7 +3,7 @@ import wandb
 from addmo.util.experiment_logger import ExperimentLogger, LocalLogger, WandbLogger
 from addmo.util.definitions import create_or_clean_directory, root_dir
 from aixtra_use_case.sweeps import (
-    sweep_configs,
+    config_sweep,
     config_blueprints,
     config_blueprints_systems,
 )
@@ -74,7 +74,7 @@ def run_all():
 def create_config():  # Todo set
     config = ExtrapolationExperimentConfig()
     config = config_blueprints_systems.config_carnot(config)
-    config = config_blueprints.linear_regression_config(config)
+    config = config_blueprints.no_tuning_config(config)
     config.experiment_name = f"7_{config.simulation_data_name}"
     return config
 
@@ -82,7 +82,7 @@ def create_config():  # Todo set
 def create_sweep():
     config = create_config()
 
-    sweep_configuration = sweep_configs.sweep_repetitions_only()  # Todo set
+    sweep_configuration = config_sweep.sweep_hidden_layer_sizes()  # Todo set
 
     entity = wandb.api.default_entity
     project_name = config.experiment_name

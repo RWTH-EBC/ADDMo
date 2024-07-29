@@ -15,6 +15,7 @@ def no_tuning_config(config: ExtrapolationExperimentConfig) :
     }
     config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"
     config.config_model_tuning.validation_score_mechanism = "none"
+    config.config_model_tuning.validation_score_splitting = "none"
     config.config_detector.detectors = ["KNN", "OCSVM", "KNN_untuned", "OCSVM_untuned"]
 
     return config
@@ -31,6 +32,7 @@ def tuning_config(config: ExtrapolationExperimentConfig):
     config = no_tuning_config(config)
     config.config_model_tuning.hyperparameter_tuning_type = "OptunaTuner"
     config.config_model_tuning.validation_score_mechanism = "cv"
+    config.config_model_tuning.validation_score_splitting = "KFold"
     config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 100}
     config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"
     return config

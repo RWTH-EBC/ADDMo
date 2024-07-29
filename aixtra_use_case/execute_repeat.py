@@ -40,7 +40,7 @@ WandbLogger.project = f"TEST_{config.simulation_data_name}"
 WandbLogger.directory = os.path.join(config.experiment_folder, "wandb_logger")
 WandbLogger.active = False
 
-config.experiment_name = "debug_2"
+config.experiment_name = "debug"
 # config.grid_points_per_axis = 20
 # config.config_explo_quant.explo_grid_points_per_axis = 20
 # config.config_explo_quant.exploration_bounds = {
@@ -54,14 +54,14 @@ config.experiment_name = "debug_2"
 
 # Run scripts
 # ExperimentLogger.start_experiment(config=config)  # log config
-s1_split_data.exe(config)
-s2_tune_ml_regressor.exe(config)
-s3_regressor_error_calculation.exe(config)
-s4_true_validity_domain.exe(config)
+# s1_split_data.exe(config)
+# s2_tune_ml_regressor.exe(config)
+# s3_regressor_error_calculation.exe(config)
+# s4_true_validity_domain.exe(config)
 # s5_tune_detector.exe(config)
 # s6_detector_score_calculation.exe(config)
 
-s8_0_generate_grid.exe(config)
+# s8_0_generate_grid.exe(config)
 # s8_1_coverage_convex_hull.exe(config)
 # s8_2_coverage_grid_occupancy.exe(config)
 # s8_3_coverage_tuned_ND.exe(config)

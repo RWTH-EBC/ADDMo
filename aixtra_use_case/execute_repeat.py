@@ -27,7 +27,7 @@ from aixtra_use_case import (
 )
 
 # load config from path
-path_to_folder = r"D:\04_GitRepos\addmo-extra\aixtra_use_case\results\3_Boptest_TAir_mid_ODE_noise_m0_std0.01_firm-sweep-110"
+path_to_folder = r"D:\04_GitRepos\addmo-extra\aixtra_use_case\results\debug"
 config_path = os.path.join(path_to_folder, "local_logger", "config.json")
 config = load_config_from_json(config_path, ExtrapolationExperimentConfig)
 
@@ -40,21 +40,22 @@ WandbLogger.project = f"TEST_{config.simulation_data_name}"
 WandbLogger.directory = os.path.join(config.experiment_folder, "wandb_logger")
 WandbLogger.active = False
 
-config.grid_points_per_axis = 20
-config.config_explo_quant.explo_grid_points_per_axis = 20
-config.config_explo_quant.exploration_bounds = {
-    "TDryBul": [260.15, 286.15],
-    "HDirNor": [0, 1000],
-    "oveHeaPumY_u": [0, 1],
-    "reaTZon_y": [280.15, 295.15],
-    "delta_reaTZon_y": [-0.5, 0.5],
-}
+config.experiment_name = "debug_2"
+# config.grid_points_per_axis = 20
+# config.config_explo_quant.explo_grid_points_per_axis = 20
+# config.config_explo_quant.exploration_bounds = {
+#     "TDryBul": [260.15, 286.15],
+#     "HDirNor": [0, 1000],
+#     "oveHeaPumY_u": [0, 1],
+#     "reaTZon_y": [280.15, 295.15],
+#     "delta_reaTZon_y": [-0.5, 0.5],
+# }
 
 
 # Run scripts
 # ExperimentLogger.start_experiment(config=config)  # log config
 s1_split_data.exe(config)
-# s2_tune_ml_regressor.exe(config)
+s2_tune_ml_regressor.exe(config)
 s3_regressor_error_calculation.exe(config)
 s4_true_validity_domain.exe(config)
 # s5_tune_detector.exe(config)

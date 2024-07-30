@@ -1,23 +1,6 @@
 import wandb
 from typing import Dict, Any, List, Tuple
-
-
-def update_run(api: wandb.Api, run_path: str, summary_dict: Dict[str, Any],
-               config_dict: Dict[str, Any]) -> None:
-    """Update the summary and config of a single run with multiple key-value pairs."""
-    try:
-        run = api.run(run_path)
-        if summary_dict:
-            run.summary.update(summary_dict)
-            run.summary.update()  # Explicitly update to ensure changes are saved
-            print(f"Updated run {run_path} summary with: {summary_dict}")
-        if config_dict:
-            for key, value in config_dict.items():
-                run.config[key] = value
-            run.update()  # Save the changes
-            print(f"Updated run {run_path} config with: {config_dict}")
-    except Exception as e:
-        print(f"Error updating run {run_path}: {str(e)}")
+from aixtra.util.update_wandb_sweep import update_run
 
 
 def batch_update_runs(run_paths: List[str], summary_dict: Dict[str, Any],

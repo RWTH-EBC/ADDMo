@@ -23,7 +23,17 @@ def update_run(run: wandb.apis.public.Run, summary_dict: Dict[str, Any],
 
         if config_dict:
             for key, value in config_dict.items():
-                run.config[key] = value
+                keys = key.split('.')
+                if len(keys) == 1:
+                    run.config[keys[0]] = value
+                elif len(keys) == 2:
+                    run.config[keys[0]][keys[1]] = value
+                elif len(keys) == 3:
+                    run.config[keys[0]][keys[1]][keys[2]] = value
+                elif len(keys) == 4:
+                    run.config[keys[0]][keys[1]][keys[2]][keys[3]] = value
+                else:
+                    print(f"Warning: Key '{key}' has more than 4 levels of nesting. Skipping.")
             run.update()  # Save the changes
             print(f"Updated run {run.id} config with: {config_dict}")
 
@@ -66,7 +76,7 @@ def batch_update_sweep_runs(user_name: str, project_name: str, sweep_id: str,
 if __name__ == '__main__':
     USER_NAME = "team-martinraetz"
     PROJECT_NAME = "7_Carnot_mid_noise_m0_std0.02"
-    SWEEP_ID = "uksqmubn"
+    SWEEP_ID = "xyjgjlew"
 
 
 
@@ -76,7 +86,7 @@ if __name__ == '__main__':
     # }
 
     CONFIG_UPDATE_DICT = {
-        "config_model_tuning.validation_score_splitting": "none"
+        "config_model_tuning.validation_score_splitting": "no"
     }
 
     batch_update_sweep_runs(USER_NAME, PROJECT_NAME, SWEEP_ID, SUMMARY_UPDATE_DICT,

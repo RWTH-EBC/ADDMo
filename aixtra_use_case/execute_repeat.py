@@ -27,7 +27,7 @@ from aixtra_use_case import (
 )
 
 # load config from path
-path_to_folder = r"D:\04_GitRepos\addmo-extra\aixtra_use_case\results\debug"
+path_to_folder = r"D:\04_GitRepos\addmo-extra\aixtra_use_case\results\6_ODEel_steady_rosy-sweep-42"
 config_path = os.path.join(path_to_folder, "local_logger", "config.json")
 config = load_config_from_json(config_path, ExtrapolationExperimentConfig)
 
@@ -40,7 +40,7 @@ WandbLogger.project = f"TEST_{config.simulation_data_name}"
 WandbLogger.directory = os.path.join(config.experiment_folder, "wandb_logger")
 WandbLogger.active = False
 
-config.experiment_name = "debug"
+# config.experiment_name = "debug"
 # config.grid_points_per_axis = 20
 # config.config_explo_quant.explo_grid_points_per_axis = 20
 # config.config_explo_quant.exploration_bounds = {

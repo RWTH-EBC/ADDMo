@@ -75,8 +75,8 @@ def batch_update_sweep_runs(user_name: str, project_name: str, sweep_id: str,
 
 if __name__ == '__main__':
     USER_NAME = "team-martinraetz"
-    PROJECT_NAME = "7_Carnot_mid_noise_m0_std0.02"
-    SWEEP_ID = "xyjgjlew"
+    PROJECT_NAME = "7_ODEel_steady_NovDez___MPC_Typ2D"
+    SWEEP_ID = "zrz31i4h"
 
 
 

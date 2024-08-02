@@ -1,8 +1,18 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 
+
 class ModelTunerConfig(BaseModel):
-    models: list[str] = Field(["ScikitMLP_TargetTransformed"], description="List of models to use")
+    models: list[str] = Field(
+        ["ScikitMLP_TargetTransformed"], description="List of models to use"
+    )
+
+    trainings_per_model: int = Field(
+        1,
+        description="Number of trainings per model to choose the best "
+        "from, this is done to avoid local minima"
+        "during training.",
+    )
 
     hyperparameter_tuning_type: str = Field(
         "OptunaTuner",
@@ -27,12 +37,12 @@ class ModelTunerConfig(BaseModel):
     )
 
     validation_score_metric: str = Field(
-        "neg_root_mean_squared_error", description="Validation score metric, e.g., r2, neg_mean_absolute_error"
+        "neg_root_mean_squared_error",
+        description="Validation score metric, e.g., r2, neg_mean_absolute_error",
     )
     validation_score_metric_kwargs: Optional[dict] = Field(
         default=None, description="Kwargs for the validation score metric"
     )
-
 
 
 class ModelTuningExperimentConfig(BaseModel):
@@ -68,4 +78,6 @@ class ModelTuningExperimentConfig(BaseModel):
     end_test: str = Field(
         "2016-08-16 23:45", description="End date and time for testing"
     )
-    config_model_tuner: ModelTunerConfig = Field(ModelTunerConfig(), description="Model tuner config, set your own config.")
+    config_model_tuner: ModelTunerConfig = Field(
+        ModelTunerConfig(), description="Model tuner config, set your own config."
+    )

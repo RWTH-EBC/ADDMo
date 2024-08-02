@@ -1,3 +1,7 @@
+from copy import deepcopy
+
+from sklearn.metrics import root_mean_squared_error
+
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
 from addmo.s3_model_tuning.hyperparameter_tuning.hyparam_tuning_factory import (
@@ -27,7 +31,16 @@ class ModelTuner:
             model, x_train_val, y_train_val
         )
 
-        model.fit(x_train_val, y_train_val)
+        # refit the model on the whole training and validation system_data and get best model
+        fitted_models = []
+        for i in range(self.config.trainings_per_model):
+            _model = deepcopy(model)
+            _model.fit(x_train_val, y_train_val)
+            y_pred = _model.predict(x_train_val)
+            _model.fit_error = root_mean_squared_error(y_train_val, y_pred)
+            print(f"Model training {i} fit error: {_model.fit_error}")
+            fitted_models.append(_model)
+        model = min(fitted_models, key=lambda x: x.fit_error)
 
         return model
 

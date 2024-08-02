@@ -25,7 +25,7 @@ class Scoring:
 
 class ValidationScoring(ABC):
     def __init__(self, config: ModelTunerConfig):
-        self.metric = MetricFactory.metric_factory(
+        self.metric: AbstractMetric = MetricFactory.metric_factory(
             config.validation_score_metric, config.validation_score_metric_kwargs
         )
         self.splitter = SplitterFactory.splitter_factory(config)

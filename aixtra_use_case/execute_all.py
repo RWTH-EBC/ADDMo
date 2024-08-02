@@ -1,5 +1,7 @@
 import os
 
+from keras.src.callbacks import EarlyStopping
+
 from addmo.util.experiment_logger import ExperimentLogger
 from addmo.util.experiment_logger import LocalLogger
 from addmo.util.experiment_logger import WandbLogger
@@ -18,8 +20,9 @@ from aixtra_use_case import s2_tune_ml_regressor, s4_true_validity_domain, \
 from aixtra_use_case.sweeps import config_blueprints, config_blueprints_systems
 config = ExtrapolationExperimentConfig()
 config = config_blueprints_systems.config_ODEel_steady(config)
-config = config_blueprints.linear_regression_config(config)
+config = config_blueprints.no_tuning_config(config)
 
+config.config_model_tuning.trainings_per_model = 3
 config.config_detector.detectors = ["KNN_untuned"]
 
 
@@ -29,7 +32,7 @@ LocalLogger.directory = os.path.join(config.experiment_folder, "local_logger")
 LocalLogger.active = True
 WandbLogger.project = f"TEST_{config.simulation_data_name}"
 WandbLogger.directory = os.path.join(config.experiment_folder, "wandb_logger")
-WandbLogger.active = True
+WandbLogger.active = False
 
 
 # Run scripts

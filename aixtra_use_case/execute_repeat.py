@@ -27,7 +27,7 @@ from aixtra_use_case import (
 )
 
 # load config from path
-path_to_folder = r"D:\04_GitRepos\addmo-extra\aixtra_use_case\results\6_ODEel_steady_rosy-sweep-42"
+path_to_folder = r"D:\04_GitRepos\addmo-extra\aixtra_use_case\results\Empty"
 config_path = os.path.join(path_to_folder, "local_logger", "config.json")
 config = load_config_from_json(config_path, ExtrapolationExperimentConfig)
 

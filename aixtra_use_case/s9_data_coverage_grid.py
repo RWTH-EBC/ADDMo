@@ -28,6 +28,14 @@ def exe(config: ExtrapolationExperimentConfig):
         config.config_explo_quant.exploration_bounds, xy_grid
     )
 
+    # for nicer appearence make sure that the control variable 3rd last column
+    control_var = "oveHeaPumY_u"
+    cols = xy_grid.columns.tolist()
+    cols.remove(control_var)
+    cols.insert(-2, control_var)
+    xy_grid = xy_grid[cols]
+
+
     # plot
     plotly_parallel_coordinates_plt = (
         coverage_plotting.plot_dataset_parallel_coordinates_plotly(

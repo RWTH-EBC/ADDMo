@@ -22,7 +22,7 @@ config = ExtrapolationExperimentConfig()
 config = config_blueprints_systems.config_ODEel_steady(config)
 config = config_blueprints.no_tuning_config(config)
 
-config.config_model_tuning.trainings_per_model = 3
+config.config_model_tuning.trainings_per_model = 1
 config.config_detector.detectors = ["KNN_untuned"]
 
 
@@ -48,8 +48,8 @@ s8_0_generate_grid.exe(config)
 # s8_2_coverage_grid_occupancy.exe(config)
 s8_3_coverage_tuned_ND.exe(config)
 s8_4_coverage_true_validity.exe(config)
-# s9_data_coverage.exe(config)
-# s9_data_coverage_grid.exe(config)
+s9_data_coverage.exe(config)
+s9_data_coverage_grid.exe(config)
 # # #
 # s7_2_plotting.exe_plot_2D_all(config)
 # s7_2_plotting.exe_plot_2D_detector(config)

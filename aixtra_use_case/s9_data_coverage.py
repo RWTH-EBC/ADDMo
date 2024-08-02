@@ -28,7 +28,12 @@ def exe(config: ExtrapolationExperimentConfig):
         config.config_explo_quant.exploration_bounds, xy_regressor_fit
     )
 
-
+    # for nicer appearence make sure that the control variable 3rd last column
+    control_var = "oveHeaPumY_u"
+    cols = xy_regressor_fit.columns.tolist()
+    cols.remove(control_var)
+    cols.insert(-2, control_var)
+    xy_regressor_fit = xy_regressor_fit[cols]
 
 
 

@@ -61,51 +61,66 @@ combinations = [
 ]
 
 # Create plots
-fig = plt.figure(figsize=(20, 15))
+fig = plt.figure(figsize=(20, 20))
 
-# Get colors from colormaps for legend
-viridis_color = to_rgba(plt.get_cmap('viridis')(0.5))
-plasma_color = to_rgba(plt.get_cmap('plasma')(0.5))
+variables = ["t_amb", "rad_dir", "u_hp", "t_room"]
+n_vars = len(variables)
 
-for i, (x, y, x_label, y_label) in enumerate(combinations, 1):
-    ax = fig.add_subplot(2, 3, i, projection='3d')
-    X, Y = np.meshgrid(x, y)
+for i in range(n_vars):
+    for j in range(n_vars):
+        if i < j:  # Upper triangle
+            ax = fig.add_subplot(n_vars, n_vars, i*n_vars + j + 1, projection='3d')
+            x, y = eval(variables[i]), eval(variables[j])
+            X, Y = np.meshgrid(x, y)
 
-    if x_label == "t_amb" and y_label == "rad_dir":
-        Z1 = prediction(X, Y, np.mean(u_hp), np.mean(t_room))
-        Z2 = regressor_prediction(X, Y, np.mean(u_hp), np.mean(t_room))
-    elif x_label == "t_amb" and y_label == "u_hp":
-        Z1 = prediction(X, np.mean(rad_dir), Y, np.mean(t_room))
-        Z2 = regressor_prediction(X, np.mean(rad_dir), Y, np.mean(t_room))
-    elif x_label == "t_amb" and y_label == "t_room":
-        Z1 = prediction(X, np.mean(rad_dir), np.mean(u_hp), Y)
-        Z2 = regressor_prediction(X, np.mean(rad_dir), np.mean(u_hp), Y)
-    elif x_label == "rad_dir" and y_label == "u_hp":
-        Z1 = prediction(np.mean(t_amb), X, Y, np.mean(t_room))
-        Z2 = regressor_prediction(np.mean(t_amb), X, Y, np.mean(t_room))
-    elif x_label == "rad_dir" and y_label == "t_room":
-        Z1 = prediction(np.mean(t_amb), X, np.mean(u_hp), Y)
-        Z2 = regressor_prediction(np.mean(t_amb), X, np.mean(u_hp), Y)
-    else:  # u_hp and t_room
-        Z1 = prediction(np.mean(t_amb), np.mean(rad_dir), X, Y)
-        Z2 = regressor_prediction(np.mean(t_amb), np.mean(rad_dir), X, Y)
+            if variables[i] == "t_amb" and variables[j] == "rad_dir":
+                Z1 = prediction(X, Y, np.mean(u_hp), np.mean(t_room))
+                Z2 = regressor_prediction(X, Y, np.mean(u_hp), np.mean(t_room))
+            elif variables[i] == "t_amb" and variables[j] == "u_hp":
+                Z1 = prediction(X, np.mean(rad_dir), Y, np.mean(t_room))
+                Z2 = regressor_prediction(X, np.mean(rad_dir), Y, np.mean(t_room))
+            elif variables[i] == "t_amb" and variables[j] == "t_room":
+                Z1 = prediction(X, np.mean(rad_dir), np.mean(u_hp), Y)
+                Z2 = regressor_prediction(X, np.mean(rad_dir), np.mean(u_hp), Y)
+            elif variables[i] == "rad_dir" and variables[j] == "u_hp":
+                Z1 = prediction(np.mean(t_amb), X, Y, np.mean(t_room))
+                Z2 = regressor_prediction(np.mean(t_amb), X, Y, np.mean(t_room))
+            elif variables[i] == "rad_dir" and variables[j] == "t_room":
+                Z1 = prediction(np.mean(t_amb), X, np.mean(u_hp), Y)
+                Z2 = regressor_prediction(np.mean(t_amb), X, np.mean(u_hp), Y)
+            else:  # u_hp and t_room
+                Z1 = prediction(np.mean(t_amb), np.mean(rad_dir), X, Y)
+                Z2 = regressor_prediction(np.mean(t_amb), np.mean(rad_dir), X, Y)
 
-    surf1 = ax.plot_surface(X, Y, Z1, cmap='viridis', alpha=0.7)
-    surf2 = ax.plot_surface(X, Y, Z2, cmap='plasma', alpha=0.7)
+            surf1 = ax.plot_surface(X, Y, Z1, cmap='viridis', alpha=0.7)
+            surf2 = ax.plot_surface(X, Y, Z2, cmap='plasma', alpha=0.7)
 
-    ax.set_xlabel(x_label)
-    ax.set_ylabel(y_label)
-    ax.set_zlabel('Prediction')
-    ax.set_title(f'{x_label} vs {y_label}')
+            ax.set_xlabel(variables[i])
+            ax.set_ylabel(variables[j])
+            ax.set_zlabel('Prediction')
 
-    # Add a color bar for each surface
-    fig.colorbar(surf1, ax=ax, shrink=0.5, aspect=5, pad=0.1, label='Prediction')
-    fig.colorbar(surf2, ax=ax, shrink=0.5, aspect=5, pad=0.15, label='Regressor Prediction')
+        elif i > j:  # Lower triangle
+            ax = fig.add_subplot(n_vars, n_vars, i*n_vars + j + 1)
+            ax.axis('off')
 
-    # Add a custom legend
-    custom_lines = [plt.Line2D([0], [0], linestyle="none", c=viridis_color, marker='o'),
-                    plt.Line2D([0], [0], linestyle="none", c=plasma_color, marker='o')]
-    ax.legend(custom_lines, ['Prediction', 'Regressor Prediction'], loc='upper left')
+        else:  # Diagonal
+            ax = fig.add_subplot(n_vars, n_vars, i*n_vars + j + 1)
+            if i == 0:
+                plt.colorbar(plt.cm.ScalarMappable(cmap='viridis'), ax=ax, orientation='horizontal', label='Prediction')
+                ax.set_title('Prediction', fontweight='bold')
+            elif i == 1:
+                plt.colorbar(plt.cm.ScalarMappable(cmap='plasma'), ax=ax, orientation='horizontal', label='Regressor Prediction')
+                ax.set_title('Regressor Prediction', fontweight='bold')
+            else:
+                ax.axis('off')
+            ax.set_xticks([])
+            ax.set_yticks([])
+
+# Add variable names to rows and columns
+for i, var in enumerate(variables):
+    fig.text(0.07 + i*0.23, 0.98, var, ha='center', va='center', fontweight='bold', fontsize=12)
+    fig.text(0.02, 0.92 - i*0.23, var, ha='left', va='center', fontweight='bold', fontsize=12)
 
 plt.tight_layout()
+plt.subplots_adjust(top=0.95, bottom=0.05, left=0.05, right=0.95)
 plt.show()

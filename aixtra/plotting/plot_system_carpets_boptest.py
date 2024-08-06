@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -6,15 +7,15 @@ from addmo.s3_model_tuning.models.model_factory import ModelFactory
 from aixtra.system_simulations.system_simulations import boptest_delta_T_air_physical_approximation_elcontrol
 from matplotlib.colors import to_rgba
 
+# Replace this with your actual regressor prediction function
+
+path_to_regressor = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\1_MPC_Boptest900_2019_defaultControl\ODEel_pid_steady\7_ODEel_steady_NovDez___MPC_Typ2D\Auswertung_CarpetPlot\2024-07-29_14-01__usual-sweep-3\regressor.keras"
+regressor = ModelFactory.load_model(path_to_regressor)
+
 def prediction(t_amb, rad_dir, u_hp, t_room):
     return boptest_delta_T_air_physical_approximation_elcontrol(t_amb, rad_dir, u_hp, t_room)
 
 def regressor_prediction(t_amb, rad_dir, u_hp, t_room):
-    # Replace this with your actual regressor prediction function
-    path_to_regressor = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\7_ODEel_steady_NovDez\0PlottedCoverages\Beispiele\7_ODEel_steady_NovDez_LinReg_elated-sweep-1_COVERAGES\regressors\regressor.joblib"
-
-    regressor = ModelFactory.load_model(path_to_regressor)
-
     # Find the shape of the array inputs
     shape = next(var.shape for var in [t_amb, rad_dir, u_hp, t_room] if isinstance(var, np.ndarray))
 
@@ -123,4 +124,12 @@ for i, var in enumerate(variables):
 
 plt.tight_layout()
 plt.subplots_adjust(top=0.95, bottom=0.05, left=0.05, right=0.95)
+
+# Get the directory of the regressor
+regressor_dir = os.path.dirname(path_to_regressor)
+# Save the plot in the same directory as the regressor
+plot_filename = os.path.join(regressor_dir, 'carpet_comparison.png')
+plt.savefig(plot_filename, dpi=300, bbox_inches='tight')
+
+print(f"Plot saved as: {plot_filename}")
 plt.show()

@@ -1,9 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from aixtra.system_simulations.system_simulations import boptest_delta_T_air_physical_approximation_elcontrol
+import aixtra.system_simulations.system_simulations as sys_sim
+
+
+
+
 def prediction(t_amb, rad_dir, u_hp, t_room):
-    return boptest_delta_T_air_physical_approximation_elcontrol(t_amb, rad_dir, u_hp, t_room)
+    value = sys_sim.bestest900_ODE_VL(t_amb, rad_dir, u_hp, t_room)
+    # value = sys_sim.bestest900_ODE(t_amb, rad_dir, u_hp, t_room)
+    return value
 
 # Define the bounds
 bounds = {

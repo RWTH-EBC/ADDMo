@@ -82,4 +82,75 @@ def boptest_delta_T_air_physical_approximation_elcontrol(t_amb, rad_dir, u_hp, t
         The calculated value based on the input parameters.
 
     """
+
+
     return (((15000 / 35) * (t_amb - t_room)) + (24 * rad_dir) + (15000 * u_hp * (((t_amb)/(273.15+35 - t_amb)) * 0.45/3) * (1 / (1 + np.exp(-(u_hp - 0.01) * 500))))) * 900 / 70476480
+
+def bestest900_ODE(t_amb, rad_dir, u_hp, t_room) -> float:
+    return (((15000 / 35) * (t_amb - t_room)) + (24 * rad_dir) + (15000 * u_hp * (((t_amb)/(t_room+15 - t_amb)) * 0.45/3))) * 900 / 70476480
+
+def bestest900_ODE_COPcorr(t_amb, rad_dir, u_hp, t_room) -> float:
+    COP_correction = (-0.6*((u_hp-0.5)**2)) + 1.15 # Abgeleitet aus Diss von Vering
+    return (((15000 / 35) * (t_amb - t_room)) + (24 * rad_dir) + (15000 * u_hp * (((t_amb)/(t_room+15 - t_amb)) * 0.45 * COP_correction/3))) * 900 / 70476480
+
+def bestest900_ODE_VL(t_amb, rad_dir, u_hp, t_room) -> float:
+    return (((15000 / 35) * (t_amb - t_room)) + (24 * rad_dir) + (15000 * u_hp * ((t_amb/(t_room + (u_hp*25) + 5 - t_amb)) * 0.45/3))) * 900 / 70476480
+
+def bestest900_ODE_VL_COPcorr(t_amb, rad_dir, u_hp, t_room) -> float:
+    COP_correction = (-0.6*((u_hp-0.5)**2)) + 1.15 # Abgeleitet aus Diss von Vering
+    return (((15000 / 35) * (t_amb - t_room)) + (24 * rad_dir) + (15000 * u_hp * (((t_amb)/(t_room + (u_hp*25) + 5 - t_amb)) * 0.45 * COP_correction/3))) * 900 / 70476480
+
+def bestest900_ODE_bivalent(t_amb, rad_dir, p_el, t_room) -> float:
+
+    # hp stats
+    COP_nominal = 3.33  # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
+    exergetic_efficiency = 0.3 # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
+    # COP_correction = (-0.6*((u_hp-0.5)**2)) + 1.15 # Abgeleitet aus Diss von Vering
+    carnot = t_amb/(273.15 + 35 - t_amb)
+    COP = carnot * exergetic_efficiency
+
+    # heiz und el stats
+    hp_nom = 10000
+    aux_nom = 5000
+    heat_nom = 15000
+
+    hp_el_nom = hp_nom/COP_nominal
+    aux_el_nom = aux_nom/1
+    el_nom = hp_el_nom + aux_el_nom # 8000
+    hp_modulation = 0.2
+
+    # heating
+    abs_modulation_min = (hp_el_nom * hp_modulation) / el_nom
+    abs_modulation_max = (hp_el_nom * 1) / el_nom
+
+    p_el_to_20 = (1 / (1 + np.exp((p_el - abs_modulation_min) * 500)))
+    p_el_from_20 = (1 / (1 + np.exp(-(p_el - abs_modulation_min) * 500)))
+    p_el_to_100 = (1 / (1 + np.exp((p_el - abs_modulation_max) * 500)))
+    p_el_from_100 = (1 / (1 + np.exp(-(p_el - abs_modulation_max) * 500)))
+
+
+    heat_aux_low = el_nom * p_el_to_20 * p_el
+    heat_aux_high= el_nom * p_el_from_100 * (p_el - abs_modulation_max)
+    u_hp = p_el - (1/abs_modulation_max) # 0 bis 1 zwischen p_el=0 und p_el=abs_modulation_max
+    heat_hp = hp_el_nom * COP * (p_el_from_20 * u_hp - p_el_from_100 * (u_hp- abs_modulation_max*(u_hp/p_el)))
+    heater = heat_aux_low + heat_hp + heat_aux_high
+
+    # building stats
+    t_amb_auslegung = -15
+    t_room_auslegung = 20
+    transmission = ((heat_nom / (t_room_auslegung - t_amb_auslegung)) * (t_amb - t_room)) # annäherung der U-Werte durch Wärmepumpe Auslegung
+    transmission = 428.57 * (t_amb - t_room)
+
+    radiative = (24 * rad_dir)
+
+    C_zone = 70476480
+    time_step = 900
+    capacity = (time_step / C_zone)
+    capacity = 0.00001277
+
+
+    delta_t = (transmission + radiative + heater) * capacity
+    return delta_t
+
+
+

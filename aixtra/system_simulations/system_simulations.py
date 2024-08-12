@@ -101,7 +101,12 @@ def bestest900_ODE(t_amb, rad_dir, u_hp, t_room) -> float:
     # hp stats
     COP_nominal = 3.33  # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
     exergetic_efficiency = 0.45 # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
-    carnot = ((t_amb)/(t_room + 15 - t_amb))
+    min_vl_rl = 5
+    vl_rl_phys = (t_room + 10 - t_amb)
+
+    on_from_0 = (1 / (1 + np.exp((-vl_rl_phys) * 500)))
+    vl_rl_num = (min_vl_rl + (vl_rl_phys * on_from_0)) # always min of 5K difference
+    carnot = ((t_amb)/vl_rl_num)
     COP = carnot * exergetic_efficiency
 
     # heiz
@@ -129,7 +134,13 @@ def bestest900_ODE_VL(t_amb, rad_dir, u_hp, t_room) -> float:
     # hp stats
     COP_nominal = 3.33  # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
     exergetic_efficiency = 0.45 # following Stoffels Diss
-    carnot = ((t_amb)/(t_room + (u_hp*15) + 5 - t_amb))
+    min_vl_rl = 5
+    vl_rl_phys = (t_room + (u_hp * 15) - t_amb)
+
+    on_from_0 = (1 / (1 + np.exp((-vl_rl_phys) * 500)))
+    vl_rl_num = (min_vl_rl + (vl_rl_phys * on_from_0))  # always min of 5K difference
+    carnot = ((t_amb) / vl_rl_num)
+
     COP = carnot * exergetic_efficiency
 
     # heiz
@@ -157,7 +168,12 @@ def bestest900_ODE_VL_COPcorr(t_amb, rad_dir, u_hp, t_room) -> float:
     COP_nominal = 3.33  # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
     exergetic_efficiency = 0.45 # following Stoffels Diss
     COP_correction = ((-0.6*((u_hp-0.5)**2)) + 1.15) # Abgeleitet aus Diss von Vering
-    carnot = ((t_amb)/(t_room + (u_hp*15) + 5 - t_amb))
+    min_vl_rl = 5
+    vl_rl_phys = (t_room + (u_hp * 15) - t_amb)
+
+    on_from_0 = (1 / (1 + np.exp((-vl_rl_phys) * 500)))
+    vl_rl_num = (min_vl_rl + (vl_rl_phys * on_from_0))  # always min of 5K difference
+    carnot = ((t_amb) / vl_rl_num)
     COP = carnot * exergetic_efficiency * COP_correction
 
     # heiz

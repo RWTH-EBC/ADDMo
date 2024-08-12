@@ -10,6 +10,12 @@ def simulate(x_grid, simulation_name):
         system_simulation = boptest_delta_T_air_physical_approximation
     elif simulation_name == "BopTest_TAir_ODEel":
         system_simulation = boptest_delta_T_air_physical_approximation_elcontrol
+    elif simulation_name == "bestest900_ODE":
+        system_simulation = bestest900_ODE
+    elif simulation_name == "bestest900_ODE_VL":
+        system_simulation = bestest900_ODE_VL
+    elif simulation_name == "bestest900_ODE_VL_COPcorr":
+        system_simulation = bestest900_ODE_VL_COPcorr
 
     y_grid = x_grid.apply(lambda row: system_simulation(*row), axis=1)
 
@@ -87,18 +93,88 @@ def boptest_delta_T_air_physical_approximation_elcontrol(t_amb, rad_dir, u_hp, t
     return (((15000 / 35) * (t_amb - t_room)) + (24 * rad_dir) + (15000 * u_hp * (((t_amb)/(273.15+35 - t_amb)) * 0.45/3) * (1 / (1 + np.exp(-(u_hp - 0.01) * 500))))) * 900 / 70476480
 
 def bestest900_ODE(t_amb, rad_dir, u_hp, t_room) -> float:
-    return (((15000 / 35) * (t_amb - t_room)) + (24 * rad_dir) + (15000 * u_hp * (((t_amb)/(t_room+15 - t_amb)) * 0.45/3))) * 900 / 70476480
 
-def bestest900_ODE_COPcorr(t_amb, rad_dir, u_hp, t_room) -> float:
-    COP_correction = (-0.6*((u_hp-0.5)**2)) + 1.15 # Abgeleitet aus Diss von Vering
-    return (((15000 / 35) * (t_amb - t_room)) + (24 * rad_dir) + (15000 * u_hp * (((t_amb)/(t_room+15 - t_amb)) * 0.45 * COP_correction/3))) * 900 / 70476480
+    # hp stats
+    COP_nominal = 3.33  # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
+    exergetic_efficiency = 0.45 # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
+    carnot = ((t_amb)/(t_room + 15 - t_amb))
+    COP = carnot * exergetic_efficiency
+
+    # heiz
+    hp_nom = 15000
+    hp_el_nom = hp_nom/COP_nominal
+    heat_hp = hp_el_nom * COP * u_hp
+
+    # building stats
+    t_amb_auslegung = -15
+    t_room_auslegung = 20
+    transmission = ((hp_nom / (t_room_auslegung - t_amb_auslegung)) * (t_amb - t_room)) # annäherung der U-Werte durch Wärmepumpe Auslegung
+
+    radiative = (24 * rad_dir)
+
+    C_zone = 70476480
+    time_step = 900
+    capacity = (time_step / C_zone)
+
+    delta_t = (transmission + radiative + heat_hp) * capacity
+    return delta_t
+
 
 def bestest900_ODE_VL(t_amb, rad_dir, u_hp, t_room) -> float:
-    return (((15000 / 35) * (t_amb - t_room)) + (24 * rad_dir) + (15000 * u_hp * ((t_amb/(t_room + (u_hp*25) + 5 - t_amb)) * 0.45/3))) * 900 / 70476480
+
+    # hp stats
+    COP_nominal = 3.33  # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
+    exergetic_efficiency = 0.45 # following Stoffels Diss
+    carnot = ((t_amb)/(t_room + (u_hp*15) + 5 - t_amb))
+    COP = carnot * exergetic_efficiency
+
+    # heiz
+    hp_nom = 15000
+    hp_el_nom = hp_nom/COP_nominal
+    heat_hp = hp_el_nom * COP * u_hp
+
+    # building stats
+    t_amb_auslegung = -15
+    t_room_auslegung = 20
+    transmission = ((hp_nom / (t_room_auslegung - t_amb_auslegung)) * (t_amb - t_room)) # annäherung der U-Werte durch Wärmepumpe Auslegung
+
+    radiative = (24 * rad_dir)
+
+    C_zone = 70476480
+    time_step = 900
+    capacity = (time_step / C_zone)
+
+    delta_t = (transmission + radiative + heat_hp) * capacity
+    return delta_t
 
 def bestest900_ODE_VL_COPcorr(t_amb, rad_dir, u_hp, t_room) -> float:
-    COP_correction = (-0.6*((u_hp-0.5)**2)) + 1.15 # Abgeleitet aus Diss von Vering
-    return (((15000 / 35) * (t_amb - t_room)) + (24 * rad_dir) + (15000 * u_hp * (((t_amb)/(t_room + (u_hp*25) + 5 - t_amb)) * 0.45 * COP_correction/3))) * 900 / 70476480
+
+    # hp stats
+    COP_nominal = 3.33  # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
+    exergetic_efficiency = 0.45 # following Stoffels Diss
+    COP_correction = ((-0.6*((u_hp-0.5)**2)) + 1.15) # Abgeleitet aus Diss von Vering
+    carnot = ((t_amb)/(t_room + (u_hp*15) + 5 - t_amb))
+    COP = carnot * exergetic_efficiency * COP_correction
+
+    # heiz
+    hp_nom = 15000
+    hp_el_nom = hp_nom/COP_nominal
+    # hp_el_nom = hp_el_nom * 2 # twice as big heat pump required for same heating power (due to on/off water pump and radiators instead of floor heating)
+    heat_hp = hp_el_nom * COP * u_hp
+
+    # building stats
+    t_amb_auslegung = -15
+    t_room_auslegung = 20
+    transmission = ((hp_nom / (t_room_auslegung - t_amb_auslegung)) * (t_amb - t_room)) # annäherung der U-Werte durch Wärmepumpe Auslegung
+
+    radiative = (24 * rad_dir)
+
+    C_zone = 70476480
+    time_step = 900
+    capacity = (time_step / C_zone)
+
+    delta_t = (transmission + radiative + heat_hp) * capacity
+    return delta_t
 
 def bestest900_ODE_bivalent(t_amb, rad_dir, p_el, t_room) -> float:
 

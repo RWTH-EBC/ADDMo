@@ -6,6 +6,7 @@ import pandas as pd
 
 from addmo.util.definitions import results_dir
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
+from aixtra.plotting import plot
 
 
 def plot_system_carpets(
@@ -14,8 +15,6 @@ def plot_system_carpets(
     prediction_func_2=None,
     combinations=None,
     defaults_dict=None,
-    save_plot=False,
-    save_path=None,
 ):
     """
     Create comparison 3D surface plots for one or two prediction functions.
@@ -46,16 +45,16 @@ def plot_system_carpets(
             elif var == y_label:
                 inputs[var] = Y
             else:
-                if defaults_dict[var] == None:
+                if defaults_dict == None:
                     inputs[var] = np.full_like(X, np.mean(grids[var]))
                 else:
                     inputs[var] = np.full_like(X, defaults_dict[var])
 
         Z1 = prediction_func_1(**inputs)
-        surf1 = ax.plot_surface(X, Y, Z1, cmap="viridis", alpha=0.7)
+        surf1 = ax.plot_surface(X, Y, Z1, cmap="cool", alpha=0.7)
         if prediction_func_2 is not None:
             Z2 = prediction_func_2(**inputs)
-            surf2 = ax.plot_surface(X, Y, Z2, cmap="plasma", alpha=0.7)
+            surf2 = ax.plot_surface(X, Y, Z2, cmap="autumn", alpha=0.7)
 
         ax.set_xlabel(x_label)
         ax.set_ylabel(y_label)
@@ -71,13 +70,7 @@ def plot_system_carpets(
         cbar2 = fig.colorbar(surf2, cax=cbar_ax2)
         cbar2.set_label("Regressor")
 
-    if save_plot:
-        if save_path is None:
-            save_path = os.path.join(results_dir(), "carpet_comparison.png")
-        plt.savefig(save_path, dpi=300, bbox_inches="tight")
-        print(f"Plot saved as: {save_path}")
-
-    return fig
+    return plt
 
 
 def prediction_func_4_regressor(regressor, rename_dict: dict = None):
@@ -113,12 +106,12 @@ def prediction_func_4_regressor(regressor, rename_dict: dict = None):
 if __name__ == "__main__":
     import aixtra.system_simulations.system_simulations as sys_sim
 
-    path_to_regressor = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\1_MPC_Boptest900_2019_defaultControl\ODEel_pid_steady\7_ODEel_steady_NovDez___MPC_Typ2D\Auswertung_CarpetPlot\2024-07-29_14-01__usual-sweep-3\regressor.keras"
+    path_to_regressor = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\7_ODEel_steady_NovDez_5fits\linreg\7_ODEel_steady_5fits_LinReg_absurd-sweep-2\regressors\regressor.joblib"
     regressor = ModelFactory.load_model(path_to_regressor)
 
     # Define bounds
     bounds = {
-        "t_amb": [263.15, 288.15],
+        "t_amb": [263.15, 310.15],
         "rad_dir": [0, 1000],
         "u_hp": [0, 1],
         "t_room": [290.15, 300.15],
@@ -141,15 +134,19 @@ if __name__ == "__main__":
         "reaTZon_y": "t_room",
     }
 
-    defaults_dict = {"t_room": 294.15, "t_amb": 273.15, "rad_dir": 0, "u_hp": 0.5}
+    defaults_dict = {"t_amb": 273.15, "rad_dir": 0, "u_hp": 0.5, "t_room": 294.15}
 
     # Create and show the plot
-    fig = plot_system_carpets(
+    plt = plot_system_carpets(
         bounds,
-        sys_sim.bestest900_ODE_VL,
-        prediction_func_4_regressor(regressor, rename_dict),
+        sys_sim.bestest900_ODE_VL_COPcorr,
+        # prediction_func_4_regressor(regressor, rename_dict),
         combinations=combinations,
         defaults_dict=defaults_dict,
-        save_plot=True,
     )
     plt.show()
+
+    # plot.save_plot(
+    #     plt, "carpets_system", results_dir()
+    # )
+    print(f"Plot saved: {results_dir()}.")

@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 import pandas as pd
 
@@ -16,7 +18,8 @@ def calc_gradient(model:AbstractMLModel, x: pd.DataFrame) -> pd.DataFrame:
     elif isinstance(model, KerasRegressor):
         model = model.model_
     else:
-        ValueError(f"Gradient calculation only for keras models.")
+        warnings.warn("Gradient calculation only for keras models. Returning zeros.")
+        return pd.DataFrame(0, index=[0], columns=x.columns)
 
     x_ = tf.Variable(x)
     # Calculate the gradient

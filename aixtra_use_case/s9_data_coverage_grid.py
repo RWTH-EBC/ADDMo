@@ -29,7 +29,7 @@ def exe(config: ExtrapolationExperimentConfig):
     )
 
     # for nicer appearence make sure that the control variable 3rd last column
-    control_var = "oveHeaPumY_u"
+    control_var = config.var4gradient
     cols = xy_grid.columns.tolist()
     cols.remove(control_var)
     cols.insert(-2, control_var)

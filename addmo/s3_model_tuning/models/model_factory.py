@@ -77,6 +77,7 @@ class ModelFactory:
             addmo_class = ModelFactory.model_factory(addmo_class_name)
             regressor = joblib.load(abs_path)
             addmo_class.load_regressor(regressor)
+            addmo_class.metadata = metadata
 
         # Load the regressor from onnx file to PredictorOnnx class
         elif abs_path.endswith('.onnx'):
@@ -92,6 +93,7 @@ class ModelFactory:
             regressor = keras.models.load_model(abs_path)
             regressor.load_weights(abs_path)
             addmo_class.load_regressor(regressor, input_shape)
+            addmo_class.metadata = metadata
 
         else:
             raise FileNotFoundError(

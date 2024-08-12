@@ -43,14 +43,13 @@ def exe(config: ExtrapolationExperimentConfig):
     )
 
     quantifier = ExplorationQuantifier()
-    y_grid = true_validity_grid
     quantifier.labels_grid = true_validity_grid
     quantifier.x_grid = x_grid
     coverage = quantifier.calculate_coverage()
 
     plots_per_axes = plot_scatter_average_coverage_per_2D(
         x_grid=x_grid,
-        y_grid=y_grid,
+        y_grid=true_validity_grid,
         title_header=f"true validity\n"
                      f"Coverage = {coverage.loc['Inside']:.2f} %",
     )

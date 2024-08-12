@@ -6,7 +6,7 @@ def infer_threshold(outlier_fraction: float, errors_train_val_test: pd.Series) -
     absolute_threshold = errors_train_val_test.quantile(1 - outlier_fraction)
     return absolute_threshold
 
-def classify_errors_2_true_validity(errors: pd.Series, absolute_validity_threshold: float):
+def classify_errors_2_true_validity(errors: pd.Series, absolute_validity_threshold: float) -> pd.Series:
     '''The regressor error is used to classify the system_data points to be in the true validity domain
     or not. Absolute error in respective error metric.
     0: in true validity domain

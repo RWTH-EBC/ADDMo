@@ -49,6 +49,20 @@ class ExtrapolationExperimentConfig(BaseModel):
         "carnot", description="System simulation type, None if no simulation"
     )
 
+    # specifications for gradients analysis
+    var4gradient: str = Field(
+        "control var",
+        description="Variable for which the gradient is calculated. For MPC use cases this is normally the control variable.",
+    )
+    correct_gradient: int = Field(
+        1,
+        description="Value for correct gradient. 1 for positive correlation, 0 for no correlation, -1 for negative correlation.",
+    )
+    gradient_zero_margin: float = Field(
+        1e-6,
+        description="Margin for the gradient calculation for which the gradient is considered zero",
+    )
+
     # additional configs to be imported
     config_model_tuning: ModelTunerConfig = Field(
         ModelTunerConfig(), description="Model tuning setup, set your own config."

@@ -1,21 +1,25 @@
 import numpy as np
 
+def system_factory(system_name: str):
+    if system_name == "carnot":
+        system_simulation = carnot_model
+    elif system_name == "BopTest_TAir_ODE":
+        system_simulation = boptest_delta_T_air_physical_approximation
+    elif system_name == "BopTest_TAir_ODEel":
+        system_simulation = boptest_delta_T_air_physical_approximation_elcontrol
+    elif system_name == "bestest900_ODE":
+        system_simulation = bestest900_ODE
+    elif system_name == "bestest900_ODE_VL":
+        system_simulation = bestest900_ODE_VL
+    elif system_name == "bestest900_ODE_VL_COPcorr":
+        system_simulation = bestest900_ODE_VL_COPcorr
+    return system_simulation
+
 def simulate(x_grid, simulation_name):
     '''Simulate the true values for the grid via the system simulation. Important note: Order of
     arguments must be identical to the order in the csv file.'''
 
-    if simulation_name == "carnot":
-        system_simulation = carnot_model
-    elif simulation_name == "BopTest_TAir_ODE":
-        system_simulation = boptest_delta_T_air_physical_approximation
-    elif simulation_name == "BopTest_TAir_ODEel":
-        system_simulation = boptest_delta_T_air_physical_approximation_elcontrol
-    elif simulation_name == "bestest900_ODE":
-        system_simulation = bestest900_ODE
-    elif simulation_name == "bestest900_ODE_VL":
-        system_simulation = bestest900_ODE_VL
-    elif simulation_name == "bestest900_ODE_VL_COPcorr":
-        system_simulation = bestest900_ODE_VL_COPcorr
+    system_simulation = system_factory(simulation_name)
 
     y_grid = x_grid.apply(lambda row: system_simulation(*row), axis=1)
 

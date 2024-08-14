@@ -1,5 +1,31 @@
 from aixtra_use_case.config.ed_experiment_config import ExtrapolationExperimentConfig
 
+def config_bes_steady(config: ExtrapolationExperimentConfig):
+    config.simulation_data_name = "bes_steady"
+    config.experiment_name = "Empty"
+    config.name_of_target = "Change(T Room)"
+    config.train_val_test_period = (29185, 35040) #November und Dezember
+    # config.train_val_test_period = (23329, 26208, 32065, 35040) #September und Dezember
+    config.shuffle = False
+    config.grid_points_per_axis = 10
+    config.system_simulation = "bestest900_ODE"
+    config.true_outlier_threshold = 0.05
+
+    config.config_explo_quant.exploration_bounds = {
+            "t_amb": (273.15 - 10, 273.15 + 20),
+            "rad_dir": (0, 800),
+            "u_hp": (0, 1),
+            "t_room": (273.15 + 15, 273.15 + 26),
+            "Change(T Room)": (-0.5, 0.5),
+        }
+    return config
+
+def config_bes_VLCOPcorr_steady(config: ExtrapolationExperimentConfig):
+    config = config_bes_steady(config)
+    config.simulation_data_name = "bes_VLCOPcorr_steady"
+    config.system_simulation = "bestest900_ODE_VL_COPcorr"
+    return config
+
 def config_ODEel_steady(config: ExtrapolationExperimentConfig):
     config.simulation_data_name = "ODEel_steady"
     config.experiment_name = "Empty"

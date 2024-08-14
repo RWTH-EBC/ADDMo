@@ -6,7 +6,7 @@ def no_tuning_config(config: ExtrapolationExperimentConfig) :
     config.config_explo_quant.explo_grid_points_per_axis = 10
 
     config.config_model_tuning.models = ["SciKerasSequential"]
-    config.config_model_tuning.trainings_per_model = 1
+    config.config_model_tuning.trainings_per_model = 5
     config.config_model_tuning.hyperparameter_tuning_type = "NoTuningTuner"
     config.config_model_tuning.hyperparameter_tuning_kwargs = {
         "hyperparameter_set": {
@@ -32,7 +32,7 @@ def linear_regression_config(config: ExtrapolationExperimentConfig):
 
 def tuning_config(config: ExtrapolationExperimentConfig):
     config = no_tuning_config(config)
-    config.config_model_tuning.trainings_per_model = 5
+    config.config_model_tuning.trainings_per_model = 10
     config.config_model_tuning.hyperparameter_tuning_type = "OptunaTuner"
     config.config_model_tuning.validation_score_mechanism = "cv"
     config.config_model_tuning.validation_score_splitting = "KFold"

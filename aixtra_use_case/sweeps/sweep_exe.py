@@ -13,6 +13,7 @@ from aixtra_use_case import (
     s2_tune_ml_regressor,
     s3_regressor_error_calculation,
     s4_true_validity_domain,
+    s4_gradient,
     s5_tune_detector,
     s6_detector_score_calculation,
     s8_0_generate_grid,
@@ -20,6 +21,10 @@ from aixtra_use_case import (
     s8_2_coverage_grid_occupancy,
     s8_3_coverage_tuned_ND,
     s8_4_coverage_true_validity,
+    s8_5_coverage_gradient,
+    s9_data_coverage,
+    s9_data_coverage_grid,
+    s9_carpet_plots,
 )
 
 
@@ -60,6 +65,7 @@ def run_all():
     s2_tune_ml_regressor.exe(config)
     s3_regressor_error_calculation.exe(config)
     s4_true_validity_domain.exe(config)
+    s4_gradient.exe(config)
     s5_tune_detector.exe(config)
     s6_detector_score_calculation.exe(config)
     s8_0_generate_grid.exe(config)
@@ -67,22 +73,26 @@ def run_all():
     # s8_2_coverage_grid_occupancy.exe(config)
     s8_3_coverage_tuned_ND.exe(config)
     s8_4_coverage_true_validity.exe(config)
+    s8_5_coverage_gradient.exe(config)
+    s9_data_coverage.exe(config)
+    s9_data_coverage_grid.exe(config)
+    s9_carpet_plots.exe(config)
 
     ExperimentLogger.finish_experiment()
 
 
 def create_config():  # Todo set
     config = ExtrapolationExperimentConfig()
-    config = config_blueprints_systems.config_carnot(config)
-    config = config_blueprints.tuning_config(config)
-    config.experiment_name = f"7_{config.simulation_data_name}"
+    config = config_blueprints_systems.config_bes_steady(config)
+    config = config_blueprints.linear_regression_config(config)
+    config.experiment_name = f"8_{config.simulation_data_name}"
     return config
 
 
 def create_sweep():
     config = create_config()
 
-    sweep_configuration = config_sweep.sweep_several_tunings()  # Todo set
+    sweep_configuration = config_sweep.sweep_repetitions_only()  # Todo set
 
     entity = wandb.api.default_entity
     project_name = config.experiment_name

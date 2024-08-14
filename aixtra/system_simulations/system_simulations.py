@@ -101,12 +101,16 @@ def bestest900_ODE(t_amb, rad_dir, u_hp, t_room) -> float:
     # hp stats
     COP_nominal = 3.33  # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
     exergetic_efficiency = 0.45 # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
-    min_vl_rl = 5
-    vl_rl_phys = (t_room + 10 - t_amb)
 
-    on_from_0 = (1 / (1 + np.exp((-vl_rl_phys) * 500)))
-    vl_rl_num = (min_vl_rl + (vl_rl_phys * on_from_0)) # always min of 5K difference
-    carnot = ((t_amb)/vl_rl_num)
+    t_vl = (t_room + 15)
+    bruch_phys = (t_vl - t_amb)
+
+    min_vl_rl = 10
+    on_from = (1 / (1 + np.exp((-(bruch_phys-10)*20))))
+    of_from = (1 / (1 + np.exp(((bruch_phys-10)*20))))
+    bruch_num = ((min_vl_rl * of_from) + (bruch_phys * on_from)) # always min of 10K difference
+    carnot = t_vl / bruch_num
+
     COP = carnot * exergetic_efficiency
 
     # heiz
@@ -134,14 +138,54 @@ def bestest900_ODE_VL(t_amb, rad_dir, u_hp, t_room) -> float:
     # hp stats
     COP_nominal = 3.33  # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
     exergetic_efficiency = 0.45 # following Stoffels Diss
-    min_vl_rl = 5
-    vl_rl_phys = (t_room + (u_hp * 15) - t_amb)
 
-    on_from_0 = (1 / (1 + np.exp((-vl_rl_phys) * 500)))
-    vl_rl_num = (min_vl_rl + (vl_rl_phys * on_from_0))  # always min of 5K difference
-    carnot = ((t_amb) / vl_rl_num)
+    t_vl = (t_room + (u_hp * 20))
+    bruch_phys = (t_vl - t_amb)
+
+    min_vl_rl = 10
+    on_from = (1 / (1 + np.exp((-(bruch_phys-10)*20))))
+    of_from = (1 / (1 + np.exp(((bruch_phys-10)*20))))
+    bruch_num = ((min_vl_rl * of_from) + (bruch_phys * on_from)) # always min of 10K difference
+    carnot = t_vl / bruch_num
 
     COP = carnot * exergetic_efficiency
+
+    # heiz
+    hp_nom = 15000
+    hp_el_nom = hp_nom/COP_nominal
+    heat_hp = hp_el_nom * COP * u_hp
+
+    # building stats
+    t_amb_auslegung = -15
+    t_room_auslegung = 20
+    transmission = ((hp_nom / (t_room_auslegung - t_amb_auslegung)) * (t_amb - t_room)) # annäherung der U-Werte durch Wärmepumpe Auslegung
+
+    radiative = (24 * rad_dir)
+
+    C_zone = 70476480
+    time_step = 900
+    capacity = (time_step / C_zone)
+
+    delta_t = (transmission + radiative + heat_hp) * capacity
+    return delta_t
+
+def bestest900_ODE_COPCorr(t_amb, rad_dir, u_hp, t_room) -> float:
+
+    # hp stats
+    COP_nominal = 3.33  # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
+    exergetic_efficiency = 0.45 # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
+    COP_correction = ((-0.6*((u_hp-0.5)**2)) + 1.15) # Abgeleitet aus Diss von Vering
+
+    t_vl = (t_room + 15)
+    bruch_phys = (t_vl - t_amb)
+
+    min_vl_rl = 10
+    on_from = (1 / (1 + np.exp((-(bruch_phys-10)*20))))
+    of_from = (1 / (1 + np.exp(((bruch_phys-10)*20))))
+    bruch_num = ((min_vl_rl * of_from) + (bruch_phys * on_from)) # always min of 10K difference
+    carnot = t_vl / bruch_num
+
+    COP = carnot * exergetic_efficiency * COP_correction
 
     # heiz
     hp_nom = 15000
@@ -168,12 +212,16 @@ def bestest900_ODE_VL_COPcorr(t_amb, rad_dir, u_hp, t_room) -> float:
     COP_nominal = 3.33  # following boptest https://simulationresearch.lbl.gov/modelica/releases/latest/help/Buildings_Fluid_HeatPumps.html#Buildings.Fluid.HeatPumps.ScrollWaterToWater
     exergetic_efficiency = 0.45 # following Stoffels Diss
     COP_correction = ((-0.6*((u_hp-0.5)**2)) + 1.15) # Abgeleitet aus Diss von Vering
-    min_vl_rl = 5
-    vl_rl_phys = (t_room + (u_hp * 15) - t_amb)
 
-    on_from_0 = (1 / (1 + np.exp((-vl_rl_phys) * 500)))
-    vl_rl_num = (min_vl_rl + (vl_rl_phys * on_from_0))  # always min of 5K difference
-    carnot = ((t_amb) / vl_rl_num)
+    t_vl = (t_room + (u_hp * 20))
+    bruch_phys = (t_vl - t_amb)
+
+    min_vl_rl = 10
+    on_from = (1 / (1 + np.exp((-(bruch_phys-10)*20))))
+    of_from = (1 / (1 + np.exp(((bruch_phys-10)*20))))
+    bruch_num = ((min_vl_rl * of_from) + (bruch_phys * on_from)) # always min of 10K difference
+    carnot = t_vl / bruch_num
+
     COP = carnot * exergetic_efficiency * COP_correction
 
     # heiz
@@ -247,6 +295,3 @@ def bestest900_ODE_bivalent(t_amb, rad_dir, p_el, t_room) -> float:
 
     delta_t = (transmission + radiative + heater) * capacity
     return delta_t
-
-
-

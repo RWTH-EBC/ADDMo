@@ -20,7 +20,7 @@ def config_bes_steady(config: ExtrapolationExperimentConfig):
             "rad_dir": (0, 800),
             "u_hp": (0, 1),
             "t_room": (273.15 + 15, 273.15 + 26),
-            "Change(T Room)": (-0.5, 1),
+            "Change(T Room)": (-0.3, 1),
         }
     return config
 

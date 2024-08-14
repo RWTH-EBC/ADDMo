@@ -33,26 +33,11 @@ from aixtra_use_case import (
 # configure config
 from aixtra_use_case.sweeps import config_blueprints, config_blueprints_systems
 config = ExtrapolationExperimentConfig()
-config = config_blueprints_systems.config_ODEel_steady(config)
-config = config_blueprints.linear_regression_config(config)
+config = config_blueprints_systems.config_bes_VLCOPcorr_steady(config)
+config = config_blueprints.no_tuning_config(config)
 
-config.simulation_data_name = "TEMP"
-config.experiment_name = "linear"
-config.name_of_target = "Change(T Room)"
-config.system_simulation = "bestest900_ODE_VL_COPcorr"
-config.config_explo_quant.exploration_bounds = {
-    "t_amb": (263.15, 303.15),
-    "rad_dir": (0, 1000),
-    "u_hp": (0, 1),
-    "t_room": (290.15, 300.15),
-    "Change(T Room)": (-0.5, 0.5),
-}
+# config.train_val_test_period = (23329, 26208, 32065, 35040) #September und Dezember
 
-config.config_model_tuning.trainings_per_model = 1
-config.config_detector.detectors = ["KNN_untuned"]
-config.var4gradient = "u_hp"
-config.correct_gradient = 1
-config.gradient_zero_margin = 0.000001
 
 # Configure the logger
 create_or_clean_directory(config.experiment_folder)
@@ -78,7 +63,7 @@ s8_0_generate_grid.exe(config)
 # s8_3_coverage_tuned_ND.exe(config)
 s8_4_coverage_true_validity.exe(config)
 s8_5_coverage_gradient.exe(config)
-s9_data_coverage.exe(config)
+# s9_data_coverage.exe(config)
 s9_data_coverage_grid.exe(config)
 s9_carpet_plots.exe(config)
 # # #

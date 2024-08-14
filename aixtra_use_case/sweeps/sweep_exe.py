@@ -74,7 +74,7 @@ def run_all():
     s8_3_coverage_tuned_ND.exe(config)
     s8_4_coverage_true_validity.exe(config)
     s8_5_coverage_gradient.exe(config)
-    s9_data_coverage.exe(config)
+    # s9_data_coverage.exe(config)
     s9_data_coverage_grid.exe(config)
     s9_carpet_plots.exe(config)
 

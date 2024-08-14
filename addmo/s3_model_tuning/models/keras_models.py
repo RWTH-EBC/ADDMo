@@ -185,6 +185,8 @@ class SciKerasSequential(BaseKerasModel):
         hyperparameters['hidden_layer_sizes'] = [16]
         hyperparameters['batch_size'] = 200
         hyperparameters['epochs'] = 1000
+        hyperparameters['callbacks'] = [EarlyStopping(monitor="loss", min_delta=0.000000001, verbose=1,
+                                         patience=100)]
 
 
         return hyperparameters
@@ -198,8 +200,8 @@ class SciKerasSequential(BaseKerasModel):
             hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 100) for i in range(1, n_layers + 1, 1))
         hyperparameters = {
             "hidden_layer_sizes": hidden_layer_sizes,
-            "callbacks": [EarlyStopping(monitor="loss", min_delta=0.0000001, verbose=1,
-                                         patience=50)],
+            "callbacks": [EarlyStopping(monitor="loss", min_delta=0.000000001, verbose=1,
+                                         patience=100)],
         }
         return hyperparameters
 

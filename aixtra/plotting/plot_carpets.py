@@ -51,10 +51,10 @@ def plot_system_carpets(
                     inputs[var] = np.full_like(X, defaults_dict[var])
 
         Z1 = prediction_func_1(**inputs)
-        surf1 = ax.plot_surface(X, Y, Z1, cmap="cool", alpha=0.7)
+        surf1 = ax.plot_surface(X, Y, Z1, cmap="cool", alpha=0.5)
         if prediction_func_2 is not None:
             Z2 = prediction_func_2(**inputs)
-            surf2 = ax.plot_surface(X, Y, Z2, cmap="autumn", alpha=0.7)
+            surf2 = ax.plot_surface(X, Y, Z2, cmap="autumn", alpha=0.5)
 
         ax.set_xlabel(x_label)
         ax.set_ylabel(y_label)
@@ -106,7 +106,7 @@ def prediction_func_4_regressor(regressor, rename_dict: dict = None):
 if __name__ == "__main__":
     import aixtra.system_simulations.system_simulations as sys_sim
 
-    path_to_regressor = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\7_ODEel_steady_NovDez_5fits\linreg\7_ODEel_steady_5fits_LinReg_absurd-sweep-2\regressors\regressor.joblib"
+    path_to_regressor = r"D:\04_GitRepos\addmo-extra\aixtra_use_case\results\Empty\regressors\regressor.joblib"
     regressor = ModelFactory.load_model(path_to_regressor)
 
     # Define bounds

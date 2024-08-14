@@ -57,7 +57,7 @@ def classify_gradient(gradients: pd.DataFrame, gradient_zero_margin: float = 1e-
         else:
             return -1
 
-    return gradients.applymap(classify)
+    return gradients.map(classify)
 
 def calc_gradient_coverage(gradients_clf: pd.Series) -> pd.DataFrame:
     '''

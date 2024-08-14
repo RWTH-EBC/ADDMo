@@ -44,8 +44,23 @@ def exe(config: ExtrapolationExperimentConfig):
     system_function = system_factory(config.system_simulation)
     regressor_function = plot_carpets.prediction_func_4_regressor(regressor)
 
+    # hard code defaults for nicer appearance
+    if config.simulation_data_name.startswith("bes"):
+        combinations = [
+            ("u_hp", "t_amb"),
+            ("u_hp", "t_room"),
+            ("u_hp", "rad_dir"),
+            ("t_amb", "t_room"),
+            ("t_amb", "rad_dir"),
+            ("rad_dir", "t_room"),
+        ]
+        defaults_dict = {"t_amb": 273.15, "rad_dir": 0, "u_hp": 0.5, "t_room": 273.15+20}
+    else:
+        combinations = None
+        defaults_dict = None
+
     # plot
-    carpets_plot = plot_carpets.plot_system_carpets(bounds, system_function, regressor_function)
+    carpets_plot = plot_carpets.plot_system_carpets(bounds, system_function, regressor_function, combinations=combinations, defaults_dict=defaults_dict)
 
     plot.save_plot(carpets_plot, "carpets_system", config.experiment_folder)
 

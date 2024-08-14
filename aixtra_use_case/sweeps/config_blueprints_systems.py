@@ -11,12 +11,16 @@ def config_bes_steady(config: ExtrapolationExperimentConfig):
     config.system_simulation = "bestest900_ODE"
     config.true_outlier_threshold = 0.05
 
+    config.var4gradient = "u_hp"
+    config.correct_gradient = 1
+    config.gradient_zero_margin = 1e-6
+
     config.config_explo_quant.exploration_bounds = {
             "t_amb": (273.15 - 10, 273.15 + 20),
             "rad_dir": (0, 800),
             "u_hp": (0, 1),
             "t_room": (273.15 + 15, 273.15 + 26),
-            "Change(T Room)": (-0.5, 0.5),
+            "Change(T Room)": (-0.5, 1),
         }
     return config
 

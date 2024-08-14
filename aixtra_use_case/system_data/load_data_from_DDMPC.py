@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+from aixtra.system_simulations import system_simulations as sys_sim
+
 
 # Read the CSV file
 df = pd.read_csv(r"D:\04_GitRepos\DDMPC_GitLab\Examples\BopTest_TAir_ODE\stored_data\data\training_data.csv")
@@ -11,19 +13,20 @@ df_new = df[['t_amb', 'rad_dir', 'u_hp', 't_room', 'Change(T Room)']]
 df_new['Change(T Room)'] = df_new['Change(T Room)'].shift(-1)
 
 # check with simulation put to addmo:
-from aixtra.system_simulations.system_simulations import boptest_delta_T_air_physical_approximation_elcontrol
-system_prediction = boptest_delta_T_air_physical_approximation_elcontrol(df['t_amb'], df['rad_dir'], df['u_hp'], df['t_room'])
-# assert all but first row and last row cause there is nan in original data
-error = abs(system_prediction[1:-1] - df['Change(T Room)'][1:-1])
-total_error = error.sum()
-
-# if error small then put system_prediction into df_new to fill first and last row
-if total_error < 1e-6:
-    df_new['Change(T Room)'] = system_prediction
+# system_prediction = boptest_delta_T_air_physical_approximation_elcontrol(df['t_amb'], df['rad_dir'], df['u_hp'], df['t_room'])
+# # assert all but first row and last row cause there is nan in original data
+# error = abs(system_prediction[1:-1] - df['Change(T Room)'][1:-1])
+# total_error = error.sum()
+#
+# # if error small then put system_prediction into df_new to fill first and last row
+# if total_error < 1e-6:
+#     df_new.loc['Change(T Room)'] = system_prediction
+# else:
+#     print(f"Error too large: {total_error}, not filling in system prediction")
 
 
 # Save the new dataframe to a CSV file with semicolon separator and no index
-new_simulation_data_name = f"bestest900_VL_COPcorr"
+new_simulation_data_name = f"bes_VLCOPcorr_steady"
 # path = os.path.join("edited", new_simulation_data_name + ".csv")
 path = os.path.join(new_simulation_data_name + ".csv")
 

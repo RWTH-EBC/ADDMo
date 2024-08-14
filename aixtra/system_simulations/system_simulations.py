@@ -295,3 +295,14 @@ def bestest900_ODE_bivalent(t_amb, rad_dir, p_el, t_room) -> float:
 
     delta_t = (transmission + radiative + heater) * capacity
     return delta_t
+
+def clocking_losses(u_hp):
+    '''
+    f(0) = 0.85
+    f(0.3) = 1
+    f(1) = 1
+    '''
+    on_from3 = (1 / (1 + np.exp((-(u_hp-0.3)*500))))
+    of_from3 = (1 / (1 + np.exp(((u_hp-0.3)*500))))
+    clocking_losses = ((((0.5 * u_hp) + 0.85) * of_from3) + (1 * on_from3))
+    return clocking_losses

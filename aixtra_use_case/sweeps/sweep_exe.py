@@ -84,7 +84,7 @@ def run_all():
 def create_config():  # Todo set
     config = ExtrapolationExperimentConfig()
     config = config_blueprints_systems.config_bes_steady(config)
-    config = config_blueprints.linear_regression_config(config)
+    config = config_blueprints.no_tuning_config(config)
     config.experiment_name = f"8_{config.simulation_data_name}"
     return config
 
@@ -92,7 +92,7 @@ def create_config():  # Todo set
 def create_sweep():
     config = create_config()
 
-    sweep_configuration = config_sweep.sweep_repetitions_only()  # Todo set
+    sweep_configuration = config_sweep.sweep_hidden_layer_sizes()  # Todo set
 
     entity = wandb.api.default_entity
     project_name = config.experiment_name
@@ -107,8 +107,13 @@ def create_sweep():
     print(f"wandb.agent('{full_sweep_path}', function=run_all)")
 
     print("\nTo run an agent from the Anaconda command prompt, follow these steps:")
-    print("   conda activate ADDMo-Extra")
+    print("\n \n \n From VM:")
     print("   conda activate py311_addmoextra")
+    print(f"   cd {root_dir()}")
+    print(f"   python -m aixtra_use_case.sweeps.sweep_exe {full_sweep_path}")
+
+    print("\n \n \n From Laptop:")
+    print("   conda activate ADDMo-Extra")
     print(f"   cd /d {root_dir()}")
     print(f"   python -m aixtra_use_case.sweeps.sweep_exe {full_sweep_path}")
 

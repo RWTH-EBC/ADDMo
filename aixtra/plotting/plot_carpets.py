@@ -27,7 +27,7 @@ def plot_system_carpets(
         ]
 
     # Create a grid for each variable
-    grids = {var: np.linspace(bounds[var][0], bounds[var][1], 50) for var in variables}
+    grids = {var: np.linspace(bounds[var][0], bounds[var][1], 150) for var in variables}
 
     # Create the figure
     fig = plt.figure(figsize=(24, 15))
@@ -111,10 +111,10 @@ if __name__ == "__main__":
 
     # Define bounds
     bounds = {
-        "t_amb": [263.15, 310.15],
-        "rad_dir": [0, 1000],
+        "t_amb": [273.15-10, 273.15+20],
+        "rad_dir": [0, 800],
         "u_hp": [0, 1],
-        "t_room": [290.15, 300.15],
+        "t_room": [273.15+15, 273.15+26],
     }
 
     # Create all possible combinations of variables
@@ -134,7 +134,7 @@ if __name__ == "__main__":
         "reaTZon_y": "t_room",
     }
 
-    defaults_dict = {"t_amb": 273.15, "rad_dir": 0, "u_hp": 0.5, "t_room": 294.15}
+    defaults_dict = {"t_amb": 273.15, "rad_dir": 0, "u_hp": 0.5, "t_room": 273.15+20}
 
     # Create and show the plot
     plt = plot_system_carpets(

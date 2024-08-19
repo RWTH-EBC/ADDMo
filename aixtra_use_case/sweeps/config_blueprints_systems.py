@@ -30,6 +30,11 @@ def config_bes_VLCOPcorr_steady(config: ExtrapolationExperimentConfig):
     config.system_simulation = "bestest900_ODE_VL_COPcorr"
     return config
 
+def config_bes_VLCOPcorr_random(config: ExtrapolationExperimentConfig):
+    config = config_bes_VLCOPcorr_steady(config)
+    config.simulation_data_name = "bes_VLCOPcorr_random"
+    return config
+
 def config_ODEel_steady(config: ExtrapolationExperimentConfig):
     config.simulation_data_name = "ODEel_steady"
     config.experiment_name = "Empty"

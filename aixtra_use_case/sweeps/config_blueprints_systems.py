@@ -36,12 +36,12 @@ def config_bes_VLCOPcorr_random(config: ExtrapolationExperimentConfig):
     return config
 def config_bes_VLCOPcorr_steady_NovDezSelect(config: ExtrapolationExperimentConfig):
     config = config_bes_VLCOPcorr_steady(config)
-    config.train_val_test_period = (0, 1442)
+    config.train_val_test_period = (0, 1439)
     config.simulation_data_name = "bes_VLCOPcorr_steady_NovDezSelect"
     return config
 def config_bes_VLCOPcorr_random_NovDezSelect(config: ExtrapolationExperimentConfig):
     config = config_bes_VLCOPcorr_random(config)
-    config.train_val_test_period = (0, 1442)
+    config.train_val_test_period = (0, 1439)
     config.simulation_data_name = "bes_VLCOPcorr_random_NovDezSelect"
     return config
 

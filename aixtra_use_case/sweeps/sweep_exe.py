@@ -83,7 +83,7 @@ def run_all():
 
 def create_config():  # Todo set
     config = ExtrapolationExperimentConfig()
-    config = config_blueprints_systems.config_bes_VLCOPcorr_random(config)
+    config = config_blueprints_systems.config_bes_VLCOPcorr_steady_NovDezSelect(config)
     config = config_blueprints.no_tuning_config(config)
     config.experiment_name = f"8_{config.simulation_data_name}"
     return config

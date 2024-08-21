@@ -1,3 +1,5 @@
+import os
+from addmo.util.definitions import ed_use_case_dir
 from aixtra_use_case.config.ed_experiment_config import ExtrapolationExperimentConfig
 
 def config_bes_steady(config: ExtrapolationExperimentConfig):
@@ -37,12 +39,14 @@ def config_bes_VLCOPcorr_random(config: ExtrapolationExperimentConfig):
 def config_bes_VLCOPcorr_steady_NovDezSelect(config: ExtrapolationExperimentConfig):
     config = config_bes_VLCOPcorr_steady(config)
     config.train_val_test_period = (0, 1439)
-    config.simulation_data_name = "bes_VLCOPcorr_steady_NovDezSelect"
     return config
+
 def config_bes_VLCOPcorr_random_NovDezSelect(config: ExtrapolationExperimentConfig):
     config = config_bes_VLCOPcorr_random(config)
-    config.train_val_test_period = (0, 1439)
-    config.simulation_data_name = "bes_VLCOPcorr_random_NovDezSelect"
+    indice_path = os.path.join(ed_use_case_dir(), "system_data", "trial_indices.txt")
+    with open(indice_path, 'r') as f:
+        indices = f.read().split(', ')
+    config.train_val_test_period = list(indices)
     return config
 
 def config_ODEel_steady(config: ExtrapolationExperimentConfig):

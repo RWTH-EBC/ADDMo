@@ -77,7 +77,7 @@ def select_train(xy: pd.DataFrame, plot_dir: str = None) -> pd.DataFrame:
         iteration += 1
 
     # Sort dataset by index and return unscaled data
-    return xy.loc[dataset_indices].sort_index()
+    return dataset_indices
 
 
 def plot_data_selection(var1, var2, dataset_all, dataset_selected=None, new_data=None,
@@ -144,7 +144,7 @@ def create_gif_selection(image_folder, output_folder):
     frames[0].save(output_gif_filename, format='GIF',
                    append_images=frames[1:],
                    save_all=True,
-                   duration=300, loop=0)  # Changed loop to 0 for infinite looping
+                   duration=100, loop=0)  # Changed loop to 0 for infinite looping
 
     print(f"GIF created: {output_gif_filename}")
 
@@ -164,12 +164,22 @@ if __name__ == "__main__":
 
     # append all of them
     xy = pd.concat([xy_training, xy_validation, xy_test])
+    xy.index = xy.index.astype(int)
 
     # Call the select_train function
     plot_dir = r'D:\04_GitRepos\addmo-extra\aixtra_use_case\results'
-    selected_dataset = select_train(xy, plot_dir=r'D:\04_GitRepos\addmo-extra\aixtra_use_case\results')
+    indices = select_train(xy, plot_dir=plot_dir)
     create_gifs_for_all_combinations(plot_dir)
+
+    # save indices to a file
+    indices_list = list(indices)
+    indices_path = os.path.join(plot_dir, "selected_indices.txt")
+    with open(indices_path, 'w') as f:
+        for item in indices_list:
+            f.write("%s, " % item)
+
+    selected_dataset = xy.loc[indices].sort_index()
 
     # save the selected dataset
     data_path = os.path.join(plot_dir, "selected_dataset.csv")
-    selected_dataset.to_csv(data_path, sep=";", index=False, header=True, encoding="utf-8")
+    selected_dataset.to_csv(data_path, sep=";", index=True, header=True, encoding="utf-8")

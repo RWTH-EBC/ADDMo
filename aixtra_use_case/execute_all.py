@@ -33,7 +33,7 @@ from aixtra_use_case import (
 # configure config
 from aixtra_use_case.sweeps import config_blueprints, config_blueprints_systems
 config = ExtrapolationExperimentConfig()
-config = config_blueprints_systems.config_bes_VLCOPcorr_steady_NovDezSelect(config)
+config = config_blueprints_systems.config_bes_VLCOPcorr_random_NovDezSelect(config)
 config = config_blueprints.linear_regression_config(config)
 
 # Configure the logger

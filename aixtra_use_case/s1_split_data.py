@@ -27,7 +27,12 @@ def exe(config: ExtrapolationExperimentConfig):
             indices.extend(range(start, end))
         return indices
 
-    train_val_test_indices = get_indices_from_multiple_periods(config.train_val_test_period)
+    if isinstance(config.train_val_test_period, tuple):
+        # if the train_val_test_period is a tuple, it is a period
+        train_val_test_indices = get_indices_from_multiple_periods(config.train_val_test_period)
+    if isinstance(config.train_val_test_period, list):
+        # if the train_val_test_period is a list, it is already a list of indices
+        train_val_test_indices = config.train_val_test_period
 
     (
         xy_training,

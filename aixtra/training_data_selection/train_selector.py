@@ -37,6 +37,7 @@ def select_train(xy: pd.DataFrame, plot_dir: str = None) -> pd.DataFrame:
     nr_blocks = 14*24*4 // block_size
 
     iteration = 1
+    indices_per_iteration = {}
     # Choose data for 63 more days
     while iteration <= nr_blocks:
         # Calculate novelty scores for remaining data
@@ -66,6 +67,8 @@ def select_train(xy: pd.DataFrame, plot_dir: str = None) -> pd.DataFrame:
 
         print(f"Iteration {iteration}: Added {len(new_indices)} new data points")
 
+        indices_per_iteration[iteration] = [list(dataset_indices), list(new_indices)]
+
         # Plot the data selection (using unscaled data for visualization)
         if plot_dir:
             for var1, var2 in column_combinations:
@@ -77,7 +80,7 @@ def select_train(xy: pd.DataFrame, plot_dir: str = None) -> pd.DataFrame:
         iteration += 1
 
     # Sort dataset by index and return unscaled data
-    return dataset_indices
+    return dataset_indices, indices_per_iteration
 
 
 def plot_data_selection(var1, var2, dataset_all, dataset_selected=None, new_data=None,
@@ -168,8 +171,14 @@ if __name__ == "__main__":
 
     # Call the select_train function
     plot_dir = r'D:\04_GitRepos\addmo-extra\aixtra_use_case\results'
-    indices = select_train(xy, plot_dir=plot_dir)
+    indices, indices_per_iteration = select_train(xy, plot_dir=plot_dir)
     create_gifs_for_all_combinations(plot_dir)
+
+    # save indices_per_iteration to a csv
+    indices_per_iteration_path = os.path.join(plot_dir, "indices_per_iteration.csv")
+    indices_per_iteration_df = pd.DataFrame(indices_per_iteration).transpose()
+    indices_per_iteration_df.to_csv(indices_per_iteration_path, sep=";", index=True, header=True, encoding="utf-8")
+
 
     # save indices to a file
     indices_list = list(indices)

@@ -38,14 +38,18 @@ def config_bes_VLCOPcorr_random(config: ExtrapolationExperimentConfig):
     return config
 def config_bes_VLCOPcorr_steady_NovDezSelect(config: ExtrapolationExperimentConfig):
     config = config_bes_VLCOPcorr_steady(config)
-    config.train_val_test_period = (0, 1439)
+    indice_path = os.path.join(ed_use_case_dir(), "system_data", "bes_VLCOPcorr_steady_NovDezSelect_indices.txt")
+    with open(indice_path, 'r') as f:
+        indices = f.read().split(', ')
+    indices = [int(i) for i in indices if i != ''] # remove empty strings which is last element
     return config
 
 def config_bes_VLCOPcorr_random_NovDezSelect(config: ExtrapolationExperimentConfig):
     config = config_bes_VLCOPcorr_random(config)
-    indice_path = os.path.join(ed_use_case_dir(), "system_data", "trial_indices.txt")
+    indice_path = os.path.join(ed_use_case_dir(), "system_data", "bes_VLCOPcorr_random_NovDezSelect_indices.txt")
     with open(indice_path, 'r') as f:
         indices = f.read().split(', ')
+    indices = [int(i) for i in indices if i != ''] # remove empty strings which is last element
     config.train_val_test_period = list(indices)
     return config
 

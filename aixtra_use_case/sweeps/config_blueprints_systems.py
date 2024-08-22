@@ -42,6 +42,7 @@ def config_bes_VLCOPcorr_steady_NovDezSelect(config: ExtrapolationExperimentConf
     with open(indice_path, 'r') as f:
         indices = f.read().split(', ')
     indices = [int(i) for i in indices if i != ''] # remove empty strings which is last element
+    config.train_val_test_period = list(indices)
     return config
 
 def config_bes_VLCOPcorr_random_NovDezSelect(config: ExtrapolationExperimentConfig):

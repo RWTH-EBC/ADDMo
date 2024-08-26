@@ -42,7 +42,7 @@ def run_all():
     if config.config_model_tuning.models == ["ScikitLinearRegNoScaler"]:
         wandb.run.name = f"LinReg_{wandb.run.name}"
     elif config.experiment_name.endswith("NovDezSelect"):
-        config.config_model_tuning.hyperparameter_tuning_kwargs["hyperparameter_set"]["batch_size"] = 50
+        config.config_model_tuning.hyperparameter_tuning_kwargs["hyperparameter_set"]["batch_size"] = 50 # konstante anzahl an batches per epoch (26.3 batches)
 
     # update config
     run_name = f"{config.experiment_name}_{wandb.run.name}"

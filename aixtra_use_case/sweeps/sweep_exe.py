@@ -42,7 +42,9 @@ def run_all():
     if config.config_model_tuning.models == ["ScikitLinearRegNoScaler"]:
         wandb.run.name = f"LinReg_{wandb.run.name}"
     elif config.experiment_name.endswith("NovDezSelect"):
-        config.config_model_tuning.hyperparameter_tuning_kwargs["hyperparameter_set"]["batch_size"] = 50 # konstante anzahl an batches per epoch (26.3 batches)
+        # works only for no_tuning
+        if 'hyperparameter_set' in config.config_model_tuning.hyperparameter_tuning_kwargs:
+            config.config_model_tuning.hyperparameter_tuning_kwargs["hyperparameter_set"]["batch_size"] = 50 # konstante anzahl an batches per epoch (26.3 batches)
 
     # update config
     run_name = f"{config.experiment_name}_{wandb.run.name}"
@@ -90,6 +92,7 @@ def create_config():  # Todo set
     config.experiment_name = f"8_{config.simulation_data_name}_NovDezSelect"
     return config
 
+# Todo: correct batch size in hyperparameter suggest?
 
 def create_sweep():
     config = create_config()

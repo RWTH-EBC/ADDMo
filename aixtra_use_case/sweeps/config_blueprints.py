@@ -21,6 +21,19 @@ def no_tuning_config(config: ExtrapolationExperimentConfig) :
 
     return config
 
+def no_tuning_config_SVR(config: ExtrapolationExperimentConfig):
+    config.config_explo_quant.explo_grid_points_per_axis = 10
+
+    config.config_model_tuning.models = ["ScikitSVR"]
+    config.config_model_tuning.trainings_per_model = 1
+    config.config_model_tuning.hyperparameter_tuning_type = "NoTuningTuner"
+    config.config_model_tuning.hyperparameter_tuning_kwargs = {"hyperparameter_set": {}}
+    config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"
+    config.config_model_tuning.validation_score_mechanism = "none"
+    config.config_model_tuning.validation_score_splitting = "none"
+    config.config_detector.detectors = ["KNN_untuned", "OCSVM_untuned"]
+
+    return config
 
 def linear_regression_config(config: ExtrapolationExperimentConfig):
     config = no_tuning_config(config)

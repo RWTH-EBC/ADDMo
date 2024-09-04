@@ -34,6 +34,13 @@ class OptunaTuner(AbstractHyParamTuner):
         Perform hyperparameter tuning using Optuna.
         """
 
+        # dirty hard-coded exceptions
+        if model.__class__.__name__ == "ScikitSVR":
+            n_jobs = 1 # SVR does not support parallel jobs (resulting in equal model scores across all trials)
+        else:
+            n_jobs = -1
+
+
         def objective(trial):
             hyperparameters = model.optuna_hyperparameter_suggest(trial)
             model.set_params(hyperparameters)
@@ -44,7 +51,7 @@ class OptunaTuner(AbstractHyParamTuner):
         study.optimize(
             objective,
             n_trials=self.config.hyperparameter_tuning_kwargs["n_trials"],
-            n_jobs=-1,  # The number of parallel jobs. If this argument is set to -1, the number
+            n_jobs=n_jobs,  # The number of parallel jobs. If this argument is set to -1, the number
             # is set to CPU count. Parallel jobs may fail sequential logging to wandb.
         )
 

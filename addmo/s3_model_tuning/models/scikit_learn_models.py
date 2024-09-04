@@ -3,6 +3,7 @@ import joblib
 import sklearn
 from abc import ABC
 from sklearn.neural_network import MLPRegressor
+from sklearn.svm import SVR
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, MaxAbsScaler
 from sklearn.compose import TransformedTargetRegressor
@@ -245,3 +246,73 @@ class ScikitLinearRegNoScaler(ScikitLinearReg):
             target_name=self.y_fit.name,
             features_ordered=list(self.x_fit.columns),
             preprocessing=['No scaling'])
+
+class ScikitSVR(BaseScikitLearnModel):
+    """Scikit-learn Support Vector Regressor (SVR) model."""
+
+    def __init__(self):
+        super().__init__(SVR())
+
+    def _define_metadata(self):
+        """
+        Define metadata.
+        """
+        self.metadata = ModelMetadata(
+            addmo_class=type(self).__name__,
+            addmo_commit_id=ModelMetadata.get_commit_id(),
+            library=sklearn.__name__,
+            library_model_type=type(self.regressor).__name__,
+            library_version=sklearn.__version__,
+            target_name=self.y_fit.name,
+            features_ordered=list(self.x_fit.columns),
+            preprocessing=['Scaling'])
+
+    def grid_search_hyperparameter(self):
+        pass
+
+    def optuna_hyperparameter_suggest(self, trial):
+        hyperparameters = {}
+
+        hyperparameters["C"] = trial.suggest_float("C", 1e-2, 1e1, log=True)  #regularizer
+        hyperparameters["epsilon"] = trial.suggest_float("epsilon", 1e-3, 1.0, log=True)  #distance of tube
+        hyperparameters["kernel"] = trial.suggest_categorical("kernel", ["linear", "poly", "rbf", "sigmoid"])
+        hyperparameters["tol"] = trial.suggest_float("tol", 1e-5, 1e-1, log=True)
+
+        # kernel-specific hyperparameters
+        if hyperparameters["kernel"] in ["poly", "rbf", "sigmoid"]:
+            hyperparameters["gamma"] = trial.suggest_categorical("gamma", ["scale", "auto"])
+
+        if hyperparameters["kernel"] == "poly":
+            hyperparameters["degree"] = trial.suggest_int("degree", 2, 5)
+            hyperparameters["coef0"] = trial.suggest_float("coef0", 0.0, 1.0)
+
+        if hyperparameters["kernel"] == "sigmoid":
+            hyperparameters["coef0"] = trial.suggest_float("coef0", 0.0, 1.0)
+
+        return hyperparameters
+
+    def default_hyperparameter(self):
+        """"
+        Return default hyperparameters.
+        """
+        hyperparameter = SVR().get_params()
+        hyperparameter["max_iter"] = 500
+        hyperparameter["tol"] = 1e-2
+        return hyperparameter
+
+    def set_params(self, hyperparameters):
+        """
+        Access the hyperparameters of the model within the pipeline within the SVR.
+        """
+        hyperparameters = {f"model__{key}": value for key, value in hyperparameters.items()}
+
+        self.regressor.set_params(**hyperparameters)
+
+    def get_params(self, deep=True):
+        """
+        Get the hyperparameters of the model.
+        """
+        param = self.regressor.get_params(deep=deep)
+
+        model_param = {key: value for key, value in param.items() if key.startswith("model__")}
+        return model_param

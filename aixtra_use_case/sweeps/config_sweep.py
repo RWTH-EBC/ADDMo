@@ -69,3 +69,32 @@ def sweep_repetitions_only():
         }
     }
     return sweep_configuration
+
+def sweep_SVR_params():
+
+    sweep_configuration = {
+        "name": "SVR_hyperparameter_sweep",
+        "method": "grid",
+        "metric": {"name": "coverage_true_validity", "goal": "maximize"},
+        "parameters": {
+            # "repetition": {"values": [1, 2, 3]},
+            "config_model_tuning": {
+                "parameters": {
+                    "hyperparameter_tuning_kwargs": {
+                        "parameters": {
+                            "hyperparameter_set": {
+                                "parameters": {
+                                    "C": {"values": [0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10,
+                                                     100, 1000]},
+                                    "epsilon": {"values": [0.001, 0.01, 0.1, 0.5, 1.0]},
+                                    "kernel": {"values": ["linear", "rbf"]},
+                                    "tol": {"values": [0.00001, 0.0001, 0.001, 0.01]}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return sweep_configuration

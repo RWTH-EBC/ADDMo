@@ -33,8 +33,12 @@ from aixtra_use_case import (
 # configure config
 from aixtra_use_case.sweeps import config_blueprints, config_blueprints_systems
 config = ExtrapolationExperimentConfig()
-config = config_blueprints_systems.config_bes_VLCOPcorr_grid(config)
-config = config_blueprints.linear_regression_config(config)
+config = config_blueprints_systems.config_bes_VLCOPcorr_random_NovDezSelect(config)
+config = config_blueprints.no_tuning_config(config)
+
+config.config_model_tuning.hyperparameter_tuning_kwargs["hyperparameter_set"]["activation"] = "linear"
+config.config_model_tuning.hyperparameter_tuning_kwargs["hyperparameter_set"]["hidden_layer_sizes"] = [1]
+config.config_model_tuning.trainings_per_model = 1
 
 config.experiment_name = "test3"
 
@@ -52,18 +56,18 @@ ExperimentLogger.start_experiment(config=config)  # log config
 s1_split_data.exe(config)
 s2_tune_ml_regressor.exe(config)
 s3_regressor_error_calculation.exe(config)
-s4_true_validity_domain.exe(config)
-s4_gradient.exe(config)
-s5_tune_detector.exe(config)
-s6_detector_score_calculation.exe(config)
+# s4_true_validity_domain.exe(config)
+# s4_gradient.exe(config)
+# s5_tune_detector.exe(config)
+# s6_detector_score_calculation.exe(config)
 s8_0_generate_grid.exe(config)
-s8_1_coverage_convex_hull.exe(config)
-s8_2_coverage_grid_occupancy.exe(config)
-s8_3_coverage_tuned_ND.exe(config)
-s8_4_coverage_true_validity.exe(config)
-s8_5_coverage_gradient.exe(config)
+# s8_1_coverage_convex_hull.exe(config)
+# s8_2_coverage_grid_occupancy.exe(config)
+# s8_3_coverage_tuned_ND.exe(config)
+# s8_4_coverage_true_validity.exe(config)
+# s8_5_coverage_gradient.exe(config)
 # s9_data_coverage.exe(config)
-s9_data_coverage_grid.exe(config)
+# s9_data_coverage_grid.exe(config)
 s9_carpet_plots.exe(config)
 # #
 # s7_2_plotting.exe_plot_2D_all(config)

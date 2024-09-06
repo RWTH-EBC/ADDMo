@@ -138,7 +138,7 @@ class SciKerasSequential(BaseKerasModel):
         # sequential_regressor.add(normalizer)
         # Adding hidden layers based on hyperparameters
         for units in self.hyperparameters['hidden_layer_sizes']:
-            sequential_regressor.add(Dense(units=units, activation='relu'))
+            sequential_regressor.add(Dense(units=units, activation=self.hyperparameters['activation']))
 
         sequential_regressor.add(Dense(1, activation='linear'))
         return sequential_regressor
@@ -183,6 +183,7 @@ class SciKerasSequential(BaseKerasModel):
         if hyperparameters['loss'] is None:
             hyperparameters['loss'] = MeanSquaredError()
         hyperparameters['hidden_layer_sizes'] = [16]
+        hyperparameters['activation'] = 'relu'
         hyperparameters['batch_size'] = 200
         hyperparameters['epochs'] = 1000
         hyperparameters['callbacks'] = [EarlyStopping(monitor="loss", min_delta=0.000000001, verbose=1,

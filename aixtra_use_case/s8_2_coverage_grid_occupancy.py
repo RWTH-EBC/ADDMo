@@ -29,7 +29,7 @@ def exe(config: ExtrapolationExperimentConfig):
         config.config_explo_quant.exploration_bounds, x_regressor_fit
     )
 
-    grid_occupancy = GridOccupancy(config.config_explo_quant.explo_grid_points_per_axis)
+    grid_occupancy = GridOccupancy(config.config_explo_quant.explo_grid_points_per_axis-1) #HotFix: Only for GridTraining data: reduce by 1 to avoid edge effects with same sized grid
     grid_occupancy.train(x_regressor_fit, bounds)
     coverage = grid_occupancy.calculate_coverage()
 

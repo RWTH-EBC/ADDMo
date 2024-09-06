@@ -2,8 +2,8 @@ import os
 
 from aixtra.util import loading_saving_aixtra
 
-simulation_data_name = "Carnot_mid"
-new_simulation_data_name = "Boptest_TAir_mid_reduced"
+simulation_data_name = "bes_VLCOPCorr_grid"
+new_simulation_data_name = "bes_VLCOPCorr_grid"
 path = os.path.join("edited", new_simulation_data_name + ".csv")
 
 xy_tot = loading_saving_aixtra.read_csv(simulation_data_name, directory=None, index_col=False)

@@ -54,6 +54,13 @@ def config_bes_VLCOPcorr_random_NovDezSelect(config: ExtrapolationExperimentConf
     config.train_val_test_period = list(indices)
     return config
 
+def config_bes_VLCOPcorr_grid(config: ExtrapolationExperimentConfig):
+    config = config_bes_VLCOPcorr_steady(config)
+    config.simulation_data_name = "bes_VLCOPcorr_grid"
+    config.train_val_test_period = (0, 9998)  # full data (leaving 2 samples for "remaining")
+    config.shuffle = True
+    return config
+
 def config_ODEel_steady(config: ExtrapolationExperimentConfig):
     config.simulation_data_name = "ODEel_steady"
     config.experiment_name = "Empty"

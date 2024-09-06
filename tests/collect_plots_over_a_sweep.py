@@ -32,7 +32,7 @@ def collect_plots(base_dir, plot_name):
 
 
 # Example usage
-base_directory = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_steady_NovDez\layer"
+base_directory = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_random_NovDezSelect_SVR\poly_sweep"
 plot_to_collect = "carpets_system.png"
 
 output_directory = collect_plots(base_directory, plot_to_collect)

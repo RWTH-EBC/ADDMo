@@ -33,7 +33,7 @@ class AbstractDetector(ABC):
     def norm(self, x_t: ndarray, init: bool = False) -> ndarray:
         """Normalize system_data, min/max normalization
 
-        #Todo: achtung scaling beißt sich vllt. mit dem der ML Modelle, reproduzierbarkeit?
+
 
         Parameters
         ----------

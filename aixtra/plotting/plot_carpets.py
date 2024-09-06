@@ -126,15 +126,15 @@ if __name__ == "__main__":
         ("t_amb", "rad_dir"),
         ("rad_dir", "t_room"),
     ]
+    #
+    # rename_dict = {
+    #     "TDryBul": "t_amb",
+    #     "HDirNor": "rad_dir",
+    #     "oveHeaPumY_u": "u_hp",
+    #     "reaTZon_y": "t_room",
+    # }
 
-    rename_dict = {
-        "TDryBul": "t_amb",
-        "HDirNor": "rad_dir",
-        "oveHeaPumY_u": "u_hp",
-        "reaTZon_y": "t_room",
-    }
-
-    defaults_dict = {"t_amb": 273.15, "rad_dir": 0, "u_hp": 0.5, "t_room": 273.15+20}
+    defaults_dict = {"t_amb": 273.15+6, "rad_dir": 0, "u_hp": 0.5, "t_room": 273.15+20}
 
     # Create and show the plot
     plt = plot_system_carpets(

@@ -21,9 +21,9 @@ class ExtrapolationExperimentConfig(BaseModel):
     )
 
     # Specify system_data indices used for training, validation and testing of regressor
-    train_val_test_period: Union[Tuple[int, int], List] = Field(
-        (0, 744),
-        description="If tuple, it is the start and end of several periods, like (0, 744, 1488, 2232)."
+    train_val_test_period: List = Field(
+        [[0, 744]],
+        description="If list of list, it is the start and end of several periods, like [[0, 744], [1488, 2232]]."
                     "If list, it is directly a list of indices, like [0, 1, 2, 3, 4, 744, 745].",
     )
     val_fraction: float = Field(0.1, description="Fraction of system_data for validation")

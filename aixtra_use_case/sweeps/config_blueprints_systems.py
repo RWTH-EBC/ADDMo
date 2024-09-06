@@ -6,8 +6,8 @@ def config_bes_steady(config: ExtrapolationExperimentConfig):
     config.simulation_data_name = "bes_steady"
     config.experiment_name = "Empty"
     config.name_of_target = "Change(T Room)"
-    config.train_val_test_period = (29185, 35040) #November und Dezember
-    # config.train_val_test_period = (23329, 26208, 32065, 35040) #September und Dezember
+    config.train_val_test_period = [[29185, 35040]] #November und Dezember
+    # config.train_val_test_period = [[23329, 26208], [32065, 35040]] #September und Dezember
     config.shuffle = False
     config.grid_points_per_axis = 10
     config.system_simulation = "bestest900_ODE"
@@ -57,7 +57,7 @@ def config_bes_VLCOPcorr_random_NovDezSelect(config: ExtrapolationExperimentConf
 def config_bes_VLCOPcorr_grid(config: ExtrapolationExperimentConfig):
     config = config_bes_VLCOPcorr_steady(config)
     config.simulation_data_name = "bes_VLCOPcorr_grid"
-    config.train_val_test_period = (0, 9998)  # full data (leaving 2 samples for "remaining")
+    config.train_val_test_period = [[0, 9998]]  # full data (leaving 2 samples for "remaining")
     config.shuffle = True
     return config
 
@@ -65,8 +65,7 @@ def config_ODEel_steady(config: ExtrapolationExperimentConfig):
     config.simulation_data_name = "ODEel_steady"
     config.experiment_name = "Empty"
     config.name_of_target = "delta_reaTZon_y"
-    config.train_val_test_period = (29185, 35040) #November und Dezember
-    # config.train_val_test_period = (23329, 26208, 32065, 35040) #September und Dezember
+    config.train_val_test_period = [[29185, 35040]] #November und Dezember
     config.shuffle = False
     config.grid_points_per_axis = 10
     config.system_simulation = "BopTest_TAir_ODEel"
@@ -85,7 +84,7 @@ def config_carnot(config: ExtrapolationExperimentConfig):
     config.simulation_data_name = "Carnot_mid_noise_m0_std0.02"
     config.experiment_name = "Empty"
     config.name_of_target = "$\dot{Q}_{heiz}$ in kW"
-    config.train_val_test_period = (0, 744)
+    config.train_val_test_period = [[0, 744]]
     config.shuffle = False
     config.grid_points_per_axis = 10
     config.system_simulation = "carnot"

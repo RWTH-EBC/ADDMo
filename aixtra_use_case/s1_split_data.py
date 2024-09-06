@@ -20,18 +20,19 @@ def exe(config: ExtrapolationExperimentConfig):
     )
 
     def get_indices_from_multiple_periods(periods):
-        '''Converts a list of periods into a list of indices. For example, if periods = [0, 5,
-        10, 15], the function will return [0, 1, 2, 3, 4, 10, 11, 12, 13, 14]'''
+        '''Converts a list of periods into a list of indices. For example, if periods = [[0, 5],
+        [10, 15]], the function will return [0, 1, 2, 3, 4, 10, 11, 12, 13, 14]'''
         indices = []
-        for start, end in zip(periods[::2], periods[1::2]):
+        for period in periods:
+            start, end = period
             indices.extend(range(start, end))
         return indices
 
-    if isinstance(config.train_val_test_period, tuple):
-        # if the train_val_test_period is a tuple, it is a period
+    if isinstance(config.train_val_test_period[0], (list, tuple)):
+        # if the train_val_test_period is a list of lists, these are the periods
         train_val_test_indices = get_indices_from_multiple_periods(config.train_val_test_period)
-    if isinstance(config.train_val_test_period, list):
-        # if the train_val_test_period is a list, it is already a list of indices
+    else:
+        # it is already a list of indices
         train_val_test_indices = config.train_val_test_period
 
     (

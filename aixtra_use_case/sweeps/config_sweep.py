@@ -118,7 +118,7 @@ def sweep_full_ANN():
     #             hidden_layer_sizes.append([neurons1, neurons2, neurons3])
 
     sweep_configuration = {
-        "name": "hidden_layer_sizes",
+        "name": "full_ann_sweep",
         "method": "bayes",
         "metric": {"name": "coverage_true_validity", "goal": "maximize"},
         "parameters": {

@@ -41,10 +41,10 @@ def run_all():
     # Set up experiment name and folders
     if config.config_model_tuning.models == ["ScikitLinearRegNoScaler"]:
         wandb.run.name = f"LinReg_{wandb.run.name}"
-    elif config.experiment_name.endswith("NovDezSelect"):
-        # works only for no_tuning
-        if 'hyperparameter_set' in config.config_model_tuning.hyperparameter_tuning_kwargs:
-            config.config_model_tuning.hyperparameter_tuning_kwargs["hyperparameter_set"]["batch_size"] = 50 # konstante anzahl an batches per epoch (26.3 batches)
+    # elif config.experiment_name.endswith("NovDezSelect"):
+    #     # works only for no_tuning
+    #     if 'hyperparameter_set' in config.config_model_tuning.hyperparameter_tuning_kwargs:
+    #         config.config_model_tuning.hyperparameter_tuning_kwargs["hyperparameter_set"]["batch_size"] = 50 # konstante anzahl an batches per epoch (26.3 batches)
 
     # update config
     run_name = f"{config.experiment_name}_{wandb.run.name}"
@@ -87,7 +87,7 @@ def run_all():
 
 def create_config():  # Todo set
     config = ExtrapolationExperimentConfig()
-    config = config_blueprints_systems.config_bes_VLCOPcorr_random_NovDezSelect(config)
+    config = config_blueprints_systems.config_bes_VLCOPcorr_steady(config)
     config = config_blueprints.no_tuning_config(config)
     config.experiment_name = f"8_{config.simulation_data_name}"
     return config

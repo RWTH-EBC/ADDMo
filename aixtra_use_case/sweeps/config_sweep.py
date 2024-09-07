@@ -122,7 +122,7 @@ def sweep_full_ANN():
         "method": "bayes",
         "metric": {"name": "coverage_true_validity", "goal": "maximize"},
         "parameters": {
-            # "repetition": {"values": [1, 2, 3]},
+            "repetition": {"values": [1, 2, 3]},
             "config_model_tuning": {
                 "parameters": {
                     "hyperparameter_tuning_kwargs": {
@@ -130,7 +130,7 @@ def sweep_full_ANN():
                             "hyperparameter_set": {
                                 "parameters": {
                                     "hidden_layer_sizes": {"values": hidden_layer_sizes},
-                                    "batch_size": {"values": [10, 50, 100, 200]},
+                                    "batch_size": {"values": [20]},
                                     "activation": {"values": ["linear", "softplus", "sigmoid"]},
                                 }
                             }

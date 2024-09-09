@@ -119,7 +119,7 @@ def sweep_full_ANN():
 
     sweep_configuration = {
         "name": "full_ann_sweep",
-        "method": "bayes",
+        "method": "grid",
         "metric": {"name": "coverage_true_validity", "goal": "maximize"},
         "parameters": {
             "repetition": {"values": [1, 2, 3]},

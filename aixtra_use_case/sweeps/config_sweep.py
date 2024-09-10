@@ -130,8 +130,52 @@ def sweep_full_ANN():
                             "hyperparameter_set": {
                                 "parameters": {
                                     "hidden_layer_sizes": {"values": hidden_layer_sizes},
-                                    "batch_size": {"values": [20]},
+                                    "batch_size": {"values": [50]},
                                     "activation": {"values": ["linear", "softplus", "sigmoid"]},
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+        },
+    }
+    return sweep_configuration
+
+
+def sweep_softplus_layer():
+    hidden_layer_sizes = []
+
+    # Single layer possibilities
+    for neurons in [5, 10, 50, 100, 1000]:
+        hidden_layer_sizes.append([neurons])
+
+    # Two layer possibilities
+    for neurons1 in [5, 10, 50, 100]:
+        for neurons2 in [5, 10, 50, 100]:
+            hidden_layer_sizes.append([neurons1, neurons2])
+
+    # # Three layer possibilities
+    # for neurons1 in [5, 10, 100, 1000]:
+    #     for neurons2 in [5, 10, 100, 1000]:
+    #         for neurons3 in [5, 10, 100, 1000]:
+    #             hidden_layer_sizes.append([neurons1, neurons2, neurons3])
+
+    sweep_configuration = {
+        "name": "softplus_layer",
+        "method": "grid",
+        "metric": {"name": "coverage_true_validity", "goal": "maximize"},
+        "parameters": {
+            "repetition": {"values": [1, 2, 3]},
+            "config_model_tuning": {
+                "parameters": {
+                    "hyperparameter_tuning_kwargs": {
+                        "parameters": {
+                            "hyperparameter_set": {
+                                "parameters": {
+                                    "hidden_layer_sizes": {"values": hidden_layer_sizes},
+                                    "batch_size": {"values": [50]},
+                                    "activation": {"values": ["softplus"]},
                                 }
                             }
                         }

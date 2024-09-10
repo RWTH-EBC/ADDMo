@@ -6,7 +6,7 @@ def no_tuning_config(config: ExtrapolationExperimentConfig) :
     config.config_explo_quant.explo_grid_points_per_axis = 10
 
     config.config_model_tuning.models = ["SciKerasSequential"]
-    config.config_model_tuning.trainings_per_model = 5
+    config.config_model_tuning.trainings_per_model = 3
     config.config_model_tuning.hyperparameter_tuning_type = "NoTuningTuner"
     config.config_model_tuning.hyperparameter_tuning_kwargs = {
         "hyperparameter_set": {

@@ -183,8 +183,8 @@ class SciKerasSequential(BaseKerasModel):
         if hyperparameters['loss'] is None:
             hyperparameters['loss'] = MeanSquaredError()
         hyperparameters['hidden_layer_sizes'] = [16]
-        hyperparameters['activation'] = 'relu'
-        hyperparameters['batch_size'] = 200
+        hyperparameters['activation'] = 'softplus'
+        hyperparameters['batch_size'] = 50
         hyperparameters['epochs'] = 1000
         hyperparameters['callbacks'] = [EarlyStopping(monitor="loss", min_delta=0.000000001, verbose=1,
                                          patience=100)]
@@ -203,6 +203,7 @@ class SciKerasSequential(BaseKerasModel):
             "hidden_layer_sizes": hidden_layer_sizes,
             "callbacks": [EarlyStopping(monitor="loss", min_delta=0.000000001, verbose=1,
                                          patience=100)],
+            "activation": trial.suggest_categorical("activation", ["relu", "linear", "softplus", "sigmoid"]),
         }
         return hyperparameters
 

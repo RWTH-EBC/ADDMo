@@ -49,6 +49,6 @@ def tuning_config(config: ExtrapolationExperimentConfig):
     config.config_model_tuning.hyperparameter_tuning_type = "OptunaTuner"
     config.config_model_tuning.validation_score_mechanism = "cv"
     config.config_model_tuning.validation_score_splitting = "KFold"
-    config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 100}
+    config.config_model_tuning.hyperparameter_tuning_kwargs = {"n_trials": 50}
     config.config_model_tuning.validation_score_metric = "neg_root_mean_squared_error"
     return config

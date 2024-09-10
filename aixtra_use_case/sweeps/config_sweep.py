@@ -42,7 +42,7 @@ def sweep_hidden_layer_sizes():
 
 def sweep_several_tunings():
     sweep_configuration = {
-        "name": "tuned_splitting_sweep",
+        "name": "tune_lay_acti",
         "method": "grid",
         "metric": {"name": "coverage_true_validity", "goal": "maximize"},
         "parameters": {

@@ -22,7 +22,7 @@ def exe(config: ExtrapolationExperimentConfig):
 
     directory = os.path.join(config.experiment_folder, "detectors")
     for detector_file in os.listdir(directory):
-        if detector_file.endswith(".pkl"):
+        if detector_file.endswith(".pkl") and (detector_file.replace("_test+fit", "").replace(".pkl", "") in config.config_detector.detectors): #TODO:Attention hard code only works for _test+fit
             # get name without file ending
             detector_name = detector_file.split(".")[0]
             detector = loading_saving_aixtra.read_pkl(detector_name, directory=directory)
@@ -32,36 +32,37 @@ def exe(config: ExtrapolationExperimentConfig):
             y_grid = quantifier.calc_labels(x_grid=x_grid)
             coverage = quantifier.calculate_coverage()
 
-        plots_per_axes = plot_scatter_average_coverage_per_2D(
-            x_grid=x_grid,
-            y_grid=y_grid,
-            title_header=f"Extra-{detector_name}\n"
-                         f"Coverage = {coverage.loc['Inside']:.2f} %",
-        )
-
-        for i, plt in enumerate(plots_per_axes):
-            plot.save_plot(
-                plt,
-                f"coverage_extra_{detector_name}_{i}",
-                config.experiment_folder,
+            plots_per_axes = plot_scatter_average_coverage_per_2D(
+                x_grid=x_grid,
+                y_grid=y_grid,
+                title_header=f"Extra-{detector_name}\n"
+                             f"Coverage = {coverage.loc['Inside']:.2f} %",
             )
-            # plot.show_plot(plt)
 
-        # save
-        save_path = os.path.join(config.experiment_folder, "explo_quant")
-        loading_saving_aixtra.write_csv(
-            quantifier.labels_grid,
-            f"labels_grid_extra_{detector_name}",
-            save_path,
-        )
-        loading_saving_aixtra.write_csv(
-            coverage,
-            f"coverage_percentage_extra_{detector_name}",
-            save_path,
-        )
+            for i, plt in enumerate(plots_per_axes):
+                plot.save_plot(
+                    plt,
+                    f"coverage_extra_{detector_name}_{i}",
+                    config.experiment_folder,
+                )
+                # plot.show_plot(plt)
 
-        # log coverage
-        ExperimentLogger.log({f"coverage_extra_{detector_name}": coverage.loc["Inside"]})
+            # save
+            save_path = os.path.join(config.experiment_folder, "explo_quant")
+            loading_saving_aixtra.write_csv(
+                quantifier.labels_grid,
+                f"labels_grid_extra_{detector_name}",
+                save_path,
+            )
+            loading_saving_aixtra.write_csv(
+                coverage,
+                f"coverage_percentage_extra_{detector_name}",
+                save_path,
+            )
+
+            # log coverage
+            ExperimentLogger.log({f"coverage_extra_{detector_name}": coverage.loc["Inside"]})
+            return {f"coverage_extra_{detector_name}": coverage.loc["Inside"]} # Todo: delete, only for rerunning
 
 
     print(f"{__name__} executed")

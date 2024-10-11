@@ -43,7 +43,7 @@ WandbLogger.directory = os.path.join(config.experiment_folder, "wandb_logger")
 WandbLogger.active = False
 
 # Run scripts
-ExperimentLogger.start_experiment(config=config)  # log config
+# ExperimentLogger.start_experiment(config=config)  # log config
 # s1_split_data.exe(config)
 # s2_tune_ml_regressor.exe(config)
 # s3_regressor_error_calculation.exe(config)

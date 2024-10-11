@@ -11,6 +11,9 @@ def yield_runs_per_sweep(user_name: str, project_name: str, sweep_id: str) -> It
     sweep = api.sweep(sweep_path)
     yield from sweep.runs
 
+def get_config_from_run(run):
+    """Extract the config from a run, excluding keys starting with '_'."""
+    return {k: v for k, v in run.config.items() if not k.startswith("_")}
 
 def update_run(run: wandb.apis.public.Run, summary_dict: Dict[str, Any],
                config_dict: Dict[str, Any]) -> None:

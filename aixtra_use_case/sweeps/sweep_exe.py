@@ -16,6 +16,7 @@ from aixtra_use_case import (
     s4_gradient,
     s5_tune_detector,
     s6_detector_score_calculation,
+    s7_2_plotting,
     s8_0_generate_grid,
     s8_1_coverage_convex_hull,
     s8_2_coverage_grid_occupancy,
@@ -80,16 +81,18 @@ def run_all():
     s8_5_coverage_gradient.exe(config)
     # s9_data_coverage.exe(config)
     s9_data_coverage_grid.exe(config)
-    s9_carpet_plots.exe(config)
+    # s9_carpet_plots.exe(config)
+
+    s7_2_plotting.exe_plot_2D_all(config)
 
     ExperimentLogger.finish_experiment()
 
 
 def create_config():  # Todo set
     config = ExtrapolationExperimentConfig()
-    config = config_blueprints_systems.config_bes_VLCOPcorr_steady_NovDezSelect(config)
-    config = config_blueprints.tuning_config(config)
-    config.experiment_name = f"8_{config.simulation_data_name}_NovDezSelect"
+    config = config_blueprints_systems.config_carnot(config)
+    config = config_blueprints.no_tuning_config(config)
+    config.experiment_name = f"8_{config.simulation_data_name}"
     return config
 
 # Todo: correct batch size in hyperparameter suggest?
@@ -97,7 +100,7 @@ def create_config():  # Todo set
 def create_sweep():
     config = create_config()
 
-    sweep_configuration = config_sweep.sweep_several_tunings()  # Todo set
+    sweep_configuration = config_sweep.sweep_full_ANN()  # Todo set
 
     entity = wandb.api.default_entity
     project_name = config.experiment_name

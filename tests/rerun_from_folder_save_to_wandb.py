@@ -73,9 +73,9 @@ def rerun(input_path):
 if __name__ == '__main__':
     USER_NAME = "team-martinraetz"
     PROJECT_NAME = "8_bes_VLCOPcorr_steady"
-    SWEEP_ID = "oqwxjlq3"
+    SWEEP_ID = "bgziqe1g"
 
-    local_folder = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_steady_NovDez\fullann"
+    local_folder = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_steady_NovDez\tune_new"
 
     for run in uws.yield_runs_per_sweep(USER_NAME, PROJECT_NAME, SWEEP_ID):
         # with wandb.init(id=run.id, project=PROJECT_NAME, entity=USER_NAME, resume="must") as resumed_run:
@@ -87,13 +87,13 @@ if __name__ == '__main__':
 
         uws.update_run(run, summary_dict=log, config_dict=False)
 
-        for run_MPC in uws.yield_runs_per_sweep(USER_NAME, f"{PROJECT_NAME}___MPC", "x1onc4xa"):
+        for run_MPC in uws.yield_runs_per_sweep(USER_NAME, f"{PROJECT_NAME}___MPC", "qyx51lqo"):
             config_MPC = uws.get_config_from_run(run_MPC)
             if config_MPC["experiment_name"] == config["experiment_name"]:
                 uws.update_run(run_MPC, summary_dict=log, config_dict=False)
             config_MPC = None
 
-        for run_MPC_dyn in uws.yield_runs_per_sweep(USER_NAME, f"{PROJECT_NAME}___MPC_dyn", "hqimf8mf"):
+        for run_MPC_dyn in uws.yield_runs_per_sweep(USER_NAME, f"{PROJECT_NAME}___MPC_dyn", "5j6d2cqy"):
             config_MPC_dyn = uws.get_config_from_run(run_MPC_dyn)
             if config_MPC_dyn["experiment_name"] == config["experiment_name"]:
                 uws.update_run(run_MPC_dyn, summary_dict=log, config_dict=False)

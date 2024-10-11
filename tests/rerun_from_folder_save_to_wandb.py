@@ -41,7 +41,6 @@ def rerun(input_path):
     config.config_detector.detectors = ["KNN"]#, "OCSVM"]
 
     # Configure the logger
-    create_or_clean_directory(config.experiment_folder)
     LocalLogger.directory = os.path.join(config.experiment_folder, "local_logger")
     LocalLogger.active = True
     WandbLogger.active = False

@@ -92,6 +92,12 @@ def exe(config: ExtrapolationExperimentConfig):
             loading_saving_aixtra.write_csv(
                 threshold, f"{detector_name}_{tag}_threshold", save_path
             )
+            loading_saving_aixtra.write_csv(
+                x_detector_fit, f"{detector_name}_{tag}_x_fit", save_path
+            )
+            loading_saving_aixtra.write_csv(
+                x_detector_val, f"{detector_name}_{tag}_x_val", save_path
+            )
         else:
             # untuned detector with calculated nd_threshold
             # infer the actual fraction of outliers from the validation set
@@ -108,13 +114,14 @@ def exe(config: ExtrapolationExperimentConfig):
             loading_saving_aixtra.write_csv(
                 threshold, f"{detector_name}_{tag}_untuned_threshold", save_path
             )
+            loading_saving_aixtra.write_csv(
+                x_detector_fit, f"{detector_name}_{tag}_untuned_x_fit", save_path
+            )
+            loading_saving_aixtra.write_csv(
+                x_detector_val, f"{detector_name}_{tag}_untuned_x_val", save_path
+            )
 
-        loading_saving_aixtra.write_csv(
-            x_detector_fit, f"{detector_name}_{tag}_x_fit", save_path
-        )
-        loading_saving_aixtra.write_csv(
-            x_detector_val, f"{detector_name}_{tag}_x_val", save_path
-        )
+
 
     print(f"{__name__} executed")
 

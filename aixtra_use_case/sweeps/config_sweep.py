@@ -130,8 +130,8 @@ def sweep_full_ANN():
                             "hyperparameter_set": {
                                 "parameters": {
                                     "hidden_layer_sizes": {"values": hidden_layer_sizes},
-                                    "batch_size": {"values": [50]},
-                                    "activation": {"values": ["linear", "softplus", "sigmoid"]},
+                                    "batch_size": {"values": [10]}, #TODO: for BES 50 for carnot 10
+                                    "activation": {"values": ["relu", "linear", "softplus", "sigmoid"]},
                                 }
                             }
                         }

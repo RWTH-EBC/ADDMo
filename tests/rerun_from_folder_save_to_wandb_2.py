@@ -38,8 +38,6 @@ def rerun(input_path):
 
     config = load_config_from_json(os.path.join(input_path, "local_logger", "config.json"), ExtrapolationExperimentConfigRepeater)
 
-    config.config_detector.detectors = ["KNN"]#, "OCSVM"]
-
     # Configure the logger
     LocalLogger.directory = os.path.join(config.experiment_folder, "local_logger")
     LocalLogger.active = True
@@ -52,8 +50,8 @@ def rerun(input_path):
     # s3_regressor_error_calculation.exe(config)
     # s4_true_validity_domain.exe(config)
     # s4_gradient.exe(config)
-    s5_tune_detector.exe(config)
-    s6_detector_score_calculation.exe(config)
+    # s5_tune_detector.exe(config)
+    # s6_detector_score_calculation.exe(config)
     # s8_0_generate_grid.exe(config)
     # # s8_1_coverage_convex_hull.exe(config)
     # # s8_2_coverage_grid_occupancy.exe(config)
@@ -74,10 +72,10 @@ def rerun(input_path):
 
 if __name__ == '__main__':
     USER_NAME = "team-martinraetz"
-    PROJECT_NAME = "8_bes_VLCOPcorr_steady"
-    SWEEP_ID = "bgziqe1g"
+    PROJECT_NAME = "8_Carnot_mid_noise_m0_std0.02"
+    SWEEP_ID = "bl6kkkwh"
 
-    local_folder = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_steady_NovDez\tune_new"
+    local_folder = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_Carnot_mid_noise_m0_std002\ANN"
 
     for run in uws.yield_runs_per_sweep(USER_NAME, PROJECT_NAME, SWEEP_ID):
         # with wandb.init(id=run.id, project=PROJECT_NAME, entity=USER_NAME, resume="must") as resumed_run:
@@ -89,17 +87,6 @@ if __name__ == '__main__':
 
         uws.update_run(run, summary_dict=log, config_dict=False)
 
-        for run_MPC in uws.yield_runs_per_sweep(USER_NAME, f"{PROJECT_NAME}___MPC", "qyx51lqo"):
-            config_MPC = uws.get_config_from_run(run_MPC)
-            if config_MPC["experiment_name"] == config["experiment_name"]:
-                uws.update_run(run_MPC, summary_dict=log, config_dict=False)
-            config_MPC = None
-
-        for run_MPC_dyn in uws.yield_runs_per_sweep(USER_NAME, f"{PROJECT_NAME}___MPC_dyn", "5j6d2cqy"):
-            config_MPC_dyn = uws.get_config_from_run(run_MPC_dyn)
-            if config_MPC_dyn["experiment_name"] == config["experiment_name"]:
-                uws.update_run(run_MPC_dyn, summary_dict=log, config_dict=False)
-            config_MPC_dyn = None
 
 
 

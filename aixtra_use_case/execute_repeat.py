@@ -30,7 +30,7 @@ from aixtra_use_case import (
 )
 
 # load config from path
-path_to_folder = r"D:\04_GitRepos\addmo-extra\aixtra_use_case\results\Empty"
+path_to_folder = r"D:\04_GitRepos\addmo-extra\aixtra_use_case\results\8_Carnot_mid_noise_m0_std0.02_absurd-sweep-24"
 config_path = os.path.join(path_to_folder, "local_logger", "config.json")
 config = load_config_from_json(config_path, ExtrapolationExperimentConfig)
 
@@ -54,10 +54,13 @@ WandbLogger.active = False
 # s8_0_generate_grid.exe(config)
 # # s8_1_coverage_convex_hull.exe(config)
 # # s8_2_coverage_grid_occupancy.exe(config)
-# s8_3_coverage_tuned_ND.exe(config)
+
+log = {}
+for d in s8_3_coverage_tuned_ND.exe(config):
+    log.update(d)
 # s8_4_coverage_true_validity.exe(config)
 # s8_5_coverage_gradient.exe(config)
-s9_data_coverage.exe(config)
+# s9_data_coverage.exe(config)
 # s9_data_coverage_grid.exe(config)
 # s9_carpet_plots.exe(config)
 

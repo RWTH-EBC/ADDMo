@@ -192,3 +192,7 @@ if __name__ == "__main__":
     # save the selected dataset
     data_path = os.path.join(plot_dir, "selected_dataset.csv")
     selected_dataset.to_csv(data_path, sep=";", index=True, header=True, encoding="utf-8")
+
+    # save original dataset
+    orig_data_path = os.path.join(plot_dir, "original_dataset.csv")
+    xy.to_csv(orig_data_path, sep=";", index=True, header=True, encoding="utf-8")

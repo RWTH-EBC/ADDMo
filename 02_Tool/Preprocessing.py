@@ -54,6 +54,7 @@ def Scaling(StandardScaling,RobustScaling,NoScaling, Data):
         joblib.dump(ScaleTracker_Signal, os.path.join(SV.ResultsFolder, "ScalerTracker.save")) #dump this scaler in a file in the respective folder
         mapper = DataFrameMapper([(Data.columns, StandardScaler())]) #create the actually used scaler
         Scaled_Data = mapper.fit_transform(Data.copy()) #train it and scale the data
+        joblib.dump(mapper, os.path.join(SV.ResultsFolder, "FeatureScaler.save"))  # save feature scaler
         Data = pd.DataFrame(Scaled_Data, index=Data.index, columns=Data.columns)
     #Doing "RobustScaler"
     if RobustScaling == True:
@@ -62,6 +63,7 @@ def Scaling(StandardScaling,RobustScaling,NoScaling, Data):
         joblib.dump(ScaleTracker_Signal, os.path.join(SV.ResultsFolder, "ScalerTracker.save")) #dump this scaler in a file in the respective folder
         mapper = DataFrameMapper([(Data.columns, RobustScaler())]) #create the actually used scaler
         Scaled_Data = mapper.fit_transform(Data.copy()) #train it and scale the data
+        joblib.dump(mapper, os.path.join(SV.ResultsFolder, "FeatureScaler.save"))  # save feature scaler
         Data = pd.DataFrame(Scaled_Data, index=Data.index, columns=Data.columns)
     return (Data)
 

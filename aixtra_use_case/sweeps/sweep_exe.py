@@ -1,7 +1,8 @@
 import os
 import wandb
 from addmo.util.experiment_logger import ExperimentLogger, LocalLogger, WandbLogger
-from addmo.util.definitions import create_or_clean_directory, root_dir
+from addmo.util.definitions import create_or_clean_directory
+from addmo.util.load_save_utils import root_dir
 from aixtra_use_case.sweeps import (
     config_sweep,
     config_blueprints,

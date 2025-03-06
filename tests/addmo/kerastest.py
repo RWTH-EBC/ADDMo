@@ -6,7 +6,7 @@ from sklearn.metrics import r2_score
 from addmo.s3_model_tuning.models.keras_models import SciKerasSequential
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
 from addmo.s3_model_tuning.models.scikit_learn_models import ScikitMLP
-from addmo.util.definitions import root_dir
+from addmo.util.load_save_utils import root_dir
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from addmo.s3_model_tuning.model_tuner import ModelTuner
 from aixtra_use_case.config.ed_experiment_config import ExtrapolationExperimentConfig

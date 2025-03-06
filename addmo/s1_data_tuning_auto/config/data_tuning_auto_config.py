@@ -1,5 +1,6 @@
+import os
 from pydantic import BaseModel, Field
-
+from addmo.util.load_save_utils import root_dir
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 
 class DataTuningAutoSetup(BaseModel):
@@ -12,7 +13,7 @@ class DataTuningAutoSetup(BaseModel):
         "data_tuning_experiment_auto", description="Set name of the experiments series."
     )
     abs_path_to_data: str = Field(
-        r"D:\04_GitRepos\addmo-extra\addmo_examples\raw_input_data\InputData.xlsx",
+        os.path.join(root_dir(),'addmo_examples','raw_input_data','InputData.xlsx'),
         description="Path to the file that has the system_data.",
     )
     name_of_target: str = Field(

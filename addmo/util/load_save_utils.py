@@ -1,6 +1,9 @@
 import os
 import shutil
 
+def root_dir():
+    # Finds the root directory of the git repository
+    return os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 def create_or_clean_directory(path: str) -> str:
     if not os.path.exists(path):

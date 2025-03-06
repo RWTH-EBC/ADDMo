@@ -1,9 +1,11 @@
+import os
 from pydantic import BaseModel, Field
+from addmo.util.load_save_utils import root_dir
 
 
 class DataTuningFixedConfig(BaseModel):
     path_to_raw_data: str = Field(
-        r"D:\04_GitRepos\addmo-extra\addmo_examples\raw_input_data\InputData.xlsx",
+        os.path.join(root_dir(),'addmo_examples','raw_input_data','InputData.xlsx'),
         description="Absolute path to raw system_data",
     )
     name_of_raw_data: str = Field(

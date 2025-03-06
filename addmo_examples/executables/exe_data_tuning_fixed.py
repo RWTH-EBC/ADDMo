@@ -1,6 +1,7 @@
 import os
 
-from addmo.util.definitions import root_dir, results_dir_data_tuning
+from addmo.util.definitions import results_dir_data_tuning
+from addmo.util.load_save_utils import root_dir
 from addmo.util.experiment_logger import LocalLogger
 from addmo.util.experiment_logger import WandbLogger
 from addmo.util.experiment_logger import ExperimentLogger
@@ -33,7 +34,7 @@ tuner = DataTunerByConfig(config=config)
 
 # Load the system_data
 xy_raw = load_data(config.path_to_raw_data)
-ExperimentLogger.log({"xy_raw": xy_raw.iloc[[0, 1, 2, -3, -2, -1]]})
+ExperimentLogger.log({"xy_testraw": xy_raw.iloc[[0, 1, 2, -3, -2, -1]]})
 
 # Split the system_data
 x, y = split_target_features(config.target, xy_raw)

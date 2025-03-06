@@ -7,7 +7,7 @@ from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 from addmo.s3_model_tuning.models.keras_models import SciKerasSequential
-from addmo.util.definitions import root_dir
+from addmo.util.load_save_utils import root_dir
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from addmo.s3_model_tuning.model_tuner import ModelTuner
 

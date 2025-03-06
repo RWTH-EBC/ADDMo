@@ -1,13 +1,7 @@
 import os
-import json
-from addmo.util.load_save_utils import create_or_clean_directory
+from addmo.util.load_save_utils import create_or_clean_directory, root_dir
 from addmo.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
-
-
-def root_dir():
-    # Finds the root directory of the git repository
-    return os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 
 def raw_data_path(path: str = None):

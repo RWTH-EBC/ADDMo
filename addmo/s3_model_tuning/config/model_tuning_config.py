@@ -1,10 +1,12 @@
+import os
 from pydantic import BaseModel, Field
 from typing import Optional
+from addmo.util.load_save_utils import root_dir
 
 
 class ModelTunerConfig(BaseModel):
     models: list[str] = Field(
-        ["ScikitMLP_TargetTransformed"], description="List of models to use"
+        ["ScikitMLP_TargetTransformed", "SciKerasSequential"], description="List of models to use"
     )
 
     trainings_per_model: int = Field(
@@ -19,7 +21,7 @@ class ModelTunerConfig(BaseModel):
         description="Type of hyperparameter tuning, e.g., OptunaTuner, GridSearchTuner",
     )
     hyperparameter_tuning_kwargs: Optional[dict] = Field(
-        {"n_trials": 5}, description="Kwargs for the tuner"
+        {"n_trials": 2}, description="Kwargs for the tuner"
     )
 
     validation_score_mechanism: str = Field(
@@ -57,7 +59,7 @@ class ModelTuningExperimentConfig(BaseModel):
         "test_model_tuning", description="Set name of the current experiment"
     )
     abs_path_to_data: str = Field(
-        r"D:\04_GitRepos\addmo-extra\addmo_examples\raw_input_data\InputData.xlsx",
+        os.path.join(root_dir(),'addmo_examples','raw_input_data','InputData.xlsx'),
         description="Path to the file that has the system_data",
     )
     name_of_target: str = Field(

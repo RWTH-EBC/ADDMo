@@ -2,7 +2,8 @@ import os
 
 import pandas as pd
 
-from addmo.util.definitions import root_dir, results_dir_data_tuning
+from addmo.util.definitions import results_dir_data_tuning
+from addmo.util.load_save_utils import root_dir
 from addmo.util.experiment_logger import ExperimentLogger
 from addmo.util.experiment_logger import LocalLogger
 from addmo.util.experiment_logger import WandbLogger

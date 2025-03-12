@@ -5,7 +5,7 @@ stages:
 
 
 variables:
-  PYTHON_VERSION: "python:3.10"
+  PYTHON_VERSION: "python:3.7"
   TEST_PATH: tests
   TEST_ENGINE: "unittest"
 

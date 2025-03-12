@@ -18,9 +18,7 @@ include:
       file: 'python/tests/coverage.gitlab-ci.yml' # Generates test coverage
 
     - project: 'ebc/ebc-general/templates/gitlab-ci'
-      file: 'python/code-quality/pylint.gitlab-ci.yml'
-    - project: 'ebc/ebc-general/templates/gitlab-ci'
-      file: 'pages/pages.gitlab-ci.yml'  # Code quality
+      file: 'python/code-quality/pylint.gitlab-ci.yml'# Code quality
 
     - project: 'ebc/ebc-general/templates/gitlab-ci'
       file: 'python/build/build.gitlab-ci.yml'

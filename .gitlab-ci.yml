@@ -6,7 +6,7 @@ stages:
 
 
 variables:
-  PYTHON_VERSION: "registry.git.rwth-aachen.de/ebc/ebc-general/templates/gitlab-ci:python_3.10"
+  PYTHON_VERSION: "python:3.10"
   TEST_PATH: tests
   TEST_ENGINE: "unittest"
 

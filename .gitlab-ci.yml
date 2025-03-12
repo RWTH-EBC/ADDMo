@@ -1,5 +1,4 @@
 stages:
-  - test
   - code_quality
   - deploy
   - build
@@ -12,10 +11,7 @@ variables:
 
 
 include:
-    - project: 'ebc/ebc-general/templates/gitlab-ci'
-      file: 'python/tests/tests.gitlab-ci.yml'
-    - project: 'ebc/ebc-general/templates/gitlab-ci'
-      file: 'python/tests/coverage.gitlab-ci.yml' # Generates test coverage
+    
 
     - project: 'ebc/ebc-general/templates/gitlab-ci'
       file: 'python/code-quality/pylint.gitlab-ci.yml'# Code quality

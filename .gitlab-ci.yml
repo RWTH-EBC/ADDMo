@@ -12,8 +12,7 @@ variables:
 
 
 include:
-    - project: 'ebc/ebc-general/templates/gitlab-ci'
-      file: 'python/tests/tests.gitlab-ci.yml'
+
     - project: 'ebc/ebc-general/templates/gitlab-ci'
       file: 'python/tests/coverage.gitlab-ci.yml' # Generates test coverage
 

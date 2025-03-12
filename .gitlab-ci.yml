@@ -1,3 +1,27 @@
-# This file is a template, and might need editing before it works on your project.
+stages:
+  - test
+  - code_quality
+  - deploy
+  - build
+
+
+variables:
+  PYTHON_VERSION: "registry.git.rwth-aachen.de/ebc/ebc_all/gitlab_ci/templates:python_3.10"
+  TEST_PATH: tests
+  TEST_ENGINE: "unittest"
+
+
 include:
-  template: Jobs/Code-Quality.gitlab-ci.yml
+    - project: 'EBC/EBC_all/gitlab_ci/templates'
+      file: 'python/tests/tests.gitlab-ci.yml'
+    - project: 'EBC/EBC_all/gitlab_ci/templates'
+      file: 'python/tests/coverage.gitlab-ci.yml' # Generates test coverage
+
+    - project: 'EBC/EBC_all/gitlab_ci/templates'
+      file: 'python/code-quality/pylint.gitlab-ci.yml'
+    - project: 'EBC/EBC_all/gitlab_ci/templates'
+      file: 'pages/pages.gitlab-ci.yml'  # Code quality
+
+    - project: 'EBC/EBC_all/gitlab_ci/templates'
+      file: 'python/build/build.gitlab-ci.yml'
+

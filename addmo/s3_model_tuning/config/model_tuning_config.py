@@ -6,7 +6,7 @@ from addmo.util.load_save_utils import root_dir
 
 class ModelTunerConfig(BaseModel):
     models: list[str] = Field(
-        ["ScikitMLP_TargetTransformed", "SciKerasSequential"], description="List of models to use"
+        ["ScikitMLP_TargetTransformed"], description="List of models to use"
     )
 
     trainings_per_model: int = Field(

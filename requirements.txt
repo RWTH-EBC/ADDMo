@@ -3,7 +3,7 @@ wandb
 onnxruntime
 pydantic
 joblib
-scikit-learn
+scikit-learn==1.5.2
 scikeras==0.13
 keras==3.3.3
 tensorflow

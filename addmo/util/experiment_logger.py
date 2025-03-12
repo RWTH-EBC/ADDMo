@@ -185,6 +185,7 @@ class LocalLogger(AbstractLogger): #Todo: evtl. komplett löschen und auf normal
                 file_path = os.path.join(LocalLogger.directory, name + ".csv")
                 data.to_csv(file_path)
 
+
     @staticmethod
     def use_artifact(name: str, alias: str = "latest"):
         if LocalLogger.active:

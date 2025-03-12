@@ -6,22 +6,22 @@ stages:
 
 
 variables:
-  PYTHON_VERSION: "registry.git.rwth-aachen.de/ebc/ebc_all/gitlab_ci/templates:python_3.10"
+  PYTHON_VERSION: "registry.git.rwth-aachen.de/ebc/ebc-general/templates/gitlab-ci:python_3.10"
   TEST_PATH: tests
   TEST_ENGINE: "unittest"
 
 
 include:
-    - project: 'EBC/EBC_all/gitlab_ci/templates'
+    - project: 'ebc/ebc-general/templates/gitlab-ci'
       file: 'python/tests/tests.gitlab-ci.yml'
-    - project: 'EBC/EBC_all/gitlab_ci/templates'
+    - project: 'ebc/ebc-general/templates/gitlab-ci'
       file: 'python/tests/coverage.gitlab-ci.yml' # Generates test coverage
 
-    - project: 'EBC/EBC_all/gitlab_ci/templates'
+    - project: 'ebc/ebc-general/templates/gitlab-ci'
       file: 'python/code-quality/pylint.gitlab-ci.yml'
-    - project: 'EBC/EBC_all/gitlab_ci/templates'
+    - project: 'ebc/ebc-general/templates/gitlab-ci'
       file: 'pages/pages.gitlab-ci.yml'  # Code quality
 
-    - project: 'EBC/EBC_all/gitlab_ci/templates'
+    - project: 'ebc/ebc-general/templates/gitlab-ci'
       file: 'python/build/build.gitlab-ci.yml'
 

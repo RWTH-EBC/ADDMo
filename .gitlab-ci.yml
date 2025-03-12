@@ -1,7 +1,7 @@
 stages:
   - code_quality
   - deploy
-  - build
+  
 
 
 variables:
@@ -16,6 +16,4 @@ include:
     - project: 'ebc/ebc-general/templates/gitlab-ci'
       file: 'python/code-quality/pylint.gitlab-ci.yml'# Code quality
 
-    - project: 'ebc/ebc-general/templates/gitlab-ci'
-      file: 'python/build/build.gitlab-ci.yml'
-
+    

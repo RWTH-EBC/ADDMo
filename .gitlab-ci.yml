@@ -13,8 +13,8 @@ variables:
   PAGES_BRANCH: mre-rpa
   TEST_PATH: tests
   TEST_ENGINE: "unittest"
-  EXAMPLE_CONVERTER_CONFIG: addmo_examples/converter.toml
-  EXAMPLE_FILE_FOLDER: addmo_examples
+  EXAMPLE_CONVERTER_CONFIG: "addmo_examples/converter.toml"
+  EXAMPLE_FILE_FOLDER: "addmo_examples"
 
 
 include:
@@ -35,7 +35,7 @@ include:
       file: 'pages/gl-pages.gitlab-ci.yml'  # Stores code-quality pages here
 
     - project: 'ebc/ebc-general/templates/gitlab-ci'
-      file: 'python/examples/examples.gitlab-ci.yml'  # Stores examples as
+      file: 'python/examples/examples.gitlab-ci.yml'  # Stores examples
 
 
     - project: 'ebc/ebc-general/templates/gitlab-ci'

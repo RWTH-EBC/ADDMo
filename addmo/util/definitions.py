@@ -5,6 +5,9 @@ from addmo.s3_model_tuning.config.model_tuning_config import ModelTuningExperime
 
 
 def raw_data_path(path: str = None):
+    """
+    Returns the path to the raw input data file, using a default if none is provided.
+    """
     if path is None:
         # Use the default path
         return os.path.join(root_dir(), 'addmo_examples', 'raw_input_data', 'InputData.xlsx')
@@ -17,23 +20,38 @@ def raw_data_path(path: str = None):
 
 
 def results_dir():
+    """
+    Returns the path to the results directory.
+    """
     return os.path.join(root_dir(), 'addmo_examples', 'results')
 
 
 def results_dir_wandb():
+    """
+   Returns the path to the results directory for wandb logging.
+   """
     return os.path.join(results_dir(), 'wandb')
 
 
 def results_dir_data_tuning(config: DataTuningFixedConfig):
+    """
+    Returns the path to the results directory for data tuning based on config.
+    """
     path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, config.name_of_tuning)
     return create_or_clean_directory(path)
 
 
 def results_dir_model_tuning(config: ModelTuningExperimentConfig):
+    """
+    Returns the path to the results directory for model tuning based on config.
+    """
     path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data,
                         config.name_of_data_tuning_experiment, config.name_of_model_tuning_experiment)
     return create_or_clean_directory(path)
 
 
 def ed_use_case_dir():
+    """
+    Returns the path to the use case directory.
+    """
     return os.path.join(root_dir(), 'aixtra_use_case')

@@ -112,7 +112,6 @@ class AbstractMLModel(ABC):
         Args:
             directory: directory where the trained model is saved.
             regressor_filename: file name used for saving the model.
-
         """
         metadata_path = create_path_or_ask_to_override(regressor_filename + '_metadata.json', directory)
         with open(metadata_path, 'w') as f:

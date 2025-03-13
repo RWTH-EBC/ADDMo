@@ -18,13 +18,17 @@ from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningA
 
 
 def manual_feature_select(config: DataTuningAutoSetup, x):
-    """Manual selection of features"""
+    """
+    Manual selection of features
+    """
     return x[config.selected_features]
 
 
 def filter_low_variance(config: DataTuningAutoSetup, x):
-    """Pre-Filter removing features with low variance.
-    For documentation see scikit-learning.org."""
+    """
+    Pre-Filter removing features with low variance.
+    For documentation see scikit-learning.org.
+    """
     filter = VarianceThreshold(threshold=config.low_variance_threshold).fit(
         X=x
     ).set_output(transform="pandas")  # fit filter
@@ -33,17 +37,20 @@ def filter_low_variance(config: DataTuningAutoSetup, x):
 
 
 def filter_ica(x):
-    """Filter Independent Component Analysis (ICA)"""
+    """
+    Filter Independent Component Analysis (ICA)
+    """
     Ica = FastICA(max_iter=1000).set_output(transform="pandas")
     x_processed = Ica.fit_transform(X=x)
     return x_processed
 
 
 def filter_univariate(config: DataTuningAutoSetup, x, y):
-    """Filter univariate
-    with scoring function f-test or mutual information
+    """
+    Filter univariate with scoring function f-test or mutual information
     and search mode : {‘percentile’, ‘k_best’, ‘fpr’, ‘fdr’, ‘fwe’}
-    For documentation see scikit-learning.org."""
+    For documentation see scikit-learning.org.
+    """
     filter = GenericUnivariateSelect(
         score_func=config.univariate_score_function,
         mode=config.univariate_search_mode,
@@ -56,8 +63,10 @@ def filter_univariate(config: DataTuningAutoSetup, x, y):
 
 # embedded Feature Selection by recursive feature elemination (Feature Subset Selection, multivariate)
 def recursive_feature_selection_embedded(config: DataTuningAutoSetup, x, y):
-    """Embedded Feature Selection by recursive feature elemination (multivariate)
-    For documentation see scikit-learning.org."""
+    """
+    Embedded Feature Selection by recursive feature elimination (multivariate)
+    For documentation see scikit-learning.org.
+    """
 
     white_list_of_possible_models = ["Scikit_RF", "Scikit_Lasso"]
     # currently only supporting scikit-learn models
@@ -86,7 +95,10 @@ def recursive_feature_selection_embedded(config: DataTuningAutoSetup, x, y):
 def recursive_feature_selection_wrapper_scikit_learn(
     config: DataTuningAutoSetup, x, y
 ) -> pd.DataFrame:
-
+    """
+    Feature Selection by SequentialFeatureSelector
+    For documentation see scikit-learning.org.
+    """
     # erfolgloser Versuch, die Wrapper Funktionen von scikit-learn zu nutzen und gleichzeitig die
     # Modelle hyperparameter zu tunen, vermutlich am besten einen eigenen Wrapper schreiben
     # alternativ die feature selection mit in optuna integrieren?

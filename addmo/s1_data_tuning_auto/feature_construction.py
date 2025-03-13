@@ -11,6 +11,9 @@ from addmo.s3_model_tuning.model_tuner import ModelTuner
 
 
 def create_difference(config: DataTuningAutoSetup, xy):
+    """
+    Creates difference-based features for non-target variables.
+    """
     x_created = pd.DataFrame()
 
     for var_name in xy.columns:
@@ -22,6 +25,9 @@ def create_difference(config: DataTuningAutoSetup, xy):
 
 
 def manual_target_lags(config: DataTuningAutoSetup, xy):
+    """
+    Creates manually specified lag features for the target variable.
+    """
     # target_lags in format [first lag (int), second lag (int)]
     x_created = pd.DataFrame()
 
@@ -33,6 +39,9 @@ def manual_target_lags(config: DataTuningAutoSetup, xy):
 
 
 def automatic_timeseries_target_lag_constructor(config: DataTuningAutoSetup, xy):
+    """
+    Automatically generates target lags based on model performance improvement.
+    """
     x_created = pd.DataFrame()
 
     tuner = ModelTuner(config.config_model_tuning)
@@ -62,6 +71,9 @@ def automatic_timeseries_target_lag_constructor(config: DataTuningAutoSetup, xy)
 
 
 def manual_feature_lags(config: DataTuningAutoSetup, xy):
+    """
+    Creates manually specified lag features for selected variables.
+    """
     # feature_lags in format {var_name: [first lag (int), second lag (int)]}
 
     x_created = pd.DataFrame()
@@ -76,6 +88,9 @@ def manual_feature_lags(config: DataTuningAutoSetup, xy):
 
 
 def automatic_feature_lag_constructor(config: DataTuningAutoSetup, xy):
+    """
+    Automatically generates feature lags based on model performance improvement.
+    """
     x_created = pd.DataFrame()
 
     tuner = ModelTuner(config.config_model_tuning)

@@ -1,11 +1,3 @@
-'''Based on the exe_data_tuning_auto, need to ensure that the process runs given a config
-things needed to check in order to ensure that process runs:
-1. DataTunerAuto: initialise and call tuno_auto (if any breaking changes are introduced, the test will fail)
-2. Output structure: needs to be dataframe (catch None exceptions if occurs)
-3. Check pd.concat: catches errors in y or tuned_x if unexpected changes occur
-4. Check logging: call logging and check if log_artifact is created without any issues
-mocking: ensures that failures come from the tested funcs and not external dependencies'''
-
 import unittest
 import pandas as pd
 from unittest.mock import  patch, MagicMock
@@ -19,7 +11,9 @@ from addmo.util.data_handling import split_target_features
 
 
 class TestDataTunerAuto(unittest.TestCase):
-    """Unit tests for data tuning using pre-defined config"""
+    """
+    Unit tests for data tuning using pre-defined config.
+    """
 
     def setUp(self):
         """Set up config"""
@@ -44,17 +38,17 @@ class TestDataTunerAuto(unittest.TestCase):
         self.assertFalse(tuned_xy.empty, "Tuned xy data is empty")
         self.assertIsInstance(tuned_xy, pd.DataFrame, "Tuned xy data is not a dataframe")
 
-
-        #Todo: Ask Martin if this is unncessary since its an external function and is done manually
         try:
-            ExperimentLogger.log_artifact(tuned_xy, name='tuned_xy', art_type='pkl')
+            ExperimentLogger.log_artifact(tuned_xy, name='tuned_xy', art_type='csv')
 
         except Exception as e:
             self.fail(f"ExperimentLogger.log_artifact raised an exception: {e}")
 
 
 class TestDataTunerFixed(unittest.TestCase):
-    """Unit tests for data tuning using pre-defined config"""
+    """
+    Unit tests for data tuning using pre-defined config.
+    """
 
     def setUp(self):
         """Set up config"""
@@ -95,7 +89,7 @@ class TestDataTunerFixed(unittest.TestCase):
 
 
         try:
-            ExperimentLogger.log_artifact(xy_tuned, name='xy_tuned', art_type='pkl')
+            ExperimentLogger.log_artifact(xy_tuned, name='xy_tuned', art_type='csv')
 
         except Exception as e:
             self.fail(f"ExperimentLogger.log_artifact raised an exception: {e}")

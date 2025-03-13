@@ -11,6 +11,9 @@ from addmo.util.load_save import load_data
 from addmo.util.data_handling import split_target_features
 
 def exe_data_tuning_fixed():
+    """
+    Execute the system_data tuning process in a fixed manner.
+    """
     # Path to the config file
     path_to_config = os.path.join(root_dir(), 'addmo', 's2_data_tuning', 'config',
                                   'data_tuning_config.json')

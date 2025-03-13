@@ -52,6 +52,9 @@ class SciKerasSequential(BaseKerasModel):
         self.regressor.fit(x.values.astype(np.float32), y.values.astype(np.float32))
 
     def predict(self, x):
+        """
+        Make prediction.
+        """
         return self.regressor.predict(x.values.astype(np.float32))
 
     def get_params(self, deep=True):
@@ -193,7 +196,9 @@ class SciKerasSequential(BaseKerasModel):
         return hyperparameters
 
     def optuna_hyperparameter_suggest(self, trial):
-
+        """
+        Suggest hyperparameters for optimization.
+        """
         n_layers = trial.suggest_int("n_layers", 1, 2)
         if n_layers == 1:
             hidden_layer_sizes = tuple(trial.suggest_int(f"n_units_l{i}", 1, 1000) for i in range(1, n_layers + 1, 1))
@@ -208,7 +213,9 @@ class SciKerasSequential(BaseKerasModel):
         return hyperparameters
 
     def grid_search_hyperparameter(self):
-
+        """
+        Suggest hyperparameters for optimization.
+        """
         hyperparameter_grid = {
             "hidden_layer_sizes": [(64,), (128, 64), (256, 128, 64)],
             "loss": [MeanSquaredError()],

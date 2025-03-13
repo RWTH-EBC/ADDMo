@@ -2,10 +2,15 @@ import os
 import shutil
 
 def root_dir():
-    # Finds the root directory of the git repository
+    """
+    Finds the root directory of the git repository.
+    """
     return os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 def create_or_clean_directory(path: str) -> str:
+    """
+    Creates a directory or optionally deletes its contents if it exists.
+    """
     if not os.path.exists(path):
         # Path does not exist, create it
         os.makedirs(path)
@@ -34,6 +39,9 @@ def create_or_clean_directory(path: str) -> str:
 
 
 def create_path_or_ask_to_override(filename, directory, override: bool = True) -> str:
+    """
+    Creates a file path and optionally overwrites the existing file.
+    """
     path = create_dir_and_get_path(filename, directory)
     _overwrite_file(path, override)
     return path
@@ -63,6 +71,9 @@ def _overwrite_file(path: str, overwrite: bool):
 
 
 def _get_bool(message: str, true: list = None, false: list = None) -> bool or str:
+    """
+    Gets a boolean value from the user.
+    """
     if false is None:
         false = ["no", "nein", "false", "1", "n"]
     if true is None:

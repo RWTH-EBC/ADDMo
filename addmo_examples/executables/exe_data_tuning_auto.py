@@ -12,6 +12,9 @@ from addmo.s1_data_tuning_auto.data_tuner_auto import DataTunerAuto
 
 
 def exe_data_tuning_auto():
+    """
+    Execute the system_data tuning process automatically.
+    """
     # Path to the config file
     path_to_config = os.path.join(root_dir(), 'addmo', 's1_data_tuning_auto', 'config',
                                 'data_tuning_auto_config.json')

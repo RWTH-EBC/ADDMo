@@ -49,6 +49,9 @@ class DataTunerAuto:
 
 
     def feature_selection(self):
+        """
+        This method is used to select features from the raw system_data.
+        """
         if self.config.manual_feature_selection:
             self.x = fs.manual_feature_select(self.config, self.x)
         if self.config.filter_low_variance:

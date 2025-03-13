@@ -8,7 +8,11 @@ from addmo.util.load_save import load_data
 from addmo.util.load_save import load_config_from_json
 from addmo.util.data_handling import split_target_features
 
+
 class TestModelTuner(unittest.TestCase):
+    """
+    Unit tests for ModelTuner using pre-defined config.
+    """
     def setUp(self):
         self.config = ModelTuningExperimentConfig()
 

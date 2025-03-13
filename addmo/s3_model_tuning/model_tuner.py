@@ -17,7 +17,9 @@ class ModelTuner:
         self.tuner = HyperparameterTunerFactory.tuner_factory(self.config, self.scorer)
 
     def tune_model(self, model_name: str, x_train_val, y_train_val):
-        """Tune a model and return the best model fitted to training and validation system_data."""
+        """
+        Tune a model and return the best model fitted to training and validation system_data.
+        """
         model = ModelFactory.model_factory(model_name)
 
         best_params = self.tuner.tune(
@@ -45,6 +47,9 @@ class ModelTuner:
         return model
 
     def tune_all_models(self, x_train_val, y_train_val):
+        """
+        Tune all models and return the best model fitted to training and validation system_data.
+        """
         model_dict = {}
         for model_name in self.config.models:
             model = self.tune_model(model_name, x_train_val, y_train_val)
@@ -52,14 +57,23 @@ class ModelTuner:
         return model_dict
 
     def get_model_validation_score(self, model_dict, model_name):
+        """
+        Get the model validation score from the model dictionary.
+        """
         return model_dict[model_name].validation_score
 
     def get_best_model_name(self, model_dict):
+        """
+        Get the best model name from the model dictionary.
+        """
         best_model_name = max(
             model_dict, key=lambda x: self.get_model_validation_score(model_dict, x)
         )
         return best_model_name
     def get_model(self, model_dict, model_name):
+        """
+        Get the model from the model dictionary.
+        """
         return model_dict[model_name]
 
 

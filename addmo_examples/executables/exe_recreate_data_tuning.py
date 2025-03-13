@@ -9,9 +9,10 @@ from addmo.util.experiment_logger import WandbLogger
 from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from addmo.s1_data_tuning_auto.data_tuner_auto import DataTunerAuto
 
-#Main idea: recreate data_tuning on new data based on same config, so just update the data path and experiment name and keep scalars the same
 def recreate_tuning(name_of_raw_data, name_of_tuning, abs_path_to_data, name_new_config):
-
+    """
+    Execute data tuning auto on new data based on existing configuration.
+    """
     # Load the previously saved tuning configuration
     path_to_saved_config = os.path.join(root_dir(), results_dir(), name_of_raw_data, name_of_tuning, "config.json")
 

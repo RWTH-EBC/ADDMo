@@ -10,19 +10,24 @@ from addmo.s3_model_tuning.models.abstract_model import ModelMetadata
 from aixtra.util import loading_saving_aixtra
 
 
-
 def get_subclasses(base_class):
-    """Dynamically get all the subclasses which contain the models for the given base class"""
+    """
+    Dynamically get all the subclasses which contain the models for the given base class.
+    """
     return base_class.__subclasses__()
 
 class TestBaseMLModel(unittest.TestCase):
-    """Unit tests for Base class models"""
+    """
+    Unit tests for base class models.
+    """
 
     base_class = BaseKerasModel  # Change this to test different base classes
 
     @classmethod
     def setUpClass(cls):
-        """Find all subclasses of the base class."""
+        """
+        Find all subclasses of the base class.
+        """
 
         cls.temp_dir = tempfile.TemporaryDirectory()
         cls.subclasses = get_subclasses(cls.base_class)
@@ -31,11 +36,15 @@ class TestBaseMLModel(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Cleanup temp directory after tests."""
+        """
+        Cleanup temp directory after tests.
+        """
         cls.temp_dir.cleanup()
 
     def test_all_models(self):
-        """Test all registered models that are subclasses of AbstractMLModel."""
+        """
+        Test all registered models that are subclasses of AbstractMLModel.
+        """
 
         # Ensure regressor is not None
         for model_class in self.subclasses:
@@ -62,7 +71,6 @@ class TestBaseMLModel(unittest.TestCase):
         self.assertIsInstance(model.metadata, ModelMetadata, "Meta data not defined properly")
         self.assertEqual(model.metadata.addmo_class, model_class.__name__, "Model class mismatch")
         self.assertIsInstance(test_regressor, type(model), "Loaded model class mismatch")
-
 
 
 if __name__ == "__main__":

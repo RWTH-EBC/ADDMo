@@ -117,6 +117,9 @@ class ScikitMLP(BaseScikitLearnModel):
         self.set_params(self.default_hyperparameter())
 
     def optuna_hyperparameter_suggest(self, trial):
+        """
+        Suggest hyperparameters for optimization.
+        """
         hyperparameters = {}
 
         # Suggest hyperparameters
@@ -131,6 +134,9 @@ class ScikitMLP(BaseScikitLearnModel):
         return hyperparameters
 
     def grid_search_hyperparameter(self):
+        """
+        Suggest hyperparameters for optimization.
+        """
         hyperparameter_grid = {
             "hidden_layer_sizes": [(50,), (100,), (50, 50), (100, 100)],
             "activation": ["tanh", "relu"],
@@ -271,6 +277,9 @@ class ScikitSVR(BaseScikitLearnModel):
         pass
 
     def optuna_hyperparameter_suggest(self, trial):
+        """
+        Suggest hyperparameters for optimization.
+        """
         hyperparameters = {}
 
         hyperparameters["C"] = trial.suggest_float("C", 1e-2, 1e1, log=True)  #regularizer

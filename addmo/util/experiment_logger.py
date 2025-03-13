@@ -44,7 +44,9 @@ class WandbLogger(AbstractLogger):
 
     @staticmethod
     def start_experiment(config=None, **kwargs):
-        """Starts a new experiment and logs the config to wandb."""
+        """
+        Starts a new experiment and logs the config to wandb.
+        """
         if WandbLogger.active:
             if not os.path.exists(WandbLogger.directory):
                 os.makedirs(WandbLogger.directory)
@@ -59,12 +61,17 @@ class WandbLogger(AbstractLogger):
 
     @staticmethod
     def finish_experiment():
-        """Finishes the current experiment."""
+        """
+        Finishes the current experiment.
+        """
         if WandbLogger.active:
             wandb.finish()
 
     @staticmethod
     def log(log: dict):
+        """
+        Logs run data.
+        """
         if WandbLogger.active:
             processed_log = {}
             for name, data in log.items():
@@ -91,6 +98,9 @@ class WandbLogger(AbstractLogger):
             description: str = None,
             metadata: dict = None
     ):
+        """
+        Logs artifact data.
+        """
         if not WandbLogger.active:
             return
 
@@ -131,8 +141,12 @@ class WandbLogger(AbstractLogger):
 
         wandb.run.log_artifact(artifact)
         artifact.wait()
+
     @staticmethod
     def use_artifact(name: str, alias: str = "latest"):
+        """
+        Downloads logged model artifact from wandb.
+        """
         if WandbLogger.active:
             artifact = wandb.use_artifact(f"{name}:{alias}")
             artifact_dir = artifact.download()
@@ -160,6 +174,9 @@ class LocalLogger(AbstractLogger): #Todo: evtl. komplett löschen und auf normal
 
     @staticmethod
     def start_experiment(config, **kwargs):
+        """
+        Starts a new experiment and logs the config to LocalLogger.
+        """
         if LocalLogger.active:
             create_or_clean_directory(LocalLogger.directory)
             path = os.path.join(LocalLogger.directory, "config.json")
@@ -168,6 +185,9 @@ class LocalLogger(AbstractLogger): #Todo: evtl. komplett löschen und auf normal
 
     @staticmethod
     def finish_experiment():
+        """
+        Finishes the current experiment.
+        """
         if LocalLogger.active:
             # safe run_time_storage to disk
             pass  # Implement finish experiment logic here
@@ -180,6 +200,9 @@ class LocalLogger(AbstractLogger): #Todo: evtl. komplett löschen und auf normal
 
     @staticmethod
     def log_artifact(data, name: str, art_type: str):
+        """
+        Logs artifact data.
+        """
         if LocalLogger.active:
             if art_type == "system_data":
                 file_path = os.path.join(LocalLogger.directory, name + ".csv")
@@ -188,6 +211,9 @@ class LocalLogger(AbstractLogger): #Todo: evtl. komplett löschen und auf normal
 
     @staticmethod
     def use_artifact(name: str, alias: str = "latest"):
+        """
+        Downloads logged model artifact.
+        """
         if LocalLogger.active:
             filename = name + '.csv'
             file_path = os.path.join(LocalLogger.directory, filename)

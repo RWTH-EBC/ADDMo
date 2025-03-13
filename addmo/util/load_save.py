@@ -10,8 +10,10 @@ ConfigT = TypeVar("ConfigT", bound=BaseModel)
 def load_config_from_json(
         config: Union[ConfigT, FilePath, str, dict], config_type: Type[ConfigT]
 ) -> ConfigT:
-    """Generic config loader, either accepting a path to a json file, a json string, a
-    dict or passing through a valid config object."""
+    """
+    Generic config loader, either accepting a path to a json file, a json string, a
+    dict or passing through a valid config object.
+    """
 
     if isinstance(config, (str, Path)):
         # if we have a str / path, we need to check whether it is a file or a json string
@@ -33,13 +35,19 @@ def load_config_from_json(
 
 
 def save_config_to_json(config: ConfigT, path: str):
-    """Save the config to a json file."""
+    """
+    Save the config to a json file.
+    """
     config_json = config.model_dump_json(indent=4)
     with open(path, "w") as f:
         f.write(config_json)
 
 
 def load_data(abs_path: str) -> pd.DataFrame:
+    """
+    Load data from absolute file path.
+    """
+
     if abs_path.endswith(".csv"):
         # Read the CSV file
         df = pd.read_csv(
@@ -56,6 +64,9 @@ def load_data(abs_path: str) -> pd.DataFrame:
 
 
 def write_data(df: pd.DataFrame, abs_path: str):
+    """
+    Write data to absolute file path.
+    """
     if abs_path.endswith(".csv"):
         # Write the CSV file
         df.to_csv(abs_path, sep=";", encoding="latin1")

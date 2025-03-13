@@ -15,6 +15,9 @@ from addmo.util.load_save import load_config_from_json
 from addmo.util.data_handling import split_target_features
 
 def exe_model_tuning(config=None):
+    """
+    Executes model tuning process and returns the best model.
+    """
 
     # Configure the logger
     LocalLogger.directory = results_dir_model_tuning(config)

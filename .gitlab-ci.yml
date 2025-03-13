@@ -33,8 +33,8 @@ include:
     - project: 'ebc/ebc-general/templates/gitlab-ci'
       file: 'pages/gl-pages.gitlab-ci.yml'  # Stores code-quality pages here
 
-#    - project: 'ebc/ebc-general/templates/gitlab-ci'
-#      file: 'python/examples/examples.gitlab-ci.yml'  # Stores examples as
+    - project: 'ebc/ebc-general/templates/gitlab-ci'
+      file: 'python/examples/examples.gitlab-ci.yml'  # Stores examples as
 
 
     - project: 'ebc/ebc-general/templates/gitlab-ci'

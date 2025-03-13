@@ -7,7 +7,6 @@ stages:
   - deploy
 
 
-
 variables:
   PYTHON_VERSION: "registry.git.rwth-aachen.de/ebc/ebc_all/gitlab_ci/templates:python_3.10"
   PAGES_BRANCH: mre-rpa

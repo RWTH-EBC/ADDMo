@@ -33,7 +33,7 @@ include:
       file: 'python/examples/examples.gitlab-ci.yml'  # Stores examples as
 
     - project: 'ebc/ebc-general/templates/gitlab-ci'
-      file: 'sphinxdoc/sphinxdoc.gitlab-ci.yml'
+      file: 'doc/sphinxdoc.gitlab-ci.yml'
 
     - project: 'ebc/ebc-general/templates/gitlab-ci'
       file: 'python/build/build.gitlab-ci.yml'

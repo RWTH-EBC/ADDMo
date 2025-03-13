@@ -10,34 +10,39 @@ from addmo.util.experiment_logger import WandbLogger
 from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from addmo.s1_data_tuning_auto.data_tuner_auto import DataTunerAuto
 
-# Path to the config file
-path_to_config = os.path.join(root_dir(), 'addmo', 's1_data_tuning_auto', 'config',
-                            'data_tuning_auto_config.json')
 
-# Create the config object
-# config = load_config_from_json(path_to_config, DataTuningAutoSetup)
-config = DataTuningAutoSetup()
+def exe_data_tuning_auto():
+    # Path to the config file
+    path_to_config = os.path.join(root_dir(), 'addmo', 's1_data_tuning_auto', 'config',
+                                'data_tuning_auto_config.json')
 
-# Configure the logger
-LocalLogger.directory = results_dir_data_tuning(config)
-LocalLogger.active = True
-WandbLogger.project = "addmo-test_data_auto_tuning"
-WandbLogger.directory = results_dir_data_tuning(config)
-WandbLogger.active = False
+    # Create the config object
+    # config = load_config_from_json(path_to_config, DataTuningAutoSetup)
+    config = DataTuningAutoSetup()
 
-# Initialize logging
-ExperimentLogger.start_experiment(config=config)
+    # Configure the logger
+    LocalLogger.directory = results_dir_data_tuning(config)
+    LocalLogger.active = True
+    WandbLogger.project = "addmo-test_data_auto_tuning"
+    WandbLogger.directory = results_dir_data_tuning(config)
+    WandbLogger.active = False
 
-# Create the system_data tuner
-tuner = DataTunerAuto(config=config)
+    # Initialize logging
+    ExperimentLogger.start_experiment(config=config)
 
-# Tune the system_data
-tuned_x = tuner.tune_auto()
-y = tuner.y
+    # Create the system_data tuner
+    tuner = DataTunerAuto(config=config)
 
-tuned_xy = pd.concat([y, tuned_x], axis=1, join="inner").bfill()
+    # Tune the system_data
+    tuned_x = tuner.tune_auto()
+    y = tuner.y
 
-# Log the tuned system_data
-ExperimentLogger.log_artifact(tuned_xy, name='tuned_xy', art_type='system_data')
+    tuned_xy = pd.concat([y, tuned_x], axis=1, join="inner").bfill()
 
-print("Finished")
+    # Log the tuned system_data
+    ExperimentLogger.log_artifact(tuned_xy, name='tuned_xy', art_type='system_data')
+
+    print("Finished")
+
+if __name__ == "__main__":
+    exe_data_tuning_auto()

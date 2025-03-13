@@ -1,14 +1,18 @@
 stages:
   - test
   - code_quality
-  - deploy
+  - examples
+  - doc
   - build
+  - deploy
+
 
 
 variables:
   PYTHON_VERSION: "python:3.10"
   TEST_PATH: tests
   TEST_ENGINE: "unittest"
+  EXAMPLE_CONVERTER_CONFIG: "addmo_examples/converter.toml"
 
 
 include:
@@ -16,8 +20,20 @@ include:
     - project: 'ebc/ebc-general/templates/gitlab-ci'
       file: 'python/tests/coverage.gitlab-ci.yml' # Generates test coverage
 
+#    - project: 'EBC/EBC_all/gitlab_ci/templates'
+#      file: 'python/tests/tests.gitlab-ci.yml'  # ask martin to execute/ask permissions
+
     - project: 'ebc/ebc-general/templates/gitlab-ci'
-      file: 'python/code-quality/pylint.gitlab-ci.yml'# Code quality
+      file: 'python/code-quality/pylint.gitlab-ci.yml'
+
+    - project: 'ebc/ebc-general/templates/gitlab-ci'
+      file: 'pages/gl-pages.gitlab-ci.yml'  # Stores code-quality pages here
+
+    - project: 'ebc/ebc-general/templates/gitlab-ci'
+      file: 'python/examples/examples.gitlab-ci.yml'  # Stores examples as
+
+    - project: 'ebc/ebc-general/templates/gitlab-ci'
+      file: 'sphinxdoc/sphinxdoc.gitlab-ci.yml'
 
     - project: 'ebc/ebc-general/templates/gitlab-ci'
       file: 'python/build/build.gitlab-ci.yml'

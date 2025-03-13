@@ -13,7 +13,8 @@ variables:
   PAGES_BRANCH: mre-rpa
   TEST_PATH: tests
   TEST_ENGINE: "unittest"
-  EXAMPLE_CONVERTER_CONFIG: "addmo_examples/converter.toml"
+  EXAMPLE_CONVERTER_CONFIG: addmo_examples/converter.toml
+  EXAMPLE_FILE_FOLDER: addmo_examples
 
 
 include:

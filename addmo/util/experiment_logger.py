@@ -36,6 +36,22 @@ class AbstractLogger(ABC):
     def use_artifact(name: str, alias: str = "latest"):
         pass
 
+    @staticmethod
+    def _handle_pkl(data,name,art_type, directory):
+        filename = f"{name}.{art_type}"
+        create_path_or_ask_to_override(filename, directory)
+        filepath = os.path.join(directory, filename)
+        with open(filepath, "wb") as f:
+            pickle.dump(data, f)
+        return "pkl", [filepath]
+
+    @staticmethod
+    def _handle_model(data,name,art_type, directory):
+        model: AbstractMLModel = data
+        filepath = os.path.join(directory, f"{name}.{art_type}")
+        metadata_filepath = os.path.join(directory, f"{name}_metadata.json")
+        model.save_regressor(directory, name, art_type)
+        return "regressor", [filepath, metadata_filepath]
 
 class WandbLogger(AbstractLogger):
     active: bool = False
@@ -104,27 +120,12 @@ class WandbLogger(AbstractLogger):
         if not WandbLogger.active:
             return
 
-        def handle_pkl(data):
-            filename = f"{name}.{art_type}"
-            create_path_or_ask_to_override(filename, WandbLogger.directory)
-            filepath = os.path.join(WandbLogger.directory, filename)
-            with open(filepath, "wb") as f:
-                pickle.dump(data, f)
-            return "pkl", [filepath]
-
-        def handle_model(data):
-            model: AbstractMLModel = data
-            filepath = os.path.join(WandbLogger.directory, f"{name}.{art_type}")
-            metadata_filepath = os.path.join(WandbLogger.directory, f"{name}_metadata.json")
-            model.save_regressor(WandbLogger.directory, name, art_type)
-            return "regressor", [filepath, metadata_filepath]
-
         type_handlers = {
-            "pkl": handle_pkl,
-            "h5": handle_model,
-            "keras": handle_model,
-            "joblib": handle_model,
-            "onnx": handle_model,
+            "pkl": lambda d: super(WandbLogger, WandbLogger)._handle_pkl(d, name, art_type, WandbLogger.directory),
+            "h5": lambda d: super(WandbLogger, WandbLogger)._handle_model(d, name, art_type, WandbLogger.directory),
+            "keras": lambda d: super(WandbLogger, WandbLogger)._handle_model(d, name, art_type, WandbLogger.directory),
+            "joblib": lambda d: super(WandbLogger, WandbLogger)._handle_model(d, name, art_type, WandbLogger.directory),
+            "onnx": lambda d: super(WandbLogger, WandbLogger)._handle_model(d, name, art_type, WandbLogger.directory),
         }
 
         if art_type not in type_handlers:
@@ -207,6 +208,21 @@ class LocalLogger(AbstractLogger): #Todo: evtl. komplett löschen und auf normal
             if art_type == "system_data":
                 file_path = os.path.join(LocalLogger.directory, name + ".csv")
                 data.to_csv(file_path)
+                return
+
+        type_handlers = {
+            "pkl": lambda d: super(LocalLogger, LocalLogger)._handle_pkl(d, name, art_type, LocalLogger.directory),
+            "h5": lambda d: super(LocalLogger, LocalLogger)._handle_model(d, name, art_type, LocalLogger.directory),
+            "keras": lambda d: super(LocalLogger, LocalLogger)._handle_model(d, name, art_type, LocalLogger.directory),
+            "joblib": lambda d: super(LocalLogger, LocalLogger)._handle_model(d, name, art_type, LocalLogger.directory),
+            "onnx": lambda d: super(LocalLogger, LocalLogger)._handle_model(d, name, art_type, LocalLogger.directory),
+        }
+
+        if art_type not in type_handlers:
+            raise ValueError(f"Unsupported artifact type: {art_type}")
+
+        artifact_type, files_to_add = type_handlers[art_type](data)
+        print(f"Saved {artifact_type} files: {files_to_add}")
 
 
     @staticmethod

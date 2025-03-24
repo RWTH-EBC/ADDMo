@@ -3,6 +3,7 @@ import glob
 from addmo.util.load_save_utils import create_or_clean_directory, root_dir
 from addmo.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
+from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 
 
 def raw_data_path(path: str = None):
@@ -75,3 +76,11 @@ def return_best_model(dir):
         return path_to_regressor
     else:
         raise FileNotFoundError("No 'best_model' file found in the directory.")
+
+def results_dir_data_tuning_auto(config: DataTuningAutoSetup):
+    """
+    Returns the path to the results directory for auto data tuning based on config.
+    """
+    dir = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, 'data_tuning_experiment_auto')
+    path = os.path.join(dir, 'tuned_xy_auto.csv')
+    return path

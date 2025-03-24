@@ -84,7 +84,7 @@ if __name__ == "__main__":
     config_path = os.path.join(dir, "config.json")
     with open(config_path, 'r') as f:
         model_config = json.load(f)
-    input_data_path = r'C:\Users\mre-rpa\PycharmProjects\addmo-automated-ml-regression\addmo_examples\raw_input_data\InputData.xlsx'
+    input_data_path = os.path.join(root_dir(),'addmo_examples','raw_input_data','InputData.xlsx')
     input_data_exp_name = 'model_testing'
     model_test(model_config, input_data_path, input_data_exp_name, True)
 

@@ -22,7 +22,7 @@ def recreate_tuning(name_of_raw_data, name_of_tuning, abs_path_to_data, name_new
     # Load new dataset here
     saved_config_data["abs_path_to_data"] = abs_path_to_data
     saved_config_data["name_of_raw_data"] = name_new_config
-    saved_config_data["name_of_tuning"] = "data_tuning_experiment_auto"
+    saved_config_data["name_of_tuning"] = "test_data_tuning"
 
     # Convert the dictionary back to the DataTuningAutoSetup object
     new_config = DataTuningAutoSetup(**saved_config_data)

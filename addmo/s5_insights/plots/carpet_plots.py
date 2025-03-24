@@ -1,0 +1,132 @@
+import numpy as np
+import math
+import pandas as pd
+import matplotlib.pyplot as plt
+from addmo.util import plotting as d
+from addmo.util.definitions import  return_results_dir_model_tuning, return_best_model
+from addmo.s3_model_tuning.models.model_factory import ModelFactory
+
+def plot_carpets(model_config, combinations=None, defaults_dict=None):
+    """
+    Create 3D surface plots for prediction function.
+    """
+
+    target = model_config["name_of_target"]
+    data_path = model_config['abs_path_to_data']
+
+    # Load data
+    data = pd.read_excel(data_path)
+    # Fetch time column from dataset
+    time_column = next((col for col in data.columns if pd.api.types.is_datetime64_any_dtype(data[col])), None)
+    # Set time column as index
+    if time_column:
+        data.set_index(time_column, inplace=True)
+
+    x_grid = data.drop(target, axis=1)
+    variables = list(x_grid.columns)
+
+    # Load regressor
+    path_to_regressor = return_best_model(return_results_dir_model_tuning())
+    regressor = ModelFactory.load_model(path_to_regressor)
+    prediction_func= prediction_func_4_regressor(regressor)
+
+    # Define bounds
+    bounds = {}
+    for var in variables:
+        if var in x_grid.columns:
+            bounds[var] = [x_grid[var].min(), x_grid[var].max()]
+
+    if defaults_dict is None:
+        # Use mean value as default
+        defaults_dict = {var: x_grid[var].mean() for var in variables}
+
+    if combinations is None:
+        combinations = [
+            (v1, v2) for i, v1 in enumerate(variables) for v2 in variables[i + 1:]
+        ]
+
+    # Create a grid for each variable
+    grids = {var: np.linspace(bounds[var][0], bounds[var][1], 150) for var in variables}
+
+    fig_height = max(5, len(combinations) * 3)
+    # Create the figure
+    fig_size = (d.cm2inch(15.5), d.cm2inch(fig_height))
+    fig = plt.figure(figsize=fig_size)
+
+    # Create subplots
+    num_plots = len(combinations)
+    num_cols = 2
+    num_rows = math.ceil(num_plots / num_cols)
+
+    plt.subplots_adjust(left=-0.05, right=0.90, bottom=0.02, top=1, wspace=-0.1, hspace=0.01)
+
+    for i, (x_label, y_label) in enumerate(combinations, 1):
+        ax = fig.add_subplot(num_rows, num_cols, i, projection="3d")
+        X, Y = np.meshgrid(grids[x_label], grids[y_label])
+
+        # Create input arrays for prediction functions
+        inputs = {}
+        for var in variables:
+            if var == x_label:
+                inputs[var] = X
+            elif var == y_label:
+                inputs[var] = Y
+            else:
+                if defaults_dict == None:
+                    inputs[var] = np.full_like(X, np.mean(grids[var]))
+                else:
+                    inputs[var] = np.full_like(X, defaults_dict[var])
+
+        Z = prediction_func(**inputs)
+        surf = ax.plot_surface(X, Y, Z, cmap="cool", alpha=0.5)
+        ax.set_box_aspect([1, 1, 0.6])  # Adjust aspect ratio
+        ax.margins(x=0, y=0)
+        ax.set_xlabel(x_label, fontsize=7, labelpad=-7)
+        ax.set_ylabel(y_label, fontsize=7, labelpad=-7)
+        ax.set_zlabel("Prediction", fontsize=7, labelpad=-7)
+        ax.set_zlabel("Prediction", labelpad=-7)
+        ax.tick_params(axis="x", which="major", pad=-5)
+        ax.tick_params(axis="y", pad=-3)
+        ax.tick_params(axis="z", pad=-3)
+        plt.setp(ax.get_yticklabels(), fontsize=7)
+        plt.setp(ax.get_xticklabels(), fontsize=7)
+        plt.setp(ax.get_zticklabels(), fontsize=7)
+
+
+    # Add colorbars and label them
+    cbar_ax = fig.add_axes([0.9, 0.35, 0.02, 0.3])
+    cbar = fig.colorbar(surf, cax=cbar_ax)
+    cbar.ax.tick_params(labelsize=7)
+    cbar.set_label("Regressor", loc="center", fontsize=7)
+
+    return plt
+
+
+def prediction_func_4_regressor(regressor, rename_dict: dict = None):
+    """
+    Create a prediction function for a regressor as the regressor takes a DataFrame as input.
+    """
+
+    def pred_func(**kwargs):
+        features = regressor.metadata["features_ordered"]
+        if rename_dict is not None:
+            features = [rename_dict[feature] for feature in features]
+
+        # Determine the shape of the output
+        shape = next(
+            arr.shape for arr in kwargs.values() if isinstance(arr, np.ndarray)
+        )
+
+        # Prepare input data
+        input_data = pd.DataFrame(
+            {feature: np.ravel(kwargs[feature]) for feature in features}
+        )
+
+        # Make prediction
+        prediction = regressor.predict(input_data)
+
+        # Reshape the prediction to match the input shape
+        return prediction.reshape(shape)
+
+    return pred_func
+

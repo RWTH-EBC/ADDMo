@@ -33,7 +33,10 @@ def exe_model_tuning(config=None):
     model_tuner = ModelTuner(config=config.config_model_tuner)
 
     # Load the system_data
-    xy_tuned = load_data(config.abs_path_to_data)
+    p= r'C:\Users\mre-rpa\PycharmProjects\addmo-automated-ml-regression\addmo_examples\results\test_raw_data\data_tuning_experiment_auto\tuned_xy_auto.csv'
+    xy_tuned = pd.read_csv(
+            p, delimiter=",", index_col=[0], encoding="latin1", header=[0]
+        )
 
     # Select training and validation period
     xy_tuned_train_val = xy_tuned.loc[config.start_train_val:config.stop_train_val]
@@ -50,7 +53,7 @@ def exe_model_tuning(config=None):
     best_model = model_tuner.get_model(model_dict, best_model_name)
 
     # Log the best model
-    ExperimentLogger.log_artifact(best_model, name='best_model', art_type='onnx')
+    ExperimentLogger.log_artifact(best_model, name='best_model', art_type='keras')
 
 
     print("Finished")

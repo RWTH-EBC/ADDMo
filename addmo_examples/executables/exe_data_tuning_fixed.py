@@ -36,7 +36,7 @@ def exe_data_tuning_fixed():
     tuner = DataTunerByConfig(config=config)
 
     # Load the system_data
-    xy_raw = load_data(config.path_to_raw_data)
+    xy_raw = load_data(config.abs_path_to_data)
     ExperimentLogger.log({"xy_testraw": xy_raw.iloc[[0, 1, 2, -3, -2, -1]]})
 
     # Split the system_data
@@ -55,7 +55,7 @@ def exe_data_tuning_fixed():
     ExperimentLogger.log({"xy_tuned": xy_tuned.iloc[[0, 1, 2, -3, -2, -1]]})
 
     # Log the tuned system_data
-    ExperimentLogger.log_artifact(xy_tuned, name='xy_tuned', art_type='pkl')
+    ExperimentLogger.log_artifact(xy_tuned, name='xy_tuned_fixed', art_type='system_data')
 
     # Finish logging
     ExperimentLogger.finish_experiment()

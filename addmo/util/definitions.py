@@ -1,4 +1,5 @@
 import os
+import glob
 from addmo.util.load_save_utils import create_or_clean_directory, root_dir
 from addmo.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
@@ -55,3 +56,22 @@ def ed_use_case_dir():
     Returns the path to the use case directory.
     """
     return os.path.join(root_dir(), 'aixtra_use_case')
+
+def return_results_dir_model_tuning( name_of_raw_data='test_raw_data',name_of_data_tuning_experiment='test_data_tuning', name_of_model_tuning_experiment='test_model_tuning'):
+    """
+      Returns the path to the results directory for completed model tuning .
+      """
+    path = os.path.join(root_dir(),root_dir(), results_dir(), name_of_raw_data,name_of_data_tuning_experiment, name_of_model_tuning_experiment)
+    return path
+
+def return_best_model(dir):
+    """
+    Returns the path to the best model based on the directory path.
+    """
+    model_files = glob.glob(os.path.join(dir, "best_model.*"))
+
+    if model_files:
+        path_to_regressor = model_files[0]  # Load the first match
+        return path_to_regressor
+    else:
+        raise FileNotFoundError("No 'best_model' file found in the directory.")

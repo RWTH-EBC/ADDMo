@@ -43,7 +43,7 @@ def exe_data_tuning_auto():
     tuned_xy = pd.concat([y, tuned_x], axis=1, join="inner").bfill()
 
     # Log the tuned system_data
-    ExperimentLogger.log_artifact(tuned_xy, name='tuned_xy', art_type='system_data')
+    ExperimentLogger.log_artifact(tuned_xy, name='tuned_xy_auto', art_type='system_data')
 
     print("Finished")
 

@@ -1,4 +1,5 @@
 # This is an example working file of how to recreate auto data tuning using a previously saved config file for data tuning
+# Model tuning is done automatically in the model testing script (if True), there is no need to execute this file separately in that case
 import os
 import json
 import pandas as pd

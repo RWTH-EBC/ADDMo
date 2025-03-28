@@ -22,7 +22,7 @@ include:
       file: 'python/tests/coverage.gitlab-ci.yml' # Generates test coverage
 
     - project: 'EBC/EBC_all/gitlab_ci/templates'
-      file: 'python/tests/tests.gitlab-ci.yml'  # ask martin to execute/ask permissions
+      file: 'python/tests/tests.gitlab-ci.yml'  # test pipeline
 
     - project: 'EBC/EBC_all/gitlab_ci/templates'
       file: 'python/code-quality/pylint.gitlab-ci.yml'

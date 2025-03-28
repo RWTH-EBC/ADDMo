@@ -33,8 +33,7 @@ def exe_model_tuning(config=None):
     model_tuner = ModelTuner(config=config.config_model_tuner)
 
     # Load the system_data
-    tuned_data_path= results_dir_data_tuning_auto(config=config)
-    xy_tuned = pd.read_csv(tuned_data_path, delimiter=",", index_col=[0], encoding="latin1", header=[0] )
+    xy_tuned = load_data(config.abs_path_to_data)
 
     # Select training and validation period
     xy_tuned_train_val = xy_tuned.loc[config.start_train_val:config.stop_train_val]
@@ -59,7 +58,9 @@ def exe_model_tuning(config=None):
 if __name__ == "__main__":
     # Create the config object
     config = ModelTuningExperimentConfig()
-
+    # Change default input data path to auto tuned data path
+    tuned_data_path = results_dir_data_tuning_auto(config=config)
+    config.abs_path_to_data = tuned_data_path
     config.config_model_tuner.validation_score_splitting = 'UnivariateSplitter'
     config.config_model_tuner.validation_score_splitting_kwargs = None
 

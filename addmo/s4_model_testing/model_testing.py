@@ -16,8 +16,10 @@ from addmo.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
 from addmo.s2_data_tuning.data_tuner_fixed import DataTunerByConfig
 from addmo.util.load_save import load_data
 from addmo.util.data_handling import split_target_features
+from addmo.s5_insights.plots.scatter_plot import scatter
 
-def model_test(model_config, input_data_path, input_data_exp_name, model_tuning=False):
+
+def model_test(model_config, input_data_path, input_data_exp_name, model_tuning=True):
 
     # Load regressor
     path_to_regressor = return_best_model(return_results_dir_model_tuning())
@@ -25,10 +27,8 @@ def model_test(model_config, input_data_path, input_data_exp_name, model_tuning=
 
     # Load data tuning config used for the model
     name_of_raw_data = model_config['name_of_raw_data']
-    name_of_tuning = "data_tuning_experiment_auto"    #model_config['name_of_data_tuning_experiment']
-    # Up Here we assume that the tuning config is in the same dir as model tuning results
-    # However, auto data tuning is saved in a different directory by default
-    # Todo: add a comment in data auto tuning to change the dir to 'test_data_tuning' so that everything is saved in the same dir and fetched directly from config
+    # Explicitly change data directory if using auto-tuning, if it is fixed then keep it: model_config['name_of_data_tuning_experiment']
+    name_of_tuning = "data_tuning_experiment_auto"
 
     path_data_tuning_config = os.path.join(root_dir(), results_dir(), name_of_raw_data, name_of_tuning, "config.json")
     with open(path_data_tuning_config, "r") as file:
@@ -36,35 +36,10 @@ def model_test(model_config, input_data_path, input_data_exp_name, model_tuning=
 
 
     if model_tuning:
-        # Load new dataset here
-        saved_config_data["abs_path_to_data"] = input_data_path
-        saved_config_data["name_of_raw_data"] = input_data_exp_name
-        saved_config_data["name_of_data_tuning_experiment"] = "data_tuning_experiment_auto"
-
-        # Convert the dictionary back to the DataTuningAutoSetup object
-        new_config = DataTuningAutoSetup(**saved_config_data)
-
-        LocalLogger.directory = results_dir_data_tuning(new_config)
-        LocalLogger.active = True
-        WandbLogger.project = "addmo-test_data_auto_tuning"
-        WandbLogger.directory = results_dir_data_tuning(new_config)
-        WandbLogger.active = False
-
-        ExperimentLogger.start_experiment(config=new_config)
-
-        # Create a new tuner instance with the same tuning parameters
-        new_tuner = DataTunerAuto(config=new_config)
-
-        # Apply the same tuning process to the new data
-        tuned_x_new = new_tuner.tune_auto()
-        y_new = new_tuner.y
-
-        tuned_xy_new = pd.concat([y_new, tuned_x_new], axis=1, join="inner").bfill()
-
-        # Log the tuned system data
-        ExperimentLogger.log_artifact(tuned_xy_new, name="tuned_xy_testing", art_type="system_data")
+        tuned_x_new,y_new = model_tuning_recreate_auto(saved_config_data, input_data_path,input_data_exp_name)
         y_pred = pd.Series(regressor.predict(tuned_x_new), index=tuned_x_new.index)
         fit_error= root_mean_squared_error(y_new, y_pred)
+        scatter(y_new, y_pred, model_config['name_of_target'],fit_error)
 
 
     else:
@@ -73,20 +48,43 @@ def model_test(model_config, input_data_path, input_data_exp_name, model_tuning=
         y = xy[saved_config_data['name_of_target']]
         y_pred = pd.Series(regressor.predict(x), index=x.index)
         fit_error= root_mean_squared_error(y, y_pred)
+        scatter(y, y_pred, model_config['name_of_target'],fit_error)
 
 
 
     print("error is : ", fit_error)
 
-if __name__ == "__main__":
-    dir = return_results_dir_model_tuning()
-    # Read config
-    config_path = os.path.join(dir, "config.json")
-    with open(config_path, 'r') as f:
-        model_config = json.load(f)
-    input_data_path = os.path.join(root_dir(),'addmo_examples','raw_input_data','InputData.xlsx')
-    input_data_exp_name = 'model_testing'
-    model_test(model_config, input_data_path, input_data_exp_name, True)
+def model_tuning_recreate_auto(saved_config_data, input_data_path,input_data_exp_name):
+    # Load new dataset here
+    saved_config_data["abs_path_to_data"] = input_data_path
+    saved_config_data["name_of_raw_data"] = input_data_exp_name
+    saved_config_data["name_of_data_tuning_experiment"] = "data_tuning_experiment_auto"
+
+    # Convert the dictionary back to the DataTuningAutoSetup object
+    new_config = DataTuningAutoSetup(**saved_config_data)
+
+    LocalLogger.directory = results_dir_data_tuning(new_config)
+    LocalLogger.active = True
+    WandbLogger.project = "addmo-test_data_auto_tuning"
+    WandbLogger.directory = results_dir_data_tuning(new_config)
+    WandbLogger.active = False
+
+    ExperimentLogger.start_experiment(config=new_config)
+
+    # Create a new tuner instance with the same tuning parameters
+    new_tuner = DataTunerAuto(config=new_config)
+
+    # Apply the same tuning process to the new data
+    tuned_x_new = new_tuner.tune_auto()
+    y_new = new_tuner.y
+
+    tuned_xy_new = pd.concat([y_new, tuned_x_new], axis=1, join="inner").bfill()
+
+    # Log the tuned system data
+    ExperimentLogger.log_artifact(tuned_xy_new, name="tuned_xy_testing", art_type="system_data")
+    return tuned_x_new, y_new
+
+
 
 
 # If using fixed config then use this:

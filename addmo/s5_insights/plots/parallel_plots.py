@@ -4,17 +4,18 @@ import matplotlib.pyplot as plt
 from addmo.util import plotting as d
 from addmo.util.definitions import  return_results_dir_model_tuning, return_best_model
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
-
+from addmo.util.load_save import load_data
 
 def parallel_plots(model_config):
 
     # Load target and data
     target = model_config["name_of_target"]
     data_path = model_config['abs_path_to_data']
-    data = pd.read_excel(data_path)
+    data = load_data(data_path)
+
 
     # Load regressor
-    path_to_regressor = return_best_model(return_results_dir_model_tuning())
+    path_to_regressor = return_best_model(return_results_dir_model_tuning(model_config['name_of_raw_data'], model_config['name_of_data_tuning_experiment'],model_config['name_of_model_tuning_experiment']))
     regressor = ModelFactory.load_model(path_to_regressor)
 
     # Pre-process data
@@ -71,7 +72,7 @@ def parallel_plots(model_config):
             ax.spines['right'].set_position(("axes", i / (ys_grid.shape[1] - 1)))
     host.set_xlim(0, ys_grid.shape[1] - 1)
     host.set_xticks(range(ys_grid.shape[1]))
-    host.set_xticklabels([col.replace(' ', '\n') for col in xy_grid.columns])
+    host.set_xticklabels([col.replace(' ', '\n').replace('__', '\n') for col in xy_grid.columns])
     host.tick_params(axis='x', which='major', pad=7, labelsize=9)
     host.spines['right'].set_visible(False)
     host.xaxis.tick_top()

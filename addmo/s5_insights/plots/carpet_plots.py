@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from addmo.util import plotting as d
 from addmo.util.definitions import  return_results_dir_model_tuning, return_best_model
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
+from addmo.util.load_save import load_data
 
 def plot_carpets(model_config, combinations=None, defaults_dict=None):
     """
@@ -15,7 +16,7 @@ def plot_carpets(model_config, combinations=None, defaults_dict=None):
     data_path = model_config['abs_path_to_data']
 
     # Load data
-    data = pd.read_excel(data_path)
+    data = load_data(data_path)
     # Fetch time column from dataset
     time_column = next((col for col in data.columns if pd.api.types.is_datetime64_any_dtype(data[col])), None)
     # Set time column as index
@@ -26,7 +27,7 @@ def plot_carpets(model_config, combinations=None, defaults_dict=None):
     variables = list(x_grid.columns)
 
     # Load regressor
-    path_to_regressor = return_best_model(return_results_dir_model_tuning())
+    path_to_regressor = return_best_model(return_results_dir_model_tuning(model_config['name_of_raw_data'], model_config['name_of_data_tuning_experiment'],model_config['name_of_model_tuning_experiment']))
     regressor = ModelFactory.load_model(path_to_regressor)
     prediction_func= prediction_func_4_regressor(regressor)
 
@@ -81,11 +82,12 @@ def plot_carpets(model_config, combinations=None, defaults_dict=None):
         surf = ax.plot_surface(X, Y, Z, cmap="cool", alpha=0.5)
         ax.set_box_aspect([1, 1, 0.6])  # Adjust aspect ratio
         ax.margins(x=0, y=0)
-        ax.set_xlabel(x_label, fontsize=7, labelpad=-7)
-        ax.set_ylabel(y_label, fontsize=7, labelpad=-7)
+        ax.set_xlabel(x_label.replace('__', '\n'), fontsize=7, labelpad=-6)
+        ax.set_ylabel(y_label.replace('__', '\n'), fontsize=7, labelpad=-6)
         ax.set_zlabel("Prediction", fontsize=7, labelpad=-7)
         ax.set_zlabel("Prediction", labelpad=-7)
         ax.tick_params(axis="x", which="major", pad=-5)
+        ax.view_init(elev=30, azim=120)
         ax.tick_params(axis="y", pad=-3)
         ax.tick_params(axis="z", pad=-3)
         plt.setp(ax.get_yticklabels(), fontsize=7)
@@ -124,6 +126,7 @@ def prediction_func_4_regressor(regressor, rename_dict: dict = None):
 
         # Make prediction
         prediction = regressor.predict(input_data)
+
 
         # Reshape the prediction to match the input shape
         return prediction.reshape(shape)

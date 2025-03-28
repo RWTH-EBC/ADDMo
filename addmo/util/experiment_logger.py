@@ -2,6 +2,7 @@ import os
 from abc import ABC, abstractmethod
 import pickle
 import pandas as pd
+from pandas import ExcelWriter
 import wandb
 from addmo.s3_model_tuning.models.abstract_model import AbstractMLModel
 from addmo.util.load_save import save_config_to_json
@@ -206,8 +207,9 @@ class LocalLogger(AbstractLogger): #Todo: evtl. komplett löschen und auf normal
         """
         if LocalLogger.active:
             if art_type == "system_data":
-                file_path = os.path.join(LocalLogger.directory, name + ".csv")
-                data.to_csv(file_path)
+                file_path = os.path.join(LocalLogger.directory, name)
+                data.to_csv(os.path.join(file_path + ".csv"))
+
                 return
 
         type_handlers = {

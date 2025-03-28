@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 from addmo.util import plotting as d
+from addmo.util.load_save import load_data
 
 
 def plot_data(model_config):
@@ -9,12 +10,12 @@ def plot_data(model_config):
     Function to plot the data from the given model config file path.
     """
 
-    data_path = model_config['abs_path_to_data']
+    data_path = model_config["abs_path_to_data"]
     start_date = model_config['start_train_val']
     end_date = model_config['end_test']
 
     # Load and preprocess data
-    data = pd.read_excel(data_path)
+    data = load_data(data_path)
     # Fetch time column from dataset
     time_column = next((col for col in data.columns if pd.api.types.is_datetime64_any_dtype(data[col])), None)
     # Filter data based on start and end date from model config
@@ -28,7 +29,7 @@ def plot_data(model_config):
     # Dynamically set figure height
     fig_height = max(5, len(columns_to_plot) * 2.5)
     fig, axes = plt.subplots(len(columns_to_plot), 1, figsize=(d.cm2inch(15.5), d.cm2inch(fig_height)),sharex=True, gridspec_kw={'wspace': 0, 'hspace': 0.08})
-    plt.subplots_adjust(left=0.13, right=0.97, bottom=0.05, top=0.97)
+    plt.subplots_adjust(left=0.12, right=0.97, bottom=0.05, top=0.97)
 
     for ax, column in zip(axes, columns_to_plot):
         if column== model_config['name_of_target']:
@@ -40,7 +41,7 @@ def plot_data(model_config):
         else:
             color= d.black
             ax.plot(time_ser.index, time_ser[column], color=color, linewidth=0.75)
-        ax.set_ylabel(column.replace(' ', '\n '), fontsize=7, labelpad=-4)
+        ax.set_ylabel(column.replace(' ', '\n').replace('__', '\n'), fontsize=7, labelpad=-1)
         plt.setp(ax.get_yticklabels(), fontsize=7)
         ax.grid()
 

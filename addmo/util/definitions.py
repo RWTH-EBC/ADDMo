@@ -78,8 +78,8 @@ def return_best_model(dir):
         raise FileNotFoundError("No 'best_model' file found in the directory.")
 
 def results_dir_data_tuning_auto(config: DataTuningAutoSetup):
-    """
-    Returns the path to the results directory for auto data tuning based on config.
+    """nin
+    Returns the path to the Excel file of tuned data based on config.
     """
     dir = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, 'data_tuning_experiment_auto')
     path = os.path.join(dir, 'tuned_xy_auto.csv')

@@ -28,10 +28,15 @@ include:
       file: 'python/code-quality/pylint.gitlab-ci.yml'
 
     - project: 'EBC/EBC_all/gitlab_ci/templates'
-      file: 'python/doc/sphinxdoc.gitlab-ci.yml'
+      file: 'python/sphinxdoc/sphinxdoc.gitlab-ci.yml'
+
 
     - project: 'EBC/EBC_all/gitlab_ci/templates'
-      file: 'pages/pages.gitlab-ci.yml'  # Stores code-quality pages here
+      file: 'pages/gl-pages.gitlab-ci.yml'
+
+    - project: 'EBC/EBC_all/gitlab_ci/templates'
+      file: 'pages/gh-pages.gitlab-ci.yml'
+
 
     - project: 'EBC/EBC_all/gitlab_ci/templates'
       file: 'python/examples/examples.gitlab-ci.yml'  # Stores examples

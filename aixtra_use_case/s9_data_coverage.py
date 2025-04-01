@@ -47,7 +47,7 @@ def exe(config: ExtrapolationExperimentConfig):
         xy_regressor_fit, bounds, ""
     )
 
-    # save plots
+    # save model_plots
     save_path = os.path.join(config.experiment_folder)
 
     plot.save_plot(

@@ -15,7 +15,7 @@ def collect_plots(base_dir, plot_name):
 
         # Check if it's a directory
         if os.path.isdir(run_path):
-            plot_path = os.path.join(run_path, 'plots', plot_name)
+            plot_path = os.path.join(run_path, 'model_plots', plot_name)
 
             # Check if the plot exists
             if os.path.exists(plot_path):

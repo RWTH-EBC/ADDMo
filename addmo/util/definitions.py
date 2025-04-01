@@ -62,7 +62,7 @@ def return_results_dir_model_tuning( name_of_raw_data='test_raw_data',name_of_da
     """
       Returns the path to the results directory for completed model tuning .
       """
-    path = os.path.join(root_dir(),root_dir(), results_dir(), name_of_raw_data,name_of_data_tuning_experiment, name_of_model_tuning_experiment)
+    path = os.path.join(root_dir(),root_dir(), results_dir(), name_of_raw_data, name_of_data_tuning_experiment, name_of_model_tuning_experiment)
     return path
 
 def return_best_model(dir):
@@ -78,9 +78,25 @@ def return_best_model(dir):
         raise FileNotFoundError("No 'best_model' file found in the directory.")
 
 def results_dir_data_tuning_auto(config: DataTuningAutoSetup):
-    """nin
+    """
     Returns the path to the Excel file of tuned data based on config.
     """
     dir = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, 'data_tuning_experiment_auto')
     path = os.path.join(dir, 'tuned_xy_auto.csv')
     return path
+
+def results_dir_model_tuning_fixed(config: DataTuningFixedConfig):
+    """
+    Returns the path to the Excel file of tuned data based on config.
+    """
+    dir = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, 'data_tuning_experiment_fixed')
+    path = os.path.join(dir, 'xy_tuned_fixed.csv')
+    return path
+
+
+def results_model_testing(name_tuning_exp):
+    """
+    Returns the path to the results directory for model tuning based on config.
+    """
+    path = os.path.join(root_dir(), results_dir(), 'model_testing', name_tuning_exp)
+    return create_or_clean_directory(path)

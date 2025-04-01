@@ -1,7 +1,7 @@
 import os
-
+import json
 import pandas as pd
-
+from addmo.util.plotting import save_pdf
 from addmo.util.definitions import results_dir_data_tuning
 from addmo.util.load_save_utils import root_dir
 from addmo.util.experiment_logger import ExperimentLogger
@@ -9,7 +9,7 @@ from addmo.util.experiment_logger import LocalLogger
 from addmo.util.experiment_logger import WandbLogger
 from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from addmo.s1_data_tuning_auto.data_tuner_auto import DataTunerAuto
-
+from addmo.s5_insights.model_plots.time_series import plot_timeseries
 
 def exe_data_tuning_auto():
     """
@@ -43,8 +43,19 @@ def exe_data_tuning_auto():
     tuned_xy = pd.concat([y, tuned_x], axis=1, join="inner").bfill()
 
     # Log the tuned system_data
-    ExperimentLogger.log_artifact(tuned_xy, name='tuned_xy_auto', art_type='system_data')
+    file_name = 'tuned_xy_auto'
+    ExperimentLogger.log_artifact(tuned_xy, file_name, art_type='system_data')
 
+    # Return file paths for plotting data
+    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')
+    config_path = os.path.join(LocalLogger.directory, "config.json")
+    with open(config_path, 'r') as f:
+        plot_config = json.load(f)
+
+    # Plot tuned data
+    plt = plot_timeseries(plot_config, saved_data_path)
+    plt.show()
+    save_pdf(plt, os.path.join(LocalLogger.directory, file_name ))
     print("Finished")
 
 if __name__ == "__main__":

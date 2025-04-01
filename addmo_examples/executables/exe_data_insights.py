@@ -1,11 +1,11 @@
 import os
 import json
 from addmo.util.definitions import results_dir_model_tuning
-from addmo.s5_insights.plots.time_series import plot_data
-from addmo.s5_insights.plots.parallel_plots import parallel_plots
+from addmo.s5_insights.model_plots.time_series import plot_timeseries
+from addmo.s5_insights.model_plots.parallel_plots import parallel_plots
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
 from addmo.util.plotting import save_pdf
-from addmo.s5_insights.plots.carpet_plots import  plot_carpets
+from addmo.s5_insights.model_plots.carpet_plots import  plot_carpets
 from addmo.util.definitions import  return_results_dir_model_tuning
 
 
@@ -14,7 +14,7 @@ def exe_time_series_plot(config, plot_name, plot_dir, save=False):
     Executes plotting of input data.
     """
 
-    plt = plot_data(config)
+    plt = plot_timeseries(config)
     if save:
         os.makedirs(plot_dir, exist_ok=True)
         plot_path = os.path.join(plot_dir, plot_name)
@@ -24,7 +24,7 @@ def exe_time_series_plot(config, plot_name, plot_dir, save=False):
 
 def exe_carpet_plots(model_config, plot_name, plot_dir, save = False):
     """
-    Executes carpet plots of input data features along with predictions using saved model.
+    Executes carpet model_plots of input data features along with predictions using saved model.
     """
     # Create and show the plot
     plt = plot_carpets(model_config)
@@ -39,7 +39,7 @@ def exe_carpet_plots(model_config, plot_name, plot_dir, save = False):
 
 def exe_parallel_plot(model_config, plot_name, plot_dir, save = False):
     """
-    Executes parallel plots of input data features along with predictions using saved model.
+    Executes parallel model_plots of input data features along with predictions using saved model.
     """
 
 
@@ -61,8 +61,8 @@ if __name__ == '__main__':
     with open(config_path, 'r') as f:
         model_config = json.load(f)
 
-    # Path for saving the plots
-    plot_dir = os.path.join(results_dir_model_tuning( ModelTuningExperimentConfig()), 'plots')
+    # Path for saving the model_plots
+    plot_dir = os.path.join(results_dir_model_tuning( ModelTuningExperimentConfig()), 'model_plots')
 
     # Execute plotting functions
     exe_time_series_plot(model_config,"training_data_time_series",plot_dir,save=True)

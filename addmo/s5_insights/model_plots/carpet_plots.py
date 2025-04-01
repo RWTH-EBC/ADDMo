@@ -9,7 +9,7 @@ from addmo.util.load_save import load_data
 
 def plot_carpets(model_config, combinations=None, defaults_dict=None):
     """
-    Create 3D surface plots for prediction function.
+    Create 3D surface model_plots for prediction function.
     """
 
     target = model_config["name_of_target"]

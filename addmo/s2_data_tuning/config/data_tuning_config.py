@@ -4,7 +4,7 @@ from addmo.util.load_save_utils import root_dir
 
 
 class DataTuningFixedConfig(BaseModel):
-    path_to_raw_data: str = Field(
+    abs_path_to_data: str = Field(
         os.path.join(root_dir(),'addmo_examples','raw_input_data','InputData.xlsx'),
         description="Absolute path to raw system_data",
     )
@@ -12,13 +12,13 @@ class DataTuningFixedConfig(BaseModel):
         "test_raw_data", description="Name of the raw system_data set"
     )
     name_of_tuning: str = Field(
-        "test_data_tuning", description="Name of the system_data tuning configuration"
+        "data_tuning_experiment_fixed", description="Name of the system_data tuning configuration"
     )
-    target: str = Field("Total active power", description="Output of prediction")
+    name_of_target: str = Field("FreshAir Temperature", description="Output of prediction")
     features: list[str] = Field(
         [
             "Schedule",
-            "FreshAir Temperature",
+            "Total active power",
             "FreshAir Temperature___diff",
             "FreshAir Temperature___lag1",
             "FreshAir Temperature___squared",

@@ -17,7 +17,7 @@ def plot_system_carpets(
     defaults_dict=None,
 ):
     """
-    Create comparison 3D surface plots for one or two prediction functions.
+    Create comparison 3D surface model_plots for one or two prediction functions.
     """
 
     variables = list(bounds.keys())

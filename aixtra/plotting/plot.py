@@ -185,7 +185,7 @@ def show_plot(plt):
 
 
 def save_plot(plt, file_name: str, experiment_folder: str):
-    folder = os.path.join(experiment_folder, "plots")
+    folder = os.path.join(experiment_folder, "model_plots")
     if not os.path.exists(folder):
         os.mkdir(folder)
 
@@ -605,5 +605,5 @@ def plot_bar_plot(bars, clf_labels, bars_ideal=None, labels=None, ylabel=None):
     plt.legend(loc="lower left")
 
     plt.tight_layout()
-    plt.savefig("plots\\barplot.pdf", bbox_inches="tight")
+    plt.savefig("model_plots\\barplot.pdf", bbox_inches="tight")
     plt.show()

@@ -7,7 +7,7 @@ from addmo.util.definitions import  return_results_dir_model_tuning
 if __name__ == "__main__":
 
     # Define path of saved model directory, use this function if saved to default path
-    dir = return_results_dir_model_tuning()
+    dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning_fixed')
     # Read config
     config_path = os.path.join(dir, "config.json")
     with open(config_path, 'r') as f:
@@ -17,4 +17,4 @@ if __name__ == "__main__":
     input_data_path = os.path.join(root_dir(),'addmo_examples','raw_input_data','InputData.xlsx')
     # Saving directory of new tuned data test
     input_data_exp_name = 'model_testing'
-    model_test(model_config, input_data_path, input_data_exp_name, True)
+    model_test(dir,model_config, input_data_path, input_data_exp_name, 'fixed' )

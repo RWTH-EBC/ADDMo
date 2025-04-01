@@ -212,19 +212,19 @@ class LocalLogger(AbstractLogger): #Todo: evtl. komplett löschen und auf normal
 
                 return
 
-            # type_handlers = {
-            #     "pkl": lambda d: super(LocalLogger, LocalLogger)._handle_pkl(d, name, art_type, LocalLogger.directory),
-            #     "h5": lambda d: super(LocalLogger, LocalLogger)._handle_model(d, name, art_type, LocalLogger.directory),
-            #     "keras": lambda d: super(LocalLogger, LocalLogger)._handle_model(d, name, art_type, LocalLogger.directory),
-            #     "joblib": lambda d: super(LocalLogger, LocalLogger)._handle_model(d, name, art_type, LocalLogger.directory),
-            #     "onnx": lambda d: super(LocalLogger, LocalLogger)._handle_model(d, name, art_type, LocalLogger.directory),
-            # }
-            #
-            # if art_type not in type_handlers:
-            #     raise ValueError(f"Unsupported artifact type: {art_type}")
-            #
-            # artifact_type, files_to_add = type_handlers[art_type](data)
-            # print(f"Saved {artifact_type} files: {files_to_add}")
+            type_handlers = {
+                "pkl": lambda d: super(LocalLogger, LocalLogger)._handle_pkl(d, name, art_type, LocalLogger.directory),
+                "h5": lambda d: super(LocalLogger, LocalLogger)._handle_model(d, name, art_type, LocalLogger.directory),
+                "keras": lambda d: super(LocalLogger, LocalLogger)._handle_model(d, name, art_type, LocalLogger.directory),
+                "joblib": lambda d: super(LocalLogger, LocalLogger)._handle_model(d, name, art_type, LocalLogger.directory),
+                "onnx": lambda d: super(LocalLogger, LocalLogger)._handle_model(d, name, art_type, LocalLogger.directory),
+            }
+
+            if art_type not in type_handlers:
+                raise ValueError(f"Unsupported artifact type: {art_type}")
+
+            artifact_type, files_to_add = type_handlers[art_type](data)
+            print(f"Saved {artifact_type} files: {files_to_add}")
 
 
     @staticmethod

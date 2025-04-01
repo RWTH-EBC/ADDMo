@@ -21,7 +21,7 @@ def plot_scatter_average_coverage_per_2D(
     xy_grid = x_grid.copy()
     xy_grid["label"] = y_grid
 
-    for var2, var1 in variable_combinations: # reversed order to match the other plots
+    for var2, var1 in variable_combinations: # reversed order to match the other model_plots
         # Group by var1 and var2 and calculate the mean of the label
         average_labels = xy_grid.groupby([var1, var2])["label"].mean()*100
 
@@ -69,7 +69,7 @@ def plot_grid_cells_average_coverage_per_2D(
         # average the grid cells over the remaining dimensions
         axes = tuple(set(range(coverage_grid.ndim)) - {var1, var2})
         averaged_grid = np.mean(coverage_grid, axis=axes) * 100
-        # transpose to match the order of axes of the other plots
+        # transpose to match the order of axes of the other model_plots
         averaged_grid = np.transpose(averaged_grid)
 
         # Get the variable names

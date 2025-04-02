@@ -33,7 +33,7 @@ def parallel_plots(model_config):
     cols = []
     for var in xy_grid.columns:
         min_val, max_val = xy_grid[var].min(), xy_grid[var].max()
-        if min_val != max_val:  # Only keep variables with a valid range
+        if min_val != max_val:  # Only keep variables with a valid range (no constant or 0 values)
             cols.append(var)
 
     xy_grid = xy_grid[cols]

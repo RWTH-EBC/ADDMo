@@ -58,7 +58,7 @@ def model_test(dir, model_config, input_data_path, input_data_exp_name, model_tu
             saved_config_data = json.load(file)
 
         prev_data = load_data(model_config['abs_path_to_data'])
-        describe_old = prev_data.describe()
+        describe_old = prev_data.describe().round(4)
         tuned_x_new, y, new_config, describe_new = model_tuning_recreate_fixed(saved_config_data, input_data_path,input_data_exp_name)
         describe_new, describe_old = describe_new.align(describe_old, join='inner', axis=1)
 
@@ -66,9 +66,7 @@ def model_test(dir, model_config, input_data_path, input_data_exp_name, model_tu
             print(">>>Tuning stats are same as old one")
         else:
             print("Tuning stats are different")
-            # differences = describe_new.compare(describe_old)
-            # print("\n>>> Differences in tuning stats:")
-            # print(differences)
+
 
         y_pred = pd.Series(regressor.predict(tuned_x_new), index=tuned_x_new.index)
         fit_error= root_mean_squared_error(y, y_pred)
@@ -79,8 +77,7 @@ def model_test(dir, model_config, input_data_path, input_data_exp_name, model_tu
     else:
         # Load data tuning config used for the model
         name_of_raw_data = model_config['name_of_raw_data']
-        # Explicitly change data directory if using auto-tuning, if it is fixed then keep it: model_config['name_of_data_tuning_experiment']
-        name_of_tuning = model_config['name_of_data_tuning_experiment']  # "data_tuning_experiment_auto"
+        name_of_tuning = model_config['name_of_data_tuning_experiment']
         name_of_model_tuning = model_config['name_of_model_tuning_experiment']
 
         path_data_tuning_config = os.path.join(root_dir(), results_dir(), name_of_raw_data, name_of_tuning, name_of_model_tuning, "config.json")
@@ -168,13 +165,10 @@ def model_tuning_recreate_fixed(saved_config_data, input_data_path,input_data_ex
     # Log the tuned system_data
     ExperimentLogger.log_artifact(xy_tuned, name='xy_tuned_fixed', art_type='system_data')
 
+    describe = xy_tuned.describe().round(4)
+    tuned_y_new = xy_tuned[new_config.name_of_target]
     tuned_x_new = xy_tuned.drop(new_config.name_of_target, axis=1)
-    tuned_xy_new = pd.concat([y, tuned_x_new], axis=1, join="inner").bfill()
-    describe = tuned_xy_new.describe()
-    tuned_y = tuned_xy_new[new_config.name_of_target]
-    x = tuned_xy_new.drop(new_config.name_of_target, axis=1)
 
-
-    return x, tuned_y, new_config, describe
+    return tuned_x_new, tuned_y_new, new_config, describe
 
 

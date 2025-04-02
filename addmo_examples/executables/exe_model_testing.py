@@ -6,7 +6,7 @@ from addmo.util.definitions import  return_results_dir_model_tuning
 
 if __name__ == "__main__":
 
-    # Define path of saved model directory, use this function if saved to default path
+    # Define path of saved model directory, don't specify arguments in the function below if model is saved to default path
     dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning_fixed')
     # Read config
     config_path = os.path.join(dir, "config.json")

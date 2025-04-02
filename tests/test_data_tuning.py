@@ -65,11 +65,11 @@ class TestDataTunerFixed(unittest.TestCase):
         tuner = DataTunerByConfig(config=self.config)
 
         # Load system_data
-        xy_raw = load_data(self.config.path_to_raw_data)
+        xy_raw = load_data(self.config.abs_path_to_data)
         self.assertIsInstance(xy_raw, pd.DataFrame)
         self.assertFalse(xy_raw.empty)
 
-        x, y = split_target_features(self.config.target, xy_raw)
+        x, y = split_target_features(self.config.name_of_target, xy_raw)
 
         # Tune the system_data
         tuned_x = tuner.tune_fixed(xy_raw)

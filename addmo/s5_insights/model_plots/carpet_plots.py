@@ -49,19 +49,29 @@ def plot_carpets(model_config, combinations=None, defaults_dict=None):
     # Create a grid for each variable
     grids = {var: np.linspace(bounds[var][0], bounds[var][1], 150) for var in variables}
 
-    fig_height = max(5, len(combinations) * 3)
-    # Create the figure
-    fig_size = (d.cm2inch(15.5), d.cm2inch(fig_height))
-    fig = plt.figure(figsize=fig_size)
+    # Filter combinations where both the features are non-zero
+    valid_combinations = [
+        (x_label, y_label) for x_label, y_label in combinations
+        if bounds[x_label][0] != 0 or bounds[x_label][1] != 0
+        if bounds[y_label][0] != 0 or bounds[y_label][1] != 0
+    ]
 
-    # Create subplots
-    num_plots = len(combinations)
+    # Handle case where all combinations are invalid
+    if not valid_combinations:
+        print("No valid subplots to display. Skipping plot creation.")
+        return None
+
+    num_plots = len(valid_combinations)
     num_cols = 2
     num_rows = math.ceil(num_plots / num_cols)
 
-    plt.subplots_adjust(left=-0.05, right=0.90, bottom=0.02, top=1, wspace=-0.1, hspace=0.01)
+    fig_height = max(5, num_plots * 3.5)
+    fig_size = (d.cm2inch(15.5), d.cm2inch(fig_height))
+    fig = plt.figure(figsize=fig_size)
+    plt.subplots_adjust(left=-0.05, right=0.90, bottom=0.02, top=1, wspace=-0.1, hspace=0.05)
 
-    for i, (x_label, y_label) in enumerate(combinations, 1):
+
+    for i, (x_label, y_label) in enumerate(valid_combinations, 1):
         ax = fig.add_subplot(num_rows, num_cols, i, projection="3d")
         X, Y = np.meshgrid(grids[x_label], grids[y_label])
 
@@ -80,7 +90,7 @@ def plot_carpets(model_config, combinations=None, defaults_dict=None):
 
         Z = prediction_func(**inputs)
         surf = ax.plot_surface(X, Y, Z, cmap="cool", alpha=0.5)
-        ax.set_box_aspect([1, 1, 0.6])  # Adjust aspect ratio
+        ax.set_box_aspect([1, 1, 0.6])
         ax.margins(x=0, y=0)
         ax.set_xlabel(x_label.replace('__', '\n'), fontsize=7, labelpad=-6)
         ax.set_ylabel(y_label.replace('__', '\n'), fontsize=7, labelpad=-6)
@@ -101,7 +111,7 @@ def plot_carpets(model_config, combinations=None, defaults_dict=None):
     cbar.ax.tick_params(labelsize=7)
     cbar.set_label("Regressor", loc="center", fontsize=7)
 
-    return plt
+    return fig
 
 
 def prediction_func_4_regressor(regressor, rename_dict: dict = None):

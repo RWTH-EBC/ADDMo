@@ -30,7 +30,7 @@ include:
 
 
   - project: 'ebc/ebc-general/templates/gitlab-ci'
-    file: 'python/build/build.gitlab-ci.yml'
+    file:  'python/build/build.gitlab-ci.yml'
 
 
 #    - project: 'EBC/EBC_all/gitlab_ci/templates'

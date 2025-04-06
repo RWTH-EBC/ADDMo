@@ -11,6 +11,7 @@ from addmo.util.load_save import load_data
 from addmo.util.plotting import save_pdf
 from addmo.util.data_handling import split_target_features
 from addmo.s5_insights.model_plots.time_series import plot_timeseries
+from addmo.util.load_save import load_config_from_json
 
 def exe_data_tuning_fixed():
     """
@@ -25,11 +26,14 @@ def exe_data_tuning_fixed():
     # config = load_config_from_json(path_to_config, DataTuningFixedConfig)
 
     # Configure the logger
-    LocalLogger.directory = results_dir_data_tuning(config)
     LocalLogger.active = True
+    if LocalLogger.active:
+        LocalLogger.directory = results_dir_data_tuning(config)
+
     WandbLogger.project = "addmo-tests_data_tuning_fixed"
-    WandbLogger.directory = results_dir_data_tuning(config)
     WandbLogger.active = False
+    if WandbLogger.active:
+        WandbLogger.directory = results_dir_data_tuning(config)
 
     # Initialize logging
     ExperimentLogger.start_experiment(config=config)

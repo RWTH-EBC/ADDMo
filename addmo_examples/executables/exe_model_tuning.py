@@ -23,11 +23,13 @@ def exe_model_tuning(config=None):
     """
 
     # Configure the logger
-    LocalLogger.directory = results_dir_model_tuning(config)
     LocalLogger.active = True
+    if LocalLogger.active:
+        LocalLogger.directory = results_dir_model_tuning(config)
     WandbLogger.project = "addmo-test_model_tuning"
-    WandbLogger.directory = results_dir_model_tuning(config)
     WandbLogger.active = False
+    if WandbLogger.active:
+        WandbLogger.directory = results_dir_model_tuning(config)
 
     # Initialize logging
     ExperimentLogger.start_experiment(config=config)

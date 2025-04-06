@@ -16,7 +16,7 @@ if os.path.exists('requirements.txt'):
         packages=find_packages(),
         url='https://git.rwth-aachen.de/EBC/Team_BA/Data_Driven_Modeling',
         license=' ',
-        author='mre',
+        author='',
         author_email=' ',
         description='Automated system_data driven modeling using regression machine learning',
         long_description=long_description,

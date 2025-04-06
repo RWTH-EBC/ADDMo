@@ -10,6 +10,7 @@ from addmo.util.experiment_logger import WandbLogger
 from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from addmo.s1_data_tuning_auto.data_tuner_auto import DataTunerAuto
 from addmo.s5_insights.model_plots.time_series import plot_timeseries
+from addmo.util.load_save import load_config_from_json
 
 def exe_data_tuning_auto():
     """
@@ -24,11 +25,13 @@ def exe_data_tuning_auto():
     config = DataTuningAutoSetup()
 
     # Configure the logger
-    LocalLogger.directory = results_dir_data_tuning(config)
     LocalLogger.active = True
+    if LocalLogger.active:
+        LocalLogger.directory = results_dir_data_tuning(config)
     WandbLogger.project = "addmo-test_data_auto_tuning"
-    WandbLogger.directory = results_dir_data_tuning(config)
     WandbLogger.active = False
+    if WandbLogger.active:
+        WandbLogger.directory = results_dir_data_tuning(config)
 
     # Initialize logging
     ExperimentLogger.start_experiment(config=config)

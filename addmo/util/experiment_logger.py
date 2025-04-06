@@ -180,7 +180,7 @@ class LocalLogger(AbstractLogger): #Todo: evtl. komplett löschen und auf normal
         Starts a new experiment and logs the config to LocalLogger.
         """
         if LocalLogger.active:
-            create_or_clean_directory(LocalLogger.directory)
+            # create_or_clean_directory(LocalLogger.directory)
             path = os.path.join(LocalLogger.directory, "config.json")
             save_config_to_json(config, path)
             return config

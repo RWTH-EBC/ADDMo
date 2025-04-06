@@ -145,7 +145,7 @@ Via setup.py:\
 Install Anaconda (conda version: 4.8.0)
 
 Open command line and create an python 3.6 environment via:
-`$ conda create --name ADDMo python=3.6 `
+`$ conda create --name ADDMo python=3.10 `
 
 Type y for accepting to install first packages
 `$ y`
@@ -159,23 +159,28 @@ Install required packages via:
 Set the conda environment "ADDMo" as interpreter for e.g. in PyCharm
 
 Via pip by your own:\
-The used Python version is 3.6.2
+The used Python version is 3.10
 
 Except the regular packages you need to install:\
-sklearn-pandas   ==  1.8.0,     (https://github.com/scikit-learn-contrib/sklearn-pandas) \
-hyperopt         ==  0.1.2,     (http://hyperopt.github.io/hyperopt-sklearn/) \
-scikit-learn     ==  0.20.0,    (https://scikit-learn.org/stable/install.html) \
-openpyxl         ==  2.5.4,     (https://openpyxl.readthedocs.io/en/stable/) \
-PyForms          ==  4.0.3,     (https://pyforms.readthedocs.io/en/v3.0/) \
-remi             == 2019.4,     (https://github.com/dddomodossola/remi) \
-statsmodels      ==  0.11.0, \
-numpy             == 1.15.4, \
-xlrd            ==  1.2.0, \
-pillow          == 6.0.0, \
-matplotlib      == 2.2.2, \
-pandas        == 0.25.3,  \
-networkx        ==   1.11       (https://networkx.github.io/) 
 
+pandas
+wandb
+onnxruntime
+pydantic
+joblib
+scikit-learn==1.5.2
+scikeras==0.13
+keras==3.3.3
+tensorflow
+skl2onnx
+optuna
+matplotlib
+hyperopt
+seaborn
+plotly
+tf2onnx
+pyod
+openpyxl
 
 
 # How to use it- two options

@@ -144,7 +144,7 @@ __2: Python + Editor__
 Via setup.py:\
 Install Anaconda (conda version: 4.8.0)
 
-Open command line and create an python 3.6 environment via:
+Open command line and create a python 3.9 or above environment via:
 `$ conda create --name ADDMo python=3.10 `
 
 Type y for accepting to install first packages

@@ -163,24 +163,24 @@ The used Python version is 3.10
 
 Except the regular packages you need to install:\
 
-pandas
-wandb
-onnxruntime
-pydantic
-joblib
-scikit-learn==1.5.2
-scikeras==0.13
-keras==3.3.3
-tensorflow
-skl2onnx
-optuna
-matplotlib
-hyperopt
-seaborn
-plotly
-tf2onnx
-pyod
-openpyxl
+pandas  
+wandb  
+onnxruntime  
+pydantic  
+joblib  
+scikit-learn==1.5.2  
+scikeras==0.13  
+keras==3.3.3  
+tensorflow  
+skl2onnx  
+optuna  
+matplotlib  
+hyperopt  
+seaborn  
+plotly  
+tf2onnx  
+pyod  
+openpyxl  
 
 
 # How to use it- two options

@@ -17,7 +17,7 @@ from addmo.s5_insights.model_plots.scatter_plot import scatter
 from util.plotting import save_pdf
 
 
-def exe_model_tuning(config=None):
+def exe_model_tuning(user_input, config=None):
     """
     Executes model tuning process and returns the best model.
     """
@@ -25,11 +25,11 @@ def exe_model_tuning(config=None):
     # Configure the logger
     LocalLogger.active = True
     if LocalLogger.active:
-        LocalLogger.directory = results_dir_model_tuning(config)
+        LocalLogger.directory = results_dir_model_tuning(user_input, config)
     WandbLogger.project = "addmo-test_model_tuning"
     WandbLogger.active = False
     if WandbLogger.active:
-        WandbLogger.directory = results_dir_model_tuning(config)
+        WandbLogger.directory = results_dir_model_tuning(user_input, config)
 
     # Initialize logging
     ExperimentLogger.start_experiment(config=config)
@@ -69,14 +69,20 @@ def exe_model_tuning(config=None):
     print("Finished")
 
 if __name__ == "__main__":
-    # Create the config object
-    config = ModelTuningExperimentConfig()
-    config.name_of_model_tuning_experiment = 'test_model_tuning_raw'
-    # Change default input data path to auto tuned data path
-    # tuned_data_path = results_dir_model_tuning_fixed(config=config)
+    # Read config from existing json file
+    path_to_config = os.path.join(root_dir(), 'addmo', 's3_model_tuning', 'config',
+                                  'model_tuning_config.json')
+
+    config = load_config_from_json(path_to_config, ModelTuningExperimentConfig)
+    # Create the default config object
+    # config = ModelTuningExperimentConfig()
+    # config.name_of_model_tuning_experiment = 'test_model_tuning_raw'
+    # # Change default input data path to auto tuned data path
+    # tuned_data_path = os.path.join(results_dir_data_tuning_auto(), "tuned_xy_auto.csv")
     # config.abs_path_to_data = tuned_data_path
     config.config_model_tuner.validation_score_splitting = 'UnivariateSplitter'
     config.config_model_tuner.validation_score_splitting_kwargs = None
-
+    user_input = input(
+        "To overwrite the existing content type in 'addmo_examples/results/test_raw_data/test_data_tuning/test_model_tuning' results directory <y>, for deleting the current contents type <d>: ")
     # run
-    exe_model_tuning(config)
+    exe_model_tuning(user_input,config)

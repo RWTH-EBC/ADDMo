@@ -35,21 +35,21 @@ def results_dir_wandb():
     return os.path.join(results_dir(), 'wandb')
 
 
-def results_dir_data_tuning(config: DataTuningFixedConfig):
+def results_dir_data_tuning(config: DataTuningFixedConfig, user_input):
     """
     Returns the path to the results directory for data tuning based on config.
     """
     path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, config.name_of_tuning)
-    return create_or_clean_directory(path)
+    return create_or_clean_directory(path, user_input)
 
 
-def results_dir_model_tuning(config: ModelTuningExperimentConfig):
+def results_dir_model_tuning(user_input, config: ModelTuningExperimentConfig):
     """
     Returns the path to the results directory for model tuning based on config.
     """
     path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data,
                         config.name_of_data_tuning_experiment, config.name_of_model_tuning_experiment)
-    return create_or_clean_directory(path)
+    return create_or_clean_directory(path, user_input)
 
 
 def ed_use_case_dir():
@@ -77,21 +77,23 @@ def return_best_model(dir):
     else:
         raise FileNotFoundError("No 'best_model' file found in the directory.")
 
-def results_dir_data_tuning_auto(config: DataTuningAutoSetup):
+def results_dir_data_tuning_auto(config: DataTuningAutoSetup = None):
     """
     Returns the path to the Excel file of tuned data based on config.
     """
+    if config is None:
+        config = DataTuningAutoSetup()
     dir = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, 'data_tuning_experiment_auto')
-    path = os.path.join(dir, 'tuned_xy_auto.csv')
-    return path
+    return dir
 
-def results_dir_model_tuning_fixed(config: DataTuningFixedConfig):
+def results_dir_model_tuning_fixed(config: DataTuningFixedConfig = None):
     """
     Returns the path to the Excel file of tuned data based on config.
     """
+    if config is None:
+        config = DataTuningFixedConfig()
     dir = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, 'data_tuning_experiment_fixed')
-    path = os.path.join(dir, 'xy_tuned_fixed.csv')
-    return path
+    return dir
 
 
 def results_model_testing(name_tuning_exp):
@@ -99,4 +101,6 @@ def results_model_testing(name_tuning_exp):
     Returns the path to the results directory for model tuning based on config.
     """
     path = os.path.join(root_dir(), results_dir(), 'model_testing', name_tuning_exp)
-    return create_or_clean_directory(path)
+    print(f"The directory {path} already exists")
+    user_input = input("To overwrite the content type <y>, for deleting the current contents type <d>: ")
+    return create_or_clean_directory(path, user_input)

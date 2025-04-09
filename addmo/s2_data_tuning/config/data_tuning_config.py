@@ -1,7 +1,7 @@
 import os
 from pydantic import BaseModel, Field
 from addmo.util.load_save_utils import root_dir
-
+from pydantic import conlist
 
 class DataTuningFixedConfig(BaseModel):
     abs_path_to_data: str = Field(
@@ -25,4 +25,5 @@ class DataTuningFixedConfig(BaseModel):
             "Total active power___lag1",
         ],
         description="List of features which the tuning shall result in.",
+
     )

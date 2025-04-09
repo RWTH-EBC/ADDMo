@@ -1,24 +1,27 @@
 {
-  "name_of_raw_data": "test_data",
-  "name_of_data_tuning_experiment": "test_data_tuning",
-  "name_of_model_tuning_experiment": "test_model_tuning",
-  "abs_path_to_data": "D:\\\\04_GitRepos\\\\addmo-extra\\\\raw_input_data\\\\InputData.xlsx",
-  "name_of_target": "FreshAir Temperature",
-  "start_train_val": "2016-08-01 00:00",
-  "stop_train_val": "2016-08-14 23:45",
-  "start_test": "2016-08-15 00:00",
-  "end_test": "2016-08-16 23:45",
-  "config_model_tuner": {
-    "models": ["MLP"],
-    "hyperparameter_tuning_type": "OptunaTuner",
-    "hyperparameter_tuning_kwargs": {
-      "n_trials": 2
-    },
-    "validation_score_mechanism": "cv",
-    "validation_score_mechanism_kwargs": null,
-    "validation_score_splitting": "KFold",
-    "validation_score_splitting_kwargs": null,
-    "validation_score_metric": "r2",
-    "validation_score_metric_kwargs": null
-  }
+    "name_of_raw_data": "test_raw_data",
+    "name_of_data_tuning_experiment": "test_data_tuning",
+    "name_of_model_tuning_experiment": "test_model_tuning",
+    "abs_path_to_data": "C:\\Users\\mre-rpa\\PycharmProjects\\addmo-automated-ml-regression\\addmo_examples\\raw_input_data\\InputData.xlsx",
+    "name_of_target": "FreshAir Temperature",
+    "start_train_val": "2016-08-01 00:00",
+    "stop_train_val": "2016-08-14 23:45",
+    "start_test": "2016-08-15 00:00",
+    "end_test": "2016-08-16 23:45",
+    "config_model_tuner": {
+        "models": [
+            "ScikitMLP"
+        ],
+        "trainings_per_model": 1,
+        "hyperparameter_tuning_type": "OptunaTuner",
+        "hyperparameter_tuning_kwargs": {
+            "n_trials": 2
+        },
+        "validation_score_mechanism": "cv",
+        "validation_score_mechanism_kwargs": null,
+        "validation_score_splitting": "KFold",
+        "validation_score_splitting_kwargs": null,
+        "validation_score_metric": "neg_root_mean_squared_error",
+        "validation_score_metric_kwargs": null
+    }
 }

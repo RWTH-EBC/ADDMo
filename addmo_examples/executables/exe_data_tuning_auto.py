@@ -12,7 +12,7 @@ from addmo.s1_data_tuning_auto.data_tuner_auto import DataTunerAuto
 from addmo.s5_insights.model_plots.time_series import plot_timeseries
 from addmo.util.load_save import load_config_from_json
 
-def exe_data_tuning_auto():
+def exe_data_tuning_auto(user_input):
     """
     Execute the system_data tuning process automatically.
     """
@@ -21,17 +21,17 @@ def exe_data_tuning_auto():
                                 'data_tuning_auto_config.json')
 
     # Create the config object
-    # config = load_config_from_json(path_to_config, DataTuningAutoSetup)
-    config = DataTuningAutoSetup()
+    config = load_config_from_json(path_to_config, DataTuningAutoSetup)
+    # config = DataTuningAutoSetup()
 
     # Configure the logger
     LocalLogger.active = True
     if LocalLogger.active:
-        LocalLogger.directory = results_dir_data_tuning(config)
+        LocalLogger.directory = results_dir_data_tuning(config, user_input)
     WandbLogger.project = "addmo-test_data_auto_tuning"
     WandbLogger.active = False
     if WandbLogger.active:
-        WandbLogger.directory = results_dir_data_tuning(config)
+        WandbLogger.directory = results_dir_data_tuning(config,user_input)
 
     # Initialize logging
     ExperimentLogger.start_experiment(config=config)
@@ -62,4 +62,5 @@ def exe_data_tuning_auto():
     print("Finished")
 
 if __name__ == "__main__":
-    exe_data_tuning_auto()
+    user_input = input("To overwrite the existing content type in 'data_tuning_experiment_auto' results directory <y>, for deleting the current contents type <d>: ")
+    exe_data_tuning_auto(user_input)

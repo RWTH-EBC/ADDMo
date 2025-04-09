@@ -7,7 +7,7 @@ def root_dir():
     """
     return os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
-def create_or_clean_directory(path: str) -> str:
+def create_or_clean_directory(path: str, user_input) -> str:
     """
     Creates a directory or optionally deletes its contents if it exists.
     """
@@ -19,11 +19,8 @@ def create_or_clean_directory(path: str) -> str:
         pass
     else:
         # Path exists, ask for confirmation to delete current contents
-        print(f"The directory {path} already exists and contains the following files/folders:")
-        for filename in os.listdir(path):
-            file_path = os.path.join(path, filename)
-            print(f" - {file_path}")
-        response = input("To overwrite the content type <y>, for deleting the current contents type <d>: ")
+        response = user_input
+
         if response.lower() == 'd':
             # Delete the contents of the directory
             for filename in os.listdir(path):

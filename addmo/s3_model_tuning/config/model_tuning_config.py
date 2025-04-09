@@ -5,8 +5,10 @@ from addmo.util.load_save_utils import root_dir
 
 
 class ModelTunerConfig(BaseModel):
+
+
     models: list[str] = Field(
-        ["ScikitMLP_TargetTransformed"], description="List of models to use"
+        ["ScikitMLP_TargetTransformed"], description="List of models to use (available models: ScikitMLP, ScikitLinearReg, ScikitLinearRegNoScaler, ScikitSVR, ScikitMLP_TargetTransformed, SciKerasSequential)",
     )
 
     trainings_per_model: int = Field(

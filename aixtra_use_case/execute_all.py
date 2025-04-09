@@ -51,7 +51,9 @@ config.grid_points_per_axis = 100
 config.experiment_name = "Carnot_long_5neurons"
 
 # Configure the logger
-create_or_clean_directory(config.experiment_folder)
+print(f"The directory {config.experiment_folder} already exists")
+user_input = input("To overwrite the content type <y>, for deleting the current contents type <d>: ")
+create_or_clean_directory(config.experiment_folder, user_input)
 LocalLogger.directory = os.path.join(config.experiment_folder, "local_logger")
 LocalLogger.active = True
 WandbLogger.project = f"TEST_{config.simulation_data_name}"

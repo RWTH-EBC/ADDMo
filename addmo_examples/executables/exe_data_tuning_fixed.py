@@ -13,7 +13,7 @@ from addmo.util.data_handling import split_target_features
 from addmo.s5_insights.model_plots.time_series import plot_timeseries
 from addmo.util.load_save import load_config_from_json
 
-def exe_data_tuning_fixed():
+def exe_data_tuning_fixed(user_input):
     """
     Execute the system_data tuning process in a fixed manner.
     """
@@ -28,12 +28,12 @@ def exe_data_tuning_fixed():
     # Configure the logger
     LocalLogger.active = True
     if LocalLogger.active:
-        LocalLogger.directory = results_dir_data_tuning(config)
+        LocalLogger.directory = results_dir_data_tuning(config,user_input)
 
     WandbLogger.project = "addmo-tests_data_tuning_fixed"
     WandbLogger.active = False
     if WandbLogger.active:
-        WandbLogger.directory = results_dir_data_tuning(config)
+        WandbLogger.directory = results_dir_data_tuning(config,user_input)
 
     # Initialize logging
     ExperimentLogger.start_experiment(config=config)
@@ -61,7 +61,7 @@ def exe_data_tuning_fixed():
     ExperimentLogger.log({"xy_tuned": xy_tuned.iloc[[0, 1, 2, -3, -2, -1]]})
 
     # Log the tuned system_data
-    file_name = 'xy_tuned_fixed'
+    file_name = 'tuned_xy_fixed'
     ExperimentLogger.log_artifact(xy_tuned, file_name, art_type='system_data')
 
     # Finish logging
@@ -82,4 +82,6 @@ def exe_data_tuning_fixed():
 
 
 if __name__ == '__main__':
-    exe_data_tuning_fixed()
+    user_input = input("To overwrite the existing content type in 'data_tuning_experiment_fixed' results directory <y>, for deleting the current contents type <d>: ")
+
+    exe_data_tuning_fixed(user_input)

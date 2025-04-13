@@ -200,7 +200,14 @@ Note: `BaseSettings` has been moved to the `pydantic-settings` package. The foll
 
 __Using the GUI:__
 
-Run GUI_remi.py and see the information within the GUI
+Setup GUI configuration in pycharm:
+1. Go to `run`-> `Edit Configurations`
+2. Create new configuration with name `app.py`
+3. In the `run` tab, change `script` to `module` and add `streamlit` as input
+4. Add `run app.py` in the scripts parameter section
+5. Save the configuration
+
+Run app.py and see the information within the GUI
 
 Select the respective "tool" via the tabs:
 

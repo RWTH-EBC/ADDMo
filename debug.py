@@ -1,4 +1,4 @@
 from streamlit.web.bootstrap import run
 
-real_script = 'app2.py'
+real_script = 'app.py'
 run(real_script, False, [], {})

@@ -35,7 +35,7 @@ def results_dir_wandb():
     return os.path.join(results_dir(), 'wandb')
 
 
-def results_dir_data_tuning(config: DataTuningFixedConfig, user_input):
+def results_dir_data_tuning(config: DataTuningFixedConfig, user_input='y'):
     """
     Returns the path to the results directory for data tuning based on config.
     """
@@ -43,7 +43,7 @@ def results_dir_data_tuning(config: DataTuningFixedConfig, user_input):
     return create_or_clean_directory(path, user_input)
 
 
-def results_dir_model_tuning(user_input, config: ModelTuningExperimentConfig):
+def results_dir_model_tuning(config: ModelTuningExperimentConfig,user_input='y', ):
     """
     Returns the path to the results directory for model tuning based on config.
     """
@@ -96,11 +96,9 @@ def results_dir_model_tuning_fixed(config: DataTuningFixedConfig = None):
     return dir
 
 
-def results_model_testing(name_tuning_exp):
+def results_model_testing(name_tuning_exp,user_input='y'):
     """
     Returns the path to the results directory for model tuning based on config.
     """
     path = os.path.join(root_dir(), results_dir(), 'model_testing', name_tuning_exp)
-    print(f"The directory {path} already exists")
-    user_input = input("To overwrite the content type <y>, for deleting the current contents type <d>: ")
     return create_or_clean_directory(path, user_input)

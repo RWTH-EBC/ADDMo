@@ -10,7 +10,7 @@
     "end_test": "2016-08-16 23:45",
     "config_model_tuner": {
         "models": [
-            "ScikitMLP"
+            "ScikitMLP_TargetTransformed"
         ],
         "trainings_per_model": 1,
         "hyperparameter_tuning_type": "OptunaTuner",

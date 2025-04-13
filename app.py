@@ -1,496 +1,418 @@
-import os
-import json
 import streamlit as st
-import pandas as pd
-import sys
-from pathlib import Path
 from streamlit_pydantic import pydantic_input
-
-# Import the existing configuration class
 from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
-from addmo.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
+from addmo_examples.executables.exe_data_tuning_auto import exe_data_tuning_auto
+from addmo_examples.executables.exe_data_tuning_fixed import exe_data_tuning_fixed
+import json
+import os
+from addmo.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
+from addmo.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
+from addmo_examples.executables.exe_model_tuning import exe_model_tuning
 from addmo.util.load_save_utils import root_dir
+from s3_model_tuning.config.model_tuning_config import ModelTunerConfig
+from streamlit_pdf_viewer import pdf_viewer
+from addmo.util.definitions import results_dir_data_tuning_auto,results_dir_model_tuning_fixed,return_results_dir_model_tuning
+from addmo_examples.executables.exe_data_insights import exe_time_series_plot,exe_parallel_plot,exe_carpet_plots
+from addmo.s4_model_testing.model_testing import model_test
 
+def exe_streamlit_data_tuning_auto():
+    st.header("Data Tuning Auto Configuration")
 
-def load_config_from_json(config_path):
-    """Load configuration from the JSON file."""
-    try:
-        with open(config_path, 'r') as f:
-            config_data = json.load(f)
-        return config_data
-    except Exception as e:
-        st.warning(f"Could not load configuration from file: {e}")
-        return None
+    # Show form with all config fields
+    with st.form("config_form_auto"):
+        st.subheader("Data Tuning Configuration")
+        auto_tuning_config: DataTuningAutoSetup = pydantic_input( "Auto",DataTuningAutoSetup)
+        st.subheader("Model Configuration")
+        model_input: ModelTunerConfig = pydantic_input("model", ModelTunerConfig, group_optional_fields= "sidebar")
+        auto_tuning_config["config_model_tuning"]=model_input
+        overwrite_strategy = st.radio(
+            "To overwrite the existing content type in 'addmo_examples/results/test_raw_data/data_tuning_experiment_auto' results directory, choose 'y', for deleting the current contents type choose 'd' ",
+            ["y","d"],
+            index=0,
+            help="Select how to handle existing results directory."
+        )
+        submitted = st.form_submit_button("Run Auto Data Tuning")
 
+    # Run when user submits the config
+    if submitted:
+        if auto_tuning_config is None :
+            st.error("❌ Form is incomplete or invalid. Please fill out all required fields.")
+        auto_tuning_config = DataTuningAutoSetup(**auto_tuning_config,)
+        # Save config to the expected JSON location
+        config_path = os.path.join(
+            root_dir(), 'addmo', 's1_data_tuning_auto', 'config', 'data_tuning_auto_config.json'
+        )
+        os.makedirs(os.path.dirname(config_path), exist_ok=True)
 
-def save_config_to_json(config_data, config_path):
-    """Save configuration to JSON file."""
-    try:
         with open(config_path, 'w') as f:
-            json.dump(config_data, f, indent=2)
-        return True
-    except Exception as e:
-        st.error(f"Error saving configuration: {e}")
-        return False
+            f.write(auto_tuning_config.model_dump_json(indent=4))
+
+        st.success("✅ Configuration saved!")
 
 
-def run_data_tuning():
-    """Execute the data tuning process."""
-    try:
-        st.info("Running data tuning process...")
+        # Run the tuning process
+        with st.spinner("Running data tuning..."):
+            exe_data_tuning_auto(overwrite_strategy)
+            plot_image_path = os.path.join(results_dir_data_tuning_auto(auto_tuning_config), "tuned_xy_auto.pdf")
 
-        # Import the execution module
-        from exe_data_tuning_auto import exe_data_tuning_auto
+            st.markdown("### Auto-Tuned Data Plot")
 
-        with st.spinner("Processing data tuning..."):
-            # Run the data tuning process
-            exe_data_tuning_auto()
+            # Display the saved plot PDF
+            pdf_viewer(plot_image_path, width= "80%", height= 855)
 
-        st.success("Data tuning completed successfully!")
-    except ImportError:
-        st.error("Could not import the data tuning module. Make sure the files are in the correct location.")
-    except Exception as e:
-        st.error(f"Error during data tuning: {e}")
+            st.success("✅ Data tuning completed!")
 
+def exe_streamlit_data_tuning_fixed():
+    st.header("Data Tuning Fixed Configuration")
 
-def render_global_section(config_obj):
-    """Render the global section of the configuration."""
-    st.subheader("Global Settings")
-
-    col1, col2 = st.columns(2)
-    with col1:
-        config_obj.name_of_raw_data = st.text_input(
-            "Name of Raw Data",
-            value=config_obj.name_of_raw_data,
-            help="Set name of the folder where the experiments shall be saved"
+    # Show form with all config fields
+    with st.form("config_form_fixed"):
+        st.subheader("Data Tuning Configuration")
+        config_data = pydantic_input(key="Config Setup",model=DataTuningFixedConfig)
+        default_features = [
+            "Schedule",
+            "Total active power",
+            "FreshAir Temperature___diff",
+            "FreshAir Temperature___lag1",
+            "FreshAir Temperature___squared",
+            "Total active power___lag1"
+        ]
+        features_input = st.text_area(
+            "(comma separated)",
+            value=", ".join(default_features),
+            help="List of features which the tuning shall result in."
         )
-
-        config_obj.name_of_tuning = st.text_input(
-            "Name of Tuning",
-            value=config_obj.name_of_tuning,
-            help="Set name of the experiments series"
+        config_data['features'] = [f.strip() for f in features_input.split(",") if f.strip()]
+        overwrite_strategy = st.radio(
+            "To overwrite the existing content type in 'addmo_examples/results/test_raw_data/data_tuning_experiment_fixed' results directory, choose 'y', for deleting the current contents type choose 'd' ",
+            ["y", "d"],
+            index=0,
+            help="Select how to handle existing results directory."
         )
+        submitted = st.form_submit_button("Run Fixed Data Tuning")
 
-    with col2:
-        config_obj.abs_path_to_data = st.text_input(
-            "Path to Data",
-            value=config_obj.abs_path_to_data,
-            help="Path to the file that has the system_data"
+    # Run when user submits the config
+    if submitted:
+        if config_data is None:
+            st.error("❌ Form is incomplete or invalid. Please fill out all required fields.")
+        config_data  = DataTuningFixedConfig(**config_data )
+        # Save config to the expected JSON location
+        config_path = os.path.join(
+            root_dir(), 'addmo', 's2_data_tuning', 'config', 'data_tuning_config.json'
         )
+        os.makedirs(os.path.dirname(config_path), exist_ok=True)
 
-        config_obj.name_of_target = st.text_input(
-            "Target Variable Name",
-            value=config_obj.name_of_target,
-            help="Name of the target variable"
+        with open(config_path, 'w') as f:
+            f.write(config_data.model_dump_json(indent=4))
+
+        st.success("✅ Configuration saved!")
+
+        # Run the tuning process
+        with st.spinner("Running data tuning..."):
+            exe_data_tuning_fixed(overwrite_strategy)
+            plot_image_path = os.path.join(results_dir_model_tuning_fixed(config_data), "xy_tuned_fixed.pdf")
+
+            st.markdown("### Tuned Fixed Data Plot")
+
+            # Display the saved plot PDF
+            pdf_viewer(plot_image_path, width="80%", height=855)
+
+            st.success("✅ Data tuning completed!")
+
+def exe_streamlit_model_tuning():
+    st.header("Model Tuning")
+
+    # Form 1: Model configuration
+    with st.form("config_form_model"):
+        st.subheader("Model Configuration")
+        model_config_data = pydantic_input("ModelConfig", ModelTuningExperimentConfig)
+
+        with st.sidebar:
+            st.subheader("Model Tuning Configuration")
+            model_tuner = pydantic_input("ModelTunerConfig", ModelTunerConfig)
+
+        submitted_config = st.form_submit_button("Save Model Config")
+
+        if submitted_config:
+            model_config_data["config_model_tuner"] = model_tuner
+            st.session_state.model_config_data = model_config_data
+            st.success("Model configuration saved!")
+
+
+    # Form 2: Ask about tuned data
+    with st.form("form_tuned_data"):
+        type_of_data = st.radio("Would you like to use tuned data for model tuning?", ["Yes", "No"])
+        submitted_tuning_pref = st.form_submit_button("Submit")
+
+        if submitted_tuning_pref:
+            st.session_state.use_tuned_data = type_of_data
+
+    # Form 3: If tuned data is selected, ask which tuning
+    if st.session_state.get("use_tuned_data") == "Yes":
+        with st.form("form_choose_tuning_type"):
+            type_of_tuning = st.radio("Which tuning would you like to use?", ["Auto", "Fixed"])
+            submitted_tuning_type = st.form_submit_button("Submit")
+            if submitted_tuning_type:
+                if "model_config_data" in st.session_state:
+                    # model_config_data = st.session_state.model_config_data
+                    if type_of_tuning == "Auto":
+                        st.session_state.model_config_data["abs_path_to_data"] = os.path.join(results_dir_data_tuning_auto(),
+                                                                             "tuned_xy_auto.csv")
+                    else:
+                        st.session_state.model_config_data["abs_path_to_data"] = os.path.join(results_dir_model_tuning_fixed(),
+                                                                             "tuned_xy_fixed.csv")
+                    st.success("✅ Tuned data path set in config.")
+
+    # Form 4: Final submission
+    with st.form("form_run_model_tuning"):
+        overwrite_strategy = st.radio(
+            "To overwrite the existing content type in 'addmo_examples/results/test_raw_data/test_data_tuning/test_model_tuning' results directory, choose 'y', for deleting the current contents type choose 'd' ",
+            ["y", "d"],
+            index=0,
+            help="Select how to handle existing results directory."
         )
+        final_submit = st.form_submit_button("Run Model Tuning")
 
-    return config_obj
-
-
-def render_feature_construction(config_obj):
-    """Render the feature construction section of the configuration."""
-    st.subheader("Feature Construction")
-
-    col1, col2 = st.columns(2)
-    with col1:
-        config_obj.create_differences = st.checkbox(
-            "Create Differences",
-            value=config_obj.create_differences,
-            help="Feature difference creation (building the derivative of the features)"
-        )
-
-        config_obj.create_manual_target_lag = st.checkbox(
-            "Create Manual Target Lag",
-            value=config_obj.create_manual_target_lag,
-            help="Manual construction of target lags"
-        )
-
-        target_lag_str = ", ".join(map(str, config_obj.target_lag))
-        updated_target_lag = st.text_input(
-            "Target Lag",
-            value=target_lag_str,
-            help="Array of lags for the target (comma-separated integers)"
-        )
-        try:
-            config_obj.target_lag = [int(x.strip()) for x in updated_target_lag.split(",")]
-        except:
-            st.error("Target lag must be comma-separated integers")
-
-    with col2:
-        config_obj.create_automatic_timeseries_target_lag = st.checkbox(
-            "Create Automatic Timeseries Target Lag",
-            value=config_obj.create_automatic_timeseries_target_lag,
-            help="Automatic construction of time series target lags"
-        )
-
-        config_obj.minimum_target_lag = st.number_input(
-            "Minimum Target Lag",
-            value=config_obj.minimum_target_lag,
-            min_value=1,
-            help="Minimal target lag which shall be considered"
-        )
-
-        config_obj.create_automatic_feature_lags = st.checkbox(
-            "Create Automatic Feature Lags",
-            value=config_obj.create_automatic_feature_lags,
-            help="Automatic construction of feature lags via wrapper"
-        )
-
-    # Special handling for feature_lags (complex nested dict)
-    config_obj.create_manual_feature_lags = st.checkbox(
-        "Create Manual Feature Lags",
-        value=config_obj.create_manual_feature_lags,
-        help="Manual construction of feature lags"
-    )
-
-    if config_obj.create_manual_feature_lags:
-        feature_lags_str = json.dumps(config_obj.feature_lags, indent=2)
-        updated_feature_lags_str = st.text_area(
-            "Feature Lags (JSON format)",
-            value=feature_lags_str,
-            height=150,
-            help="Feature lags in format {var_name: [lags]}"
-        )
-        try:
-            config_obj.feature_lags = json.loads(updated_feature_lags_str)
-        except:
-            st.error("Invalid JSON format for feature lags")
-
-    # Additional feature lag parameters
-    col1, col2 = st.columns(2)
-    with col1:
-        config_obj.minimum_feature_lag = st.number_input(
-            "Minimum Feature Lag",
-            value=config_obj.minimum_feature_lag,
-            min_value=1,
-            help="Minimum feature lag"
-        )
-
-    with col2:
-        config_obj.maximum_feature_lag = st.number_input(
-            "Maximum Feature Lag",
-            value=config_obj.maximum_feature_lag,
-            min_value=1,
-            help="Maximum feature lag"
-        )
-
-    return config_obj
-
-
-def render_feature_selection(config_obj):
-    """Render the feature selection section of the configuration."""
-    st.subheader("Feature Selection")
-
-    # Manual feature selection
-    config_obj.manual_feature_selection = st.checkbox(
-        "Manual Feature Selection",
-        value=config_obj.manual_feature_selection,
-        help="Manual selection of Features by their Column number"
-    )
-
-    if config_obj.manual_feature_selection:
-        selected_features_str = json.dumps(config_obj.selected_features, indent=2)
-        updated_selected_features_str = st.text_area(
-            "Selected Features (JSON array format)",
-            value=selected_features_str,
-            height=150,
-            help="Variable names of the features to keep"
-        )
-        try:
-            config_obj.selected_features = json.loads(updated_selected_features_str)
-        except:
-            st.error("Invalid JSON format for selected features")
-
-    # Feature filtering options
-    col1, col2 = st.columns(2)
-    with col1:
-        config_obj.filter_low_variance = st.checkbox(
-            "Filter Low Variance",
-            value=config_obj.filter_low_variance,
-            help="Remove features with low variance"
-        )
-
-        if config_obj.filter_low_variance:
-            config_obj.low_variance_threshold = st.number_input(
-                "Low Variance Threshold",
-                value=config_obj.low_variance_threshold,
-                min_value=0.0,
-                format="%.3f",
-                help="Variance threshold for feature removal"
-            )
-
-        config_obj.filter_ICA = st.checkbox(
-            "Filter ICA",
-            value=config_obj.filter_ICA,
-            help="Filter: Independent Component Analysis(ICA)"
-        )
-
-    with col2:
-        config_obj.filter_univariate = st.checkbox(
-            "Filter Univariate",
-            value=config_obj.filter_univariate,
-            help="Filter univariate by scikit-learn"
-        )
-
-        if config_obj.filter_univariate:
-            config_obj.univariate_score_function = st.selectbox(
-                "Univariate Score Function",
-                options=["mutual_info_regression", "f_regression"],
-                index=0 if config_obj.univariate_score_function == "mutual_info_regression" else 1,
-                help="Score function for univariate feature selection"
-            )
-
-            config_obj.univariate_search_mode = st.selectbox(
-                "Univariate Search Mode",
-                options=["percentile", "k_best"],
-                index=0 if config_obj.univariate_search_mode == "percentile" else 1,
-                help="Search mode for univariate feature selection"
-            )
-
-            config_obj.univariate_filter_params = st.number_input(
-                "Univariate Filter Params",
-                value=config_obj.univariate_filter_params,
-                min_value=1,
-                help="Percent of features to keep or number of top features to keep"
-            )
-
-    # Embedded feature selection
-    col1, col2 = st.columns(2)
-    with col1:
-        config_obj.embedded_model = st.selectbox(
-            "Embedded Model",
-            options=["RF", "MLP", "LR", "SVR"],
-            index=["RF", "MLP", "LR", "SVR"].index(config_obj.embedded_model),
-            help="Estimator for use in all embedded methods"
-        )
-
-        config_obj.filter_recursive_embedded = st.checkbox(
-            "Filter Recursive Embedded",
-            value=config_obj.filter_recursive_embedded,
-            help="Enable recursive feature elimination"
-        )
-
-        if config_obj.filter_recursive_embedded:
-            config_obj.recursive_embedded_number_features_to_select = st.number_input(
-                "Number of Features to Select",
-                value=config_obj.recursive_embedded_number_features_to_select,
-                min_value=1,
-                help="Number of features to select in recursive feature elimination"
-            )
-
-    with col2:
-        config_obj.wrapper_sequential_feature_selection = st.checkbox(
-            "Wrapper Sequential Feature Selection",
-            value=config_obj.wrapper_sequential_feature_selection,
-            help="Enable wrapper sequential feature selection"
-        )
-
-        if config_obj.wrapper_sequential_feature_selection:
-            config_obj.sequential_direction = st.selectbox(
-                "Sequential Direction",
-                options=["forward", "backward"],
-                index=0 if config_obj.sequential_direction == "forward" else 1,
-                help="Direction for sequential feature selection"
-            )
-
-    config_obj.min_increase_4_wrapper = st.number_input(
-        "Minimum Increase for Wrapper",
-        value=config_obj.min_increase_4_wrapper,
-        min_value=0.0,
-        format="%.5f",
-        help="Minimum score increase for a feature to be considered worthy in wrapper methods"
-    )
-
-    return config_obj
-
-
-def render_model_config(config_obj):
-    """Render the model configuration section."""
-    st.subheader("Model Configuration")
-
-    # Get a reference to the model tuning config
-    model_config = config_obj.config_model_tuning
-
-    col1, col2 = st.columns(2)
-    with col1:
-        model_config.hyperparameter_tuning_type = st.selectbox(
-            "Hyperparameter Tuning Type",
-            options=["OptunaTuner", "RandomizedSearchCV", "GridSearchCV"],
-            index=["OptunaTuner", "RandomizedSearchCV", "GridSearchCV"].index(
-                model_config.hyperparameter_tuning_type
-            ),
-            help="Type of hyperparameter tuning"
-        )
-
-        model_config.validation_score_mechanism = st.selectbox(
-            "Validation Score Mechanism",
-            options=["cv", "train_test_split"],
-            index=0 if model_config.validation_score_mechanism == "cv" else 1,
-            help="Validation score mechanism"
-        )
-
-        model_config.validation_score_splitting = st.selectbox(
-            "Validation Score Splitting",
-            options=["KFold", "TimeSeriesSplit"],
-            index=0 if model_config.validation_score_splitting == "KFold" else 1,
-            help="Validation score splitting method"
-        )
-
-    with col2:
-        model_config.models = st.selectbox(
-            "Model",
-            options=["MLP", "RF", "SVR", "LR","ScikitMLP_TargetTransformed",'SciKerasSequential'],
-            index=["MLP", "RF", "SVR", "LR", "ScikitMLP_TargetTransformed",'SciKerasSequential'].index(model_config.models),
-            help="Model type"
-        )
-
-        model_config.validation_score_metric = st.selectbox(
-            "Validation Score Metric",
-            options=["r2", "mse", "rmse", "mae"],
-            index=["r2", "mse", "rmse", "mae"].index(model_config.validation_score_metric),
-            help="Validation score metric"
-        )
-
-        # For hyperparameter_tuning_kwargs, handling as a dictionary
-        if model_config.hyperparameter_tuning_kwargs is None:
-            model_config.hyperparameter_tuning_kwargs = {"n_trials": 5}
-
-        n_trials = model_config.hyperparameter_tuning_kwargs.get("n_trials", 5)
-        updated_n_trials = st.number_input(
-            "Number of Trials",
-            value=n_trials,
-            min_value=1,
-            help="Number of trials for hyperparameter tuning"
-        )
-        model_config.hyperparameter_tuning_kwargs = {"n_trials": updated_n_trials}
-
-    # For validation_score_splitting_kwargs, handling as a dictionary
-    if model_config.validation_score_splitting_kwargs is None:
-        model_config.validation_score_splitting_kwargs = {"n_splits": 3}
-
-    n_splits = model_config.validation_score_splitting_kwargs.get("n_splits", 3)
-    model_config.validation_score_splitting_kwargs = {
-        "n_splits": st.number_input(
-            "Number of Splits",
-            value=n_splits,
-            min_value=2,
-            help="Number of splits for cross-validation"
-        )
-    }
-
-    return config_obj
-
-
-def main():
-    st.set_page_config(
-        page_title="ADDMO Data Tuning Configuration",
-        page_icon="🔧",
-        layout="wide"
-    )
-
-    st.title("ADDMO Data Tuning Auto Configuration")
-    st.markdown("""
-    This application allows you to configure and run the automated data tuning process.
-
-    1. Configure the parameters in the Configuration tab
-    2. Review and edit the full JSON in the JSON View tab
-    3. Run the data tuning process in the Execute tab
-    """)
-
-    # Define the path to the configuration file
-    config_path = os.path.join('addmo', 's1_data_tuning_auto', 'config', 'data_tuning_auto_config.json')
-
-    if not os.path.exists(config_path):
-        config_path = 'data_tuning_auto_config.json'  # Fallback to local path
-
-    # Create tabs for different sections
-    tab1, tab2, tab3 = st.tabs(["Configuration", "JSON View", "Execute"])
-
-    # Load configuration from JSON
-    json_config = load_config_from_json(config_path)
-
-    # Initialize config object using the DataTuningAutoSetup class
-    if json_config:
-        config_obj = DataTuningAutoSetup(**json_config)
-    else:
-        # If no JSON config found, create a default one
-        config_obj = DataTuningAutoSetup()
-
-    with tab1:
-        st.header("Data Tuning Configuration")
-
-        # Create a form for the configuration
-        with st.form("config_form"):
-            st.subheader("Data Tuning Configuration")
-            config: DataTuningAutoSetup = pydantic_input("Config Setup", DataTuningAutoSetup)
-            st.subheader("Model Configuration")
-
-            model_input: ModelTunerConfig = pydantic_input("ModelTunerConfig", ModelTunerConfig)
-            model_input["models"] = st.multiselect(
-                "List of Models",
-                options=["MLP", "RF", "SVR", "LR", "ScikitMLP_TargetTransformed", "SciKerasSequential"],
-
-                help="Choose one or more models to use in tuning"
-            )
-
-            config["config_model_tuning"] = model_input
-            submitted = st.form_submit_button("Run Data Tuning")
-
-            if submitted:
-                config = DataTuningAutoSetup(
-                    **config,
-                )
-                # Save config to the expected JSON location
+        if final_submit:
+            if "model_config_data" not in st.session_state:
+                st.error("🚫 Model configuration is missing. Please fill out the model config first.")
+            else:
+                model_config_data = st.session_state.model_config_data
+                # Save and execute
                 config_path = os.path.join(
-                    root_dir(), 'addmo', 's1_data_tuning_auto', 'config', 'data_tuning_auto_config.json'
+                    root_dir(), 'addmo', 's3_model_tuning', 'config', 'model_tuning_config.json'
                 )
                 os.makedirs(os.path.dirname(config_path), exist_ok=True)
-
+                model_config_data_obj  = ModelTuningExperimentConfig(**model_config_data)
                 with open(config_path, 'w') as f:
-                    f.write(config.model_dump_json(indent=4))
+                    f.write(model_config_data_obj .model_dump_json(indent=4))
 
                 st.success("✅ Configuration saved!")
 
-    with tab2:
-        st.header("JSON Configuration")
+                with st.spinner("Running model tuning..."):
+                    exe_model_tuning(overwrite_strategy, model_config_data_obj)
+                    plot_image_path = os.path.join(return_results_dir_model_tuning(), "model_fit_scatter.pdf")
 
-        # Display JSON with option to edit
-        json_str = json.dumps(config_obj.dict(), indent=2)
-        edited_json = st.text_area("Edit JSON directly", json_str, height=400)
+                    st.markdown("### Model fit Plot")
 
-        try:
-            edited_config = json.loads(edited_json)
-            if st.button("Update from JSON"):
-                try:
-                    # Validate the configuration using the Pydantic model
-                    validated_config = DataTuningAutoSetup(**edited_config)
+                    # Display the saved plot PDF
+                    pdf_viewer(plot_image_path, width="80%", height=855)
+                    st.success("✅ Model tuning completed!")
 
-                    # Save the validated configuration
-                    if save_config_to_json(validated_config.dict(), config_path):
-                        st.success(f"Configuration updated from JSON and saved to {config_path}!")
+def exe_streamlit_data_insights():
+    if "dir_submitted" not in st.session_state:
+        st.session_state.dir_submitted = False
+    if "model_dir" not in st.session_state:
+        st.session_state.model_dir = ""
 
-                        # Update the config object
-                        config_obj = validated_config
-                except Exception as e:
-                    st.error(f"Invalid configuration: {e}")
-        except json.JSONDecodeError as e:
-            st.error(f"Invalid JSON: {e}")
+    if st.session_state.dir_submitted is False:
+        with st.form("Model Directory"):
+            option = st.radio(
+                "Select results directory option for loading previously saved model:",
+                ("Default", "Custom")
+            )
 
-        # Download button
-        st.download_button(
-            label="Download Config JSON",
-            data=json.dumps(config_obj.dict(), indent=2),
-            file_name="data_tuning_auto_config.json",
-            mime="application/json"
-        )
+            if option == "Custom":
+                directory = st.text_input("Enter the custom results directory path")
+            else:
+                directory = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning',
+                                                            'test_model_tuning_raw')
 
-    with tab3:
-        st.header("Execute Data Tuning")
-        st.write("Click the button below to run the data tuning process using the current configuration.")
+            submitted = st.form_submit_button("Submit")
 
-        if st.button("Run Data Tuning"):
-            run_data_tuning()
+            if submitted:
+                st.session_state.model_dir = directory
+                st.session_state.dir_submitted = True
+                st.rerun()
+
+    else:
+        directory = st.session_state.model_dir
+        st.write(f"Using directory: {directory}")
+
+        config_path = os.path.join(directory, "config.json")
+        with open(config_path, 'r') as f:
+            model_config = json.load(f)
+
+        plot_dir = os.path.join(directory, 'plots')
+
+        with st.form("Choose plots for execution"):
+            plots_selections = st.multiselect("Select the plots which you'd like to see",
+                                              options=['Time Series plot for training data',
+                                                       'Predictions carpet plot',
+                                                       'Predictions parallel plot'])
+            submitted = st.form_submit_button("Run")
+
+            if submitted:
+                st.session_state.plots_selections = plots_selections
+
+                st.write(f"Plots will be saved in {plot_dir}")
+
+                if 'Time Series plot for training data' in plots_selections:
+                    exe_time_series_plot(model_config, "training_data_time_series", plot_dir, save=True)
+                    st.markdown("### Time Series Data Plot")
+
+                    # Display the saved plot PDF
+                    path = os.path.join(plot_dir, "training_data_time_series.pdf")
+                    pdf_viewer(path, width="80%", height=855)
+
+                if 'Predictions carpet plot' in plots_selections:
+                    exe_carpet_plots(model_config, "predictions_carpet_new", plot_dir, save=True)
+                    st.markdown("### Carpet Plot")
+
+                    # Display the saved plot PDF
+                    path = os.path.join(plot_dir, "predictions_carpet_new.pdf")
+                    pdf_viewer(path, width="100%")
+
+                if 'Predictions parallel plot' in plots_selections:
+                    exe_parallel_plot(model_config, "parallel_plot", plot_dir, save=True)
+                    st.markdown("### Parallel Plot")
+
+                    # Display the saved plot PDF
+                    path = os.path.join(plot_dir, "parallel_plot.pdf")
+                    pdf_viewer(path, width="100%", height=1400 )
+
+# Streamlit UI
+
+st.set_page_config(
+    page_title="ADDMO",
+    page_icon="🔧",
+    layout="wide"
+)
+
+st.title("ADDMO")
+st.markdown("""
+This application allows you to configure and run the automated data and model tuning process.
+
+1. Data Tuning (Auto/Fixed)
+2. Model Tuning
+3. Data Insights
+4. Model Testing
+""")
+tab = st.radio("Choose Tab", ["Data Tuning", "Model Tuning", "Insights", "Model Testing"], horizontal=True)
+if tab == "Data Tuning":
+    if "tuning_type" not in st.session_state:
+        st.session_state.tuning_type = None
+
+    if "tuning_submitted" not in st.session_state:
+        st.session_state.tuning_submitted = False
+
+    if not st.session_state.tuning_submitted:
+        with st.form("Type of tuning"):
+            tuning_type = st.radio(
+                "Choose tuning type for dataset",
+                ["Auto", "Fixed"],
+                index=0,
+                key="tuning_type_radio"
+            )
+            submitted = st.form_submit_button("Confirm")
+        if submitted:
+            st.session_state.tuning_type = tuning_type
+            st.session_state.tuning_submitted = True
+            st.rerun()
+
+    # After submission
+    else:
+        if st.session_state.tuning_type == "Auto":
+            exe_streamlit_data_tuning_auto()
+        elif st.session_state.tuning_type == "Fixed":
+            exe_streamlit_data_tuning_fixed()
+
+        # Add a reset button to allow switching tuning types
+        st.markdown("---")
+        if st.button("Run another tuning type"):
+            st.session_state.tuning_submitted = False
+            st.session_state.tuning_type = None
+            st.rerun()
 
 
-if __name__ == "__main__":
-    main()
+
+if tab == "Model Tuning":
+    exe_streamlit_model_tuning()
+
+if tab=="Insights":
+    exe_streamlit_data_insights()
+
+if tab=="Model Testing":
+    for key in ["dir_submitted", "input_submitted", "tuning_submitted"]:
+        if key not in st.session_state:
+            st.session_state[key] = False
+
+    for key in ["model_dir", "input_data", "tuning_type"]:
+        if key not in st.session_state:
+            st.session_state[key] = ""
+
+    if not st.session_state.dir_submitted:
+        with st.form("Model Directory"):
+            option = st.radio(
+                "Select directory option for loading previously saved model for testing:",
+                ("Default", "Custom")
+            )
+
+            if option == "Custom":
+                directory = st.text_input("Enter the custom results directory path")
+            else:
+                directory = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning',
+                                                            'test_model_tuning_raw')
+
+            submitted = st.form_submit_button("Submit")
+
+            if submitted:
+                st.session_state.model_dir = directory
+                st.session_state.dir_submitted = True
+
+    if st.session_state.dir_submitted:
+        directory = st.session_state.model_dir
+        st.write(f"Using directory: {directory}")
+
+        config_path = os.path.join(directory, "config.json")
+        with open(config_path, 'r') as f:
+            model_config = json.load(f)
+
+        if not st.session_state.input_submitted:
+            with st.form("Input Data"):
+                option = st.radio("Select raw input data path for testing the saved model:",
+                                  ("Default", "Custom"))
+
+                if option == "Default":
+                    input_data_path = os.path.join(root_dir(), 'addmo_examples', 'raw_input_data', 'InputData.xlsx')
+                else:
+                    input_data_path = st.text_input("Enter the input data path for testing the saved model:")
+
+                submitted = st.form_submit_button("Submit")
+
+                if submitted:
+                    st.session_state.input_data = input_data_path
+                    st.session_state.input_submitted = True
+
+        if st.session_state.input_submitted:
+            with st.form("Tuning Type"):
+                tuning_type = st.radio("Select type of tuning for the raw input data:",
+                                       ("Auto", "Fixed", "None"))
+                submitted = st.form_submit_button("Submit")
+
+                if submitted:
+                    st.session_state.tuning_type = tuning_type
+                    st.session_state.tuning_submitted = True
+
+        # Run model test once all inputs are gathered
+        if st.session_state.tuning_submitted:
+            error, saving_dir = model_test(st.session_state.model_dir, model_config, st.session_state.input_data, "model_streamlit_test", st.session_state.tuning_type)
+            st.write(f"Results saved in: ", saving_dir)
+            st.write(f"Error is: ", error)
+            pdf_viewer(os.path.join(saving_dir,"model_fit_scatter.pdf"), width="80%")
+
+
+
+            # Button to test another model
+            if st.button("Test another model"):
+                for key in ["dir_submitted", "input_submitted", "tuning_submitted"]:
+                    st.session_state[key] = False
+                for key in ["model_dir", "input_data", "tuning_type"]:
+                    st.session_state[key] = ""
+                st.rerun()
+
+
+
+
+
+

@@ -7,7 +7,7 @@ def root_dir():
     """
     return os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
-def create_or_clean_directory(path: str, user_input) -> str:
+def create_or_clean_directory(path: str, user_input='y') -> str:
     """
     Creates a directory or optionally deletes its contents if it exists.
     """

@@ -80,7 +80,7 @@ def parallel_plots(model_config):
     for j in range(zs_grid.shape[0]):
         host.plot(np.arange(ys_grid.shape[1]), zs_grid[j, :], color=d.red, linewidth=0.5, alpha=0.7)
 
-    return plt
+    return fig
 
 
 

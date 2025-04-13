@@ -66,9 +66,9 @@ def plot_carpets(model_config, combinations=None, defaults_dict=None):
     num_rows = math.ceil(num_plots / num_cols)
 
     fig_height = max(5, num_plots * 3.5)
-    fig_size = (d.cm2inch(15.5), d.cm2inch(fig_height))
+    fig_size = (d.cm2inch(16), d.cm2inch(fig_height))
     fig = plt.figure(figsize=fig_size)
-    plt.subplots_adjust(left=-0.05, right=0.90, bottom=0.02, top=1, wspace=-0.1, hspace=0.05)
+    plt.subplots_adjust(left=-0.05, right=0.88, bottom=0.02, top=1, wspace=-0.1, hspace=0.05)
 
 
     for i, (x_label, y_label) in enumerate(valid_combinations, 1):
@@ -130,9 +130,10 @@ def prediction_func_4_regressor(regressor, rename_dict: dict = None):
         )
 
         # Prepare input data
-        input_data = pd.DataFrame(
-            {feature: np.ravel(kwargs[feature]) for feature in features}
-        )
+        input_data = pd.DataFrame({
+            feature: np.ravel(kwargs.get(feature, np.full_like(next(iter(kwargs.values())), fill_value=0)))
+            for feature in features
+        })
 
         # Make prediction
         prediction = regressor.predict(input_data)

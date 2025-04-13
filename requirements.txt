@@ -16,3 +16,7 @@ plotly
 tf2onnx
 pyod
 openpyxl
+streamlit
+streamlit-pydantic
+pydantic-settings
+

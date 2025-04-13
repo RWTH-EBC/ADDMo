@@ -43,9 +43,7 @@
     "wrapper_sequential_feature_selection": false,
     "sequential_direction": "forward",
     "config_model_tuning": {
-        "models": [
-            "ScikitMLP_TargetTransformed"
-        ],
+        "models": [],
         "trainings_per_model": 1,
         "hyperparameter_tuning_type": "OptunaTuner",
         "hyperparameter_tuning_kwargs": {

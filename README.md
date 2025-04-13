@@ -147,14 +147,17 @@ Install Anaconda (conda version: 4.8.0)
 Open command line and create a python 3.9 or above environment via:
 `$ conda create --name ADDMo python=3.10 `
 
-Type y for accepting to install first packages
+Type y for accepting to install first packages:
 `$ y`
 
-Activate environment
+Activate environment:
 `$ conda activate ADDMo`
 
+
+Change directory in command line to the project path using: `$ cd <Path to your local ADDMo repo>`
+
 Install required packages via:
-`$ pip install -e <Path to your local ADDMo repo>`
+`$ pip install -e .`
 
 Set the conda environment "ADDMo" as interpreter for e.g. in PyCharm
 
@@ -181,6 +184,13 @@ plotly
 tf2onnx  
 pyod  
 openpyxl  
+streamlit  
+streamlit-pydantic  
+pydantic-settings  
+
+Note: `BaseSettings` has been moved to the `pydantic-settings` package. The following changes are needed according to the migration document:
+1. Search for "from pydantic import BaseSettings" in the project scope
+2. Change it to "from pydantic_settings import BaseSettings"
 
 
 # How to use it- two options

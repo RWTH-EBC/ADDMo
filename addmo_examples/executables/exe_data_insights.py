@@ -9,12 +9,12 @@ from addmo.s5_insights.model_plots.carpet_plots import  plot_carpets
 from addmo.util.definitions import  return_results_dir_model_tuning
 
 
-def exe_time_series_plot(config, plot_name, plot_dir, save=False):
+def exe_time_series_plot(model_config, plot_name, plot_dir, save=False):
     """
     Executes plotting of input data.
     """
 
-    plt = plot_timeseries(config, data_path=model_config['abs_path_to_data'])
+    plt = plot_timeseries(model_config, data_path=model_config['abs_path_to_data'])
     if save:
         os.makedirs(plot_dir, exist_ok=True)
         plot_path = os.path.join(plot_dir, plot_name)
@@ -34,7 +34,6 @@ def exe_carpet_plots(model_config, plot_name, plot_dir, save = False):
         plot_path = os.path.join(plot_dir, plot_name)
         plt.show()
         save_pdf(plt, plot_path)
-        print('Plot saved to {}'.format(plot_path))
     else:
         plt.show()
 
@@ -56,7 +55,7 @@ def exe_parallel_plot(model_config, plot_name, plot_dir, save = False):
 if __name__ == '__main__':
 
     # Default saved directory for loading the saved model
-    dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning_raw')
+    dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning')
 
     # Read config
     config_path = os.path.join(dir, "config.json")
@@ -68,5 +67,5 @@ if __name__ == '__main__':
 
     # Execute plotting functions
     # exe_time_series_plot(model_config,"training_data_time_series",plot_dir,save=True)
-    exe_carpet_plots(model_config, "predictions_carpet_new", plot_dir,save=True)
-    # exe_parallel_plot(model_config,"parallel_plot", plot_dir, save=True)
+    # exe_carpet_plots(model_config, "predictions_carpet", plot_dir,save=True)
+    exe_parallel_plot(model_config,"parallel_plot", plot_dir, save=True)

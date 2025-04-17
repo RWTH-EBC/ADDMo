@@ -6,7 +6,9 @@ from addmo.util.definitions import  return_results_dir_model_tuning
 
 if __name__ == "__main__":
 
-    # Define path of saved model directory, don't specify arguments in the function below if model is saved to default path
+    # By default, the model after exe_model_tuning is saved at 'addmo_examples/results/test_raw_data/test_data_tuning/test_model_tuning'. Simply pass the function
+    # return_results_dir_model_tuning() to set this directory. Change the arguments only when the default name_of_raw_data, name_of_data_tuning_experiment or
+    # name_of_model_tuning_experiment is changed during model_tuning, since the saving directory of model depends on it.
     dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning_fixed')
     # Read config
     config_path = os.path.join(dir, "config.json")

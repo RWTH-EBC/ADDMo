@@ -89,13 +89,13 @@ def results_dir_data_tuning_auto(name_of_raw_data):
 
 def results_dir_data_tuning_fixed(name_of_raw_data):
     """
-    Returns the path to the Excel file of tuned data based on config.
+    Returns the path to the folder in results directory of tuned data based on config.
     """
     if name_of_raw_data is None:
         config = DataTuningFixedConfig()
         name_of_raw_data = config.name_of_raw_data
     dir = os.path.join(root_dir(), results_dir(), name_of_raw_data, 'data_tuning_experiment_fixed')
-    return create_or_clean_directory(dir, user_input='y')
+    return dir
 
 
 def results_model_testing(name_tuning_exp,user_input='y'):

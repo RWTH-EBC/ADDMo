@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-from addmo.util.definitions import results_dir_model_tuning, results_dir_data_tuning_auto, results_dir_model_tuning_fixed
+from addmo.util.definitions import results_dir_model_tuning, results_dir_data_tuning_auto, results_dir_data_tuning_fixed
 from addmo.util.load_save_utils import root_dir
 from addmo.util.experiment_logger import LocalLogger
 from addmo.util.experiment_logger import WandbLogger

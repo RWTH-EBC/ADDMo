@@ -9,7 +9,7 @@ from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningA
 from addmo.util.experiment_logger import ExperimentLogger
 from addmo.util.experiment_logger import LocalLogger
 from addmo.util.experiment_logger import WandbLogger
-from addmo.util.definitions import  return_results_dir_model_tuning, return_best_model,results_model_testing
+from addmo.util.definitions import  results_dir_data_tuning_fixed, return_best_model,results_dir_data_tuning_auto
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
 from sklearn.metrics import root_mean_squared_error
 from addmo.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
@@ -30,13 +30,12 @@ def model_test(dir, model_config, input_data_path, input_data_exp_name, model_tu
     if model_tuning.lower()=='auto':
         # Load data tuning config used for the model
         name_of_raw_data = model_config['name_of_raw_data']
-        name_of_tuning =  "data_tuning_experiment_auto"
-        path_data_tuning_config = os.path.join(root_dir(), results_dir(), name_of_raw_data, name_of_tuning, "config.json")
+        path_data_tuning_config = os.path.join(results_dir_data_tuning_auto(name_of_raw_data), "config.json")
         with open(path_data_tuning_config, "r") as file:
             saved_config_data = json.load(file)
 
 
-        tuned_x_new,y_new, new_config, describe_new = model_tuning_recreate_auto(saved_config_data, input_data_path,input_data_exp_name)
+        tuned_x_new,y_new, new_config = data_tuning_recreate_auto(saved_config_data, input_data_path, input_data_exp_name)
         y_pred = pd.Series(regressor.predict(tuned_x_new), index=tuned_x_new.index)
         fit_error= root_mean_squared_error(y_new, y_pred)
         plt = scatter(y_new, y_pred, model_config['name_of_target'],fit_error)
@@ -47,13 +46,12 @@ def model_test(dir, model_config, input_data_path, input_data_exp_name, model_tu
     elif model_tuning.lower()=='fixed':
         # Load data tuning config used for the model
         name_of_raw_data = model_config['name_of_raw_data']
-        name_of_tuning = "data_tuning_experiment_fixed"
-        path_data_tuning_config = os.path.join(root_dir(), results_dir(), name_of_raw_data, name_of_tuning,"config.json")
+        path_data_tuning_config = os.path.join(results_dir_data_tuning_fixed(name_of_raw_data),"config.json")
         with open(path_data_tuning_config, "r") as file:
             saved_config_data = json.load(file)
 
 
-        tuned_x_new, y, new_config, describe_new = model_tuning_recreate_fixed(saved_config_data, input_data_path,input_data_exp_name)
+        tuned_x_new, y, new_config = data_tuning_recreate_fixed(saved_config_data, input_data_path, input_data_exp_name)
         y_pred = pd.Series(regressor.predict(tuned_x_new), index=tuned_x_new.index)
         fit_error= root_mean_squared_error(y, y_pred)
         plt = scatter(y, y_pred, model_config['name_of_target'],fit_error)
@@ -77,7 +75,7 @@ def model_test(dir, model_config, input_data_path, input_data_exp_name, model_tu
 
     return  fit_error, saving_dir
 
-def model_tuning_recreate_auto(saved_config_data, input_data_path,input_data_exp_name):
+def data_tuning_recreate_auto(saved_config_data, input_data_path, input_data_exp_name):
     # Load new dataset here
     saved_config_data["abs_path_to_data"] = input_data_path
     saved_config_data["name_of_raw_data"] = input_data_exp_name
@@ -102,14 +100,13 @@ def model_tuning_recreate_auto(saved_config_data, input_data_path,input_data_exp
     y_new = new_tuner.y
 
     tuned_xy_new = pd.concat([y_new, tuned_x_new], axis=1, join="inner").bfill()
-    describe= tuned_xy_new.describe()
 
     # Log the tuned system data
     ExperimentLogger.log_artifact(tuned_xy_new, name="tuned_xy_testing", art_type="system_data")
-    return tuned_x_new, y_new, new_config, describe
+    return tuned_x_new, y_new, new_config
 
 
-def model_tuning_recreate_fixed(saved_config_data, input_data_path,input_data_exp_name):
+def data_tuning_recreate_fixed(saved_config_data, input_data_path, input_data_exp_name):
     # Load new dataset here
     saved_config_data["abs_path_to_data"] = input_data_path
     saved_config_data["name_of_raw_data"] = input_data_exp_name
@@ -146,10 +143,9 @@ def model_tuning_recreate_fixed(saved_config_data, input_data_path,input_data_ex
     # Log the tuned system_data
     ExperimentLogger.log_artifact(xy_tuned, name='xy_tuned_fixed', art_type='system_data')
 
-    describe = xy_tuned.describe().round(4)
     tuned_y_new = xy_tuned[new_config.name_of_target]
     tuned_x_new = xy_tuned.drop(new_config.name_of_target, axis=1)
 
-    return tuned_x_new, tuned_y_new, new_config, describe
+    return tuned_x_new, tuned_y_new, new_config
 
 

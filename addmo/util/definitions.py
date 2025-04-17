@@ -77,23 +77,25 @@ def return_best_model(dir):
     else:
         raise FileNotFoundError("No 'best_model' file found in the directory.")
 
-def results_dir_data_tuning_auto(config: DataTuningAutoSetup = None):
+def results_dir_data_tuning_auto(name_of_raw_data):
     """
-    Returns the path to the Excel file of tuned data based on config.
+    Returns the directory of tuned data based on config's name of raw_data.
     """
-    if config is None:
+    if name_of_raw_data is None:
         config = DataTuningAutoSetup()
-    dir = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, 'data_tuning_experiment_auto')
+        name_of_raw_data = config.name_of_raw_data
+    dir = os.path.join(root_dir(), results_dir(), name_of_raw_data, 'data_tuning_experiment_auto')
     return dir
 
-def results_dir_model_tuning_fixed(config: DataTuningFixedConfig = None):
+def results_dir_data_tuning_fixed(name_of_raw_data):
     """
     Returns the path to the Excel file of tuned data based on config.
     """
-    if config is None:
+    if name_of_raw_data is None:
         config = DataTuningFixedConfig()
-    dir = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, 'data_tuning_experiment_fixed')
-    return dir
+        name_of_raw_data = config.name_of_raw_data
+    dir = os.path.join(root_dir(), results_dir(), name_of_raw_data, 'data_tuning_experiment_fixed')
+    return create_or_clean_directory(dir, user_input='y')
 
 
 def results_model_testing(name_tuning_exp,user_input='y'):

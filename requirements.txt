@@ -9,7 +9,7 @@ keras==3.3.3
 tensorflow
 skl2onnx
 optuna
-matplotlib
+matplotlib==3.10.1
 hyperopt
 seaborn
 plotly
@@ -19,4 +19,5 @@ openpyxl
 streamlit
 streamlit-pydantic
 pydantic-settings
+streamlit_pdf_viewer
 

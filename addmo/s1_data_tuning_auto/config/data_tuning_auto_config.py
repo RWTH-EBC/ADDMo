@@ -96,13 +96,16 @@ class DataTuningAutoSetup(BaseModel):
         description="'forward' or 'backward' direction for sequential feature selection.",
     )
 
-    # Wrapper Model Variables
-    config_model_tuning: ModelTunerConfig = Field(
-        default_factory=ModelTunerConfig,
-        description="Model tuning setup, set your own config."
-    )
-
     min_increase_4_wrapper: float = Field(
         0.005,
         description="Minimum score increase for a feature to be considered worthy in wrapper methods.",
+    )
+    # Wrapper Model Variables
+    # model_tuning_note: str = Field(
+    #     default="Please configure model tuning below – do not change this field.",
+    #     description="Info only. The real model tuning config is entered separately.",
+    # )
+    config_model_tuning: Optional[ModelTunerConfig] = Field(
+        default_factory=ModelTunerConfig,
+        description="Model tuning setup – this is managed separately, do not edit here."
     )

@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit_pydantic as sp
 from attr.filters import exclude
 
-from streamlit_pydantic import pydantic_input
+from streamlit_pydantic import pydantic_input, pydantic_output, pydantic_form
 from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from addmo_examples.executables.exe_data_tuning_auto import exe_data_tuning_auto
 from addmo_examples.executables.exe_data_tuning_fixed import exe_data_tuning_fixed
@@ -34,9 +34,11 @@ def exe_streamlit_data_tuning_auto():
         Once configured, your setup is saved to the default results directory of project (addmo_examples/results/test_raw_data/data_tuning_experiment_auto) and executed with just a click.
         """)
 
-
+    st.subheader("General Data Tuning Configuration")
     auto_tuning_config: DataTuningAutoSetup = pydantic_input("Auto", DataTuningAutoSetup)
-
+    st.subheader("Model Tuner Configuration")
+    model_tuner_config: ModelTuningExperimentConfig = pydantic_input("ModelTuner", ModelTunerConfig)
+    auto_tuning_config["config_model_tuning"]= model_tuner_config
     # Output strategy
     st.subheader("Output Directory Strategy")
     st.markdown("""
@@ -132,7 +134,7 @@ def exe_streamlit_data_tuning_fixed():
         st.success("✅ Configuration saved!")
 
         # Run the tuning process
-        with st.spinner("Running data tuning..."):
+        with st.spinner("Running data tuning.."):
             exe_data_tuning_fixed(overwrite_strategy)
             # Load default saving path for plot
             plot_image_path = os.path.join(results_dir_data_tuning_fixed("test_raw_data"), "tuned_xy_fixed.pdf")

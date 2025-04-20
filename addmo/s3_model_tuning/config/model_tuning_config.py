@@ -1,7 +1,12 @@
 import os
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, Any
 from addmo.util.load_save_utils import root_dir
+
+
+class HyperparameterTuningKwargs(BaseModel):
+    n_trials: Optional[int] = None
+    timeout: Optional[int] = None
 
 
 class ModelTunerConfig(BaseModel):
@@ -26,6 +31,7 @@ class ModelTunerConfig(BaseModel):
         default_factory=lambda: {"n_trials": 2},
         description="Kwargs for the tuner"
     )
+
 
     validation_score_mechanism: str = Field(
         "cv", description="Validation score mechanism, e.g., cross validation, holdout"

@@ -1,4 +1,7 @@
 import streamlit as st
+import streamlit_pydantic as sp
+from attr.filters import exclude
+
 from streamlit_pydantic import pydantic_input
 from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from addmo_examples.executables.exe_data_tuning_auto import exe_data_tuning_auto
@@ -14,10 +17,6 @@ from streamlit_pdf_viewer import pdf_viewer
 from addmo.util.definitions import results_dir_data_tuning_auto,results_dir_data_tuning_fixed,return_results_dir_model_tuning
 from addmo_examples.executables.exe_data_insights import exe_time_series_plot,exe_parallel_plot,exe_carpet_plots
 from addmo.s4_model_testing.model_testing import model_test, data_tuning_recreate_fixed, data_tuning_recreate_auto
-
-from pydantic import create_model
-from typing import get_args, get_origin, List
-import inspect
 
 
 
@@ -35,69 +34,39 @@ def exe_streamlit_data_tuning_auto():
         Once configured, your setup is saved to the default results directory of project (addmo_examples/results/test_raw_data/data_tuning_experiment_auto) and executed with just a click.
         """)
 
-    # Show form with all config fields
-    with st.form("config_form_auto"):
-        st.subheader("General Configuration")
-        auto_tuning_config: DataTuningAutoSetup = pydantic_input( "Auto",DataTuningAutoSetup)
-        target_lag_input = st.text_input("Target Lag (comma-separated)", "1,2", help="Enter a list of lags for the target variable (e.g., 1,2,3)")
-        selected_features = st.text_input("Selected features",value= "FreshAir Temperature, Total active power", help= "Variable names of the features to keep")
-        with st.sidebar:
-            st.subheader("Model Tuning Configuration")
-            model_input: ModelTunerConfig = pydantic_input("model", ModelTunerConfig)
-            hyperparameter_tuning_kwargs = st.text_input("Hyperparameter tuning kwargs", value = "n_trials: 2", help= "Hyperparameter tuning kwargs(e.g., n_trials: 10, timeout: 300)")
+
+    auto_tuning_config: DataTuningAutoSetup = pydantic_input("Auto", DataTuningAutoSetup)
+
+    # Output strategy
+    st.subheader("Output Directory Strategy")
+    st.markdown("""
+        Define how to handle existing results:
+        - **y**: Overwrite the contents  
+        - **d**: Delete and recreate the directory
+    """)
+    overwrite_strategy = st.radio(
+        "Choose strategy for existing results directory:",
+        ["y", "d"],
+        index=0,
+        help="Select how to handle existing results directory at: addmo_examples/results/test_raw_data/data_tuning_experiment_auto",
+    )
 
 
-        st.subheader("Output Directory Strategy")
-        st.markdown("""
-                Define how to handle existing results:
-                - **y**: Overwrite the contents
-                - **d**: Delete and recreate the directory
-                """)
-        overwrite_strategy = st.radio(
-            "Choose strategy for existing results directory:",
-            ["y", "d"],
-            index=0,
-            help="Select how to handle existing results directory at: addmo_examples/results/test_raw_data/data_tuning_experiment_auto",
-        )
-        submitted = st.form_submit_button("Run Auto Data Tuning")
-
+    # Submit button
+    if st.button("Run Auto Data Tuning"):
     # Run when user submits the config
-    if submitted:
         missing_fields = []
         for field_name, field_value in auto_tuning_config.items():
-            if field_value in [None, "", [], {}]:
+            # Check if field is missing or empty
+            if isinstance(field_value, (list)) and not field_value:
+                missing_fields.append(field_name)
+            elif field_value in [None, ""]:
                 missing_fields.append(field_name)
 
+        # If any fields are missing, show an error
         if missing_fields:
             st.error(f"❌ The following required fields are missing or empty: {', '.join(missing_fields)}")
             return
-
-        try:
-            parsed_target_lag = [int(i.strip()) for i in target_lag_input.split(",") if i.strip().isdigit()]
-            auto_tuning_config["target_lag"] = parsed_target_lag
-        except Exception as e:
-            st.error(f"❌ Invalid format for target lag. Please enter integers separated by commas. Error: {e}")
-            return
-
-        try:
-            parsed_selected_features = [f.strip() for f in selected_features.split(",") if f.strip()]
-            auto_tuning_config["selected_features"] = parsed_selected_features
-        except Exception as e:
-            st.error(f"❌ Invalid format for selected features. Please enter names separated by commas. Error: {e}")
-            return
-
-        try:
-            parsed_kwargs = dict(
-                (k.strip(), eval(v.strip())) for k, v in
-                (item.split(":") for item in hyperparameter_tuning_kwargs.split(",") if ":" in item)
-            )
-            model_input["hyperparameter_tuning_kwargs"] = parsed_kwargs
-        except Exception as e:
-            st.error(
-                f"❌ Invalid format for hyperparameter tuning kwargs. Use format like 'n_trials: 2, timeout: 60'. Error: {e}")
-            return
-
-        auto_tuning_config["config_model_tuning"]=model_input
 
         auto_tuning_config = DataTuningAutoSetup(**auto_tuning_config,)
         # Save config to the expected JSON location
@@ -115,13 +84,11 @@ def exe_streamlit_data_tuning_auto():
         # Run the tuning process
         with st.spinner("Running data tuning..."):
             exe_data_tuning_auto(overwrite_strategy)
+            # Load default saving path for plot
             plot_image_path = os.path.join(results_dir_data_tuning_auto("test_raw_data"), "tuned_xy_auto.pdf")
-
             st.markdown("### Auto-Tuned Data Plot")
-
             # Display the saved plot PDF
             pdf_viewer(plot_image_path, width= "80%", height= 855)
-
             st.success("✅ Data tuning completed!")
 
 def exe_streamlit_data_tuning_fixed():
@@ -133,48 +100,25 @@ def exe_streamlit_data_tuning_fixed():
 
             Once configured, your setup is saved to the default results directory of project (addmo_examples/results/test_raw_data/data_tuning_experiment_fixed) and executed with just a click.
             """)
-    # Show form with all config fields
-    with st.form("config_form_fixed"):
-        st.subheader("Data Tuning Configuration")
-        fixed_config_data = pydantic_input(key="Config Setup", model=DataTuningFixedConfig)
-        default_features = [
-            "Schedule",
-            "Total active power",
-            "FreshAir Temperature___diff",
-            "FreshAir Temperature___lag1",
-            "FreshAir Temperature___squared",
-            "Total active power___lag1"
-        ]
-        features_input = st.text_area(
-            "(comma separated)",
-            value=", ".join(default_features),
-            help="List of features which the tuning shall result in."
-        )
-        fixed_config_data['features'] = [f.strip() for f in features_input.split(",") if f.strip()]
-        st.subheader("Output Directory Strategy")
-        st.markdown("""
-                       Define how to handle existing results:
-                       - **y**: Overwrite the contents
-                       - **d**: Delete and recreate the directory
-                       """)
-        overwrite_strategy = st.radio(
-            "Choose strategy for existing results directory:",
-            ["y", "d"],
-            index=0,
-            help="Select how to handle existing results directory at: addmo_examples/results/test_raw_data/data_tuning_experiment_fixed",
-        )
-        submitted = st.form_submit_button("Run Fixed Data Tuning")
 
-    # Run when user submits the config
-    if submitted:
-        missing_fields = []
-        for field_name, field_value in fixed_config_data.items():
-            if field_value in [None, "", [], {}]:
-                missing_fields.append(field_name)
+    st.subheader("Data Tuning Configuration")
+    fixed_config_data = pydantic_input(key="Config Setup", model=DataTuningFixedConfig)
 
-        if missing_fields:
-            st.error(f"❌ The following required fields are missing or empty: {', '.join(missing_fields)}")
-            return
+    st.subheader("Output Directory Strategy")
+    st.markdown("""
+       Define how to handle existing results:
+       - **y**: Overwrite the contents
+       - **d**: Delete and recreate the directory
+    """)
+    overwrite_strategy = st.radio(
+        "Choose strategy for existing results directory:",
+        ["y", "d"],
+        index=0,
+        help="Select how to handle existing results directory at: addmo_examples/results/test_raw_data/data_tuning_experiment_fixed",
+    )
+
+    if st.button("Run Fixed Data Tuning"):
+
         fixed_config_data  = DataTuningFixedConfig(**fixed_config_data)
         # Save config to the expected JSON location
         config_path = os.path.join(
@@ -190,33 +134,32 @@ def exe_streamlit_data_tuning_fixed():
         # Run the tuning process
         with st.spinner("Running data tuning..."):
             exe_data_tuning_fixed(overwrite_strategy)
+            # Load default saving path for plot
             plot_image_path = os.path.join(results_dir_data_tuning_fixed("test_raw_data"), "tuned_xy_fixed.pdf")
-
             st.markdown("### Tuned Fixed Data Plot")
-
             # Display the saved plot PDF
             pdf_viewer(plot_image_path, width="80%", height=855)
-
             st.success("✅ Data tuning completed!")
 
 def exe_streamlit_model_tuning():
     st.header("Model Tuning")
 
-    # Form 1: Model configuration
-    with st.form("config_form_model"):
-        st.subheader("Model Configuration")
-        model_config_data = pydantic_input("ModelConfig", ModelTuningExperimentConfig)
+    st.subheader("Model Configuration")
+    model_config_data = pydantic_input(key="model_config_form", model=ModelTuningExperimentConfig)
 
-        with st.sidebar:
-            st.subheader("Model Tuning Configuration")
-            model_tuner = pydantic_input("ModelTunerConfig", ModelTunerConfig)
+    # Submit button for the form
+    if st.button("Save Model config"):
+        st.session_state.model_config_data = model_config_data
+        st.success("Model configuration saved!")
 
-        submitted_config = st.form_submit_button("Save Model Config")
-
-        if submitted_config:
-            model_config_data["config_model_tuner"] = model_tuner
-            st.session_state.model_config_data = model_config_data
-            st.success("Model configuration saved!")
+        # Sidebar for model tuning config
+    # with st.sidebar:
+    #     st.subheader("Model Tuning Configuration")
+    #     model_tuner_data = sp.pydantic_form(key="model_tuner_form", model=ModelTunerConfig)
+    #
+    #     # Check if the form is submitted
+    #     if model_tuner_data:
+    #         st.session_state.model_tuner_data = model_tuner_data
 
 
     # Form 2: Ask about tuned data

@@ -2,6 +2,7 @@ import os
 from pydantic import BaseModel, Field
 from addmo.util.load_save_utils import root_dir
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
+from typing import Optional
 
 class DataTuningAutoSetup(BaseModel):
     # Global Variables
@@ -28,7 +29,7 @@ class DataTuningAutoSetup(BaseModel):
     create_manual_target_lag: bool = Field(
         True, description="Manual construction of target lags."
     )
-    target_lag: list = Field([1, 2], description="Array of lags for the target.")
+    target_lag: list[int] = Field([1, 2], description="Array of lags for the target.")
     create_automatic_timeseries_target_lag: bool = Field(
         False, description="Automatic construction of time series target lags."
     )
@@ -38,7 +39,7 @@ class DataTuningAutoSetup(BaseModel):
     create_manual_feature_lags: bool = Field(
         False, description="Manual construction of feature lags."
     )
-    feature_lags: dict = Field(
+    feature_lags:dict[str, list[int]] = Field(
         {"FreshAir Temperature": [1, 2], "Total active power": [1, 2]},
         description="Feature_lags in format {var_name: [lags]}",
     )
@@ -52,7 +53,7 @@ class DataTuningAutoSetup(BaseModel):
     manual_feature_selection: bool = Field(
         False, description="Manual selection of Features by their Column number."
     )
-    selected_features: list = Field(
+    selected_features: list[str] = Field(
         ["FreshAir Temperature", "Total active power"],
         description="Variable names of the features to keep.",
     )
@@ -97,7 +98,8 @@ class DataTuningAutoSetup(BaseModel):
 
     # Wrapper Model Variables
     config_model_tuning: ModelTunerConfig = Field(
-        ModelTunerConfig(), description="Model tuning setup, set your own config."
+        default_factory=ModelTunerConfig,
+        description="Model tuning setup, set your own config."
     )
 
     min_increase_4_wrapper: float = Field(

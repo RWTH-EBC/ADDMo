@@ -22,21 +22,22 @@ class ModelTunerConfig(BaseModel):
         "OptunaTuner",
         description="Type of hyperparameter tuning, e.g., OptunaTuner, GridSearchTuner",
     )
-    hyperparameter_tuning_kwargs: Optional[dict] = Field(
-        {"n_trials": 2}, description="Kwargs for the tuner"
+    hyperparameter_tuning_kwargs: Optional[dict[str, int]] = Field(
+        default_factory=lambda: {"n_trials": 2},
+        description="Kwargs for the tuner"
     )
 
     validation_score_mechanism: str = Field(
         "cv", description="Validation score mechanism, e.g., cross validation, holdout"
     )
-    validation_score_mechanism_kwargs: Optional[dict] = Field(
+    validation_score_mechanism_kwargs: Optional[dict[str, str]] = Field(
         default=None, description="Kwargs for the validation score mechanism"
     )
 
     validation_score_splitting: str = Field(
         "KFold", description="Validation score splitting, e.g., KFold, PredefinedSplit"
     )
-    validation_score_splitting_kwargs: Optional[dict] = Field(
+    validation_score_splitting_kwargs: Optional[dict[str, str]] = Field(
         default=None, description="Kwargs for the validation score splitter"
     )
 
@@ -44,7 +45,7 @@ class ModelTunerConfig(BaseModel):
         "neg_root_mean_squared_error",
         description="Validation score metric, e.g., r2, neg_mean_absolute_error",
     )
-    validation_score_metric_kwargs: Optional[dict] = Field(
+    validation_score_metric_kwargs: Optional[dict[str, str]] = Field(
         default=None, description="Kwargs for the validation score metric"
     )
 
@@ -82,6 +83,6 @@ class ModelTuningExperimentConfig(BaseModel):
     end_test: str = Field(
         "2016-08-16 23:45", description="End date and time for testing"
     )
-    config_model_tuner: ModelTunerConfig = Field(
-        ModelTunerConfig(), description="Model tuner config, set your own config."
+    config_model_tuner: ModelTunerConfig = Field(default_factory=ModelTunerConfig,
+        description="Model tuning setup, set your own config."
     )

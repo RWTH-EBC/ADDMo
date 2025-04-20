@@ -101,10 +101,10 @@ class DataTuningAutoSetup(BaseModel):
         description="Minimum score increase for a feature to be considered worthy in wrapper methods.",
     )
     # Wrapper Model Variables
-    # model_tuning_note: str = Field(
-    #     default="Please configure model tuning below – do not change this field.",
-    #     description="Info only. The real model tuning config is entered separately.",
-    # )
+    model_tuning_note: str = Field(
+        default="Please configure model tuning separately – do not change the Config Model Tuning field below.",
+        description="Info only. The real model tuning config is entered separately.",
+    )
     config_model_tuning: Optional[ModelTunerConfig] = Field(
         default_factory=ModelTunerConfig,
         description="Model tuning setup – this is managed separately, do not edit here."

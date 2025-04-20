@@ -1,12 +1,7 @@
 import os
 from pydantic import BaseModel, Field
-from typing import Optional, Any
+from typing import Optional
 from addmo.util.load_save_utils import root_dir
-
-
-class HyperparameterTuningKwargs(BaseModel):
-    n_trials: Optional[int] = None
-    timeout: Optional[int] = None
 
 
 class ModelTunerConfig(BaseModel):
@@ -89,6 +84,11 @@ class ModelTuningExperimentConfig(BaseModel):
     end_test: str = Field(
         "2016-08-16 23:45", description="End date and time for testing"
     )
-    config_model_tuner: ModelTunerConfig = Field(default_factory=ModelTunerConfig,
-        description="Model tuning setup, set your own config."
+    model_tuning_note: str = Field(
+        default="Please configure model tuning separately – do not change the Config Model Tuning field below.",
+        description="Info only. The real model tuning config is entered separately.",
+    )
+    config_model_tuner: Optional[ModelTunerConfig]  = Field(
+        default_factory=ModelTunerConfig,
+        description="Model tuning setup – this is managed separately, do not edit here."
     )

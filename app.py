@@ -35,9 +35,9 @@ def exe_streamlit_data_tuning_auto():
         """)
 
     st.subheader("General Data Tuning Configuration")
-    auto_tuning_config: DataTuningAutoSetup = pydantic_input("Auto", DataTuningAutoSetup)
+    auto_tuning_config = pydantic_input("Auto", DataTuningAutoSetup)
     st.subheader("Model Tuner Configuration")
-    model_tuner_config: ModelTuningExperimentConfig = pydantic_input("ModelTuner", ModelTunerConfig)
+    model_tuner_config= pydantic_input("ModelTuner", ModelTunerConfig)
     auto_tuning_config["config_model_tuning"]= model_tuner_config
     # Output strategy
     st.subheader("Output Directory Strategy")
@@ -120,6 +120,17 @@ def exe_streamlit_data_tuning_fixed():
     )
 
     if st.button("Run Fixed Data Tuning"):
+        missing_fields = []
+        for field_name, field_value in fixed_config_data.items():
+            # Check if field is missing or empty
+            if isinstance(field_value, (list)) and not field_value:
+                missing_fields.append(field_name)
+            elif field_value in [None, ""]:
+                missing_fields.append(field_name)
+        # If any fields are missing, show an error
+        if missing_fields:
+            st.error(f"❌ The following required fields are missing or empty: {', '.join(missing_fields)}")
+            return
 
         fixed_config_data  = DataTuningFixedConfig(**fixed_config_data)
         # Save config to the expected JSON location
@@ -147,58 +158,69 @@ def exe_streamlit_model_tuning():
     st.header("Model Tuning")
 
     st.subheader("Model Configuration")
-    model_config_data = pydantic_input(key="model_config_form", model=ModelTuningExperimentConfig)
+    model_config_data = pydantic_input("ModelConfig", ModelTuningExperimentConfig)
 
-    # Submit button for the form
-    if st.button("Save Model config"):
+
+    st.subheader("Model Tuning Configuration")
+    model_tuner = pydantic_input("ModelTunerConfig", ModelTunerConfig)
+    model_config_data["config_model_tuner"] = model_tuner
+
+    st.subheader("Input data tuning type")
+    type_of_data = st.selectbox("Would you like to use tuned data for model tuning?", ["choose", "Yes", "No"])
+    st.session_state.use_tuned_data = type_of_data
+    if type_of_data == "Yes":
+            type_of_tuning = st.selectbox("Which tuning would you like to use?", ["choose","Auto", "Fixed"])
+
+            if type_of_tuning == "Auto":
+                st.text("The default directory used for loading the data is: addmo_examples/results/test_raw_data/data_tuning_experiment_auto")
+                path_type = st.selectbox(
+                    "Would you like to use the default saving path for loading the input data?",
+                    ["Select an option", "Yes", "No"],
+                    help= "The path for loading input data depends on the experiment names defined above. "
+                           "If the default saving paths and experiment folder names are not changed during data tuning and model config, choose Default")
+                if path_type== "Yes":
+                    model_config_data["abs_path_to_data"] = os.path.join(
+                        results_dir_data_tuning_auto(model_config_data['name_of_raw_data']),
+                        "tuned_xy_auto.csv")
+                    st.success("✅ Tuned data path set in config.")
+                elif path_type == "No":
+                    model_config_data["abs_path_to_data"] = st.text_input('path')
+                    st.success("✅ Tuned data path set in config.")
+
+            elif type_of_tuning == "Fixed":
+                st.text("The default directory used for loading the data is: addmo_examples/results/test_raw_data/data_tuning_experiment_fixed")
+
+                path_type = st.selectbox(
+                    "Would you like to use the default saving path for loading the input data?",
+                    ["Select an option", "Yes", "No"]
+                )
+                if path_type == "Yes":
+                    model_config_data["abs_path_to_data"] = os.path.join(
+                        results_dir_data_tuning_fixed(model_config_data['name_of_raw_data']),
+                        "tuned_xy_fixed.csv")
+                    st.success("✅ Tuned data path set in config.")
+
+                elif path_type == "No":
+                    model_config_data["abs_path_to_data"] = st.text_input('path')
+                    st.success("✅ Tuned data path set in config.")
+    if st.button("Save Model Config"):
         st.session_state.model_config_data = model_config_data
         st.success("Model configuration saved!")
 
-        # Sidebar for model tuning config
-    # with st.sidebar:
-    #     st.subheader("Model Tuning Configuration")
-    #     model_tuner_data = sp.pydantic_form(key="model_tuner_form", model=ModelTunerConfig)
-    #
-    #     # Check if the form is submitted
-    #     if model_tuner_data:
-    #         st.session_state.model_tuner_data = model_tuner_data
+    st.subheader("Output Directory Strategy")
+    st.markdown("""
+           Define how to handle existing results:
+           - **y**: Overwrite the contents
+           - **d**: Delete and recreate the directory
+        """)
+    overwrite_strategy = st.radio(
+        "Choose strategy for existing results directory:",
+        ["y", "d"],
+        index=0,
+        help="Select how to handle existing results directory at: addmo_examples/results/test_raw_data/data_tuning_experiment_fixed",
+    )
 
-
-    # Form 2: Ask about tuned data
-    with st.form("form_tuned_data"):
-        type_of_data = st.radio("Would you like to use tuned data for model tuning?", ["Yes", "No"])
-        submitted_tuning_pref = st.form_submit_button("Submit")
-
-        if submitted_tuning_pref:
-            st.session_state.use_tuned_data = type_of_data
-
-    # Form 3: If tuned data is selected, ask which tuning
-    if st.session_state.get("use_tuned_data") == "Yes":
-        with st.form("form_choose_tuning_type"):
-            type_of_tuning = st.radio("Which tuning would you like to use?", ["Auto", "Fixed"])
-            submitted_tuning_type = st.form_submit_button("Submit")
-            if submitted_tuning_type:
-                if "model_config_data" in st.session_state:
-                    # model_config_data = st.session_state.model_config_data
-                    if type_of_tuning == "Auto":
-                        st.session_state.model_config_data["abs_path_to_data"] = os.path.join(results_dir_data_tuning_auto('test_raw_data'),
-                                                                             "tuned_xy_auto.csv")
-                    else:
-                        st.session_state.model_config_data["abs_path_to_data"] = os.path.join(results_dir_data_tuning_fixed(),
-                                                                             "tuned_xy_fixed.csv")
-                    st.success("✅ Tuned data path set in config.")
-
-    # Form 4: Final submission
-    with st.form("form_run_model_tuning"):
-        overwrite_strategy = st.radio(
-            "To overwrite the existing content type in 'addmo_examples/results/test_raw_data/test_data_tuning/test_model_tuning' results directory, choose 'y', for deleting the current contents type choose 'd' ",
-            ["y", "d"],
-            index=0,
-            help="Select how to handle existing results directory."
-        )
-        final_submit = st.form_submit_button("Run Model Tuning")
-
-        if final_submit:
+    if st.button("Run Model Tuning"):
             if "model_config_data" not in st.session_state:
                 st.error("🚫 Model configuration is missing. Please fill out the model config first.")
             else:
@@ -208,9 +230,9 @@ def exe_streamlit_model_tuning():
                     root_dir(), 'addmo', 's3_model_tuning', 'config', 'model_tuning_config.json'
                 )
                 os.makedirs(os.path.dirname(config_path), exist_ok=True)
-                model_config_data_obj  = ModelTuningExperimentConfig(**model_config_data)
+                model_config_data_obj = ModelTuningExperimentConfig(**model_config_data)
                 with open(config_path, 'w') as f:
-                    f.write(model_config_data_obj .model_dump_json(indent=4))
+                    f.write(model_config_data_obj.model_dump_json(indent=4))
 
                 st.success("✅ Configuration saved!")
 
@@ -223,6 +245,7 @@ def exe_streamlit_model_tuning():
                     # Display the saved plot PDF
                     pdf_viewer(plot_image_path, width="80%", height=855)
                     st.success("✅ Model tuning completed!")
+
 
 def exe_streamlit_data_insights():
     if "dir_submitted" not in st.session_state:

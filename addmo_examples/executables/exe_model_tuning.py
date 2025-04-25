@@ -14,7 +14,7 @@ from addmo.util.load_save import load_data
 from addmo.util.load_save import load_config_from_json
 from addmo.util.data_handling import split_target_features
 from addmo.s5_insights.model_plots.scatter_plot import scatter
-from util.plotting import save_pdf
+from addmo.util.plotting import save_pdf
 
 
 def exe_model_tuning(user_input, config=None):

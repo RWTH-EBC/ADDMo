@@ -24,7 +24,7 @@ class ModelTunerConfig(BaseModel):
     )
     hyperparameter_tuning_kwargs: Optional[dict[str, int]] = Field(
         default_factory=lambda: {"n_trials": 2},
-        description="Kwargs for the tuner"
+        description="Kwargs for the tuner. Set default value to n_trials: 2"
     )
 
 

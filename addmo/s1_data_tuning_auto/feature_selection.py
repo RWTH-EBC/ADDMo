@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.decomposition import FastICA
-from sklearn.feature_selection import GenericUnivariateSelect
+from sklearn.feature_selection import GenericUnivariateSelect, mutual_info_regression, f_regression
 from sklearn.feature_selection import RFE, RFECV
 from sklearn.feature_selection import SequentialFeatureSelector
 
@@ -51,13 +51,26 @@ def filter_univariate(config: DataTuningAutoSetup, x, y):
     and search mode : {‘percentile’, ‘k_best’, ‘fpr’, ‘fdr’, ‘fwe’}
     For documentation see scikit-learning.org.
     """
-    filter = GenericUnivariateSelect(
-        score_func=config.univariate_score_function,
+    score_function_map = {
+        "mutual_info_regression": mutual_info_regression,
+        "f_regression": f_regression,
+    }
+
+    score_func = score_function_map.get(config.univariate_score_function)
+    if score_func is None:
+        raise ValueError(
+            f"Invalid score function '{config.univariate_score_function}'. "
+            "Must be one of: 'mutual_info_regression', 'f_regression'."
+        )
+
+    selector = GenericUnivariateSelect(
+        score_func=score_func,
         mode=config.univariate_search_mode,
         param=config.univariate_filter_params,
     ).set_output(transform="pandas")
-    filter = filter.fit(X=x, y=y)
-    x_processed = filter.transform(X=x)
+
+    selector = selector.fit(X=x, y=y)
+    x_processed = selector.transform(X=x)
     return x_processed
 
 

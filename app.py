@@ -1,13 +1,10 @@
 import streamlit as st
-import streamlit_pydantic as sp
-from attr.filters import exclude
-
+import json
+import os
 from streamlit_pydantic import pydantic_input, pydantic_output, pydantic_form
 from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from addmo_examples.executables.exe_data_tuning_auto import exe_data_tuning_auto
 from addmo_examples.executables.exe_data_tuning_fixed import exe_data_tuning_fixed
-import json
-import os
 from addmo.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
 from addmo_examples.executables.exe_model_tuning import exe_model_tuning
@@ -17,7 +14,7 @@ from streamlit_pdf_viewer import pdf_viewer
 from addmo.util.definitions import results_dir_data_tuning_auto,results_dir_data_tuning_fixed,return_results_dir_model_tuning, results_model_streamlit_testing
 from addmo_examples.executables.exe_data_insights import exe_time_series_plot,exe_parallel_plot,exe_carpet_plots
 from addmo.s4_model_testing.model_testing import model_test, data_tuning_recreate_fixed, data_tuning_recreate_auto
-import traceback
+
 
 
 
@@ -43,8 +40,8 @@ def exe_streamlit_data_tuning_auto():
     - **`abs_path_to_data`**: Full path to your input Excel file.
     - **`name_of_target`**: The name of your target column to be predicted.
 
-    - The default results data folder is: addmo-automated-ml-regression\\addmo_examples\\results\\test_raw_data
-    - The default tuning experiment is: data_tuning_experiment_auto
+    - The default results data folder is: `addmo-automated-ml-regression\\addmo_examples\\results\\test_raw_data`
+    - The default name of tuning experiment is: `data_tuning_experiment_auto`
     
     - The information about every feature is provided in the help tab of each feature along with default values
 
@@ -59,10 +56,43 @@ def exe_streamlit_data_tuning_auto():
     - **`create_automatic_feature_lags`**: Let a model choose optimal lags.
     - **`minimum_feature_lag` / `maximum_feature_lag`**: Range of lags to consider between 1 and 20.
 
-    #### Feature Selection
-    Refine your feature set using statistical filters or model-informed methods:
-    - **`manual_feature_selection`**: Select features manually. Specify column numbers, if selected.
-    - **`selected_features`**: Choose which features to keep.
+    """)
+
+    st.header("Guide for Data Tuning")
+    st.markdown("""
+    ### Manual Configuration
+
+    Use these options if you want to explicitly define features or lags.
+    Note: No need to specify model config if these all features are constructed manually using the fields below
+    
+    ##### Manually Select Features
+    - ✅ Enable `manual_feature_selection` to select the features which will be included in tuned data
+    -  Provide the feature names in `selected_features`. E.g: ["FreshAir Temperature", "Total active power"]
+    ##### Manually Create Feature Lags
+    - ✅ Enable `create_manual_feature_lags` to create feature lags 
+    - Define lag values for each feature in `feature_lags`: E.g: 
+    {
+        "FreshAir Temperature": [1, 2],
+        "Total active power": [1, 2, 3]
+    }
+    ##### Create Manual Target Lags
+    - ✅ Enable `create_manual_target_lag` for manual construction of target lags.
+    - Define lag values for target feature here in `target_lag`. E.g: [1,2]
+    
+    ### Automated Configuration
+    
+    Skip filling the field values for the above mentioned attributes if you would like to proceed with automated configuration.
+    Note: Filling the Model config below is required in case these options are selected.
+    #### Automatically Create Feature Lags
+    - ✅ Enable create_automatic_feature_lags
+    - Configure: `minimum_feature_lag` , `maximum_feature_lag`, `config_model_tuning` (defines the model used to evaluate lags) 
+    #### Automatically Create Target Lags
+    - ✅ Enable create_automatic_timeseries_target_lag
+    - Set minimum_target_lag only
+    
+    #### Further features: 
+    These options are **used only in automated tuning workflows** where model-based evaluation is performed (e.g., during automatic feature lag or target lag construction).  
+    They are **not used** when you're manually selecting features or creating lags.
     - **`filter_low_variance`**: Pre-Filter removing features with low variance.
     - **`low_variance_threshold`**: Minimum variance required.
     - **`filter_ICA`**: Apply Independent Component Analysis.
@@ -70,7 +100,7 @@ def exe_streamlit_data_tuning_auto():
     - **`univariate_score_function`**: `'mutual_info_regression'` or `'f_regression'`.
     - **`univariate_search_mode`**: Choose top features via `‘percentile’, ‘k_best’, ‘fpr’, ‘fdr’, ‘fwe’`.
     - **`univariate_filter_params`**: Percentage or count of features to keep.
-
+        
     #### Embedded / Wrapper Selection
     Learns which features matter while the model is training:
     - **`embedded_model`**: Estimator used for model-based selection (e.g., RF). It scores the importance of each feature based on how useful it is for making predictions.
@@ -79,6 +109,7 @@ def exe_streamlit_data_tuning_auto():
     - **`wrapper_sequential_feature_selection`**: Forward/backward wrapper selection.
     - **`sequential_direction`**: `'forward'` or `'backward'`.
     - **`min_increase_4_wrapper`**: Minimum performance gain needed to accept a feature.
+    
     """)
     auto_tuning_config = pydantic_input("Auto", DataTuningAutoSetup)
     st.header("Model Tuner Configuration")
@@ -112,7 +143,11 @@ def exe_streamlit_data_tuning_auto():
 
     """)
     model_tuner_config = pydantic_input("ModelTuner", ModelTunerConfig)
-    auto_tuning_config["config_model_tuning"] = model_tuner_config
+    if not model_tuner_config['hyperparameter_tuning_kwargs']:
+        model_tuner_config['hyperparameter_tuning_kwargs'] = {"n_trials": 2}
+    # auto_tuning_config._config_model_tuning = model_tuner_config
+
+    auto_tuning_config["_config_model_tuning"] = model_tuner_config
     # Output strategy
     st.subheader("Output Directory Strategy")
     st.markdown("""
@@ -302,6 +337,8 @@ def exe_streamlit_model_tuning():
 
     st.subheader("Model Tuning Configuration")
     model_tuner = pydantic_input("ModelTunerConfig", ModelTunerConfig)
+    if not model_tuner["hyperparameter_tuning_kwargs"]:
+        model_tuner["hyperparameter_tuning_kwargs"] = {"n_trials": 2}
     model_config_data["config_model_tuner"] = model_tuner
 
     st.subheader("Input data tuning type")
@@ -704,7 +741,7 @@ st.set_page_config(
 
 st.title("ADDMO - Automated Data & Model Optimization")
 st.markdown("""
-Welcome to **ADDMO**, a powerful and user-friendly AutoML toolkit designed for **time series regression tasks**.
+Welcome to **ADDMO**, a AutoML toolkit designed for **time series regression tasks**.
 
 This application helps you configure, run, and analyze the full machine learning pipeline — from **data preprocessing** to **model tuning**, with full documentation and visualization at each step.
 

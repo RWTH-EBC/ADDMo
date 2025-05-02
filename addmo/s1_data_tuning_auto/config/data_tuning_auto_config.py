@@ -1,5 +1,5 @@
 import os
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, PrivateAttr
 from addmo.util.load_save_utils import root_dir
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from typing import Optional
@@ -39,7 +39,7 @@ class DataTuningAutoSetup(BaseModel):
     create_manual_feature_lags: bool = Field(
         False, description="Manual construction of feature lags."
     )
-    feature_lags:dict[str, list[int]] = Field(
+    feature_lags: dict[str, list[int]] = Field(
         {"FreshAir Temperature": [1, 2], "Total active power": [1, 2]},
         description="Feature_lags in format {var_name: [lags]}",
     )
@@ -51,7 +51,7 @@ class DataTuningAutoSetup(BaseModel):
 
     # FeatureSelection Variables
     manual_feature_selection: bool = Field(
-        False, description="Manual selection of Features by their Column number."
+        False, description="Manual selection of Features by their Column name."
     )
     selected_features: list[str] = Field(
         ["FreshAir Temperature", "Total active power"],
@@ -101,11 +101,14 @@ class DataTuningAutoSetup(BaseModel):
         description="Minimum score increase for a feature to be considered worthy in wrapper methods.",
     )
     # Wrapper Model Variables
-    model_tuning_note: str = Field(
-        default="Please configure model tuning separately – do not change the Config Model Tuning field below.",
-        description="Info only. The real model tuning config is entered separately.",
-    )
-    config_model_tuning: Optional[ModelTunerConfig] = Field(
-        default_factory=ModelTunerConfig,
-        description="Model tuning setup – this is managed separately, do not edit here."
-    )
+    # config_model_tuning: Optional[ModelTunerConfig] = Field(
+    #     default_factory=ModelTunerConfig,
+    #     description="Model tuning setup – this is managed separately, do not edit here."
+    # )
+
+    _config_model_tuning: Optional[ModelTunerConfig] = PrivateAttr()
+
+    def __init__(self, **data):
+        super().__init__(**data)
+        self._config_model_tuning = ModelTunerConfig()
+

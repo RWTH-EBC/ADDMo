@@ -9,19 +9,10 @@
         1,
         2
     ],
-    "create_automatic_timeseries_target_lag": false,
+    "create_automatic_timeseries_target_lag": true,
     "minimum_target_lag": 1,
     "create_manual_feature_lags": false,
-    "feature_lags": {
-        "FreshAir Temperature": [
-            1,
-            2
-        ],
-        "Total active power": [
-            1,
-            2
-        ]
-    },
+    "feature_lags": {},
     "create_automatic_feature_lags": false,
     "minimum_feature_lag": 1,
     "maximum_feature_lag": 20,
@@ -42,22 +33,5 @@
     "recursive_embedded_number_features_to_select": 18,
     "wrapper_sequential_feature_selection": false,
     "sequential_direction": "forward",
-    "min_increase_4_wrapper": 0.005,
-    "model_tuning_note": "Please configure model tuning separately – do not change the Config Model Tuning field below.",
-    "config_model_tuning": {
-        "models": [
-            "ScikitMLP_TargetTransformed"
-        ],
-        "trainings_per_model": 1,
-        "hyperparameter_tuning_type": "OptunaTuner",
-        "hyperparameter_tuning_kwargs": {
-            "n_trials": 2
-        },
-        "validation_score_mechanism": "cv",
-        "validation_score_mechanism_kwargs": {},
-        "validation_score_splitting": "KFold",
-        "validation_score_splitting_kwargs": {},
-        "validation_score_metric": "neg_root_mean_squared_error",
-        "validation_score_metric_kwargs": {}
-    }
+    "min_increase_4_wrapper": 0.005
 }

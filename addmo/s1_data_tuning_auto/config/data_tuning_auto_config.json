@@ -9,7 +9,7 @@
         1,
         2
     ],
-    "create_automatic_timeseries_target_lag": true,
+    "create_automatic_timeseries_target_lag": false,
     "minimum_target_lag": 1,
     "create_manual_feature_lags": false,
     "feature_lags": {},
@@ -23,7 +23,7 @@
     ],
     "filter_low_variance": true,
     "low_variance_threshold": 0.1,
-    "filter_ICA": false,
+    "filter_ICA": true,
     "filter_univariate": false,
     "univariate_score_function": "mutual_info_regression",
     "univariate_search_mode": "percentile",

@@ -40,8 +40,9 @@ def filter_ica(x):
     """
     Filter Independent Component Analysis (ICA)
     """
-    Ica = FastICA(max_iter=1000).set_output(transform="pandas")
-    x_processed = Ica.fit_transform(X=x)
+    Ica = FastICA(max_iter=1000)
+    x_transformed = Ica.fit_transform(X=x)
+    x_processed = pd.DataFrame(x_transformed, columns=x.columns, index=x.index)
     return x_processed
 
 

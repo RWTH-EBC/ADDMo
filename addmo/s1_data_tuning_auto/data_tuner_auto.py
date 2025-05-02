@@ -57,7 +57,7 @@ class DataTunerAuto:
         if self.config.filter_low_variance:
             self.x = fs.filter_low_variance(self.config, self.x)
         if self.config.filter_ICA:
-            self.x = fs.filter_ica(self.config, self.x)
+            self.x = fs.filter_ica(self.x)
         if self.config.filter_univariate:
             self.x = fs.filter_univariate(self.config, self.x, self.y)
         if self.config.filter_recursive_embedded:

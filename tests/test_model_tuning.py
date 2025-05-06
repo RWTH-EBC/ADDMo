@@ -17,7 +17,7 @@ class TestModelTuner(unittest.TestCase):
         self.config = ModelTuningExperimentConfig()
 
     def test_model_tuning(self):
-        model_tuner = ModelTuner(config=self.config.config_model_tuner)
+        model_tuner = ModelTuner(config=self.config._config_model_tuner)
 
         # Load the system_data
         xy_tuned = load_data(self.config.abs_path_to_data)

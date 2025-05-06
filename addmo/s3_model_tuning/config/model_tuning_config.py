@@ -1,5 +1,5 @@
 import os
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, PrivateAttr
 from typing import Optional
 from addmo.util.load_save_utils import root_dir
 
@@ -52,6 +52,9 @@ class ModelTunerConfig(BaseModel):
 
 
 class ModelTuningExperimentConfig(BaseModel):
+    def __init__(self, **data):
+        super().__init__(**data)
+        self._config_model_tuner = ModelTunerConfig()
     name_of_raw_data: str = Field(
         "test_raw_data", description="Refer to the raw system_data connected to this"
     )
@@ -84,11 +87,10 @@ class ModelTuningExperimentConfig(BaseModel):
     end_test: str = Field(
         "2016-08-16 23:45", description="End date and time for testing"
     )
-    model_tuning_note: str = Field(
-        default="Please configure model tuning separately – do not change the Config Model Tuning field below.",
-        description="Info only. The real model tuning config is entered separately.",
-    )
-    config_model_tuner: Optional[ModelTunerConfig]  = Field(
-        default_factory=ModelTunerConfig,
-        description="Model tuning setup – this is managed separately, do not edit here."
-    )
+
+    # config_model_tuner: Optional[ModelTunerConfig]  = Field(
+    #     default_factory=ModelTunerConfig,
+    #     description="Model tuning setup – this is managed separately, do not edit here."
+    # )
+    _config_model_tuner: Optional[ModelTunerConfig] = PrivateAttr()
+

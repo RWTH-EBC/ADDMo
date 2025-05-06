@@ -13,7 +13,7 @@
     "minimum_target_lag": 1,
     "create_manual_feature_lags": false,
     "feature_lags": {},
-    "create_automatic_feature_lags": false,
+    "create_automatic_feature_lags": true,
     "minimum_feature_lag": 1,
     "maximum_feature_lag": 20,
     "manual_feature_selection": false,

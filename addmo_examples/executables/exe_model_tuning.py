@@ -35,7 +35,7 @@ def exe_model_tuning(user_input, config=None):
     ExperimentLogger.start_experiment(config=config)
 
     # Create the model tuner
-    model_tuner = ModelTuner(config=config.config_model_tuner)
+    model_tuner = ModelTuner(config=config._config_model_tuner)
 
     # Load the system_data
     xy_tuned = load_data(config.abs_path_to_data)
@@ -80,8 +80,8 @@ if __name__ == "__main__":
     # # Change default input data path to auto tuned data path
     # tuned_data_path = os.path.join(results_dir_data_tuning_auto(), "tuned_xy_auto.csv")
     # config.abs_path_to_data = tuned_data_path
-    config.config_model_tuner.validation_score_splitting = 'UnivariateSplitter'
-    config.config_model_tuner.validation_score_splitting_kwargs = None
+    config._config_model_tuner.validation_score_splitting = 'UnivariateSplitter'
+    config._config_model_tuner.validation_score_splitting_kwargs = None
     user_input = input(
         "To overwrite the existing content type in 'addmo_examples/results/test_raw_data/test_data_tuning/test_model_tuning' results directory <y>, for deleting the current contents type <d>: ")
     # run

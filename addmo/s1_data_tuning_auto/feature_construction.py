@@ -107,6 +107,7 @@ def automatic_feature_lag_constructor(config: DataTuningAutoSetup, xy):
         temp_score = old_score
         for i in range(config.minimum_feature_lag, config.maximum_feature_lag + 1):
             series = feature_constructor.create_lag(x[column], i)
+            series = series[0:]
             x_processed = pd.concat([x, series], axis=1, join="inner")
 
             new_model = tuner.tune_model(config._config_model_tuning.models[0], x_processed, y)

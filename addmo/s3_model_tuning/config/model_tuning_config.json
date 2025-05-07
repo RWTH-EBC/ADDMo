@@ -2,11 +2,10 @@
     "name_of_raw_data": "test_raw_data",
     "name_of_data_tuning_experiment": "test_data_tuning",
     "name_of_model_tuning_experiment": "test_model_tuning",
-    "abs_path_to_data": "D:\\PyCharm 2023.3.5\\addmo-automated-ml-regression\\addmo_examples\\raw_input_data\\InputData.xlsx",
+    "abs_path_to_data": "C:\\Users\\mre-rpa\\Desktop\\PycharmProjects\\addmo-automated-ml-regression\\addmo_examples\\raw_input_data\\InputData.xlsx",
     "name_of_target": "FreshAir Temperature",
     "start_train_val": "2016-08-01 00:00",
     "stop_train_val": "2016-08-14 23:45",
     "start_test": "2016-08-15 00:00",
-    "end_test": "2016-08-16 23:45",
-    "model_tuning_note": "Please configure model tuning separately – do not change the Config Model Tuning field below."
+    "end_test": "2016-08-16 23:45"
 }

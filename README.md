@@ -157,14 +157,14 @@ Activate environment:
 Change directory in command line to the project path using: `$ cd <Path to your local ADDMo repo>`
 
 Install required packages via:
-`$ pip install -e .`
+`$ pip install -r requirements.txt`
 
 Set the conda environment "ADDMo" as interpreter for e.g. in PyCharm
 
 Via pip by your own:\
 The used Python version is 3.10
 
-Except the regular packages you need to install:\
+Except the regular packages you need to install:
 
 pandas  
 wandb  
@@ -185,13 +185,16 @@ tf2onnx
 pyod  
 openpyxl  
 streamlit  
-streamlit-pydantic  
+git+https://github.com/RWTH-EBC/streamlit-pydantic.git  
 pydantic-settings  
 
 Note: `BaseSettings` has been moved to the `pydantic-settings` package. The following changes are needed according to the migration document:
 1. Search for "from pydantic import BaseSettings" in the project scope
 2. Change it to "from pydantic_settings import BaseSettings"
 
+
+# Plotting
+Some users might face matplotlib interface errors while executing plotting scripts in GUI. If encountering such an error, try downgrading matplotlib to 3.9
 
 # How to use it- two options
 

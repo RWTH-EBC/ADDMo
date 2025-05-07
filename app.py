@@ -21,9 +21,8 @@ from addmo.s4_model_testing.model_testing import model_test, data_tuning_recreat
 def exe_streamlit_data_tuning_auto():
     st.header("Auto Data Tuning Configuration")
     st.markdown("""
-        Welcome to the **Auto Data Tuning Setup** interface! 👋
-
-        This tool lets you configure and launch a fully-automated data tuning pipeline.
+       
+        This setup allows you configure and launch a fully-automated data tuning pipeline.
         Use the form below to customize:
         - Preprocessing & feature engineering (e.g., lag generation, variance filtering)
         - Feature selection strategies
@@ -67,17 +66,17 @@ def exe_streamlit_data_tuning_auto():
     
     ##### Manually Select Features
     - ✅ Enable `manual_feature_selection` to select the features which will be included in tuned data
-    -  Provide the feature names in `selected_features`. E.g: ["FreshAir Temperature", "Total active power"]
+    -  Provide the feature names in `selected_features`, e.g.: ["FreshAir Temperature", "Total active power"]
     ##### Manually Create Feature Lags
     - ✅ Enable `create_manual_feature_lags` to create feature lags 
-    - Define lag values for each feature in `feature_lags`: E.g: 
+    - Define lag values for each feature in `feature_lags`, e.g.: 
     {
         "FreshAir Temperature": [1, 2],
         "Total active power": [1, 2, 3]
     }
     ##### Create Manual Target Lags
     - ✅ Enable `create_manual_target_lag` for manual construction of target lags.
-    - Define lag values for target feature here in `target_lag`. E.g: [1,2]
+    - Define lag values for target feature here in `target_lag`, e.g.: [1,2]
     
     ### Automated Configuration
     
@@ -159,7 +158,7 @@ def exe_streamlit_data_tuning_auto():
         "Choose strategy for existing results directory:",
         ["y", "d"],
         index=0,
-        help="Select how to handle existing results directory at: addmo_examples/results/test_raw_data/data_tuning_experiment_auto",
+        help="Select how to handle existing results directory at: `addmo_examples/results/test_raw_data/data_tuning_experiment_auto`",
     )
 
 
@@ -205,10 +204,7 @@ def exe_streamlit_data_tuning_auto():
 def exe_streamlit_data_tuning_fixed():
     st.header("Data Tuning Fixed Configuration")
     st.markdown("""
-            Welcome to the **Fixed Data Tuning Setup** interface! 👋
-
-            This tool lets you tune the system_data in a fixed manner without randomness
-
+            This setup allows you tune the system data in a fixed manner without randomness
             """)
 
     st.subheader("Data Tuning Configuration")
@@ -220,8 +216,8 @@ def exe_streamlit_data_tuning_fixed():
         - **`abs_path_to_data`**: Full path to your input Excel file.
         - **`name_of_target`**: The name of your target column to be predicted.
 
-        - The default results data folder is: addmo-automated-ml-regression\\addmo_examples\\results\\test_raw_data
-        - The default tuning experiment is: data_tuning_experiment_fixed
+        - The default results data folder is: `addmo-automated-ml-regression\\addmo_examples\\results\\test_raw_data`
+        - The default tuning experiment is: `data_tuning_experiment_fixed`
 
         - The information about every feature is provided in the help tab of each feature along with default values
         
@@ -291,6 +287,14 @@ def exe_streamlit_data_tuning_fixed():
 def exe_streamlit_model_tuning():
     st.header("Model Tuning")
     st.markdown("""
+    
+     This setup allows you to:
+    - Select and train one or multiple machine learning models.
+    - Tune their hyperparameters using techniques like **Optuna** or **Grid Search**.
+    - Use **cross-validation** or **holdout splits** to validate performance.
+    - Choose the best-performing model from multiple runs to avoid local minima
+    
+    
     ####  General Setup
     - **`name_of_raw_data`**: Name of results data folder (used in output paths).
     - **`name_of_tuning`**: Name of the tuning experiment.
@@ -303,11 +307,7 @@ def exe_streamlit_model_tuning():
     - Overall, the default results directory is: `addmo-automated-ml-regression\\addmo_examples\\results\\test_raw_data\\test_data_tuning\\test_model_tuning`
 
     
-    This configuration:
-    - Selects and trains one or multiple machine learning models.
-    - Tunes their hyperparameters using techniques like **Optuna** or **Grid Search**.
-    - Uses **cross-validation** or **holdout splits** to validate performance.
-    - Chooses the best-performing model from multiple runs to avoid local minima
+   
     
     Recommendations about some hyperparameters:
     - Use **`ScikitMLP_TargetTransformed`** for non-linear patterns in time series.
@@ -433,7 +433,7 @@ def exe_streamlit_data_insights():
 
     st.header('Generate Insights for the tuned saved models')
     st.markdown("""
-    This section helps you **generate insightful visualizations** based on the results of previously trained and saved models. It's especially useful for **analyzing model performance** and **understanding the effect of features** through various plots.
+    This setup allows you to **generate insightful visualizations** based on the results of previously trained and saved models. It's especially useful for **analyzing model performance** and **understanding the effect of features** through various plots.
     Once you load a previously saved model's config file and result directory, you can:
 
     - **Visualize Time Series Performance**  
@@ -531,7 +531,7 @@ def exe_streamlit_data_insights():
 def exe_streamlit_model_testing():
     st.header("Model Testing")
     st.markdown("""
-    Use this tab to **test a previously trained and saved model** using **new or unseen input data**. This step helps you **evaluate model performance** beyond the training phase and validate generalization.
+    This setup allows you **test a previously trained and saved model** using **new or unseen input data**. This step helps you **evaluate model performance** beyond the training phase and validate generalization.
 
     Once a trained model is selected, this tab lets you:
 
@@ -637,7 +637,7 @@ def exe_streamlit_data_tuning_recreate():
     st.header("Recreate data tuning for new data")
     st.markdown("""
 
-    This tab allows you to **recreate the exact data tuning process** applied during a previous experiment, using the saved tuning configuration.  
+    This setup allows you to **recreate the exact data tuning process** applied during a previous experiment, using the saved tuning configuration.  
 
     Although data tuning is **automatically handled** in the **Model Testing tab**, this tab gives you **manual control** over the recreation of tuned datasets.  
     It's useful when:

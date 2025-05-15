@@ -527,7 +527,6 @@ def exe_streamlit_data_insights():
             st.session_state.pop("plots_selections", None)
             st.rerun()
 
-
 def exe_streamlit_model_testing():
     st.header("Model Testing")
     st.markdown("""

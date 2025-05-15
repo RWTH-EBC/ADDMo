@@ -1,5 +1,5 @@
 {
-    "name_of_raw_data": "test_raw_data",
+    "name_of_raw_data": "hjhhjl",
     "name_of_tuning": "data_tuning_experiment_auto",
     "abs_path_to_data": "C:\\Users\\mre-rpa\\Desktop\\PycharmProjects\\addmo-automated-ml-regression\\addmo_examples\\raw_input_data\\InputData.xlsx",
     "name_of_target": "FreshAir Temperature",
@@ -21,9 +21,9 @@
         "FreshAir Temperature",
         "Total active power"
     ],
-    "filter_low_variance": false,
+    "filter_low_variance": true,
     "low_variance_threshold": 0.1,
-    "filter_ICA": true,
+    "filter_ICA": false,
     "filter_univariate": false,
     "univariate_score_function": "mutual_info_regression",
     "univariate_search_mode": "percentile",

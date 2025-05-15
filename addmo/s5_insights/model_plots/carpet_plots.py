@@ -54,8 +54,13 @@ def plot_carpets(model_config, combinations=None, defaults_dict=None):
         (x_label, y_label) for x_label, y_label in combinations
         if bounds[x_label][0] != 0 or bounds[x_label][1] != 0
         if bounds[y_label][0] != 0 or bounds[y_label][1] != 0
-    ]
 
+    ]
+    removed_items =[]
+    for var in variables:
+        if bounds[var][0] == 0 and bounds[var][1] == 0:
+            removed_items.append(var)
+    print('The following combinations are removed because the column only consists of zero values: {}'.format(removed_items))
     # Handle case where all combinations are invalid
     if not valid_combinations:
         print("No valid subplots to display. Skipping plot creation.")

@@ -22,8 +22,8 @@ def exe_data_tuning_fixed(user_input):
                                   'data_tuning_config.json')
 
     # Create the config object
-    config = DataTuningFixedConfig()
-    # config = load_config_from_json(path_to_config, DataTuningFixedConfig)
+    # config = DataTuningFixedConfig()
+    config = load_config_from_json(path_to_config, DataTuningFixedConfig)
 
     # Configure the logger
     LocalLogger.active = True

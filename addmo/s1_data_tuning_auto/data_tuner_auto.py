@@ -63,7 +63,7 @@ class DataTunerAuto:
         if self.config.filter_recursive_embedded:
             self.x = fs.recursive_feature_selection_embedded(self.config, self.x)
         if self.config.filter_recursive_embedded:
-            self.x = fs.embedded__recursive_feature_selection(self.config, self.x)
+            self.x = fs.embedded_recursive_feature_selection(self.config, self.x)
         if self.config.wrapper_sequential_feature_selection:
             self.x = fs.recursive_feature_selection_wrapper_scikit_learn(self.config, self.x,
                                                                          self.y)

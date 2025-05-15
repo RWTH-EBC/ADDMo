@@ -67,5 +67,5 @@ if __name__ == '__main__':
 
     # Execute plotting functions
     # exe_time_series_plot(model_config,"training_data_time_series",plot_dir,save=True)
-    # exe_carpet_plots(model_config, "predictions_carpet", plot_dir,save=True)
-    exe_parallel_plot(model_config,"parallel_plot", plot_dir, save=True)
+    exe_carpet_plots(model_config, "predictions_carpet", plot_dir,save=True)
+    # exe_parallel_plot(model_config,"parallel_plot", plot_dir, save=True)

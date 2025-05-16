@@ -1,6 +1,6 @@
 {
-    "name_of_raw_data": "hjhhjl",
-    "name_of_tuning": "data_tuning_experiment_auto",
+    "name_of_raw_data": "test_raw_data_1",
+    "name_of_tuning": "data_tuning_experiment_auto_test",
     "abs_path_to_data": "C:\\Users\\mre-rpa\\Desktop\\PycharmProjects\\addmo-automated-ml-regression\\addmo_examples\\raw_input_data\\InputData.xlsx",
     "name_of_target": "FreshAir Temperature",
     "create_differences": false,

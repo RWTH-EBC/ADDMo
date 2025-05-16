@@ -77,14 +77,14 @@ def return_best_model(dir):
     else:
         raise FileNotFoundError("No 'best_model' file found in the directory.")
 
-def results_dir_data_tuning_auto(name_of_raw_data='test_raw_data'):
+def results_dir_data_tuning_auto(name_of_raw_data='test_raw_data', name_of_data_tuning_experiment='data_tuning_experiment_auto'):
     """
     Returns the directory of tuned data based on config's name of raw_data.
     """
     if name_of_raw_data is None:
         config = DataTuningAutoSetup()
         name_of_raw_data = config.name_of_raw_data
-    dir = os.path.join(root_dir(), results_dir(), name_of_raw_data, 'data_tuning_experiment_auto')
+    dir = os.path.join(root_dir(), results_dir(), name_of_raw_data, name_of_data_tuning_experiment)
     return dir
 
 def results_dir_data_tuning_fixed(name_of_raw_data='test_raw_data'):

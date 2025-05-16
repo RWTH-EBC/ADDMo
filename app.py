@@ -11,7 +11,7 @@ from addmo_examples.executables.exe_model_tuning import exe_model_tuning
 from addmo.util.load_save_utils import root_dir
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from streamlit_pdf_viewer import pdf_viewer
-from addmo.util.definitions import results_dir_data_tuning_auto,results_dir_data_tuning_fixed,return_results_dir_model_tuning, results_model_streamlit_testing
+from addmo.util.definitions import results_dir_data_tuning_auto,results_dir_data_tuning_fixed,return_results_dir_model_tuning, results_model_streamlit_testing,results_dir_data_tuning
 from addmo_examples.executables.exe_data_insights import exe_time_series_plot,exe_parallel_plot,exe_carpet_plots
 from addmo.s4_model_testing.model_testing import model_test, data_tuning_recreate_fixed, data_tuning_recreate_auto
 
@@ -111,55 +111,55 @@ def exe_streamlit_data_tuning_auto():
     
     """)
     auto_tuning_config = pydantic_input("Auto", DataTuningAutoSetup)
-    st.header("Model Tuner Configuration")
-
-    st.markdown("""
-     **Model Tuner** automatically generates feature lags and evaluates features during embedded/wrapper selection.
-
-    This helps the pipeline understand:
-    - Which feature lags improve model performance the most
-    - Which features to keep based on their contribution to predictions
-    ---
-    Recommendations about some hyperparameters:
-    - Use **`ScikitMLP_TargetTransformed`** for non-linear patterns in time series.
-    - **`trainings_per_model`**: `3–5` for deep models (e.g. MLP), `1–2` for simple models (e.g. linear)
-    - **`hyperparameter_tuning_kwargs`**: `n_trials = 2-5`. Do not leave this field empty.
-    - **`validation_score_mechanism`**: **`cv`** for consistent and robust evaluation.
-    - **`validation_score_mechanism_kwargs`**: {"test_size": 0.2}
-    - **`validation_score_splitting`**: `KFold` *(default, recommended)*, `PredefinedSplit`
-    - **`validation_score_splitting_kwargs`**: For KFold, example:{"n_splits": 5, "shuffle": True}
-    - **`validation_score_metric`**: Scoring function to decide which lags or features are valuable.
-    
-        - `r2`: Score from 0–1 *(higher is better)*
-        - `neg_root_mean_squared_error` *(default)*
-        - `neg_mean_absolute_error`
-
-        *Use `neg_root_mean_squared_error` to prioritize precision in regression.*
-
-    - **`validation_score_metric_kwargs`**: Advanced tweaks for the metric (rarely needed).
-
-    ---
-
-    """)
-    model_tuner_config = pydantic_input("ModelTuner", ModelTunerConfig)
-    if not model_tuner_config['hyperparameter_tuning_kwargs']:
-        model_tuner_config['hyperparameter_tuning_kwargs'] = {"n_trials": 2}
+    # st.header("Model Tuner Configuration")
+    #
+    # st.markdown("""
+    #  **Model Tuner** automatically generates feature lags and evaluates features during embedded/wrapper selection.
+    #
+    # This helps the pipeline understand:
+    # - Which feature lags improve model performance the most
+    # - Which features to keep based on their contribution to predictions
+    # ---
+    # Recommendations about some hyperparameters:
+    # - Use **`ScikitMLP_TargetTransformed`** for non-linear patterns in time series.
+    # - **`trainings_per_model`**: `3–5` for deep models (e.g. MLP), `1–2` for simple models (e.g. linear)
+    # - **`hyperparameter_tuning_kwargs`**: `n_trials = 2-5`. Do not leave this field empty.
+    # - **`validation_score_mechanism`**: **`cv`** for consistent and robust evaluation.
+    # - **`validation_score_mechanism_kwargs`**: {"test_size": 0.2}
+    # - **`validation_score_splitting`**: `KFold` *(default, recommended)*, `PredefinedSplit`
+    # - **`validation_score_splitting_kwargs`**: For KFold, example:{"n_splits": 5, "shuffle": True}
+    # - **`validation_score_metric`**: Scoring function to decide which lags or features are valuable.
+    #
+    #     - `r2`: Score from 0–1 *(higher is better)*
+    #     - `neg_root_mean_squared_error` *(default)*
+    #     - `neg_mean_absolute_error`
+    #
+    #     *Use `neg_root_mean_squared_error` to prioritize precision in regression.*
+    #
+    # - **`validation_score_metric_kwargs`**: Advanced tweaks for the metric (rarely needed).
+    #
+    # ---
+    #
+    # """)
+    # model_tuner_config = pydantic_input("ModelTuner", ModelTunerConfig)
+    # if not model_tuner_config['hyperparameter_tuning_kwargs']:
+    #     model_tuner_config['hyperparameter_tuning_kwargs'] = {"n_trials": 2}
     # auto_tuning_config._config_model_tuning = model_tuner_config
 
-    auto_tuning_config["_config_model_tuning"] = model_tuner_config
+    # auto_tuning_config["_config_model_tuning"] = model_tuner_config
     # Output strategy
+    auto_tuning_config_obj = DataTuningAutoSetup(**auto_tuning_config, )
+    output_dir = results_dir_data_tuning(auto_tuning_config_obj)
     st.subheader("Output Directory Strategy")
-    st.markdown("""
-        Define how to handle existing results:
-        - **y**: Overwrite the contents  
-        - **d**: Delete and recreate the directory
-    """)
-    overwrite_strategy = st.radio(
-        "Choose strategy for existing results directory:",
-        ["y", "d"],
-        index=0,
-        help="Select how to handle existing results directory at: `addmo_examples/results/test_raw_data/data_tuning_experiment_auto`",
+    st.write("The default directory for saving the tuned data is : " )
+    st.code(output_dir)
+    strategy = st.selectbox(
+        "Choose how to handle existing results in the output directory:",
+        ["Select an option", "Overwrite (y)", "Delete and recreate (d)"]
     )
+
+    if strategy != "Select an option":
+        overwrite_strategy = strategy.split()[-1].strip("()")
 
 
     # Submit button
@@ -176,9 +176,8 @@ def exe_streamlit_data_tuning_auto():
         # If any fields are missing, show an error
         if missing_fields:
             st.error(f"❌ The following required fields are missing or empty: {', '.join(missing_fields)}")
-            return
+            return None
 
-        auto_tuning_config = DataTuningAutoSetup(**auto_tuning_config,)
         # Save config to the expected JSON location
         config_path = os.path.join(
             root_dir(), 'addmo', 's1_data_tuning_auto', 'config', 'data_tuning_auto_config.json'
@@ -186,7 +185,7 @@ def exe_streamlit_data_tuning_auto():
         os.makedirs(os.path.dirname(config_path), exist_ok=True)
 
         with open(config_path, 'w') as f:
-            f.write(auto_tuning_config.model_dump_json(indent=4))
+            f.write(auto_tuning_config_obj.model_dump_json(indent=4))
 
         st.success("✅ Configuration saved!")
 
@@ -195,11 +194,13 @@ def exe_streamlit_data_tuning_auto():
         with st.spinner("Running data tuning..."):
             exe_data_tuning_auto(overwrite_strategy)
             # Load default saving path for plot
-            plot_image_path = os.path.join(results_dir_data_tuning_auto("test_raw_data"), "tuned_xy_auto.pdf")
+            plot_image_path = os.path.join(output_dir, "tuned_xy_auto.pdf")
             st.markdown("### Auto-Tuned Data Plot")
             # Display the saved plot PDF
             pdf_viewer(plot_image_path, width= "80%", height= 855)
             st.success("✅ Data tuning completed!")
+
+    return output_dir
 
 def exe_streamlit_data_tuning_fixed():
     st.header("Data Tuning Fixed Configuration")
@@ -234,24 +235,23 @@ def exe_streamlit_data_tuning_fixed():
         To create lagged features:
         - Use the format **`lagX`** where **X** is the number of time steps to shift.
         - Example: `Temperature__lag1` = Temperature at previous timestep          """)
-    fixed_config_data = pydantic_input(key="Config Setup", model=DataTuningFixedConfig)
-
+    fixed_tuning_config = pydantic_input(key="Config Setup", model=DataTuningFixedConfig)
+    fixed_config_tuning_obj = DataTuningFixedConfig(**fixed_tuning_config)
+    output_dir = results_dir_data_tuning(fixed_config_tuning_obj)
     st.subheader("Output Directory Strategy")
-    st.markdown("""
-       Define how to handle existing results:
-       - **y**: Overwrite the contents
-       - **d**: Delete and recreate the directory
-    """)
-    overwrite_strategy = st.radio(
-        "Choose strategy for existing results directory:",
-        ["y", "d"],
-        index=0,
-        help="Select how to handle existing results directory at: addmo_examples/results/test_raw_data/data_tuning_experiment_fixed",
+    st.write("The default directory for saving the tuned data is : ")
+    st.code(output_dir)
+    strategy = st.selectbox(
+        "Choose how to handle existing results in the output directory:",
+        ["Select an option", "Overwrite (y)", "Delete and recreate (d)"]
     )
+
+    if strategy != "Select an option":
+        overwrite_strategy = strategy.split()[-1].strip("()")
 
     if st.button("Run Fixed Data Tuning"):
         missing_fields = []
-        for field_name, field_value in fixed_config_data.items():
+        for field_name, field_value in fixed_tuning_config.items():
             # Check if field is missing or empty
             if isinstance(field_value, (list)) and not field_value:
                 missing_fields.append(field_name)
@@ -262,7 +262,6 @@ def exe_streamlit_data_tuning_fixed():
             st.error(f"❌ The following required fields are missing or empty: {', '.join(missing_fields)}")
             return
 
-        fixed_config_data  = DataTuningFixedConfig(**fixed_config_data)
         # Save config to the expected JSON location
         config_path = os.path.join(
             root_dir(), 'addmo', 's2_data_tuning', 'config', 'data_tuning_config.json'
@@ -270,7 +269,7 @@ def exe_streamlit_data_tuning_fixed():
         os.makedirs(os.path.dirname(config_path), exist_ok=True)
 
         with open(config_path, 'w') as f:
-            f.write(fixed_config_data.model_dump_json(indent=4))
+            f.write(fixed_config_tuning_obj.model_dump_json(indent=4))
 
         st.success("✅ Configuration saved!")
 
@@ -278,11 +277,13 @@ def exe_streamlit_data_tuning_fixed():
         with st.spinner("Running data tuning.."):
             exe_data_tuning_fixed(overwrite_strategy)
             # Load default saving path for plot
-            plot_image_path = os.path.join(results_dir_data_tuning_fixed("test_raw_data"), "tuned_xy_fixed.pdf")
+            plot_image_path = os.path.join(output_dir, "tuned_xy_fixed.pdf")
             st.markdown("### Tuned Fixed Data Plot")
             # Display the saved plot PDF
             pdf_viewer(plot_image_path, width="80%", height=855)
             st.success("✅ Data tuning completed!")
+
+    return output_dir
 
 def exe_streamlit_model_tuning():
     st.header("Model Tuning")
@@ -307,8 +308,6 @@ def exe_streamlit_model_tuning():
     - Overall, the default results directory is: `addmo-automated-ml-regression\\addmo_examples\\results\\test_raw_data\\test_data_tuning\\test_model_tuning`
 
     
-   
-    
     Recommendations about some hyperparameters:
     - Use **`ScikitMLP_TargetTransformed`** for non-linear patterns in time series.
     - **`trainings_per_model`**: `3–5` for deep models (e.g. MLP), `1–2` for simple models (e.g. linear)
@@ -331,16 +330,23 @@ def exe_streamlit_model_tuning():
     
     """)
 
+
+    if 'model_config_data' not in st.session_state:
+        st.session_state.model_config_data = None
+    if 'model_config_saved' not in st.session_state:
+        st.session_state.model_config_saved = False
+    if 'output_dir' not in st.session_state:
+        st.session_state.output_dir = None
+    if 'overwrite_strategy' not in st.session_state:
+        st.session_state.overwrite_strategy = None
+
     st.subheader("Model Configuration")
     model_config_data = pydantic_input("ModelConfig", ModelTuningExperimentConfig)
-
-
     st.subheader("Model Tuning Configuration")
     model_tuner = pydantic_input("ModelTunerConfig", ModelTunerConfig)
     if not model_tuner["hyperparameter_tuning_kwargs"]:
         model_tuner["hyperparameter_tuning_kwargs"] = {"n_trials": 2}
     model_config_data["config_model_tuner"] = model_tuner
-
     st.subheader("Input data tuning type")
     st.markdown("Please ensure that the data tuning process is completed and the files are saved at correct paths. "
                 "By default, the experiment names and results directory are synced for data tuning and model tuning. "
@@ -348,86 +354,95 @@ def exe_streamlit_model_tuning():
     type_of_data = st.selectbox("Would you like to use tuned data for model tuning?", ["choose", "Yes", "No"])
     st.session_state.use_tuned_data = type_of_data
     if type_of_data == "Yes":
-            type_of_tuning = st.selectbox("Which tuning would you like to use?", ["choose","Auto", "Fixed"])
+        type_of_tuning = st.selectbox("Which tuning would you like to use?", ["choose", "Auto", "Fixed"])
 
-            if type_of_tuning == "Auto":
-                st.text("The default directory used for loading the data is: addmo_examples/results/test_raw_data/data_tuning_experiment_auto")
-                path_type = st.selectbox(
-                    "Would you like to use the default saving path for loading the input data?",
-                    ["Select an option", "Yes", "No"],
-                    help= "The path for loading input data depends on the experiment names defined above. "
-                           "If the default saving paths and experiment folder names are not changed during data tuning and model config, choose Default")
-                if path_type== "Yes":
-                    model_config_data["abs_path_to_data"] = os.path.join(
-                        results_dir_data_tuning_auto(model_config_data['name_of_raw_data']),
-                        "tuned_xy_auto.csv")
-                    st.success("✅ Tuned data path set in config.")
-                elif path_type == "No":
-                    model_config_data["abs_path_to_data"] = st.text_input('path')
-                    st.success("✅ Tuned data path set in config.")
+        if type_of_tuning == "Auto":
+            st.text(
+                "The default directory used for loading the data is: addmo_examples/results/test_raw_data/data_tuning_experiment_auto")
+            path_type = st.selectbox(
+                "Would you like to use the default saving path for loading the input data?",
+                ["Select an option", "Yes", "No"],
+                help="The path for loading input data depends on the experiment names defined above. "
+                     "If the default saving paths and experiment folder names are not changed during data tuning and model config, choose Default")
+            if path_type == "Yes":
+                model_config_data["abs_path_to_data"] = os.path.join(
+                    results_dir_data_tuning_auto(model_config_data['name_of_raw_data']),
+                    "tuned_xy_auto.csv")
+                st.success("✅ Tuned data path set in config.")
+            elif path_type == "No":
+                model_config_data["abs_path_to_data"] = st.text_input('path')
+                st.success("✅ Tuned data path set in config.")
 
-            elif type_of_tuning == "Fixed":
-                st.text("The default directory used for loading the data is: addmo_examples/results/test_raw_data/data_tuning_experiment_fixed")
+        elif type_of_tuning == "Fixed":
+            st.text(
+                "The default directory used for loading the data is: addmo_examples/results/test_raw_data/data_tuning_experiment_fixed")
 
-                path_type = st.selectbox(
-                    "Would you like to use the default saving path for loading the input data?",
-                    ["Select an option", "Yes", "No"]
-                )
-                if path_type == "Yes":
-                    model_config_data["abs_path_to_data"] = os.path.join(
-                        results_dir_data_tuning_fixed(model_config_data['name_of_raw_data']),
-                        "tuned_xy_fixed.csv")
-                    st.success("✅ Tuned data path set in config.")
+            path_type = st.selectbox(
+                "Would you like to use the default saving path for loading the input data?",
+                ["Select an option", "Yes", "No"]
+            )
+            if path_type == "Yes":
+                model_config_data["abs_path_to_data"] = os.path.join(
+                    results_dir_data_tuning_fixed(model_config_data['name_of_raw_data']),
+                    "tuned_xy_fixed.csv")
+                st.success("✅ Tuned data path set in config.")
 
-                elif path_type == "No":
-                    model_config_data["abs_path_to_data"] = st.text_input('path')
-                    st.success("✅ Tuned data path set in config.")
+            elif path_type == "No":
+                model_config_data["abs_path_to_data"] = st.text_input('path')
+                st.success("✅ Tuned data path set in config.")
+
+    #Save Config
     if st.button("Save Model Config"):
         st.session_state.model_config_data = model_config_data
-        st.success("Model configuration saved!")
+        st.session_state.model_config_saved = True
 
-    st.subheader("Output Directory Strategy")
-    st.markdown("""
-           Define how to handle existing results:
-           - **y**: Overwrite the contents
-           - **d**: Delete and recreate the directory
-        """)
-    overwrite_strategy = st.radio(
-        "Choose strategy for existing results directory:",
-        ["y", "d"],
-        index=0,
-        help="Select how to handle existing results directory at: addmo_examples/results/test_raw_data/data_tuning_experiment_fixed",
-    )
+        model_config_obj = ModelTuningExperimentConfig(**model_config_data)
+        output_dir = return_results_dir_model_tuning(
+            model_config_obj.name_of_raw_data,
+            model_config_obj.name_of_data_tuning_experiment,
+            model_config_obj.name_of_model_tuning_experiment
+        )
+        st.session_state.output_dir = output_dir
 
-    if st.button("Run Model Tuning"):
-            model_config_data = st.session_state.model_config_data
+        config_path = os.path.join(root_dir(), 'addmo', 's3_model_tuning', 'config', 'model_tuning_config.json')
+        os.makedirs(os.path.dirname(config_path), exist_ok=True)
+        with open(config_path, 'w') as f:
+            f.write(model_config_obj.model_dump_json(indent=4))
 
-            if "model_config_data" not in st.session_state:
-                st.error("🚫 Model configuration is missing. Please fill out the model config first.")
-            else:
-            # Save and execute
-                config_path = os.path.join(
-                    root_dir(), 'addmo', 's3_model_tuning', 'config', 'model_tuning_config.json'
-                )
-                os.makedirs(os.path.dirname(config_path), exist_ok=True)
-                model_config_data_obj = ModelTuningExperimentConfig(**model_config_data)
-                with open(config_path, 'w') as f:
-                    f.write(model_config_data_obj.model_dump_json(indent=4))
+        st.success("✅ Model configuration saved!")
 
-                st.success("✅ Configuration saved!")
+    #overwrite strategy
+    if st.session_state.model_config_saved:
+        st.subheader("Output Directory Strategy")
+        st.code(st.session_state.output_dir)
 
-                with st.spinner("Running model tuning..."):
-                    exe_model_tuning(overwrite_strategy, model_config_data_obj)
-                    plot_image_path = os.path.join(return_results_dir_model_tuning(model_config_data_obj.name_of_raw_data,model_config_data_obj.name_of_data_tuning_experiment, model_config_data_obj.name_of_model_tuning_experiment), "model_fit_scatter.pdf")
+        strategy = st.selectbox(
+            "Choose how to handle existing results in the output directory:",
+            ["Select an option", "Overwrite (y)", "Delete and recreate (d)"]
+        )
 
-                    st.markdown("### Model fit Plot")
+        if strategy != "Select an option":
+            st.session_state.overwrite_strategy = strategy.split()[-1].strip("()")
 
-                    # Display the saved plot PDF
-                    pdf_viewer(plot_image_path, width="80%", height=855)
-                    st.success("✅ Model tuning completed!")
-    st.markdown("---")
-    if st.button("Run another model tuning"):
-        st.rerun()
+    # run model tuning
+    if (
+            st.session_state.model_config_saved
+            and st.session_state.overwrite_strategy is not None
+            and st.button("Run Model Tuning")
+    ):
+        model_config_data = st.session_state.model_config_data
+        model_config_obj = ModelTuningExperimentConfig(**model_config_data)
+        output_dir = st.session_state.output_dir
+        overwrite_strategy = st.session_state.overwrite_strategy
+
+        with st.spinner("Running model tuning..."):
+            exe_model_tuning(overwrite_strategy, model_config_obj)
+            plot_image_path = os.path.join(output_dir, "model_fit_scatter.pdf")
+
+            st.markdown("### Model Fit Plot")
+            pdf_viewer(plot_image_path, width="80%", height=855)
+            st.success("✅ Model tuning completed!")
+    return st.session_state.output_dir
 
 def exe_streamlit_data_insights():
 
@@ -453,6 +468,8 @@ def exe_streamlit_data_insights():
         st.session_state.dir_submitted = False
     if "model_dir" not in st.session_state:
         st.session_state.model_dir = ""
+    if "output_dir" not in st.session_state:
+        st.session_state.output_dir = None
 
     if st.session_state.dir_submitted is False:
         st.subheader("Load previously saved Model for generating insights:")
@@ -477,12 +494,25 @@ def exe_streamlit_data_insights():
     else:
         directory = st.session_state.model_dir
         st.write(f"Using directory: {directory}")
+        strategy = st.selectbox(
+            "Would you like to save the plots to this directory or a different one?:",
+            ["Select an option", "Save to model results directory (y)", "Custom directory (n)"]
+        )
+
+        if strategy != "Select an option":
+            overwrite_strategy = strategy.split()[-1].strip("()")
+            if overwrite_strategy=='y':
+                plot_dir = os.path.join(directory, 'plots')
+                st.session_state.output_dir = plot_dir
+            else:
+                plot_dir = st.text_input("Enter the directory to save the plots to:")
+                st.session_state.output_dir = plot_dir
 
         config_path = os.path.join(directory, "config.json")
+
         with open(config_path, 'r') as f:
             model_config = json.load(f)
 
-        plot_dir = os.path.join(directory, 'plots')
 
         with st.form("Choose plots for generating insights"):
             plots_selections = st.multiselect("Select the plots which you'd like to see",
@@ -494,10 +524,10 @@ def exe_streamlit_data_insights():
             if submitted:
                 st.session_state.plots_selections = plots_selections
 
-                st.write(f"Plots will be saved in {plot_dir}")
+                st.write(f"Plots will be saved in {st.session_state.output_dir}")
 
                 if 'Time Series plot for training data' in plots_selections:
-                    exe_time_series_plot(model_config, "training_data_time_series", plot_dir, save=True)
+                    exe_time_series_plot(model_config, "training_data_time_series", st.session_state.output_dir, save=True)
                     st.markdown("### Time Series Data Plot")
 
                     # Display the saved plot PDF
@@ -505,7 +535,7 @@ def exe_streamlit_data_insights():
                     pdf_viewer(path, width="80%", height=855)
 
                 if 'Predictions carpet plot' in plots_selections:
-                    exe_carpet_plots(model_config, "predictions_carpet_new", plot_dir, save=True)
+                    exe_carpet_plots(model_config, "predictions_carpet_new", st.session_state.output_dir, save=True)
                     st.markdown("### Carpet Plot")
 
                     # Display the saved plot PDF
@@ -513,19 +543,14 @@ def exe_streamlit_data_insights():
                     pdf_viewer(path, width="80%")
 
                 if 'Predictions parallel plot' in plots_selections:
-                    exe_parallel_plot(model_config, "parallel_plot", plot_dir, save=True)
+                    exe_parallel_plot(model_config, "parallel_plot", st.session_state.output_dir, save=True)
                     st.markdown("### Parallel Plot")
 
                     # Display the saved plot PDF
-                    path = os.path.join(plot_dir, "parallel_plot.pdf")
+                    path = os.path.join(st.session_state.output_dir, "parallel_plot.pdf")
                     pdf_viewer(path, width="80%", height=1400)
+    return st.session_state.output_dir
 
-        st.markdown("---")
-        if st.button("Generate other insights"):
-            st.session_state.dir_submitted = False
-            st.session_state.model_dir = ""
-            st.session_state.pop("plots_selections", None)
-            st.rerun()
 
 def exe_streamlit_model_testing():
     st.header("Model Testing")
@@ -542,22 +567,22 @@ def exe_streamlit_model_testing():
 
     ---
 
-    **Select Tuning Type**
+    #### Select Tuning Type
     This is **critical** if the model was trained on **tuned data**:
     - `None`: Use raw data without any tuning (only if the model was trained that way).
 
     ⚠️ **Make sure the tuning type and input structure match the training phase!**  
     If the trained model used tuned data, you must choose the **same tuning procedure** here. The same tuning process will be recreated on input data.
 
-   The default results directory is: `addmo-automated-ml-regression/addmo_examples/results/model_streamlit_test/`
+   The default results directory is: `addmo-automated-ml-regression/addmo_examples/results/model_streamlit_test/model_testing`
 
    
     """)
-    for key in ["dir_submitted", "input_submitted", "tuning_submitted"]:
+    for key in ["dir_submitted", "input_submitted", "tuning_path_confirmed", "tuning_submitted"]:
         if key not in st.session_state:
             st.session_state[key] = False
-
-    for key in ["model_dir", "input_data", "tuning_type"]:
+    st.session_state.output_dir = results_model_streamlit_testing("model_testing")
+    for key in ["model_dir", "input_data", "tuning_type", "output_dir", "custom_tuning_path", "tuning_path_type","tuning_type_selected", "saving_dir"]:
         if key not in st.session_state:
             st.session_state[key] = ""
 
@@ -606,31 +631,73 @@ def exe_streamlit_model_testing():
                     st.session_state.input_data = input_data_path
                     st.session_state.input_submitted = True
 
-        if st.session_state.input_submitted:
+        if st.session_state.input_submitted and not st.session_state.tuning_type_selected:
             with st.form("Tuning Type"):
                 tuning_type = st.radio("Select type of tuning for the raw input data:",
                                        ("Auto", "Fixed", "None"))
                 submitted = st.form_submit_button("Submit")
+            if submitted:
+                st.session_state.tuning_type = tuning_type
+                if tuning_type in ("Auto", "Fixed"):
+                    st.session_state.tuning_type_selected = True
+                else:
+                    st.session_state.tuning_path_confirmed = True  # No tuning needed
 
-                if submitted:
-                    st.session_state.tuning_type = tuning_type
-                    st.session_state.tuning_submitted = True
+        if st.session_state.tuning_type_selected and not st.session_state.tuning_path_confirmed:
+            with st.form("Tuning Path"):
+                path_type = st.selectbox("Use default saving path for loading the input data?",
+                                         ["Select an option", "Yes", "No"],
+                                         index=0)
+                st.session_state.tuning_path_type = path_type
 
-        # Run model test once all inputs are gathered
-        if st.session_state.tuning_submitted:
+                abs_path = None
+                path_set = False
+
+                model_config["abs_path_to_data"] = ""
+
+                if path_type == "Yes":
+                    if st.session_state.tuning_type == "Auto":
+                        abs_path = os.path.join(
+                            results_dir_data_tuning_auto(model_config["name_of_raw_data"]),
+                            "tuned_xy_auto.csv")
+                    elif st.session_state.tuning_type == "Fixed":
+                        abs_path = os.path.join(
+                            results_dir_data_tuning_fixed(model_config["name_of_raw_data"]),
+                            "tuned_xy_fixed.csv")
+                    path_set = True
+
+                elif path_type == "No":
+                    custom_path = st.text_input("Enter custom path for tuned data:")
+                    st.session_state.custom_tuning_path = custom_path
+                    if custom_path.strip():
+                        abs_path = custom_path
+                        path_set = True
+
+                confirm = st.form_submit_button("Confirm Path")
+
+                if confirm:
+                    if path_set and abs_path:
+                        model_config["abs_path_to_data"] = abs_path
+                        st.session_state.model_config = model_config
+                        st.session_state.tuning_submitted = True
+                        st.session_state.tuning_path_confirmed = True
+                        st.success("✅ Tuned data path confirmed!")
+                    else:
+                        st.error("❌ Please provide a valid path before confirming.")
+
+        # Run model test when all inputs are gathered
+        if st.session_state.tuning_submitted or st.session_state.tuning_path_confirmed:
             error, saving_dir = model_test(st.session_state.model_dir, model_config, st.session_state.input_data,
                                            "model_streamlit_test", st.session_state.tuning_type)
+
+            st.session_state.saving_dir = saving_dir
             st.write(f"Results saved in: ", saving_dir)
             st.write(f"Error is: ", error)
             pdf_viewer(os.path.join(saving_dir, "model_fit_scatter.pdf"), width="80%")
 
-        # Button to test another model
-        st.markdown("---")
-        if st.button("Generate other insights"):
-            st.session_state.dir_submitted = False
-            st.session_state.model_dir = ""
-            st.session_state.pop("plots_selections", None)  # Optional: remove previous selections
-            st.rerun()
+    return st.session_state.saving_dir
+
+
 
 def exe_streamlit_data_tuning_recreate():
     st.header("Recreate data tuning for new data")
@@ -651,6 +718,7 @@ def exe_streamlit_data_tuning_recreate():
 
     if "tuning_type" not in st.session_state:
         st.session_state.tuning_type = None
+        st.session_state.saving_dir = None
 
     if "tuning_submitted" not in st.session_state:
         st.session_state.tuning_submitted = False
@@ -718,27 +786,32 @@ def exe_streamlit_data_tuning_recreate():
             st.write(tuned_x_new)
             result_dir = results_model_streamlit_testing(input_data_exp_name)
             st.write('The tuned data is saved at:', result_dir)
+            st.session_state.saving_dir = result_dir
+
+    return st.session_state.saving_dir
 
 
-
-
-    st.markdown("---")
-    if st.button("Generate another tuning type"):
-        st.session_state.tuning_type = None
-        st.session_state.tuning_submitted = False
-        st.session_state.dir_submitted = False
-        st.session_state.model_dir = None
-        st.rerun()
 
 # Streamlit UI
 
 st.set_page_config(
     page_title="ADDMO",
-    page_icon="🔧",
+    page_icon=r"C:\Users\mre-rpa\Desktop\PycharmProjects\addmo-automated-ml-regression\logo.png",
     layout="wide"
 )
 
-st.title("ADDMO - Automated Data & Model Optimization")
+col1, col2 = st.columns([0.05, 1])
+with col1:
+    st.image("C:/Users/mre-rpa/Desktop/PycharmProjects/addmo-automated-ml-regression/logo.png", width=60)
+
+with col2:
+    st.markdown("""
+        <h1 style='margin: 0; padding-left: 0; padding-top: 12px; line-height: 1;'>
+            ADDMO - Automated Data & Model Optimization
+        </h1>
+        """, unsafe_allow_html=True)
+
+
 st.markdown("""
 Welcome to **ADDMO**, a AutoML toolkit designed for **time series regression tasks**.
 
@@ -767,6 +840,12 @@ This application helps you configure, run, and analyze the full machine learning
 
 Each module is modular and optional, enabling flexible experimentation and analysis.  
 """)
+
+if 'last_saved_path' not in st.session_state:
+    st.session_state.last_saved_path = ""
+st.write("📁 Last Saved Path")
+st.code(st.session_state.get("last_saved_path", "No path saved yet."))
+
 tab = st.radio("Choose Tab", ["Data Tuning", "Model Tuning", "Insights", "Model Testing","Data Tuning Recreate"], horizontal=True)
 if tab == "Data Tuning":
     st.header("Choose Data Tuning type")
@@ -793,9 +872,12 @@ if tab == "Data Tuning":
     # After submission
     else:
         if st.session_state.tuning_type == "Auto":
-            exe_streamlit_data_tuning_auto()
+            last_saved_path = exe_streamlit_data_tuning_auto()
+            st.session_state.last_saved_path = last_saved_path
+
         elif st.session_state.tuning_type == "Fixed":
-            exe_streamlit_data_tuning_fixed()
+            last_saved_path = exe_streamlit_data_tuning_fixed()
+            st.session_state.last_saved_path = last_saved_path
 
         # Add a reset button to allow switching tuning types
         st.markdown("---")
@@ -807,17 +889,50 @@ if tab == "Data Tuning":
 
 
 if tab == "Model Tuning":
-    exe_streamlit_model_tuning()
+    last_saved_path = exe_streamlit_model_tuning()
+    st.session_state.last_saved_path = last_saved_path
+
+    st.markdown("---")
+    if st.button("Run another model tuning"):
+        st.rerun()
 
 if tab=="Insights":
-    exe_streamlit_data_insights()
+    last_saved_path = exe_streamlit_data_insights()
+    st.session_state.last_saved_path = last_saved_path
+
+    st.markdown("---")
+    if st.button("Generate other insights"):
+        st.session_state.dir_submitted = False
+        st.session_state.model_dir = ""
+        st.session_state.pop("plots_selections", None)
+        st.rerun()
 
 if tab=="Model Testing":
-    exe_streamlit_model_testing()
+    last_saved_path = exe_streamlit_model_testing()
+    st.session_state.last_saved_path = last_saved_path
+    st.markdown("---")
+    if st.button("Test another model"):
+        for key in [
+            "dir_submitted", "input_submitted", "tuning_path_confirmed", "model_dir", "input_data", "tuning_type", "output_dir", "custom_tuning_path", "tuning_path_type",
+                    "tuning_type_selected", "tuning_submitted"
+        ]:
+            if key in st.session_state:
+                del st.session_state[key]
+
+
+        st.rerun()
 
 
 if tab=="Data Tuning Recreate":
-    exe_streamlit_data_tuning_recreate()
+    last_saved_path = exe_streamlit_data_tuning_recreate()
+    st.session_state.last_saved_path = last_saved_path
+    st.markdown("---")
+    if st.button("Generate another tuning type"):
+        st.session_state.tuning_type = None
+        st.session_state.tuning_submitted = False
+        st.session_state.dir_submitted = False
+        st.session_state.model_dir = None
+        st.rerun()
 
 
 

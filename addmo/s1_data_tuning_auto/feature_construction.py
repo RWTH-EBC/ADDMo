@@ -38,36 +38,36 @@ def manual_target_lags(config: DataTuningAutoSetup, xy):
     return x_created
 
 
-def automatic_timeseries_target_lag_constructor(config: DataTuningAutoSetup, xy):
-    """
-    Automatically generates target lags based on model performance improvement.
-    """
-    x_created = pd.DataFrame()
-
-    tuner = ModelTuner(config._config_model_tuning)
-
-    # prepare system_data
-    x, y = split_target_features(config.name_of_target, xy)
-
-    model = tuner.tune_model(config._config_model_tuning.models[0], x, y)
-
-    old_score = tuner.scorer.score_validation(model, x, y)
-
-    # loop through to create lags as long as they improve the result
-    for i in range(config.minimum_target_lag, len(x)):
-        series = feature_constructor.create_lag(y, i)
-        x_processed = pd.concat([x, series], axis=1, join="inner").bfill()
-
-        new_model = tuner.tune_model(config._config_model_tuning.models[0], x_processed, y)
-        new_score = tuner.scorer.score_validation(new_model, x_processed, y)
-
-        if new_score <= old_score + config.min_increase_4_wrapper:
-            break
-        else:
-            x_created[series.name] = series
-            old_score = new_score
-
-    return x_created
+# def automatic_timeseries_target_lag_constructor(config: DataTuningAutoSetup, xy):
+#     """
+#     Automatically generates target lags based on model performance improvement.
+#     """
+#     x_created = pd.DataFrame()
+#
+#     tuner = ModelTuner(config._config_model_tuning)
+#
+#     # prepare system_data
+#     x, y = split_target_features(config.name_of_target, xy)
+#
+#     model = tuner.tune_model(config._config_model_tuning.models[0], x, y)
+#
+#     old_score = tuner.scorer.score_validation(model, x, y)
+#
+#     # loop through to create lags as long as they improve the result
+#     for i in range(config.minimum_target_lag, len(x)):
+#         series = feature_constructor.create_lag(y, i)
+#         x_processed = pd.concat([x, series], axis=1, join="inner").bfill()
+#
+#         new_model = tuner.tune_model(config._config_model_tuning.models[0], x_processed, y)
+#         new_score = tuner.scorer.score_validation(new_model, x_processed, y)
+#
+#         if new_score <= old_score + config.min_increase_4_wrapper:
+#             break
+#         else:
+#             x_created[series.name] = series
+#             old_score = new_score
+#
+#     return x_created
 
 
 def manual_feature_lags(config: DataTuningAutoSetup, xy):
@@ -87,39 +87,39 @@ def manual_feature_lags(config: DataTuningAutoSetup, xy):
     return x_created
 
 
-def automatic_feature_lag_constructor(config: DataTuningAutoSetup, xy):
-    """
-    Automatically generates feature lags based on model performance improvement.
-    """
-    x_created = pd.DataFrame()
-
-    tuner = ModelTuner(config._config_model_tuning)
-
-    # prepare system_data
-    x, y = split_target_features(config.name_of_target, xy)
-
-    model = tuner.tune_model(config._config_model_tuning.models[0], x, y)
-
-    old_score = tuner.scorer.score_validation(model, x, y)
-
-    # Loop through to create feature lags as long as they improve the result
-    for column in x:
-        temp_score = old_score
-        for i in range(config.minimum_feature_lag, config.maximum_feature_lag + 1):
-            series = feature_constructor.create_lag(x[column], i)
-            series = series[0:]
-            x_processed = pd.concat([x, series], axis=1, join="inner")
-
-            new_model = tuner.tune_model(config._config_model_tuning.models[0], x_processed, y)
-            new_score = tuner.scorer.score_validation(new_model, x_processed, y)
-
-            # choose the best lag for that feature
-            if new_score > temp_score:
-                temp_score = new_score
-                x_best_lag = series
-
-        # add best lag to feature space if good enough
-        if temp_score >= old_score + config.min_increase_4_wrapper:
-            x_created[x_best_lag.name] = x_best_lag
-
-    return x_created
+# def automatic_feature_lag_constructor(config: DataTuningAutoSetup, xy):
+#     """
+#     Automatically generates feature lags based on model performance improvement.
+#     """
+#     x_created = pd.DataFrame()
+#
+#     tuner = ModelTuner(config._config_model_tuning)
+#
+#     # prepare system_data
+#     x, y = split_target_features(config.name_of_target, xy)
+#
+#     model = tuner.tune_model(config._config_model_tuning.models[0], x, y)
+#
+#     old_score = tuner.scorer.score_validation(model, x, y)
+#
+#     # Loop through to create feature lags as long as they improve the result
+#     for column in x:
+#         temp_score = old_score
+#         for i in range(config.minimum_feature_lag, config.maximum_feature_lag + 1):
+#             series = feature_constructor.create_lag(x[column], i)
+#             series = series[0:]
+#             x_processed = pd.concat([x, series], axis=1, join="inner")
+#
+#             new_model = tuner.tune_model(config._config_model_tuning.models[0], x_processed, y)
+#             new_score = tuner.scorer.score_validation(new_model, x_processed, y)
+#
+#             # choose the best lag for that feature
+#             if new_score > temp_score:
+#                 temp_score = new_score
+#                 x_best_lag = series
+#
+#         # add best lag to feature space if good enough
+#         if temp_score >= old_score + config.min_increase_4_wrapper:
+#             x_created[x_best_lag.name] = x_best_lag
+#
+#     return x_created

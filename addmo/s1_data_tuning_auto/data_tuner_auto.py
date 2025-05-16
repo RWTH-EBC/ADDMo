@@ -1,11 +1,9 @@
 import pandas as pd
-
 from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from addmo.util.load_save import load_data
 from addmo.s1_data_tuning_auto import feature_construction as fc
 from addmo.s1_data_tuning_auto import feature_selection as fs
 from addmo.util.data_handling import split_target_features
-from addmo.util.experiment_logger import ExperimentLogger
 
 class DataTunerAuto:
     """
@@ -37,15 +35,10 @@ class DataTunerAuto:
         if self.config.create_manual_target_lag:
             x_created = fc.manual_target_lags(self.config, self.xy_raw)
             self.x = pd.concat([self.x, x_created], axis=1, join="inner").bfill()
-        if self.config.create_automatic_timeseries_target_lag:
-            x_created = fc.automatic_timeseries_target_lag_constructor(self.config, self.xy_raw)
-            self.x = pd.concat([self.x, x_created], axis=1, join="inner").bfill()
         if self.config.create_manual_feature_lags:
             x_created = fc.manual_feature_lags(self.config, self.xy_raw)
             self.x = pd.concat([self.x, x_created], axis=1, join="inner").bfill()
-        if self.config.create_automatic_feature_lags:
-            x_created = fc.automatic_feature_lag_constructor(self.config, self.xy_raw)
-            self.x = pd.concat([self.x, x_created], axis=1, join="inner").bfill()
+
 
 
     def feature_selection(self):
@@ -54,17 +47,10 @@ class DataTunerAuto:
         """
         if self.config.manual_feature_selection:
             self.x = fs.manual_feature_select(self.config, self.x)
-        if self.config.filter_low_variance:
-            self.x = fs.filter_low_variance(self.config, self.x)
-        if self.config.filter_ICA:
-            self.x = fs.filter_ica(self.x)
-        if self.config.filter_univariate:
-            self.x = fs.filter_univariate(self.config, self.x, self.y)
-        if self.config.filter_recursive_embedded:
-            self.x = fs.recursive_feature_selection_embedded(self.config, self.x)
-        if self.config.filter_recursive_embedded:
-            self.x = fs.embedded_recursive_feature_selection(self.config, self.x)
-        if self.config.wrapper_sequential_feature_selection:
-            self.x = fs.recursive_feature_selection_wrapper_scikit_learn(self.config, self.x,
-                                                                         self.y)
+
+        if self.config._filter_recursive_by_count:
+            self.x = fs.recursive_feature_selection_by_count(self.config, self.x, self.y)
+
+        if self.config._filter_recursive_by_score:
+            self.x = fs.recursive_feature_selection_by_score(self.config, self.x, self.y)
 

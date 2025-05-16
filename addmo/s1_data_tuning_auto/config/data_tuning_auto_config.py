@@ -30,9 +30,7 @@ class DataTuningAutoSetup(BaseModel):
         True, description="Manual construction of target lags."
     )
     target_lag: list[int] = Field([1, 2], description="Array of lags for the target.")
-    create_automatic_timeseries_target_lag: bool = Field(
-        False, description="Automatic construction of time series target lags."
-    )
+
     minimum_target_lag: int = Field(
         1, description="Minimal target lag which shall be considered."
     )
@@ -43,12 +41,6 @@ class DataTuningAutoSetup(BaseModel):
         {"FreshAir Temperature": [1, 2], "Total active power": [1, 2]},
         description="Feature_lags in format {var_name: [lags]}",
     )
-    create_automatic_feature_lags: bool = Field(
-        False, description="Automatic construction of feature lags via wrapper."
-    )
-    minimum_feature_lag: int = Field(1, description="Minimum feature lag.")
-    maximum_feature_lag: int = Field(20, description="Maximum feature lag.")
-
     # FeatureSelection Variables
     manual_feature_selection: bool = Field(
         False, description="Manual selection of Features by their Column name."
@@ -57,58 +49,20 @@ class DataTuningAutoSetup(BaseModel):
         ["FreshAir Temperature", "Total active power"],
         description="Variable names of the features to keep.",
     )
-    filter_low_variance: bool = Field(
-        True, description="Remove features with low variance."
-    )
-    low_variance_threshold: float = Field(
-        0.1, description="Variance threshold for feature removal."
-    )
-    filter_ICA: bool = Field(
-        False, description="Filter: Independent Component Analysis(ICA)."
-    )
-    filter_univariate: bool = Field(
-        False, description="Filter univariate by scikit-learn."
-    )
-    univariate_score_function: str = Field(
-        "mutual_info_regression",
-        description="'mutual_info_regression' or 'f_regression'.",
-    )
-    univariate_search_mode: str = Field(
-        "percentile", description="'percentile' or 'k_best'."
-    )
-    univariate_filter_params: int = Field(
-        50, description="Percent of features to keep or number of top features to keep."
-    )
-    embedded_model: str = Field(
-        "RF", description="Estimator for use in all embedded methods."
-    )
-    filter_recursive_embedded: bool = Field(
-        False, description="Enable recursive feature elimination."
-    )
     recursive_embedded_number_features_to_select: int = Field(
-        18, description="Number of features to select in recursive feature elimination."
-    )
-    wrapper_sequential_feature_selection: bool = Field(
-        False, description="Enable wrapper sequential feature selection."
+        7, description="Number of features to select in recursive feature elimination."
     )
     sequential_direction: str = Field(
         "forward",
         description="'forward' or 'backward' direction for sequential feature selection.",
     )
-
-    min_increase_4_wrapper: float = Field(
-        0.005,
-        description="Minimum score increase for a feature to be considered worthy in wrapper methods.",
+    min_increase_for_wrapper: float = Field(
+        0.01,
+        description="Minimum score increase for a feature.",
     )
-    # Wrapper Model Variables
-    # config_model_tuning: Optional[ModelTunerConfig] = Field(
-    #     default_factory=ModelTunerConfig,
-    #     description="Model tuning setup – this is managed separately, do not edit here."
-    # )
 
-    _config_model_tuning: Optional[ModelTunerConfig] = PrivateAttr()
+    _filter_recursive_by_count: bool = PrivateAttr(default=True)
+    _filter_recursive_by_score: bool = PrivateAttr(default=False)
 
-    def __init__(self, **data):
-        super().__init__(**data)
-        self._config_model_tuning = ModelTunerConfig()
+
 

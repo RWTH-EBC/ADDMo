@@ -26,8 +26,6 @@ def exe_streamlit_data_tuning_auto():
         Use the form below to customize:
         - Preprocessing & feature engineering (e.g., lag generation, variance filtering)
         - Feature selection strategies
-        - Model tuning setup (required for automatically generating feature lags based on model performance improvement)
-
         """)
 
     st.subheader("Data Tuning Configuration")
@@ -49,12 +47,8 @@ def exe_streamlit_data_tuning_auto():
     - **`create_differences`**: Create first-order differences (like feature derivatives).
     - **`create_manual_target_lag`**: Add lags for the target variable manually.
     - **`target_lag`**: Define which lags to add for the target (e.g., [1, 2] = t-1, t-2).
-    - **`create_automatic_timeseries_target_lag`**: Enable automatic lag generation.
     - **`create_manual_feature_lags`**: Add lags for specific input variables.
     - **`feature_lags`**: Define feature-specific lags: e.g., `{feature: [1, 2]}`. If unsure, set default to: FreshAir Temperature: [1, 2], Total active power: [1, 2]
-    - **`create_automatic_feature_lags`**: Let a model choose optimal lags.
-    - **`minimum_feature_lag` / `maximum_feature_lag`**: Range of lags to consider between 1 and 20.
-
     """)
 
     st.header("Guide for Data Tuning")
@@ -78,77 +72,45 @@ def exe_streamlit_data_tuning_auto():
     - ✅ Enable `create_manual_target_lag` for manual construction of target lags.
     - Define lag values for target feature here in `target_lag`, e.g.: [1,2]
     
-    ### Automated Configuration
-    
-    Skip filling the field values for the above mentioned attributes if you would like to proceed with automated configuration.
-    Note: Filling the Model config below is required in case these options are selected.
-    #### Automatically Create Feature Lags
-    - ✅ Enable create_automatic_feature_lags
-    - Configure: `minimum_feature_lag` , `maximum_feature_lag`, `config_model_tuning` (defines the model used to evaluate lags) 
-    #### Automatically Create Target Lags
-    - ✅ Enable create_automatic_timeseries_target_lag
-    - Set minimum_target_lag only
-    
-    #### Further features: 
-    These options are **used only in automated tuning workflows** where model-based evaluation is performed (e.g., during automatic feature lag or target lag construction).  
-    They are **not used** when you're manually selecting features or creating lags.
-    - **`filter_low_variance`**: Pre-Filter removing features with low variance.
-    - **`low_variance_threshold`**: Minimum variance required.
-    - **`filter_ICA`**: Apply Independent Component Analysis.
-    - **`filter_univariate`**: Filter univariate with scoring function `f-test` or `mutual information` and search mode : `‘percentile’, ‘k_best’, ‘fpr’, ‘fdr’, ‘fwe’`.
-    - **`univariate_score_function`**: `'mutual_info_regression'` or `'f_regression'`.
-    - **`univariate_search_mode`**: Choose top features via `‘percentile’, ‘k_best’, ‘fpr’, ‘fdr’, ‘fwe’`.
-    - **`univariate_filter_params`**: Percentage or count of features to keep.
         
-    #### Embedded / Wrapper Selection
+    #### Automated Feature Selection
     Learns which features matter while the model is training:
-    - **`embedded_model`**: Estimator used for model-based selection (e.g., RF). It scores the importance of each feature based on how useful it is for making predictions.
-    - **`filter_recursive_embedded`**: Recursive feature elimination.
     - **`recursive_embedded_number_features_to_select`**: Number of features to select in recursive feature elimination.
     - **`wrapper_sequential_feature_selection`**: Forward/backward wrapper selection.
     - **`sequential_direction`**: `'forward'` or `'backward'`.
-    - **`min_increase_4_wrapper`**: Minimum performance gain needed to accept a feature.
+    - **`min_increase_for_wrapper`**: Minimum performance gain needed to accept a feature.
     
     """)
     auto_tuning_config = pydantic_input("Auto", DataTuningAutoSetup)
-    # st.header("Model Tuner Configuration")
-    #
-    # st.markdown("""
-    #  **Model Tuner** automatically generates feature lags and evaluates features during embedded/wrapper selection.
-    #
-    # This helps the pipeline understand:
-    # - Which feature lags improve model performance the most
-    # - Which features to keep based on their contribution to predictions
-    # ---
-    # Recommendations about some hyperparameters:
-    # - Use **`ScikitMLP_TargetTransformed`** for non-linear patterns in time series.
-    # - **`trainings_per_model`**: `3–5` for deep models (e.g. MLP), `1–2` for simple models (e.g. linear)
-    # - **`hyperparameter_tuning_kwargs`**: `n_trials = 2-5`. Do not leave this field empty.
-    # - **`validation_score_mechanism`**: **`cv`** for consistent and robust evaluation.
-    # - **`validation_score_mechanism_kwargs`**: {"test_size": 0.2}
-    # - **`validation_score_splitting`**: `KFold` *(default, recommended)*, `PredefinedSplit`
-    # - **`validation_score_splitting_kwargs`**: For KFold, example:{"n_splits": 5, "shuffle": True}
-    # - **`validation_score_metric`**: Scoring function to decide which lags or features are valuable.
-    #
-    #     - `r2`: Score from 0–1 *(higher is better)*
-    #     - `neg_root_mean_squared_error` *(default)*
-    #     - `neg_mean_absolute_error`
-    #
-    #     *Use `neg_root_mean_squared_error` to prioritize precision in regression.*
-    #
-    # - **`validation_score_metric_kwargs`**: Advanced tweaks for the metric (rarely needed).
-    #
-    # ---
-    #
-    # """)
-    # model_tuner_config = pydantic_input("ModelTuner", ModelTunerConfig)
-    # if not model_tuner_config['hyperparameter_tuning_kwargs']:
-    #     model_tuner_config['hyperparameter_tuning_kwargs'] = {"n_trials": 2}
-    # auto_tuning_config._config_model_tuning = model_tuner_config
 
-    # auto_tuning_config["_config_model_tuning"] = model_tuner_config
     # Output strategy
     auto_tuning_config_obj = DataTuningAutoSetup(**auto_tuning_config, )
+
+    st.subheader("Automatic feature selection")
+    st.markdown(
+        """
+        This step performs **recursive feature elimination (RFE)** using a Random Forest model to automatically select the most relevant features.
+
+        You can choose between two selection strategies:
+
+        - **By minimum number of features**:  
+          Features are eliminated one at a time until only the specified number (`recursive_embedded_number_features_to_select`) remain.
+
+        - **By performance improvement**:  
+          Features are eliminated until the model's cross-validation score no longer improves significantly, based on a threshold (`min_increase_for_wrapper`).
+        """
+    )
+    feature_selection_strategy = st.selectbox(
+        "Select the feature selection strategy:",
+        ["Select an option", "Minimum number of features", "Minimum score improvement"]
+    )
+
+    if feature_selection_strategy == "Minimum number of features":
+        auto_tuning_config_obj._filter_recursive_by_count = True
+    elif feature_selection_strategy == "Minimum score improvement":
+        auto_tuning_config_obj._filter_recursive_by_score = True
+
+
     output_dir = results_dir_data_tuning(auto_tuning_config_obj)
     st.subheader("Output Directory Strategy")
     st.write("The default directory for saving the tuned data is : " )
@@ -194,10 +156,14 @@ def exe_streamlit_data_tuning_auto():
         with st.spinner("Running data tuning..."):
             exe_data_tuning_auto(overwrite_strategy)
             # Load default saving path for plot
-            plot_image_path = os.path.join(output_dir, "tuned_xy_auto.pdf")
-            st.markdown("### Auto-Tuned Data Plot")
-            # Display the saved plot PDF
-            pdf_viewer(plot_image_path, width= "80%", height= 855)
+            base_path = os.path.join(output_dir, "tuned_xy_auto.pdf")
+            pdf_viewer(base_path, width="80%", height=855)
+
+            # Path to the optional 2-week plot
+            two_weeks_path = os.path.join(output_dir, "tuned_xy_auto_2weeks.pdf")
+            if os.path.exists(two_weeks_path):
+                st.markdown("### Zoomed View: Time Series (2 Weeks)")
+                pdf_viewer(two_weeks_path, width="80%", height=855)
             st.success("✅ Data tuning completed!")
 
     return output_dir
@@ -277,10 +243,15 @@ def exe_streamlit_data_tuning_fixed():
         with st.spinner("Running data tuning.."):
             exe_data_tuning_fixed(overwrite_strategy)
             # Load default saving path for plot
-            plot_image_path = os.path.join(output_dir, "tuned_xy_fixed.pdf")
-            st.markdown("### Tuned Fixed Data Plot")
-            # Display the saved plot PDF
-            pdf_viewer(plot_image_path, width="80%", height=855)
+            # Load default saving path for plot
+            base_path = os.path.join(output_dir, "tuned_xy_fixed.pdf")
+            pdf_viewer(base_path, width="80%", height=855)
+
+            # Path to the optional 2-week plot
+            two_weeks_path = os.path.join(output_dir, "tuned_xy_fixed_2weeks.pdf")
+            if os.path.exists(two_weeks_path):
+                st.markdown("### Zoomed View: Time Series (2 Weeks)")
+                pdf_viewer(two_weeks_path, width="80%", height=855)
             st.success("✅ Data tuning completed!")
 
     return output_dir
@@ -530,9 +501,15 @@ def exe_streamlit_data_insights():
                     exe_time_series_plot(model_config, "training_data_time_series", st.session_state.output_dir, save=True)
                     st.markdown("### Time Series Data Plot")
 
-                    # Display the saved plot PDF
-                    path = os.path.join(plot_dir, "training_data_time_series.pdf")
-                    pdf_viewer(path, width="80%", height=855)
+                    # Path to the main plot
+                    base_path = os.path.join(st.session_state.output_dir, "training_data_time_series.pdf")
+                    pdf_viewer(base_path, width="80%", height=855)
+
+                    # Path to the optional 2-week plot
+                    two_weeks_path = os.path.join(st.session_state.output_dir, "training_data_time_series_2weeks.pdf")
+                    if os.path.exists(two_weeks_path):
+                        st.markdown("### Zoomed View: Time Series (2 Weeks)")
+                        pdf_viewer(two_weeks_path, width="80%", height=855)
 
                 if 'Predictions carpet plot' in plots_selections:
                     exe_carpet_plots(model_config, "predictions_carpet_new", st.session_state.output_dir, save=True)
@@ -550,7 +527,6 @@ def exe_streamlit_data_insights():
                     path = os.path.join(st.session_state.output_dir, "parallel_plot.pdf")
                     pdf_viewer(path, width="80%", height=1400)
     return st.session_state.output_dir
-
 
 def exe_streamlit_model_testing():
     st.header("Model Testing")
@@ -697,8 +673,6 @@ def exe_streamlit_model_testing():
 
     return st.session_state.saving_dir
 
-
-
 def exe_streamlit_data_tuning_recreate():
     st.header("Recreate data tuning for new data")
     st.markdown("""
@@ -796,13 +770,15 @@ def exe_streamlit_data_tuning_recreate():
 
 st.set_page_config(
     page_title="ADDMO",
-    page_icon=r"C:\Users\mre-rpa\Desktop\PycharmProjects\addmo-automated-ml-regression\logo.png",
+    page_icon=os.path.join(root_dir(), 'staticfiles', '230718 Logo ADDMo-01.png'),
     layout="wide"
 )
 
-col1, col2 = st.columns([0.05, 1])
+col1, col2 = st.columns([0.5,3])
 with col1:
-    st.image("C:/Users/mre-rpa/Desktop/PycharmProjects/addmo-automated-ml-regression/logo.png", width=60)
+    st.image(os.path.join(root_dir(), 'staticfiles', '230718 Logo ADDMo-01.png'), use_container_width=True)
+# with col2:
+#     st.image(os.path.join(root_dir(), 'staticfiles', 'EBC_Logo.png'),use_container_width=True)
 
 with col2:
     st.markdown("""

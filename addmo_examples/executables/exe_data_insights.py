@@ -1,7 +1,7 @@
 import os
 import json
 from addmo.util.definitions import results_dir_model_tuning
-from addmo.s5_insights.model_plots.time_series import plot_timeseries
+from addmo.s5_insights.model_plots.time_series import plot_timeseries_combined
 from addmo.s5_insights.model_plots.parallel_plots import parallel_plots
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
 from addmo.util.plotting import save_pdf
@@ -14,13 +14,19 @@ def exe_time_series_plot(model_config, plot_name, plot_dir, save=False):
     Executes plotting of input data.
     """
 
-    plt = plot_timeseries(model_config, data_path=model_config['abs_path_to_data'])
+    figures = plot_timeseries_combined(model_config, data_path=model_config['abs_path_to_data'])
+
+    if not isinstance(figures, list):
+        figures = [figures]
     if save:
         os.makedirs(plot_dir, exist_ok=True)
-        plot_path = os.path.join(plot_dir, plot_name)
-        save_pdf(plt, plot_path)
+        for idx, fig in enumerate(figures):
+            suffix = "_2weeks" if idx == 1 else ""
+            plot_path = os.path.join(plot_dir, f"{plot_name}{suffix}")
+            save_pdf(fig, plot_path)
     else:
-        plt.show()
+        for fig in figures:
+            fig.show()
 
 def exe_carpet_plots(model_config, plot_name, plot_dir, save = False):
     """
@@ -66,6 +72,6 @@ if __name__ == '__main__':
     plot_dir = os.path.join(dir, 'plots')
 
     # Execute plotting functions
-    # exe_time_series_plot(model_config,"training_data_time_series",plot_dir,save=True)
-    exe_carpet_plots(model_config, "predictions_carpet", plot_dir,save=True)
+    exe_time_series_plot(model_config,"training_data_time_series",plot_dir,save=False)
+    # exe_carpet_plots(model_config, "predictions_carpet", plot_dir,save=True)
     # exe_parallel_plot(model_config,"parallel_plot", plot_dir, save=True)

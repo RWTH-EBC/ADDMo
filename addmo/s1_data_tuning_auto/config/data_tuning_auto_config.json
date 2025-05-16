@@ -1,6 +1,6 @@
 {
-    "name_of_raw_data": "test_raw_data_1",
-    "name_of_tuning": "data_tuning_experiment_auto_test",
+    "name_of_raw_data": "test_raw_data",
+    "name_of_tuning": "data_tuning_experiment_auto",
     "abs_path_to_data": "C:\\Users\\mre-rpa\\Desktop\\PycharmProjects\\addmo-automated-ml-regression\\addmo_examples\\raw_input_data\\InputData.xlsx",
     "name_of_target": "FreshAir Temperature",
     "create_differences": false,
@@ -9,29 +9,15 @@
         1,
         2
     ],
-    "create_automatic_timeseries_target_lag": false,
     "minimum_target_lag": 1,
     "create_manual_feature_lags": false,
     "feature_lags": {},
-    "create_automatic_feature_lags": false,
-    "minimum_feature_lag": 1,
-    "maximum_feature_lag": 20,
     "manual_feature_selection": false,
     "selected_features": [
         "FreshAir Temperature",
         "Total active power"
     ],
-    "filter_low_variance": true,
-    "low_variance_threshold": 0.1,
-    "filter_ICA": false,
-    "filter_univariate": false,
-    "univariate_score_function": "mutual_info_regression",
-    "univariate_search_mode": "percentile",
-    "univariate_filter_params": 50,
-    "embedded_model": "RF",
-    "filter_recursive_embedded": false,
-    "recursive_embedded_number_features_to_select": 18,
-    "wrapper_sequential_feature_selection": false,
+    "recursive_embedded_number_features_to_select": 7,
     "sequential_direction": "forward",
-    "min_increase_4_wrapper": 0.005
+    "min_increase_for_wrapper": 0.01
 }

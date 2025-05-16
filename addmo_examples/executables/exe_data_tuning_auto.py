@@ -9,7 +9,7 @@ from addmo.util.experiment_logger import LocalLogger
 from addmo.util.experiment_logger import WandbLogger
 from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from addmo.s1_data_tuning_auto.data_tuner_auto import DataTunerAuto
-from addmo.s5_insights.model_plots.time_series import plot_timeseries
+from addmo.s5_insights.model_plots.time_series import plot_timeseries_combined
 from addmo.util.load_save import load_config_from_json
 
 def exe_data_tuning_auto(user_input):
@@ -56,9 +56,17 @@ def exe_data_tuning_auto(user_input):
         plot_config = json.load(f)
 
     # Plot tuned data
-    plt = plot_timeseries(plot_config, saved_data_path)
-    plt.show()
-    save_pdf(plt, os.path.join(LocalLogger.directory, file_name ))
+    figures = plot_timeseries_combined(plot_config, saved_data_path)
+    for fig in figures:
+        fig.show()
+    os.makedirs(LocalLogger.directory, exist_ok=True)
+    for idx, fig in enumerate(figures):
+        suffix = "_2weeks" if idx == 1 else ""
+        plot_path = os.path.join(LocalLogger.directory, f"{file_name}{suffix}")
+        save_pdf(fig, plot_path)
+
+
+
     print("Finished")
 
 if __name__ == "__main__":

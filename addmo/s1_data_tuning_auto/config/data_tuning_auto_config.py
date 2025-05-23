@@ -1,10 +1,10 @@
 import os
 from pydantic import BaseModel, Field, PrivateAttr
 from addmo.util.load_save_utils import root_dir
-from addmo.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
-from typing import Optional
+import json
 
-class DataTuningAutoSetup(BaseModel):
+
+class DataTuningAutoInput(BaseModel):
     # Global Variables
     name_of_raw_data: str = Field(
         "test_raw_data",
@@ -49,20 +49,35 @@ class DataTuningAutoSetup(BaseModel):
         ["FreshAir Temperature", "Total active power"],
         description="Variable names of the features to keep.",
     )
-    recursive_embedded_number_features_to_select: int = Field(
-        7, description="Number of features to select in recursive feature elimination."
-    )
+
     sequential_direction: str = Field(
         "forward",
         description="'forward' or 'backward' direction for sequential feature selection.",
     )
+
+    _recursive_embedded_number_features_to_select: int = PrivateAttr(default=7)
+    _min_increase_for_wrapper: float = PrivateAttr(default=0.01)
+    _filter_recursive_by_count: bool = PrivateAttr(default=False)
+    _filter_recursive_by_score: bool = PrivateAttr(default=False)
+
+
+class DataTuningAutoSetup(DataTuningAutoInput):
+    filter_recursive_by_count: bool = Field(
+        False,
+        description="Enable recursive feature elimination."
+    )
+    recursive_embedded_number_features_to_select: int = Field(
+        18,
+        description="Number of features to select in recursive feature elimination."
+    )
+    filter_recursive_by_score: bool = Field(
+        False,
+        description="Enable wrapper sequential feature selection."
+    )
     min_increase_for_wrapper: float = Field(
         0.01,
-        description="Minimum score increase for a feature.",
+        description="Minimum performance gain for wrapper-based feature selection."
     )
-
-    _filter_recursive_by_count: bool = PrivateAttr(default=True)
-    _filter_recursive_by_score: bool = PrivateAttr(default=False)
 
 
 

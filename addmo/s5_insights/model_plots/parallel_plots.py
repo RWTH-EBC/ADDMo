@@ -6,7 +6,7 @@ from addmo.util.definitions import  return_results_dir_model_tuning, return_best
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
 from addmo.util.load_save import load_data
 
-def parallel_plots(model_config):
+def parallel_plots(model_config, path_to_regressor = None):
 
     # Load target and data
     target = model_config["name_of_target"]
@@ -15,7 +15,8 @@ def parallel_plots(model_config):
 
 
     # Load regressor
-    path_to_regressor = return_best_model(return_results_dir_model_tuning(model_config['name_of_raw_data'], model_config['name_of_data_tuning_experiment'],model_config['name_of_model_tuning_experiment']))
+    if path_to_regressor is None:
+        path_to_regressor = return_best_model(return_results_dir_model_tuning(model_config['name_of_raw_data'], model_config['name_of_data_tuning_experiment'],model_config['name_of_model_tuning_experiment']))
     regressor = ModelFactory.load_model(path_to_regressor)
 
     # Pre-process data

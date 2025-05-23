@@ -7,7 +7,7 @@ from addmo.util.definitions import  return_results_dir_model_tuning, return_best
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
 from addmo.util.load_save import load_data
 
-def plot_carpets(model_config, combinations=None, defaults_dict=None):
+def plot_carpets(model_config, bounds= None, combinations=None, defaults_dict=None, path_to_regressor = None):
     """
     Create 3D surface model_plots for prediction function.
     """
@@ -27,15 +27,17 @@ def plot_carpets(model_config, combinations=None, defaults_dict=None):
     variables = list(x_grid.columns)
 
     # Load regressor
-    path_to_regressor = return_best_model(return_results_dir_model_tuning(model_config['name_of_raw_data'], model_config['name_of_data_tuning_experiment'],model_config['name_of_model_tuning_experiment']))
+    if path_to_regressor is None:
+        path_to_regressor = return_best_model(return_results_dir_model_tuning(model_config['name_of_raw_data'], model_config['name_of_data_tuning_experiment'],model_config['name_of_model_tuning_experiment']))
     regressor = ModelFactory.load_model(path_to_regressor)
     prediction_func= prediction_func_4_regressor(regressor)
 
     # Define bounds
-    bounds = {}
-    for var in variables:
-        if var in x_grid.columns:
-            bounds[var] = [x_grid[var].min(), x_grid[var].max()]
+    if bounds is None:
+        bounds = {}
+        for var in variables:
+            if var in x_grid.columns:
+                bounds[var] = [x_grid[var].min(), x_grid[var].max()]
 
     if defaults_dict is None:
         # Use mean value as default

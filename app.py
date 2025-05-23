@@ -1,21 +1,23 @@
 import streamlit as st
 import json
 import os
+import pandas as pd
 from streamlit_pydantic import pydantic_input, pydantic_output, pydantic_form
-from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
+from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup, DataTuningAutoInput
 from addmo_examples.executables.exe_data_tuning_auto import exe_data_tuning_auto
 from addmo_examples.executables.exe_data_tuning_fixed import exe_data_tuning_fixed
 from addmo.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
 from addmo_examples.executables.exe_model_tuning import exe_model_tuning
-from addmo.util.load_save_utils import root_dir
+from addmo.util.load_save_utils import root_dir, create_or_clean_directory
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from streamlit_pdf_viewer import pdf_viewer
-from addmo.util.definitions import results_dir_data_tuning_auto,results_dir_data_tuning_fixed,return_results_dir_model_tuning, results_model_streamlit_testing,results_dir_data_tuning
+from addmo.util.definitions import results_dir_data_tuning_auto, results_dir_data_tuning_fixed, \
+    return_results_dir_model_tuning, results_model_streamlit_testing, results_dir_data_tuning, results_dir
 from addmo_examples.executables.exe_data_insights import exe_time_series_plot,exe_parallel_plot,exe_carpet_plots
 from addmo.s4_model_testing.model_testing import model_test, data_tuning_recreate_fixed, data_tuning_recreate_auto
-
-
+from addmo.util.load_save import load_data
+from addmo.util.plotting import create_bounds_model, sanitize_column_name
 
 
 def exe_streamlit_data_tuning_auto():
@@ -48,7 +50,7 @@ def exe_streamlit_data_tuning_auto():
     - **`create_manual_target_lag`**: Add lags for the target variable manually.
     - **`target_lag`**: Define which lags to add for the target (e.g., [1, 2] = t-1, t-2).
     - **`create_manual_feature_lags`**: Add lags for specific input variables.
-    - **`feature_lags`**: Define feature-specific lags: e.g., `{feature: [1, 2]}`. If unsure, set default to: FreshAir Temperature: [1, 2], Total active power: [1, 2]
+    - **`feature_lags`**: Define feature-specific lags: e.g., `{feature: [1, 2]}`. 
     """)
 
     st.header("Guide for Data Tuning")
@@ -81,10 +83,11 @@ def exe_streamlit_data_tuning_auto():
     - **`min_increase_for_wrapper`**: Minimum performance gain needed to accept a feature.
     
     """)
-    auto_tuning_config = pydantic_input("Auto", DataTuningAutoSetup)
+    auto_tuning_config = pydantic_input("Auto", DataTuningAutoInput)
 
     # Output strategy
-    auto_tuning_config_obj = DataTuningAutoSetup(**auto_tuning_config, )
+    auto_tuning_config_obj = DataTuningAutoInput(**auto_tuning_config)
+    st.session_state.auto_tuning_config = auto_tuning_config_obj
 
     st.subheader("Automatic feature selection")
     st.markdown(
@@ -106,9 +109,11 @@ def exe_streamlit_data_tuning_auto():
     )
 
     if feature_selection_strategy == "Minimum number of features":
-        auto_tuning_config_obj._filter_recursive_by_count = True
+        st.session_state.auto_tuning_config._filter_recursive_by_count = True
+        st.session_state.auto_tuning_config._recursive_embedded_number_features_to_select = int(st.text_input("Enter num features", "7"))
     elif feature_selection_strategy == "Minimum score improvement":
-        auto_tuning_config_obj._filter_recursive_by_score = True
+        st.session_state.auto_tuning_config._filter_recursive_by_score = True
+        st.session_state.auto_tuning_config._min_increase_for_wrapper = float(st.text_input("Enter score gain for improvement", "0.1"))
 
 
     output_dir = results_dir_data_tuning(auto_tuning_config_obj)
@@ -146,8 +151,13 @@ def exe_streamlit_data_tuning_auto():
         )
         os.makedirs(os.path.dirname(config_path), exist_ok=True)
 
+        full_config = DataTuningAutoSetup(**st.session_state.auto_tuning_config.model_dump(),
+                                        recursive_embedded_number_features_to_select=st.session_state.auto_tuning_config._recursive_embedded_number_features_to_select,
+                                        min_increase_for_wrapper=st.session_state.auto_tuning_config._min_increase_for_wrapper,
+                                        filter_recursive_by_count=st.session_state.auto_tuning_config._filter_recursive_by_count,
+                                        filter_recursive_by_score=st.session_state.auto_tuning_config._filter_recursive_by_score)
         with open(config_path, 'w') as f:
-            f.write(auto_tuning_config_obj.model_dump_json(indent=4))
+            f.write(full_config.model_dump_json(indent=4))
 
         st.success("✅ Configuration saved!")
 
@@ -415,26 +425,7 @@ def exe_streamlit_model_tuning():
             st.success("✅ Model tuning completed!")
     return st.session_state.output_dir
 
-def exe_streamlit_data_insights():
-
-    st.header('Generate Insights for the tuned saved models')
-    st.markdown("""
-    This setup allows you to **generate insightful visualizations** based on the results of previously trained and saved models. It's especially useful for **analyzing model performance** and **understanding the effect of features** through various plots.
-    Once you load a previously saved model's config file and result directory, you can:
-
-    - **Visualize Time Series Performance**  
-      Plot predictions vs actual target values across time for the training data.
-    
-    - **Create Carpet Plots**  
-      These 2D plots help visualize the interaction between multiple features and the predicted values.
-    
-    - **Draw Parallel Plots**  
-      Visualize the relationships between feature combinations and their contribution to the prediction.
-    
-    **Note**:
-    - Ensure that your selected directory contains a valid trained model config and model results.
-    - The plots depend on a successful model tuning run — you must have completed that step first.
-     """)
+def generate_addmo_insights():
     if "dir_submitted" not in st.session_state:
         st.session_state.dir_submitted = False
     if "model_dir" not in st.session_state:
@@ -461,72 +452,322 @@ def exe_streamlit_data_insights():
                 st.session_state.model_dir = directory
                 st.session_state.dir_submitted = True
                 st.rerun()
-
     else:
         directory = st.session_state.model_dir
         st.write(f"Using directory: {directory}")
-        strategy = st.selectbox(
-            "Would you like to save the plots to this directory or a different one?:",
-            ["Select an option", "Save to model results directory (y)", "Custom directory (n)"]
-        )
-
-        if strategy != "Select an option":
-            overwrite_strategy = strategy.split()[-1].strip("()")
-            if overwrite_strategy=='y':
-                plot_dir = os.path.join(directory, 'plots')
-                st.session_state.output_dir = plot_dir
-            else:
-                plot_dir = st.text_input("Enter the directory to save the plots to:")
-                st.session_state.output_dir = plot_dir
-
+        plot_dir = os.path.join(directory, 'plots')
+        st.session_state.output_dir = plot_dir
         config_path = os.path.join(directory, "config.json")
 
         with open(config_path, 'r') as f:
             model_config = json.load(f)
 
+        # Initialize session state for plots if not exists
+        if "plots_selections" not in st.session_state:
+            st.session_state.plots_selections = []
+        if "show_plots_form" not in st.session_state:
+            st.session_state.show_plots_form = True
+        if "show_bounds_form" not in st.session_state:
+            st.session_state.show_bounds_form = False
+        if "plots_confirmed" not in st.session_state:
+            st.session_state.plots_confirmed = False
 
+        # Show plots selection form only if needed
         with st.form("Choose plots for generating insights"):
-            plots_selections = st.multiselect("Select the plots which you'd like to see",
-                                              options=['Time Series plot for training data',
-                                                       'Predictions carpet plot',
-                                                       'Predictions parallel plot'])
+            plots_selections = st.multiselect(
+                "Select the plots which you'd like to see",
+                options=['Time Series plot for training data',
+                         'Predictions carpet plot',
+                         'Predictions parallel plot'],
+                default=st.session_state.get("plots_selections", [])
+            )
             submitted = st.form_submit_button("Confirm plots")
 
             if submitted:
                 st.session_state.plots_selections = plots_selections
+                st.session_state.plots_confirmed = True
+                st.session_state.show_bounds_form = 'Predictions carpet plot' in plots_selections
+                # st.rerun()
 
-                st.write(f"Plots will be saved in {st.session_state.output_dir}")
+        # Show bounds selection and plot generation if carpet plot was selected
+        if st.session_state.plots_confirmed:
+            st.markdown(f"Using saved directory: `{directory}`")
+            st.markdown(f"Plots will be saved in: `{st.session_state.output_dir}`")
 
-                if 'Time Series plot for training data' in plots_selections:
-                    exe_time_series_plot(model_config, "training_data_time_series", st.session_state.output_dir, save=True)
-                    st.markdown("### Time Series Data Plot")
+            if 'Predictions carpet plot' in st.session_state.plots_selections:
+                if "bounds_choice" not in st.session_state:
+                    st.session_state.bounds_choice = "Select an option"
+                bounds_choice = st.selectbox(
+                    "Choose bounds for the columns of data",
+                    ["Select an option", "Choose min and max of existing data as bounds",
+                     "Define custom bounds"],
+                    index=["Select an option", "Choose min and max of existing data as bounds",
+                           "Define custom bounds"].index(st.session_state.bounds_choice)
+                )
+                st.session_state.bounds_choice = bounds_choice
 
-                    # Path to the main plot
-                    base_path = os.path.join(st.session_state.output_dir, "training_data_time_series.pdf")
-                    pdf_viewer(base_path, width="80%", height=855)
+                if bounds_choice == "Define custom bounds":
+                    data = load_data(model_config["abs_path_to_data"])
+                    if "custom_bounds" not in st.session_state:
+                        st.session_state.custom_bounds = {}
 
-                    # Path to the optional 2-week plot
-                    two_weeks_path = os.path.join(st.session_state.output_dir, "training_data_time_series_2weeks.pdf")
-                    if os.path.exists(two_weeks_path):
-                        st.markdown("### Zoomed View: Time Series (2 Weeks)")
-                        pdf_viewer(two_weeks_path, width="80%", height=855)
+                    with st.form("Custom bounds input"):
+                        for column in data.columns:
+                            col_min = float(data[column].min())
+                            col_max = float(data[column].max())
+                            default_min = st.session_state.custom_bounds.get(column, [col_min, col_max])[0]
+                            default_max = st.session_state.custom_bounds.get(column, [col_min, col_max])[1]
 
-                if 'Predictions carpet plot' in plots_selections:
-                    exe_carpet_plots(model_config, "predictions_carpet_new", st.session_state.output_dir, save=True)
+                            st.markdown(f"**{column}**")
+                            min_val = st.number_input(f"Min for {column}", key=f"{column}_min",
+                                                      value=default_min)
+                            max_val = st.number_input(f"Max for {column}", key=f"{column}_max",
+                                                      value=default_max)
+                            st.session_state.custom_bounds[column] = [min_val, max_val]
+
+                        if st.form_submit_button("Confirm bounds"):
+                            st.session_state.bounds = st.session_state.custom_bounds
+                            st.success("Custom bounds have been saved.")
+
+                elif bounds_choice == "Choose min and max of existing data as bounds":
+                    st.session_state.bounds = None
+
+                if st.button("Generate Carpet Plot"):
+                    exe_carpet_plots(model_config, "predictions_carpet_new",
+                                     st.session_state.output_dir, save=True,
+                                     bounds=st.session_state.bounds)
                     st.markdown("### Carpet Plot")
+                    pdf_viewer(os.path.join(st.session_state.output_dir, "predictions_carpet_new.pdf"),
+                               width="80%")
+            if 'Time Series plot for training data' in st.session_state.plots_selections:
+                exe_time_series_plot(model_config, "training_data_time_series", st.session_state.output_dir,
+                                     save=True)
+                st.markdown("### Time Series Data Plot")
 
-                    # Display the saved plot PDF
-                    path = os.path.join(plot_dir, "predictions_carpet_new.pdf")
-                    pdf_viewer(path, width="80%")
+                # Path to the main plot
+                base_path = os.path.join(st.session_state.output_dir, "training_data_time_series.pdf")
+                pdf_viewer(base_path, width="80%", height=855)
 
-                if 'Predictions parallel plot' in plots_selections:
-                    exe_parallel_plot(model_config, "parallel_plot", st.session_state.output_dir, save=True)
-                    st.markdown("### Parallel Plot")
+                # Path to the optional 2-week plot
+                two_weeks_path = os.path.join(st.session_state.output_dir,
+                                              "training_data_time_series_2weeks.pdf")
+                if os.path.exists(two_weeks_path):
+                    st.markdown("### Zoomed View: Time Series (2 Weeks)")
+                    pdf_viewer(two_weeks_path, width="80%", height=855)
 
-                    # Display the saved plot PDF
-                    path = os.path.join(st.session_state.output_dir, "parallel_plot.pdf")
-                    pdf_viewer(path, width="80%", height=1400)
+            if 'Predictions parallel plot' in st.session_state.plots_selections:
+                exe_parallel_plot(model_config, "parallel_plot", st.session_state.output_dir, save=True)
+                st.markdown("### Parallel Plot")
+
+                # Display the saved plot PDF
+                path = os.path.join(st.session_state.output_dir, "parallel_plot.pdf")
+                pdf_viewer(path, width="80%", height=1400)
+
     return st.session_state.output_dir
+
+def input_custom_model_config():
+    st.subheader("Enter Configuration for External Model Insights")
+    st.markdown("Fill in the required details to generate insights from a model **not trained by this application**.")
+
+    with st.form("external_model_config_form"):
+        save_dir_name = st.text_input("Name the directory where plots will be saved", key="saving_dir")
+        abs_path_to_data = st.text_input("Absolute path to the data file (e.g., .xlsx)", key="abs_path_to_data")
+        name_of_target = st.text_input("Name of the target variable", key="name_of_target")
+        start_train_val = st.text_input("Start date/time for train/validation (e.g., 2016-08-01 00:00)", key="start_train_val")
+        stop_train_val = st.text_input("Stop date/time for test (e.g., 2016-08-14 23:45)", key="end_test")
+        features_ordered_input = st.text_input("Enter the list of ordered columns in the data, except the target column", key="features_ordered")
+        base_class = st.selectbox("Base class of regressor", options=["ScikitMLP", "ScikitLinearReg", "ScikitLinearRegNoScaler", "ScikitSVR", "ScikitMLP_TargetTransformed", "SciKerasSequential"],
+                                  help="Choose the type of model class used to train the uploaded model")
+        model_file = st.file_uploader("Upload your trained model (.keras or .joblib)", type=["keras", "joblib"])
+
+        submitted = st.form_submit_button("Save Configuration")
+        features_ordered = [feat.strip() for feat in features_ordered_input.split(",") if feat.strip()]
+
+    if submitted:
+        data_config = {
+            "saving_dir": save_dir_name,
+            "abs_path_to_data": abs_path_to_data,
+            "name_of_target": name_of_target,
+            "start_train_val": start_train_val,
+            "end_test": stop_train_val
+
+        }
+        model_metadata_config = {
+            "addmo_class": base_class,
+            "target_name": name_of_target,
+            "features_ordered": features_ordered
+        }
+        st.session_state["external_data_config"] = data_config
+        st.session_state["model_metadata_config"] = model_metadata_config
+        temp_dir = create_or_clean_directory(save_dir_name)
+        metadata_config_path = os.path.join(temp_dir, "best_model_metadata.json")
+        with open(metadata_config_path, "w") as f:
+            json.dump(model_metadata_config, f, indent=4)
+
+        data_config_path = os.path.join(temp_dir, "config.json")
+        with open(data_config_path, "w") as f:
+            json.dump(data_config, f, indent=4)
+
+        model_path = os.path.join(temp_dir, model_file.name)
+        with open(model_path, "wb") as f:
+            f.write(model_file.getbuffer())
+
+        st.success("Configuration saved successfully!")
+
+        return data_config, model_path
+    return None
+
+def generate_external_insights(config: dict, model_dir: str):
+    """
+    Generates plots for a model not trained by the current app, using the provided config and model directory.
+    """
+    if "external_config_submitted" not in st.session_state:
+        st.session_state.external_config_submitted = True  # Set once config is passed
+
+    if "output_dir" not in st.session_state:
+        st.session_state.output_dir = config.get("saving_dir")
+
+    if "plots_selections" not in st.session_state:
+        st.session_state.plots_selections = []
+    if "show_plots_form" not in st.session_state:
+        st.session_state.show_plots_form = True
+    if "show_bounds_form" not in st.session_state:
+        st.session_state.show_bounds_form = False
+    if "plots_confirmed" not in st.session_state:
+        st.session_state.plots_confirmed = False
+
+        # Show plots selection form only if needed
+    with st.form("Choose plots for generating insights"):
+        plots_selections = st.multiselect(
+            "Select the plots which you'd like to see",
+            options=['Time Series plot for training data',
+                     'Predictions carpet plot',
+                     'Predictions parallel plot'],
+            default=st.session_state.get("plots_selections", [])
+        )
+        submitted = st.form_submit_button("Confirm plots")
+
+        if submitted:
+            st.session_state.plots_selections = plots_selections
+            st.session_state.plots_confirmed = True
+            st.session_state.show_bounds_form = 'Predictions carpet plot' in plots_selections
+            st.rerun()
+
+    if st.session_state.plots_confirmed:
+        st.markdown(f"Using saved directory: `{model_dir}`")
+        st.markdown(f"Plots will be saved in: `{st.session_state.output_dir}`")
+
+        if 'Predictions carpet plot' in st.session_state.plots_selections:
+            if "bounds_choice" not in st.session_state:
+                st.session_state.bounds_choice = "Select an option"
+
+            bounds_choice = st.selectbox(
+                "Choose bounds for the columns of data",
+                ["Select an option", "Choose min and max of existing data as bounds", "Define custom bounds"],
+                index=["Select an option", "Choose min and max of existing data as bounds",
+                       "Define custom bounds"].index(st.session_state.bounds_choice)
+            )
+            st.session_state.bounds_choice = bounds_choice
+
+            if bounds_choice == "Define custom bounds":
+                data = load_data(config["abs_path_to_data"])
+                if "custom_bounds" not in st.session_state:
+                    st.session_state.custom_bounds = {}
+
+                with st.form("Custom bounds input"):
+                    for column in data.columns:
+                        col_min = float(data[column].min())
+                        col_max = float(data[column].max())
+                        default_min = st.session_state.custom_bounds.get(column, [col_min, col_max])[0]
+                        default_max = st.session_state.custom_bounds.get(column, [col_min, col_max])[1]
+
+                        st.markdown(f"**{column}**")
+                        min_val = st.number_input(f"Min for {column}", key=f"{column}_min", value=default_min)
+                        max_val = st.number_input(f"Max for {column}", key=f"{column}_max", value=default_max)
+                        st.session_state.custom_bounds[column] = [min_val, max_val]
+
+                    if st.form_submit_button("Confirm bounds"):
+                        st.session_state.bounds = st.session_state.custom_bounds
+                        st.success("Custom bounds have been saved.")
+
+            elif bounds_choice == "Choose min and max of existing data as bounds":
+                st.session_state.bounds = None
+
+            if st.button("Generate Carpet Plot"):
+                exe_carpet_plots(config, "predictions_carpet_new",
+                                 st.session_state.output_dir, save=True,
+                                 bounds=st.session_state.bounds, path_to_regressor = st.session_state.model_dir)
+                st.markdown("### Carpet Plot")
+                pdf_viewer(os.path.join(st.session_state.output_dir, "predictions_carpet_new.pdf"),
+                           width="80%")
+
+        if 'Time Series plot for training data' in st.session_state.plots_selections:
+            exe_time_series_plot(config, "training_data_time_series", st.session_state.output_dir,
+                                 save=True)
+            st.markdown("### Time Series Data Plot")
+            base_path = os.path.join(st.session_state.output_dir, "training_data_time_series.pdf")
+            pdf_viewer(base_path, width="80%", height=855)
+            two_weeks_path = os.path.join(st.session_state.output_dir,
+                                          "training_data_time_series_2weeks.pdf")
+            if os.path.exists(two_weeks_path):
+                st.markdown("### Zoomed View: Time Series (2 Weeks)")
+                pdf_viewer(two_weeks_path, width="80%", height=855)
+
+        if 'Predictions parallel plot' in st.session_state.plots_selections:
+            exe_parallel_plot(config, "parallel_plot", st.session_state.output_dir, True, st.session_state.model_dir)
+            st.markdown("### Parallel Plot")
+            path = os.path.join(st.session_state.output_dir, "parallel_plot.pdf")
+            pdf_viewer(path, width="80%", height=1400)
+
+
+
+    return st.session_state.output_dir
+
+def exe_streamlit_data_insights():
+
+    st.header('Generate Insights for the tuned saved models')
+    st.markdown("""
+    This setup allows you to **generate insightful visualizations** based on the results of previously trained and saved models. It's especially useful for **analyzing model performance** and **understanding the effect of features** through various plots.
+    Once you load a previously saved model's config file and result directory, you can:
+
+    - **Visualize Time Series Performance**  
+      Plot predictions vs actual target values across time for the training data.
+    
+    - **Create Carpet Plots**  
+      These 2D plots help visualize the interaction between multiple features and the predicted values.
+    
+    - **Draw Parallel Plots**  
+      Visualize the relationships between feature combinations and their contribution to the prediction.
+    
+    **Note**:
+    - Ensure that your selected directory contains a valid trained model config and model results.
+    - The plots depend on a successful model tuning run — you must have completed that step first.
+     """)
+    st.session_state.path = None
+    if "choose_plotting_type" not in st.session_state:
+        st.session_state.choose_plotting_type = "Select an option"
+
+    choose_plotting_type= st.selectbox("Would you like to generate insights for a model trained by this application or generate insights for other models?",
+                                       ["Select an option", "Generate insights for a model trained by this application","Generate insights for other models"], key="choose_plotting_type")
+
+    if st.session_state.choose_plotting_type == "Generate insights for a model trained by this application":
+         st.session_state.path = generate_addmo_insights()
+    elif st.session_state.choose_plotting_type == "Generate insights for other models":
+        if "external_config_submitted" not in st.session_state:
+            result = input_custom_model_config()
+            if result is not None:
+                config, model_dir = result
+                st.session_state.config = config
+                st.session_state.model_dir = model_dir
+                st.session_state.output_dir = config.get("saving_dir")
+                st.session_state.external_config_submitted = True
+                st.rerun()
+        else:
+            st.session_state.path = generate_external_insights(st.session_state.config, st.session_state.model_dir)
+
+
+
+    return st.session_state.path
 
 def exe_streamlit_model_testing():
     st.header("Model Testing")
@@ -878,9 +1119,8 @@ if tab=="Insights":
 
     st.markdown("---")
     if st.button("Generate other insights"):
-        st.session_state.dir_submitted = False
-        st.session_state.model_dir = ""
-        st.session_state.pop("plots_selections", None)
+        for key in list(st.session_state.keys()):
+            del st.session_state[key]
         st.rerun()
 
 if tab=="Model Testing":

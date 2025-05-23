@@ -28,12 +28,12 @@ def exe_time_series_plot(model_config, plot_name, plot_dir, save=False):
         for fig in figures:
             fig.show()
 
-def exe_carpet_plots(model_config, plot_name, plot_dir, save = False):
+def exe_carpet_plots(model_config, plot_name, plot_dir, save = False, bounds= None, path_to_regressor= None):
     """
     Executes carpet model_plots of input data features along with predictions using saved model.
     """
     # Create and show the plot
-    plt = plot_carpets(model_config)
+    plt = plot_carpets(model_config, bounds=bounds, path_to_regressor= path_to_regressor)
 
     if save:
         os.makedirs(plot_dir, exist_ok=True)
@@ -44,13 +44,13 @@ def exe_carpet_plots(model_config, plot_name, plot_dir, save = False):
         plt.show()
 
 
-def exe_parallel_plot(model_config, plot_name, plot_dir, save = False):
+def exe_parallel_plot(model_config, plot_name, plot_dir, save = False, path_to_regressor=None):
     """
     Executes parallel model_plots of input data features along with predictions using saved model.
     """
 
 
-    plt = parallel_plots(model_config)
+    plt = parallel_plots(model_config, path_to_regressor=path_to_regressor)
     plt.show()
     if save:
         os.makedirs(plot_dir, exist_ok=True)
@@ -61,8 +61,9 @@ def exe_parallel_plot(model_config, plot_name, plot_dir, save = False):
 if __name__ == '__main__':
 
     # Default saved directory for loading the saved model
-    dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning')
-
+    # dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning')
+    dir = r'C:\Users\mre-rpa\Desktop\PycharmProjects\addmo-automated-ml-regression\addmo_examples\results\plots_test'
+    path_to_regressor = r"C:\Users\mre-rpa\Desktop\PycharmProjects\addmo-automated-ml-regression\addmo_examples\results\plots_test\best_model.joblib"
     # Read config
     config_path = os.path.join(dir, "config.json")
     with open(config_path, 'r') as f:
@@ -72,6 +73,6 @@ if __name__ == '__main__':
     plot_dir = os.path.join(dir, 'plots')
 
     # Execute plotting functions
-    exe_time_series_plot(model_config,"training_data_time_series",plot_dir,save=False)
-    # exe_carpet_plots(model_config, "predictions_carpet", plot_dir,save=True)
+    # exe_time_series_plot(model_config,"training_data_time_series",plot_dir,save=False)
+    exe_carpet_plots(model_config, "predictions_carpet", plot_dir,save=True, path_to_regressor=path_to_regressor)
     # exe_parallel_plot(model_config,"parallel_plot", plot_dir, save=True)

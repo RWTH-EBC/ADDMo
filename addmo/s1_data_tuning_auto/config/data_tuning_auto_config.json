@@ -17,7 +17,9 @@
         "FreshAir Temperature",
         "Total active power"
     ],
-    "recursive_embedded_number_features_to_select": 7,
     "sequential_direction": "forward",
-    "min_increase_for_wrapper": 0.01
+    "filter_recursive_by_count": false,
+    "recursive_embedded_number_features_to_select": 7,
+    "filter_recursive_by_score": true,
+    "min_increase_for_wrapper": 0.0001
 }

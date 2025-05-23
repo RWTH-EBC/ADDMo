@@ -48,9 +48,9 @@ class DataTunerAuto:
         if self.config.manual_feature_selection:
             self.x = fs.manual_feature_select(self.config, self.x)
 
-        if self.config._filter_recursive_by_count:
+        if self.config.filter_recursive_by_count:
             self.x = fs.recursive_feature_selection_by_count(self.config, self.x, self.y)
 
-        if self.config._filter_recursive_by_score:
+        if self.config.filter_recursive_by_score:
             self.x = fs.recursive_feature_selection_by_score(self.config, self.x, self.y)
 

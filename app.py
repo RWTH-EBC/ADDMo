@@ -1,11 +1,9 @@
 import base64
-
 import streamlit as st
 import json
 import os
-import pandas as pd
 from streamlit_pydantic import pydantic_input, pydantic_output, pydantic_form
-from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup, DataTuningAutoInput
+from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from addmo_examples.executables.exe_data_tuning_auto import exe_data_tuning_auto
 from addmo_examples.executables.exe_data_tuning_fixed import exe_data_tuning_fixed
 from addmo.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
@@ -14,12 +12,10 @@ from addmo_examples.executables.exe_model_tuning import exe_model_tuning
 from addmo.util.load_save_utils import root_dir, create_or_clean_directory
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from streamlit_pdf_viewer import pdf_viewer
-from addmo.util.definitions import results_dir_data_tuning_auto, results_dir_data_tuning_fixed, \
-    return_results_dir_model_tuning, results_model_streamlit_testing, results_dir_data_tuning, results_dir
+from addmo.util.definitions import results_dir_data_tuning_auto, results_dir_data_tuning_fixed, return_results_dir_model_tuning, results_model_streamlit_testing, results_dir_data_tuning, results_dir
 from addmo_examples.executables.exe_data_insights import exe_time_series_plot,exe_parallel_plot,exe_carpet_plots
 from addmo.s4_model_testing.model_testing import model_test, data_tuning_recreate_fixed, data_tuning_recreate_auto
 from addmo.util.load_save import load_data
-from addmo.util.plotting import create_bounds_model, sanitize_column_name
 
 
 def exe_streamlit_data_tuning_auto():
@@ -85,10 +81,10 @@ def exe_streamlit_data_tuning_auto():
     - **`min_increase_for_wrapper`**: Minimum performance gain needed to accept a feature.
     
     """)
-    auto_tuning_config = pydantic_input("Auto", DataTuningAutoInput)
+    auto_tuning_config = pydantic_input("Auto", DataTuningAutoSetup)
 
     # Output strategy
-    auto_tuning_config_obj = DataTuningAutoInput(**auto_tuning_config)
+    auto_tuning_config_obj = DataTuningAutoSetup(**auto_tuning_config)
     st.session_state.auto_tuning_config = auto_tuning_config_obj
 
     st.subheader("Automatic feature selection")
@@ -111,11 +107,9 @@ def exe_streamlit_data_tuning_auto():
     )
 
     if feature_selection_strategy == "Minimum number of features":
-        st.session_state.auto_tuning_config._filter_recursive_by_count = True
-        st.session_state.auto_tuning_config._recursive_embedded_number_features_to_select = int(st.text_input("Enter num features", "7"))
+        st.session_state.auto_tuning_config.filter_recursive_by_count = True
     elif feature_selection_strategy == "Minimum score improvement":
-        st.session_state.auto_tuning_config._filter_recursive_by_score = True
-        st.session_state.auto_tuning_config._min_increase_for_wrapper = float(st.text_input("Enter score gain for improvement", "0.1"))
+        st.session_state.auto_tuning_config.filter_recursive_by_score = True
 
 
     output_dir = results_dir_data_tuning(auto_tuning_config_obj)
@@ -153,13 +147,8 @@ def exe_streamlit_data_tuning_auto():
         )
         os.makedirs(os.path.dirname(config_path), exist_ok=True)
 
-        full_config = DataTuningAutoSetup(**st.session_state.auto_tuning_config.model_dump(),
-                                        recursive_embedded_number_features_to_select=st.session_state.auto_tuning_config._recursive_embedded_number_features_to_select,
-                                        min_increase_for_wrapper=st.session_state.auto_tuning_config._min_increase_for_wrapper,
-                                        filter_recursive_by_count=st.session_state.auto_tuning_config._filter_recursive_by_count,
-                                        filter_recursive_by_score=st.session_state.auto_tuning_config._filter_recursive_by_score)
         with open(config_path, 'w') as f:
-            f.write(full_config.model_dump_json(indent=4))
+            f.write(st.session_state.auto_tuning_config.model_dump_json(indent=4))
 
         st.success("✅ Configuration saved!")
 
@@ -460,9 +449,11 @@ def generate_addmo_insights():
         plot_dir = os.path.join(directory, 'plots')
         st.session_state.output_dir = plot_dir
         config_path = os.path.join(directory, "config.json")
-
+        metadata_path = os.path.join(directory, "best_model_metadata.json")
         with open(config_path, 'r') as f:
             model_config = json.load(f)
+        with open(metadata_path, 'r') as f:
+            model_metadata_config = json.load(f)
 
         # Initialize session state for plots if not exists
         if "plots_selections" not in st.session_state:
@@ -478,7 +469,7 @@ def generate_addmo_insights():
         with st.form("Choose plots for generating insights"):
             plots_selections = st.multiselect(
                 "Select the plots which you'd like to see",
-                options=['Time Series plot for training data',
+                options=['Time Series plot',
                          'Predictions carpet plot',
                          'Predictions parallel plot'],
                 default=st.session_state.get("plots_selections", [])
@@ -509,53 +500,68 @@ def generate_addmo_insights():
                 st.session_state.bounds_choice = bounds_choice
 
                 if bounds_choice == "Define custom bounds":
-                    data = load_data(model_config["abs_path_to_data"])
+                    feature_columns = model_metadata_config.get("features_ordered", [])
+
                     if "custom_bounds" not in st.session_state:
                         st.session_state.custom_bounds = {}
 
-                    with st.form("Custom bounds input"):
-                        for column in data.columns:
-                            col_min = float(data[column].min())
-                            col_max = float(data[column].max())
-                            default_min = st.session_state.custom_bounds.get(column, [col_min, col_max])[0]
-                            default_max = st.session_state.custom_bounds.get(column, [col_min, col_max])[1]
+                    if "defaults" not in st.session_state:
+                        st.session_state.defaults = {}
+
+                    with st.form("Custom bounds and defaults input"):
+                        for column in feature_columns:
+                            # Defaults for bounds
+                            default_min = st.session_state.custom_bounds.get(column, [0.0, 1.0])[0]
+                            default_max = st.session_state.custom_bounds.get(column, [0.0, 1.0])[1]
+
+                            # Default for default value
+                            default_val = st.session_state.defaults.get(column, 0.0)
 
                             st.markdown(f"**{column}**")
-                            min_val = st.number_input(f"Min for {column}", key=f"{column}_min",
-                                                      value=default_min)
-                            max_val = st.number_input(f"Max for {column}", key=f"{column}_max",
-                                                      value=default_max)
-                            st.session_state.custom_bounds[column] = [min_val, max_val]
+                            min_val = st.number_input(f"Min for {column}", key=f"{column}_min", value=default_min)
+                            max_val = st.number_input(f"Max for {column}", key=f"{column}_max", value=default_max)
+                            default_input = st.number_input(f"Default value for {column}", key=f"{column}_default",
+                                                            value=default_val)
 
-                        if st.form_submit_button("Confirm bounds"):
+                            # Save to session state
+                            st.session_state.custom_bounds[column] = [min_val, max_val]
+                            st.session_state.defaults[column] = default_input
+
+                        if st.form_submit_button("Confirm bounds and defaults"):
                             st.session_state.bounds = st.session_state.custom_bounds
-                            st.success("Custom bounds have been saved.")
+                            st.session_state.final_defaults = st.session_state.defaults
+                            st.success("Custom bounds and default values have been saved.")
 
                 elif bounds_choice == "Choose min and max of existing data as bounds":
                     st.session_state.bounds = None
+                    st.session_state.defaults = None
+                    if not model_config.get("abs_path_to_data"):
+                        st.write(
+                            "Absolute path of data is required in order to create bounds and default values. Please re-run the form again and specify the path to data for which the plots need to be created.")
 
                 if st.button("Generate Carpet Plot"):
-                    exe_carpet_plots(model_config, "predictions_carpet_new",
+                    exe_carpet_plots(directory, "predictions_carpet_new",
                                      st.session_state.output_dir, save=True,
-                                     bounds=st.session_state.bounds)
+                                     bounds=st.session_state.bounds, defaults_dict=st.session_state.defaults)
                     st.markdown("### Carpet Plot")
                     pdf_viewer(os.path.join(st.session_state.output_dir, "predictions_carpet_new.pdf"),
                                width="80%")
-            if 'Time Series plot for training data' in st.session_state.plots_selections:
-                exe_time_series_plot(model_config, "training_data_time_series", st.session_state.output_dir,
-                                     save=True)
-                st.markdown("### Time Series Data Plot")
 
-                # Path to the main plot
-                base_path = os.path.join(st.session_state.output_dir, "training_data_time_series.pdf")
-                pdf_viewer(base_path, width="80%", height=855)
+            if 'Time Series plot' in st.session_state.plots_selections:
+                    exe_time_series_plot(model_config, "training_data_time_series", st.session_state.output_dir,
+                                         save=True)
+                    st.markdown("### Time Series Data Plot")
 
-                # Path to the optional 2-week plot
-                two_weeks_path = os.path.join(st.session_state.output_dir,
-                                              "training_data_time_series_2weeks.pdf")
-                if os.path.exists(two_weeks_path):
-                    st.markdown("### Zoomed View: Time Series (2 Weeks)")
-                    pdf_viewer(two_weeks_path, width="80%", height=855)
+                    # Path to the main plot
+                    base_path = os.path.join(st.session_state.output_dir, "training_data_time_series.pdf")
+                    pdf_viewer(base_path, width="80%", height=855)
+
+                    # Path to the optional 2-week plot
+                    two_weeks_path = os.path.join(st.session_state.output_dir,
+                                                  "training_data_time_series_2weeks.pdf")
+                    if os.path.exists(two_weeks_path):
+                        st.markdown("### Zoomed View: Time Series (2 Weeks)")
+                        pdf_viewer(two_weeks_path, width="80%", height=855)
 
             if 'Predictions parallel plot' in st.session_state.plots_selections:
                 exe_parallel_plot(model_config, "parallel_plot", st.session_state.output_dir, save=True)
@@ -570,30 +576,39 @@ def generate_addmo_insights():
 def input_custom_model_config():
     st.subheader("Enter Configuration for External Model Insights")
     st.markdown("Fill in the required details to generate insights from a model **not trained by this application**.")
-
+    st.markdown("""
+    **Note**:
+    - You need to specify the data path for creating carpet plots if the bounds and default values for each feature are not known and need to be calculated automatically.
+    - You need to provide the input data for the creation of other plots (e.g., Time Series Plot and Parallel Plot).
+    """)
     with st.form("external_model_config_form"):
-        save_dir_name = st.text_input("Name the directory where plots will be saved", key="saving_dir")
-        abs_path_to_data = st.text_input("Absolute path to the data file (e.g., .xlsx)", key="abs_path_to_data")
+        abs_path_to_data = st.text_input("Absolute path to the data file (e.g., .xlsx) (Not required for carpet plots)", key="abs_path_to_data")
         name_of_target = st.text_input("Name of the target variable", key="name_of_target")
-        start_train_val = st.text_input("Start date/time for train/validation (e.g., 2016-08-01 00:00)", key="start_train_val")
-        stop_train_val = st.text_input("Stop date/time for test (e.g., 2016-08-14 23:45)", key="end_test")
+        start_train_val = st.text_input("Start date/time for train/validation (e.g., 2016-08-01 00:00) (Not required for carpet plots)", key="start_train_val")
+        stop_train_val = st.text_input("Stop date/time for test (e.g., 2016-08-14 23:45) (Not required for carpet plots)", key="end_test")
         features_ordered_input = st.text_input("Enter the list of ordered columns in the data, except the target column", key="features_ordered")
-        base_class = st.selectbox("Base class of regressor", options=["ScikitMLP", "ScikitLinearReg", "ScikitLinearRegNoScaler", "ScikitSVR", "ScikitMLP_TargetTransformed", "SciKerasSequential"],
+        base_class = st.selectbox("Base class of regressor", options=["ScikitMLP", "Keras"],
                                   help="Choose the type of model class used to train the uploaded model")
         model_file = st.file_uploader("Upload your trained model (.keras or .joblib)", type=["keras", "joblib"])
 
         submitted = st.form_submit_button("Save Configuration")
         features_ordered = [feat.strip() for feat in features_ordered_input.split(",") if feat.strip()]
+        saving_dir = create_or_clean_directory(os.path.join(results_dir(), "model_plots"))
+        if base_class == "Keras":
+            base_class = "SciKerasSequential"
 
     if submitted:
         data_config = {
-            "saving_dir": save_dir_name,
-            "abs_path_to_data": abs_path_to_data,
+            "saving_dir": saving_dir,
             "name_of_target": name_of_target,
-            "start_train_val": start_train_val,
-            "end_test": stop_train_val
-
         }
+        if abs_path_to_data:
+            data_config["abs_path_to_data"] = abs_path_to_data
+        if start_train_val:
+            data_config["start_train_val"] = start_train_val
+        if stop_train_val:
+            data_config["stop_train_val"] = stop_train_val
+
         model_metadata_config = {
             "addmo_class": base_class,
             "target_name": name_of_target,
@@ -601,25 +616,26 @@ def input_custom_model_config():
         }
         st.session_state["external_data_config"] = data_config
         st.session_state["model_metadata_config"] = model_metadata_config
-        temp_dir = create_or_clean_directory(save_dir_name)
-        metadata_config_path = os.path.join(temp_dir, "best_model_metadata.json")
+
+        metadata_config_path = os.path.join(saving_dir, "best_model_metadata.json")
         with open(metadata_config_path, "w") as f:
             json.dump(model_metadata_config, f, indent=4)
 
-        data_config_path = os.path.join(temp_dir, "config.json")
+        data_config_path = os.path.join(saving_dir, "config.json")
         with open(data_config_path, "w") as f:
             json.dump(data_config, f, indent=4)
 
-        model_path = os.path.join(temp_dir, model_file.name)
+        model_path = os.path.join(saving_dir, model_file.name)
         with open(model_path, "wb") as f:
             f.write(model_file.getbuffer())
 
         st.success("Configuration saved successfully!")
 
-        return data_config, model_path
+
+        return data_config, model_path, model_metadata_config
     return None
 
-def generate_external_insights(config: dict, model_dir: str):
+def generate_external_insights(config: dict, model_dir: str, model_metadata_config: dict ):
     """
     Generates plots for a model not trained by the current app, using the provided config and model directory.
     """
@@ -672,33 +688,48 @@ def generate_external_insights(config: dict, model_dir: str):
             st.session_state.bounds_choice = bounds_choice
 
             if bounds_choice == "Define custom bounds":
-                data = load_data(config["abs_path_to_data"])
+                feature_columns = model_metadata_config.get("features_ordered", [])
+
                 if "custom_bounds" not in st.session_state:
                     st.session_state.custom_bounds = {}
 
-                with st.form("Custom bounds input"):
-                    for column in data.columns:
-                        col_min = float(data[column].min())
-                        col_max = float(data[column].max())
-                        default_min = st.session_state.custom_bounds.get(column, [col_min, col_max])[0]
-                        default_max = st.session_state.custom_bounds.get(column, [col_min, col_max])[1]
+                if "defaults" not in st.session_state:
+                    st.session_state.defaults = {}
+
+                with st.form("Custom bounds and defaults input"):
+                    for column in feature_columns:
+                        # Defaults for bounds
+                        default_min = st.session_state.custom_bounds.get(column, [0.0, 1.0])[0]
+                        default_max = st.session_state.custom_bounds.get(column, [0.0, 1.0])[1]
+
+                        # Default for default value
+                        default_val = st.session_state.defaults.get(column, 0.0)
 
                         st.markdown(f"**{column}**")
                         min_val = st.number_input(f"Min for {column}", key=f"{column}_min", value=default_min)
                         max_val = st.number_input(f"Max for {column}", key=f"{column}_max", value=default_max)
-                        st.session_state.custom_bounds[column] = [min_val, max_val]
+                        default_input = st.number_input(f"Default value for {column}", key=f"{column}_default",
+                                                        value=default_val)
 
-                    if st.form_submit_button("Confirm bounds"):
+                        # Save to session state
+                        st.session_state.custom_bounds[column] = [min_val, max_val]
+                        st.session_state.defaults[column] = default_input
+
+                    if st.form_submit_button("Confirm bounds and defaults"):
                         st.session_state.bounds = st.session_state.custom_bounds
-                        st.success("Custom bounds have been saved.")
+                        st.session_state.final_defaults = st.session_state.defaults
+                        st.success("Custom bounds and default values have been saved.")
 
             elif bounds_choice == "Choose min and max of existing data as bounds":
                 st.session_state.bounds = None
+                st.session_state.defaults = None
+                if not config.get("abs_path_to_data"):
+                    st.write("Absolute path of data is required in order to create bounds and default values. Please re-run the form again and specify the path to data for which the plots need to be created.")
 
             if st.button("Generate Carpet Plot"):
-                exe_carpet_plots(config, "predictions_carpet_new",
+                exe_carpet_plots(st.session_state.output_dir, "predictions_carpet_new",
                                  st.session_state.output_dir, save=True,
-                                 bounds=st.session_state.bounds, path_to_regressor = st.session_state.model_dir)
+                                 bounds=st.session_state.bounds, defaults_dict=st.session_state.defaults)
                 st.markdown("### Carpet Plot")
                 pdf_viewer(os.path.join(st.session_state.output_dir, "predictions_carpet_new.pdf"),
                            width="80%")
@@ -744,6 +775,7 @@ def exe_streamlit_data_insights():
     **Note**:
     - Ensure that your selected directory contains a valid trained model config and model results.
     - The plots depend on a successful model tuning run — you must have completed that step first.
+    - If you want to generate plots for models not trained on this application, please ensure to upload the trained model and the corresponding model class.
      """)
     st.session_state.path = None
     if "choose_plotting_type" not in st.session_state:
@@ -758,14 +790,15 @@ def exe_streamlit_data_insights():
         if "external_config_submitted" not in st.session_state:
             result = input_custom_model_config()
             if result is not None:
-                config, model_dir = result
+                config, model_dir, model_metadata_config = result
                 st.session_state.config = config
                 st.session_state.model_dir = model_dir
+                st.session_state.model_metadata_config = model_metadata_config
                 st.session_state.output_dir = config.get("saving_dir")
                 st.session_state.external_config_submitted = True
                 st.rerun()
         else:
-            st.session_state.path = generate_external_insights(st.session_state.config, st.session_state.model_dir)
+            st.session_state.path = generate_external_insights(st.session_state.config, st.session_state.model_dir, st.session_state.model_metadata_config )
 
 
 
@@ -1017,8 +1050,6 @@ st.set_page_config(
     layout="wide"
 )
 
-# col1, col2 = st.columns([0.5,3])
-# with col1:
 st.markdown("""
     <style>
         /* Remove top whitespace */
@@ -1036,10 +1067,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-# with col2:
-#     st.image(os.path.join(root_dir(), 'staticfiles', 'EBC_Logo.png'),use_container_width=True)
 
-# with col2:
 st.markdown("""
         <h1 style='margin: 0; padding-left: 0; padding-top: 12px; line-height: 1;'>
             ADDMO - Automated Data & Model Optimization
@@ -1117,9 +1145,9 @@ if tab == "Data Tuning":
         # Add a reset button to allow switching tuning types
         st.markdown("---")
         if st.button("Run another tuning type"):
-            st.session_state.tuning_submitted = False
-            st.session_state.tuning_type = None
-            st.rerun()
+            for key in list(st.session_state.keys()):
+                if key != "last_saved_path":
+                    del st.session_state[key]
 
 
 
@@ -1129,6 +1157,8 @@ if tab == "Model Tuning":
 
     st.markdown("---")
     if st.button("Run another model tuning"):
+        for key in list(st.session_state.keys()):
+            del st.session_state[key]
         st.rerun()
 
 if tab=="Insights":
@@ -1138,7 +1168,8 @@ if tab=="Insights":
     st.markdown("---")
     if st.button("Generate other insights"):
         for key in list(st.session_state.keys()):
-            del st.session_state[key]
+            if key != "last_saved_path":
+                del st.session_state[key]
         st.rerun()
 
 if tab=="Model Testing":
@@ -1146,14 +1177,9 @@ if tab=="Model Testing":
     st.session_state.last_saved_path = last_saved_path
     st.markdown("---")
     if st.button("Test another model"):
-        for key in [
-            "dir_submitted", "input_submitted", "tuning_path_confirmed", "model_dir", "input_data", "tuning_type", "output_dir", "custom_tuning_path", "tuning_path_type",
-                    "tuning_type_selected", "tuning_submitted"
-        ]:
-            if key in st.session_state:
+        for key in list(st.session_state.keys()):
+            if key != "last_saved_path":
                 del st.session_state[key]
-
-
         st.rerun()
 
 
@@ -1162,10 +1188,9 @@ if tab=="Data Tuning Recreate":
     st.session_state.last_saved_path = last_saved_path
     st.markdown("---")
     if st.button("Generate another tuning type"):
-        st.session_state.tuning_type = None
-        st.session_state.tuning_submitted = False
-        st.session_state.dir_submitted = False
-        st.session_state.model_dir = None
+        for key in list(st.session_state.keys()):
+            if key != "last_saved_path":
+                del st.session_state[key]
         st.rerun()
 
 

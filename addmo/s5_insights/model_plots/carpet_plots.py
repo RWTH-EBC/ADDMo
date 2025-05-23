@@ -13,24 +13,29 @@ def plot_carpets(model_config, bounds= None, combinations=None, defaults_dict=No
     """
 
     target = model_config["name_of_target"]
-    data_path = model_config['abs_path_to_data']
-
-    # Load data
-    data = load_data(data_path)
-    # Fetch time column from dataset
-    time_column = next((col for col in data.columns if pd.api.types.is_datetime64_any_dtype(data[col])), None)
-    # Set time column as index
-    if time_column:
-        data.set_index(time_column, inplace=True)
-
-    x_grid = data.drop(target, axis=1)
-    variables = list(x_grid.columns)
-
     # Load regressor
     if path_to_regressor is None:
-        path_to_regressor = return_best_model(return_results_dir_model_tuning(model_config['name_of_raw_data'], model_config['name_of_data_tuning_experiment'],model_config['name_of_model_tuning_experiment']))
+        path_to_regressor = return_best_model(return_results_dir_model_tuning(model_config['name_of_raw_data'],
+                                                                              model_config['name_of_data_tuning_experiment'],
+                                                                              model_config[ 'name_of_model_tuning_experiment']))
     regressor = ModelFactory.load_model(path_to_regressor)
-    prediction_func= prediction_func_4_regressor(regressor)
+    # Do not use the input data if user provides bounds and default dictionary
+    if bounds is not None and defaults_dict is not None:
+        variables = regressor.metadata["features_ordered"]
+        print('not using input data')
+
+    # Load the input data and fetch column names as well as bounds from it
+    else:
+        print('using input data')
+        data_path = model_config['abs_path_to_data']
+        data = load_data(data_path)
+        # Fetch time column from dataset
+        time_column = next((col for col in data.columns if pd.api.types.is_datetime64_any_dtype(data[col])), None)
+        # Set time column as index
+        if time_column:
+            data.set_index(time_column, inplace=True)
+        x_grid = data.drop(target, axis=1)
+        variables = list(x_grid.columns)
 
     # Define bounds
     if bounds is None:
@@ -39,14 +44,18 @@ def plot_carpets(model_config, bounds= None, combinations=None, defaults_dict=No
             if var in x_grid.columns:
                 bounds[var] = [x_grid[var].min(), x_grid[var].max()]
 
+    # Define default values
     if defaults_dict is None:
         # Use mean value as default
         defaults_dict = {var: x_grid[var].mean() for var in variables}
 
+    # Create combinations
     if combinations is None:
         combinations = [
             (v1, v2) for i, v1 in enumerate(variables) for v2 in variables[i + 1:]
         ]
+
+    prediction_func= prediction_func_4_regressor(regressor)
 
     # Create a grid for each variable
     grids = {var: np.linspace(bounds[var][0], bounds[var][1], 150) for var in variables}
@@ -136,15 +145,13 @@ def prediction_func_4_regressor(regressor, rename_dict: dict = None):
             arr.shape for arr in kwargs.values() if isinstance(arr, np.ndarray)
         )
 
-        # Prepare input data
-        input_data = pd.DataFrame({
-            feature: np.ravel(kwargs.get(feature, np.full_like(next(iter(kwargs.values())), fill_value=0)))
-            for feature in features
-        })
+        # Prepare input saved_plots
+        input_data = pd.DataFrame(
+            {feature: np.ravel(kwargs[feature]) for feature in features}
+        )
 
         # Make prediction
         prediction = regressor.predict(input_data)
-
 
         # Reshape the prediction to match the input shape
         return prediction.reshape(shape)

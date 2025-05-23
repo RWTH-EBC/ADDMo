@@ -24,22 +24,3 @@ def save_pdf(plt,save_path):
     save_path= os.path.join(save_path)+ ".pdf"
     plt.savefig(save_path, dpi=900, bbox_inches="tight", format='pdf')
 
-def sanitize_column_name(col: str) -> str:
-    """Convert column name to valid Python identifier"""
-    # Replace all special characters with single underscore
-    col = re.sub(r'[^a-zA-Z0-9]', '_', col)
-    # Collapse multiple underscores to single
-    col = re.sub(r'_+', '_', col)
-    # Remove leading/trailing underscores
-    return col.strip('_')
-
-def create_bounds_model(df: pd.DataFrame) -> type[BaseModel]:
-    fields = {}
-    for col in df.columns:
-        dtype = df[col].dtype
-        if pd.api.types.is_numeric_dtype(dtype):
-            sanitized_col = sanitize_column_name(col)
-            fields[f"{sanitized_col}_min"] = (Optional[float], Field(default=df[col].min(), title=f"{col} min"))
-            fields[f"{sanitized_col}_max"] = (Optional[float], Field(default=df[col].max(), title=f"{col} max"))
-    DynamicBoundsModel = create_model("DynamicBoundsModel", **fields)
-    return DynamicBoundsModel

@@ -2,7 +2,7 @@ import os
 from pydantic import BaseModel, Field, PrivateAttr
 from addmo.util.load_save_utils import root_dir
 
-class DataTuningAutoInput(BaseModel):
+class DataTuningAutoSetup(BaseModel):
     # Global Variables
     name_of_raw_data: str = Field(
         "test_raw_data",
@@ -53,13 +53,6 @@ class DataTuningAutoInput(BaseModel):
         description="'forward' or 'backward' direction for sequential feature selection.",
     )
 
-    _recursive_embedded_number_features_to_select: int = PrivateAttr(default=7)
-    _min_increase_for_wrapper: float = PrivateAttr(default=0.01)
-    _filter_recursive_by_count: bool = PrivateAttr(default=False)
-    _filter_recursive_by_score: bool = PrivateAttr(default=False)
-
-
-class DataTuningAutoSetup(DataTuningAutoInput):
     filter_recursive_by_count: bool = Field(
         False,
         description="Enable recursive feature elimination."

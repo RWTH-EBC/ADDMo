@@ -1,8 +1,6 @@
 import os
 from pydantic import BaseModel, Field, PrivateAttr
 from addmo.util.load_save_utils import root_dir
-import json
-
 
 class DataTuningAutoInput(BaseModel):
     # Global Variables

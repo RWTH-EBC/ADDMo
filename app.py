@@ -1,3 +1,5 @@
+import base64
+
 import streamlit as st
 import json
 import os
@@ -1015,14 +1017,30 @@ st.set_page_config(
     layout="wide"
 )
 
-col1, col2 = st.columns([0.5,3])
-with col1:
-    st.image(os.path.join(root_dir(), 'staticfiles', '230718 Logo ADDMo-01.png'), use_container_width=True)
+# col1, col2 = st.columns([0.5,3])
+# with col1:
+st.markdown("""
+    <style>
+        /* Remove top whitespace */
+        .block-container {
+            padding-top: 1rem;
+        }
+    </style>
+""", unsafe_allow_html=True)
+st.markdown(
+    f"""
+    <div style="display: flex; justify-content: center;">
+        <img src="data:image/png;base64,{base64.b64encode(open(os.path.join(root_dir(), 'staticfiles', 'logo.png'), 'rb').read()).decode()}" 
+             style="width: 1000px;" alt="Logo">
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 # with col2:
 #     st.image(os.path.join(root_dir(), 'staticfiles', 'EBC_Logo.png'),use_container_width=True)
 
-with col2:
-    st.markdown("""
+# with col2:
+st.markdown("""
         <h1 style='margin: 0; padding-left: 0; padding-top: 12px; line-height: 1;'>
             ADDMO - Automated Data & Model Optimization
         </h1>

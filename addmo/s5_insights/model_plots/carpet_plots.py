@@ -6,6 +6,8 @@ from addmo.util import plotting as d
 from addmo.util.definitions import  return_results_dir_model_tuning, return_best_model
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
 from addmo.util.load_save import load_data
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 def plot_carpets(model_config, bounds= None, combinations=None, defaults_dict=None, path_to_regressor = None):
     """
@@ -22,11 +24,9 @@ def plot_carpets(model_config, bounds= None, combinations=None, defaults_dict=No
     # Do not use the input data if user provides bounds and default dictionary
     if bounds is not None and defaults_dict is not None:
         variables = regressor.metadata["features_ordered"]
-        print('not using input data')
 
     # Load the input data and fetch column names as well as bounds from it
     else:
-        print('using input data')
         data_path = model_config['abs_path_to_data']
         data = load_data(data_path)
         # Fetch time column from dataset
@@ -158,3 +158,130 @@ def prediction_func_4_regressor(regressor, rename_dict: dict = None):
 
     return pred_func
 
+def plot_carpets_with_buckets(
+    model_config,
+    bounds=None,
+    combinations=None,
+    defaults_dict=None,
+    path_to_regressor=None,
+    n_bucket_points=500,
+    n_buckets=10
+):
+    """
+    Plot 3D carpet plots with scatter points sampled from feature buckets.
+    """
+    target = model_config["name_of_target"]
+
+    # Load model
+    if path_to_regressor is None:
+        path_to_regressor = return_best_model(
+            return_results_dir_model_tuning(
+                model_config['name_of_raw_data'],
+                model_config['name_of_data_tuning_experiment'],
+                model_config['name_of_model_tuning_experiment']
+            )
+        )
+    regressor = ModelFactory.load_model(path_to_regressor)
+    prediction_func = prediction_func_4_regressor(regressor)
+
+    # Load data
+    data = load_data(model_config["abs_path_to_data"])
+    time_column = next((col for col in data.columns if pd.api.types.is_datetime64_any_dtype(data[col])), None)
+    if time_column:
+        data.set_index(time_column, inplace=True)
+
+    x_data = data.drop(columns=[target])
+    variables = x_data.columns.tolist()
+
+    if bounds is None:
+        bounds = {col: [x_data[col].min(), x_data[col].max()] for col in variables}
+
+    if defaults_dict is None:
+        defaults_dict = {col: x_data[col].mean() for col in variables}
+
+    if combinations is None:
+        combinations = [(v1, v2) for i, v1 in enumerate(variables) for v2 in variables[i + 1:]]
+
+    # Generate valid combinations
+    valid_combinations = [
+        (x, y) for x, y in combinations
+        if bounds[x][0] != 0 or bounds[x][1] != 0 and bounds[y][0] != 0 or bounds[y][1] != 0
+    ]
+
+    if not valid_combinations:
+        print("No valid subplots to display.")
+        return None
+
+    # real data predictions
+    y_pred_data = regressor.predict(x_data)
+
+    # Create 3D bucket scatter samples
+    scatter_df = pd.DataFrame(columns=variables)
+    rng = np.random.default_rng(seed=42)
+
+    for var in variables:
+        bucket_edges = np.linspace(bounds[var][0], bounds[var][1], n_buckets + 1)
+        bucket_samples = []
+
+        for i in range(n_buckets):
+            low = bucket_edges[i]
+            high = bucket_edges[i + 1]
+            bucket_samples.extend(rng.uniform(low, high, n_bucket_points // n_buckets))
+
+        scatter_df[var] = pd.Series(bucket_samples[:n_bucket_points])
+
+
+    # Create grids
+    grids = {var: np.linspace(bounds[var][0], bounds[var][1], 150) for var in variables}
+
+    fig = plt.figure(figsize=(12, len(valid_combinations) * 4))
+    num_cols = 2
+    num_rows = math.ceil(len(valid_combinations) / num_cols)
+
+    for i, (x_label, y_label) in enumerate(valid_combinations, 1):
+        ax = fig.add_subplot(num_rows, num_cols, i, projection='3d')
+
+        # Surface Plot
+        X, Y = np.meshgrid(grids[x_label], grids[y_label])
+        inputs = {}
+
+        for var in variables:
+            if var == x_label:
+                inputs[var] = X
+            elif var == y_label:
+                inputs[var] = Y
+            else:
+                inputs[var] = np.full_like(X, defaults_dict[var])
+
+        Z = prediction_func(**inputs)
+        surf = ax.plot_surface(X, Y, Z, cmap="coolwarm", alpha=0.5)
+
+        # Scatter Points from Original Data
+        ax.scatter(
+            x_data[x_label],
+            x_data[y_label],
+            y_pred_data,
+            c='black',
+            s=5,
+            label='Original Predictions'
+        )
+
+        # Bucketed Scatter Points (without prediction)
+        ax.scatter(
+            scatter_df[x_label],
+            scatter_df[y_label],
+            np.full_like(scatter_df[x_label], np.min(Z)),  # Just to anchor it
+            c='green',
+            s=2,
+            alpha=0.4,
+            label='Bucket Scatter'
+        )
+
+        ax.set_xlabel(x_label, fontsize=8)
+        ax.set_ylabel(y_label, fontsize=8)
+        ax.set_zlabel("Prediction", fontsize=8)
+        ax.view_init(elev=30, azim=120)
+        ax.legend(fontsize=6)
+
+    fig.tight_layout()
+    return fig

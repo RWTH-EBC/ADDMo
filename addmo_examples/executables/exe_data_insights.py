@@ -5,7 +5,7 @@ from addmo.s5_insights.model_plots.time_series import plot_timeseries_combined
 from addmo.s5_insights.model_plots.parallel_plots import parallel_plots
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
 from addmo.util.plotting import save_pdf
-from addmo.s5_insights.model_plots.carpet_plots import  plot_carpets
+from addmo.s5_insights.model_plots.carpet_plots import  plot_carpets, plot_carpets_with_buckets
 from addmo.util.definitions import  return_results_dir_model_tuning
 
 
@@ -39,8 +39,8 @@ def exe_carpet_plots(dir, plot_name, plot_dir, save = False, bounds= None, defau
 
     path_to_regressor = os.path.join(dir, "best_model.joblib")
 
-    plt = plot_carpets(model_config,  bounds=bounds , defaults_dict = defaults_dict, combinations= combinations, path_to_regressor= path_to_regressor)
-
+    # plt = plot_carpets(model_config,  bounds=bounds , defaults_dict = defaults_dict, combinations= combinations, path_to_regressor= path_to_regressor)
+    plt = plot_carpets_with_buckets(model_config)
     if save:
         os.makedirs(plot_dir, exist_ok=True)
         plot_path = os.path.join(plot_dir, plot_name)
@@ -68,8 +68,8 @@ if __name__ == '__main__':
 
     # Default saved directory for loading the saved model
     # dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning')
-    dir = r'C:\Users\mre-rpa\Desktop\PycharmProjects\addmo-automated-ml-regression\addmo_examples\results\plots'
-    path_to_regressor = r"C:\Users\mre-rpa\Desktop\PycharmProjects\addmo-automated-ml-regression\addmo_examples\results\plots\best_model.joblib"
+    dir = r'C:\Users\mre-rpa\Desktop\PycharmProjects\addmo-automated-ml-regression\addmo_examples\results\test_raw_data\test_data_tuning\test_model_tuning'
+    path_to_regressor = r"C:\Users\mre-rpa\Desktop\PycharmProjects\addmo-automated-ml-regression\addmo_examples\results\test_raw_data\test_data_tuning\test_model_tuning\best_model.joblib"
     # Read config
     config_path = os.path.join(dir, "config.json")
     with open(config_path, 'r') as f:

@@ -548,8 +548,7 @@ def generate_addmo_insights():
                                width="80%")
 
             if 'Time Series plot' in st.session_state.plots_selections:
-                    exe_time_series_plot(model_config, "training_data_time_series", st.session_state.output_dir,
-                                         save=True)
+                    exe_time_series_plot(model_config, "training_data_time_series", st.session_state.output_dir, save=True)
                     st.markdown("### Time Series Data Plot")
 
                     # Path to the main plot

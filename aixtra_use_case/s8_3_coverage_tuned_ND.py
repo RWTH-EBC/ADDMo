@@ -62,7 +62,7 @@ def exe(config: ExtrapolationExperimentConfig):
 
             # log coverage
             ExperimentLogger.log({f"coverage_extra_{detector_name}": coverage.loc["Inside"]})
-            yield {f"coverage_extra_{detector_name}": coverage.loc["Inside"]} # Todo: delete, only for rerunning
+            # yield {f"coverage_extra_{detector_name}": coverage.loc["Inside"]} # Todo: delete, only for rerunning
 
 
     print(f"{__name__} executed")

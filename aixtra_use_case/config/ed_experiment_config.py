@@ -77,6 +77,14 @@ class ExtrapolationExperimentConfig(BaseModel):
         description="Exploration quantification config, set your own config.",
     )
 
+    _experiment_folder: Optional[str] = None  # private storage for custom path, makes it settable
+
     @property
     def experiment_folder(self):
+        if self._experiment_folder is not None:
+            return self._experiment_folder
         return os.path.join(ed_use_case_dir(), "results", self.experiment_name)
+
+    @experiment_folder.setter
+    def experiment_folder(self, value):
+        self._experiment_folder = value

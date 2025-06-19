@@ -13,7 +13,7 @@ from addmo.util.load_save_utils import root_dir, create_or_clean_directory
 from addmo.s3_model_tuning.config.model_tuning_config import ModelTunerConfig
 from streamlit_pdf_viewer import pdf_viewer
 from addmo.util.definitions import results_dir_data_tuning_auto, results_dir_data_tuning_fixed, return_results_dir_model_tuning, results_model_streamlit_testing, results_dir_data_tuning, results_dir
-from addmo_examples.executables.exe_data_insights import exe_time_series_plot,exe_parallel_plot,exe_carpet_plots
+from addmo_examples.executables.exe_data_insights import exe_time_series_plot, exe_parallel_plot, exe_carpet_plots, exe_scatter_carpet_plots, exe_interactive_parallel_plot
 from addmo.s4_model_testing.model_testing import model_test, data_tuning_recreate_fixed, data_tuning_recreate_auto
 from addmo.util.load_save import load_data
 
@@ -460,8 +460,8 @@ def generate_addmo_insights():
             st.session_state.plots_selections = []
         if "show_plots_form" not in st.session_state:
             st.session_state.show_plots_form = True
-        if "show_bounds_form" not in st.session_state:
-            st.session_state.show_bounds_form = False
+        if "requires_bounds_form" not in st.session_state:
+            st.session_state.requires_bounds_form = ""
         if "plots_confirmed" not in st.session_state:
             st.session_state.plots_confirmed = False
 
@@ -470,8 +470,9 @@ def generate_addmo_insights():
             plots_selections = st.multiselect(
                 "Select the plots which you'd like to see",
                 options=['Time Series plot',
-                         'Predictions carpet plot',
-                         'Predictions parallel plot'],
+                         'Predictions surface plot',
+                         'Predictions parallel plot',
+                         'Prediction surface with feature interaction scatter plot'],
                 default=st.session_state.get("plots_selections", [])
             )
             submitted = st.form_submit_button("Confirm plots")
@@ -479,21 +480,23 @@ def generate_addmo_insights():
             if submitted:
                 st.session_state.plots_selections = plots_selections
                 st.session_state.plots_confirmed = True
-                st.session_state.show_bounds_form = 'Predictions carpet plot' in plots_selections
+                st.session_state.requires_bounds_form = any(
+                    plot in st.session_state.plots_selections
+                    for plot in ['Predictions carpet plot', 'Prediction surface with feature interaction scatter plot']
+                )
                 # st.rerun()
 
-        # Show bounds selection and plot generation if carpet plot was selected
         if st.session_state.plots_confirmed:
             st.markdown(f"Using saved directory: `{directory}`")
             st.markdown(f"Plots will be saved in: `{st.session_state.output_dir}`")
 
-            if 'Predictions carpet plot' in st.session_state.plots_selections:
+            if st.session_state.requires_bounds_form:
                 if "bounds_choice" not in st.session_state:
                     st.session_state.bounds_choice = "Select an option"
+
                 bounds_choice = st.selectbox(
                     "Choose bounds for the columns of data",
-                    ["Select an option", "Choose min and max of existing data as bounds",
-                     "Define custom bounds"],
+                    ["Select an option", "Choose min and max of existing data as bounds", "Define custom bounds"],
                     index=["Select an option", "Choose min and max of existing data as bounds",
                            "Define custom bounds"].index(st.session_state.bounds_choice)
                 )
@@ -510,11 +513,8 @@ def generate_addmo_insights():
 
                     with st.form("Custom bounds and defaults input"):
                         for column in feature_columns:
-                            # Defaults for bounds
                             default_min = st.session_state.custom_bounds.get(column, [0.0, 1.0])[0]
                             default_max = st.session_state.custom_bounds.get(column, [0.0, 1.0])[1]
-
-                            # Default for default value
                             default_val = st.session_state.defaults.get(column, 0.0)
 
                             st.markdown(f"**{column}**")
@@ -523,7 +523,6 @@ def generate_addmo_insights():
                             default_input = st.number_input(f"Default value for {column}", key=f"{column}_default",
                                                             value=default_val)
 
-                            # Save to session state
                             st.session_state.custom_bounds[column] = [min_val, max_val]
                             st.session_state.defaults[column] = default_input
 
@@ -536,16 +535,24 @@ def generate_addmo_insights():
                     st.session_state.bounds = None
                     st.session_state.defaults = None
                     if not model_config.get("abs_path_to_data"):
-                        st.write(
-                            "Absolute path of data is required in order to create bounds and default values. Please re-run the form again and specify the path to data for which the plots need to be created.")
+                        st.warning(
+                            "Absolute path of data is required in order to create bounds and default values. "
+                            "Please re-run the form again and specify the path to data for which the plots need to be created."
+                        )
+            if 'Predictions surface plot' in st.session_state.plots_selections:
+                exe_carpet_plots(directory, "predictions_carpet",
+                                 st.session_state.output_dir, save=True,
+                                 bounds=st.session_state.bounds, defaults_dict=st.session_state.defaults)
+                st.markdown("### Carpet Plot")
+                pdf_viewer(os.path.join(st.session_state.output_dir, "predictions_carpet.pdf"), width="80%")
 
-                if st.button("Generate Carpet Plot"):
-                    exe_carpet_plots(directory, "predictions_carpet_new",
-                                     st.session_state.output_dir, save=True,
-                                     bounds=st.session_state.bounds, defaults_dict=st.session_state.defaults)
-                    st.markdown("### Carpet Plot")
-                    pdf_viewer(os.path.join(st.session_state.output_dir, "predictions_carpet_new.pdf"),
-                               width="80%")
+            if 'Prediction surface with feature interaction scatter plot' in st.session_state.plots_selections:
+
+                exe_scatter_carpet_plots(directory, "predictions_scatter_surface",
+                                         st.session_state.output_dir, save=True,
+                                         bounds=st.session_state.bounds, defaults_dict=st.session_state.defaults)
+                st.markdown("### Surface with scatter Plot")
+                pdf_viewer(os.path.join(st.session_state.output_dir, "predictions_scatter_surface.pdf"), width="80%")
 
             if 'Time Series plot' in st.session_state.plots_selections:
                     exe_time_series_plot(model_config, "training_data_time_series", st.session_state.output_dir, save=True)
@@ -563,12 +570,20 @@ def generate_addmo_insights():
                         pdf_viewer(two_weeks_path, width="80%", height=855)
 
             if 'Predictions parallel plot' in st.session_state.plots_selections:
-                exe_parallel_plot(model_config, "parallel_plot", st.session_state.output_dir, save=True)
-                st.markdown("### Parallel Plot")
+                fig = exe_interactive_parallel_plot(model_config, "parallel_plot", st.session_state.output_dir, save=True)
+                scrollable_html = f"""
+                <div style="overflow-x: auto; width: 100%;">
+                    <div style="min-width: 1200px;"> <!-- Set to match or exceed your plot width -->
+                        {fig.to_html(full_html=False, include_plotlyjs='cdn')}
+                    </div>
+                </div>
+                """
 
+                st.markdown("### Interactive Parallel Plot")
+                st.components.v1.html(scrollable_html, height=700)
                 # Display the saved plot PDF
-                path = os.path.join(st.session_state.output_dir, "parallel_plot.pdf")
-                pdf_viewer(path, width="80%", height=1400)
+                # path = os.path.join(st.session_state.output_dir, "parallel_plot.pdf")
+                # pdf_viewer(path, width="80%", height=1400)
 
     return st.session_state.output_dir
 
@@ -765,8 +780,8 @@ def exe_streamlit_data_insights():
     - **Visualize Time Series Performance**  
       Plot predictions vs actual target values across time for the training data.
     
-    - **Create Carpet Plots**  
-      These 2D plots help visualize the interaction between multiple features and the predicted values.
+    - **Create Surface Plots**  
+      These 3D plots help visualize the interaction between multiple features and the predicted values.
     
     - **Draw Parallel Plots**  
       Visualize the relationships between feature combinations and their contribution to the prediction.

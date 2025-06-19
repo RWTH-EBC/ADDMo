@@ -7,7 +7,14 @@ from addmo.util.definitions import  return_results_dir_model_tuning, return_best
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
 from addmo.util.load_save import load_data
 import matplotlib.pyplot as plt
+from itertools import product
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
+from matplotlib.colors import ListedColormap
+from addmo.util.plotting import *
+
+from matplotlib.patches import Patch
+
 
 def plot_carpets(model_config, bounds= None, combinations=None, defaults_dict=None, path_to_regressor = None):
     """
@@ -164,124 +171,185 @@ def plot_carpets_with_buckets(
     combinations=None,
     defaults_dict=None,
     path_to_regressor=None,
-    n_bucket_points=500,
-    n_buckets=10
-):
-    """
-    Plot 3D carpet plots with scatter points sampled from feature buckets.
-    """
+    num_buckets=5):
+
+    bucket_colors = [
+        black,
+        blue,
+        red,
+        green,
+        dark_red]
     target = model_config["name_of_target"]
-
-    # Load model
+    # Load regressor
     if path_to_regressor is None:
-        path_to_regressor = return_best_model(
-            return_results_dir_model_tuning(
-                model_config['name_of_raw_data'],
-                model_config['name_of_data_tuning_experiment'],
-                model_config['name_of_model_tuning_experiment']
-            )
-        )
+        path_to_regressor = return_best_model(return_results_dir_model_tuning(model_config['name_of_raw_data'],
+                                                                              model_config['name_of_data_tuning_experiment'],
+                                                                              model_config[ 'name_of_model_tuning_experiment']))
     regressor = ModelFactory.load_model(path_to_regressor)
-    prediction_func = prediction_func_4_regressor(regressor)
+    # Do not use the input data if user provides bounds and default dictionary
+    if bounds is not None and defaults_dict is not None:
+        variables = regressor.metadata["features_ordered"]
 
-    # Load data
-    data = load_data(model_config["abs_path_to_data"])
-    time_column = next((col for col in data.columns if pd.api.types.is_datetime64_any_dtype(data[col])), None)
-    if time_column:
-        data.set_index(time_column, inplace=True)
+    # Load the input data and fetch column names as well as bounds from it
+    else:
+        data_path = model_config['abs_path_to_data']
+        data = load_data(data_path)
+        # Fetch time column from dataset
+        time_column = next((col for col in data.columns if pd.api.types.is_datetime64_any_dtype(data[col])), None)
+        # Set time column as index
+        if time_column:
+            data.set_index(time_column, inplace=True)
+        x_grid = data.drop(target, axis=1)
+        variables = list(x_grid.columns)
 
-    x_data = data.drop(columns=[target])
-    variables = x_data.columns.tolist()
-
+    # Define bounds
     if bounds is None:
-        bounds = {col: [x_data[col].min(), x_data[col].max()] for col in variables}
+        bounds = {}
+        for var in variables:
+            if var in x_grid.columns:
+                bounds[var] = [x_grid[var].min(), x_grid[var].max()]
 
+    # Define default values
     if defaults_dict is None:
-        defaults_dict = {col: x_data[col].mean() for col in variables}
+        # Use mean value as default
+        defaults_dict = {var: x_grid[var].mean() for var in variables}
 
+    # Create combinations
     if combinations is None:
-        combinations = [(v1, v2) for i, v1 in enumerate(variables) for v2 in variables[i + 1:]]
+        combinations = [
+            (v1, v2) for i, v1 in enumerate(variables) for v2 in variables[i + 1:]
+        ]
 
-    # Generate valid combinations
-    valid_combinations = [
-        (x, y) for x, y in combinations
-        if bounds[x][0] != 0 or bounds[x][1] != 0 and bounds[y][0] != 0 or bounds[y][1] != 0
-    ]
+    prediction_func= prediction_func_4_regressor(regressor)
 
-    if not valid_combinations:
-        print("No valid subplots to display.")
-        return None
-
-    # real data predictions
-    y_pred_data = regressor.predict(x_data)
-
-    # Create 3D bucket scatter samples
-    scatter_df = pd.DataFrame(columns=variables)
-    rng = np.random.default_rng(seed=42)
-
-    for var in variables:
-        bucket_edges = np.linspace(bounds[var][0], bounds[var][1], n_buckets + 1)
-        bucket_samples = []
-
-        for i in range(n_buckets):
-            low = bucket_edges[i]
-            high = bucket_edges[i + 1]
-            bucket_samples.extend(rng.uniform(low, high, n_bucket_points // n_buckets))
-
-        scatter_df[var] = pd.Series(bucket_samples[:n_bucket_points])
-
-
-    # Create grids
+    # Create a grid for each variable
     grids = {var: np.linspace(bounds[var][0], bounds[var][1], 150) for var in variables}
 
-    fig = plt.figure(figsize=(12, len(valid_combinations) * 4))
+    # Filter combinations where both the features are non-zero
+    valid_combinations = [
+        (x_label, y_label) for x_label, y_label in combinations
+        if bounds[x_label][0] != 0 or bounds[x_label][1] != 0
+        if bounds[y_label][0] != 0 or bounds[y_label][1] != 0
+
+    ]
+    removed_items =[]
+    for var in variables:
+        if bounds[var][0] == 0 and bounds[var][1] == 0:
+            removed_items.append(var)
+    print('The following combinations are removed because the column only consists of zero values: {}'.format(removed_items))
+    # Handle case where all combinations are invalid
+    if not valid_combinations:
+        print("No valid subplots to display. Skipping plot creation.")
+        return None
+
+    num_plots = len(valid_combinations)
     num_cols = 2
-    num_rows = math.ceil(len(valid_combinations) / num_cols)
+    num_rows = math.ceil(num_plots / num_cols)
+
+    fig_height = max(5, num_plots * 3.5)
+    fig_size = (d.cm2inch(16), d.cm2inch(fig_height))
+    fig = plt.figure(figsize=fig_size)
+    plt.subplots_adjust(left=-0.05, right=0.88, bottom=0.05, top=1, wspace=-0.1, hspace=0.05)
 
     for i, (x_label, y_label) in enumerate(valid_combinations, 1):
-        ax = fig.add_subplot(num_rows, num_cols, i, projection='3d')
-
-        # Surface Plot
+        ax = fig.add_subplot(num_rows, num_cols, i, projection="3d")
         X, Y = np.meshgrid(grids[x_label], grids[y_label])
-        inputs = {}
 
+        # Prepare inputs for surface prediction
+        inputs_surface = {}
         for var in variables:
             if var == x_label:
-                inputs[var] = X
+                inputs_surface[var] = X
             elif var == y_label:
-                inputs[var] = Y
+                inputs_surface[var] = Y
             else:
-                inputs[var] = np.full_like(X, defaults_dict[var])
+                inputs_surface[var] = np.full_like(X, defaults_dict[var])
 
-        Z = prediction_func(**inputs)
-        surf = ax.plot_surface(X, Y, Z, cmap="coolwarm", alpha=0.5)
+        # Create predictions based on the 2 combination values, keeping the other features fixed
+        Z_surface = prediction_func(**inputs_surface)
 
-        # Scatter Points from Original Data
-        ax.scatter(
-            x_data[x_label],
-            x_data[y_label],
-            y_pred_data,
-            c='black',
-            s=5,
-            label='Original Predictions'
-        )
 
-        # Bucketed Scatter Points (without prediction)
-        ax.scatter(
-            scatter_df[x_label],
-            scatter_df[y_label],
-            np.full_like(scatter_df[x_label], np.min(Z)),  # Just to anchor it
-            c='green',
-            s=2,
-            alpha=0.4,
-            label='Bucket Scatter'
-        )
+        # Subsample for scatter points for remaining features
+        all_indices = np.arange(X.size)
+        n_scatter_points = int(0.005 * X.size)
+        chosen_indices = np.random.choice(all_indices, n_scatter_points, replace=False)
+        chosen_rows, chosen_cols = np.unravel_index(chosen_indices, X.shape)
+        X_subset = X[chosen_rows, chosen_cols]
+        Y_subset = Y[chosen_rows, chosen_cols]
+        Z_surface_subset = Z_surface[chosen_rows, chosen_cols]
 
-        ax.set_xlabel(x_label, fontsize=8)
-        ax.set_ylabel(y_label, fontsize=8)
-        ax.set_zlabel("Prediction", fontsize=8)
+        # Prediction surface
+        surf = ax.plot_surface(X, Y, Z_surface, cmap="cool", alpha=0.5, zorder=2)
+
+        other_features = [f for f in variables if f not in (x_label, y_label)]
+        bucket_edges = {f: np.linspace(bounds[f][0], bounds[f][1], num_buckets + 1) for f in other_features}
+
+        for b in range(num_buckets):
+            inputs_bucket = {
+                x_label: X_subset,
+                y_label: Y_subset
+            }
+            for f in other_features:
+                lo = bucket_edges[f][b]
+                hi = bucket_edges[f][b + 1]
+                inputs_bucket[f] = np.random.uniform(lo, hi, size=X_subset.shape)
+
+            # Create predictions based on buckets features
+            Z_bucket = prediction_func(**inputs_bucket)
+
+            Z_bucket_above = np.where(Z_bucket > Z_surface_subset, Z_bucket, np.nan)
+            Z_bucket_below = np.where(Z_bucket <= Z_surface_subset, Z_bucket, np.nan)
+
+            color = bucket_colors[b]
+
+            # Lower surface
+            ax.scatter(X_subset,Y_subset,Z_bucket_below,color=color,s=3,alpha=0.8,zorder=1)
+
+            # Upper surface
+            ax.scatter(X_subset,Y_subset,Z_bucket_above,color=color,s=3,alpha=0.8,zorder=3)
+
+        ax.set_box_aspect([1, 1, 0.6])
+        ax.margins(x=0, y=0)
+        ax.set_xlabel(x_label.replace('__', '\n'), fontsize=7, labelpad=-6)
+        ax.set_ylabel(y_label.replace('__', '\n'), fontsize=7, labelpad=-6)
+        ax.set_zlabel("Prediction", fontsize=7, labelpad=-7)
+        ax.set_zlabel("Prediction", labelpad=-7)
+        ax.tick_params(axis="x", which="major", pad=-5)
         ax.view_init(elev=30, azim=120)
-        ax.legend(fontsize=6)
+        ax.tick_params(axis="y", pad=-3)
+        ax.tick_params(axis="z", pad=-3)
+        plt.setp(ax.get_yticklabels(), fontsize=7)
+        plt.setp(ax.get_xticklabels(), fontsize=7)
+        plt.setp(ax.get_zticklabels(), fontsize=7)
 
-    fig.tight_layout()
+
+    # Add legend and colorbar
+    legend_entries = []
+    for b in range(num_buckets):
+        bucket_ranges = []
+        for f in other_features:
+            lo = bucket_edges[f][b]
+            hi = bucket_edges[f][b + 1]
+            bucket_ranges.append(f"{f}[{lo:.1f}, {hi:.1f}]")
+        label = "\n".join(bucket_ranges)
+        legend_entries.append((bucket_colors[b], label))
+
+    handles = [Patch(facecolor=color, label=label) for color, label in legend_entries]
+    fig.legend(
+        handles=handles,
+        loc='lower center',
+        ncol=3,  # <-- this sets 3 columns
+        fontsize=6,
+        frameon=False,
+        handleheight=1.2)
+    cbar_ax = fig.add_axes([0.9, 0.35, 0.02, 0.3])
+    cbar = fig.colorbar(surf, cax=cbar_ax)
+    cbar.ax.tick_params(labelsize=7)
+    cbar.set_label("Regressor", loc="center", fontsize=7)
+
     return fig
+
+#in order to see the interactivate plot in browser, use this:
+ # import plotly.io as pio
+ #    pio.renderers.default = "browser"
+ #    plt.show()

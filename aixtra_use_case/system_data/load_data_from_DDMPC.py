@@ -4,7 +4,7 @@ from aixtra.system_simulations import system_simulations as sys_sim
 
 
 # Read the CSV file
-df = pd.read_csv(r"D:\04_GitRepos\DDMPC_GitLab\Examples\BopTest_TAir_ODE\stored_data\data\training_data.csv")
+df = pd.read_csv(r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\2_MPC_bes_random\training_data\data\training_data.csv")
 
 # Select and rename the columns we need
 df_new = df[['t_amb', 'rad_dir', 'u_hp', 't_room', 'Change(T Room)']]
@@ -13,7 +13,7 @@ df_new = df[['t_amb', 'rad_dir', 'u_hp', 't_room', 'Change(T Room)']]
 df_new['Change(T Room)'] = df_new['Change(T Room)'].shift(-1)
 
 # check with simulation put to addmo:
-system_prediction = sys_sim.bestest900_ODE_VL_COPcorr(df['t_amb'], df['rad_dir'], df['u_hp'], df['t_room'])
+system_prediction = sys_sim.bestest900_ODE(df['t_amb'], df['rad_dir'], df['u_hp'], df['t_room'])
 # assert all but first row and last row cause there is nan in original data
 _df = df_new.copy()
 _df["syspred"] = system_prediction
@@ -30,7 +30,7 @@ else:
 
 
 # Save the new dataframe to a CSV file with semicolon separator and no index
-new_simulation_data_name = f"bes_VLCOPcorr_random"
+new_simulation_data_name = f"bes_random"
 # path = os.path.join("edited", new_simulation_data_name + ".csv")
 path = os.path.join(new_simulation_data_name + ".csv")
 

@@ -4,7 +4,7 @@ import os
 import pytz
 
 # Read the CSV file
-input_file_path = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\Boptest900_2019_defaultControl\training_data.csv"
+input_file_path = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\2_MPC_bes_random\training_data\data\training_data.csv"
 df = pd.read_csv(input_file_path)
 
 # Convert 'time' column to datetime

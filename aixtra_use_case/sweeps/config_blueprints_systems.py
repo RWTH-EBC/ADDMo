@@ -25,7 +25,10 @@ def config_bes_steady(config: ExtrapolationExperimentConfig):
             "Change(T Room)": (-0.3, 1),
         }
     return config
-
+def config_bes_random(config: ExtrapolationExperimentConfig):
+    config = config_bes_VLCOPcorr_steady(config)
+    config.simulation_data_name = "bes_random"
+    return config
 def config_bes_VLCOPcorr_steady(config: ExtrapolationExperimentConfig):
     config = config_bes_steady(config)
     config.simulation_data_name = "bes_VLCOPcorr_steady"

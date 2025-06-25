@@ -362,10 +362,10 @@ class AutomatedTraining(App):
             ContMT_NameOfData, self.NameOfDataMT = text("Name of data (as input)", self.info_NameOfData, "TrialInput").do()
             ContMT_NameOfExperiment, self.NameOfExperimentMT = text("Name of experiment (as input)", self.info_NameOfExperiment, "TrialTunedData").do()
             ContMT_NameOfSubTest, self.NameOfSubTestMT = text("Name of subtest (results)", self.info_NameOfSubTest, "TrialTunedModel").do()
-            ContMT_StartTraining, self.StartTrainingMT = text("Start of training", self.info_StartDateTraining, '2016-08-01 00:00').do()
-            ContMT_EndTraining, self.EndTrainingMT = text("End of training", self.info_EndDateTraining, '2016-08-14 23:45').do()
-            ContMT_StartTesting, self.StartTestingMT = text("Start of testing", self.info_StartDateTesting, '2016-08-15 00:00').do()
-            ContMT_EndTesting, self.EndTestingMT = text("End of testing", self.info_EndDateTesting, '2016-08-16 23:45').do()
+            ContMT_StartTraining, self.StartTrainingMT = text("Start of training", self.info_StartDateTraining, '2000-01-01 00:00:00').do()
+            ContMT_EndTraining, self.EndTrainingMT = text("End of training", self.info_EndDateTraining, '2000-01-01 00:15:00').do()
+            ContMT_StartTesting, self.StartTestingMT = text("Start of testing", self.info_StartDateTesting, '2000-01-01 00:30:00').do()
+            ContMT_EndTesting, self.EndTestingMT = text("End of testing", self.info_EndDateTesting, '2000-01-01 00:36:00').do()
             ContMT_HyperBayesEval, self.HyperBayesEvalMT = spinbox("Bayes eval hyperparameter", self.info_HyperBayesEval, 100, 1, 10000).do()
 
             ContMT_CV = gui.Widget(width='100%', layout_orientation=gui.Widget.LAYOUT_HORIZONTAL,

@@ -185,10 +185,8 @@ def plot_predict_measured(prediction, measurement, MAE, R2, StartDatePredict, Sa
     #ax1.axvline(StartDatePredict, color='k', linestyle='--')
     plt.tight_layout(rect=[-0.02, -0.03, 1.02, 0.90])
     SavePath = "%s/Prediction_%s" % (SavePath, BlackBox)
-    SavePath_pdf = "%s.pdf" % (SavePath)
-    SavePath_jpg = "%s.jpg" % (SavePath)
-    plt.savefig(SavePath_pdf, transparent=True)
-    plt.savefig(SavePath_jpg, transparent=True)
+    SavePath_png = "%s.png" % (SavePath)
+    plt.savefig(SavePath_png)
     plt.close()
 
 
@@ -222,10 +220,8 @@ def plot_Residues(prediction, measurement, MAE, R2, SavePath, nameOfSignal, Blac
     #plt.tight_layout()
     plt.tight_layout(rect=[-0.02, -0.03, 1.02, 0.97])
     SavePath = "%s/Residuals_%s" % (SavePath, BlackBox)
-    SavePath_pdf = "%s.pdf" % (SavePath)
-    SavePath_jpg = "%s.jpg" % (SavePath)
-    plt.savefig(SavePath_pdf, transparent=True)
-    plt.savefig(SavePath_jpg, transparent=True)
+    SavePath_png = "%s.png" % (SavePath)
+    plt.savefig(SavePath_png)
     plt.close()
 
 

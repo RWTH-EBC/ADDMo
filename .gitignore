@@ -13,6 +13,10 @@
 # temporary boundary condition files #
 ######################################
 
+# Input files
+/03_TrialInput/*
+!/03_TrialInput/InputData.xlsx
+
 
 # Output-Files #
 ########################

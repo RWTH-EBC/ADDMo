@@ -1,3 +1,6 @@
+"""
+by Jun Jiang
+"""
 import numpy as np
 from sklearn.externals import joblib
 import os

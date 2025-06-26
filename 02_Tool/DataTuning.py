@@ -36,7 +36,7 @@ def main():
     SV.PathToData = PathToData
     SV.ResultsFolder = ResultsFolder
     SV.PathToPickles = PathToPickles
-    SV.InputData = InputData
+    # SV.InputData = InputData  # Set input data to SV from calling function
 
     ImportData.clear() #make sure the selected folder is unused
 

@@ -179,6 +179,7 @@ def plot_carpets_with_buckets(
         red,
         green,
         dark_red]
+
     target = model_config["name_of_target"]
     # Load regressor
     if path_to_regressor is None:
@@ -338,7 +339,7 @@ def plot_carpets_with_buckets(
     fig.legend(
         handles=handles,
         loc='lower center',
-        ncol=3,  # <-- this sets 3 columns
+        ncol=3,
         fontsize=6,
         frameon=False,
         handleheight=1.2)

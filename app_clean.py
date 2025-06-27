@@ -111,14 +111,14 @@ def exe_streamlit_data_tuning_auto():
     if st.button("Run Auto Data Tuning"):
         missing = check_missing_fields(auto_tuning_config)
         if missing:
-            st.error(f"❌ Missing fields: {', '.join(missing)}")
+            st.error(f"Missing fields: {', '.join(missing)}")
             return None
 
         config_path = os.path.join(
             root_dir(), 'addmo', 's1_data_tuning_auto', 'config', 'data_tuning_auto_config.json'
         )
         save_config_to_json(auto_tuning_config_obj, config_path)
-        st.success("✅ Configuration saved!")
+        st.success("Configuration saved!")
 
         with st.spinner("Running data tuning..."):
             exe_data_tuning_auto(overwrite_strategy)
@@ -129,7 +129,7 @@ def exe_streamlit_data_tuning_auto():
             if os.path.exists(zoomed_path):
                 st.markdown("### Zoomed View: Time Series (2 Weeks)")
                 pdf_viewer(zoomed_path, width="80%", height=855)
-            st.success("✅ Data tuning completed!")
+            st.success("Data tuning completed!")
 
     return output_dir
 
@@ -171,14 +171,14 @@ def exe_streamlit_data_tuning_fixed():
     if st.button("Run Fixed Data Tuning"):
         missing = check_missing_fields(fixed_tuning_config)
         if missing:
-            st.error(f"❌ Missing fields: {', '.join(missing)}")
+            st.error(f"Missing fields: {', '.join(missing)}")
             return
 
         config_path = os.path.join(
             root_dir(), 'addmo', 's2_data_tuning', 'config', 'data_tuning_config.json'
         )
         save_config_to_json(fixed_config_tuning_obj, config_path)
-        st.success("✅ Configuration saved!")
+        st.success("Configuration saved!")
 
         with st.spinner("Running data tuning.."):
             exe_data_tuning_fixed(overwrite_strategy)
@@ -189,7 +189,7 @@ def exe_streamlit_data_tuning_fixed():
             if os.path.exists(zoomed_path):
                 st.markdown("### Zoomed View: Time Series (2 Weeks)")
                 pdf_viewer(zoomed_path, width="80%", height=855)
-            st.success("✅ Data tuning completed!")
+            st.success("Data tuning completed!")
 
     return output_dir
 
@@ -239,11 +239,11 @@ def exe_streamlit_model_tuning():
                     func(model_config_data['name_of_raw_data']),
                     f"tuned_xy_{type_of_tuning.lower()}.csv"
                 )
-                st.success("✅ Tuned data path set in config.")
+                st.success("Tuned data path set in config.")
 
             elif path_type == "No":
                 model_config_data["abs_path_to_data"] = st.text_input('path')
-                st.success("✅ Tuned data path set in config.")
+                st.success("Tuned data path set in config.")
 
     # Save config
     if st.button("Save Model Config"):
@@ -260,7 +260,7 @@ def exe_streamlit_model_tuning():
 
         config_path = os.path.join(root_dir(), 'addmo', 's3_model_tuning', 'config', 'model_tuning_config.json')
         save_config_to_json(model_config_obj, config_path)
-        st.success("✅ Model configuration saved!")
+        st.success("Model configuration saved!")
 
     if st.session_state.model_config_saved:
         st.subheader("Output Directory Strategy")
@@ -280,7 +280,7 @@ def exe_streamlit_model_tuning():
             plot_image_path = os.path.join(st.session_state.output_dir, "model_fit_scatter.pdf")
             st.markdown("### Model Fit Plot")
             pdf_viewer(plot_image_path, width="80%", height=855)
-            st.success("✅ Model tuning completed!")
+            st.success("Model tuning completed!")
 
     return st.session_state.output_dir
 
@@ -328,12 +328,10 @@ def generate_external_insights(config: dict, model_dir: str, model_metadata_conf
             st.session_state.show_bounds_form = 'Predictions carpet plot' in plots_selections
             st.rerun()
 
-    # --- Display selected plots ---
     if st.session_state.plots_confirmed:
         st.markdown(f"Using saved directory: {model_dir}")
         st.markdown(f"Plots will be saved in: {st.session_state.output_dir}")
 
-        # --- Carpet Plot Logic ---
         if 'Predictions carpet plot' in st.session_state.plots_selections:
             if "bounds_choice" not in st.session_state:
                 st.session_state.bounds_choice = "Select an option"
@@ -412,7 +410,6 @@ def generate_external_insights(config: dict, model_dir: str, model_metadata_conf
                     width="80%"
                 )
 
-        # --- Time Series Plot Logic ---
         if 'Time Series plot for training data' in st.session_state.plots_selections:
             exe_time_series_plot(config, "training_data_time_series", st.session_state.output_dir, save=True)
 
@@ -425,7 +422,6 @@ def generate_external_insights(config: dict, model_dir: str, model_metadata_conf
                 st.markdown("### Zoomed View: Time Series (2 Weeks)")
                 pdf_viewer(two_weeks_path, width="80%", height=855)
 
-        # --- Parallel Plot Logic ---
         if 'Predictions parallel plot' in st.session_state.plots_selections:
             exe_parallel_plot(
                 config,
@@ -500,7 +496,7 @@ def generate_addmo_insights():
                 st.session_state.plots_confirmed = True
                 st.session_state.requires_bounds_form = any(
                     plot in st.session_state.plots_selections
-                    for plot in ['Predictions carpet plot', 'Prediction surface with feature interaction scatter plot']
+                    for plot in ['Predictions surface plot', 'Prediction surface with feature interaction scatter plot']
                 )
 
         if st.session_state.plots_confirmed:
@@ -797,9 +793,9 @@ def exe_streamlit_model_testing():
                         st.session_state.model_config = model_config
                         st.session_state.tuning_submitted = True
                         st.session_state.tuning_path_confirmed = True
-                        st.success("✅ Tuned data path confirmed!")
+                        st.success("Tuned data path confirmed!")
                     else:
-                        st.error("❌ Please provide a valid path before confirming.")
+                        st.error("Please provide a valid path before confirming.")
 
         # Run model test when all inputs are gathered
         if st.session_state.tuning_submitted or st.session_state.tuning_path_confirmed:

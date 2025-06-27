@@ -1,9 +1,7 @@
 import os
 import json
-from addmo.util.definitions import results_dir_model_tuning
 from addmo.s5_insights.model_plots.time_series import plot_timeseries_combined
 from addmo.s5_insights.model_plots.parallel_plots import parallel_plots, parallel_plots_interactive
-from addmo.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
 from addmo.util.plotting import save_pdf
 from addmo.s5_insights.model_plots.carpet_plots import  plot_carpets, plot_carpets_with_buckets
 from addmo.util.definitions import  return_results_dir_model_tuning
@@ -100,26 +98,19 @@ def exe_interactive_parallel_plot(model_config, plot_name, plot_dir, save = Fals
 if __name__ == '__main__':
 
     # Default saved directory for loading the saved model
-    # dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning')
-    dir = r'C:\Users\mre-rpa\Desktop\PycharmProjects\addmo-automated-ml-regression\addmo_examples\results\test_raw_data\test_data_tuning\test_model_tuning'
-    path_to_regressor = r"C:\Users\mre-rpa\Desktop\PycharmProjects\addmo-automated-ml-regression\addmo_examples\results\test_raw_data\test_data_tuning\test_model_tuning\best_model.joblib"
+    results_dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning')
+    path_to_regressor = os.path.join(results_dir)
     # Read config
-    config_path = os.path.join(dir, "config.json")
+    config_path = os.path.join(results_dir, "config.json")
     with open(config_path, 'r') as f:
         model_config = json.load(f)
 
     # Path for saving the model_plots
-    plot_dir = os.path.join(dir, 'plots')
-    # bounds = {"Total active power": [0, 45], "Schedule": [0, 1], "FreshAir Temperature": [10.6, 28.1],
-    #           "Space Temperature T1": [22.8, 26],
-    #           "Space Temperature T2": [20.6, 23.5], "Av. Space Temperature": [21.7, 24.75],
-    #           "Supply Temperature": [14.1, 31], "Empty trial schedule": [0, 0], "Shut off schedule": [0, 1]}
-    # defaults_dict = {"Total active power": 15, "Schedule": 1, "FreshAir Temperature": 15, "Space Temperature T1": 24,
-    #                  "Space Temperature T2": 21, "Av. Space Temperature": 22, "Supply Temperature": 18,
-    #                  "Empty trial schedule": 0, "Shut off schedule": 1}
+    plot_dir = os.path.join(results_dir, 'plots')
 
     # Execute plotting functions
-    # exe_time_series_plot(model_config,"training_data_time_series",plot_dir,save=False)
-    # exe_carpet_plots(dir, "predictions_carpet", plot_dir,save=True)
+    exe_time_series_plot(model_config,"training_data_time_series",plot_dir,save=False)
+    exe_carpet_plots(results_dir, "predictions_carpet", plot_dir,save=False)
     exe_parallel_plot(model_config,"parallel_plot", plot_dir, save=False)
     exe_interactive_parallel_plot(model_config,"interactive_parallel_plot", plot_dir, save=False)
+    exe_scatter_carpet_plots(results_dir, "predictions_scatter_carpet", plot_dir,save=False)

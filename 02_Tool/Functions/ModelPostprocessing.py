@@ -12,11 +12,11 @@ logger = logging.getLogger(__name__)
 
 class PostProcessing:
     DEFAULT_PREDICTOR_MODEL_FILE_NAMES = {
-        'ANN': 'ann_bayesian_predictor.save',
-        'GB': 'gradientboost_bayesian.save',
-        'LASSO': 'lasso_bayesian.save',
-        'RF': 'rf_predictor.save',
-        'SVR': 'svr_bayesian_predictor.save',
+        'ANN': 'ann_bayesian_predictor',
+        'GB': 'gradientboost_bayesian',
+        'LASSO': 'lasso_bayesian',
+        'RF': 'rf_predictor',
+        'SVR': 'svr_bayesian_predictor',
     }
 
     def __init__(
@@ -36,7 +36,11 @@ class PostProcessing:
         self.scaler_tracker = self.load_model(os.path.join(self.dir_trial_tuned_data, 'ScalerTracker.save'))
         self.name_of_signal = self.load_model(os.path.join(self.dir_trial_tuned_data, 'NameOfSignal.save'))
         self.best_models = {
-            k: self.load_model(os.path.join(self.dir_model, 'BestModels', v))  # Load ML models
+            k: self.load_model(os.path.join(self.dir_model, 'BestModels', f'{v}.save'))  # Load ML models
+            for k, v in self.DEFAULT_PREDICTOR_MODEL_FILE_NAMES.items()
+        }
+        self.summary_dfs = {
+            k: pd.read_excel(os.path.join(self.dir_model, f'Summary_{v}_{dir_model}.xlsx'), index_col=0)
             for k, v in self.DEFAULT_PREDICTOR_MODEL_FILE_NAMES.items()
         }
 
@@ -67,6 +71,12 @@ class PostProcessing:
             return predictions_scaled[0][0]
         except Exception as e:
             logging.error(f"An error occured while predicting {model_name}: {e}")
+
+    def get_values_from_summary_data(self, model_name: str, keys: list = ['Feature importance', 'Computation Time']):
+        return {
+            k: self.summary_dfs[model_name].loc[k, 0]
+            for k in keys
+        }
 
     @staticmethod
     def load_model(model_file_path: str):

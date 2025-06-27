@@ -171,14 +171,8 @@ def plot_carpets_with_buckets(
     combinations=None,
     defaults_dict=None,
     path_to_regressor=None,
-    num_buckets=5):
+    num_buckets=4):
 
-    bucket_colors = [
-        black,
-        blue,
-        red,
-        green,
-        dark_red]
 
     target = model_config["name_of_target"]
     # Load regressor
@@ -212,8 +206,27 @@ def plot_carpets_with_buckets(
 
     # Define default values
     if defaults_dict is None:
-        # Use mean value as default
-        defaults_dict = {var: x_grid[var].mean() for var in variables}
+        defaults_dict = {}
+        for var in variables:
+            unique_vals = x_grid[var].dropna().unique()
+            if len(unique_vals) <= 3 and all(val in [0, 1] for val in unique_vals):  # binary feature
+                defaults_dict[var] = x_grid[var].mode().iloc[0] # take the mode of columns for binary features
+            else:
+                defaults_dict[var] = x_grid[var].mean()
+
+    print('the defaults dict is: ', defaults_dict)
+    for var in variables:
+        print(f'{var}: MIN  is: {x_grid[var].min()} MAX is:  {x_grid[var].max()}')
+
+    # Create data buckets based on num of buckets:
+    bucket_size = { var: ((x_grid[var].max()- x_grid[var].min() )/ num_buckets) for var in variables }
+    print('bucket size:', bucket_size)
+
+    bucket = {
+        var: (defaults_dict[var] - (bucket_size[var]/2), defaults_dict[var] + (bucket_size[var]/2))
+        for var in variables
+    }
+    print('the bucket which contains the default values in middle looks like this: ', bucket)
 
     # Create combinations
     if combinations is None:
@@ -250,7 +263,7 @@ def plot_carpets_with_buckets(
     fig_height = max(5, num_plots * 3.5)
     fig_size = (d.cm2inch(16), d.cm2inch(fig_height))
     fig = plt.figure(figsize=fig_size)
-    plt.subplots_adjust(left=-0.05, right=0.88, bottom=0.05, top=1, wspace=-0.1, hspace=0.05)
+    plt.subplots_adjust(left=-0.05, right=0.88, bottom=0.02, top=1, wspace=-0.1, hspace=0.05)
 
     for i, (x_label, y_label) in enumerate(valid_combinations, 1):
         ax = fig.add_subplot(num_rows, num_cols, i, projection="3d")
@@ -269,45 +282,25 @@ def plot_carpets_with_buckets(
         # Create predictions based on the 2 combination values, keeping the other features fixed
         Z_surface = prediction_func(**inputs_surface)
 
-
-        # Subsample for scatter points for remaining features
-        all_indices = np.arange(X.size)
-        n_scatter_points = int(0.005 * X.size)
-        chosen_indices = np.random.choice(all_indices, n_scatter_points, replace=False)
-        chosen_rows, chosen_cols = np.unravel_index(chosen_indices, X.shape)
-        X_subset = X[chosen_rows, chosen_cols]
-        Y_subset = Y[chosen_rows, chosen_cols]
-        Z_surface_subset = Z_surface[chosen_rows, chosen_cols]
-
         # Prediction surface
-        surf = ax.plot_surface(X, Y, Z_surface, cmap="cool", alpha=0.5, zorder=2)
+        surf = ax.plot_surface(X, Y, Z_surface, cmap="cool", alpha=0.5, zorder=1)
 
+        # filter real data points which belongs to the default dict bucket of the remaining combinations:
         other_features = [f for f in variables if f not in (x_label, y_label)]
-        bucket_edges = {f: np.linspace(bounds[f][0], bounds[f][1], num_buckets + 1) for f in other_features}
+        mask = pd.Series(True, index=x_grid.index) # for filtering out rows which we don't want
+        for f in other_features:
+            lower, upper = bucket[f]
+            # returns value true for the index if it falls within the range,
+            # so iteratively removes indices for features which don't fall in bucket
+            mask &= x_grid[f].between(lower, upper)
 
-        for b in range(num_buckets):
-            inputs_bucket = {
-                x_label: X_subset,
-                y_label: Y_subset
-            }
-            for f in other_features:
-                lo = bucket_edges[f][b]
-                hi = bucket_edges[f][b + 1]
-                inputs_bucket[f] = np.random.uniform(lo, hi, size=X_subset.shape)
-
-            # Create predictions based on buckets features
-            Z_bucket = prediction_func(**inputs_bucket)
-
-            Z_bucket_above = np.where(Z_bucket > Z_surface_subset, Z_bucket, np.nan)
-            Z_bucket_below = np.where(Z_bucket <= Z_surface_subset, Z_bucket, np.nan)
-
-            color = bucket_colors[b]
-
-            # Lower surface
-            ax.scatter(X_subset,Y_subset,Z_bucket_below,color=color,s=3,alpha=0.8,zorder=1)
-
-            # Upper surface
-            ax.scatter(X_subset,Y_subset,Z_bucket_above,color=color,s=3,alpha=0.8,zorder=3)
+        # Get filtered real data
+        real_x = x_grid.loc[mask, x_label]
+        real_y = x_grid.loc[mask, y_label]
+        real_target = data.loc[mask, target]
+        # Plot actual real target points
+        scatter = ax.scatter(real_x, real_y, real_target,
+                             color=red, alpha=0.6, label='Real target values (other features ~ default values)', s=3, zorder=2, depthshade=False)
 
         ax.set_box_aspect([1, 1, 0.6])
         ax.margins(x=0, y=0)
@@ -322,35 +315,12 @@ def plot_carpets_with_buckets(
         plt.setp(ax.get_yticklabels(), fontsize=7)
         plt.setp(ax.get_xticklabels(), fontsize=7)
         plt.setp(ax.get_zticklabels(), fontsize=7)
+        handles, labels = ax.get_legend_handles_labels()
+        fig.legend(handles, labels, loc='lower center', ncol=1, frameon=True, fontsize=7)
 
-
-    # Add legend and colorbar
-    legend_entries = []
-    for b in range(num_buckets):
-        bucket_ranges = []
-        for f in other_features:
-            lo = bucket_edges[f][b]
-            hi = bucket_edges[f][b + 1]
-            bucket_ranges.append(f"{f}[{lo:.1f}, {hi:.1f}]")
-        label = "\n".join(bucket_ranges)
-        legend_entries.append((bucket_colors[b], label))
-
-    handles = [Patch(facecolor=color, label=label) for color, label in legend_entries]
-    fig.legend(
-        handles=handles,
-        loc='lower center',
-        ncol=3,
-        fontsize=6,
-        frameon=False,
-        handleheight=1.2)
     cbar_ax = fig.add_axes([0.9, 0.35, 0.02, 0.3])
     cbar = fig.colorbar(surf, cax=cbar_ax)
     cbar.ax.tick_params(labelsize=7)
     cbar.set_label("Regressor", loc="center", fontsize=7)
 
     return fig
-
-#in order to see the interactivate plot in browser, use this:
- # import plotly.io as pio
- #    pio.renderers.default = "browser"
- #    plt.show()

@@ -109,8 +109,8 @@ if __name__ == '__main__':
     plot_dir = os.path.join(results_dir, 'plots')
 
     # Execute plotting functions
-    exe_time_series_plot(model_config,"training_data_time_series",plot_dir,save=False)
-    exe_carpet_plots(results_dir, "predictions_carpet", plot_dir,save=False)
-    exe_parallel_plot(model_config,"parallel_plot", plot_dir, save=False)
-    exe_interactive_parallel_plot(model_config,"interactive_parallel_plot", plot_dir, save=False)
-    exe_scatter_carpet_plots(results_dir, "predictions_scatter_carpet", plot_dir,save=False)
+    # exe_time_series_plot(model_config,"training_data_time_series",plot_dir,save=False)
+    # exe_carpet_plots(results_dir, "predictions_carpet", plot_dir,save=False)
+    # exe_parallel_plot(model_config,"parallel_plot", plot_dir, save=False)
+    # exe_interactive_parallel_plot(model_config,"interactive_parallel_plot", plot_dir, save=False)
+    exe_scatter_carpet_plots(results_dir, "predictions_scatter_carpet_bucket=4", plot_dir,save=True)

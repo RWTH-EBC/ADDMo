@@ -97,13 +97,16 @@ def exe_interactive_parallel_plot(model_config, plot_name, plot_dir, save = Fals
     return plt
 if __name__ == '__main__':
 
+    _path_to_input_dir = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_random_NovDez\fullANN\8_bes_VLCOPcorr_random_absurd-sweep-172"
+
     # Default saved directory for loading the saved model
-    results_dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning')
-    path_to_regressor = os.path.join(results_dir)
+    results_dir = r"D:\04_GitRepos\addmo-extra\aixtra_use_case\results"
+    path_to_regressor = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_random_NovDez\fullANN\8_bes_VLCOPcorr_random_absurd-sweep-172\regressors\regressor.keras"
     # Read config
-    config_path = os.path.join(results_dir, "config.json")
+    config_path = os.path.join(_path_to_input_dir, "local_logger", "config.json")
     with open(config_path, 'r') as f:
         model_config = json.load(f)
+        model_config['abs_path_to_data'] = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_random_NovDez\fullANN\8_bes_VLCOPcorr_random_absurd-sweep-172\regressors\xy_regressor_fit.csv"
 
     # Path for saving the model_plots
     plot_dir = os.path.join(results_dir, 'plots')
@@ -113,4 +116,13 @@ if __name__ == '__main__':
     # exe_carpet_plots(results_dir, "predictions_carpet", plot_dir,save=False)
     # exe_parallel_plot(model_config,"parallel_plot", plot_dir, save=False)
     # exe_interactive_parallel_plot(model_config,"interactive_parallel_plot", plot_dir, save=False)
-    exe_scatter_carpet_plots(results_dir, "predictions_scatter_carpet_bucket=4", plot_dir,save=True)
+    # exe_scatter_carpet_plots(_path_to_input_dir, "predictions_scatter_carpet_bucket=4", plot_dir, save=True) #TODO: whats that string thing?
+
+    plt = plot_carpets_with_buckets(model_config,bounds=None, defaults_dict=None, combinations=None,path_to_regressor=path_to_regressor, num_buckets=4)
+
+    os.makedirs(plot_dir, exist_ok=True)
+    plot_path = os.path.join(plot_dir, "test")
+    plt.show()
+    save_pdf(plt, plot_path)
+    print(plot_path)
+

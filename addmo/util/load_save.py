@@ -59,7 +59,6 @@ def load_data(abs_path: str) -> pd.DataFrame:
 
     # Convert the index to datetime
     df.index = pd.to_datetime(df.index, format="%Y-%m-%d %H:%M:%S")
-
     return df
 
 

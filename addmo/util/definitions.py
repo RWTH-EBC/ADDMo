@@ -63,7 +63,7 @@ def return_results_dir_model_tuning( name_of_raw_data='test_raw_data',name_of_da
     """
       Returns the path to the results directory for completed model tuning .
       """
-    path = os.path.join(root_dir(),root_dir(), results_dir(), name_of_raw_data, name_of_data_tuning_experiment, name_of_model_tuning_experiment)
+    path = os.path.join(root_dir(),root_dir(), results_dir(), name_of_raw_data, name_of_data_tuning_experiment, name_of_model_tuning_experiment) #todo: twice root dir?
     return path
 
 def return_best_model(dir):

@@ -187,13 +187,15 @@ def plot_carpets_with_buckets(
 
     # Load the input data and fetch column names as well as bounds from it
     else:
-        data_path = model_config['abs_path_to_data']
-        data = load_data(data_path)
-        # Fetch time column from dataset
-        time_column = next((col for col in data.columns if pd.api.types.is_datetime64_any_dtype(data[col])), None)
-        # Set time column as index
-        if time_column:
-            data.set_index(time_column, inplace=True)
+        data_path = model_config['abs_path_to_data'] #Todo: is that generalized? Did you add that variable?
+        data = pd.read_csv(
+            data_path, delimiter=";", index_col=[0], encoding="latin1", header=[0]
+        )
+        # # Fetch time column from dataset
+        # time_column = next((col for col in data.columns if pd.api.types.is_datetime64_any_dtype(data[col])), None) #TODO: why we need that?
+        # # Set time column as index
+        # if time_column:
+        #     data.set_index(time_column, inplace=True)
         x_grid = data.drop(target, axis=1)
         variables = list(x_grid.columns)
 

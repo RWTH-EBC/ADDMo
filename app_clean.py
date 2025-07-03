@@ -284,7 +284,7 @@ def exe_streamlit_model_tuning():
 
     return st.session_state.output_dir
 
-def generate_external_insights(config: dict, model_dir: str, model_metadata_config: dict):
+def generate_external_insights(model_config, model_metadata_config):
     """
     Generates plots for a model not trained by the current app,
     using the provided config and model directory.
@@ -293,154 +293,271 @@ def generate_external_insights(config: dict, model_dir: str, model_metadata_conf
     # Initialize Streamlit session state variables if not already set
     if "external_config_submitted" not in st.session_state:
         st.session_state.external_config_submitted = True
-
+    if "model_dir" not in st.session_state:
+        st.session_state.model_dir = model_config.get("saving_dir")
     if "output_dir" not in st.session_state:
-        st.session_state.output_dir = config.get("saving_dir")
-
+        st.session_state.output_dir = os.path.join(st.session_state.model_dir, 'plots')
     if "plots_selections" not in st.session_state:
         st.session_state.plots_selections = []
-
     if "show_plots_form" not in st.session_state:
         st.session_state.show_plots_form = True
-
-    if "show_bounds_form" not in st.session_state:
-        st.session_state.show_bounds_form = False
-
+    if "requires_bounds_form" not in st.session_state:
+        st.session_state.requires_bounds_form = ""
     if "plots_confirmed" not in st.session_state:
         st.session_state.plots_confirmed = False
+    if "bounds_confirmed" not in st.session_state:
+        st.session_state.bounds_confirmed = False
 
-    # --- Plot selection form ---
     with st.form("Choose plots for generating insights"):
         plots_selections = st.multiselect(
             "Select the plots which you'd like to see",
-            options=[
-                'Time Series plot for training data',
-                'Predictions carpet plot',
-                'Predictions parallel plot'
-            ],
+            options=['Time Series plot',
+                     'Predictions surface plot',
+                     'Predictions parallel plot',
+                     'Prediction surface with feature interaction scatter plot'],
             default=st.session_state.get("plots_selections", [])
         )
         submitted = st.form_submit_button("Confirm plots")
-
         if submitted:
             st.session_state.plots_selections = plots_selections
             st.session_state.plots_confirmed = True
-            st.session_state.show_bounds_form = 'Predictions carpet plot' in plots_selections
-            st.rerun()
+            st.session_state.requires_bounds_form = any(
+                plot in st.session_state.plots_selections
+                for plot in ['Predictions surface plot', 'Prediction surface with feature interaction scatter plot']
+            )
+            st.session_state.bounds_confirmed = False
+            st.session_state.bounds_choice = "Select an option"
+            st.session_state.bounds_choice_submitted = False
 
     if st.session_state.plots_confirmed:
-        st.markdown(f"Using saved directory: {model_dir}")
+        st.markdown(f"Using saved directory: {st.session_state.model_dir}")
         st.markdown(f"Plots will be saved in: {st.session_state.output_dir}")
 
-        if 'Predictions carpet plot' in st.session_state.plots_selections:
-            if "bounds_choice" not in st.session_state:
-                st.session_state.bounds_choice = "Select an option"
+        if st.session_state.requires_bounds_form:
+            with st.form("Choose bounds form"):
+                bounds_choice = st.selectbox(
+                    "Choose bounds for the columns of data",
+                    ["Select an option", "Choose min and max of existing data as bounds", "Define custom bounds"],
+                    index=["Select an option", "Choose min and max of existing data as bounds",
+                           "Define custom bounds"].index(
+                        st.session_state.get("bounds_choice", "Select an option")
+                    ),
+                    key="bounds_choice_selectbox"
+                )
+                bounds_submitted = st.form_submit_button("Confirm bounds choice")
+                if bounds_submitted:
+                    st.session_state.bounds_choice = bounds_choice
+                    st.session_state.bounds_choice_submitted = True
+                    st.rerun()
 
-            bounds_choice = st.selectbox(
-                "Choose bounds for the columns of data",
-                [
-                    "Select an option",
-                    "Choose min and max of existing data as bounds",
-                    "Define custom bounds"
-                ],
-                index=[
-                    "Select an option",
-                    "Choose min and max of existing data as bounds",
-                    "Define custom bounds"
-                ].index(st.session_state.bounds_choice)
-            )
-            st.session_state.bounds_choice = bounds_choice
-
-            if bounds_choice == "Define custom bounds":
+        if st.session_state.get("bounds_choice_submitted", False):
+            if st.session_state.bounds_choice == "Define custom bounds":
                 feature_columns = model_metadata_config.get("features_ordered", [])
-
                 if "custom_bounds" not in st.session_state:
                     st.session_state.custom_bounds = {}
-
                 if "defaults" not in st.session_state:
                     st.session_state.defaults = {}
 
-                # Custom bounds and default values form
                 with st.form("Custom bounds and defaults input"):
                     for column in feature_columns:
-                        # Retrieve defaults
                         default_min = st.session_state.custom_bounds.get(column, [0.0, 1.0])[0]
                         default_max = st.session_state.custom_bounds.get(column, [0.0, 1.0])[1]
                         default_val = st.session_state.defaults.get(column, 0.0)
-
                         st.markdown(f"*{column}*")
                         min_val = st.number_input(f"Min for {column}", key=f"{column}_min", value=default_min)
                         max_val = st.number_input(f"Max for {column}", key=f"{column}_max", value=default_max)
-                        default_input = st.number_input(
-                            f"Default value for {column}", key=f"{column}_default", value=default_val
-                        )
-
-                        # Save inputs to session state
+                        default_input = st.number_input(f"Default value for {column}", key=f"{column}_default",
+                                                        value=default_val)
                         st.session_state.custom_bounds[column] = [min_val, max_val]
                         st.session_state.defaults[column] = default_input
-
                     if st.form_submit_button("Confirm bounds and defaults"):
                         st.session_state.bounds = st.session_state.custom_bounds
                         st.session_state.final_defaults = st.session_state.defaults
+                        st.session_state.bounds_confirmed = True
                         st.success("Custom bounds and default values have been saved.")
-
-            elif bounds_choice == "Choose min and max of existing data as bounds":
+            elif st.session_state.requires_bounds_form and st.session_state.bounds_choice == "Choose min and max of existing data as bounds":
                 st.session_state.bounds = None
                 st.session_state.defaults = None
+                st.session_state.bounds_confirmed = True
+                if not model_config.get("abs_path_to_data"):
+                    st.warning("Absolute path of data is required in order to create bounds and default values.")
 
-                if not config.get("abs_path_to_data"):
-                    st.write(
-                        "Absolute path of data is required in order to create bounds and default values. "
-                        "Please re-run the form again and specify the path to data for which the plots need to be created."
-                    )
+        if 'Predictions surface plot' in st.session_state.plots_selections and st.session_state.bounds_confirmed:
+            exe_carpet_plots(st.session_state.model_dir, "predictions_surface", st.session_state.output_dir, save=True,
+                             bounds=st.session_state.bounds, defaults_dict=st.session_state.defaults)
+            st.markdown("### Carpet Plot")
+            pdf_viewer(os.path.join(st.session_state.output_dir, "predictions_surface.pdf"), width="80%")
 
-            # Button to trigger carpet plot generation
-            if st.button("Generate Carpet Plot"):
-                exe_carpet_plots(
-                    st.session_state.output_dir,
-                    "predictions_carpet_new",
-                    st.session_state.output_dir,
-                    save=True,
-                    bounds=st.session_state.bounds,
-                    defaults_dict=st.session_state.defaults
-                )
-                st.markdown("### Carpet Plot")
-                pdf_viewer(
-                    os.path.join(st.session_state.output_dir, "predictions_carpet_new.pdf"),
-                    width="80%"
-                )
+        if 'Prediction surface with feature interaction scatter plot' in st.session_state.plots_selections and st.session_state.bounds_confirmed:
+            exe_scatter_carpet_plots(st.session_state.model_dir, "predictions_scatter_surface",
+                                     st.session_state.output_dir, save=True, bounds=st.session_state.bounds,
+                                     defaults_dict=st.session_state.defaults)
+            st.markdown("### Surface with scatter Plot")
+            pdf_viewer(os.path.join(st.session_state.output_dir, "predictions_scatter_surface.pdf"), width="80%")
 
-        if 'Time Series plot for training data' in st.session_state.plots_selections:
-            exe_time_series_plot(config, "training_data_time_series", st.session_state.output_dir, save=True)
-
+        if 'Time Series plot' in st.session_state.plots_selections:
+            exe_time_series_plot(st.session_state.model_dir, "training_data_time_series", st.session_state.output_dir,
+                                 save=True)
             st.markdown("### Time Series Data Plot")
             base_path = os.path.join(st.session_state.output_dir, "training_data_time_series.pdf")
             pdf_viewer(base_path, width="80%", height=855)
-
             two_weeks_path = os.path.join(st.session_state.output_dir, "training_data_time_series_2weeks.pdf")
             if os.path.exists(two_weeks_path):
                 st.markdown("### Zoomed View: Time Series (2 Weeks)")
                 pdf_viewer(two_weeks_path, width="80%", height=855)
 
         if 'Predictions parallel plot' in st.session_state.plots_selections:
-            exe_parallel_plot(
-                config,
-                "parallel_plot",
-                st.session_state.output_dir,
-                True,
-                st.session_state.model_dir
-            )
-            st.markdown("### Parallel Plot")
-            path = os.path.join(st.session_state.output_dir, "parallel_plot.pdf")
-            pdf_viewer(path, width="80%", height=1400)
-
+            fig = exe_interactive_parallel_plot(st.session_state.model_dir, "parallel_plot",
+                                                st.session_state.output_dir, save=True)
+            scrollable_html = f"""
+            <div style="overflow-x: auto; width: 100%;">
+                <div style="min-width: 1200px;">
+                    {fig.to_html(full_html=False, include_plotlyjs='cdn')}
+                </div>
+            </div>
+            """
+            st.markdown("### Interactive Parallel Plot")
+            st.components.v1.html(scrollable_html, height=700)
     return st.session_state.output_dir
+
+
+# def generate_external_insights(config, model_dir, model_metadata_config):
+#
+#     defaults = {
+#         "external_config_submitted": True,
+#         "output_dir": config.get("saving_dir", os.path.join(model_dir, "plots")),
+#         "plots_selections": [],
+#         "show_plots_form": True,
+#         "requires_bounds_form": "",
+#         "plots_confirmed": False,
+#         "bounds_confirmed": False,
+#         "bounds_choice": "Select an option",
+#         "bounds_choice_submitted": False,
+#     }
+#     for key, value in defaults.items():
+#         if key not in st.session_state:
+#             st.session_state[key] = value
+#
+#         # Plot selection form
+#     with st.form("Choose plots for generating insights"):
+#         plots_selections = st.multiselect(
+#             "Select the plots you'd like to see:",
+#             options=[
+#                 'Time Series plot for training data',
+#                 'Predictions carpet plot',
+#                 'Predictions parallel plot'
+#             ],
+#             default=st.session_state.get("plots_selections", [])
+#         )
+#         submitted = st.form_submit_button("Confirm plots")
+#         if submitted:
+#             st.session_state.plots_selections = plots_selections
+#             st.session_state.plots_confirmed = True
+#             st.session_state.requires_bounds_form = 'Predictions carpet plot' in plots_selections
+#             st.session_state.bounds_confirmed = False
+#             st.session_state.bounds_choice = "Select an option"
+#             st.session_state.bounds_choice_submitted = False
+#             st.rerun()
+#
+#     if st.session_state.plots_confirmed:
+#         st.markdown(f"Using saved directory: `{model_dir}`")
+#         st.markdown(f"Plots will be saved in: `{st.session_state.output_dir}`")
+#
+#         if st.session_state.requires_bounds_form:
+#             with st.form("Choose bounds form"):
+#                 bounds_choice = st.selectbox(
+#                     "Choose bounds for the columns of data",
+#                     ["Select an option", "Choose min and max of existing data as bounds", "Define custom bounds"],
+#                     index=["Select an option", "Choose min and max of existing data as bounds",
+#                            "Define custom bounds"].index(
+#                         st.session_state.get("bounds_choice", "Select an option")
+#                     ),
+#                     key="external_bounds_choice_selectbox"
+#                 )
+#                 bounds_submitted = st.form_submit_button("Confirm bounds choice")
+#                 if bounds_submitted:
+#                     st.session_state.bounds_choice = bounds_choice
+#                     st.session_state.bounds_choice_submitted = True
+#                     st.rerun()
+#
+#         if st.session_state.get("bounds_choice_submitted", False):
+#             if st.session_state.bounds_choice == "Define custom bounds":
+#                 feature_columns = model_metadata_config.get("features_ordered", [])
+#
+#                 if "custom_bounds" not in st.session_state:
+#                     st.session_state.custom_bounds = {}
+#                 if "defaults" not in st.session_state:
+#                     st.session_state.defaults = {}
+#
+#                 with st.form("Custom bounds and defaults input"):
+#                     for column in feature_columns:
+#                         default_min = st.session_state.custom_bounds.get(column, [0.0, 1.0])[0]
+#                         default_max = st.session_state.custom_bounds.get(column, [0.0, 1.0])[1]
+#                         default_val = st.session_state.defaults.get(column, 0.0)
+#
+#                         st.markdown(f"*{column}*")
+#                         min_val = st.number_input(f"Min for {column}", key=f"{column}_min", value=default_min)
+#                         max_val = st.number_input(f"Max for {column}", key=f"{column}_max", value=default_max)
+#                         default_input = st.number_input(f"Default value for {column}", key=f"{column}_default",
+#                                                         value=default_val)
+#
+#                         st.session_state.custom_bounds[column] = [min_val, max_val]
+#                         st.session_state.defaults[column] = default_input
+#
+#                     if st.form_submit_button("Confirm bounds and defaults"):
+#                         st.session_state.bounds = st.session_state.custom_bounds
+#                         st.session_state.final_defaults = st.session_state.defaults
+#                         st.session_state.bounds_confirmed = True
+#                         st.success("Custom bounds and default values have been saved.")
+#
+#             elif st.session_state.bounds_choice == "Choose min and max of existing data as bounds":
+#                 st.session_state.bounds = None
+#                 st.session_state.defaults = None
+#                 st.session_state.bounds_confirmed = True
+#                 if not config.get("abs_path_to_data"):
+#                     st.warning("Absolute path of data is required in order to use this option for bounds.")
+#
+#         if 'Predictions carpet plot' in st.session_state.plots_selections and st.session_state.bounds_confirmed:
+#             exe_carpet_plots(
+#                 model_dir,
+#                 "predictions_carpet_new",
+#                 st.session_state.output_dir,
+#                 save=True,
+#                 bounds=st.session_state.bounds,
+#                 defaults_dict=st.session_state.defaults
+#             )
+#             st.markdown("### Carpet Plot")
+#             pdf_viewer(os.path.join(st.session_state.output_dir, "predictions_carpet_new.pdf"), width="80%")
+#
+#         if 'Time Series plot for training data' in st.session_state.plots_selections:
+#             exe_time_series_plot(model_dir, "training_data_time_series", st.session_state.output_dir, save=True)
+#             st.markdown("### Time Series Data Plot")
+#             base_path = os.path.join(st.session_state.output_dir, "training_data_time_series.pdf")
+#             pdf_viewer(base_path, width="80%", height=855)
+#             two_weeks_path = os.path.join(st.session_state.output_dir, "training_data_time_series_2weeks.pdf")
+#             if os.path.exists(two_weeks_path):
+#                 st.markdown("### Zoomed View: Time Series (2 Weeks)")
+#                 pdf_viewer(two_weeks_path, width="80%", height=855)
+#
+#         if 'Predictions parallel plot' in st.session_state.plots_selections:
+#             fig = exe_interactive_parallel_plot(model_dir, "parallel_plot", st.session_state.output_dir, save=True)
+#             st.markdown("### Interactive Parallel Plot")
+#             scrollable_html = f"""
+#                 <div style="overflow-x: auto; width: 100%;">
+#                     <div style="min-width: 1200px;">
+#                         {fig.to_html(full_html=False, include_plotlyjs='cdn')}
+#                     </div>
+#                 </div>
+#                 """
+#             st.components.v1.html(scrollable_html, height=700)
+#
+#     return st.session_state.output_dir
 
 def generate_addmo_insights():
     if "dir_submitted" not in st.session_state:
         st.session_state.dir_submitted = False
     if "model_dir" not in st.session_state:
-        st.session_state.model_dir = ""
+        st.session_state.model_dir = None
     if "output_dir" not in st.session_state:
         st.session_state.output_dir = None
 
@@ -456,11 +573,11 @@ def generate_addmo_insights():
             else:
                 directory = return_results_dir_model_tuning()
             submitted = st.form_submit_button("Submit")
-            if submitted:
+            if submitted and directory:
                 st.session_state.model_dir = directory
                 st.session_state.dir_submitted = True
-                st.rerun()
-    else:
+
+    if st.session_state.dir_submitted and st.session_state.model_dir is not None and st.session_state.model_dir!="":
         directory = st.session_state.model_dir
         st.write(f"Using directory: {directory}")
         plot_dir = os.path.join(directory, 'plots')
@@ -480,6 +597,8 @@ def generate_addmo_insights():
             st.session_state.requires_bounds_form = ""
         if "plots_confirmed" not in st.session_state:
             st.session_state.plots_confirmed = False
+        if "bounds_confirmed" not in st.session_state:
+            st.session_state.bounds_confirmed = False
 
         with st.form("Choose plots for generating insights"):
             plots_selections = st.multiselect(
@@ -498,26 +617,39 @@ def generate_addmo_insights():
                     plot in st.session_state.plots_selections
                     for plot in ['Predictions surface plot', 'Prediction surface with feature interaction scatter plot']
                 )
+                st.session_state.bounds_confirmed = False
+                st.session_state.bounds_choice = "Select an option"
+                st.session_state.bounds_choice_submitted = False
 
         if st.session_state.plots_confirmed:
             st.markdown(f"Using saved directory: {directory}")
             st.markdown(f"Plots will be saved in: {st.session_state.output_dir}")
 
             if st.session_state.requires_bounds_form:
-                if "bounds_choice" not in st.session_state:
-                    st.session_state.bounds_choice = "Select an option"
-                bounds_choice = st.selectbox(
-                    "Choose bounds for the columns of data",
-                    ["Select an option", "Choose min and max of existing data as bounds", "Define custom bounds"],
-                    index=["Select an option", "Choose min and max of existing data as bounds", "Define custom bounds"].index(st.session_state.bounds_choice)
-                )
-                st.session_state.bounds_choice = bounds_choice
-                if bounds_choice == "Define custom bounds":
+                with st.form("Choose bounds form"):
+                    bounds_choice = st.selectbox(
+                        "Choose bounds for the columns of data",
+                        ["Select an option", "Choose min and max of existing data as bounds", "Define custom bounds"],
+                        index=["Select an option", "Choose min and max of existing data as bounds",
+                               "Define custom bounds"].index(
+                            st.session_state.get("bounds_choice", "Select an option")
+                        ),
+                        key="bounds_choice_selectbox"
+                    )
+                    bounds_submitted = st.form_submit_button("Confirm bounds choice")
+                    if bounds_submitted:
+                        st.session_state.bounds_choice = bounds_choice
+                        st.session_state.bounds_choice_submitted = True
+                        st.rerun()
+
+            if st.session_state.get("bounds_choice_submitted", False):
+                if st.session_state.bounds_choice == "Define custom bounds":
                     feature_columns = model_metadata_config.get("features_ordered", [])
                     if "custom_bounds" not in st.session_state:
                         st.session_state.custom_bounds = {}
                     if "defaults" not in st.session_state:
                         st.session_state.defaults = {}
+
                     with st.form("Custom bounds and defaults input"):
                         for column in feature_columns:
                             default_min = st.session_state.custom_bounds.get(column, [0.0, 1.0])[0]
@@ -532,25 +664,27 @@ def generate_addmo_insights():
                         if st.form_submit_button("Confirm bounds and defaults"):
                             st.session_state.bounds = st.session_state.custom_bounds
                             st.session_state.final_defaults = st.session_state.defaults
+                            st.session_state.bounds_confirmed = True
                             st.success("Custom bounds and default values have been saved.")
-                elif bounds_choice == "Choose min and max of existing data as bounds":
+                elif st.session_state.requires_bounds_form and st.session_state.bounds_choice == "Choose min and max of existing data as bounds":
                     st.session_state.bounds = None
                     st.session_state.defaults = None
+                    st.session_state.bounds_confirmed= True
                     if not model_config.get("abs_path_to_data"):
                         st.warning("Absolute path of data is required in order to create bounds and default values.")
 
-            if 'Predictions surface plot' in st.session_state.plots_selections:
-                exe_carpet_plots(directory, "predictions_carpet", st.session_state.output_dir, save=True, bounds=st.session_state.bounds, defaults_dict=st.session_state.defaults)
+            if 'Predictions surface plot' in st.session_state.plots_selections and st.session_state.bounds_confirmed:
+                exe_carpet_plots(st.session_state.model_dir, "predictions_surface", st.session_state.output_dir, save=True, bounds=st.session_state.bounds, defaults_dict=st.session_state.defaults)
                 st.markdown("### Carpet Plot")
-                pdf_viewer(os.path.join(st.session_state.output_dir, "predictions_carpet.pdf"), width="80%")
+                pdf_viewer(os.path.join(st.session_state.output_dir, "predictions_surface.pdf"), width="80%")
 
-            if 'Prediction surface with feature interaction scatter plot' in st.session_state.plots_selections:
-                exe_scatter_carpet_plots(directory, "predictions_scatter_surface", st.session_state.output_dir, save=True, bounds=st.session_state.bounds, defaults_dict=st.session_state.defaults)
+            if 'Prediction surface with feature interaction scatter plot' in st.session_state.plots_selections and st.session_state.bounds_confirmed:
+                exe_scatter_carpet_plots(st.session_state.model_dir, "predictions_scatter_surface", st.session_state.output_dir, save=True, bounds=st.session_state.bounds, defaults_dict=st.session_state.defaults)
                 st.markdown("### Surface with scatter Plot")
                 pdf_viewer(os.path.join(st.session_state.output_dir, "predictions_scatter_surface.pdf"), width="80%")
 
             if 'Time Series plot' in st.session_state.plots_selections:
-                exe_time_series_plot(model_config, "training_data_time_series", st.session_state.output_dir, save=True)
+                exe_time_series_plot(st.session_state.model_dir, "training_data_time_series", st.session_state.output_dir, save=True)
                 st.markdown("### Time Series Data Plot")
                 base_path = os.path.join(st.session_state.output_dir, "training_data_time_series.pdf")
                 pdf_viewer(base_path, width="80%", height=855)
@@ -560,7 +694,7 @@ def generate_addmo_insights():
                     pdf_viewer(two_weeks_path, width="80%", height=855)
 
             if 'Predictions parallel plot' in st.session_state.plots_selections:
-                fig = exe_interactive_parallel_plot(model_config, "parallel_plot", st.session_state.output_dir, save=True)
+                fig = exe_interactive_parallel_plot(st.session_state.model_dir, "parallel_plot", st.session_state.output_dir, save=True)
                 scrollable_html = f"""
                 <div style="overflow-x: auto; width: 100%;">
                     <div style="min-width: 1200px;">
@@ -570,7 +704,10 @@ def generate_addmo_insights():
                 """
                 st.markdown("### Interactive Parallel Plot")
                 st.components.v1.html(scrollable_html, height=700)
-
+    # keys_to_preserve = {"output_dir"}
+    # for key in list(st.session_state.keys()):
+    #     if key not in keys_to_preserve:
+    #         del st.session_state[key]
     return st.session_state.output_dir
 
 def input_custom_model_config():
@@ -625,7 +762,7 @@ def input_custom_model_config():
         with open(model_path, "wb") as f:
             f.write(model_file.getbuffer())
         st.success("Configuration saved successfully!")
-        return data_config, model_path, model_metadata_config
+        return data_config, model_metadata_config
     return None
 
 def exe_streamlit_data_insights():
@@ -647,17 +784,16 @@ def exe_streamlit_data_insights():
         if "external_config_submitted" not in st.session_state:
             result = input_custom_model_config()
             if result is not None:
-                config, model_dir, model_metadata_config = result
+                config, model_metadata_config = result
                 st.session_state.config = config
-                st.session_state.model_dir = model_dir
+                # st.session_state.model_dir = model_dir
                 st.session_state.model_metadata_config = model_metadata_config
-                st.session_state.output_dir = config.get("saving_dir")
+                # st.session_state.output_dir = config.get("saving_dir")
                 st.session_state.external_config_submitted = True
                 st.rerun()
         else:
             st.session_state.path = generate_external_insights(
                 st.session_state.config,
-                st.session_state.model_dir,
                 st.session_state.model_metadata_config
             )
     return st.session_state.path

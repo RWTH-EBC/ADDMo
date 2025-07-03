@@ -40,7 +40,7 @@ def results_dir_data_tuning(config: DataTuningFixedConfig, user_input='y'):
     """
     Returns the path to the results directory for data tuning based on config.
     """
-    path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data, config.name_of_tuning)
+    path = os.path.join(results_dir(), config.name_of_raw_data, config.name_of_tuning)
     return create_or_clean_directory(path, user_input)
 
 
@@ -48,7 +48,7 @@ def results_dir_model_tuning(config: ModelTuningExperimentConfig,user_input='y',
     """
     Returns the path to the results directory for model tuning based on config.
     """
-    path = os.path.join(root_dir(), results_dir(), config.name_of_raw_data,
+    path = os.path.join(results_dir(), config.name_of_raw_data,
                         config.name_of_data_tuning_experiment, config.name_of_model_tuning_experiment)
     return create_or_clean_directory(path, user_input)
 
@@ -63,7 +63,7 @@ def return_results_dir_model_tuning( name_of_raw_data='test_raw_data',name_of_da
     """
       Returns the path to the results directory for completed model tuning .
       """
-    path = os.path.join(root_dir(),root_dir(), results_dir(), name_of_raw_data, name_of_data_tuning_experiment, name_of_model_tuning_experiment) #todo: twice root dir?
+    path = os.path.join(results_dir(), name_of_raw_data, name_of_data_tuning_experiment, name_of_model_tuning_experiment)
     return path
 
 def return_best_model(dir):
@@ -85,7 +85,7 @@ def results_dir_data_tuning_auto(name_of_raw_data='test_raw_data', name_of_data_
     if name_of_raw_data is None:
         config = DataTuningAutoSetup()
         name_of_raw_data = config.name_of_raw_data
-    dir = os.path.join(root_dir(), results_dir(), name_of_raw_data, name_of_data_tuning_experiment)
+    dir = os.path.join(results_dir(), name_of_raw_data, name_of_data_tuning_experiment)
     return dir
 
 def results_dir_data_tuning_fixed(name_of_raw_data='test_raw_data'):
@@ -95,7 +95,7 @@ def results_dir_data_tuning_fixed(name_of_raw_data='test_raw_data'):
     if name_of_raw_data is None:
         config = DataTuningFixedConfig()
         name_of_raw_data = config.name_of_raw_data
-    dir = os.path.join(root_dir(), results_dir(), name_of_raw_data, 'data_tuning_experiment_fixed')
+    dir = os.path.join(results_dir(), name_of_raw_data, 'data_tuning_experiment_fixed')
     return dir
 
 
@@ -103,8 +103,15 @@ def results_model_streamlit_testing(name_tuning_exp):
     """
     Returns the path to the results directory for model tuning based on config.
     """
-    path = os.path.join(root_dir(), results_dir(), 'model_streamlit_test', name_tuning_exp)
+    path = os.path.join(results_dir(), 'model_streamlit_test', name_tuning_exp)
     return path
 
 
-
+def load_model_config(dir):
+    """
+    Returns the path to the model configuration file.
+    """
+    config_path = os.path.join(dir, "config.json")
+    with open(config_path, 'r') as f:
+        model_config = json.load(f)
+    return model_config

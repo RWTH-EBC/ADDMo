@@ -1,30 +1,17 @@
 import numpy as np
 import pandas as pd
+import plotly.express as px
 import matplotlib.pyplot as plt
 from addmo.util import plotting as d
-from addmo.util.definitions import  return_results_dir_model_tuning, return_best_model
-from addmo.s3_model_tuning.models.model_factory import ModelFactory
 from addmo.util.load_save import load_data
-import plotly.express as px
 
 
-def parallel_plots(model_config, path_to_regressor = None):
+def parallel_plots(model_config, regressor):
 
     # Load target and data
     target = model_config["name_of_target"]
     data_path = model_config['abs_path_to_data']
     data = load_data(data_path)
-
-
-    # Load regressor
-    if path_to_regressor is None:
-        path_to_regressor = return_best_model(return_results_dir_model_tuning(model_config['name_of_raw_data'], model_config['name_of_data_tuning_experiment'],model_config['name_of_model_tuning_experiment']))
-    regressor = ModelFactory.load_model(path_to_regressor)
-
-    # Pre-process data
-    time_column = next((col for col in data.columns if pd.api.types.is_datetime64_any_dtype(data[col])), None)
-    if time_column:
-        data.set_index(time_column, inplace=True)
 
     xy_grid = data.drop(target, axis=1)
     y_pred = pd.Series(regressor.predict(xy_grid), index=xy_grid.index)
@@ -88,26 +75,11 @@ def parallel_plots(model_config, path_to_regressor = None):
 
 
 
-def parallel_plots_interactive(model_config, path_to_regressor=None):
+def parallel_plots_interactive(model_config, regressor):
     # Load target and data
     target = model_config["name_of_target"]
     data_path = model_config['abs_path_to_data']
     data = load_data(data_path)
-
-    # Load regressor
-    if path_to_regressor is None:
-        path_to_regressor = return_best_model(
-            return_results_dir_model_tuning(
-                model_config['name_of_raw_data'],
-                model_config['name_of_data_tuning_experiment'],
-                model_config['name_of_model_tuning_experiment']
-            )
-        )
-    regressor = ModelFactory.load_model(path_to_regressor)
-
-    time_column = next((col for col in data.columns if pd.api.types.is_datetime64_any_dtype(data[col])), None)
-    if time_column:
-        data.set_index(time_column, inplace=True)
 
     xy_grid = data.drop(target, axis=1)
     y_pred = pd.Series(regressor.predict(xy_grid), index=xy_grid.index)

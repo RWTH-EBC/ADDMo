@@ -5,7 +5,7 @@ from addmo.util import plotting as d
 from addmo.util.load_save import load_data
 
 
-def plot_timeseries_combined(config, data_path):
+def plot_timeseries_combined(config):
     """
     Returns:
     - Full time range defined in config.
@@ -14,15 +14,8 @@ def plot_timeseries_combined(config, data_path):
     Returns one or two matplotlib figures.
     """
     # Load data
+    data_path = config['abs_path_to_data']
     data = load_data(data_path)
-
-    # Fetch time column from dataset
-    time_column = next((col for col in data.columns if pd.api.types.is_datetime64_any_dtype(data[col])), None)
-    # Filter data based on start and end date from model config
-    if time_column:
-        # Set time column as index
-        data.set_index(time_column, inplace=True)
-
     # Get date range from config
     start_date = pd.to_datetime(config.get('start_train_val', data.index.min()))
     end_date = pd.to_datetime(config.get('end_test', data.index.max()))

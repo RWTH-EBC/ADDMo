@@ -22,5 +22,5 @@ def cm2inch(value):
 
 def save_pdf(plt,save_path):
     save_path= os.path.join(save_path)+ ".pdf"
-    plt.savefig(save_path, dpi=300, bbox_inches="tight", format='pdf')
+    plt.savefig(save_path, dpi=900, bbox_inches="tight", format='pdf')
 

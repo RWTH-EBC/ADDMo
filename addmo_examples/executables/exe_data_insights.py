@@ -55,6 +55,7 @@ def exe_scatter_carpet_plots(dir, plot_name, plot_dir, save = True, bounds= None
         Executes carpet model_plots of input data features along with predictions using saved model.
     """
     model_config = load_model_config(dir)
+    model_config['abs_path_to_data'] = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_random_NovDez\fullANN\8_bes_VLCOPcorr_random_absurd-sweep-172\regressors\xy_regressor_fit.csv"
 
     if path_to_regressor is None:
         path_to_regressor = return_best_model(dir)  #return default path where model is saved
@@ -126,8 +127,8 @@ if __name__ == '__main__':
     #
 
     # Define directory where the model config and regressor is saved:
-    _path_to_input_dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning_fixed')
-    # _path_to_input_dir = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_random_NovDez\fullANN\8_bes_VLCOPcorr_random_absurd-sweep-172"
+    # _path_to_input_dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning_fixed')
+    _path_to_input_dir = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_random_NovDez\fullANN\8_bes_VLCOPcorr_random_absurd-sweep-172"
 
     # Path for saving the model_plots
     plot_dir = os.path.join(_path_to_input_dir, 'plots')

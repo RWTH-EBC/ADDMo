@@ -12,7 +12,7 @@ from addmo.s1_data_tuning_auto.data_tuner_auto import DataTunerAuto
 from addmo.s5_insights.model_plots.time_series import plot_timeseries_combined
 from addmo.util.load_save import load_config_from_json
 
-def exe_data_tuning_auto(user_input):
+def exe_data_tuning_auto(user_input='y'):
     """
     Execute the system_data tuning process automatically.
     """
@@ -56,7 +56,7 @@ def exe_data_tuning_auto(user_input):
         plot_config = json.load(f)
 
     # Plot tuned data
-    figures = plot_timeseries_combined(plot_config, saved_data_path)
+    figures = plot_timeseries_combined(plot_config)
     for fig in figures:
         fig.show()
     os.makedirs(LocalLogger.directory, exist_ok=True)
@@ -64,9 +64,6 @@ def exe_data_tuning_auto(user_input):
         suffix = "_2weeks" if idx == 1 else ""
         plot_path = os.path.join(LocalLogger.directory, f"{file_name}{suffix}")
         save_pdf(fig, plot_path)
-
-
-
     print("Finished")
 
 if __name__ == "__main__":

@@ -17,7 +17,7 @@ from addmo.s5_insights.model_plots.scatter_plot import scatter
 from addmo.util.plotting import save_pdf
 
 
-def exe_model_tuning(user_input, config=None):
+def exe_model_tuning(user_input='y', config=None):
     """
     Executes model tuning process and returns the best model.
     """

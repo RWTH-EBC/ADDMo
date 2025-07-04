@@ -16,12 +16,21 @@ def get_subclasses(base_class):
     """
     return base_class.__subclasses__()
 
+def train_and_check_model(self, model, x_sample, y_sample):
+    """
+    Test the fit and predict functionality of the model.
+    """
+    model.fit(x_sample, y_sample)
+    predictions = model.predict(x_sample)
+    self.assertEqual(len(predictions), len(y_sample))
+    self.assertIsInstance(predictions, np.ndarray)
+
 class TestBaseMLModel(unittest.TestCase):
     """
     Unit tests for base class models.
     """
 
-    base_class = BaseKerasModel  # Change this to test different base classes
+    base_class = BaseScikitLearnModel  # Change this to test different base classes
 
     @classmethod
     def setUpClass(cls):
@@ -31,6 +40,7 @@ class TestBaseMLModel(unittest.TestCase):
 
         cls.temp_dir = tempfile.TemporaryDirectory()
         cls.subclasses = get_subclasses(cls.base_class)
+
         if not cls.subclasses:
             raise ValueError(f"No subclasses found for {cls.base_class.__name__}")
 
@@ -49,19 +59,16 @@ class TestBaseMLModel(unittest.TestCase):
         # Ensure regressor is not None
         for model_class in self.subclasses:
             with self.subTest(model=model_class.__name__):
+
                 model = model_class()  # Instantiate model
+                print(f"\n[INFO] Testing model {model_class.__name__}")
+
                 self.assertIsNotNone(model.regressor, f"{model_class.__name__} should have a regressor")
 
         x_sample = pd.DataFrame(np.random.rand(10, 2), columns=["A", "B"])
         y_sample = pd.Series(np.random.rand(10), name = "Target")
 
-
-        model.fit(x_sample, y_sample)
-        predictions = model.predict(x_sample)
-
-        # Test training and prediction
-        self.assertEqual(len(predictions), len(y_sample))
-        self.assertIsInstance(predictions, np.ndarray)
+        train_and_check_model(self, model, x_sample, y_sample)
 
         # Test model serialization
 

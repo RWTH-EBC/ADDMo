@@ -23,7 +23,11 @@ class TestModelTuner(unittest.TestCase):
         xy_tuned = load_data(self.config.abs_path_to_data)
 
         # Select training and validation period
-        xy_tuned_train_val = xy_tuned.loc[self.config.start_train_val:self.config.stop_train_val]
+        if hasattr(self.config, "start_train_val") and hasattr(self.config, "stop_train_val"):
+            xy_tuned_train_val = xy_tuned.loc[self.config.start_train_val: self.config.stop_train_val]
+        else:
+            xy_tuned_train_val = xy_tuned
+
         x_train_val, y_train_val = split_target_features(self.config.name_of_target, xy_tuned_train_val)
 
         # Tune the models

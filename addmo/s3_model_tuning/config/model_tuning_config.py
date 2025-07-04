@@ -88,10 +88,5 @@ class ModelTuningExperimentConfig(BaseModel):
     end_test: str = Field(
         "2016-08-16 23:45", description="End date and time for testing"
     )
-
-    # config_model_tuner: Optional[ModelTunerConfig]  = Field(
-    #     default_factory=ModelTunerConfig,
-    #     description="Model tuning setup – this is managed separately, do not edit here."
-    # )
     _config_model_tuner: Optional[ModelTunerConfig] = PrivateAttr()
 

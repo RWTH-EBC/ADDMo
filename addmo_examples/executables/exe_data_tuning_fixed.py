@@ -13,7 +13,7 @@ from addmo.util.data_handling import split_target_features
 from addmo.s5_insights.model_plots.time_series import plot_timeseries_combined
 from addmo.util.load_save import load_config_from_json
 
-def exe_data_tuning_fixed(user_input):
+def exe_data_tuning_fixed(user_input='y'):
     """
     Execute the system_data tuning process in a fixed manner.
     """
@@ -75,7 +75,7 @@ def exe_data_tuning_fixed(user_input):
 
     # Plot tuned data
 
-    figures = plot_timeseries_combined(plot_config, saved_data_path)
+    figures = plot_timeseries_combined(plot_config)
     for fig in figures:
         fig.show()
     os.makedirs(LocalLogger.directory, exist_ok=True)

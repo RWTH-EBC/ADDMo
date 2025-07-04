@@ -110,6 +110,8 @@ def exe_interactive_parallel_plot(dir, plot_name, plot_dir, save = True, path_to
         plt.write_html(plot_path)
 
     return plt
+
+
 if __name__ == '__main__':
 
     #

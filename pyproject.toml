@@ -1,4 +1,4 @@
-[projet]
+[project]
 name = 'addmo-automated-ml-regression'
 version = '0.1.0'
 description= 'Automated machine learning tool for regression tasks'
@@ -25,7 +25,7 @@ dependencies = [ "pandas",
     "streamlit",
     "pydantic-settings",
     "streamlit_pdf_viewer",
-    "git+https://github.com/RWTH-EBC/streamlit-pydantic.git"]
+    ]
 
 [build-system]
 requires = ['setuptools>=75.8.0']

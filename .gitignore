@@ -60,3 +60,4 @@ dist
 doc/_build
 
 extrapolation_detection/aixtra_use_case/results/RISHIKA_TEST/local_logger/config.json
+build/*

@@ -135,6 +135,9 @@ Change directory in command line to the project path using: `cd <Path to your lo
 Install required packages via:
 `pip install .`
 
+Also install this repo manually using: `pip install git+https://github.com/RWTH-EBC/streamlit-pydantic.git`
+
+
 Set the conda environment "ADDMo" as interpreter for e.g. in PyCharm
 
 
@@ -154,7 +157,7 @@ Some users might face matplotlib interface errors while executing plotting scrip
 
 __Using the GUI:__
 
-Executing this command in the terminal where your virtual environment is activated will launch the GUI: `addmo-gui`
+Executing this command in the terminal where your virtual environment is activated will launch the GUI: `python launch_GUI.py`
 
 Select the respective "tool" via the tabs:
 

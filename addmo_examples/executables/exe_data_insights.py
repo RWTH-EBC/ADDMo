@@ -9,7 +9,7 @@ from addmo.util.plotting import save_pdf
 from addmo.s5_insights.model_plots.carpet_plots import  plot_carpets, plot_carpets_with_buckets, prediction_func_4_regressor
 from addmo.util.definitions import  return_results_dir_model_tuning, return_best_model, load_model_config
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
-from util.load_save import load_data
+from addmo.util.load_save import load_data
 
 
 def exe_time_series_plot(dir, plot_name, plot_dir, save=True):

@@ -108,85 +108,36 @@ simply converting the id into a timestamp (pandas.datetimeindex convention).
 The tool is single output only (no MIMO).
 It has no natively recurrent model, means it only uses ownlags as a regular input for regression analysis (A native recurrent model would be e.g. long short term memory neural networks)
 
-# How to set it up - two options
+# How to set it up 
 
-1. using exclusively the GUI via docker container 
-2. full spectrum via your python environment and editor (suggested) 
+Clone the repository  
+`git clone https://git-ce.rwth-aachen.de/ebc/ebc-general/machine-learning/addmo-automated-ml-regression.git`
 
-__1: Docker__
+Create new environment using venv or conda  
 
-Install docker - make sure it works properly
+Using venv:  
+`python3 -m venv .venv`  
+`source .venv/bin/activate`  
 
-Open CMD
-
-`$cd <Path to ADDMo Repo>`\
-`$docker image build -t addmo .`\
-`$docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeling:/ADDMo --name addmocontainer addmo`
-
-
-Open your browser and enter the URL: [http://127.0.0.1:8081/]
-1. The GUI should open up
-2. Use the tool
-3. Interact with ADDMo via the CMD
-4. If a script runs into an error you have to restart the container 
-
-To restart the container in cmd:\
-"strg+c" for stopping the program
-
-`$ docker container stop addmocontainer` \
-`$ docker container rm addmocontainer` \
-`$ docker container run --publish 8081:8081 -it -v D:/Git_Repos/Data_Driven_Modeling:/ADDMo --name addmocontainer addmo `
-
-
-
-__2: Python + Editor__
-
-Via setup.py:\
-Install Anaconda (conda version: 4.8.0)
-
-Open command line and create a python 3.9 or above environment via:
-`$ conda create --name ADDMo python=3.10 `
+Using conda:  
+Open command line and create a python 3.10 or above environment via:
+`conda create --name ADDMo python=3.10 `
 
 Type y for accepting to install first packages:
-`$ y`
+` y`
 
 Activate environment:
-`$ conda activate ADDMo`
+`conda activate ADDMo`
 
 
-Change directory in command line to the project path using: `$ cd <Path to your local ADDMo repo>`
+Change directory in command line to the project path using: `cd <Path to your local ADDMo repo>`
 
 Install required packages via:
-`$ pip install -r requirements.txt`
+`pip install .`
 
 Set the conda environment "ADDMo" as interpreter for e.g. in PyCharm
 
-Via pip by your own:\
-The used Python version is 3.10
 
-Except the regular packages you need to install:
-
-pandas  
-wandb  
-onnxruntime  
-pydantic  
-joblib  
-scikit-learn==1.5.2  
-scikeras==0.13  
-keras==3.3.3  
-tensorflow  
-skl2onnx  
-optuna  
-matplotlib  
-hyperopt  
-seaborn  
-plotly  
-tf2onnx  
-pyod  
-openpyxl  
-streamlit  
-git+https://github.com/RWTH-EBC/streamlit-pydantic.git  
-pydantic-settings  
 
 Note: `BaseSettings` has been moved to the `pydantic-settings` package. The following changes are needed according to the migration document:
 1. Search for "from pydantic import BaseSettings" in the project scope
@@ -203,14 +154,7 @@ Some users might face matplotlib interface errors while executing plotting scrip
 
 __Using the GUI:__
 
-Setup GUI configuration in pycharm:
-1. Go to `run`-> `Edit Configurations`
-2. Create new configuration with name `app.py`
-3. In the `run` tab, change `script` to `module` and add `streamlit` as input
-4. Add `run app.py` in the scripts parameter section
-5. Save the configuration
-
-Run app.py and see the information within the GUI
+Executing this command in the terminal where your virtual environment is activated will launch the GUI: `addmo-gui`
 
 Select the respective "tool" via the tabs:
 
@@ -243,7 +187,7 @@ Note: If you want to use "only predict" upon a new data set, make sure it has th
 
 __Running the scripts directly via the python console:__
 
-*Executive scripts are:*\
+*Executive scripts are:*
 - DataTuning.py for tuning the data (achieving the tuned data)
 - ModelTuning.py for tuning the model (with the tuned data as input). 
 In the final lines of ModelTuning.py one can define via commmenting and uncommenting, whether the automatic procedure (final bayes: training the model while automatically selecting the best: 

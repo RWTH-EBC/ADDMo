@@ -83,7 +83,6 @@ def recursive_feature_selection_by_count(config: DataTuningAutoSetup, x, y):
         selector = RFE(estimator=model, n_features_to_select=len(current_features))
         selector = selector.fit(x.iloc[:, current_features], y)
 
-        # Optional: print CV score just for info, but no stopping condition
         scores = cross_val_score(model, x.iloc[:, current_features], y, cv=5, scoring='r2')
         mean_score = np.mean(scores)
         print(f"Features: {len(current_features)}, CV Score: {mean_score:.4f}")

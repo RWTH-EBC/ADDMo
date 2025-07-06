@@ -5,7 +5,7 @@ from addmo.util import plotting as d
 from addmo.util.load_save import load_data
 
 
-def plot_timeseries_combined(config):
+def plot_timeseries_combined(config, data):
     """
     Returns:
     - Full time range defined in config.
@@ -13,13 +13,12 @@ def plot_timeseries_combined(config):
 
     Returns one or two matplotlib figures.
     """
-    # Load data
-    data_path = config['abs_path_to_data']
-    data = load_data(data_path)
-    # Get date range from config
-    start_date = pd.to_datetime(config.get('start_train_val', data.index.min()))
-    end_date = pd.to_datetime(config.get('end_test', data.index.max()))
-    data = data[(data.index >= start_date) & (data.index <= end_date)]
+
+    # Get date range from config (if it exists):
+    if hasattr(config,'start_train_val') and hasattr(config, 'end_test'):
+        start_date = pd.to_datetime(config.get('start_train_val', data.index.min()))
+        end_date = pd.to_datetime(config.get('end_test', data.index.max()))
+        data = data[(data.index >= start_date) & (data.index <= end_date)]
 
     # Check data duration
     duration_days = (data.index.max() - data.index.min()).days

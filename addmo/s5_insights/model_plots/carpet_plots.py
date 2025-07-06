@@ -300,8 +300,7 @@ def plot_carpets_with_buckets(
         Z1 = pred_func_1(**inputs_surface)
         surf1_cmap = "winter"
         surf2_cmap = "autumn"
-        if pred_func_2 is None:
-            surf1 = ax.plot_surface(X, Y, Z1, cmap=surf1_cmap, alpha=0.5)
+
         if pred_func_2 is not None:
             Z2 = pred_func_2(**inputs_surface)
 
@@ -322,23 +321,66 @@ def plot_carpets_with_buckets(
             surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)
             surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)
 
+        if pred_func_2 is None:
+            norm1 = colors.Normalize(vmin=np.nanmin(Z1), vmax=np.nanmax(Z1))
+            # norm2 = colors.Normalize(vmin=np.nanmin(Z2), vmax=np.nanmax(Z2))
+            # filter real data points which belongs to the default dict bucket of the remaining combinations:
+            other_features = [f for f in variables if f not in (x_label, y_label)]
+            mask = pd.Series(True, index=measurements_data.index) # for filtering out rows which we don't want
+            for f in other_features:
+                lower, upper = bucket[f]
+                # returns value true for the index if it falls within the range,
+                # so iteratively removes indices for features which don't fall in bucket
+                mask &= measurements_data[f].between(lower, upper)
 
-        # filter real data points which belongs to the default dict bucket of the remaining combinations:
-        other_features = [f for f in variables if f not in (x_label, y_label)]
-        mask = pd.Series(True, index=measurements_data.index) # for filtering out rows which we don't want
-        for f in other_features:
-            lower, upper = bucket[f]
-            # returns value true for the index if it falls within the range,
-            # so iteratively removes indices for features which don't fall in bucket
-            mask &= measurements_data[f].between(lower, upper)
+            # Get filtered real data
+            real_x = measurements_data.loc[mask, x_label].to_numpy()
+            real_y = measurements_data.loc[mask, y_label].to_numpy()
+            real_target = data.loc[mask, target].to_numpy()
 
-        # Get filtered real data
-        real_x = measurements_data.loc[mask, x_label]
-        real_y = measurements_data.loc[mask, y_label]
-        real_target = data.loc[mask, target]
-        # Plot actual real target points
-        scatter = ax.scatter(real_x, real_y, real_target,
-                             c=real_target, cmap=surf2_cmap, alpha=0.6, s=3, zorder=10, norm=norm2 if 'norm2' in locals() else None)
+            # Step 2: Prepare the grid
+            x_grid = grids[x_label]
+            y_grid = grids[y_label]
+
+            # Step 3: Classify each point based on Z1 prediction from grid
+            above_x, above_y, above_z = [], [], []
+            below_x, below_y, below_z = [], [], []
+
+            # Map (x_val, y_val) to Z1 prediction from the grid
+            for x_val, y_val, target_val in zip(real_x, real_y, real_target):
+                xi = np.abs(x_grid - x_val).argmin()
+                yi = np.abs(y_grid - y_val).argmin()
+                pred_val = Z1[yi, xi]  # note: row index = y, col index = x
+
+                if target_val > pred_val:
+                    above_x.append(x_val)
+                    above_y.append(y_val)
+                    above_z.append(target_val)
+                else:
+                    below_x.append(x_val)
+                    below_y.append(y_val)
+                    below_z.append(target_val)
+
+            # Step 4: Split the surface Z1 into below and above parts
+            Z1_below = np.where(Z1 < real_target.mean(), Z1, np.nan)  # rough approx
+            Z1_above = np.where(Z1 >= real_target.mean(), Z1, np.nan)
+
+            # ⚠️ Optional: instead of `mean`, you could make a mask grid from real_target projection
+
+            # Step 5: Plot in order to maintain layering
+            # → first the surface *below* the real data
+            surf1_smaller = ax.plot_surface(X, Y, Z1_below, cmap=surf1_cmap, alpha=0.5, norm=norm1)
+
+            # → then the real data that lies *below* the surface
+            scatter= ax.scatter(below_x, below_y, below_z, color="red", label="Real < Pred", depthshade=False)
+            surf1_greater = ax.plot_surface(X, Y, Z1_above, cmap=surf1_cmap, alpha=0.5, norm=norm1)
+
+            # → then the real data that lies *above* the surface
+            ax.scatter(above_x, above_y, above_z, color="green", label="Real > Pred", depthshade=False)
+
+            # → finally the surface *above* the real data
+
+
 
         ax.set_box_aspect([1, 1, 0.6])
         ax.margins(x=0, y=0)
@@ -358,7 +400,7 @@ def plot_carpets_with_buckets(
     # Add colorbars and label them
 
     cbar_ax1 = fig.add_axes([0.92, 0.55, 0.02, 0.3])
-    cbar1 = fig.colorbar(surf1, cax=cbar_ax1)
+    cbar1 = fig.colorbar(surf1_smaller, cax=cbar_ax1)
     cbar1.set_label("Regressor", fontsize=7)
     cbar1.set_ticks([])
     cbar1.set_ticklabels([])

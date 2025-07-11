@@ -1,0 +1,16 @@
+{
+    "models": [
+        "SciKerasSequential"
+    ],
+    "trainings_per_model": 1,
+    "hyperparameter_tuning_type": "OptunaTuner",
+    "hyperparameter_tuning_kwargs": {
+        "n_trials": 2
+    },
+    "validation_score_mechanism": "cv",
+    "validation_score_mechanism_kwargs": {},
+    "validation_score_splitting": "KFold",
+    "validation_score_splitting_kwargs": {},
+    "validation_score_metric": "neg_root_mean_squared_error",
+    "validation_score_metric_kwargs": {}
+}

@@ -66,17 +66,19 @@ def return_results_dir_model_tuning( name_of_raw_data='test_raw_data',name_of_da
     path = os.path.join(results_dir(), name_of_raw_data, name_of_data_tuning_experiment, name_of_model_tuning_experiment)
     return path
 
-def return_best_model(dir):
+def return_best_model(dir, extensions=(".joblib", ".keras")):
     """
-    Returns the path to the best model based on the directory path.
+    Returns the path to the model based on the directory path.
     """
-    model_files = glob.glob(os.path.join(dir, "best_model.*"))
+    for fname in sorted(os.listdir(dir)):
+        if fname.endswith(extensions):
+            full_path = os.path.join(dir, fname)
+            if os.path.isfile(full_path):
+                return full_path
 
-    if model_files:
-        path_to_regressor = model_files[0]  # Load the first match
-        return path_to_regressor
-    else:
-        raise FileNotFoundError("No 'best_model' file found in the directory.")
+    raise FileNotFoundError(
+        f"No model file with extensions {extensions} found in {dir!r}"
+    )
 
 def results_dir_data_tuning_auto(name_of_raw_data='test_raw_data', name_of_data_tuning_experiment='data_tuning_experiment_auto'):
     """

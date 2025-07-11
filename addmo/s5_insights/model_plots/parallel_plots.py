@@ -6,12 +6,7 @@ from addmo.util import plotting as d
 from addmo.util.load_save import load_data
 
 
-def parallel_plots(model_config, regressor):
-
-    # Load target and data
-    target = model_config["name_of_target"]
-    data_path = model_config['abs_path_to_data']
-    data = load_data(data_path)
+def parallel_plots(target, data, regressor):
 
     xy_grid = data.drop(target, axis=1)
     y_pred = pd.Series(regressor.predict(xy_grid), index=xy_grid.index)
@@ -75,11 +70,8 @@ def parallel_plots(model_config, regressor):
 
 
 
-def parallel_plots_interactive(model_config, regressor):
-    # Load target and data
-    target = model_config["name_of_target"]
-    data_path = model_config['abs_path_to_data']
-    data = load_data(data_path)
+def parallel_plots_interactive(target, data, regressor):
+
 
     xy_grid = data.drop(target, axis=1)
     y_pred = pd.Series(regressor.predict(xy_grid), index=xy_grid.index)

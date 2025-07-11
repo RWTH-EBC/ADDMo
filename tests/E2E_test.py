@@ -8,7 +8,7 @@ from addmo_examples.executables.exe_data_tuning_fixed import exe_data_tuning_fix
 from addmo_examples.executables.exe_model_tuning import exe_model_tuning
 from addmo_examples.executables.exe_data_insights import exe_carpet_plots
 from s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
-from s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig
+from s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig, ModelTunerConfig
 from util.load_save_utils import root_dir
 
 
@@ -24,8 +24,10 @@ class TestAddmoEndToEnd(unittest.TestCase):
             "addmo", "s2_data_tuning", "config", "data_tuning_config.json"
         )
         cls.data_config = load_config_from_json(cls.data_config_path, DataTuningFixedConfig)
-        cls.model_config_path = os.path.join(root_dir(), "addmo", "s3_model_tuning", "config", "model_tuning_config.json")
-        cls.model_config = load_config_from_json(cls.model_config_path, ModelTuningExperimentConfig)
+        cls.model_tuner_config_path = os.path.join(root_dir(), "addmo", "s3_model_tuning", "config", "model_tuner_config.json")
+        cls.model_exp_config_path = os.path.join(root_dir(), "addmo", "s3_model_tuning", "config", "model_tuner_experiment_config.json")
+        cls.model_config = load_config_from_json(cls.model_exp_config_path, ModelTuningExperimentConfig)
+        cls.model_tuner_config = load_config_from_json(cls.model_tuner_config_path, ModelTunerConfig)
 
     def test_full_pipeline(self):
 
@@ -42,7 +44,7 @@ class TestAddmoEndToEnd(unittest.TestCase):
         self.model_config.abs_path_to_data = tuned_csv
 
         # Test Model Tuning executable file
-        exe_model_tuning(config= self.model_config)
+        exe_model_tuning(config_exp= self.model_config, config_tuner= self.model_tuner_config)
         model_dir = results_dir_model_tuning(self.model_config)
         best_model_path = return_best_model(model_dir)
         self.assertTrue(os.path.exists(best_model_path), "Best model not saved.")

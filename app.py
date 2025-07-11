@@ -203,7 +203,7 @@ def exe_streamlit_model_tuning():
     """)
 
     # Session initialization
-    for key in ["model_config_data", "model_config_saved", "output_dir", "overwrite_strategy"]:
+    for key in ["model_config_data", "model_config_saved", "output_dir", "overwrite_strategy","model_tuner"]:
         if key not in st.session_state:
             st.session_state[key] = None if key != "model_config_saved" else False
 
@@ -216,7 +216,7 @@ def exe_streamlit_model_tuning():
     if not model_tuner.get("hyperparameter_tuning_kwargs"):
         model_tuner["hyperparameter_tuning_kwargs"] = {"n_trials": 2}
 
-    model_config_data["config_model_tuner"] = model_tuner
+    model_config_data["_config_model_tuner"] = model_tuner
 
     st.subheader("Input data tuning type")
     type_of_data = st.selectbox("Would you like to use tuned data for model tuning?", ["choose", "Yes", "No"])
@@ -248,8 +248,10 @@ def exe_streamlit_model_tuning():
     # Save config
     if st.button("Save Model Config"):
         st.session_state.model_config_data = model_config_data
+        st.session_state.model_tuner = model_tuner
         st.session_state.model_config_saved = True
         model_config_obj = ModelTuningExperimentConfig(**model_config_data)
+        model_tuner_obj = ModelTunerConfig(**model_tuner)
 
         output_dir = return_results_dir_model_tuning(
             model_config_obj.name_of_raw_data,
@@ -258,8 +260,10 @@ def exe_streamlit_model_tuning():
         )
         st.session_state.output_dir = output_dir
 
-        config_path = os.path.join(root_dir(), 'addmo', 's3_model_tuning', 'config', 'model_tuning_config.json')
-        save_config_to_json(model_config_obj, config_path)
+        config_path_exp = os.path.join(root_dir(), 'addmo', 's3_model_tuning', 'config', 'model_tuner_experiment_config.json')
+        config_path_tuner = os.path.join(root_dir(), 'addmo', 's3_model_tuning', 'config', 'model_tuner_config.json')
+        save_config_to_json(model_config_obj, config_path_exp)
+        save_config_to_json(model_tuner_obj, config_path_tuner)
         st.success("Model configuration saved!")
 
     if st.session_state.model_config_saved:
@@ -275,8 +279,9 @@ def exe_streamlit_model_tuning():
     if (st.session_state.model_config_saved and st.session_state.overwrite_strategy is not None
             and st.button("Run Model Tuning")):
         model_config_obj = ModelTuningExperimentConfig(**st.session_state.model_config_data)
+        model_tuner_obj= ModelTunerConfig(**st.session_state.model_tuner)
         with st.spinner("Running model tuning..."):
-            exe_model_tuning(st.session_state.overwrite_strategy, model_config_obj)
+            exe_model_tuning(st.session_state.overwrite_strategy, model_config_obj, model_tuner_obj)
             plot_image_path = os.path.join(st.session_state.output_dir, "model_fit_scatter.pdf")
             st.markdown("### Model Fit Plot")
             pdf_viewer(plot_image_path, width="80%", height=855)
@@ -620,7 +625,8 @@ def input_custom_model_config():
         st.session_state["external_data_config"] = data_config
         st.session_state["model_metadata_config"] = model_metadata_config
 
-        metadata_config_path = os.path.join(saving_dir, "best_model_metadata.json")
+        base_name = os.path.splitext(model_file.name)[0]
+        metadata_config_path = os.path.join(saving_dir, base_name + "_metadata.json")
         with open(metadata_config_path, "w") as f:
             json.dump(model_metadata_config, f, indent=4)
         data_config_path = os.path.join(saving_dir, "config.json")

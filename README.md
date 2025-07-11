@@ -57,26 +57,11 @@ feature selection, see scikit-learn.org for further information. Number
 of features can be both found automatically or set manually.
 - Embedded feature selection by threshold: Univariate feature
 selection by a custom threshold of importance.
-- Wrapper recursive feature selection*: Multivariate wrapper
-which iteratively deletes the worst feature of the respective
-feature subset as long as it improves the score_test.
 
-Sample processing:
-- Individual model “hourly”*: One model per hour of the day.
-- Individual model “weekday & weekend”*: One model for
-weekdays and one for weekends.
-- Individual model “by feature”*: One model for all samples
-with the feature’s values below and one for values above a
-certain threshold. The respective feature is user-defined.
-- Shuffle: Random shuffle of samples.
 
 Model tuning:
 - Model selection*: Exhaustive wrapper for selecting the best
 out of all implemented models.
-- Recursive prediction*: Enabling multistep ahead prediction
-for models with time series and inertia ownlags. Iteratively
-feeding the forecast back to the ownlag slots of the input
-features.
 - Hyperparameter tuning: via bayesian optimization or grid search
 - Cross-validation: prevent overfitting
 
@@ -86,9 +71,6 @@ is optional, thus ensuring that any combination can be selected.
 The implemented models are 
 - “multi layer perceptron” (ANN) 
 - “epsilon support vector regression” (SVR)
-- “random forest” (RF)
-- “gradient tree boosting” (GB)
-- “lasso”
 
 The methodology of fit & test set differentiation, hyperparameter
 tuning and cross-validation is depicted in "ModelTuningFlowchart.vsdx". Moreover,
@@ -110,35 +92,36 @@ It has no natively recurrent model, means it only uses ownlags as a regular inpu
 
 # How to set it up 
 
-Clone the repository  
+1. Clone the repository  
 `git clone https://git-ce.rwth-aachen.de/ebc/ebc-general/machine-learning/addmo-automated-ml-regression.git`
 
-Create new environment using venv or conda  
 
-Using venv:  
-`python3 -m venv .venv`  
-`source .venv/bin/activate`  
+2. Create new environment using venv or conda  
 
-Using conda:  
-Open command line and create a python 3.10 or above environment via:
-`conda create --name ADDMo python=3.10 `
-
-Type y for accepting to install first packages:
-` y`
-
-Activate environment:
-`conda activate ADDMo`
-
-
-Change directory in command line to the project path using: `cd <Path to your local ADDMo repo>`
-
-Install required packages via:
-`pip install .`
-
-Also install this repo manually using: `pip install git+https://github.com/RWTH-EBC/streamlit-pydantic.git`
+	Using venv:  
+	`python3 -m venv .venv`  
+	`source .venv/bin/activate`  
+	
+	Using conda:  
+	Open command line and create a python 3.10 or above environment via:
+	`conda create --name ADDMo python=3.10 `
+	
+	Type y for accepting to install first packages:
+	` y`
+	
+	Activate environment:
+	`conda activate ADDMo`
 
 
-Set the conda environment "ADDMo" as interpreter for e.g. in PyCharm
+3. Change directory in command line to the project path using: `cd <Path to your local ADDMo repo>`
+
+
+4. Install required packages via:
+   `pip install .`
+
+	
+
+5. Set the conda environment "ADDMo" as interpreter for e.g. in PyCharm
 
 
 
@@ -161,14 +144,7 @@ Executing this command in the terminal where your virtual environment is activat
 
 Select the respective "tool" via the tabs:
 
-1.The automatic procedure (Auto final bayes: Importing data, tuning data, training the model while automatically\
-selecting the best: "Model", "Individual Model", "Features" and "Hyperparameters of the model". Also evaluate the models via out-of-sample prediction), \
-Necessary steps "Auto final bayes":\
-	1.Upload input data\
-	2.Define settings\
-	3.Run
-
-2.Data tuning: Importing input data, tuning data.\
+1.Data tuning: Importing input data, tuning data.\
 Necessary steps "Data tuning":\
 	1.Upload input data\
 	2.Define settings\

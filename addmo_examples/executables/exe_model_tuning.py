@@ -17,7 +17,7 @@ from addmo.s5_insights.model_plots.scatter_plot import scatter
 from addmo.util.plotting import save_pdf
 
 
-def exe_model_tuning(user_input='y', config=None):
+def exe_model_tuning(user_input='y', config_exp=None, config_tuner=None):
     """
     Executes model tuning process and returns the best model.
     """
@@ -25,24 +25,24 @@ def exe_model_tuning(user_input='y', config=None):
     # Configure the logger
     LocalLogger.active = True
     if LocalLogger.active:
-        LocalLogger.directory = results_dir_model_tuning( config,user_input)
+        LocalLogger.directory = results_dir_model_tuning( config_exp,user_input)
     WandbLogger.project = "addmo-test_model_tuning"
     WandbLogger.active = False
     if WandbLogger.active:
-        WandbLogger.directory = results_dir_model_tuning(config,user_input)
+        WandbLogger.directory = results_dir_model_tuning(config_exp,user_input)
 
     # Initialize logging
-    ExperimentLogger.start_experiment(config=config)
+    ExperimentLogger.start_experiment(config=config_exp)
 
     # Create the model tuner
-    model_tuner = ModelTuner(config=config._config_model_tuner)
+    model_tuner = ModelTuner(config=config_tuner)
 
     # Load the system_data
-    xy_tuned = load_data(config.abs_path_to_data)
+    xy_tuned = load_data(config_exp.abs_path_to_data)
 
     # Select training and validation period
-    xy_tuned_train_val = xy_tuned.loc[config.start_train_val:config.stop_train_val]
-    x_train_val, y_train_val = split_target_features(config.name_of_target, xy_tuned_train_val)
+    xy_tuned_train_val = xy_tuned.loc[config_exp.start_train_val:config_exp.stop_train_val]
+    x_train_val, y_train_val = split_target_features(config_exp.name_of_target, xy_tuned_train_val)
 
     # log start and end of the system_data
     ExperimentLogger.log({"xy_tuned_train_val": pd.concat([xy_tuned_train_val.head(5), xy_tuned_train_val.tail(5)])})
@@ -61,7 +61,7 @@ def exe_model_tuning(user_input='y', config=None):
         art_type = 'joblib'
     name = 'best_model'
     ExperimentLogger.log_artifact(best_model, name, art_type)
-    plt = scatter(y_train_val, y_pred, config.name_of_target, best_model.fit_error)
+    plt = scatter(y_train_val, y_pred, config_exp.name_of_target, best_model.fit_error)
     save_pdf(plt, os.path.join(LocalLogger.directory, 'model_fit_scatter'))
     plt.show()
 
@@ -70,19 +70,21 @@ def exe_model_tuning(user_input='y', config=None):
 
 if __name__ == "__main__":
     # Read config from existing json file
-    path_to_config = os.path.join(root_dir(), 'addmo', 's3_model_tuning', 'config',
-                                  'model_tuning_config.json')
-
-    config = load_config_from_json(path_to_config, ModelTuningExperimentConfig)
+    path_to_config_exp = os.path.join(root_dir(), 'addmo', 's3_model_tuning', 'config',
+                                  'model_tuner_experiment_config.json')
+    path_to_config_tuner= os.path.join(root_dir(), 'addmo', 's3_model_tuning', 'config',
+                                  'model_tuner_config.json')
+    config_exp = load_config_from_json(path_to_config_exp, ModelTuningExperimentConfig)
+    config_tuner = load_config_from_json(path_to_config_tuner, ModelTunerConfig)
     # Create the default config object
     # config = ModelTuningExperimentConfig()
     # config.name_of_model_tuning_experiment = 'test_model_tuning_raw'
     # # Change default input data path to auto tuned data path
     # tuned_data_path = os.path.join(results_dir_data_tuning_auto(), "tuned_xy_auto.csv")
     # config.abs_path_to_data = tuned_data_path
-    config._config_model_tuner.validation_score_splitting = 'UnivariateSplitter'
-    config._config_model_tuner.validation_score_splitting_kwargs = None
+    # config_tuner._config_model_tuner.validation_score_splitting = 'UnivariateSplitter'
+    # config_tuner._config_model_tuner.validation_score_splitting_kwargs = None
     user_input = input(
         "To overwrite the existing content type in 'addmo_examples/results/test_raw_data/test_data_tuning/test_model_tuning' results directory <y>, for deleting the current contents type <d>: ")
     # run
-    exe_model_tuning(user_input,config)
+    exe_model_tuning(user_input, config_exp, config_tuner)

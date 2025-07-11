@@ -1,9 +1,10 @@
 import pandas as pd
 import json
+import datetime
 from pathlib import Path
 from pydantic import FilePath, BaseModel
 from typing import Type, TypeVar, Union
-
+import datetime
 ConfigT = TypeVar("ConfigT", bound=BaseModel)
 
 
@@ -78,3 +79,22 @@ def write_data(df: pd.DataFrame, abs_path: str):
         df.to_excel(abs_path)
 
 
+def ensure_datetime_index(
+    df: pd.DataFrame,
+    origin: datetime.datetime = datetime.datetime(2019, 1, 1),
+    fmt: str = "%Y-%m-%d %H:%M:%S"):
+
+
+    if pd.api.types.is_datetime64_any_dtype(df.index):
+        return df
+
+    idx = df.index
+    try:
+        df.index = pd.to_datetime(idx, format=fmt)
+        return df
+    except (ValueError, TypeError):
+        pass
+
+    secs = pd.to_numeric(idx, errors="coerce")
+    df.index = pd.to_datetime(secs, unit="s", origin=origin)
+    return df

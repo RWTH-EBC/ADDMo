@@ -25,6 +25,7 @@ dependencies = [ "pandas",
     "streamlit",
     "pydantic-settings",
     "streamlit_pdf_viewer",
+    "streamlit-pydantic @ git+https://github.com/RWTH-EBC/streamlit-pydantic.git@main"
     ]
 
 [build-system]

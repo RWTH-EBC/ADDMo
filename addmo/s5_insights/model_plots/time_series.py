@@ -5,7 +5,7 @@ from addmo.util import plotting as d
 from addmo.util.load_save import load_data
 
 
-def plot_timeseries_combined(config, data):
+def plot_timeseries_combined(config,data):
     """
     Returns:
     - Full time range defined in config.
@@ -28,7 +28,7 @@ def plot_timeseries_combined(config, data):
     fig_full, axes_full = plt.subplots(len(columns_to_plot), 1,
                                        figsize=(d.cm2inch(15.5), d.cm2inch(fig_height)),
                                        sharex=True, gridspec_kw={'wspace': 0, 'hspace': 0.08})
-    plt.subplots_adjust(left=0.12, right=0.97, bottom=0.05, top=0.97)
+    plt.subplots_adjust(left=0.12, right=0.97, bottom=0.1, top=0.97)
 
     for ax, column in zip(axes_full, columns_to_plot):
         color = d.red if column == config['name_of_target'] else d.black
@@ -42,7 +42,7 @@ def plot_timeseries_combined(config, data):
         plt.setp(ax.get_yticklabels(), fontsize=7)
 
     axes_full[-1].set_xlabel("Time", fontsize=7)
-    axes_full[-1].xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
+    axes_full[-1].xaxis.set_major_formatter(mdates.DateFormatter('%m-%d\n%H:%M'))
     plt.setp(axes_full[-1].xaxis.get_majorticklabels(), rotation=0, ha="center", fontsize=7)
     fig_full.align_labels()
 
@@ -57,7 +57,7 @@ def plot_timeseries_combined(config, data):
         fig_2weeks, axes_2weeks = plt.subplots(len(columns_to_plot), 1,
                                                figsize=(d.cm2inch(15.5), d.cm2inch(fig_height_2w)),
                                                sharex=True, gridspec_kw={'wspace': 0, 'hspace': 0.08})
-        plt.subplots_adjust(left=0.12, right=0.97, bottom=0.05, top=0.97)
+        plt.subplots_adjust(left=0.12, right=0.97, bottom=0.1, top=0.97)
 
         for ax, column in zip(axes_2weeks, columns_to_plot):
             color = d.red if column == config['name_of_target'] else d.black
@@ -71,7 +71,7 @@ def plot_timeseries_combined(config, data):
             plt.setp(ax.get_yticklabels(), fontsize=7)
 
         axes_2weeks[-1].set_xlabel("Time", fontsize=7)
-        axes_2weeks[-1].xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
+        axes_2weeks[-1].xaxis.set_major_formatter(mdates.DateFormatter('%m-%d\n%H:%M'))
         plt.setp(axes_2weeks[-1].xaxis.get_majorticklabels(), rotation=0, ha="center", fontsize=7)
         fig_2weeks.align_labels()
 

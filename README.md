@@ -152,7 +152,7 @@ Toggle key preprocessing steps like lag creation and difference features and cho
 
 Default saving path: `addmo-automated-ml-regression\addmo_examples\results\test_raw_data\data_tuning_experiment_auto`
 
-ℹ️ Detailed configuration guide available directly in the GUI tab.
+Detailed configuration guide available directly in the GUI tab.
 
 ### Fixed Data Tuning:
 Uses the same general fields as the auto tuning tab and supports key feature construction options:
@@ -162,7 +162,7 @@ Default saving path: `addmo-automated-ml-regression\addmo_examples\results\test_
 
 Feature naming convention: Temperature__lag3, Power__diff
 
-ℹ️ Detailed configuration guide available directly in the GUI tab.
+Detailed configuration guide available directly in the GUI tab.
 
 ## Model tuning 
 Importing the previously tuned data, training the model with optimizing the hyperparameters and evaluate the model via out-of-sample predictions. Mention the tuned data path (default or custom) in the config to train model on tuned data.

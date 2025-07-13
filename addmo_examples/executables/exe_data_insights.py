@@ -8,7 +8,6 @@ from addmo.s5_insights.model_plots.carpet_plots import  plot_carpets, plot_carpe
 from addmo.util.definitions import  return_results_dir_model_tuning, return_best_model, load_model_config
 from addmo.util.load_save import ensure_datetime_index
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
-from aixtra.system_simulations import system_simulations as sys_sim
 
 def exe_time_series_plot(dir, plot_name, plot_dir, save=True):
     """
@@ -63,7 +62,6 @@ def exe_carpet_plots(dir, plot_name, plot_dir, save = True, bounds= None, defaul
     # Load regressor
     regressor = ModelFactory.load_model(path_to_regressor)
     pred_func_1 = prediction_func_4_regressor(regressor)
-    pred_func_2= sys_sim.bestest900_ODE_VL_COPcorr
     # Load target variable
     target = model_config["name_of_target"]
 
@@ -86,7 +84,7 @@ def exe_carpet_plots(dir, plot_name, plot_dir, save = True, bounds= None, defaul
         variables = list(measurements_data.columns)
 
     # Execute plotting
-    plt= plot_carpets(variables=variables, measurements_data= measurements_data, regressor_func= pred_func_1, system_func = pred_func_2, bounds = bounds, combinations = combinations, defaults_dict = defaults_dict)
+    plt= plot_carpets(variables=variables, measurements_data= measurements_data, regressor_func= pred_func_1, bounds = bounds, combinations = combinations, defaults_dict = defaults_dict)
 
     if save:
         os.makedirs(plot_dir, exist_ok=True)
@@ -209,16 +207,6 @@ def exe_interactive_parallel_plot(dir, plot_name, plot_dir, save = True, path_to
 
 if __name__ == '__main__':
 
-    #
-    # # Default saved directory for loading the saved model
-    # results_dir = r"D:\04_GitRepos\addmo-extra\aixtra_use_case\results"
-    # path_to_regressor = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_random_NovDez\fullANN\8_bes_VLCOPcorr_random_absurd-sweep-172\regressors\regressor.keras"
-    # # Read config
-    # config_path = os.path.join(_path_to_input_dir, "local_logger", "config.json")
-    # with open(config_path, 'r') as f:
-    #     model_config = json.load(f)
-    #     model_config['abs_path_to_data'] = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_random_NovDez\fullANN\8_bes_VLCOPcorr_random_absurd-sweep-172\regressors\xy_regressor_fit.csv"
-    #
 
     # Define directory where the model config and regressor is saved:
     # _path_to_input_dir = return_results_dir_model_tuning('test_raw_data_1', 'test_data_tuning', 'test_model_tuning')
@@ -228,6 +216,7 @@ if __name__ == '__main__':
 
 
     _path_to_input_dir= r'C:\Users\mre-rpa\Desktop\PycharmProjects\addmo-automated-ml-regression\addmo_examples\results\model_plots'
+
     # Path for saving the model_plots
     plot_dir = os.path.join(_path_to_input_dir, 'plots')
     # Define regressor path if it is not saved as 'best_model.ext'
@@ -236,11 +225,11 @@ if __name__ == '__main__':
 
 
     # Execute plotting functions
-    exe_time_series_plot(_path_to_input_dir, plot_name = "training_data_time_series", plot_dir= plot_dir,save=False)
+   # exe_time_series_plot(_path_to_input_dir, plot_name = "training_data_time_series", plot_dir= plot_dir,save=False)
     # exe_carpet_plots(_path_to_input_dir, plot_name = "predictions_carpet_test", plot_dir= plot_dir, save=True)
     # exe_parallel_plot(_path_to_input_dir, plot_name =  "parallel_plot",  plot_dir= plot_dir, save=False)
     # exe_interactive_parallel_plot(_path_to_input_dir, plot_name =  "interactive_parallel_plot",  plot_dir= plot_dir, save=False)
-    # exe_scatter_carpet_plots(_path_to_input_dir, plot_name = "predictions_scatter_carpet_bucket=4", plot_dir= plot_dir,save=False)
+    exe_scatter_carpet_plots(_path_to_input_dir, plot_name = "predictions_scatter_carpet_bucket=4", plot_dir= plot_dir,save=False)
 
 
 

@@ -17,14 +17,14 @@ from addmo.s5_insights.model_plots.scatter_plot import scatter
 from addmo.util.plotting import save_pdf
 from addmo.util.load_save_utils import create_or_clean_directory
 
-def model_test(dir, model_config, input_data_path, input_data_exp_name, model_tuning):
+def model_test(dir, model_config, input_data_path, input_data_exp_name, data_tuning_type):
 
     # Load regressor
     path_to_regressor = return_best_model(dir)
     regressor = ModelFactory.load_model(path_to_regressor)
 
 
-    if model_tuning.lower()=='auto':
+    if data_tuning_type.lower()== 'auto':
         # Load data tuning config used for the model
         name_of_raw_data = model_config['name_of_raw_data']
         path_data_tuning_config = os.path.join(results_dir_data_tuning_auto(name_of_raw_data), "config.json")
@@ -40,7 +40,7 @@ def model_test(dir, model_config, input_data_path, input_data_exp_name, model_tu
         save_pdf(plt, os.path.join(saving_dir, 'model_fit_scatter'))
         plt.show()
 
-    elif model_tuning.lower()=='fixed':
+    elif data_tuning_type.lower()== 'fixed':
         # Load data tuning config used for the model
         name_of_raw_data = model_config['name_of_raw_data']
         path_data_tuning_config = os.path.join(results_dir_data_tuning_fixed(name_of_raw_data),"config.json")

@@ -1,6 +1,6 @@
 {
     "models": [
-        "SciKerasSequential"
+        "ScikitMLP_TargetTransformed"
     ],
     "trainings_per_model": 1,
     "hyperparameter_tuning_type": "OptunaTuner",

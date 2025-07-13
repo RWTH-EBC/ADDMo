@@ -144,66 +144,92 @@ Executing this command in the terminal where your virtual environment is activat
 
 Select the respective "tool" via the tabs:
 
-1.Data tuning: Importing input data, tuning data.\
-Necessary steps "Data tuning":\
-	1.Upload input data\
-	2.Define settings\
-	3.Run
-
-3.Model tuning: Importing the previously tuned data, training the model with optimizing the hyperparameters and evaluate the model via out-of-sample prediction.\
-Necessary steps "Model tuning":\
-	1.Define the folder from which the tuned data shall be loaded\
-	2.Define settings\
-	3.Run
-
-4.Only predict: Import previously trained models and their underlying tuned data, predict and evaluate the model with a more sophisticated evaluation method.\
-Necessary steps "Predict only":\
-	1.Define the folder from which the trained models (and their respective tuned data) shall be imported\
-	2.Define settings\
-	3.Run
-Note: If you want to use "only predict" upon a new data set, make sure it has the same feature set and is scaled exactly equal to the data set used for training.
+## Data tuning
+### Auto Data Tuning:
 
 
-__Running the scripts directly via the python console:__
+Toggle key preprocessing steps like lag creation and difference features and choose between manual or automated feature selection.
+
+Default saving path: `addmo-automated-ml-regression\addmo_examples\results\test_raw_data\data_tuning_experiment_auto`
+
+ℹ️ Detailed configuration guide available directly in the GUI tab.
+
+### Fixed Data Tuning:
+Uses the same general fields as the auto tuning tab and supports key feature construction options:
+create_lag, create_diff, create_squared
+
+Default saving path: `addmo-automated-ml-regression\addmo_examples\results\test_raw_data\data_tuning_experiment_fixed`
+
+Feature naming convention: Temperature__lag3, Power__diff
+
+ℹ️ Detailed configuration guide available directly in the GUI tab.
+
+## Model tuning 
+Importing the previously tuned data, training the model with optimizing the hyperparameters and evaluate the model via out-of-sample predictions. Mention the tuned data path (default or custom) in the config to train model on tuned data.
+One can select multiple models for training in the `Models` field under the `Model Tuning Configuration`
+
+Default saving path: `addmo-automated-ml-regression\addmo_examples\results\test_raw_data\test_data_tuning\test_model_tuning`
+
+## Insights
+Generate insightful visualizations based on the results of previously trained and saved models. One can generate insights on models trained by ADDMo or external frameworks (only `Scikit` and `Keras` models supported).
+One can define bounds and default values for the features manually or select the existing min and max of each feature as bound and mean (numerical features) or mode (categorical features) as default values.
+
+## Testing
+Test a previously trained and saved model using new or unseen input data and predict and evaluate the model with a more sophisticated evaluation method.\
+`Select Tuning Type`: This is critical if the model was trained on tuned data. Specify the tuning type and the path where the tuned data file is saved. The file is loaded to recreate the data tuning automatically. 
+This way the model is trained and tested on the same features and ensures the tuning type and input structure match the training phase!
+
+## Recreate Data Tuning
+Allows recreating the exact data tuning process applied during a previous experiment, using the saved tuning configuration.
+This step is handled already in the `Testing` tab. This tab only supports tuning configurations saved by this app.
+It cannot recreate tuning from externally trained models or configurations.
+
+## Running the scripts directly via the python console:
+
+These execution files works exactly like the GUI tabs. In order to perform specific functionalities, change the saved config.json file under
+each config tab in the ADDMo folder.  
+For example: For changing the config for `Auto Data Tuning`, change the file here: `addmo-automated-ml-regression\addmo\s1_data_tuning_auto\config\data_tuning_auto_config.json`
 
 *Executive scripts are:*
-- DataTuning.py for tuning the data (achieving the tuned data)
-- ModelTuning.py for tuning the model (with the tuned data as input). 
-In the final lines of ModelTuning.py one can define via commmenting and uncommenting, whether the automatic procedure (final bayes: training the model while automatically selecting the best: 
-		"Model", "Individual Model", "Features" and "Hyperparameters of the model"), the regular procedure (optimizing the hyperparameter of the model), or the procedure for using previously trained models to only predict.
-
-
-Set a name of the data and a name of the experiment in order to save your documentation and results (final input data) in a folder named as the data and a subfolder named as the name of experiment. This allows to go back to this final input data whenever you want. 
-
-*Define all variables in SharedVariables.py:*\
-Advises on how to understand the entry section in SharedVariables, per Method you´ll find:\
-1st Line: A comment about what the method is or does\
-2st Line: A variable that decides whether this method will be used or not. (possible entries are: True or False)\
-Following lines: Only if additional attributes need to be set: The respective attributes, read the comments to understand which entries are valid. 
-Empty lines separate the methods
-
-Check for the order of how the methods are executed, as each method´s input is the output of the method conducted before.
+- `exe_data_tuning_auto.py` for automatically tuning the data. 
+- `exe_data_tuning_fixed.py` for tuning the data in a fixed manner.
+- `exe_model_tuning.py` for training a list of models and saving the best performing model.
+- `exe_data_insights.py` for generating several insightful plots for interpreting the model performance.
+- `exe_model_testing.py` for predicting new data values on trained model.
+- `exe_recreate_data_tuning.py` for recreating the same features on new data based on saved tuned data
 
 -------------------------------------------
 
 __Information about the required input shape:__
-- Input ExcelFile has to be named: "InputData" and saved in the Folder "Data"
+- Input ExcelFile has to be named: "InputData" and saved in the Folder `addmo_examples/raw_input_data`
 - Sheet to read in must be the first sheet, with time as first column and all signals and features thereafter (one per column)
-- The time must be in the format of "pandas.datetimeindex"
+- The time must be in the format of "pandas.datetimeindex". If the time is in seconds, it is converted into DD-MM-YY format.
 - Columns must have different names
-- Each columns has to have a unit, which should be written like: [kwh] if no unit is available write []
-- The index should be continuously counting(no missing steps)
+- By default, the delimiter for csv files is `;`. Explicitly change it under the exe_data_insights in case of different delimiters.
 
 __Understanding the handling of saving the results:__\
-A folder called results is created within the directory of the python files. Within that folder a four layered folder system is used, the next layer is a subfolder of the respective previous layer. The folder are created by the program, only their names must be defined:
-- Layer0: "Results", general folder for all results)
-- Layer1: "NameOfData", name of the folder used to declare which input data is used for the results within.
-- Layer2: "NameOfExperiment", name of the folder in which the results of "DataTuning" are saved, including the "tuned data" which will be the input for model tuning.
-- Layer3: "NameOfSubTest", name of the folder in which the results of "ModelTuning" are saved, including the trained models which will be the input for only predicting.
-- Layer4: "NameOfOnlyPredict", name of the folder in which the results of "OnlyPredict" are saved.
-
-
-
+A folder called results is created within the directory (`addmo-automated-ml-regression\addmo_examples`) of the python files. Within that folder a four layered folder system is used, the next layer is a subfolder of the respective previous layer. The folder are created by the program, only their names must be defined:
+- Layer0: `Results`: general folder for all results
+- Layer0: `raw_input_data`: name of the folder used to declare which input data is used for the results within.
+- Layer1: `name_of_raw_data`: name of the folder in which the results of all executions for a particular run are saved, including the "Data Tuning" which will be the input for model tuning. "Model Tuning" and "Data Insights" results are saved as different folders under this folder.
+- Layer2: `name_of_tuning`: name of the folder in which the results of "Data Tuning" are saved. 
+- Layer2: `name_of_data_tuning_experiment`: name of folder in which different "Model Tuning" experiment folders are created. This folder helps in keeping track of which model tuning is used for a specific dataset and helps you create multiple experiments using different models but the using the same tuned data. 
+- Layer3: `name_of_model_tuning_experiment`: name of folder in which results of "Model Tuning" are saved.
+- Layer4: `plots`: name of the folder in which the results of plotting are saved.  
+- 
+An example of how the structure looks like:  
+``` 
+addmo_examples/  
+└── raw_input_data/ 
+└── results/  
+	└── test_raw_data/             # name_of_raw_data
+        	└── data_tuning_experiment_fixed/      # name_of_tuning (tuned data is stored here)
+        	└── test_data_tuning_fixed/     # name_of_data_tuning_experiment (models trained on fixed tuned data is stored here)
+                	└── ScikitMLP_fixed_tuning/        # name_of_model_tuning_experiment (all files regarding a specifc trained model)
+                 		└── plots/        # plots generated using ScikitMLP are stored here
+			└── SciKeras_fixed_tuning/
+				└── plots/
+```
 # Scheme of ADDMo:
 
 The program is built like the mainconcept (file in the readme folder), take it as guideline. Read the comments in the code or the GUI to get more information.

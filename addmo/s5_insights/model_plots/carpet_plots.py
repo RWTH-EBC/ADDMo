@@ -263,12 +263,9 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
         # Create predictions based on the 2 combination values, keeping the other features fixed
         Z1 = regressor_func(**inputs_surface)
         surf1_cmap = "winter"
-        surf2_cmap = "autumn"
 
         norm1 = colors.Normalize(vmin=np.nanmin(Z1), vmax=np.nanmax(Z1))
-        vmin_meas = target_values.min()
-        vmax_meas = target_values.max()
-        norm2 = colors.Normalize(vmin=vmin_meas, vmax=vmax_meas)
+
         # filter real data points which belongs to the default dict bucket of the remaining combinations:
         other_features = [f for f in variables if f not in (x_label, y_label)]
         mask = pd.Series(True, index=measurements_data.index) # for filtering out rows which we don't want
@@ -293,23 +290,30 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
                 inputs_meas[var] = np.full_like(real_x, defaults_dict[var])
         pred_at_pts = regressor_func(**inputs_meas)
 
-        below_mask = real_target <= pred_at_pts
-        above_mask = real_target > pred_at_pts
+        residual = real_target - pred_at_pts
+        below_mask = residual < 0
+        above_mask = residual >= 0
 
-        ax.scatter(
+        norm_below = colors.Normalize(vmin=residual[below_mask].min(), vmax=0)
+        norm_above = colors.Normalize(vmin=0, vmax=residual[above_mask].max())
+
+        scatter1= ax.scatter(
             real_x[below_mask], real_y[below_mask], real_target[below_mask],
-            c=real_target[below_mask],
-            cmap=surf2_cmap,
-            alpha=1, s=3, depthshade= False
+            c=residual[below_mask],
+            cmap="Reds",
+            # color='blue',
+            norm=norm_below,
+            alpha=1, s=2, depthshade= False
         )
 
-        surf1 = ax.plot_surface(X, Y, Z1, cmap=surf1_cmap, alpha=0.5, norm=norm1)
+        surf1 = ax.plot_surface(X, Y, Z1, cmap=surf1_cmap, alpha=0.4, norm=norm1)
 
-        scatter=ax.scatter(
+        scatter2 =ax.scatter(
             real_x[above_mask], real_y[above_mask], real_target[above_mask],
-            c=real_target[above_mask],
-            cmap=surf2_cmap,
-            alpha=1, s=3, depthshade=False
+            c=residual[above_mask],
+            cmap="copper_r",
+            norm=norm_above,
+            alpha=0.8, s=2, depthshade=False
         )
 
         ax.set_box_aspect([1, 1, 0.6])
@@ -328,101 +332,24 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
 
 
     # Add colorbars and label them
+    # Need to dynamically fit in 3 cmaps according to fig height:
 
-    cbar_ax1 = fig.add_axes([0.92, 0.55, 0.02, 0.3])
-    cbar1 = fig.colorbar(surf1, cax=cbar_ax1)
-    cbar1.set_label("Regressor", fontsize=7)
-    cbar1.set_ticks([])
-    cbar1.set_ticklabels([])
+    avail_height= 0.32
+    pad_frac = 0.1
+    bar_h = avail_height * (1 - pad_frac)
+    gap = avail_height * pad_frac
+    entries = [
+        (surf1, "Regressor"),
+        (scatter1, "Residuals < 0"),
+        (scatter2, "Residuals ≥ 0"),
+    ]
 
-    cbar_ax2 = fig.add_axes([0.92, 0.05, 0.02, 0.3])
-    cbar2 = fig.colorbar(scatter, cax=cbar_ax2)
-    cbar2.set_label("Measurement Data", fontsize=7)
-    cbar2.set_ticks([])
-    cbar2.set_ticklabels([])
+    for i, (mappable, label) in enumerate(entries):
+        bottom = 0.02 + i * avail_height + (gap / 2)
+        cax = fig.add_axes([0.92, bottom, 0.02, bar_h])
+        cb = fig.colorbar(mappable, cax=cax)
+        cb.set_label(label, fontsize=7)
+        cb.set_ticks([])
+        cb.set_ticklabels([])
 
     return fig
-
-
-# if system_func is not None:
-#     Z2 = system_func(**inputs_surface)
-#     other_features = [f for f in variables if f not in (x_label, y_label)]
-#     mask = pd.Series(True, index=measurements_data.index)  # for filtering out rows which we don't want
-#     for f in other_features:
-#         lower, upper = bucket[f]
-#         # returns value true for the index if it falls within the range,
-#         # so iteratively removes indices for features which don't fall in bucket
-#         mask &= measurements_data[f].between(lower, upper)
-#
-#     # Get filtered real data
-#     real_x = measurements_data.loc[mask, x_label].to_numpy()
-#     real_y = measurements_data.loc[mask, y_label].to_numpy()
-#     real_target = target_values.loc[mask].values.flatten()
-#
-#     inputs_meas = {}
-#     for var in variables:
-#         if var == x_label:
-#             inputs_meas[var] = real_x
-#         elif var == y_label:
-#             inputs_meas[var] = real_y
-#         else:
-#             # hold others at their default
-#             inputs_meas[var] = np.full_like(real_x, defaults_dict[var])
-#     # Create a common normalization for consistent coloring
-#     norm1 = colors.Normalize(vmin=np.nanmin(Z1), vmax=np.nanmax(Z1))
-#     norm2 = colors.Normalize(vmin=np.nanmin(Z2), vmax=np.nanmax(Z2))
-#
-#     Z1_greater = np.where(Z1 >= Z2, Z1, np.nan)
-#     Z1_smaller = np.where(Z1 <= Z2, Z1, np.nan)
-#     Z2_greater = np.where(Z2 >= Z1, Z2, np.nan)
-#     Z2_smaller = np.where(Z2 <= Z1, Z2, np.nan)
-#
-#     pred1_at_pts = regressor_func(**inputs_meas)  # shape (N,)
-#     pred2_at_pts = system_func(**inputs_meas)  # shape (N,)
-#
-#     # 2) Define the three bands:
-#     low_pred = np.minimum(pred1_at_pts, pred2_at_pts)
-#     high_pred = np.maximum(pred1_at_pts, pred2_at_pts)
-#
-#     below_mask = real_target <= low_pred
-#     between_mask = (real_target > low_pred) & (real_target <= high_pred)
-#     above_mask = real_target > high_pred
-#
-#     # 3) First—the “below” points:
-#     ax.scatter(
-#         real_x[below_mask], real_y[below_mask], real_target[below_mask],
-#         color="blue",  # solid color
-#         s=10,  # adjust for visibility
-#         alpha=1.0,
-#         depthshade=False
-#     )
-#
-#     # 4) Next—draw your two surfaces in pieces.  (I keep your existing split logic.)
-#     surf1 = ax.plot_surface(X, Y, Z1, cmap=surf1_cmap, visible=False, norm=norm1)
-#     surf2 = ax.plot_surface(X, Y, Z2, cmap=surf2_cmap, visible=False, norm=norm2)
-#
-#     # the “lower” halves of each surface
-#     surf2_smaller = ax.plot_surface(X, Y, Z2_smaller, cmap=surf2_cmap, alpha=0.5, norm=norm2)
-#     surf1_smaller = ax.plot_surface(X, Y, Z1_smaller, cmap=surf1_cmap, alpha=0.5, norm=norm1)
-#
-#     # 5) In the gap between carpets, draw the “between” points:
-#     ax.scatter(
-#         real_x[between_mask], real_y[between_mask], real_target[between_mask],
-#         color="gray",
-#         s=10,
-#         alpha=1.0,
-#         depthshade=False
-#     )
-#
-#     # 6) Then the “upper” halves of each surface
-#     surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)
-#     surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)
-#
-#     # 7) Finally—the “above” points on top of everything:
-#     scatter = ax.scatter(
-#         real_x[above_mask], real_y[above_mask], real_target[above_mask],
-#         color="black",
-#         s=10,
-#         alpha=1.0,
-#         depthshade=False
-#     )

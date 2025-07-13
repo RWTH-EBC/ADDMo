@@ -1,5 +1,5 @@
 {
-    "name_of_raw_data": "test_raw_data_1",
+    "name_of_raw_data": "test_raw_data",
     "name_of_data_tuning_experiment": "test_data_tuning",
     "name_of_model_tuning_experiment": "test_model_tuning",
     "abs_path_to_data": "C:\\Users\\mre-rpa\\Desktop\\PycharmProjects\\addmo-automated-ml-regression\\addmo_examples\\raw_input_data\\InputData.xlsx",

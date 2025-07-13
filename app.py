@@ -675,7 +675,7 @@ def exe_streamlit_data_insights():
 def exe_streamlit_model_testing():
     st.header("Model Testing")
     st.markdown("""
-    This setup allows you to *test a previously trained and saved model* using *new or unseen input data. This step helps you **evaluate model performance* beyond the training phase and validate generalization.
+    This setup allows you to *test a previously trained and saved model* using new or unseen input data. This step helps you *evaluate model performance* beyond the training phase and validate generalization.
 
     Once a trained model is selected, this tab lets you:
 
@@ -689,7 +689,7 @@ def exe_streamlit_model_testing():
 
     #### Select Tuning Type
     This is *critical* if the model was trained on *tuned data*:
-    - None: Use raw data without any tuning (only if the model was trained that way).
+    - Note: Use raw data without any tuning (only if the model was trained that way).
 
     ⚠️ *Make sure the tuning type and input structure match the training phase!*
 
@@ -829,7 +829,7 @@ def exe_streamlit_data_tuning_recreate():
     st.markdown("""
     This setup allows you to *recreate the exact data tuning process* applied during a previous experiment, using the saved tuning configuration.  
 
-    Although data tuning is *automatically handled* in the *Model Testing tab, this tab gives you **manual control* over the recreation of tuned datasets.  
+    Although data tuning is *automatically handled* in the*Model Testing tab, this tab gives you *manual control* over the recreation of tuned datasets.  
     It's useful when:
     - You need a standalone tuned dataset for further analysis or visualization.
     - You want to verify how tuning was applied.

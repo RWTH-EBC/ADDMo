@@ -76,14 +76,7 @@ if __name__ == "__main__":
                                   'model_tuner_config.json')
     config_exp = load_config_from_json(path_to_config_exp, ModelTuningExperimentConfig)
     config_tuner = load_config_from_json(path_to_config_tuner, ModelTunerConfig)
-    # Create the default config object
-    # config = ModelTuningExperimentConfig()
-    # config.name_of_model_tuning_experiment = 'test_model_tuning_raw'
-    # # Change default input data path to auto tuned data path
-    # tuned_data_path = os.path.join(results_dir_data_tuning_auto(), "tuned_xy_auto.csv")
-    # config.abs_path_to_data = tuned_data_path
-    # config_tuner._config_model_tuner.validation_score_splitting = 'UnivariateSplitter'
-    # config_tuner._config_model_tuner.validation_score_splitting_kwargs = None
+
     user_input = input(
         "To overwrite the existing content type in 'addmo_examples/results/test_raw_data/test_data_tuning/test_model_tuning' results directory <y>, for deleting the current contents type <d>: ")
     # run

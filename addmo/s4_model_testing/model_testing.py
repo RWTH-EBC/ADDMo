@@ -14,7 +14,7 @@ from addmo.s2_data_tuning.data_tuner_fixed import DataTunerByConfig
 from addmo.util.load_save import load_data
 from addmo.util.data_handling import split_target_features
 from addmo.s5_insights.model_plots.scatter_plot import scatter
-from addmo.util.plotting import save_pdf
+from addmo.util.plotting_utils import save_pdf
 from addmo.util.load_save_utils import create_or_clean_directory
 
 def model_test(dir, model_config, input_data_path, input_data_exp_name, data_tuning_type):

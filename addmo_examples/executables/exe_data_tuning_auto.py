@@ -1,7 +1,7 @@
 import os
 import json
 import pandas as pd
-from addmo.util.plotting import save_pdf
+from addmo.util.plotting_utils import save_pdf
 from addmo.util.definitions import results_dir_data_tuning
 from addmo.util.load_save_utils import root_dir
 from addmo.util.experiment_logger import ExperimentLogger

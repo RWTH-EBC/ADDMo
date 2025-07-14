@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from addmo.util import plotting as d
+from addmo.util import plotting_utils as d
 
 
 def scatter(train_data, predictions, target_name, rmse):

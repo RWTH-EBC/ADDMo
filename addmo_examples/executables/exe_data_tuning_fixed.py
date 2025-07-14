@@ -8,7 +8,7 @@ from addmo.util.experiment_logger import ExperimentLogger
 from addmo.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
 from addmo.s2_data_tuning.data_tuner_fixed import DataTunerByConfig
 from addmo.util.load_save import load_data
-from addmo.util.plotting import save_pdf
+from addmo.util.plotting_utils import save_pdf
 from addmo.util.data_handling import split_target_features
 from addmo.s5_insights.model_plots.time_series import plot_timeseries_combined
 from addmo.util.load_save import load_config_from_json

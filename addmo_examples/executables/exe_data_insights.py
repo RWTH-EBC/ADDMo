@@ -3,7 +3,7 @@ import pandas as pd
 import datetime
 from addmo.s5_insights.model_plots.time_series import plot_timeseries_combined
 from addmo.s5_insights.model_plots.parallel_plots import parallel_plots, parallel_plots_interactive
-from addmo.util.plotting import save_pdf
+from addmo.util.plotting_utils import save_pdf
 from addmo.s5_insights.model_plots.carpet_plots import  plot_carpets, plot_carpets_with_buckets, prediction_func_4_regressor
 from addmo.util.definitions import  return_results_dir_model_tuning, return_best_model, load_model_config
 from addmo.util.load_save import ensure_datetime_index
@@ -229,7 +229,7 @@ if __name__ == '__main__':
     # exe_carpet_plots(_path_to_input_dir, plot_name = "predictions_carpet_test", plot_dir= plot_dir, save=True)
     # exe_parallel_plot(_path_to_input_dir, plot_name =  "parallel_plot",  plot_dir= plot_dir, save=False)
     # exe_interactive_parallel_plot(_path_to_input_dir, plot_name =  "interactive_parallel_plot",  plot_dir= plot_dir, save=False)
-    exe_scatter_carpet_plots(_path_to_input_dir, plot_name = "predictions_scatter_carpet_bucket=4", plot_dir= plot_dir,save=False)
+    exe_scatter_carpet_plots(_path_to_input_dir, plot_name = "plot_option4", plot_dir= plot_dir,save=True)
 
 
 

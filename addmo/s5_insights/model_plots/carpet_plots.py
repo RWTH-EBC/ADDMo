@@ -2,7 +2,7 @@ import numpy as np
 import math
 import pandas as pd
 import matplotlib.pyplot as plt
-from addmo.util import plotting as d
+from addmo.util import plotting_utils as d
 from pathlib import Path
 
 from addmo.util.definitions import  return_results_dir_model_tuning, return_best_model
@@ -13,7 +13,7 @@ from itertools import product
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 from matplotlib.colors import ListedColormap
-from addmo.util.plotting import *
+from addmo.util.plotting_utils import *
 import matplotlib.colors as colors
 
 
@@ -249,7 +249,8 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
     for i, (x_label, y_label) in enumerate(valid_combinations, 1):
         ax = fig.add_subplot(num_rows, num_cols, i, projection="3d",computed_zorder=False)
         X, Y = np.meshgrid(grids[x_label], grids[y_label])
-
+        for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
+            axis.pane.set_facecolor(grey)
         # Prepare inputs for surface prediction
         inputs_surface = {}
         for var in variables:
@@ -263,7 +264,8 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
         # Create predictions based on the 2 combination values, keeping the other features fixed
         Z1 = regressor_func(**inputs_surface)
         surf1_cmap = "winter"
-
+        cmap_below = "YlGn_r"
+        cmap_above = "YlOrBr"
         norm1 = colors.Normalize(vmin=np.nanmin(Z1), vmax=np.nanmax(Z1))
 
         # filter real data points which belongs to the default dict bucket of the remaining combinations:
@@ -294,14 +296,15 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
         below_mask = residual < 0
         above_mask = residual >= 0
 
+        norm = colors.Normalize(vmin=residual[below_mask].min(), vmax=residual[above_mask].max())
         norm_below = colors.Normalize(vmin=residual[below_mask].min(), vmax=0)
         norm_above = colors.Normalize(vmin=0, vmax=residual[above_mask].max())
-
         scatter1= ax.scatter(
             real_x[below_mask], real_y[below_mask], real_target[below_mask],
             c=residual[below_mask],
-            cmap="Reds",
-            # color='blue',
+            # cmap="PiYG",
+            # norm=norm,
+            cmap=cmap_below,
             norm=norm_below,
             alpha=1, s=2, depthshade= False
         )
@@ -311,9 +314,11 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
         scatter2 =ax.scatter(
             real_x[above_mask], real_y[above_mask], real_target[above_mask],
             c=residual[above_mask],
-            cmap="copper_r",
+            # cmap="PiYG",
+            # norm=norm,
+            cmap=cmap_above,
             norm=norm_above,
-            alpha=0.8, s=2, depthshade=False
+            alpha=1, s=2, depthshade=False
         )
 
         ax.set_box_aspect([1, 1, 0.6])
@@ -331,25 +336,42 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
         plt.setp(ax.get_zticklabels(), fontsize=7)
 
 
-    # Add colorbars and label them
-    # Need to dynamically fit in 3 cmaps according to fig height:
+    cax1 = fig.add_axes([0.92, 0.525, 0.02, 0.4])
+    cb1 = fig.colorbar(surf1, cax=cax1)
+    cb1.set_label("Regressor", fontsize=7)
+    cb1.set_ticks([])
+    cb1.set_ticklabels([])
 
-    avail_height= 0.32
-    pad_frac = 0.1
-    bar_h = avail_height * (1 - pad_frac)
-    gap = avail_height * pad_frac
-    entries = [
-        (surf1, "Regressor"),
-        (scatter1, "Residuals < 0"),
-        (scatter2, "Residuals ≥ 0"),
-    ]
 
-    for i, (mappable, label) in enumerate(entries):
-        bottom = 0.02 + i * avail_height + (gap / 2)
-        cax = fig.add_axes([0.92, bottom, 0.02, bar_h])
-        cb = fig.colorbar(mappable, cax=cax)
-        cb.set_label(label, fontsize=7)
-        cb.set_ticks([])
-        cb.set_ticklabels([])
+    # for single colormap
+    # cax2 = fig.add_axes([0.92, 0.05, 0.02, 0.4])
+    # cb2 = fig.colorbar(scatter1, cax=cax2)
+    # cb2.set_label("Measurements Data", fontsize=7)
+    # cb2.set_ticks([])
+    # cb2.set_ticklabels([])
+    # fig.text(0.97, 0.09, "Below Prediction", fontsize=6, rotation=90, va="bottom", ha="center")
+    # fig.text(0.97, 0.49, "Above Prediction", fontsize=6, rotation=90, va="top", ha="center")
+
+    # for 2 colormaps:
+    cax_below = fig.add_axes([0.92, 0.05, 0.02, 0.2])
+    cb_below = fig.colorbar(scatter1, cax=cax_below)
+    # cb_below.set_label("Below Prediction", fontsize=7)
+    cb_below.set_ticks([])
+    cb_below.set_ticklabels([])
+
+    cax_above = fig.add_axes([0.92, 0.25, 0.02, 0.2])
+    cb_above = fig.colorbar(scatter2, cax=cax_above)
+    # cb_above.set_label("Above Prediction", fontsize=7)
+    cb_above.set_ticks([])
+    cb_above.set_ticklabels([])
+    fig.text(
+        0.95,
+        0.25,
+        "Measurement Data",
+        rotation=90,
+        va="center",
+        ha="left",
+        fontsize=7
+    )
 
     return fig

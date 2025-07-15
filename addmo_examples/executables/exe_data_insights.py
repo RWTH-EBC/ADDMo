@@ -217,11 +217,11 @@ if __name__ == '__main__':
     # Path for saving the model_plots
     plot_dir = os.path.join(_path_to_input_dir, 'plots')
     # Define regressor path if it is not saved as 'best_model.ext'
-    # path_to_regressor = os.path.join(results_dir, 'models.keras')
+    path_to_regressor = os.path.join(_path_to_input_dir, 'regressor.keras')
 
 
     # Execute plotting functions
-    exe_scatter_carpet_plots(_path_to_input_dir, plot_name = "phd_plot_truncated", plot_dir= plot_dir,save=True)  #Todo: pls check input data path inside the exe func
+    exe_scatter_carpet_plots(_path_to_input_dir, plot_name = "phd_plot_truncated", plot_dir= plot_dir,save=True, path_to_regressor=path_to_regressor)  #Todo: pls check input data path inside the exe func
    # exe_time_series_plot(_path_to_input_dir, plot_name = "training_data_time_series", plot_dir= plot_dir,save=False)
     # exe_carpet_plots(_path_to_input_dir, plot_name = "predictions_carpet_test", plot_dir= plot_dir, save=True)
     # exe_parallel_plot(_path_to_input_dir, plot_name =  "parallel_plot",  plot_dir= plot_dir, save=False)

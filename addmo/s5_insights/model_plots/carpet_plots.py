@@ -16,6 +16,16 @@ from matplotlib.colors import ListedColormap
 from addmo.util.plotting_utils import *
 import matplotlib.colors as colors
 
+from matplotlib import cm
+from matplotlib.colors import LinearSegmentedColormap
+
+def truncate_colormap(cmap_name, min_val=0.1, max_val=0.9, n=256):
+    """
+    Truncate a colormap to exclude the extreme ends (e.g., near-white tips).
+    """
+    cmap = cm.get_cmap(cmap_name, n)
+    new_colors = cmap(np.linspace(min_val, max_val, n))
+    return LinearSegmentedColormap.from_list(f"{cmap_name}_trunc", new_colors)
 
 
 def plot_carpets(variables, measurements_data, regressor_func, system_func=None,  bounds= None, combinations=None, defaults_dict=None):
@@ -249,8 +259,7 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
     for i, (x_label, y_label) in enumerate(valid_combinations, 1):
         ax = fig.add_subplot(num_rows, num_cols, i, projection="3d",computed_zorder=False)
         X, Y = np.meshgrid(grids[x_label], grids[y_label])
-        # for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
-            # axis.pane.set_facecolor(grey)
+
         # Prepare inputs for surface prediction
         inputs_surface = {}
         for var in variables:
@@ -264,8 +273,14 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
         # Create predictions based on the 2 combination values, keeping the other features fixed
         Z1 = regressor_func(**inputs_surface)
         surf1_cmap = "winter"
-        cmap_below = "Greens_r"
-        cmap_above = "YlOrBr"
+        cmap_below = truncate_colormap("YlGn_r", min_val=0, max_val=0.9)
+        cmap_above = truncate_colormap("YlOrBr", min_val=0.15, max_val=1)
+        #TODO: use this colormap incase of no truncation and set the background to darker grey
+        # cmap_below="YlGn_r"
+        # cmap_above="YlOrBr"
+        # for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
+        #     axis.pane.set_facecolor(light_grey)
+
         norm1 = colors.Normalize(vmin=np.nanmin(Z1), vmax=np.nanmax(Z1))
 
         # filter real data points which belongs to the default dict bucket of the remaining combinations:
@@ -296,14 +311,11 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
         below_mask = residual < 0
         above_mask = residual >= 0
 
-        norm = colors.Normalize(vmin=residual[below_mask].min(), vmax=residual[above_mask].max())
         norm_below = colors.Normalize(vmin=residual[below_mask].min(), vmax=0)
         norm_above = colors.Normalize(vmin=0, vmax=residual[above_mask].max())
         scatter1= ax.scatter(
             real_x[below_mask], real_y[below_mask], real_target[below_mask],
             c=residual[below_mask],
-            # cmap="PiYG",
-            # norm=norm,
             cmap=cmap_below,
             norm=norm_below,
             alpha=1, s=2, depthshade= False
@@ -314,8 +326,6 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
         scatter2 =ax.scatter(
             real_x[above_mask], real_y[above_mask], real_target[above_mask],
             c=residual[above_mask],
-            # cmap="PiYG",
-            # norm=norm,
             cmap=cmap_above,
             norm=norm_above,
             alpha=1, s=2, depthshade=False
@@ -342,16 +352,6 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
     cb1.set_ticks([])
     cb1.set_ticklabels([])
 
-
-    # for single colormap
-    # cax2 = fig.add_axes([0.92, 0.05, 0.02, 0.4])
-    # cb2 = fig.colorbar(scatter1, cax=cax2)
-    # cb2.set_label("Measurements Data", fontsize=7)
-    # cb2.set_ticks([])
-    # cb2.set_ticklabels([])
-    # fig.text(0.97, 0.09, "Below Prediction", fontsize=6, rotation=90, va="bottom", ha="center")
-    # fig.text(0.97, 0.49, "Above Prediction", fontsize=6, rotation=90, va="top", ha="center")
-
     # for 2 colormaps:
     cax_below = fig.add_axes([0.92, 0.05, 0.02, 0.2])
     cb_below = fig.colorbar(scatter1, cax=cax_below)
@@ -364,14 +364,7 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
     cb_above.set_label("Positive Prediction Error", fontsize=7)
     cb_above.set_ticks([])
     cb_above.set_ticklabels([])
-    fig.text(
-        0.97,
-        0.25,
-        "Measurement Data",
-        rotation=90,
-        va="center",
-        ha="left",
-        fontsize=7
-    )
+    fig.text(0.972,0.25,"Measurement Data",rotation=90,va="center",ha="left",fontsize=7)
+
 
     return fig

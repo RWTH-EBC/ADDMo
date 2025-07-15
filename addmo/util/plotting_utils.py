@@ -14,6 +14,9 @@ dark_grey = [78 / 255, 79 / 255, 80 / 255]
 light_blue = [157 / 255, 195 / 255, 230 / 255]
 blue = [0 / 255, 84 / 255, 159 / 255]
 black = [0, 0, 0]
+lighter_grey =  [0.6928, 0.696, 0.7016]
+
+
 ebc_palette_sort_1 = [dark_red,red,light_red,dark_grey,grey,light_grey,blue,light_blue,green]
 ebc_palette_sort_2 = [red,blue,grey,green,dark_red,dark_grey,light_red,light_blue,light_grey]
 

@@ -99,13 +99,14 @@ def exe_scatter_carpet_plots(dir, plot_name, plot_dir, save = True, bounds= None
     Executes carpet model_plots of input data features along with predictions using saved model.
     """
 
-    # Load config
-    model_config = load_model_config(dir)
+    # # If model config is saved in same directory:
+    # # Load config
+    # model_config = load_model_config(dir)
 
     # Only for Martin's testing folder:
-    # config_path = os.path.join(dir, "local_logger")
-    # model_config = load_model_config(config_path)
-    # model_config['abs_path_to_data'] = r"N:\Forschung\EBC0821_BMWK_FunkSta_DEQ\Students\mre-rpa\from_martin\scatter_carpets\8_bes_VLCOPcorr_random_bright-sweep-20\regressors\xy_regressor_fit.csv"
+    config_path = os.path.join(dir, "local_logger")
+    model_config = load_model_config(config_path)
+    model_config['abs_path_to_data'] = r"N:\Forschung\EBC0821_BMWK_FunkSta_DEQ\Students\mre-rpa\from_martin\scatter_carpets\8_bes_VLCOPcorr_random_bright-sweep-20\regressors\xy_regressor_fit.csv"
 
     if path_to_regressor is None:
         path_to_regressor = return_best_model(dir)  # return default path where model is saved
@@ -209,12 +210,8 @@ if __name__ == '__main__':
 
 
     # Define directory where the model config and regressor is saved:
-    _path_to_input_dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning')
-    # _path_to_input_dir = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_random_NovDez\fullANN\8_bes_VLCOPcorr_random_absurd-sweep-172"
-    # _path_to_input_dir = r"N:\Forschung\EBC0821_BMWK_FunkSta_DEQ\Students\mre-rpa\from_martin\scatter_carpets\8_bes_VLCOPcorr_random_bright-sweep-20"
-    # path_to_regressor = r"N:\Forschung\EBC0821_BMWK_FunkSta_DEQ\Students\mre-rpa\from_martin\scatter_carpets\8_bes_VLCOPcorr_random_bright-sweep-20\regressors\regressor.keras"
-
-
+    # _path_to_input_dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning')
+    _path_to_input_dir = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_random_NovDez\fullANN\8_bes_VLCOPcorr_random_absurd-sweep-172"
     # _path_to_input_dir= r'C:\Users\mre-rpa\Desktop\PycharmProjects\addmo-automated-ml-regression\addmo_examples\results\model_plots'
 
     # Path for saving the model_plots
@@ -223,16 +220,18 @@ if __name__ == '__main__':
     # path_to_regressor = os.path.join(results_dir, 'models.keras')
 
 
-
     # Execute plotting functions
+    exe_scatter_carpet_plots(_path_to_input_dir, plot_name = "phd_plot_truncated", plot_dir= plot_dir,save=True)  #Todo: pls check input data path inside the exe func
    # exe_time_series_plot(_path_to_input_dir, plot_name = "training_data_time_series", plot_dir= plot_dir,save=False)
     # exe_carpet_plots(_path_to_input_dir, plot_name = "predictions_carpet_test", plot_dir= plot_dir, save=True)
     # exe_parallel_plot(_path_to_input_dir, plot_name =  "parallel_plot",  plot_dir= plot_dir, save=False)
     # exe_interactive_parallel_plot(_path_to_input_dir, plot_name =  "interactive_parallel_plot",  plot_dir= plot_dir, save=False)
-    exe_scatter_carpet_plots(_path_to_input_dir, plot_name = "plot_option4", plot_dir= plot_dir,save=True)
 
 
 
+
+
+# extra info for plotting:
 # bounds= {'Total active power': [0.0, 31.2], 'Schedule': [0, 1], 'Space Temperature T1': [22.8, 26.0],
 #              'Space Temperature T2': [20.6, 23.5], 'Av. Space Temperature': [21.7, 24.75],
 #              'Supply Temperature': [14.1, 31.0], 'Empty trial schedule': [0, 0], 'Shut off schedule': [0, 1]}

@@ -249,8 +249,8 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
     for i, (x_label, y_label) in enumerate(valid_combinations, 1):
         ax = fig.add_subplot(num_rows, num_cols, i, projection="3d",computed_zorder=False)
         X, Y = np.meshgrid(grids[x_label], grids[y_label])
-        for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
-            axis.pane.set_facecolor(grey)
+        # for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
+            # axis.pane.set_facecolor(grey)
         # Prepare inputs for surface prediction
         inputs_surface = {}
         for var in variables:
@@ -264,7 +264,7 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
         # Create predictions based on the 2 combination values, keeping the other features fixed
         Z1 = regressor_func(**inputs_surface)
         surf1_cmap = "winter"
-        cmap_below = "YlGn_r"
+        cmap_below = "Greens_r"
         cmap_above = "YlOrBr"
         norm1 = colors.Normalize(vmin=np.nanmin(Z1), vmax=np.nanmax(Z1))
 
@@ -355,17 +355,17 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
     # for 2 colormaps:
     cax_below = fig.add_axes([0.92, 0.05, 0.02, 0.2])
     cb_below = fig.colorbar(scatter1, cax=cax_below)
-    # cb_below.set_label("Below Prediction", fontsize=7)
+    cb_below.set_label("Negative Prediction Error", fontsize=7)
     cb_below.set_ticks([])
     cb_below.set_ticklabels([])
 
     cax_above = fig.add_axes([0.92, 0.25, 0.02, 0.2])
     cb_above = fig.colorbar(scatter2, cax=cax_above)
-    # cb_above.set_label("Above Prediction", fontsize=7)
+    cb_above.set_label("Positive Prediction Error", fontsize=7)
     cb_above.set_ticks([])
     cb_above.set_ticklabels([])
     fig.text(
-        0.95,
+        0.97,
         0.25,
         "Measurement Data",
         rotation=90,

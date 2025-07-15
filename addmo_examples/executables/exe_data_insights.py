@@ -209,13 +209,13 @@ if __name__ == '__main__':
 
 
     # Define directory where the model config and regressor is saved:
-    # _path_to_input_dir = return_results_dir_model_tuning('test_raw_data_1', 'test_data_tuning', 'test_model_tuning')
+    _path_to_input_dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning')
     # _path_to_input_dir = r"R:\_Dissertationen\mre\Diss\08_Data_Plots_Analysis\0_ADDMo_TrueValidityVSExtrapolationCovargeScores\8_bes_VLCOPcorr_random_NovDez\fullANN\8_bes_VLCOPcorr_random_absurd-sweep-172"
     # _path_to_input_dir = r"N:\Forschung\EBC0821_BMWK_FunkSta_DEQ\Students\mre-rpa\from_martin\scatter_carpets\8_bes_VLCOPcorr_random_bright-sweep-20"
     # path_to_regressor = r"N:\Forschung\EBC0821_BMWK_FunkSta_DEQ\Students\mre-rpa\from_martin\scatter_carpets\8_bes_VLCOPcorr_random_bright-sweep-20\regressors\regressor.keras"
 
 
-    _path_to_input_dir= r'C:\Users\mre-rpa\Desktop\PycharmProjects\addmo-automated-ml-regression\addmo_examples\results\model_plots'
+    # _path_to_input_dir= r'C:\Users\mre-rpa\Desktop\PycharmProjects\addmo-automated-ml-regression\addmo_examples\results\model_plots'
 
     # Path for saving the model_plots
     plot_dir = os.path.join(_path_to_input_dir, 'plots')

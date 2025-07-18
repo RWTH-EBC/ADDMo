@@ -7,7 +7,7 @@ from addmo.s3_model_tuning.models.abstract_model import AbstractMLModel
 from addmo.s3_model_tuning.models.keras_models import BaseKerasModel
 from addmo.s3_model_tuning.models.scikit_learn_models import BaseScikitLearnModel
 from addmo.s3_model_tuning.models.abstract_model import ModelMetadata
-from aixtra.util import loading_saving_aixtra
+from s3_model_tuning.models.model_factory import ModelFactory
 
 
 def get_subclasses(base_class):
@@ -51,6 +51,15 @@ class TestBaseMLModel(unittest.TestCase):
         """
         cls.temp_dir.cleanup()
 
+    def test_factory_registers_all_subclasses(cls):
+        """
+        Check if the sub models obtained for the base class are registered.
+        """
+        registered = set(ModelFactory.list_available_models())
+        expected = set(cls.__name__ for cls in cls.subclasses)
+        assert expected.issubset(registered), \
+            f"Missing in factory: {expected - registered}"
+
     def test_all_models(self):
         """
         Test all registered models that are subclasses of AbstractMLModel.
@@ -61,7 +70,7 @@ class TestBaseMLModel(unittest.TestCase):
             with self.subTest(model=model_class.__name__):
 
                 model = model_class()  # Instantiate model
-                print(f"\n[INFO] Testing model {model_class.__name__}")
+                print(f"\n Testing model {model_class.__name__}")
 
                 self.assertIsNotNone(model.regressor, f"{model_class.__name__} should have a regressor")
 
@@ -71,9 +80,9 @@ class TestBaseMLModel(unittest.TestCase):
         train_and_check_model(self, model, x_sample, y_sample)
 
         # Test model serialization
-
         model.save_regressor(self.temp_dir.name, "test_model")
-        test_regressor: AbstractMLModel = loading_saving_aixtra.load_regressor("test_model", directory=os.path.join(self.temp_dir.name))
+        path_to_regressor= os.path.join(self.temp_dir.name, 'test_model')
+        test_regressor: AbstractMLModel = ModelFactory.load_model(path_to_regressor)
         # Test metadata
         self.assertIsInstance(model.metadata, ModelMetadata, "Meta data not defined properly")
         self.assertEqual(model.metadata.addmo_class, model_class.__name__, "Model class mismatch")

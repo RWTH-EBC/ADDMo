@@ -11,6 +11,11 @@ from s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
 from s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig, ModelTunerConfig
 from util.load_save_utils import root_dir
 
+# This unittest is to test whether all the executables work compatibly with each other. In case new configs are added, the user would have to create executables which tests
+# the created tuning based on configs, then the model tuning and insights are handled here. Similarly, newly added models can also be tested for existing tuned data and insights.
+
+
+# This is manual end to end test, please ensure to define the paths to new configs in order to test full pipeline
 
 class TestAddmoEndToEnd(unittest.TestCase):
 

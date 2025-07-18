@@ -1,4 +1,7 @@
+import os
 import unittest
+import inspect
+import tempfile
 import pandas as pd
 from unittest.mock import  patch, MagicMock
 from addmo.util.experiment_logger import ExperimentLogger,LocalLogger, WandbLogger
@@ -10,89 +13,74 @@ from addmo.util.load_save import load_data
 from addmo.util.data_handling import split_target_features
 
 
-class TestDataTunerAuto(unittest.TestCase):
+# Define all the tuning classes here for testing:
+TUNER_CLASSES = [DataTunerAuto, DataTunerByConfig]
+
+CONFIG_MAP = {
+    DataTunerAuto:   DataTuningAutoSetup,
+    DataTunerByConfig: DataTuningFixedConfig,}
+class TestAllDataTuners(unittest.TestCase):
     """
-    Unit tests for data tuning using pre-defined config.
-    """
-
-    def setUp(self):
-        """Set up config"""
-        self.config = DataTuningAutoSetup()
-
-    @patch("addmo.util.experiment_logger.ExperimentLogger.log_artifact") # skips actual logging behaviour and checks if its executed without errors
-    def test_data_tuner(self,mock_log_artifact):
-        """Test expected outputs of data tuner"""
-        # Create system_data tuner
-        tuner = DataTunerAuto(config=self.config)
-
-        # Tune system_data
-        tuned_x = tuner.tune_auto()
-        y = tuner.y
-        tuned_xy = pd.concat([y, tuned_x], axis=1, join="inner").bfill()
-
-        # Validation
-        self.assertFalse(tuned_x.empty, "Tuned data is empty")
-        self.assertIsInstance(tuned_x, pd.DataFrame, "Tuned data is not a dataframe")
-        self.assertFalse(y.empty, "Tuned target column is empty")
-        self.assertIsInstance(y, pd.Series, "Tuned target column is not a series")
-        self.assertFalse(tuned_xy.empty, "Tuned xy data is empty")
-        self.assertIsInstance(tuned_xy, pd.DataFrame, "Tuned xy data is not a dataframe")
-
-        try:
-            ExperimentLogger.log_artifact(tuned_xy, name='tuned_xy', art_type='csv')
-
-        except Exception as e:
-            self.fail(f"ExperimentLogger.log_artifact raised an exception: {e}")
-
-
-class TestDataTunerFixed(unittest.TestCase):
-    """
-    Unit tests for data tuning using pre-defined config.
+    For each tuner class, discover all methods named `tune_*` e.g. tune_auto, tune_fixed
+    and invoke them with the “correct” arguments. Then assert the returned `tuned_x` is a non-empty DataFrame & `y` is non-empty Series.
     """
 
-    def setUp(self):
-        """Set up config"""
-        self.config = DataTuningFixedConfig()
+    def _instantiate_config(self, tuner_cls):
+        sig = inspect.signature(tuner_cls.__init__)
+        param = sig.parameters.get("config")
+        anno = getattr(param, "annotation", inspect._empty)
 
-    @patch(
-        "addmo.util.experiment_logger.ExperimentLogger.log")
-    @patch(
-        "addmo.util.experiment_logger.ExperimentLogger.log_artifact")  # skips actual logging behaviour and checks if its executed without errors
-    def test_data_tuner(self, mock_log_artifact, mock_log):
-        """Test expected outputs of data tuner"""
+        if anno not in (inspect._empty, object):
+            config_cls = anno
+        else:
+            # fallback to explicit map
+            config_cls = CONFIG_MAP[tuner_cls]
 
-        # Create system_data tuner
-        tuner = DataTunerByConfig(config=self.config)
+        return config_cls()
 
-        # Load system_data
-        xy_raw = load_data(self.config.abs_path_to_data)
-        self.assertIsInstance(xy_raw, pd.DataFrame)
-        self.assertFalse(xy_raw.empty)
+    def _make_data(self, config):
+        raw = load_data(config.abs_path_to_data)
+        x, y = split_target_features(config.name_of_target, raw)
+        return raw, x, y
 
-        x, y = split_target_features(self.config.name_of_target, xy_raw)
+    def test_tuners(self):
+        for tuner_cls in TUNER_CLASSES:
+            with self.subTest(tuner=tuner_cls.__name__):
+                config = self._instantiate_config(tuner_cls)
+                tuner = tuner_cls(config=config)
+                raw, x, y = self._make_data(config)
+                for name, method in inspect.getmembers(tuner, predicate=inspect.ismethod):
+                    if not name.startswith("tune_"):
+                        continue
 
-        # Tune the system_data
-        tuned_x = tuner.tune_fixed(xy_raw)
-        # Merge target and features
-        xy_tuned = tuned_x.join(y)
+                    with self.subTest(method=name):
+                        sig = inspect.signature(method)
+                        num_args = len(sig.parameters)
 
-        # Validation
-        self.assertFalse(tuned_x.empty, "Tuned data is empty")
-        self.assertIsInstance(tuned_x, pd.DataFrame, "Tuned data is not a dataframe")
-        self.assertFalse(xy_tuned.empty, "Tuned xy data is empty")
-        self.assertIsInstance(xy_tuned, pd.DataFrame, "Tuned xy data is not a dataframe")
+                        if num_args == 0:
+                            tuned_x = method()
+                        elif num_args == 1:
+                            tuned_x = method(raw)
+                        elif num_args == 2:
+                            tuned_x = method(x, y)
+                        else:
+                            self.skipTest(f"{name} has unexpected signature {sig}")
 
-        try:
-            ExperimentLogger.log({"xy_tuned": xy_tuned.iloc[[0, 1, 2, -3, -2, -1]]})
-        except Exception as e:
-            self.fail(f"ExperimentLogger.log raised an exception: {e}")
+                        self.assertIsInstance(tuned_x, pd.DataFrame,
+                                              f"{name} must return DataFrame")
+                        self.assertFalse(tuned_x.empty,
+                                         f"{name} returned empty DataFrame")
 
+                        y_out = getattr(tuner, "y", y)
+                        self.assertIsInstance(y_out, pd.Series,
+                                              f"{name}: y must be Series")
+                        self.assertFalse(y_out.empty,
+                                         f"{name}: y must not be empty")
 
-        try:
-            ExperimentLogger.log_artifact(xy_tuned, name='xy_tuned', art_type='csv')
-
-        except Exception as e:
-            self.fail(f"ExperimentLogger.log_artifact raised an exception: {e}")
+                        joined = pd.concat([y_out, tuned_x], axis=1).bfill()
+                        self.assertIsInstance(joined, pd.DataFrame)
+                        self.assertFalse(joined.empty,
+                                         f"{name}: joined DataFrame empty")
 
 
 if __name__ == "__main__":

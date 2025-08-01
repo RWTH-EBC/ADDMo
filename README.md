@@ -1,3 +1,4 @@
+![Banner](staticfiles/logo.png)
 # ADDMo functional overview
 
 __ADDMo is an automated machine learning tool for regression tasks__

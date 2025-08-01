@@ -88,6 +88,7 @@ simply converting the id into a timestamp (pandas.datetimeindex convention).
 06.06.2018 what is the tool not able to do:
 The tool is single output only (no MIMO).
 It has no natively recurrent model, means it only uses ownlags as a regular input for regression analysis (A native recurrent model would be e.g. long short term memory neural networks)
+![Pipeline Diagram](staticfiles/Flowchart_2.png)
 
 # How to set it up 
 
@@ -183,8 +184,6 @@ Allows recreating the exact data tuning process applied during a previous experi
 This step is handled already in the `Testing` tab. This tab only supports tuning configurations saved by this app.
 It cannot recreate tuning from externally trained models or configurations.
 
-A flowchart showing the major steps of the pipeline:
-![Pipeline Diagram](staticfiles/Flowchart_2.png)
 ## Running the scripts directly via the python console:
 
 These execution files works exactly like the GUI tabs. In order to perform specific functionalities, change the saved config.json file under

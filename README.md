@@ -184,7 +184,7 @@ This step is handled already in the `Testing` tab. This tab only supports tuning
 It cannot recreate tuning from externally trained models or configurations.
 
 A flowchart showing the major steps of the pipeline:
-![Pipeline Diagram](staticfiles/Flowchart.png)
+![Pipeline Diagram](staticfiles/Flowchart_2.png)
 ## Running the scripts directly via the python console:
 
 These execution files works exactly like the GUI tabs. In order to perform specific functionalities, change the saved config.json file under

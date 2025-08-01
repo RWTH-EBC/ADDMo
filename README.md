@@ -88,7 +88,7 @@ simply converting the id into a timestamp (pandas.datetimeindex convention).
 06.06.2018 what is the tool not able to do:
 The tool is single output only (no MIMO).
 It has no natively recurrent model, means it only uses ownlags as a regular input for regression analysis (A native recurrent model would be e.g. long short term memory neural networks)
-![Pipeline Diagram](staticfiles/Flowchart_Addmo.png)
+![Pipeline Diagram](staticfiles/flowchart_Addmo.png)
 
 # How to set it up 
 

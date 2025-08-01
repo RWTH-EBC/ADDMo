@@ -135,10 +135,11 @@ Some users might face matplotlib interface errors while executing plotting scrip
 
 # How to use it- two options
 
-1. via the GUI
-2. accessing the python files and run them directly 
+#### Option 1: via the GUI
+#### Option 2: accessing the python files and run them directly 
 
-__Using the GUI:__
+
+__How to use the GUI:__
 
 Executing this command in the terminal where your virtual environment is activated will launch the GUI: `python launch_GUI.py`
 
@@ -230,15 +231,6 @@ addmo_examples/
 			└── SciKeras_fixed_tuning/
 				└── plots/
 ```
-# Scheme of ADDMo:
-
-The program is built like the mainconcept (file in the readme folder), take it as guideline. Read the comments in the code or the GUI to get more information.
-
-After reading the above instructions, check all documents in the readme-folder as supplemental documents.
-- MainConcept - Verknüpfung : Here the theoretical concept of the program is depicted.
-- ProgramFlowchart.vsdx : Here you can see which methods are available in the program and in which section they are executed.
-- MethodDescription.doc : This is a list of all methods plus their Input/Output, the theoretical function and their practical function.
-- DetailedMethodsDescription_CodingPointOfView.xlsx : This is a list of all methods with their attributes and their meaning, and a more detailed description of each method
 
 # Cite ADDMo:
 

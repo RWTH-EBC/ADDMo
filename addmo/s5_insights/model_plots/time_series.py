@@ -21,6 +21,8 @@ def plot_timeseries_combined(config,data):
         data = data[(data.index >= start_date) & (data.index <= end_date)]
 
     # Check data duration
+    if not pd.api.types.is_datetime64_any_dtype(data.index):
+        data.index = pd.to_datetime(data.index)
     duration_days = (data.index.max() - data.index.min()).days
     columns_to_plot = data.columns.tolist()
 

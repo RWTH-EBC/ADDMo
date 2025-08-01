@@ -10,12 +10,8 @@
         2
     ],
     "minimum_target_lag": 1,
-    "create_manual_feature_lags": true,
-    "feature_lags": {
-        "FreshAir Temperature": [
-            1
-        ]
-    },
+    "create_manual_feature_lags": false,
+    "feature_lags": {},
     "manual_feature_selection": false,
     "selected_features": [
         "FreshAir Temperature",
@@ -23,7 +19,7 @@
     ],
     "sequential_direction": "forward",
     "filter_recursive_by_count": false,
-    "recursive_embedded_number_features_to_select": 5,
+    "recursive_embedded_number_features_to_select": 18,
     "filter_recursive_by_score": false,
     "min_increase_for_wrapper": 0.01
 }

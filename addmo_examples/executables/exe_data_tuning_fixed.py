@@ -1,5 +1,6 @@
 import os
 import json
+import pandas as pd
 from addmo.util.definitions import results_dir_data_tuning
 from addmo.util.load_save_utils import root_dir
 from addmo.util.experiment_logger import LocalLogger
@@ -69,13 +70,14 @@ def exe_data_tuning_fixed(user_input='y'):
 
     # Return file paths for plotting data
     saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')
+    data = pd.read_csv(saved_data_path, delimiter=",", index_col=0, encoding="latin1", header=0)
     config_path = os.path.join(LocalLogger.directory, "config.json")
     with open(config_path, 'r') as f:
         plot_config = json.load(f)
 
     # Plot tuned data
 
-    figures = plot_timeseries_combined(plot_config)
+    figures = plot_timeseries_combined(plot_config,data)
     for fig in figures:
         fig.show()
     os.makedirs(LocalLogger.directory, exist_ok=True)

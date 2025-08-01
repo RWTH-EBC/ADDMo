@@ -143,7 +143,7 @@ def plot_carpets(variables, measurements_data, regressor_func, system_func=None,
         plt.setp(ax.get_zticklabels(), fontsize=7)
 
         # Add colorbars and label them
-    if regressor_func is not None:
+    if system_func is not None:
         cbar_ax1 = fig.add_axes([0.9, 0.35, 0.02, 0.3])
         cbar1 = fig.colorbar(surf1, cax=cbar_ax1)
         cbar1.set_label("Regressor")

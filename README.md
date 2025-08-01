@@ -27,18 +27,16 @@ via matplotlib.
 - Custom period selection*
 
 Feature creation:
-- Cross-, cloud- and autocorrelation plotting: Visualization
-of correlations for detecting influential lags and gathering
-insight into the system’s dependencies via matplotlib.
-- Creation of differences*: Creation of feature derivatives.
-- Custom featurelag creation*
-- Automatic featurelag creation*: Wrapper for automatic creation
+
+- Creation of differences: Creation of feature derivatives.
+- Custom featurelag creation
+- Automatic featurelag creation: Wrapper for automatic creation
 of the best lag per feature within a custom lag range.
 Each lag is only created if beneficial. The BBOM is based
 on the assumption that only one lag per feature has real
 informative value.
-- Custom ownlag creation*
-- Automated time series ownlag creation*: Wrapper for creating
+- Custom ownlag creation
+- Automated time series ownlag creation: Wrapper for creating
 the optimal number of time series ownlags. Ownlags
 are added as long as they improve the score_test. The selection
 is based on the assumption that the score_test is monotonically
@@ -60,7 +58,7 @@ selection by a custom threshold of importance.
 
 
 Model tuning:
-- Model selection*: Exhaustive wrapper for selecting the best
+- Model selection: Exhaustive wrapper for selecting the best
 out of all implemented models.
 - Hyperparameter tuning: via bayesian optimization or grid search
 - Cross-validation: prevent overfitting
@@ -184,6 +182,8 @@ Allows recreating the exact data tuning process applied during a previous experi
 This step is handled already in the `Testing` tab. This tab only supports tuning configurations saved by this app.
 It cannot recreate tuning from externally trained models or configurations.
 
+A flowchart showing the major steps of the pipeline:
+![Pipeline Diagram](staticfiles/Flowchart.png)
 ## Running the scripts directly via the python console:
 
 These execution files works exactly like the GUI tabs. In order to perform specific functionalities, change the saved config.json file under

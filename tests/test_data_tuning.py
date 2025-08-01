@@ -26,15 +26,7 @@ class TestAllDataTuners(unittest.TestCase):
     """
 
     def _instantiate_config(self, tuner_cls):
-        sig = inspect.signature(tuner_cls.__init__)
-        param = sig.parameters.get("config")
-        anno = getattr(param, "annotation", inspect._empty)
-
-        if anno not in (inspect._empty, object):
-            config_cls = anno
-        else:
-            # fallback to explicit map
-            config_cls = CONFIG_MAP[tuner_cls]
+        config_cls = CONFIG_MAP[tuner_cls]
 
         return config_cls()
 

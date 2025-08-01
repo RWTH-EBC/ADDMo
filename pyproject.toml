@@ -39,4 +39,4 @@ where = ["."]
 exclude = ["tests*"]
 
 [project.scripts]
-addmo-gui = "launch_GUI:launch_streamlit"
+addmo-gui = "GUI.launch_GUI:launch_streamlit"

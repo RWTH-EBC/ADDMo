@@ -117,17 +117,13 @@ It has no natively recurrent model, means it only uses ownlags as a regular inpu
 
 
 4. Install required packages via:
-   `pip install .`
+   `pip install -e .`
 
 	
 
 5. Set the conda environment "ADDMo" as interpreter for e.g. in PyCharm
 
 
-
-Note: `BaseSettings` has been moved to the `pydantic-settings` package. The following changes are needed according to the migration document:
-1. Search for "from pydantic import BaseSettings" in the project scope
-2. Change it to "from pydantic_settings import BaseSettings"
 
 
 # Plotting
@@ -141,7 +137,7 @@ Some users might face matplotlib interface errors while executing plotting scrip
 
 __How to use the GUI:__
 
-Executing this command in the terminal where your virtual environment is activated will launch the GUI: `python launch_GUI.py`
+Executing this command in the terminal where your virtual environment is activated will launch the GUI: addmo-gui
 
 Select the respective "tool" via the tabs:
 

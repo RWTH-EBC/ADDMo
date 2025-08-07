@@ -126,8 +126,8 @@ It has no natively recurrent model, means it only uses ownlags as a regular inpu
 
 
 
-# Plotting
-Some users might face matplotlib interface errors while executing plotting scripts in GUI. If encountering such an error, try downgrading matplotlib to 3.9
+### Plotting Caution:
+Some users might face matplotlib interface errors while executing plotting scripts in GUI, such as not being able to view the plots. If encountering such an error, try downgrading matplotlib to 3.9
 
 # How to use it- two options
 
@@ -139,7 +139,7 @@ __How to use the GUI:__
 
 Executing this command in the terminal where your virtual environment is activated will launch the GUI: addmo-gui
 
-Select the respective "tool" via the tabs:
+## Functionalities accessible via the GUI:
 
 ## Data tuning
 ### Auto Data Tuning:
@@ -213,7 +213,7 @@ A folder called results is created within the directory (`addmo-automated-ml-reg
 - Layer2: `name_of_data_tuning_experiment`: name of folder in which different "Model Tuning" experiment folders are created. This folder helps in keeping track of which model tuning is used for a specific dataset and helps you create multiple experiments using different models but the using the same tuned data. 
 - Layer3: `name_of_model_tuning_experiment`: name of folder in which results of "Model Tuning" are saved.
 - Layer4: `plots`: name of the folder in which the results of plotting are saved.  
-- 
+
 An example of how the structure looks like:  
 ``` 
 addmo_examples/  

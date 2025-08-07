@@ -15,9 +15,6 @@ __ADDMo faces the following challenges:__
 __The used methods for facing those challenges are:__
 
 Preprocessing:
-- Resampling* to the desired resolution.
-- Initial custom feature selection* before tuning the data.
-- Data cleaning: Replaces NaNs and infinite values.
 - Scaling and normalizing: RobustScaler, StandardScaler &
 no scaling.
 
@@ -31,18 +28,7 @@ Feature creation:
 
 - Creation of differences: Creation of feature derivatives.
 - Custom featurelag creation
-- Automatic featurelag creation: Wrapper for automatic creation
-of the best lag per feature within a custom lag range.
-Each lag is only created if beneficial. The BBOM is based
-on the assumption that only one lag per feature has real
-informative value.
 - Custom ownlag creation
-- Automated time series ownlag creation: Wrapper for creating
-the optimal number of time series ownlags. Ownlags
-are added as long as they improve the score_test. The selection
-is based on the assumption that the score_test is monotonically
-increasing with the number of ownlags, till it reaches the
-global optimum.
 
 Feature selection:
 - Low variance filter: Deletes features with low variance.
@@ -52,10 +38,7 @@ features.
 - Univariate filter: Several search and rating strategies for
 univariate filters.
 - Embedded recursive feature selection: Embedded multivariate
-feature selection, see scikit-learn.org for further information. Number
-of features can be both found automatically or set manually.
-- Embedded feature selection by threshold: Univariate feature
-selection by a custom threshold of importance.
+feature selection using Random Forest where the elimination criteria is set to score or count (features).
 
 
 Model tuning:
@@ -71,24 +54,17 @@ The implemented models are
 - “multi layer perceptron” (ANN) 
 - “epsilon support vector regression” (SVR)
 
-The methodology of fit & test set differentiation, hyperparameter
-tuning and cross-validation is depicted in "ModelTuningFlowchart.vsdx". Moreover,
-the figure illustrates, how “individual model” and “sample
-shuffle” are implemented. The implementation includes a
-comprehensive documentation of all settings and results via
-tables and plots. Additionally, it enables insight to all changes
-conducted, while tuning the data, by documenting the data set
-after each method field.
-
+The flowchart below depicts the workflow of the tool:
+![Pipeline Diagram](staticfiles/flowchart_addmo.png)
 The tool is mainly designed to perform modelling on time series data,
 via regression and time series analysis.
 Nevertheless it can also be used to handle data indexed by an id, 
 simply converting the id into a timestamp (pandas.datetimeindex convention).
 
-06.06.2018 what is the tool not able to do:
-The tool is single output only (no MIMO).
+
+Note: The tool is single output only (no MIMO).
 It has no natively recurrent model, means it only uses ownlags as a regular input for regression analysis (A native recurrent model would be e.g. long short term memory neural networks)
-![Pipeline Diagram](staticfiles/flowchart_addmo.png)
+
 
 # How to set it up 
 
@@ -200,7 +176,7 @@ For example: For changing the config for `Auto Data Tuning`, change the file her
 __Information about the required input shape:__
 - Input ExcelFile has to be named: "InputData" and saved in the Folder `addmo_examples/raw_input_data`
 - Sheet to read in must be the first sheet, with time as first column and all signals and features thereafter (one per column)
-- The time must be in the format of "pandas.datetimeindex". If the time is in seconds, it is converted into DD-MM-YY format.
+- The time must be in the format of "pandas.datetimeindex". If the time is in seconds, convert it into DD-MM-YY format.
 - Columns must have different names
 - By default, the delimiter for csv files is `;`. Explicitly change it under the exe_data_insights in case of different delimiters.
 

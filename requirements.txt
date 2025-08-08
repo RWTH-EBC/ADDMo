@@ -1,0 +1,21 @@
+pandas
+wandb
+onnxruntime
+pydantic
+joblib
+scikit-learn==1.5.2
+scikeras==0.13
+keras==3.3.3
+tensorflow
+skl2onnx
+optuna
+matplotlib==3.10.1
+hyperopt
+seaborn
+plotly
+tf2onnx
+pyod
+openpyxl
+streamlit
+streamlit_pdf_viewer
+streamlit-pydantic @ git+https://github.com/RWTH-EBC/streamlit-pydantic.git@main

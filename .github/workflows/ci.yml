@@ -3,17 +3,16 @@ name: Python CI
 on:
   push:
     branches:
-      - mre-rpa
+      - master
   pull_request:
     branches:
-      - mre-rpa
+      - master
 
 jobs:
   ci:
     uses: RWTH-EBC/ci_templates/.github/workflows/ci_pipeline.yml@development
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
     with:
       PYTHON_VERSION: "3.10"
       USE_PYLINT: true

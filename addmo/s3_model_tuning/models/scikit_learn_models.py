@@ -1,0 +1,327 @@
+import numpy as np
+import joblib
+import sklearn
+from abc import ABC
+from sklearn.neural_network import MLPRegressor
+from sklearn.svm import SVR
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, MaxAbsScaler
+from sklearn.compose import TransformedTargetRegressor
+from skl2onnx import to_onnx
+from addmo.s3_model_tuning.models.abstract_model import AbstractMLModel
+from addmo.s3_model_tuning.models.abstract_model import ModelMetadata
+from sklearn.linear_model import LinearRegression
+from addmo.util.load_save_utils import create_path_or_ask_to_override
+
+
+class BaseScikitLearnModel(AbstractMLModel, ABC):
+    """
+    Base class for scikit-learn models.
+    This class extends the AbstractMLModel, providing concrete implementations of
+    common functionalities specific to scikit-learn models.
+
+    Attributes:
+        model (Pipeline): A scikit-learn Pipeline object containing the scaler and the provided model.
+    """
+
+    def __init__(self, regressor):
+        """
+        Create an instance of the scikit-learn model including a scaler
+        """
+        self.regressor = Pipeline(
+            steps=[
+                ("scaler", StandardScaler()),  # scale the features
+                ("model", regressor)  # scaling the target variable through TransformedTargetRegressor
+                # is not compatible with ONNX
+            ]
+        )
+
+    def fit(self, x, y):
+        """
+        Train the model.
+        """
+        self.x_fit = x
+        self.y_fit = y
+        self.regressor.fit(x.values.astype(np.float32), y.values.astype(np.float32))
+
+    def predict(self, x):
+        """
+        Make predictions.
+        """
+        return self.regressor.predict(x.values.astype(np.float32))
+
+    def _define_metadata(self):
+        """
+        Define metadata.
+        """
+        self.metadata = ModelMetadata(
+            addmo_class=type(self).__name__,
+            addmo_commit_id=ModelMetadata.get_commit_id(),
+            library=sklearn.__name__,
+            library_model_type=type(self.regressor.named_steps['model']).__name__,
+            library_version=sklearn.__version__,
+            target_name=self.y_fit.name,
+            features_ordered=list(self.x_fit.columns),
+            preprocessing=['StandardScaler for all features'])
+
+    def save_regressor(self, directory, regressor_filename, file_type='joblib'):
+        """"
+        Save regressor as .joblib or .onnx including scaler to a file.
+        """
+        full_filename = f"{regressor_filename}.{file_type}"
+        path = create_path_or_ask_to_override(full_filename, directory)
+
+        if file_type == 'joblib':
+            joblib.dump(self.regressor, path)
+
+        elif file_type == 'onnx':
+            onnx_model = to_onnx(self.regressor, self.x_fit.values)
+            with open(path, "wb") as f:
+                f.write(onnx_model.SerializeToString())
+        else:
+            raise ValueError(f'The supported file types for saving the model are: .joblib and .onnx')
+
+        # Saving metadata
+        self._define_metadata()
+        self._save_metadata(directory, regressor_filename)
+
+        print(f"Model saved to {path}.")
+        return file_type
+
+    def load_regressor(self, regressor):
+        """""
+        Load trained model for serialisation.
+        """
+        self.regressor = regressor
+
+    def to_scikit_learn(self, x=None):
+        return self.regressor
+
+    def set_params(self, hyperparameters):
+        """
+        Access the hyperparameters of the model within the pipeline within the TransformedTargetRegressor
+        """
+        self.regressor.named_steps["model"].set_params(**hyperparameters)
+
+    def get_params(self, deep=True):
+        """
+        Get the hyperparameters of the model
+        """
+        return self.regressor.named_steps["model"].get_params(deep=deep)
+
+class ScikitMLP(BaseScikitLearnModel):
+    """Scikit-learn MLPRegressor model."""
+
+    def __init__(self):
+        super().__init__(MLPRegressor())
+        self.set_params(self.default_hyperparameter())
+
+    def optuna_hyperparameter_suggest(self, trial):
+        """
+        Suggest hyperparameters for optimization.
+        """
+        hyperparameters = {}
+
+        # Suggest hyperparameters
+        n_layers = trial.suggest_int("n_layers", 1, 2)
+        hidden_layer_sizes = tuple(
+            trial.suggest_int(f"n_units_l{i}", 1, 1000) for i in range(n_layers)
+        )
+
+        # Dynamic hidden layer sizes based on the number of layers
+        hyperparameters["hidden_layer_sizes"] = hidden_layer_sizes
+
+        return hyperparameters
+
+    def grid_search_hyperparameter(self):
+        """
+        Suggest hyperparameters for optimization.
+        """
+        hyperparameter_grid = {
+            "hidden_layer_sizes": [(50,), (100,), (50, 50), (100, 100)],
+            "activation": ["tanh", "relu"],
+            "solver": ["sgd", "adam"],
+            "alpha": [0.0001, 0.05],
+            "learning_rate": ["constant", "adaptive"],
+        }
+        return hyperparameter_grid
+
+    def default_hyperparameter(self):
+        """"
+        Return default hyperparameters.
+        """
+        hyperparameter = MLPRegressor().get_params()
+        hyperparameter["max_iter"] = 5000
+        hyperparameter["early_stopping"] = True
+        return hyperparameter
+
+
+class ScikitMLP_TargetTransformed(ScikitMLP):
+    def __init__(self):
+        """
+        Create an instance of the scikit-learn model including a scaler.
+        """
+        self.regressor = Pipeline(
+            steps=[
+                ("scaler", StandardScaler()),  # scale the features
+                ("model", TransformedTargetRegressor(regressor=MLPRegressor()))
+                # scaling the target variable through TransformedTargetRegressor
+                # is not compatible with ONNX
+            ]
+        )
+        self.set_params(self.default_hyperparameter())
+
+    def set_params(self, hyperparameters):
+        """
+        Access the hyperparameters of the model within the pipeline within the TransformedTargetRegressor.
+        """
+        self.regressor.named_steps["model"].regressor.set_params(**hyperparameters)
+
+    def get_params(self, deep=True):
+        """
+        Get the hyperparameters of the model.
+        """
+        return self.regressor.named_steps["model"].regressor.get_params(deep=deep)
+
+
+class ScikitLinearReg(BaseScikitLearnModel):
+    """Linear Regression model"""
+
+    def __init__(self):
+        super().__init__(LinearRegression())
+
+    def grid_search_hyperparameter(self):
+        pass
+
+    def optuna_hyperparameter_suggest(self, trial):
+        pass
+
+    def default_hyperparameter(self):
+        """"
+        Return default hyperparameters.
+        """
+        return LinearRegression().get_params()
+
+class ScikitLinearRegNoScaler(ScikitLinearReg):
+    def __init__(self):
+        """
+        Create an instance of the scikit-learn model including a scaler
+        """
+        self.regressor = Pipeline(
+            steps=[
+                ("model", LinearRegression())
+            ]
+        )
+
+    def fit(self, x, y):
+        """
+        Train the model.
+        """
+        self.x_fit = x
+        self.y_fit = y
+        self.regressor.fit(x, y)
+
+    def predict(self, x):
+        """
+        Make predictions.
+        """
+        return self.regressor.predict(x)
+
+    def get_params(self, deep=True):
+        """
+        Get the hyperparameters of the model
+        """
+        # get model parameter
+        param = self.regressor.named_steps["model"].get_params(deep=deep)
+
+        # just info params
+        param['model_complexity'] = 1
+        param['hidden_layer_sizes'] = []
+        return param
+
+    def _define_metadata(self):
+        """
+        Define metadata.
+        """
+        self.metadata = ModelMetadata(
+            addmo_class=type(self).__name__,
+            addmo_commit_id=ModelMetadata.get_commit_id(),
+            library=sklearn.__name__,
+            library_model_type=type(self.regressor).__name__,
+            library_version=sklearn.__version__,
+            target_name=self.y_fit.name,
+            features_ordered=list(self.x_fit.columns),
+            preprocessing=['No scaling'])
+
+class ScikitSVR(BaseScikitLearnModel):
+    """Scikit-learn Support Vector Regressor (SVR) model."""
+
+    def __init__(self):
+        super().__init__(SVR())
+
+    def _define_metadata(self):
+        """
+        Define metadata.
+        """
+        self.metadata = ModelMetadata(
+            addmo_class=type(self).__name__,
+            addmo_commit_id=ModelMetadata.get_commit_id(),
+            library=sklearn.__name__,
+            library_model_type=type(self.regressor).__name__,
+            library_version=sklearn.__version__,
+            target_name=self.y_fit.name,
+            features_ordered=list(self.x_fit.columns),
+            preprocessing=['Scaling'])
+
+    def grid_search_hyperparameter(self):
+        pass
+
+    def optuna_hyperparameter_suggest(self, trial):
+        """
+        Suggest hyperparameters for optimization.
+        """
+        hyperparameters = {}
+
+        hyperparameters["C"] = trial.suggest_float("C", 1e-2, 1e1, log=True)  #regularizer
+        hyperparameters["epsilon"] = trial.suggest_float("epsilon", 1e-3, 1.0, log=True)  #distance of tube
+        hyperparameters["kernel"] = trial.suggest_categorical("kernel", ["linear", "poly", "rbf", "sigmoid"])
+        hyperparameters["tol"] = trial.suggest_float("tol", 1e-5, 1e-1, log=True)
+
+        # kernel-specific hyperparameters
+        if hyperparameters["kernel"] in ["poly", "rbf", "sigmoid"]:
+            hyperparameters["gamma"] = trial.suggest_categorical("gamma", ["scale", "auto"])
+
+        if hyperparameters["kernel"] == "poly":
+            hyperparameters["degree"] = trial.suggest_int("degree", 2, 5)
+            hyperparameters["coef0"] = trial.suggest_float("coef0", 0.0, 1.0)
+
+        if hyperparameters["kernel"] == "sigmoid":
+            hyperparameters["coef0"] = trial.suggest_float("coef0", 0.0, 1.0)
+
+        return hyperparameters
+
+    def default_hyperparameter(self):
+        """"
+        Return default hyperparameters.
+        """
+        hyperparameter = SVR().get_params()
+        hyperparameter["max_iter"] = 500
+        hyperparameter["tol"] = 1e-2
+        return hyperparameter
+
+    def set_params(self, hyperparameters):
+        """
+        Access the hyperparameters of the model within the pipeline within the SVR.
+        """
+        hyperparameters = {f"model__{key}": value for key, value in hyperparameters.items()}
+
+        self.regressor.set_params(**hyperparameters)
+
+    def get_params(self, deep=True):
+        """
+        Get the hyperparameters of the model.
+        """
+        param = self.regressor.get_params(deep=deep)
+
+        model_param = {key: value for key, value in param.items() if key.startswith("model__")}
+        return model_param

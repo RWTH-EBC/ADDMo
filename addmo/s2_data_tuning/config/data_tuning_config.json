@@ -1,0 +1,14 @@
+{
+    "abs_path_to_data": "C:\\Users\\mre-rpa\\Desktop\\PycharmProjects\\addmo-automated-ml-regression\\addmo_examples\\raw_input_data\\InputData.xlsx",
+    "name_of_raw_data": "test_raw_data",
+    "name_of_tuning": "data_tuning_experiment_fixed",
+    "name_of_target": "FreshAir Temperature",
+    "features": [
+        "Schedule",
+        "Total active power",
+        "FreshAir Temperature___diff",
+        "FreshAir Temperature___lag1",
+        "FreshAir Temperature___squared",
+        "Total active power___lag1"
+    ]
+}

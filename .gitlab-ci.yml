@@ -1,0 +1,61 @@
+stages:
+  - test
+#  - examples
+  - code_quality
+#  - doc
+  - build
+  - deploy
+
+
+variables:
+  PYTHON_VERSION: "python:3.10" #"registry.git.rwth-aachen.de/ebc/ebc_all/gitlab_ci/templates:python_3.10"
+  PAGES_BRANCH: mre-rpa
+  TEST_PATH: tests
+  TEST_ENGINE: "unittest"
+  EXAMPLE_CONVERTER_CONFIG: "addmo_examples/converter.toml"
+  EXAMPLE_FILE_FOLDER: "addmo_examples"
+
+
+include:
+
+  - project: 'ebc/ebc-general/templates/gitlab-ci'
+    file: 'python/tests/coverage.gitlab-ci.yml' # Generates test coverage
+
+  - project: 'ebc/ebc-general/templates/gitlab-ci'
+    file: 'python/code-quality/pylint.gitlab-ci.yml'# Code quality
+
+
+  - project: 'ebc/ebc-general/templates/gitlab-ci'
+    file: 'pages/gh-pages.gitlab-ci.yml'
+
+
+  - project: 'ebc/ebc-general/templates/gitlab-ci'
+    file:  'python/build/build.gitlab-ci.yml'
+
+
+#    - project: 'EBC/EBC_all/gitlab_ci/templates'
+#      file: 'python/tests/coverage.gitlab-ci.yml' # Generates test coverage
+#
+#    - project: 'EBC/EBC_all/gitlab_ci/templates'
+#      file: 'python/tests/tests.gitlab-ci.yml'  # test pipeline
+#
+#    - project: 'EBC/EBC_all/gitlab_ci/templates'
+#      file: 'python/code-quality/pylint.gitlab-ci.yml'
+#
+#    - project: 'EBC/EBC_all/gitlab_ci/templates'
+#      file: 'python/sphinxdoc/sphinxdoc.gitlab-ci.yml'
+#
+#
+#    - project: 'EBC/EBC_all/gitlab_ci/templates'
+#      file: 'pages/gl-pages.gitlab-ci.yml'
+#
+#    - project: 'EBC/EBC_all/gitlab_ci/templates'
+#      file: 'pages/gh-pages.gitlab-ci.yml'
+#
+#
+#    - project: 'EBC/EBC_all/gitlab_ci/templates'
+#      file: 'python/examples/examples.gitlab-ci.yml'  # Stores examples
+#
+#
+#    - project: 'EBC/EBC_all/gitlab_ci/templates'
+#      file: 'python/build/build.gitlab-ci.yml'

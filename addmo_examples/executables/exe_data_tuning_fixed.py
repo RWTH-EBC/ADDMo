@@ -14,17 +14,10 @@ from addmo.util.data_handling import split_target_features
 from addmo.s5_insights.model_plots.time_series import plot_timeseries_combined
 from addmo.util.load_save import load_config_from_json
 
-def exe_data_tuning_fixed(user_input='y'):
+def _exe_data_tuning(config, user_input='y'):
     """
     Execute the system_data tuning process in a fixed manner.
     """
-    # Path to the config file
-    path_to_config = os.path.join(root_dir(), 'addmo', 's2_data_tuning', 'config',
-                                  'data_tuning_config.json')
-
-    # Create the config object
-    # config = DataTuningFixedConfig()
-    config = load_config_from_json(path_to_config, DataTuningFixedConfig)
 
     # Configure the logger
     LocalLogger.active = True
@@ -88,7 +81,19 @@ def exe_data_tuning_fixed(user_input='y'):
 
     print("Finished")
 
+def exe_data_tuning_fixed(user_input='y'):
+    """Execute the system_data tuning process from a config file."""
+    path_to_config = os.path.join(
+        root_dir(), 'addmo', 's2_data_tuning', 'config', 'data_tuning_config.json'
+    )
+    config = load_config_from_json(path_to_config, DataTuningFixedConfig)
+    _exe_data_tuning(config, user_input)
 
+
+def exe_data_tuning_on_default_config(user_input='y'):
+    """Execute the system_data tuning process with default config."""
+    config = DataTuningFixedConfig()
+    _exe_data_tuning(config, user_input)
 
 if __name__ == '__main__':
     user_input = input("To overwrite the existing content type in 'data_tuning_experiment_fixed' results directory <y>, for deleting the current contents type <d>: ")

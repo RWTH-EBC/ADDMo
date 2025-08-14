@@ -9,7 +9,7 @@ keras==3.3.3
 tensorflow
 skl2onnx
 optuna
-matplotlib==3.10.1
+matplotlib
 hyperopt
 seaborn
 plotly

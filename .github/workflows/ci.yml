@@ -10,7 +10,7 @@ on:
 
 jobs:
   ci:
-    uses: RWTH-EBC/ci_templates/.github/workflows/ci_pipeline.yml@development
+    uses: RWTH-EBC/ci_templates/.github/workflows/ci_pipeline.yml@main
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
     with:

@@ -311,8 +311,8 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
         below_mask = residual < 0
         above_mask = residual >= 0
 
-        norm_below = colors.Normalize(vmin=residual[below_mask].min(), vmax=0)
-        norm_above = colors.Normalize(vmin=0, vmax=residual[above_mask].max())
+        norm_below = colors.Normalize(vmin=residual[below_mask].min() if below_mask.any() else -0.01, vmax=0)
+        norm_above = colors.Normalize(vmin=0, vmax=residual[above_mask].max() if above_mask.any() else 0.01)
         scatter1= ax.scatter(
             real_x[below_mask], real_y[below_mask], real_target[below_mask],
             c=residual[below_mask],

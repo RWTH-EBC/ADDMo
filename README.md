@@ -54,8 +54,10 @@ The implemented models are
 - “multi layer perceptron” (ANN) 
 - “epsilon support vector regression” (SVR)
 
-The flowchart below depicts the workflow of the tool:
-![Pipeline Diagram](staticfiles/flowchart_addmo.png)
+The flowchart below depicts the workflow of the tool:  
+
+![Pipeline Diagram](staticfiles/flowchart_addmo.png)  
+
 The tool is mainly designed to perform modelling on time series data,
 via regression and time series analysis.
 Nevertheless it can also be used to handle data indexed by an id, 

@@ -930,7 +930,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("""
-Welcome to *ADDMO, a AutoML toolkit designed for **time series regression tasks*.
+Welcome to *ADDMO, a AutoML toolkit* designed for *time series regression tasks*.
 
 This application helps you configure, run, and analyze the full machine learning pipeline — from *data preprocessing* to *model tuning*, with full documentation and visualization at each step.
 

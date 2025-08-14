@@ -7,6 +7,10 @@ on:
   pull_request:
     branches:
       - mre-rpa
+  workflow_call:
+    secrets:
+      GH_TOKEN:
+        required: true
 
 jobs:
   ci:
@@ -21,6 +25,6 @@ jobs:
       BUILD_PACKAGE: true
       GENERATE_DOCUMENTATION: true
       GH_PAGES: true
-      EXECUTE_TESTS: true
+      EXECUTE_TESTS: true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
       EXECUTE_COVERAGE_TEST: true
 

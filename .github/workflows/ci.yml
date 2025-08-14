@@ -7,10 +7,11 @@ on:
   pull_request:
     branches:
       - mre-rpa
-  workflow_call:
-    secrets:
-      GH_TOKEN:
-        required: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   ci:

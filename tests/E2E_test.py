@@ -7,8 +7,8 @@ from addmo.util.definitions import results_dir_data_tuning, results_dir_model_tu
 from addmo_examples.executables.exe_data_tuning_fixed import exe_data_tuning_fixed
 from addmo_examples.executables.exe_model_tuning import exe_model_tuning
 from addmo_examples.executables.exe_data_insights import exe_carpet_plots
-from s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
-from s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig, ModelTunerConfig
+from addmo.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
+from addmo.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig, ModelTunerConfig
 from util.load_save_utils import root_dir
 
 # This unittest is to test whether all the executables work compatibly with each other. In case new configs are added, the user would have to create executables which tests

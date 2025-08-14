@@ -13,9 +13,9 @@ jobs:
     uses: RWTH-EBC/ci_templates/.github/workflows/ci_pipeline.yml@main
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
     with:
       PYTHON_VERSION: "3.10"
+      PYTHON_TEST_MATRIX: '["3.10"]'
       USE_PYLINT: true
       USE_RUFF: true
       BUILD_PACKAGE: true

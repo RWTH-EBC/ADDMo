@@ -2,6 +2,7 @@ import unittest
 import os
 import shutil
 import pandas as pd
+from pathlib import Path
 from addmo.util.load_save import load_config_from_json, load_data
 from addmo.util.definitions import results_dir_data_tuning, results_dir_model_tuning, return_best_model
 from addmo_examples.executables.exe_data_tuning_fixed import exe_data_tuning_fixed
@@ -29,6 +30,11 @@ class TestAddmoEndToEnd(unittest.TestCase):
             "addmo", "s2_data_tuning", "config", "data_tuning_config.json"
         )
         cls.data_config = load_config_from_json(cls.data_config_path, DataTuningFixedConfig)
+        if hasattr(cls.data_config, "abs_path_to_data"):
+            filename = Path(cls.data_config.abs_path_to_data).name
+            cls.data_config.abs_path_to_data = str(
+                Path(root_dir()) / "addmo_examples" / "raw_input_data" / filename
+            )
         cls.model_tuner_config_path = os.path.join(root_dir(), "addmo", "s3_model_tuning", "config", "model_tuner_config.json")
         cls.model_exp_config_path = os.path.join(root_dir(), "addmo", "s3_model_tuning", "config", "model_tuner_experiment_config.json")
         cls.model_config = load_config_from_json(cls.model_exp_config_path, ModelTuningExperimentConfig)

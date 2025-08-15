@@ -1,5 +1,5 @@
 ![Banner](staticfiles/logo.png)
-[![documentation](https://rwth-ebc.github.io/ADDMo//main//docs/doc.svg)](https://rwth-ebc.github.io/ADDMo//main//docs/index.html)
+[![documentation](https://rwth-ebc.github.io/ADDMo//rpa-new//docs/doc.svg)](https://rwth-ebc.github.io/ADDMo//main//docs/index.html)
 [![coverage](https://rwth-ebc.github.io/ADDMo//main//coverage/badge.svg)](https://rwth-ebc.github.io/ADDMo//main//coverage)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![pylint](https://rwth-ebc.github.io/ADDMo//main//pylint/pylint.svg )](https://rwth-ebc.github.io/ADDMo//main//pylint/pylint.html)

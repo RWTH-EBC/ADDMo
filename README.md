@@ -1,4 +1,6 @@
 ![Banner](staticfiles/logo.png)
+[![documentation](https://rwth-ebc.github.io/ADDMo//main//docs/doc.svg)](https://rwth-ebc.github.io/ADDMo//main//docs/index.html)
+[![coverage](https://rwth-ebc.github.io/ADDMo//main//coverage/badge.svg)](https://rwth-ebc.github.io/ADDMo//main//coverage)
 # ADDMo functional overview
 
 __ADDMo is an automated machine learning tool for regression tasks__

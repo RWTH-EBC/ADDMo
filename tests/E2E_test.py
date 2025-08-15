@@ -26,15 +26,7 @@ class TestAddmoEndToEnd(unittest.TestCase):
         Test the functionality of addmo_examples in a complete pipeline
         """
         # Define data tuning and model tuning setup
-        cls.data_config_path = os.path.join(root_dir(),
-            "addmo", "s2_data_tuning", "config", "data_tuning_config.json"
-        )
-        cls.data_config = load_config_from_json(cls.data_config_path, DataTuningFixedConfig)
-        if hasattr(cls.data_config, "abs_path_to_data"):
-            filename = Path(cls.data_config.abs_path_to_data).name
-            cls.data_config.abs_path_to_data = str(
-                Path(root_dir()) / "addmo_examples" / "raw_input_data" / filename
-            )
+        cls.data_config = DataTuningFixedConfig()
         cls.model_tuner_config_path = os.path.join(root_dir(), "addmo", "s3_model_tuning", "config", "model_tuner_config.json")
         cls.model_exp_config_path = os.path.join(root_dir(), "addmo", "s3_model_tuning", "config", "model_tuner_experiment_config.json")
         cls.model_config = load_config_from_json(cls.model_exp_config_path, ModelTuningExperimentConfig)

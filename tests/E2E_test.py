@@ -2,14 +2,15 @@ import unittest
 import os
 import shutil
 import pandas as pd
+from pathlib import Path
 from addmo.util.load_save import load_config_from_json, load_data
 from addmo.util.definitions import results_dir_data_tuning, results_dir_model_tuning, return_best_model
-from addmo_examples.executables.exe_data_tuning_fixed import exe_data_tuning_fixed
+from addmo_examples.executables.exe_data_tuning_fixed import exe_data_tuning_on_default_config
 from addmo_examples.executables.exe_model_tuning import exe_model_tuning
 from addmo_examples.executables.exe_data_insights import exe_carpet_plots
-from s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
-from s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig, ModelTunerConfig
-from util.load_save_utils import root_dir
+from addmo.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
+from addmo.s3_model_tuning.config.model_tuning_config import ModelTuningExperimentConfig, ModelTunerConfig
+from addmo.util.load_save_utils import root_dir
 
 # This unittest is to test whether all the executables work compatibly with each other. In case new configs are added, the user would have to create executables which tests
 # the created tuning based on configs, then the model tuning and insights are handled here. Similarly, newly added models can also be tested for existing tuned data and insights.
@@ -25,10 +26,7 @@ class TestAddmoEndToEnd(unittest.TestCase):
         Test the functionality of addmo_examples in a complete pipeline
         """
         # Define data tuning and model tuning setup
-        cls.data_config_path = os.path.join(root_dir(),
-            "addmo", "s2_data_tuning", "config", "data_tuning_config.json"
-        )
-        cls.data_config = load_config_from_json(cls.data_config_path, DataTuningFixedConfig)
+        cls.data_config = DataTuningFixedConfig()
         cls.model_tuner_config_path = os.path.join(root_dir(), "addmo", "s3_model_tuning", "config", "model_tuner_config.json")
         cls.model_exp_config_path = os.path.join(root_dir(), "addmo", "s3_model_tuning", "config", "model_tuner_experiment_config.json")
         cls.model_config = load_config_from_json(cls.model_exp_config_path, ModelTuningExperimentConfig)
@@ -37,7 +35,7 @@ class TestAddmoEndToEnd(unittest.TestCase):
     def test_full_pipeline(self):
 
         # Test Data Tuning executable file
-        exe_data_tuning_fixed()
+        exe_data_tuning_on_default_config()
         data_dir = results_dir_data_tuning(self.data_config)
         tuned_csv = os.path.join(data_dir, "tuned_xy_fixed.csv")
         self.assertTrue(os.path.exists(tuned_csv), "Tuned data file missing.")

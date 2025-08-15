@@ -1,8 +1,8 @@
 ![Banner](staticfiles/logo.png)
-[![documentation](https://rwth-ebc.github.io/ADDMo//rpa-new//docs/doc.svg)](https://rwth-ebc.github.io/ADDMo//main//docs/index.html)
-[![coverage](https://rwth-ebc.github.io/ADDMo//main//coverage/badge.svg)](https://rwth-ebc.github.io/ADDMo//main//coverage)
+[![documentation](https://rwth-ebc.github.io/ADDMo//master//docs/doc.svg)](https://rwth-ebc.github.io/ADDMo//master//docs/index.html)
+[![coverage](https://rwth-ebc.github.io/ADDMo//master//coverage/badge.svg)](https://rwth-ebc.github.io/ADDMo//master//coverage)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
-[![pylint](https://rwth-ebc.github.io/ADDMo//main//pylint/pylint.svg )](https://rwth-ebc.github.io/ADDMo//main//pylint/pylint.html)
+[![pylint](https://rwth-ebc.github.io/ADDMo//master//pylint/pylint.svg )](https://rwth-ebc.github.io/ADDMo//master//pylint/pylint.html)
 # ADDMo functional overview
 
 __ADDMo is an automated machine learning tool for regression tasks__

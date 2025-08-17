@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to AddMo’s documentation &mdash; addmo 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+      <script src="_static/jquery.js"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+      <script src="_static/doctools.js"></script>
+      <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            addmo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Welcome to AddMo’s documentation</a></li>
+<li><a class="reference internal" href="#addmo-functional-overview">ADDMo functional overview</a></li>
+<li><a class="reference internal" href="#how-to-set-it-up">How to set it up</a><ul>
+<li><a class="reference internal" href="#plotting-caution">Plotting Caution:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#how-to-use-it-two-options">How to use it- two options</a><ul>
+<li><a class="reference internal" href="#auto-data-tuning">Auto Data Tuning:</a></li>
+<li><a class="reference internal" href="#fixed-data-tuning">Fixed Data Tuning:</a><ul>
+<li><a class="reference internal" href="#model-tuning">Model tuning</a></li>
+<li><a class="reference internal" href="#insights">Insights</a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+<li><a class="reference internal" href="#recreate-data-tuning">Recreate Data Tuning</a></li>
+<li><a class="reference internal" href="#running-the-scripts-directly-via-the-python-console">Running the scripts directly via the python console:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cite-addmo">Cite ADDMo:</a></li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">addmo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome to AddMo’s documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-addmos-documentation">
+<h1>Welcome to AddMo’s documentation<a class="headerlink" href="#welcome-to-addmos-documentation" title="Permalink to this heading"></a></h1>
+<a class="reference external image-reference" href="staticfiles/logo.png"><img alt="Banner" src="staticfiles/logo.png" /></a>
+<a class="reference external image-reference" href="https://rwth-ebc.github.io/ADDMo//master//docs/index.html"><img alt="documentation" src="https://rwth-ebc.github.io/ADDMo//master//docs/doc.svg" /></a>
+<a class="reference external image-reference" href="https://rwth-ebc.github.io/ADDMo//master//coverage"><img alt="coverage" src="https://rwth-ebc.github.io/ADDMo//master//coverage/badge.svg" /></a>
+<a class="reference external image-reference" href="https://opensource.org/licenses/BSD-3-Clause"><img alt="License" src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg" /></a>
+<a class="reference external image-reference" href="https://rwth-ebc.github.io/ADDMo//master//pylint/pylint.html"><img alt="pylint" src="https://rwth-ebc.github.io/ADDMo//master//pylint/pylint.svg" /></a>
+</section>
+<section id="addmo-functional-overview">
+<h1>ADDMo functional overview<a class="headerlink" href="#addmo-functional-overview" title="Permalink to this heading"></a></h1>
+<p><strong>ADDMo is an automated machine learning tool for regression tasks</strong></p>
+<p><strong>ADDMo faces the following challenges:</strong></p>
+<ul class="simple">
+<li><p>Preprocessing of initial data (in some extent)</p></li>
+<li><p>Selection of proper training and test data periods</p></li>
+<li><p>Selection and creation of optimal features</p></li>
+<li><p>Selection of a model, the model configuration</p></li>
+<li><p>Hyperparameter tuning</p></li>
+<li><p>Overfitting &amp; underfitting</p></li>
+</ul>
+<p><strong>The used methods for facing those challenges are:</strong></p>
+<p>Preprocessing:</p>
+<ul class="simple">
+<li><p>Scaling and normalizing: RobustScaler, StandardScaler &amp;
+no scaling.</p></li>
+</ul>
+<p>Period selection:</p>
+<ul class="simple">
+<li><p>Time series plotting: Visualization of the signal’s time series
+for detecting extraordinary patterns or mistakes in the data
+via matplotlib.</p></li>
+<li><p>Custom period selection*</p></li>
+</ul>
+<p>Feature creation:</p>
+<ul class="simple">
+<li><p>Creation of differences: Creation of feature derivatives.</p></li>
+<li><p>Custom featurelag creation</p></li>
+<li><p>Custom ownlag creation</p></li>
+</ul>
+<p>Feature selection:</p>
+<ul class="simple">
+<li><p>Low variance filter: Deletes features with low variance.</p></li>
+<li><p>Custom feature selection* of created features.</p></li>
+<li><p>Independent component analysis: Separating of superimposed
+features.</p></li>
+<li><p>Univariate filter: Several search and rating strategies for
+univariate filters.</p></li>
+<li><p>Embedded recursive feature selection: Embedded multivariate
+feature selection using Random Forest where the elimination criteria is set to score or count (features).</p></li>
+</ul>
+<p>Model tuning:</p>
+<ul class="simple">
+<li><p>Model selection: Exhaustive wrapper for selecting the best
+out of all implemented models.</p></li>
+<li><p>Hyperparameter tuning: via bayesian optimization or grid search</p></li>
+<li><p>Cross-validation: prevent overfitting</p></li>
+</ul>
+<p>All those methods are applied sequentially while each method
+is optional, thus ensuring that any combination can be selected.</p>
+<p>The implemented models are</p>
+<ul class="simple">
+<li><p>“multi layer perceptron” (ANN)</p></li>
+<li><p>“epsilon support vector regression” (SVR)</p></li>
+</ul>
+<p>The flowchart below depicts the workflow of the tool:</p>
+<a class="reference external image-reference" href="staticfiles/flowchart_addmo.png"><img alt="Pipeline Diagram" src="staticfiles/flowchart_addmo.png" /></a>
+<p>The tool is mainly designed to perform modelling on time series data,
+via regression and time series analysis.
+Nevertheless it can also be used to handle data indexed by an id,
+simply converting the id into a timestamp (pandas.datetimeindex convention).</p>
+<p>Note: The tool is single output only (no MIMO).
+It has no natively recurrent model, means it only uses ownlags as a regular input for regression analysis (A native recurrent model would be e.g. long short term memory neural networks)</p>
+</section>
+<section id="how-to-set-it-up">
+<h1>How to set it up<a class="headerlink" href="#how-to-set-it-up" title="Permalink to this heading"></a></h1>
+<ol class="arabic">
+<li><p>Clone the repository<span class="raw-html-m2r"><br></span>
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://git-ce.rwth-aachen.de/ebc/ebc-general/machine-learning/addmo-automated-ml-regression.git</span></code></p></li>
+<li><p>Create new environment using venv or conda</p>
+<blockquote>
+<div><p>Using venv:<span class="raw-html-m2r"><br></span>
+<code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">venv</span> <span class="pre">.venv</span></code><span class="raw-html-m2r"><br></span>
+<code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">.venv/bin/activate</span></code></p>
+<p>Using conda:<span class="raw-html-m2r"><br></span>
+Open command line and create a python 3.10 or above environment via:
+<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">create</span> <span class="pre">--name</span> <span class="pre">ADDMo</span> <span class="pre">python=3.10</span></code></p>
+<p>Type y for accepting to install first packages:
+<code class="docutils literal notranslate"><span class="pre">y</span></code></p>
+<p>Activate environment:
+<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">ADDMo</span></code></p>
+</div></blockquote>
+</li>
+<li><p>Change directory in command line to the project path using: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">&lt;Path</span> <span class="pre">to</span> <span class="pre">your</span> <span class="pre">local</span> <span class="pre">ADDMo</span> <span class="pre">repo&gt;</span></code></p></li>
+<li><p>Install required packages via:
+<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code></p></li>
+<li><p>Set the conda environment “ADDMo” as interpreter for e.g. in PyCharm</p></li>
+</ol>
+<section id="plotting-caution">
+<h2>Plotting Caution:<a class="headerlink" href="#plotting-caution" title="Permalink to this heading"></a></h2>
+<p>Some users might face matplotlib interface errors while executing plotting scripts in GUI, such as not being able to view the plots. If encountering such an error, try downgrading matplotlib to 3.9</p>
+</section>
+</section>
+<section id="how-to-use-it-two-options">
+<h1>How to use it- two options<a class="headerlink" href="#how-to-use-it-two-options" title="Permalink to this heading"></a></h1>
+<p><strong>How to use the GUI:</strong></p>
+<p>Executing this command in the terminal where your virtual environment is activated will launch the GUI: addmo-gui</p>
+<section id="auto-data-tuning">
+<h2>Auto Data Tuning:<a class="headerlink" href="#auto-data-tuning" title="Permalink to this heading"></a></h2>
+<p>Toggle key preprocessing steps like lag creation and difference features and choose between manual or automated feature selection.</p>
+<p>Default saving path: <code class="docutils literal notranslate"><span class="pre">addmo-automated-ml-regression\addmo_examples\results\test_raw_data\data_tuning_experiment_auto</span></code></p>
+<p>Detailed configuration guide available directly in the GUI tab.</p>
+</section>
+<section id="fixed-data-tuning">
+<h2>Fixed Data Tuning:<a class="headerlink" href="#fixed-data-tuning" title="Permalink to this heading"></a></h2>
+<p>Uses the same general fields as the auto tuning tab and supports key feature construction options:
+create_lag, create_diff, create_squared</p>
+<p>Default saving path: <code class="docutils literal notranslate"><span class="pre">addmo-automated-ml-regression\addmo_examples\results\test_raw_data\data_tuning_experiment_fixed</span></code></p>
+<p>Feature naming convention: Temperature<strong>lag3, Power</strong>diff</p>
+<p>Detailed configuration guide available directly in the GUI tab.</p>
+<section id="model-tuning">
+<h3>Model tuning<a class="headerlink" href="#model-tuning" title="Permalink to this heading"></a></h3>
+<p>Importing the previously tuned data, training the model with optimizing the hyperparameters and evaluate the model via out-of-sample predictions. Mention the tuned data path (default or custom) in the config to train model on tuned data.
+One can select multiple models for training in the <code class="docutils literal notranslate"><span class="pre">Models</span></code> field under the <code class="docutils literal notranslate"><span class="pre">Model</span> <span class="pre">Tuning</span> <span class="pre">Configuration</span></code></p>
+<p>Default saving path: <code class="docutils literal notranslate"><span class="pre">addmo-automated-ml-regression\addmo_examples\results\test_raw_data\test_data_tuning\test_model_tuning</span></code></p>
+</section>
+<section id="insights">
+<h3>Insights<a class="headerlink" href="#insights" title="Permalink to this heading"></a></h3>
+<p>Generate insightful visualizations based on the results of previously trained and saved models. One can generate insights on models trained by ADDMo or external frameworks (only <code class="docutils literal notranslate"><span class="pre">Scikit</span></code> and <code class="docutils literal notranslate"><span class="pre">Keras</span></code> models supported).
+One can define bounds and default values for the features manually or select the existing min and max of each feature as bound and mean (numerical features) or mode (categorical features) as default values.</p>
+</section>
+<section id="testing">
+<h3>Testing<a class="headerlink" href="#testing" title="Permalink to this heading"></a></h3>
+<p>Test a previously trained and saved model using new or unseen input data and predict and evaluate the model with a more sophisticated evaluation method.<code class="docutils literal notranslate"><span class="pre">Select</span> <span class="pre">Tuning</span> <span class="pre">Type</span></code>: This is critical if the model was trained on tuned data. Specify the tuning type and the path where the tuned data file is saved. The file is loaded to recreate the data tuning automatically.
+This way the model is trained and tested on the same features and ensures the tuning type and input structure match the training phase!</p>
+</section>
+<section id="recreate-data-tuning">
+<h3>Recreate Data Tuning<a class="headerlink" href="#recreate-data-tuning" title="Permalink to this heading"></a></h3>
+<p>Allows recreating the exact data tuning process applied during a previous experiment, using the saved tuning configuration.
+This step is handled already in the <code class="docutils literal notranslate"><span class="pre">Testing</span></code> tab. This tab only supports tuning configurations saved by this app.
+It cannot recreate tuning from externally trained models or configurations.</p>
+</section>
+<section id="running-the-scripts-directly-via-the-python-console">
+<h3>Running the scripts directly via the python console:<a class="headerlink" href="#running-the-scripts-directly-via-the-python-console" title="Permalink to this heading"></a></h3>
+<p>These execution files works exactly like the GUI tabs. In order to perform specific functionalities, change the saved config.json file under
+each config tab in the ADDMo folder.<span class="raw-html-m2r"><br></span>
+For example: For changing the config for <code class="docutils literal notranslate"><span class="pre">Auto</span> <span class="pre">Data</span> <span class="pre">Tuning</span></code>, change the file here: <code class="docutils literal notranslate"><span class="pre">addmo-automated-ml-regression\addmo\s1_data_tuning_auto\config\data_tuning_auto_config.json</span></code></p>
+<p><em>Executive scripts are:</em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">exe_data_tuning_auto.py</span></code> for automatically tuning the data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exe_data_tuning_fixed.py</span></code> for tuning the data in a fixed manner.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exe_model_tuning.py</span></code> for training a list of models and saving the best performing model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exe_data_insights.py</span></code> for generating several insightful plots for interpreting the model performance.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exe_model_testing.py</span></code> for predicting new data values on trained model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exe_recreate_data_tuning.py</span></code> for recreating the same features on new data based on saved tuned data</p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>Information about the required input shape:</strong></p>
+<ul class="simple">
+<li><p>Input ExcelFile has to be named: “InputData” and saved in the Folder <code class="docutils literal notranslate"><span class="pre">addmo_examples/raw_input_data</span></code></p></li>
+<li><p>Sheet to read in must be the first sheet, with time as first column and all signals and features thereafter (one per column)</p></li>
+<li><p>The time must be in the format of “pandas.datetimeindex”. If the time is in seconds, convert it into DD-MM-YY format.</p></li>
+<li><p>Columns must have different names</p></li>
+<li><p>By default, the delimiter for csv files is <code class="docutils literal notranslate"><span class="pre">;</span></code>. Explicitly change it under the exe_data_insights in case of different delimiters.</p></li>
+</ul>
+<p><strong>Understanding the handling of saving the results:</strong>A folder called results is created within the directory (<code class="docutils literal notranslate"><span class="pre">addmo-automated-ml-regression\addmo_examples</span></code>) of the python files. Within that folder a four layered folder system is used, the next layer is a subfolder of the respective previous layer. The folder are created by the program, only their names must be defined:</p>
+<ul class="simple">
+<li><p>Layer0: <code class="docutils literal notranslate"><span class="pre">Results</span></code>: general folder for all results</p></li>
+<li><p>Layer0: <code class="docutils literal notranslate"><span class="pre">raw_input_data</span></code>: name of the folder used to declare which input data is used for the results within.</p></li>
+<li><p>Layer1: <code class="docutils literal notranslate"><span class="pre">name_of_raw_data</span></code>: name of the folder in which the results of all executions for a particular run are saved, including the “Data Tuning” which will be the input for model tuning. “Model Tuning” and “Data Insights” results are saved as different folders under this folder.</p></li>
+<li><p>Layer2: <code class="docutils literal notranslate"><span class="pre">name_of_tuning</span></code>: name of the folder in which the results of “Data Tuning” are saved.</p></li>
+<li><p>Layer2: <code class="docutils literal notranslate"><span class="pre">name_of_data_tuning_experiment</span></code>: name of folder in which different “Model Tuning” experiment folders are created. This folder helps in keeping track of which model tuning is used for a specific dataset and helps you create multiple experiments using different models but the using the same tuned data.</p></li>
+<li><p>Layer3: <code class="docutils literal notranslate"><span class="pre">name_of_model_tuning_experiment</span></code>: name of folder in which results of “Model Tuning” are saved.</p></li>
+<li><p>Layer4: <code class="docutils literal notranslate"><span class="pre">plots</span></code>: name of the folder in which the results of plotting are saved.</p></li>
+</ul>
+<p>An example of how the structure looks like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>addmo_examples/
+└── raw_input_data/
+└── results/
+    └── test_raw_data/             # name_of_raw_data
+            └── data_tuning_experiment_fixed/      # name_of_tuning (tuned data is stored here)
+            └── test_data_tuning_fixed/     # name_of_data_tuning_experiment (models trained on fixed tuned data is stored here)
+                    └── ScikitMLP_fixed_tuning/        # name_of_model_tuning_experiment (all files regarding a specifc trained model)
+                        └── plots/        # plots generated using ScikitMLP are stored here
+            └── SciKeras_fixed_tuning/
+                └── plots/
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="cite-addmo">
+<h1>Cite ADDMo:<a class="headerlink" href="#cite-addmo" title="Permalink to this heading"></a></h1>
+<p>If you use ADDMo in scientific publication, we would appreciate citations to the following paper:</p>
+<p>Automated data-driven modeling of building energy systems via machine learning algorithms, Rätz et al., Energy and Buildings, Volume 202, 2019.</p>
+<p>Published at Energy&amp;Buildings Journal:
+<a class="reference external" href="https://doi.org/10.1016/j.enbuild.2019.109384">Link to article</a></p>
+<p>If you are not granted access to the paper, you may find the pre-print at:
+<a class="reference external" href="https://www.researchgate.net/publication/335424562_Automated_Data-driven_Modeling_of_Building_Energy_Systems_via_Machine_Learning_Algorithms">Link to pre-print article at researchgate</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, EON EBC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

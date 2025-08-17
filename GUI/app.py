@@ -1,7 +1,7 @@
 import base64
 import streamlit as st
 import json
-import os
+import io, os, zipfile
 from streamlit_pydantic import pydantic_input, pydantic_output, pydantic_form
 from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from addmo_examples.executables.exe_data_tuning_auto import exe_data_tuning_auto
@@ -16,6 +16,17 @@ from addmo.util.definitions import results_dir_data_tuning_auto, results_dir_dat
 from addmo_examples.executables.exe_data_insights import exe_time_series_plot, exe_parallel_plot, exe_carpet_plots, exe_scatter_carpet_plots, exe_interactive_parallel_plot
 from addmo.s4_model_testing.model_testing import model_test, data_tuning_recreate_fixed, data_tuning_recreate_auto
 from addmo.util.load_save import load_data
+
+def _zipdir_to_bytes(dir_path: str):
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for root, _, files in os.walk(dir_path):
+            for f in files:
+                abs_path = os.path.join(root, f)
+                rel_path = os.path.relpath(abs_path, start=dir_path)
+                zf.write(abs_path, arcname=rel_path)
+    buf.seek(0)
+    return buf
 
 def check_missing_fields(config_dict):
     """Return list of empty or missing config fields."""
@@ -130,6 +141,13 @@ def exe_streamlit_data_tuning_auto():
                 st.markdown("### Zoomed View: Time Series (2 Weeks)")
                 pdf_viewer(zoomed_path, width="80%", height=855)
             st.success("Data tuning completed!")
+            zip_bytes = _zipdir_to_bytes(output_dir)
+            st.download_button(
+                label="Download Data Tuning Auto results folder",
+                data=zip_bytes,
+                file_name=f"{os.path.basename(output_dir)}.zip",
+                mime="application/zip"
+            )
 
     return output_dir
 

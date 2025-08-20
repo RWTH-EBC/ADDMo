@@ -7273,7 +7273,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -7284,7 +7284,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -7295,7 +7295,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -7306,7 +7306,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -7317,7 +7317,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -7328,7 +7328,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -7339,7 +7339,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "Scoring.score_test",
             "line": 20,
             "column": 49,
@@ -7350,7 +7350,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "Scoring.score_test",
             "line": 20,
             "column": 52,
@@ -7361,7 +7361,7 @@
         },
         {
             "type": "refactor",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "Scoring",
             "line": 12,
             "column": 0,
@@ -7372,7 +7372,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "ValidationScoring",
             "line": 26,
             "column": 0,
@@ -7383,7 +7383,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "ValidationScoring.score_validation",
             "line": 35,
             "column": 49,
@@ -7394,7 +7394,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "ValidationScoring.score_validation",
             "line": 35,
             "column": 52,
@@ -7405,7 +7405,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "ValidationScoring.score_validation",
             "line": 39,
             "column": 8,
@@ -7416,7 +7416,7 @@
         },
         {
             "type": "refactor",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "ValidationScoring",
             "line": 26,
             "column": 0,
@@ -7427,7 +7427,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 49,
             "column": 0,
@@ -7438,7 +7438,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -7449,7 +7449,7 @@
         },
         {
             "type": "error",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -7460,7 +7460,7 @@
         },
         {
             "type": "error",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -7471,7 +7471,7 @@
         },
         {
             "type": "error",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -7482,7 +7482,7 @@
         },
         {
             "type": "error",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -7493,7 +7493,7 @@
         },
         {
             "type": "error",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -7504,7 +7504,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "NoValidation",
             "line": 9,
             "column": 0,
@@ -7515,7 +7515,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "NoValidation.score_validation",
             "line": 13,
             "column": 55,
@@ -7526,7 +7526,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "NoValidation.score_validation",
             "line": 13,
             "column": 58,
@@ -7537,7 +7537,7 @@
         },
         {
             "type": "warning",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "NoValidation.score_validation",
             "line": 13,
             "column": 31,
@@ -7548,7 +7548,7 @@
         },
         {
             "type": "warning",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "NoValidation.score_validation",
             "line": 13,
             "column": 55,
@@ -7559,7 +7559,7 @@
         },
         {
             "type": "warning",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "NoValidation.score_validation",
             "line": 13,
             "column": 58,
@@ -7570,7 +7570,7 @@
         },
         {
             "type": "refactor",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "NoValidation",
             "line": 9,
             "column": 0,
@@ -7581,7 +7581,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "CrossValidation",
             "line": 17,
             "column": 0,
@@ -7592,7 +7592,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "CrossValidation.score_validation",
             "line": 18,
             "column": 55,
@@ -7603,7 +7603,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "CrossValidation.score_validation",
             "line": 18,
             "column": 58,
@@ -7614,7 +7614,7 @@
         },
         {
             "type": "refactor",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "CrossValidation",
             "line": 17,
             "column": 0,
@@ -7625,7 +7625,7 @@
         },
         {
             "type": "warning",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -7636,7 +7636,7 @@
         },
         {
             "type": "convention",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -7647,7 +7647,7 @@
         },
         {
             "type": "error",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -7658,7 +7658,7 @@
         },
         {
             "type": "error",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -7669,7 +7669,7 @@
         },
         {
             "type": "error",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -7680,7 +7680,7 @@
         },
         {
             "type": "error",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -7691,7 +7691,7 @@
         },
         {
             "type": "convention",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "ValidatorFactory.ValidatorFactory",
             "line": 12,
             "column": 4,
@@ -7702,7 +7702,7 @@
         },
         {
             "type": "convention",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "ValidatorFactory.ValidatorFactory",
             "line": 12,
             "column": 4,
@@ -7713,7 +7713,7 @@
         },
         {
             "type": "refactor",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "ValidatorFactory.ValidatorFactory",
             "line": 15,
             "column": 8,
@@ -7724,7 +7724,7 @@
         },
         {
             "type": "refactor",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "ValidatorFactory",
             "line": 6,
             "column": 0,
@@ -8439,7 +8439,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 108,
             "column": 0,
@@ -8450,7 +8450,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 109,
             "column": 0,
@@ -8461,7 +8461,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 144,
             "column": 0,
@@ -8472,7 +8472,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 157,
             "column": 0,
@@ -8483,7 +8483,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 192,
             "column": 0,
@@ -8494,7 +8494,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 204,
             "column": 0,
@@ -8505,7 +8505,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 206,
             "column": 0,
@@ -8516,7 +8516,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 211,
             "column": 0,
@@ -8527,7 +8527,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -8538,7 +8538,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -8549,7 +8549,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -8560,7 +8560,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -8571,7 +8571,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -8582,7 +8582,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -8593,7 +8593,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -8604,7 +8604,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -8615,7 +8615,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -8626,7 +8626,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 12,
             "column": 0,
@@ -8637,7 +8637,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 13,
             "column": 0,
@@ -8648,7 +8648,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 14,
             "column": 0,
@@ -8659,7 +8659,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 15,
             "column": 0,
@@ -8670,7 +8670,7 @@
         },
         {
             "type": "warning",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "BaseKerasModel._define_metadata",
             "line": 27,
             "column": 8,
@@ -8681,7 +8681,7 @@
         },
         {
             "type": "refactor",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "BaseKerasModel",
             "line": 18,
             "column": 0,
@@ -8692,7 +8692,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.fit",
             "line": 45,
             "column": 18,
@@ -8703,7 +8703,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.fit",
             "line": 45,
             "column": 21,
@@ -8714,7 +8714,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.predict",
             "line": 54,
             "column": 22,
@@ -8725,7 +8725,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.save_regressor",
             "line": 103,
             "column": 16,
@@ -8736,7 +8736,7 @@
         },
         {
             "type": "warning",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.save_regressor",
             "line": 105,
             "column": 16,
@@ -8747,7 +8747,7 @@
         },
         {
             "type": "warning",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.save_regressor",
             "line": 113,
             "column": 29,
@@ -8758,7 +8758,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.load_regressor",
             "line": 128,
             "column": 8,
@@ -8769,7 +8769,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.load_regressor",
             "line": 129,
             "column": 8,
@@ -8780,7 +8780,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential._build_regressor",
             "line": 149,
             "column": 31,
@@ -8791,7 +8791,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.to_scikit_learn",
             "line": 166,
             "column": 30,
@@ -8802,7 +8802,7 @@
         },
         {
             "type": "warning",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.fit",
             "line": 49,
             "column": 8,
@@ -8813,7 +8813,7 @@
         },
         {
             "type": "warning",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.fit",
             "line": 50,
             "column": 8,
@@ -8824,7 +8824,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -8835,7 +8835,7 @@
         },
         {
             "type": "warning",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -8846,7 +8846,7 @@
         },
         {
             "type": "warning",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -8857,7 +8857,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 116,
             "column": 0,
@@ -8868,7 +8868,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -8879,7 +8879,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -8890,7 +8890,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -8901,7 +8901,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -8912,7 +8912,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -8923,7 +8923,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -8934,7 +8934,7 @@
         },
         {
             "type": "refactor",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "ModelMetadata",
             "line": 13,
             "column": 0,
@@ -8945,7 +8945,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.fit",
             "line": 66,
             "column": 18,
@@ -8956,7 +8956,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.fit",
             "line": 66,
             "column": 35,
@@ -8967,7 +8967,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.fit",
             "line": 74,
             "column": 8,
@@ -8978,7 +8978,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.predict",
             "line": 77,
             "column": 22,
@@ -8989,7 +8989,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.predict",
             "line": 87,
             "column": 8,
@@ -9000,7 +9000,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.save_regressor",
             "line": 99,
             "column": 8,
@@ -9011,7 +9011,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel._define_metadata",
             "line": 106,
             "column": 8,
@@ -9022,7 +9022,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel._save_metadata",
             "line": 117,
             "column": 13,
@@ -9033,7 +9033,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel._save_metadata",
             "line": 117,
             "column": 41,
@@ -9044,7 +9044,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel._save_metadata",
             "line": 118,
             "column": 22,
@@ -9055,7 +9055,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.load_regressor",
             "line": 120,
             "column": 45,
@@ -9066,7 +9066,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.to_scikit_learn",
             "line": 131,
             "column": 30,
@@ -9077,7 +9077,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.to_scikit_learn",
             "line": 144,
             "column": 8,
@@ -9088,7 +9088,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.set_params",
             "line": 154,
             "column": 8,
@@ -9099,7 +9099,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.get_params",
             "line": 164,
             "column": 8,
@@ -9110,7 +9110,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.optuna_hyperparameter_suggest",
             "line": 177,
             "column": 8,
@@ -9121,7 +9121,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.grid_search_hyperparameter",
             "line": 187,
             "column": 8,
@@ -9132,7 +9132,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.default_hyperparameter",
             "line": 197,
             "column": 8,
@@ -9143,7 +9143,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.load_regressor",
             "line": 209,
             "column": 4,
@@ -9154,7 +9154,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.predict",
             "line": 215,
             "column": 8,
@@ -9165,7 +9165,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.default_hyperparameter",
             "line": 219,
             "column": 22,
@@ -9176,7 +9176,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.fit",
             "line": 222,
             "column": 22,
@@ -9187,7 +9187,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.get_params",
             "line": 225,
             "column": 22,
@@ -9198,7 +9198,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.grid_search_hyperparameter",
             "line": 228,
             "column": 22,
@@ -9209,7 +9209,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.optuna_hyperparameter_suggest",
             "line": 231,
             "column": 22,
@@ -9220,7 +9220,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.save_regressor",
             "line": 233,
             "column": 4,
@@ -9231,7 +9231,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.save_regressor",
             "line": 234,
             "column": 22,
@@ -9242,7 +9242,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.save_regressor",
             "line": 233,
             "column": 29,
@@ -9253,7 +9253,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.set_params",
             "line": 237,
             "column": 22,
@@ -9264,7 +9264,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.to_scikit_learn",
             "line": 239,
             "column": 4,
@@ -9275,7 +9275,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.to_scikit_learn",
             "line": 240,
             "column": 22,
@@ -9286,7 +9286,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx._define_metadata",
             "line": 243,
             "column": 22,
@@ -9297,7 +9297,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx._save_regressor",
             "line": 246,
             "column": 22,
@@ -9308,7 +9308,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx._save_regressor",
             "line": 245,
             "column": 30,
@@ -9319,7 +9319,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx._save_regressor",
             "line": 245,
             "column": 36,
@@ -9330,7 +9330,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.default_file_type",
             "line": 248,
             "column": 4,
@@ -9341,7 +9341,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.default_file_type",
             "line": 249,
             "column": 22,
@@ -9352,7 +9352,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -9363,7 +9363,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -9374,7 +9374,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -9385,7 +9385,7 @@
         },
         {
             "type": "warning",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 32,
             "column": 0,
@@ -9396,7 +9396,7 @@
         },
         {
             "type": "warning",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 33,
             "column": 0,
@@ -9407,7 +9407,7 @@
         },
         {
             "type": "convention",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 44,
             "column": 0,
@@ -9418,7 +9418,7 @@
         },
         {
             "type": "convention",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 66,
             "column": 0,
@@ -9429,7 +9429,7 @@
         },
         {
             "type": "convention",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -9440,7 +9440,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -9451,7 +9451,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -9462,7 +9462,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -9473,7 +9473,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -9484,7 +9484,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -9495,7 +9495,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -9506,7 +9506,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -9517,7 +9517,7 @@
         },
         {
             "type": "refactor",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "ModelFactory.model_factory",
             "line": 36,
             "column": 8,
@@ -9528,7 +9528,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "ModelFactory._load_metadata",
             "line": 55,
             "column": 4,
@@ -9539,7 +9539,7 @@
         },
         {
             "type": "refactor",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "ModelFactory._load_metadata",
             "line": 61,
             "column": 8,
@@ -9550,7 +9550,7 @@
         },
         {
             "type": "warning",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "ModelFactory._load_metadata",
             "line": 62,
             "column": 17,
@@ -9561,7 +9561,7 @@
         },
         {
             "type": "convention",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "ModelFactory._load_metadata",
             "line": 62,
             "column": 40,
@@ -9572,7 +9572,7 @@
         },
         {
             "type": "convention",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -9583,7 +9583,7 @@
         },
         {
             "type": "convention",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -9594,7 +9594,7 @@
         },
         {
             "type": "convention",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -9605,7 +9605,7 @@
         },
         {
             "type": "warning",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -9616,7 +9616,7 @@
         },
         {
             "type": "warning",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -9627,7 +9627,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 24,
             "column": 0,
@@ -9638,7 +9638,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 34,
             "column": 0,
@@ -9649,7 +9649,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 82,
             "column": 0,
@@ -9660,7 +9660,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 102,
             "column": 0,
@@ -9671,7 +9671,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 176,
             "column": 0,
@@ -9682,7 +9682,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 286,
             "column": 0,
@@ -9693,7 +9693,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 287,
             "column": 0,
@@ -9704,7 +9704,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 327,
             "column": 0,
@@ -9715,7 +9715,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -9726,7 +9726,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -9737,7 +9737,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -9748,7 +9748,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -9759,7 +9759,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -9770,7 +9770,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -9781,7 +9781,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -9792,7 +9792,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -9803,7 +9803,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -9814,7 +9814,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -9825,7 +9825,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -9836,7 +9836,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 12,
             "column": 0,
@@ -9847,7 +9847,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 13,
             "column": 0,
@@ -9858,7 +9858,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 14,
             "column": 0,
@@ -9869,7 +9869,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.fit",
             "line": 39,
             "column": 18,
@@ -9880,7 +9880,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.fit",
             "line": 39,
             "column": 21,
@@ -9891,7 +9891,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.predict",
             "line": 47,
             "column": 22,
@@ -9902,7 +9902,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.save_regressor",
             "line": 79,
             "column": 37,
@@ -9913,7 +9913,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.save_regressor",
             "line": 82,
             "column": 29,
@@ -9924,7 +9924,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.to_scikit_learn",
             "line": 97,
             "column": 4,
@@ -9935,7 +9935,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.to_scikit_learn",
             "line": 97,
             "column": 30,
@@ -9946,7 +9946,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.to_scikit_learn",
             "line": 97,
             "column": 30,
@@ -9957,7 +9957,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.fit",
             "line": 43,
             "column": 8,
@@ -9968,7 +9968,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.fit",
             "line": 44,
             "column": 8,
@@ -9979,7 +9979,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel._define_metadata",
             "line": 57,
             "column": 8,
@@ -9990,7 +9990,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitMLP_TargetTransformed",
             "line": 159,
             "column": 0,
@@ -10001,7 +10001,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitMLP_TargetTransformed",
             "line": 159,
             "column": 0,
@@ -10012,7 +10012,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitMLP_TargetTransformed.__init__",
             "line": 160,
             "column": 4,
@@ -10023,7 +10023,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitLinearReg.grid_search_hyperparameter",
             "line": 193,
             "column": 4,
@@ -10034,7 +10034,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitLinearReg.optuna_hyperparameter_suggest",
             "line": 196,
             "column": 4,
@@ -10045,7 +10045,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitLinearRegNoScaler",
             "line": 205,
             "column": 0,
@@ -10056,7 +10056,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitLinearRegNoScaler.__init__",
             "line": 206,
             "column": 4,
@@ -10067,7 +10067,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitLinearRegNoScaler.fit",
             "line": 220,
             "column": 8,
@@ -10078,7 +10078,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitLinearRegNoScaler.fit",
             "line": 221,
             "column": 8,
@@ -10089,7 +10089,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitLinearRegNoScaler._define_metadata",
             "line": 246,
             "column": 8,
@@ -10100,7 +10100,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitSVR.grid_search_hyperparameter",
             "line": 276,
             "column": 4,
@@ -10111,7 +10111,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitSVR._define_metadata",
             "line": 266,
             "column": 8,
@@ -10122,7 +10122,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -10133,7 +10133,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 13,
             "column": 0,
@@ -10144,7 +10144,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 13,
             "column": 0,
@@ -10155,7 +10155,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 14,
             "column": 0,
@@ -10166,7 +10166,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -10771,7 +10771,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "",
             "line": 74,
             "column": 0,
@@ -10782,7 +10782,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -10793,7 +10793,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -10804,7 +10804,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -10815,7 +10815,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "DataTuningAutoSetup",
             "line": 5,
             "column": 0,
@@ -10826,7 +10826,7 @@
         },
         {
             "type": "refactor",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "DataTuningAutoSetup",
             "line": 5,
             "column": 0,
@@ -10837,7 +10837,7 @@
         },
         {
             "type": "warning",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -12449,7 +12449,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==carpet_plots:[174:199]\n==plot_carpets_modelA:[133:157]\n        features = regressor.metadata[\"features_ordered\"]\n        if rename_dict is not None:\n            features = [rename_dict[feature] for feature in features]\n\n        # Determine the shape of the output\n        shape = next(\n            arr.shape for arr in kwargs.values() if isinstance(arr, np.ndarray)\n        )\n\n        # Prepare input saved_plots\n        input_data = pd.DataFrame(\n            {feature: np.ravel(kwargs[feature]) for feature in features}\n        )\n\n        # Make prediction\n        prediction = regressor.predict(input_data)\n\n        # Reshape the prediction to match the input shape\n        return prediction.reshape(shape)\n\n    return pred_func\n\ndef plot_carpets_with_buckets(variables, measurements_data, target_values, regressor_func , bounds=None , combinations=None , defaults_dict=None ,num_buckets=4):\n\n    # Define bounds",
+            "message": "Similar lines in 2 files\n==carpet_plots:[174:199]\n==plot_carpets_modelA:[133:157]\n        features = regressor.metadata[\"features_ordered\"]\n        if rename_dict is not None:\n            features = [rename_dict[feature] for feature in features]\n\n        # Determine the shape of the output\n        shape = next(\n            arr.shape for arr in kwargs.values() if isinstance(arr, np.ndarray)\n        )\n\n        # Prepare input saved_plots\n        input_data = pd.DataFrame(\n            {feature: np.ravel(kwargs[feature]) for feature in features}\n        )\n\n        # Make prediction\n        prediction = regressor.predict(input_data)\n\n        # Reshape the prediction to match the input shape\n        return prediction.reshape(shape)\n\n    return pred_func\n\ndef execute(plot_name, plot_dir, path_to_regressor, save):\n",
             "message-id": "R0801"
         },
         {
@@ -12460,7 +12460,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==carpet_plots:[113:130]\n==plot_carpets_modelA:[74:93]\n            norm1 = colors.Normalize(vmin=np.nanmin(Z1), vmax=np.nanmax(Z1))\n            norm2 = colors.Normalize(vmin=np.nanmin(Z2), vmax=np.nanmax(Z2))\n\n            Z1_greater = np.where(Z1 >= Z2, Z1, np.nan)\n            Z1_smaller = np.where(Z1 <= Z2, Z1, np.nan)\n            Z2_greater = np.where(Z2 >= Z1, Z2, np.nan)\n            Z2_smaller = np.where(Z2 <= Z1, Z2, np.nan)\n\n            # surface plots in correct order and normalization\n            surf1 = ax.plot_surface(X, Y, Z1, cmap=surf1_cmap, visible=False, norm=norm1)\n            surf2 = ax.plot_surface(X, Y, Z2, cmap=surf2_cmap, visible=False, norm=norm2)\n            surf2_smaller = ax.plot_surface(X, Y, Z2_smaller, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_smaller = ax.plot_surface(X, Y, Z1_smaller, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n            surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n\n\n        # Add this line to reverse the axis direction\n        # ax.set_xlim(ax.get_xlim()[::-1])",
+            "message": "Similar lines in 2 files\n==carpet_plots:[113:130]\n==plot_carpets_modelA:[74:93]\n            norm1 = colors.Normalize(vmin=np.nanmin(Z1), vmax=np.nanmax(Z1))\n            norm2 = colors.Normalize(vmin=np.nanmin(Z2), vmax=np.nanmax(Z2))\n\n            Z1_greater = np.where(Z1 >= Z2, Z1, np.nan)\n            Z1_smaller = np.where(Z1 <= Z2, Z1, np.nan)\n            Z2_greater = np.where(Z2 >= Z1, Z2, np.nan)\n            Z2_smaller = np.where(Z2 <= Z1, Z2, np.nan)\n\n            # surface plots in correct order and normalization\n            surf1 = ax.plot_surface(X, Y, Z1, cmap=surf1_cmap, visible=False, norm=norm1)\n            surf2 = ax.plot_surface(X, Y, Z2, cmap=surf2_cmap, visible=False, norm=norm2)\n            surf2_smaller = ax.plot_surface(X, Y, Z2_smaller, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_smaller = ax.plot_surface(X, Y, Z1_smaller, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n            surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n\n        # Add this line to reverse the axis direction",
             "message-id": "R0801"
         },
         {
@@ -12526,7 +12526,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==abstract_model:[143:196]\n==experiment_logger:[17:41]\n        pass\n\n    @abstractmethod\n    def set_params(self, **params):\n        \"\"\"\n        Set the hyperparameters of the ML model.\n\n        Args:\n            **params: Variable length keyword arguments for hyperparameters.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def get_params(self):\n        \"\"\"\n        Get the hyperparameters of the ML model.\n\n        Returns:\n            A dictionary of the current hyperparameters.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def optuna_hyperparameter_suggest(self, trial):\n        \"\"\"\n        Suggest hyperparameters using Optuna for hyperparameter optimization.\n\n        Args:\n            trial: An Optuna trial object used to suggest hyperparameters.\n\n        Returns:\n            A dictionary of hyperparameters with Optuna distributions.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def grid_search_hyperparameter(self):\n        \"\"\"\n        Define the hyperparameters for grid search.\n\n        Returns:\n            A dictionary representing a hyperparameter grid for grid search.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def default_hyperparameter(self):\n        \"\"\"\n        Define the default hyperparameters of the model.\n\n        Returns:\n            A dictionary with a default set of hyperparameters.\n        \"\"\"",
+            "message": "Similar lines in 2 files\n==experiment_logger:[17:41]\n==models.abstract_model:[143:196]\n        pass\n\n    @abstractmethod\n    def set_params(self, **params):\n        \"\"\"\n        Set the hyperparameters of the ML model.\n\n        Args:\n            **params: Variable length keyword arguments for hyperparameters.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def get_params(self):\n        \"\"\"\n        Get the hyperparameters of the ML model.\n\n        Returns:\n            A dictionary of the current hyperparameters.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def optuna_hyperparameter_suggest(self, trial):\n        \"\"\"\n        Suggest hyperparameters using Optuna for hyperparameter optimization.\n\n        Args:\n            trial: An Optuna trial object used to suggest hyperparameters.\n\n        Returns:\n            A dictionary of hyperparameters with Optuna distributions.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def grid_search_hyperparameter(self):\n        \"\"\"\n        Define the hyperparameters for grid search.\n\n        Returns:\n            A dictionary representing a hyperparameter grid for grid search.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def default_hyperparameter(self):\n        \"\"\"\n        Define the default hyperparameters of the model.\n\n        Returns:\n            A dictionary with a default set of hyperparameters.\n        \"\"\"",
             "message-id": "R0801"
         },
         {
@@ -12801,7 +12801,7 @@
                 "statement": 42,
                 "warning": 6
             },
-            "abstract_scorer": {
+            "scoring.abstract_scorer": {
                 "convention": 6,
                 "error": 5,
                 "fatal": 0,
@@ -12810,7 +12810,7 @@
                 "statement": 17,
                 "warning": 1
             },
-            "validator": {
+            "scoring.validator": {
                 "convention": 8,
                 "error": 5,
                 "fatal": 0,
@@ -12819,7 +12819,7 @@
                 "statement": 15,
                 "warning": 4
             },
-            "validator_factory": {
+            "scoring.validator_factory": {
                 "convention": 3,
                 "error": 4,
                 "fatal": 0,
@@ -12891,7 +12891,7 @@
                 "statement": 29,
                 "warning": 0
             },
-            "keras_models": {
+            "models.keras_models": {
                 "convention": 18,
                 "error": 12,
                 "fatal": 0,
@@ -12900,7 +12900,7 @@
                 "statement": 104,
                 "warning": 7
             },
-            "abstract_model": {
+            "models.abstract_model": {
                 "convention": 11,
                 "error": 6,
                 "fatal": 0,
@@ -12909,7 +12909,7 @@
                 "statement": 92,
                 "warning": 30
             },
-            "model_factory": {
+            "models.model_factory": {
                 "convention": 7,
                 "error": 8,
                 "fatal": 0,
@@ -12918,7 +12918,7 @@
                 "statement": 55,
                 "warning": 5
             },
-            "scikit_learn_models": {
+            "models.scikit_learn_models": {
                 "convention": 25,
                 "error": 13,
                 "fatal": 0,
@@ -12954,7 +12954,7 @@
                 "statement": 30,
                 "warning": 6
             },
-            "config.data_tuning_auto_config": {
+            "data_tuning_auto_config": {
                 "convention": 3,
                 "error": 2,
                 "fatal": 0,
@@ -13087,7 +13087,7 @@
         },
         "dependencies": {
             "packaging.version": [
-                "keras_models"
+                "models.keras_models"
             ]
         },
         "duplicated_lines": {
@@ -13332,7 +13332,7 @@
                 "statement": 29,
                 "warning": 6
             },
-            "data_tuning_config": {
+            "config.data_tuning_config": {
                 "convention": 4,
                 "error": 3,
                 "fatal": 0,
@@ -13350,7 +13350,7 @@
                 "statement": 39,
                 "warning": 0
             },
-            "hyperparameter_tuning.hyparam_tuning_factory": {
+            "hyparam_tuning_factory": {
                 "convention": 2,
                 "error": 5,
                 "fatal": 0,
@@ -13359,7 +13359,7 @@
                 "statement": 14,
                 "warning": 1
             },
-            "hyperparameter_tuning.abstract_hyparam_tuner": {
+            "abstract_hyparam_tuner": {
                 "convention": 1,
                 "error": 3,
                 "fatal": 0,
@@ -13368,7 +13368,7 @@
                 "statement": 10,
                 "warning": 0
             },
-            "hyperparameter_tuning.hyperparameter_tuner": {
+            "hyperparameter_tuner": {
                 "convention": 3,
                 "error": 7,
                 "fatal": 0,
@@ -13404,7 +13404,7 @@
                 "statement": 11,
                 "warning": 0
             },
-            "custom_metrics": {
+            "metrics.custom_metrics": {
                 "convention": 0,
                 "error": 0,
                 "fatal": 0,
@@ -13413,7 +13413,7 @@
                 "statement": 0,
                 "warning": 0
             },
-            "abstract_metric": {
+            "metrics.abstract_metric": {
                 "convention": 1,
                 "error": 0,
                 "fatal": 0,
@@ -13422,7 +13422,7 @@
                 "statement": 2,
                 "warning": 0
             },
-            "metric_factory": {
+            "metrics.metric_factory": {
                 "convention": 1,
                 "error": 3,
                 "fatal": 0,
@@ -13431,7 +13431,7 @@
                 "statement": 16,
                 "warning": 1
             },
-            "abstract_splitter": {
+            "validation_splitting.abstract_splitter": {
                 "convention": 10,
                 "error": 3,
                 "fatal": 0,
@@ -13440,7 +13440,7 @@
                 "statement": 25,
                 "warning": 0
             },
-            "custom_splitters": {
+            "validation_splitting.custom_splitters": {
                 "convention": 10,
                 "error": 1,
                 "fatal": 0,
@@ -13449,7 +13449,7 @@
                 "statement": 43,
                 "warning": 10
             },
-            "splitter_factory": {
+            "validation_splitting.splitter_factory": {
                 "convention": 1,
                 "error": 4,
                 "fatal": 0,
@@ -13458,7 +13458,7 @@
                 "statement": 19,
                 "warning": 0
             },
-            "config.model_tuning_config": {
+            "model_tuning_config": {
                 "convention": 7,
                 "error": 2,
                 "fatal": 0,
@@ -13467,7 +13467,7 @@
                 "statement": 29,
                 "warning": 0
             },
-            "models.keras_models": {
+            "keras_models": {
                 "convention": 18,
                 "error": 12,
                 "fatal": 0,
@@ -13476,7 +13476,7 @@
                 "statement": 104,
                 "warning": 7
             },
-            "models.abstract_model": {
+            "abstract_model": {
                 "convention": 11,
                 "error": 6,
                 "fatal": 0,
@@ -13485,7 +13485,7 @@
                 "statement": 92,
                 "warning": 30
             },
-            "models.model_factory": {
+            "model_factory": {
                 "convention": 7,
                 "error": 8,
                 "fatal": 0,
@@ -13494,7 +13494,7 @@
                 "statement": 55,
                 "warning": 5
             },
-            "models.scikit_learn_models": {
+            "scikit_learn_models": {
                 "convention": 25,
                 "error": 13,
                 "fatal": 0,
@@ -13663,7 +13663,7 @@
         },
         "dependencies": {
             "packaging.version": [
-                "models.keras_models"
+                "keras_models"
             ]
         },
         "duplicated_lines": {

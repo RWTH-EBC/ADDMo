@@ -1678,7 +1678,7 @@
             
         </table>
         
-        <h3>Module <code>config.data_tuning_auto_config</code> (<code>addmo/s1_data_tuning_auto/config/data_tuning_auto_config.py</code>)</h3>
+        <h3>Module <code>data_tuning_auto_config</code> (<code>addmo/s1_data_tuning_auto/config/data_tuning_auto_config.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -3256,7 +3256,7 @@
             
         </table>
         
-        <h3>Module <code>abstract_model</code> (<code>addmo/s3_model_tuning/models/abstract_model.py</code>)</h3>
+        <h3>Module <code>models.abstract_model</code> (<code>addmo/s3_model_tuning/models/abstract_model.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -3750,7 +3750,7 @@
             
         </table>
         
-        <h3>Module <code>keras_models</code> (<code>addmo/s3_model_tuning/models/keras_models.py</code>)</h3>
+        <h3>Module <code>models.keras_models</code> (<code>addmo/s3_model_tuning/models/keras_models.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -4144,7 +4144,7 @@
             
         </table>
         
-        <h3>Module <code>model_factory</code> (<code>addmo/s3_model_tuning/models/model_factory.py</code>)</h3>
+        <h3>Module <code>models.model_factory</code> (<code>addmo/s3_model_tuning/models/model_factory.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -4378,7 +4378,7 @@
             
         </table>
         
-        <h3>Module <code>scikit_learn_models</code> (<code>addmo/s3_model_tuning/models/scikit_learn_models.py</code>)</h3>
+        <h3>Module <code>models.scikit_learn_models</code> (<code>addmo/s3_model_tuning/models/scikit_learn_models.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -4892,7 +4892,7 @@
             
         </table>
         
-        <h3>Module <code>abstract_scorer</code> (<code>addmo/s3_model_tuning/scoring/abstract_scorer.py</code>)</h3>
+        <h3>Module <code>scoring.abstract_scorer</code> (<code>addmo/s3_model_tuning/scoring/abstract_scorer.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -5646,7 +5646,7 @@
             
         </table>
         
-        <h3>Module <code>validator</code> (<code>addmo/s3_model_tuning/scoring/validator.py</code>)</h3>
+        <h3>Module <code>scoring.validator</code> (<code>addmo/s3_model_tuning/scoring/validator.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -5850,7 +5850,7 @@
             
         </table>
         
-        <h3>Module <code>validator_factory</code> (<code>addmo/s3_model_tuning/scoring/validator_factory.py</code>)</h3>
+        <h3>Module <code>scoring.validator_factory</code> (<code>addmo/s3_model_tuning/scoring/validator_factory.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -8172,9 +8172,8 @@
 
     return pred_func
 
-def plot_carpets_with_buckets(variables, measurements_data, target_values, regressor_func , bounds=None , combinations=None , defaults_dict=None ,num_buckets=4):
-
-    # Define bounds</pre></td>
+def execute(plot_name, plot_dir, path_to_regressor, save):
+</pre></td>
             </tr>
             
             <tr>
@@ -8203,9 +8202,7 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
             surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)
             surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)
 
-
-        # Add this line to reverse the axis direction
-        # ax.set_xlim(ax.get_xlim()[::-1])</pre></td>
+        # Add this line to reverse the axis direction</pre></td>
             </tr>
             
             <tr>
@@ -8344,8 +8341,8 @@ def exe_data_tuning_fixed(user_input=&#39;y&#39;):
                 <td>R0801</td>
                 <td></td>
                 <td><pre>Similar lines in 2 files
-==abstract_model:[143:196]
 ==experiment_logger:[17:41]
+==models.abstract_model:[143:196]
         pass
 
     @abstractmethod
@@ -12753,17 +12750,17 @@ def exe_data_tuning_fixed(user_input=&#39;y&#39;):
             </tr>
             
             <tr>
-                <td>abstract_scorer</td>
+                <td>scoring.abstract_scorer</td>
                 <td>14</td>
             </tr>
             
             <tr>
-                <td>validator</td>
+                <td>scoring.validator</td>
                 <td>19</td>
             </tr>
             
             <tr>
-                <td>validator_factory</td>
+                <td>scoring.validator_factory</td>
                 <td>9</td>
             </tr>
             
@@ -12798,22 +12795,22 @@ def exe_data_tuning_fixed(user_input=&#39;y&#39;):
             </tr>
             
             <tr>
-                <td>keras_models</td>
+                <td>models.keras_models</td>
                 <td>38</td>
             </tr>
             
             <tr>
-                <td>abstract_model</td>
+                <td>models.abstract_model</td>
                 <td>48</td>
             </tr>
             
             <tr>
-                <td>model_factory</td>
+                <td>models.model_factory</td>
                 <td>22</td>
             </tr>
             
             <tr>
-                <td>scikit_learn_models</td>
+                <td>models.scikit_learn_models</td>
                 <td>50</td>
             </tr>
             
@@ -12833,7 +12830,7 @@ def exe_data_tuning_fixed(user_input=&#39;y&#39;):
             </tr>
             
             <tr>
-                <td>config.data_tuning_auto_config</td>
+                <td>data_tuning_auto_config</td>
                 <td>7</td>
             </tr>
             

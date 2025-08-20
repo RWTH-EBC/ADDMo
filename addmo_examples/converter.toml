@@ -3,14 +3,14 @@ ipynb_root = "addmo_examples/jupyter_notebooks"
 
 [[ExampleFile]]
 filename   = "addmo_examples/executables/exe_data_tuning_auto.py"
-func_name  = "exe_data_tuning_auto"
+#func_name  = "exe_data_tuning_auto"
 md_path    = "addmo_examples/docs"
 ipynb_path = "addmo_examples/jupyter_notebooks"
 docstrings = true
 
 [[ExampleFile]]
 filename   = "addmo_examples/executables/exe_data_tuning_fixed.py"
-func_name  = "exe_data_tuning_fixed"
+#func_name  = "exe_data_tuning_fixed"
 md_path    = "addmo_examples/docs"
 ipynb_path = "addmo_examples/jupyter_notebooks"
 docstrings = true

@@ -25,7 +25,7 @@ jobs:
       GH_PAGES: true
       EXECUTE_COVERAGE_TEST: true
       CONVERT_EXAMPLES: true
-      EXAMPLE_CONVERTER_CONFIG: "addmo_examples/examples/converter.toml"
+      EXAMPLE_CONVERTER_CONFIG: "addmo_examples/converter.toml"
 
 
 

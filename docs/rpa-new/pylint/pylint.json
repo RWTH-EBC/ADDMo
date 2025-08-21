@@ -939,7 +939,7 @@
             "type": "convention",
             "module": "exe_data_tuning_auto",
             "obj": "",
-            "line": 128,
+            "line": 129,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "line-too-long",
@@ -950,7 +950,7 @@
             "type": "convention",
             "module": "exe_data_tuning_auto",
             "obj": "",
-            "line": 130,
+            "line": 131,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "missing-final-newline",
@@ -1092,63 +1092,8 @@
         {
             "type": "refactor",
             "module": "exe_data_tuning_auto",
-            "obj": "exe_data_tuning_auto",
-            "line": 15,
-            "column": 0,
-            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
-            "symbol": "too-many-locals",
-            "message": "Too many local variables (18/15)",
-            "message-id": "R0914"
-        },
-        {
-            "type": "warning",
-            "module": "exe_data_tuning_auto",
-            "obj": "exe_data_tuning_auto",
-            "line": 15,
-            "column": 25,
-            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
-            "symbol": "redefined-outer-name",
-            "message": "Redefining name 'user_input' from outer scope (line 128)",
-            "message-id": "W0621"
-        },
-        {
-            "type": "convention",
-            "module": "exe_data_tuning_auto",
-            "obj": "exe_data_tuning_auto",
-            "line": 45,
-            "column": 4,
-            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
-            "symbol": "invalid-name",
-            "message": "Variable name \"y\" doesn't conform to snake_case naming style",
-            "message-id": "C0103"
-        },
-        {
-            "type": "warning",
-            "module": "exe_data_tuning_auto",
-            "obj": "exe_data_tuning_auto",
-            "line": 57,
-            "column": 9,
-            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
-            "symbol": "unspecified-encoding",
-            "message": "Using open without explicitly specifying an encoding",
-            "message-id": "W1514"
-        },
-        {
-            "type": "convention",
-            "module": "exe_data_tuning_auto",
-            "obj": "exe_data_tuning_auto",
-            "line": 57,
-            "column": 35,
-            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
-            "symbol": "invalid-name",
-            "message": "Variable name \"f\" doesn't conform to snake_case naming style",
-            "message-id": "C0103"
-        },
-        {
-            "type": "refactor",
-            "module": "exe_data_tuning_auto",
             "obj": "_exe_data_tuning_auto",
-            "line": 71,
+            "line": 15,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "too-many-locals",
@@ -1159,18 +1104,18 @@
             "type": "warning",
             "module": "exe_data_tuning_auto",
             "obj": "_exe_data_tuning_auto",
-            "line": 71,
+            "line": 15,
             "column": 34,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "redefined-outer-name",
-            "message": "Redefining name 'user_input' from outer scope (line 128)",
+            "message": "Redefining name 'user_input' from outer scope (line 129)",
             "message-id": "W0621"
         },
         {
             "type": "convention",
             "module": "exe_data_tuning_auto",
             "obj": "_exe_data_tuning_auto",
-            "line": 93,
+            "line": 37,
             "column": 4,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "invalid-name",
@@ -1181,7 +1126,7 @@
             "type": "warning",
             "module": "exe_data_tuning_auto",
             "obj": "_exe_data_tuning_auto",
-            "line": 105,
+            "line": 49,
             "column": 9,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "unspecified-encoding",
@@ -1192,7 +1137,7 @@
             "type": "convention",
             "module": "exe_data_tuning_auto",
             "obj": "_exe_data_tuning_auto",
-            "line": 105,
+            "line": 49,
             "column": 35,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "invalid-name",
@@ -1203,12 +1148,67 @@
             "type": "warning",
             "module": "exe_data_tuning_auto",
             "obj": "default_config_exe_data_tuning_auto",
-            "line": 119,
+            "line": 63,
             "column": 40,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "redefined-outer-name",
-            "message": "Redefining name 'user_input' from outer scope (line 128)",
+            "message": "Redefining name 'user_input' from outer scope (line 129)",
             "message-id": "W0621"
+        },
+        {
+            "type": "refactor",
+            "module": "exe_data_tuning_auto",
+            "obj": "exe_data_tuning_auto",
+            "line": 70,
+            "column": 0,
+            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
+            "symbol": "too-many-locals",
+            "message": "Too many local variables (18/15)",
+            "message-id": "R0914"
+        },
+        {
+            "type": "warning",
+            "module": "exe_data_tuning_auto",
+            "obj": "exe_data_tuning_auto",
+            "line": 70,
+            "column": 25,
+            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
+            "symbol": "redefined-outer-name",
+            "message": "Redefining name 'user_input' from outer scope (line 129)",
+            "message-id": "W0621"
+        },
+        {
+            "type": "convention",
+            "module": "exe_data_tuning_auto",
+            "obj": "exe_data_tuning_auto",
+            "line": 100,
+            "column": 4,
+            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
+            "symbol": "invalid-name",
+            "message": "Variable name \"y\" doesn't conform to snake_case naming style",
+            "message-id": "C0103"
+        },
+        {
+            "type": "warning",
+            "module": "exe_data_tuning_auto",
+            "obj": "exe_data_tuning_auto",
+            "line": 112,
+            "column": 9,
+            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
+            "symbol": "unspecified-encoding",
+            "message": "Using open without explicitly specifying an encoding",
+            "message-id": "W1514"
+        },
+        {
+            "type": "convention",
+            "module": "exe_data_tuning_auto",
+            "obj": "exe_data_tuning_auto",
+            "line": 112,
+            "column": 35,
+            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
+            "symbol": "invalid-name",
+            "message": "Variable name \"f\" doesn't conform to snake_case naming style",
+            "message-id": "C0103"
         },
         {
             "type": "convention",
@@ -1709,7 +1709,7 @@
             "type": "convention",
             "module": "exe_data_tuning_fixed",
             "obj": "",
-            "line": 168,
+            "line": 167,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "line-too-long",
@@ -1723,9 +1723,9 @@
             "line": 170,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
-            "symbol": "missing-final-newline",
-            "message": "Final newline missing",
-            "message-id": "C0304"
+            "symbol": "trailing-newlines",
+            "message": "Trailing newlines",
+            "message-id": "C0305"
         },
         {
             "type": "convention",
@@ -1884,85 +1884,8 @@
         {
             "type": "refactor",
             "module": "exe_data_tuning_fixed",
-            "obj": "exe_data_tuning_fixed",
-            "line": 17,
-            "column": 0,
-            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
-            "symbol": "too-many-locals",
-            "message": "Too many local variables (20/15)",
-            "message-id": "R0914"
-        },
-        {
-            "type": "warning",
-            "module": "exe_data_tuning_fixed",
-            "obj": "exe_data_tuning_fixed",
-            "line": 17,
-            "column": 26,
-            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
-            "symbol": "redefined-outer-name",
-            "message": "Redefining name 'user_input' from outer scope (line 168)",
-            "message-id": "W0621"
-        },
-        {
-            "type": "convention",
-            "module": "exe_data_tuning_fixed",
-            "obj": "exe_data_tuning_fixed",
-            "line": 46,
-            "column": 4,
-            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
-            "symbol": "invalid-name",
-            "message": "Variable name \"x\" doesn't conform to snake_case naming style",
-            "message-id": "C0103"
-        },
-        {
-            "type": "convention",
-            "module": "exe_data_tuning_fixed",
-            "obj": "exe_data_tuning_fixed",
-            "line": 46,
-            "column": 7,
-            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
-            "symbol": "invalid-name",
-            "message": "Variable name \"y\" doesn't conform to snake_case naming style",
-            "message-id": "C0103"
-        },
-        {
-            "type": "warning",
-            "module": "exe_data_tuning_fixed",
-            "obj": "exe_data_tuning_fixed",
-            "line": 71,
-            "column": 9,
-            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
-            "symbol": "unspecified-encoding",
-            "message": "Using open without explicitly specifying an encoding",
-            "message-id": "W1514"
-        },
-        {
-            "type": "convention",
-            "module": "exe_data_tuning_fixed",
-            "obj": "exe_data_tuning_fixed",
-            "line": 71,
-            "column": 35,
-            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
-            "symbol": "invalid-name",
-            "message": "Variable name \"f\" doesn't conform to snake_case naming style",
-            "message-id": "C0103"
-        },
-        {
-            "type": "warning",
-            "module": "exe_data_tuning_fixed",
-            "obj": "exe_data_tuning_fixed",
-            "line": 46,
-            "column": 4,
-            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
-            "symbol": "unused-variable",
-            "message": "Unused variable 'x'",
-            "message-id": "W0612"
-        },
-        {
-            "type": "refactor",
-            "module": "exe_data_tuning_fixed",
             "obj": "_exe_data_tuning",
-            "line": 87,
+            "line": 17,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "too-many-locals",
@@ -1973,18 +1896,18 @@
             "type": "warning",
             "module": "exe_data_tuning_fixed",
             "obj": "_exe_data_tuning",
-            "line": 87,
+            "line": 17,
             "column": 29,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "redefined-outer-name",
-            "message": "Redefining name 'user_input' from outer scope (line 168)",
+            "message": "Redefining name 'user_input' from outer scope (line 167)",
             "message-id": "W0621"
         },
         {
             "type": "convention",
             "module": "exe_data_tuning_fixed",
             "obj": "_exe_data_tuning",
-            "line": 113,
+            "line": 43,
             "column": 4,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "invalid-name",
@@ -1995,7 +1918,7 @@
             "type": "convention",
             "module": "exe_data_tuning_fixed",
             "obj": "_exe_data_tuning",
-            "line": 113,
+            "line": 43,
             "column": 7,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "invalid-name",
@@ -2006,7 +1929,7 @@
             "type": "warning",
             "module": "exe_data_tuning_fixed",
             "obj": "_exe_data_tuning",
-            "line": 138,
+            "line": 68,
             "column": 9,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "unspecified-encoding",
@@ -2017,7 +1940,7 @@
             "type": "convention",
             "module": "exe_data_tuning_fixed",
             "obj": "_exe_data_tuning",
-            "line": 138,
+            "line": 68,
             "column": 35,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "invalid-name",
@@ -2028,7 +1951,7 @@
             "type": "warning",
             "module": "exe_data_tuning_fixed",
             "obj": "_exe_data_tuning",
-            "line": 113,
+            "line": 43,
             "column": 4,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "unused-variable",
@@ -2039,12 +1962,89 @@
             "type": "warning",
             "module": "exe_data_tuning_fixed",
             "obj": "default_config_exe_data_tuning_fixed",
-            "line": 155,
+            "line": 84,
             "column": 41,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "redefined-outer-name",
-            "message": "Redefining name 'user_input' from outer scope (line 168)",
+            "message": "Redefining name 'user_input' from outer scope (line 167)",
             "message-id": "W0621"
+        },
+        {
+            "type": "refactor",
+            "module": "exe_data_tuning_fixed",
+            "obj": "exe_data_tuning_fixed",
+            "line": 95,
+            "column": 0,
+            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
+            "symbol": "too-many-locals",
+            "message": "Too many local variables (20/15)",
+            "message-id": "R0914"
+        },
+        {
+            "type": "warning",
+            "module": "exe_data_tuning_fixed",
+            "obj": "exe_data_tuning_fixed",
+            "line": 95,
+            "column": 26,
+            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
+            "symbol": "redefined-outer-name",
+            "message": "Redefining name 'user_input' from outer scope (line 167)",
+            "message-id": "W0621"
+        },
+        {
+            "type": "convention",
+            "module": "exe_data_tuning_fixed",
+            "obj": "exe_data_tuning_fixed",
+            "line": 124,
+            "column": 4,
+            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
+            "symbol": "invalid-name",
+            "message": "Variable name \"x\" doesn't conform to snake_case naming style",
+            "message-id": "C0103"
+        },
+        {
+            "type": "convention",
+            "module": "exe_data_tuning_fixed",
+            "obj": "exe_data_tuning_fixed",
+            "line": 124,
+            "column": 7,
+            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
+            "symbol": "invalid-name",
+            "message": "Variable name \"y\" doesn't conform to snake_case naming style",
+            "message-id": "C0103"
+        },
+        {
+            "type": "warning",
+            "module": "exe_data_tuning_fixed",
+            "obj": "exe_data_tuning_fixed",
+            "line": 149,
+            "column": 9,
+            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
+            "symbol": "unspecified-encoding",
+            "message": "Using open without explicitly specifying an encoding",
+            "message-id": "W1514"
+        },
+        {
+            "type": "convention",
+            "module": "exe_data_tuning_fixed",
+            "obj": "exe_data_tuning_fixed",
+            "line": 149,
+            "column": 35,
+            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
+            "symbol": "invalid-name",
+            "message": "Variable name \"f\" doesn't conform to snake_case naming style",
+            "message-id": "C0103"
+        },
+        {
+            "type": "warning",
+            "module": "exe_data_tuning_fixed",
+            "obj": "exe_data_tuning_fixed",
+            "line": 124,
+            "column": 4,
+            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
+            "symbol": "unused-variable",
+            "message": "Unused variable 'x'",
+            "message-id": "W0612"
         },
         {
             "type": "convention",
@@ -6910,7 +6910,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -6921,7 +6921,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -6932,7 +6932,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -6943,7 +6943,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -6954,7 +6954,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "DataTuningFixedConfig",
             "line": 6,
             "column": 0,
@@ -6965,7 +6965,7 @@
         },
         {
             "type": "refactor",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "DataTuningFixedConfig",
             "line": 6,
             "column": 0,
@@ -6976,7 +6976,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -6987,7 +6987,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -6998,7 +6998,7 @@
         },
         {
             "type": "warning",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -8032,7 +8032,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "",
             "line": 27,
             "column": 0,
@@ -8043,7 +8043,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -8054,7 +8054,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -8065,7 +8065,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -8076,7 +8076,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -8087,7 +8087,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter.split",
             "line": 26,
             "column": 20,
@@ -8098,7 +8098,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter.split",
             "line": 26,
             "column": 44,
@@ -8109,7 +8109,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter.get_n_splits",
             "line": 45,
             "column": 27,
@@ -8120,7 +8120,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter.get_n_splits",
             "line": 45,
             "column": 51,
@@ -8131,7 +8131,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter._iter_test_masks",
             "line": 50,
             "column": 14,
@@ -8142,7 +8142,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter._iter_test_masks",
             "line": 50,
             "column": 38,
@@ -8153,7 +8153,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter._iter_test_indices",
             "line": 62,
             "column": 14,
@@ -8164,7 +8164,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter._iter_test_indices",
             "line": 62,
             "column": 38,
@@ -8175,7 +8175,7 @@
         },
         {
             "type": "convention",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -8186,7 +8186,7 @@
         },
         {
             "type": "error",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -8197,7 +8197,7 @@
         },
         {
             "type": "warning",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -8208,7 +8208,7 @@
         },
         {
             "type": "convention",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter.get_n_splits",
             "line": 21,
             "column": 27,
@@ -8219,7 +8219,7 @@
         },
         {
             "type": "convention",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter.get_n_splits",
             "line": 21,
             "column": 35,
@@ -8230,7 +8230,7 @@
         },
         {
             "type": "warning",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter.get_n_splits",
             "line": 21,
             "column": 27,
@@ -8241,7 +8241,7 @@
         },
         {
             "type": "warning",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter.get_n_splits",
             "line": 21,
             "column": 35,
@@ -8252,7 +8252,7 @@
         },
         {
             "type": "warning",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter.get_n_splits",
             "line": 21,
             "column": 43,
@@ -8263,7 +8263,7 @@
         },
         {
             "type": "convention",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter._iter_test_indices",
             "line": 25,
             "column": 33,
@@ -8274,7 +8274,7 @@
         },
         {
             "type": "convention",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter._iter_test_indices",
             "line": 25,
             "column": 36,
@@ -8285,7 +8285,7 @@
         },
         {
             "type": "warning",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter._iter_test_indices",
             "line": 25,
             "column": 36,
@@ -8296,7 +8296,7 @@
         },
         {
             "type": "warning",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter._iter_test_indices",
             "line": 25,
             "column": 44,
@@ -8307,7 +8307,7 @@
         },
         {
             "type": "refactor",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter",
             "line": 9,
             "column": 0,
@@ -8318,7 +8318,7 @@
         },
         {
             "type": "convention",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter.get_n_splits",
             "line": 65,
             "column": 4,
@@ -8329,7 +8329,7 @@
         },
         {
             "type": "convention",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter.get_n_splits",
             "line": 65,
             "column": 27,
@@ -8340,7 +8340,7 @@
         },
         {
             "type": "convention",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter.get_n_splits",
             "line": 65,
             "column": 30,
@@ -8351,7 +8351,7 @@
         },
         {
             "type": "warning",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter.get_n_splits",
             "line": 65,
             "column": 30,
@@ -8362,7 +8362,7 @@
         },
         {
             "type": "warning",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter.get_n_splits",
             "line": 65,
             "column": 38,
@@ -8373,7 +8373,7 @@
         },
         {
             "type": "convention",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter._iter_test_indices",
             "line": 70,
             "column": 33,
@@ -8384,7 +8384,7 @@
         },
         {
             "type": "convention",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter._iter_test_indices",
             "line": 70,
             "column": 36,
@@ -8395,7 +8395,7 @@
         },
         {
             "type": "warning",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter._iter_test_indices",
             "line": 70,
             "column": 36,
@@ -8406,7 +8406,7 @@
         },
         {
             "type": "warning",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter._iter_test_indices",
             "line": 70,
             "column": 44,
@@ -8417,7 +8417,7 @@
         },
         {
             "type": "refactor",
-            "module": "custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter",
             "line": 43,
             "column": 0,
@@ -8428,7 +8428,7 @@
         },
         {
             "type": "convention",
-            "module": "splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -8439,7 +8439,7 @@
         },
         {
             "type": "error",
-            "module": "splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -8450,7 +8450,7 @@
         },
         {
             "type": "error",
-            "module": "splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -8461,7 +8461,7 @@
         },
         {
             "type": "error",
-            "module": "splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -8472,7 +8472,7 @@
         },
         {
             "type": "error",
-            "module": "splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -8483,7 +8483,7 @@
         },
         {
             "type": "refactor",
-            "module": "splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "SplitterFactory.splitter_factory",
             "line": 26,
             "column": 12,
@@ -8494,7 +8494,7 @@
         },
         {
             "type": "refactor",
-            "module": "splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "SplitterFactory.splitter_factory",
             "line": 36,
             "column": 12,
@@ -8505,7 +8505,7 @@
         },
         {
             "type": "refactor",
-            "module": "splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "SplitterFactory",
             "line": 12,
             "column": 0,
@@ -10969,7 +10969,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "",
             "line": 74,
             "column": 0,
@@ -10980,7 +10980,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -10991,7 +10991,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -11002,7 +11002,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -11013,7 +11013,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "DataTuningAutoSetup",
             "line": 5,
             "column": 0,
@@ -11024,7 +11024,7 @@
         },
         {
             "type": "refactor",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "DataTuningAutoSetup",
             "line": 5,
             "column": 0,
@@ -11035,7 +11035,7 @@
         },
         {
             "type": "warning",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -12647,7 +12647,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[53:78]\n==exe_data_tuning_fixed:[67:94]\n    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')\n    data = pd.read_csv(saved_data_path, delimiter=\",\", index_col=0, encoding=\"latin1\", header=0)\n    config_path = os.path.join(LocalLogger.directory, \"config.json\")\n    with open(config_path, 'r') as f:\n        plot_config = json.load(f)\n\n    # Plot tuned data\n\n    figures = plot_timeseries_combined(plot_config, data)\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n\n    print(\"Finished\")\n\ndef _exe_data_tuning(config, user_input='y'):\n    \"\"\"\n    Execute the system_data tuning process in a fixed manner.\n    \"\"\"\n\n    # Configure the logger\n    LocalLogger.active = True\n    if LocalLogger.active:",
+            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[45:65]\n==exe_data_tuning_fixed:[145:164]\n    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')\n    data = pd.read_csv(saved_data_path, delimiter=\",\", index_col=0, encoding=\"latin1\", header=0)\n    config_path = os.path.join(LocalLogger.directory, \"config.json\")\n    with open(config_path, 'r') as f:\n        plot_config = json.load(f)\n\n    # Plot tuned data\n\n    figures = plot_timeseries_combined(plot_config, data)\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    # Data tuning completed\n    print(\"Finished\")\n",
             "message-id": "R0801"
         },
         {
@@ -12658,18 +12658,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[101:121]\n==exe_data_tuning_fixed:[67:92]\n    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')\n    data = pd.read_csv(saved_data_path, delimiter=\",\", index_col=0, encoding=\"latin1\", header=0)\n    config_path = os.path.join(LocalLogger.directory, \"config.json\")\n    with open(config_path, 'r') as f:\n        plot_config = json.load(f)\n\n    # Plot tuned data\n    figures = plot_timeseries_combined(plot_config, data)\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    print(\"Finished\")\n\ndef default_config_exe_data_tuning_auto(user_input='y'):\n    \"\"\"Execute the system_data tuning process with default config.\"\"\"\n    # Initialize a default config (without loading JSON)",
-            "message-id": "R0801"
-        },
-        {
-            "type": "refactor",
-            "module": "data_handling",
-            "obj": "",
-            "line": 1,
-            "column": 0,
-            "path": "addmo/util/data_handling.py",
-            "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==carpet_plots:[174:199]\n==plot_carpets_modelA:[133:157]\n        features = regressor.metadata[\"features_ordered\"]\n        if rename_dict is not None:\n            features = [rename_dict[feature] for feature in features]\n\n        # Determine the shape of the output\n        shape = next(\n            arr.shape for arr in kwargs.values() if isinstance(arr, np.ndarray)\n        )\n\n        # Prepare input saved_plots\n        input_data = pd.DataFrame(\n            {feature: np.ravel(kwargs[feature]) for feature in features}\n        )\n\n        # Make prediction\n        prediction = regressor.predict(input_data)\n\n        # Reshape the prediction to match the input shape\n        return prediction.reshape(shape)\n\n    return pred_func\n\ndef execute(plot_name, plot_dir, path_to_regressor, save):\n",
+            "message": "Similar lines in 2 files\n==carpet_plots:[174:199]\n==plot_carpets_modelA:[133:157]\n        features = regressor.metadata[\"features_ordered\"]\n        if rename_dict is not None:\n            features = [rename_dict[feature] for feature in features]\n\n        # Determine the shape of the output\n        shape = next(\n            arr.shape for arr in kwargs.values() if isinstance(arr, np.ndarray)\n        )\n\n        # Prepare input saved_plots\n        input_data = pd.DataFrame(\n            {feature: np.ravel(kwargs[feature]) for feature in features}\n        )\n\n        # Make prediction\n        prediction = regressor.predict(input_data)\n\n        # Reshape the prediction to match the input shape\n        return prediction.reshape(shape)\n\n    return pred_func\n\ndef plot_carpets_with_buckets(variables, measurements_data, target_values, regressor_func , bounds=None , combinations=None , defaults_dict=None ,num_buckets=4):\n\n    # Define bounds",
             "message-id": "R0801"
         },
         {
@@ -12702,7 +12691,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_recreate_data_tuning:[29:50]\n==model_testing:[82:101]\n    new_config = DataTuningAutoSetup(**saved_config_data)\n\n    # Configure the logger\n    LocalLogger.directory = results_dir_data_tuning(new_config)\n    LocalLogger.active = True\n    WandbLogger.project = \"addmo-test_data_auto_tuning\"\n    WandbLogger.directory = results_dir_data_tuning(new_config)\n    WandbLogger.active = False\n\n    ExperimentLogger.start_experiment(config=new_config)\n\n    # Create a new tuner instance with the same tuning parameters\n    new_tuner = DataTunerAuto(config=new_config)\n\n    # Apply the same tuning process to the new data\n    tuned_x_new = new_tuner.tune_auto()\n    y_new = new_tuner.y\n\n    tuned_xy_new = pd.concat([y_new, tuned_x_new], axis=1, join=\"inner\").bfill()\n\n    # Log the tuned system data",
+            "message": "Similar lines in 2 files\n==exe_recreate_data_tuning:[29:50]\n==model_testing:[82:101]\n    new_config = DataTuningAutoSetup(**saved_config_data)\n\n    LocalLogger.directory = results_dir_data_tuning(new_config)\n    LocalLogger.active = True\n    WandbLogger.project = \"addmo-test_data_auto_tuning\"\n    WandbLogger.directory = results_dir_data_tuning(new_config)\n    WandbLogger.active = False\n\n    ExperimentLogger.start_experiment(config=new_config)\n\n    # Create a new tuner instance with the same tuning parameters\n    new_tuner = DataTunerAuto(config=new_config)\n\n    # Apply the same tuning process to the new data\n    tuned_x_new = new_tuner.tune_auto()\n    y_new = new_tuner.y\n\n    tuned_xy_new = pd.concat([y_new, tuned_x_new], axis=1, join=\"inner\").bfill()\n",
             "message-id": "R0801"
         },
         {
@@ -12713,7 +12702,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[61:76]\n==exe_data_tuning_fixed:[143:161]\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    print(\"Finished\")\n\ndef _exe_data_tuning_auto(config, user_input='y'):\n    \"\"\"\n    Execute the system_data tuning process automatically.\n    \"\"\"\n\n    # Configure the logger",
+            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[53:65]\n==exe_data_tuning_fixed:[73:90]\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    print(\"Finished\")\n\ndef default_config_exe_data_tuning_auto(user_input='y'):\n    \"\"\"Execute the system_data tuning process with default config.\"\"\"\n    # Initialize a default config (without loading JSON)",
             "message-id": "R0801"
         },
         {
@@ -12724,7 +12713,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_recreate_data_tuning:[32:41]\n==model_testing:[113:122]\n    LocalLogger.directory = results_dir_data_tuning(new_config)\n    LocalLogger.active = True\n    WandbLogger.project = \"addmo-test_data_auto_tuning\"\n    WandbLogger.directory = results_dir_data_tuning(new_config)\n    WandbLogger.active = False\n\n    ExperimentLogger.start_experiment(config=new_config)\n\n    #Using fixed config",
+            "message": "Similar lines in 2 files\n==exe_recreate_data_tuning:[32:41]\n==model_testing:[113:122]\n    LocalLogger.directory = results_dir_data_tuning(new_config)\n    LocalLogger.active = True\n    WandbLogger.project = \"addmo-test_data_auto_tuning\"\n    WandbLogger.directory = results_dir_data_tuning(new_config)\n    WandbLogger.active = False\n\n    ExperimentLogger.start_experiment(config=new_config)\n\n    # Create a new tuner instance with the same tuning parameters",
             "message-id": "R0801"
         },
         {
@@ -12746,7 +12735,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[53:60]\n==exe_data_tuning_fixed:[134:142]\n    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')\n    data = pd.read_csv(saved_data_path, delimiter=\",\", index_col=0, encoding=\"latin1\", header=0)\n    config_path = os.path.join(LocalLogger.directory, \"config.json\")\n    with open(config_path, 'r') as f:\n        plot_config = json.load(f)\n\n    # Plot tuned data",
+            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[45:52]\n==exe_data_tuning_fixed:[64:72]\n    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')\n    data = pd.read_csv(saved_data_path, delimiter=\",\", index_col=0, encoding=\"latin1\", header=0)\n    config_path = os.path.join(LocalLogger.directory, \"config.json\")\n    with open(config_path, 'r') as f:\n        plot_config = json.load(f)\n\n    # Plot tuned data",
             "message-id": "R0801"
         }
     ],
@@ -12965,7 +12954,7 @@
                 "statement": 29,
                 "warning": 6
             },
-            "config.data_tuning_config": {
+            "data_tuning_config": {
                 "convention": 4,
                 "error": 3,
                 "fatal": 0,
@@ -13064,7 +13053,7 @@
                 "statement": 16,
                 "warning": 1
             },
-            "abstract_splitter": {
+            "validation_splitting.abstract_splitter": {
                 "convention": 10,
                 "error": 3,
                 "fatal": 0,
@@ -13073,7 +13062,7 @@
                 "statement": 25,
                 "warning": 0
             },
-            "custom_splitters": {
+            "validation_splitting.custom_splitters": {
                 "convention": 10,
                 "error": 1,
                 "fatal": 0,
@@ -13082,7 +13071,7 @@
                 "statement": 43,
                 "warning": 10
             },
-            "splitter_factory": {
+            "validation_splitting.splitter_factory": {
                 "convention": 1,
                 "error": 4,
                 "fatal": 0,
@@ -13163,7 +13152,7 @@
                 "statement": 30,
                 "warning": 6
             },
-            "config.data_tuning_auto_config": {
+            "data_tuning_auto_config": {
                 "convention": 3,
                 "error": 2,
                 "fatal": 0,
@@ -13231,7 +13220,7 @@
                 "error": 0,
                 "fatal": 0,
                 "info": 0,
-                "refactor": 10,
+                "refactor": 9,
                 "statement": 4,
                 "warning": 0
             }
@@ -13246,14 +13235,14 @@
             "redefined-outer-name": 36,
             "unspecified-encoding": 25,
             "unused-import": 59,
-            "trailing-newlines": 12,
+            "trailing-newlines": 13,
             "fixme": 4,
             "multiple-imports": 2,
             "consider-using-with": 7,
             "too-many-arguments": 4,
             "too-many-locals": 19,
             "wrong-import-order": 37,
-            "missing-final-newline": 16,
+            "missing-final-newline": 15,
             "unused-variable": 16,
             "protected-access": 2,
             "missing-class-docstring": 16,
@@ -13285,7 +13274,7 @@
             "super-init-not-called": 2,
             "broad-exception-caught": 1,
             "signature-differs": 1,
-            "duplicate-code": 10
+            "duplicate-code": 9
         },
         "code_type_count": {
             "code": 0,
@@ -13319,12 +13308,12 @@
         "error": 298,
         "fatal": 0,
         "info": 0,
-        "refactor": 95,
+        "refactor": 94,
         "statement": 3040,
         "warning": 230,
         "global_note": 0,
-        "nb_duplicated_lines": 101,
-        "percent_duplicated_lines": 1.7159361196058445
+        "nb_duplicated_lines": 85,
+        "percent_duplicated_lines": 1.443859351112621
     },
     "previous": {
         "bad_names": {
@@ -13586,7 +13575,7 @@
                 "statement": 42,
                 "warning": 6
             },
-            "scoring.abstract_scorer": {
+            "abstract_scorer": {
                 "convention": 6,
                 "error": 5,
                 "fatal": 0,
@@ -13595,7 +13584,7 @@
                 "statement": 17,
                 "warning": 1
             },
-            "scoring.validator": {
+            "validator": {
                 "convention": 8,
                 "error": 5,
                 "fatal": 0,
@@ -13604,7 +13593,7 @@
                 "statement": 15,
                 "warning": 4
             },
-            "scoring.validator_factory": {
+            "validator_factory": {
                 "convention": 3,
                 "error": 4,
                 "fatal": 0,
@@ -13613,7 +13602,7 @@
                 "statement": 11,
                 "warning": 0
             },
-            "scoring.metrics.custom_metrics": {
+            "metrics.custom_metrics": {
                 "convention": 0,
                 "error": 0,
                 "fatal": 0,
@@ -13622,7 +13611,7 @@
                 "statement": 0,
                 "warning": 0
             },
-            "scoring.metrics.abstract_metric": {
+            "metrics.abstract_metric": {
                 "convention": 1,
                 "error": 0,
                 "fatal": 0,
@@ -13631,7 +13620,7 @@
                 "statement": 2,
                 "warning": 0
             },
-            "scoring.metrics.metric_factory": {
+            "metrics.metric_factory": {
                 "convention": 1,
                 "error": 3,
                 "fatal": 0,
@@ -13640,7 +13629,7 @@
                 "statement": 16,
                 "warning": 1
             },
-            "scoring.validation_splitting.abstract_splitter": {
+            "abstract_splitter": {
                 "convention": 10,
                 "error": 3,
                 "fatal": 0,
@@ -13649,7 +13638,7 @@
                 "statement": 25,
                 "warning": 0
             },
-            "scoring.validation_splitting.custom_splitters": {
+            "custom_splitters": {
                 "convention": 10,
                 "error": 1,
                 "fatal": 0,
@@ -13658,7 +13647,7 @@
                 "statement": 43,
                 "warning": 10
             },
-            "scoring.validation_splitting.splitter_factory": {
+            "splitter_factory": {
                 "convention": 1,
                 "error": 4,
                 "fatal": 0,
@@ -13667,7 +13656,7 @@
                 "statement": 19,
                 "warning": 0
             },
-            "config.model_tuning_config": {
+            "model_tuning_config": {
                 "convention": 7,
                 "error": 2,
                 "fatal": 0,
@@ -13739,7 +13728,7 @@
                 "statement": 30,
                 "warning": 6
             },
-            "config.data_tuning_auto_config": {
+            "data_tuning_auto_config": {
                 "convention": 3,
                 "error": 2,
                 "fatal": 0,
@@ -13807,7 +13796,7 @@
                 "error": 0,
                 "fatal": 0,
                 "info": 0,
-                "refactor": 10,
+                "refactor": 9,
                 "statement": 4,
                 "warning": 0
             }
@@ -13822,14 +13811,14 @@
             "redefined-outer-name": 36,
             "unspecified-encoding": 25,
             "unused-import": 59,
-            "trailing-newlines": 12,
+            "trailing-newlines": 13,
             "fixme": 4,
             "multiple-imports": 2,
             "consider-using-with": 7,
             "too-many-arguments": 4,
             "too-many-locals": 19,
             "wrong-import-order": 37,
-            "missing-final-newline": 16,
+            "missing-final-newline": 15,
             "unused-variable": 16,
             "protected-access": 2,
             "missing-class-docstring": 16,
@@ -13861,7 +13850,7 @@
             "super-init-not-called": 2,
             "broad-exception-caught": 1,
             "signature-differs": 1,
-            "duplicate-code": 10
+            "duplicate-code": 9
         },
         "code_type_count": {
             "code": 0,
@@ -13895,11 +13884,11 @@
         "error": 298,
         "fatal": 0,
         "info": 0,
-        "refactor": 95,
+        "refactor": 94,
         "statement": 3040,
         "warning": 230,
-        "global_note": 2.266447368421053,
-        "nb_duplicated_lines": 101,
-        "percent_duplicated_lines": 1.7159361196058445
+        "global_note": 2.2697368421052637,
+        "nb_duplicated_lines": 85,
+        "percent_duplicated_lines": 1.443859351112621
     }
 }

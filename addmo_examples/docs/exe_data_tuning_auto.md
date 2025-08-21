@@ -68,6 +68,10 @@ Please define the missing TODOs in the section below according to the docstrings
 ```python
 """
 Execute the system_data tuning process with user defined config.
+ Parameters:
+    user_input : str, optional
+        If 'y', the contents of the target results directory will be overwritten.
+        If 'd', the directory contents will be deleted. Default is 'y'.
 """
 user_input = 'y'
 ```
@@ -83,10 +87,25 @@ Create the config object
 
 ```python
 config = load_config_from_json(path_to_config, DataTuningAutoSetup)
+```
+
+Run data tuning execution
+
+```python
 _exe_data_tuning_auto(config, user_input=user_input)
 
 default_config_exe_data_tuning_auto(user_input='y'):
 """Execute the system_data tuning process with default config."""
+```
+
+Initialize a default config (without loading JSON)
+
+```python
 config = DataTuningAutoSetup()
+```
+
+Run data tuning execution
+
+```python
 _exe_data_tuning_auto(config, user_input=user_input)
 ```

@@ -24,6 +24,12 @@ Please define the missing TODOs in the section below according to the docstrings
 ```python
 """
 Executes model tuning process and returns the best model.
+Parameters:
+    user_input : str, optional
+        If 'y', the contents of the target results directory will be overwritten.
+        If 'd', the directory contents will be deleted. Default is 'y'.
+    config_exp : DataTuningExperimentConfig
+    config_tuner : ModelTunerConfig
 """
 user_input = 'y'
 config_exp = None

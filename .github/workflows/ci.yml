@@ -3,10 +3,10 @@ name: Python CI
 on:
   push:
     branches:
-      - rpa-new
+      - main
   pull_request:
     branches:
-      - rpa-new
+      - main
 
 
 jobs:

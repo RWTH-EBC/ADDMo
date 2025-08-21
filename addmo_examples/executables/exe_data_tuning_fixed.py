@@ -83,19 +83,29 @@ def _exe_data_tuning(config, user_input='y'):
 
 def exe_data_tuning_fixed(user_input='y'):
     """Execute the system_data tuning process from a config file."""
+    # Path to the config file
     path_to_config = os.path.join(
         root_dir(), 'addmo', 's2_data_tuning', 'config', 'data_tuning_config.json'
     )
+    # Create the config object
     config = load_config_from_json(path_to_config, DataTuningFixedConfig)
+    # Run data tuning execution
     _exe_data_tuning(config, user_input)
 
 
 def default_config_exe_data_tuning_fixed(user_input='y'):
-    """Execute the system_data tuning process with default config."""
+    """Execute the system_data tuning process with default config.
+    Parameters:
+        user_input : str, optional
+            If 'y', the contents of the target results directory will be overwritten.
+            If 'd', the directory contents will be deleted. Default is 'y'."""
+    # Initialize a default config (without loading JSON)
     config = DataTuningFixedConfig()
+    # Run data tuning execution
     _exe_data_tuning(config, user_input)
 
 if __name__ == '__main__':
+    # Ask the user to overwrite or delete existing results
     user_input = input("To overwrite the existing content type in 'data_tuning_experiment_fixed' results directory <y>, for deleting the current contents type <d>: ")
-
+    # Execute data tuning
     exe_data_tuning_fixed(user_input)

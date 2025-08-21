@@ -355,11 +355,13 @@ GUI/app.py:927:0: C0301: Line too long (168/100) (line-too-long)
 GUI/app.py:932:0: C0301: Line too long (154/100) (line-too-long)
 GUI/app.py:948:0: C0301: Line too long (139/100) (line-too-long)
 GUI/app.py:950:0: C0301: Line too long (146/100) (line-too-long)
-GUI/app.py:983:0: C0301: Line too long (140/100) (line-too-long)
-GUI/app.py:1020:0: C0301: Line too long (131/100) (line-too-long)
-GUI/app.py:1032:0: C0301: Line too long (121/100) (line-too-long)
-GUI/app.py:1084:0: C0304: Final newline missing (missing-final-newline)
-GUI/app.py:1:0: C0302: Too many lines in module (1084/1000) (too-many-lines)
+GUI/app.py:1050:0: C0301: Line too long (148/100) (line-too-long)
+GUI/app.py:1057:0: C0301: Line too long (103/100) (line-too-long)
+GUI/app.py:1067:0: C0303: Trailing whitespace (trailing-whitespace)
+GUI/app.py:1079:19: C0303: Trailing whitespace (trailing-whitespace)
+GUI/app.py:1125:0: C0301: Line too long (121/100) (line-too-long)
+GUI/app.py:1177:0: C0304: Final newline missing (missing-final-newline)
+GUI/app.py:1:0: C0302: Too many lines in module (1177/1000) (too-many-lines)
 GUI/app.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 GUI/app.py:2:0: E0401: Unable to import 'streamlit' (import-error)
 GUI/app.py:4:0: C0410: Multiple imports on one line (io, os, zipfile) (multiple-imports)
@@ -379,7 +381,7 @@ GUI/app.py:17:0: E0401: Unable to import 'addmo.s4_model_testing.model_testing' 
 GUI/app.py:18:0: E0401: Unable to import 'addmo.util.load_save' (import-error)
 GUI/app.py:22:72: C0103: Variable name "zf" doesn't conform to snake_case naming style (invalid-name)
 GUI/app.py:24:16: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
-GUI/app.py:34:8: W0621: Redefining name 'key' from outer scope (line 1046) (redefined-outer-name)
+GUI/app.py:34:8: W0621: Redefining name 'key' from outer scope (line 1139) (redefined-outer-name)
 GUI/app.py:42:0: C0116: Missing function or method docstring (missing-function-docstring)
 GUI/app.py:44:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
 GUI/app.py:44:28: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
@@ -388,15 +390,15 @@ GUI/app.py:154:0: C0116: Missing function or method docstring (missing-function-
 GUI/app.py:154:0: R1710: Either all return statements in a function should return an expression, or none of them should. (inconsistent-return-statements)
 GUI/app.py:221:0: C0116: Missing function or method docstring (missing-function-docstring)
 GUI/app.py:221:0: R0914: Too many local variables (16/15) (too-many-locals)
-GUI/app.py:231:8: W0621: Redefining name 'key' from outer scope (line 1046) (redefined-outer-name)
+GUI/app.py:231:8: W0621: Redefining name 'key' from outer scope (line 1139) (redefined-outer-name)
 GUI/app.py:221:0: R0915: Too many statements (58/50) (too-many-statements)
 GUI/app.py:321:0: R0914: Too many local variables (18/15) (too-many-locals)
-GUI/app.py:354:8: W0621: Redefining name 'submitted' from outer scope (line 1033) (redefined-outer-name)
+GUI/app.py:354:8: W0621: Redefining name 'submitted' from outer scope (line 1126) (redefined-outer-name)
 GUI/app.py:321:0: R0912: Too many branches (25/12) (too-many-branches)
 GUI/app.py:321:0: R0915: Too many statements (88/50) (too-many-statements)
 GUI/app.py:459:0: C0116: Missing function or method docstring (missing-function-docstring)
 GUI/app.py:459:0: R0914: Too many local variables (24/15) (too-many-locals)
-GUI/app.py:478:12: W0621: Redefining name 'submitted' from outer scope (line 1033) (redefined-outer-name)
+GUI/app.py:478:12: W0621: Redefining name 'submitted' from outer scope (line 1126) (redefined-outer-name)
 GUI/app.py:490:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
 GUI/app.py:490:39: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
 GUI/app.py:492:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
@@ -405,7 +407,7 @@ GUI/app.py:459:0: R0912: Too many branches (30/12) (too-many-branches)
 GUI/app.py:459:0: R0915: Too many statements (111/50) (too-many-statements)
 GUI/app.py:613:0: C0116: Missing function or method docstring (missing-function-docstring)
 GUI/app.py:613:0: R0914: Too many local variables (17/15) (too-many-locals)
-GUI/app.py:629:8: W0621: Redefining name 'submitted' from outer scope (line 1033) (redefined-outer-name)
+GUI/app.py:629:8: W0621: Redefining name 'submitted' from outer scope (line 1126) (redefined-outer-name)
 GUI/app.py:657:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
 GUI/app.py:657:48: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
 GUI/app.py:660:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
@@ -415,17 +417,17 @@ GUI/app.py:669:0: C0116: Missing function or method docstring (missing-function-
 GUI/app.py:677:4: W0612: Unused variable 'choose_plotting_type' (unused-variable)
 GUI/app.py:716:0: C0116: Missing function or method docstring (missing-function-docstring)
 GUI/app.py:716:0: R0914: Too many local variables (17/15) (too-many-locals)
-GUI/app.py:741:8: W0621: Redefining name 'key' from outer scope (line 1046) (redefined-outer-name)
-GUI/app.py:762:12: W0621: Redefining name 'submitted' from outer scope (line 1033) (redefined-outer-name)
-GUI/app.py:798:16: W0621: Redefining name 'tuning_type' from outer scope (line 1032) (redefined-outer-name)
+GUI/app.py:741:8: W0621: Redefining name 'key' from outer scope (line 1139) (redefined-outer-name)
+GUI/app.py:762:12: W0621: Redefining name 'submitted' from outer scope (line 1126) (redefined-outer-name)
+GUI/app.py:798:16: W0621: Redefining name 'tuning_type' from outer scope (line 1125) (redefined-outer-name)
 GUI/app.py:777:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
 GUI/app.py:777:39: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
 GUI/app.py:716:0: R0912: Too many branches (28/12) (too-many-branches)
 GUI/app.py:716:0: R0915: Too many statements (88/50) (too-many-statements)
 GUI/app.py:879:0: C0116: Missing function or method docstring (missing-function-docstring)
 GUI/app.py:879:0: R0914: Too many local variables (16/15) (too-many-locals)
-GUI/app.py:911:12: W0621: Redefining name 'tuning_type' from outer scope (line 1032) (redefined-outer-name)
-GUI/app.py:917:12: W0621: Redefining name 'submitted' from outer scope (line 1033) (redefined-outer-name)
+GUI/app.py:911:12: W0621: Redefining name 'tuning_type' from outer scope (line 1125) (redefined-outer-name)
+GUI/app.py:917:12: W0621: Redefining name 'submitted' from outer scope (line 1126) (redefined-outer-name)
 GUI/app.py:943:17: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
 GUI/app.py:943:43: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
 GUI/app.py:879:0: R0912: Too many branches (15/12) (too-many-branches)
@@ -433,7 +435,7 @@ GUI/app.py:879:0: R0915: Too many statements (55/50) (too-many-statements)
 GUI/app.py:948:29: W0612: Unused variable 'y_new' (unused-variable)
 GUI/app.py:948:36: W0612: Unused variable 'new_config' (unused-variable)
 GUI/app.py:950:29: W0612: Unused variable 'tuned_y_new' (unused-variable)
-GUI/app.py:983:58: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
+GUI/app.py:1022:11: W0718: Catching too general exception Exception (broad-exception-caught)
 GUI/app.py:3:0: C0411: standard import "import json" should be placed before "import streamlit as st" (wrong-import-order)
 GUI/app.py:4:0: C0411: standard import "import io, os, zipfile" should be placed before "import streamlit as st" (wrong-import-order)
 GUI/app.py:4:0: C0411: standard import "import io, os, zipfile" should be placed before "import streamlit as st" (wrong-import-order)
@@ -445,6 +447,7 @@ GUI/app.py:12:0: C0412: Imports from package addmo are not grouped (ungrouped-im
 GUI/app.py:15:0: C0412: Imports from package addmo are not grouped (ungrouped-imports)
 GUI/app.py:16:0: C0412: Imports from package addmo_examples are not grouped (ungrouped-imports)
 GUI/app.py:17:0: C0412: Imports from package addmo are not grouped (ungrouped-imports)
+GUI/app.py:1:0: W0611: Unused import base64 (unused-import)
 GUI/app.py:5:0: W0611: Unused pydantic_output imported from streamlit_pydantic (unused-import)
 GUI/app.py:5:0: W0611: Unused pydantic_form imported from streamlit_pydantic (unused-import)
 GUI/app.py:16:0: W0611: Unused exe_parallel_plot imported from addmo_examples.executables.exe_data_insights (unused-import)
@@ -703,7 +706,7 @@ addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py:96:0: W0613:
 addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py:91:0: R0903: Too few public methods (1/2) (too-few-public-methods)
 addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py:3:0: W0611: Unused import wandb (unused-import)
 addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py:10:0: W0611: Unused WandbLogger imported from addmo.util.experiment_logger (unused-import)
-************* Module abstract_scorer
+************* Module scoring.abstract_scorer
 addmo/s3_model_tuning/scoring/abstract_scorer.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/scoring/abstract_scorer.py:3:0: E0401: Unable to import 'addmo.s3_model_tuning.config.model_tuning_config' (import-error)
 addmo/s3_model_tuning/scoring/abstract_scorer.py:4:0: E0401: Unable to import 'addmo.s3_model_tuning.models.abstract_model' (import-error)
@@ -718,7 +721,7 @@ addmo/s3_model_tuning/scoring/abstract_scorer.py:35:49: C0103: Argument name "x"
 addmo/s3_model_tuning/scoring/abstract_scorer.py:35:52: C0103: Argument name "y" doesn't conform to snake_case naming style (invalid-name)
 addmo/s3_model_tuning/scoring/abstract_scorer.py:39:8: W0107: Unnecessary pass statement (unnecessary-pass)
 addmo/s3_model_tuning/scoring/abstract_scorer.py:26:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module validator
+************* Module scoring.validator
 addmo/s3_model_tuning/scoring/validator.py:49:0: C0305: Trailing newlines (trailing-newlines)
 addmo/s3_model_tuning/scoring/validator.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/scoring/validator.py:1:0: E0401: Unable to import 'numpy' (import-error)
@@ -738,7 +741,7 @@ addmo/s3_model_tuning/scoring/validator.py:18:55: C0103: Argument name "x" doesn
 addmo/s3_model_tuning/scoring/validator.py:18:58: C0103: Argument name "y" doesn't conform to snake_case naming style (invalid-name)
 addmo/s3_model_tuning/scoring/validator.py:17:0: R0903: Too few public methods (1/2) (too-few-public-methods)
 addmo/s3_model_tuning/scoring/validator.py:7:0: W0611: Unused WandbLogger imported from addmo.util.experiment_logger (unused-import)
-************* Module validator_factory
+************* Module scoring.validator_factory
 addmo/s3_model_tuning/scoring/validator_factory.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/scoring/validator_factory.py:1:0: E0401: Unable to import 'addmo.s3_model_tuning.scoring.abstract_scorer' (import-error)
 addmo/s3_model_tuning/scoring/validator_factory.py:2:0: E0401: Unable to import 'addmo.s3_model_tuning.scoring.validator' (import-error)
@@ -748,10 +751,10 @@ addmo/s3_model_tuning/scoring/validator_factory.py:12:4: C0116: Missing function
 addmo/s3_model_tuning/scoring/validator_factory.py:12:4: C0103: Method name "ValidatorFactory" doesn't conform to snake_case naming style (invalid-name)
 addmo/s3_model_tuning/scoring/validator_factory.py:15:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
 addmo/s3_model_tuning/scoring/validator_factory.py:6:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module metrics.abstract_metric
+************* Module scoring.metrics.abstract_metric
 addmo/s3_model_tuning/scoring/metrics/abstract_metric.py:10:0: C0115: Missing class docstring (missing-class-docstring)
 addmo/s3_model_tuning/scoring/metrics/abstract_metric.py:10:0: R0903: Too few public methods (0/2) (too-few-public-methods)
-************* Module metrics.metric_factory
+************* Module scoring.metrics.metric_factory
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:3:0: E0401: Unable to import 'sklearn' (import-error)
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:5:0: E0401: Unable to import 'addmo.s3_model_tuning.scoring.metrics' (import-error)
@@ -759,7 +762,7 @@ addmo/s3_model_tuning/scoring/metrics/metric_factory.py:6:0: E0401: Unable to im
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:19:8: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:38:20: W0212: Access to a protected member _score_func of a client class (protected-access)
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:9:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module abstract_splitter
+************* Module scoring.validation_splitting.abstract_splitter
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:27:0: C0301: Line too long (103/100) (line-too-long)
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:1:0: E0401: Unable to import 'numpy' (import-error)
@@ -773,7 +776,7 @@ addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:50:14: C
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:50:38: C0103: Argument name "y" doesn't conform to snake_case naming style (invalid-name)
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:62:14: C0103: Argument name "X" doesn't conform to snake_case naming style (invalid-name)
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:62:38: C0103: Argument name "y" doesn't conform to snake_case naming style (invalid-name)
-************* Module custom_splitters
+************* Module scoring.validation_splitting.custom_splitters
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:1:0: E0401: Unable to import 'addmo.s3_model_tuning.scoring.validation_splitting.abstract_splitter' (import-error)
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:5:0: W0105: String statement has no effect (pointless-string-statement)
@@ -797,7 +800,7 @@ addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:70:36: C0
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:70:36: W0613: Unused argument 'y' (unused-argument)
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:70:44: W0613: Unused argument 'groups' (unused-argument)
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:43:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module splitter_factory
+************* Module scoring.validation_splitting.splitter_factory
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:3:0: E0401: Unable to import 'sklearn' (import-error)
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:5:0: E0401: Unable to import 'addmo.s3_model_tuning.scoring.validation_splitting' (import-error)
@@ -806,7 +809,7 @@ addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:7:0: E040
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:26:12: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:36:12: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:12:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module model_tuning_config
+************* Module config.model_tuning_config
 addmo/s3_model_tuning/config/model_tuning_config.py:11:0: C0301: Line too long (209/100) (line-too-long)
 addmo/s3_model_tuning/config/model_tuning_config.py:64:0: C0301: Line too long (124/100) (line-too-long)
 addmo/s3_model_tuning/config/model_tuning_config.py:92:0: C0305: Trailing newlines (trailing-newlines)
@@ -1317,15 +1320,10 @@ addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
         suffix = "_2weeks" if idx == 1 else ""
         plot_path = os.path.join(LocalLogger.directory, f"{file_name}{suffix}")
         save_pdf(fig, plot_path)
-    # Data tuning completed
     print("Finished")
 
-def default_config_exe_data_tuning_fixed(user_input='y'):
-    """Execute the system_data tuning process with default config.
-    Parameters:
-        user_input : str, optional
-            If 'y', the contents of the target results directory will be overwritten.
-            If 'd', the directory contents will be deleted. Default is 'y'."""
+def default_config_exe_data_tuning_auto(user_input='y'):
+    """Execute the system_data tuning process with default config."""
     # Initialize a default config (without loading JSON) (duplicate-code)
 addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
 ==exe_recreate_data_tuning:[32:41]
@@ -1379,5 +1377,5 @@ addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
  (duplicate-code)
 
 -----------------------------------
-Your code has been rated at 2.27/10
+Your code has been rated at 2.30/10
 

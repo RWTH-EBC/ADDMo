@@ -7130,7 +7130,7 @@
         },
         {
             "type": "convention",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -7141,7 +7141,7 @@
         },
         {
             "type": "error",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -7152,7 +7152,7 @@
         },
         {
             "type": "error",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -7163,7 +7163,7 @@
         },
         {
             "type": "error",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -7174,7 +7174,7 @@
         },
         {
             "type": "error",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -7185,7 +7185,7 @@
         },
         {
             "type": "error",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -7196,7 +7196,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "HyperparameterTunerFactory.tuner_factory",
             "line": 30,
             "column": 8,
@@ -7207,7 +7207,7 @@
         },
         {
             "type": "convention",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "HyperparameterTunerFactory.tuner_factory",
             "line": 37,
             "column": 29,
@@ -7218,7 +7218,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "HyperparameterTunerFactory",
             "line": 14,
             "column": 0,
@@ -7229,7 +7229,7 @@
         },
         {
             "type": "warning",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -7240,7 +7240,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_hyparam_tuner",
+            "module": "hyperparameter_tuning.abstract_hyparam_tuner",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -7251,7 +7251,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_hyparam_tuner",
+            "module": "hyperparameter_tuning.abstract_hyparam_tuner",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -7262,7 +7262,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_hyparam_tuner",
+            "module": "hyperparameter_tuning.abstract_hyparam_tuner",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -7273,7 +7273,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_hyparam_tuner",
+            "module": "hyperparameter_tuning.abstract_hyparam_tuner",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -7284,7 +7284,7 @@
         },
         {
             "type": "refactor",
-            "module": "abstract_hyparam_tuner",
+            "module": "hyperparameter_tuning.abstract_hyparam_tuner",
             "obj": "AbstractHyParamTuner",
             "line": 7,
             "column": 0,
@@ -7295,7 +7295,7 @@
         },
         {
             "type": "convention",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 39,
             "column": 0,
@@ -7306,7 +7306,7 @@
         },
         {
             "type": "convention",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -7317,7 +7317,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -7328,7 +7328,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -7339,7 +7339,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -7350,7 +7350,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -7361,7 +7361,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -7372,7 +7372,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -7383,7 +7383,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -7394,7 +7394,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "NoTuningTuner.tune",
             "line": 18,
             "column": 43,
@@ -7405,7 +7405,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "NoTuningTuner.tune",
             "line": 18,
             "column": 56,
@@ -7416,7 +7416,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "NoTuningTuner",
             "line": 13,
             "column": 0,
@@ -7427,7 +7427,7 @@
         },
         {
             "type": "convention",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "OptunaTuner",
             "line": 31,
             "column": 0,
@@ -7438,7 +7438,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "OptunaTuner.tune",
             "line": 32,
             "column": 0,
@@ -7449,7 +7449,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "OptunaTuner",
             "line": 31,
             "column": 0,
@@ -7460,7 +7460,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "GridSearchTuner.tune",
             "line": 96,
             "column": 0,
@@ -7471,7 +7471,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "GridSearchTuner",
             "line": 91,
             "column": 0,
@@ -7482,7 +7482,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -7493,7 +7493,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -8549,7 +8549,7 @@
         },
         {
             "type": "convention",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -8560,7 +8560,7 @@
         },
         {
             "type": "convention",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "",
             "line": 64,
             "column": 0,
@@ -8571,7 +8571,7 @@
         },
         {
             "type": "convention",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "",
             "line": 92,
             "column": 0,
@@ -8582,7 +8582,7 @@
         },
         {
             "type": "convention",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -8593,7 +8593,7 @@
         },
         {
             "type": "error",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -8604,7 +8604,7 @@
         },
         {
             "type": "error",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -8615,7 +8615,7 @@
         },
         {
             "type": "convention",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "ModelTunerConfig",
             "line": 7,
             "column": 0,
@@ -8626,7 +8626,7 @@
         },
         {
             "type": "refactor",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "ModelTunerConfig",
             "line": 7,
             "column": 0,
@@ -8637,7 +8637,7 @@
         },
         {
             "type": "convention",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "ModelTuningExperimentConfig",
             "line": 54,
             "column": 0,
@@ -8648,7 +8648,7 @@
         },
         {
             "type": "refactor",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "ModelTuningExperimentConfig",
             "line": 54,
             "column": 0,
@@ -8659,7 +8659,7 @@
         },
         {
             "type": "convention",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -11002,7 +11002,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "",
             "line": 74,
             "column": 0,
@@ -11013,7 +11013,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -11024,7 +11024,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -11035,7 +11035,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -11046,7 +11046,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "DataTuningAutoSetup",
             "line": 5,
             "column": 0,
@@ -11057,7 +11057,7 @@
         },
         {
             "type": "refactor",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "DataTuningAutoSetup",
             "line": 5,
             "column": 0,
@@ -11068,7 +11068,7 @@
         },
         {
             "type": "warning",
-            "module": "config.data_tuning_auto_config",
+            "module": "data_tuning_auto_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -12680,7 +12680,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[45:65]\n==exe_data_tuning_fixed:[145:164]\n    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')\n    data = pd.read_csv(saved_data_path, delimiter=\",\", index_col=0, encoding=\"latin1\", header=0)\n    config_path = os.path.join(LocalLogger.directory, \"config.json\")\n    with open(config_path, 'r') as f:\n        plot_config = json.load(f)\n\n    # Plot tuned data\n    figures = plot_timeseries_combined(plot_config, data)\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    print(\"Finished\")\n\ndef default_config_exe_data_tuning_auto(user_input='y'):\n    \"\"\"Execute the system_data tuning process with default config.\"\"\"\n    # Initialize a default config (without loading JSON)",
+            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[45:65]\n==exe_data_tuning_fixed:[145:164]\n    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')\n    data = pd.read_csv(saved_data_path, delimiter=\",\", index_col=0, encoding=\"latin1\", header=0)\n    config_path = os.path.join(LocalLogger.directory, \"config.json\")\n    with open(config_path, 'r') as f:\n        plot_config = json.load(f)\n\n    # Plot tuned data\n\n    figures = plot_timeseries_combined(plot_config, data)\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    # Data tuning completed\n    print(\"Finished\")\n",
             "message-id": "R0801"
         },
         {
@@ -12702,7 +12702,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==carpet_plots:[113:130]\n==plot_carpets_modelA:[74:93]\n            norm1 = colors.Normalize(vmin=np.nanmin(Z1), vmax=np.nanmax(Z1))\n            norm2 = colors.Normalize(vmin=np.nanmin(Z2), vmax=np.nanmax(Z2))\n\n            Z1_greater = np.where(Z1 >= Z2, Z1, np.nan)\n            Z1_smaller = np.where(Z1 <= Z2, Z1, np.nan)\n            Z2_greater = np.where(Z2 >= Z1, Z2, np.nan)\n            Z2_smaller = np.where(Z2 <= Z1, Z2, np.nan)\n\n            # surface plots in correct order and normalization\n            surf1 = ax.plot_surface(X, Y, Z1, cmap=surf1_cmap, visible=False, norm=norm1)\n            surf2 = ax.plot_surface(X, Y, Z2, cmap=surf2_cmap, visible=False, norm=norm2)\n            surf2_smaller = ax.plot_surface(X, Y, Z2_smaller, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_smaller = ax.plot_surface(X, Y, Z1_smaller, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n            surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n\n        # Add this line to reverse the axis direction",
+            "message": "Similar lines in 2 files\n==carpet_plots:[113:130]\n==plot_carpets_modelA:[74:93]\n            norm1 = colors.Normalize(vmin=np.nanmin(Z1), vmax=np.nanmax(Z1))\n            norm2 = colors.Normalize(vmin=np.nanmin(Z2), vmax=np.nanmax(Z2))\n\n            Z1_greater = np.where(Z1 >= Z2, Z1, np.nan)\n            Z1_smaller = np.where(Z1 <= Z2, Z1, np.nan)\n            Z2_greater = np.where(Z2 >= Z1, Z2, np.nan)\n            Z2_smaller = np.where(Z2 <= Z1, Z2, np.nan)\n\n            # surface plots in correct order and normalization\n            surf1 = ax.plot_surface(X, Y, Z1, cmap=surf1_cmap, visible=False, norm=norm1)\n            surf2 = ax.plot_surface(X, Y, Z2, cmap=surf2_cmap, visible=False, norm=norm2)\n            surf2_smaller = ax.plot_surface(X, Y, Z2_smaller, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_smaller = ax.plot_surface(X, Y, Z1_smaller, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n            surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n\n\n        # Add this line to reverse the axis direction\n        # ax.set_xlim(ax.get_xlim()[::-1])",
             "message-id": "R0801"
         },
         {
@@ -12735,7 +12735,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[53:65]\n==exe_data_tuning_fixed:[73:90]\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    print(\"Finished\")\n\ndef default_config_exe_data_tuning_auto(user_input='y'):\n    \"\"\"Execute the system_data tuning process with default config.\"\"\"\n    # Initialize a default config (without loading JSON)",
+            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[53:65]\n==exe_data_tuning_fixed:[73:90]\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    # Data tuning completed\n    print(\"Finished\")\n\ndef default_config_exe_data_tuning_fixed(user_input='y'):\n    \"\"\"Execute the system_data tuning process with default config.\n    Parameters:\n        user_input : str, optional\n            If 'y', the contents of the target results directory will be overwritten.\n            If 'd', the directory contents will be deleted. Default is 'y'.\"\"\"\n    # Initialize a default config (without loading JSON)",
             "message-id": "R0801"
         },
         {
@@ -12746,7 +12746,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_recreate_data_tuning:[32:41]\n==model_testing:[113:122]\n    LocalLogger.directory = results_dir_data_tuning(new_config)\n    LocalLogger.active = True\n    WandbLogger.project = \"addmo-test_data_auto_tuning\"\n    WandbLogger.directory = results_dir_data_tuning(new_config)\n    WandbLogger.active = False\n\n    ExperimentLogger.start_experiment(config=new_config)\n\n    # Create a new tuner instance with the same tuning parameters",
+            "message": "Similar lines in 2 files\n==exe_recreate_data_tuning:[32:41]\n==model_testing:[113:122]\n    LocalLogger.directory = results_dir_data_tuning(new_config)\n    LocalLogger.active = True\n    WandbLogger.project = \"addmo-test_data_auto_tuning\"\n    WandbLogger.directory = results_dir_data_tuning(new_config)\n    WandbLogger.active = False\n\n    ExperimentLogger.start_experiment(config=new_config)\n\n    #Using fixed config",
             "message-id": "R0801"
         },
         {
@@ -13005,7 +13005,7 @@
                 "statement": 39,
                 "warning": 0
             },
-            "hyparam_tuning_factory": {
+            "hyperparameter_tuning.hyparam_tuning_factory": {
                 "convention": 2,
                 "error": 5,
                 "fatal": 0,
@@ -13014,7 +13014,7 @@
                 "statement": 14,
                 "warning": 1
             },
-            "abstract_hyparam_tuner": {
+            "hyperparameter_tuning.abstract_hyparam_tuner": {
                 "convention": 1,
                 "error": 3,
                 "fatal": 0,
@@ -13023,7 +13023,7 @@
                 "statement": 10,
                 "warning": 0
             },
-            "hyperparameter_tuner": {
+            "hyperparameter_tuning.hyperparameter_tuner": {
                 "convention": 3,
                 "error": 7,
                 "fatal": 0,
@@ -13113,7 +13113,7 @@
                 "statement": 19,
                 "warning": 0
             },
-            "config.model_tuning_config": {
+            "model_tuning_config": {
                 "convention": 7,
                 "error": 2,
                 "fatal": 0,
@@ -13185,7 +13185,7 @@
                 "statement": 30,
                 "warning": 6
             },
-            "config.data_tuning_auto_config": {
+            "data_tuning_auto_config": {
                 "convention": 3,
                 "error": 2,
                 "fatal": 0,
@@ -13564,7 +13564,7 @@
                 "statement": 29,
                 "warning": 6
             },
-            "config.data_tuning_config": {
+            "data_tuning_config": {
                 "convention": 4,
                 "error": 3,
                 "fatal": 0,
@@ -13582,7 +13582,7 @@
                 "statement": 39,
                 "warning": 0
             },
-            "hyperparameter_tuning.hyparam_tuning_factory": {
+            "hyparam_tuning_factory": {
                 "convention": 2,
                 "error": 5,
                 "fatal": 0,
@@ -13591,7 +13591,7 @@
                 "statement": 14,
                 "warning": 1
             },
-            "hyperparameter_tuning.abstract_hyparam_tuner": {
+            "abstract_hyparam_tuner": {
                 "convention": 1,
                 "error": 3,
                 "fatal": 0,
@@ -13600,7 +13600,7 @@
                 "statement": 10,
                 "warning": 0
             },
-            "hyperparameter_tuning.hyperparameter_tuner": {
+            "hyperparameter_tuner": {
                 "convention": 3,
                 "error": 7,
                 "fatal": 0,
@@ -13690,7 +13690,7 @@
                 "statement": 19,
                 "warning": 0
             },
-            "config.model_tuning_config": {
+            "model_tuning_config": {
                 "convention": 7,
                 "error": 2,
                 "fatal": 0,
@@ -13699,7 +13699,7 @@
                 "statement": 29,
                 "warning": 0
             },
-            "models.keras_models": {
+            "keras_models": {
                 "convention": 18,
                 "error": 12,
                 "fatal": 0,
@@ -13708,7 +13708,7 @@
                 "statement": 104,
                 "warning": 7
             },
-            "models.abstract_model": {
+            "abstract_model": {
                 "convention": 11,
                 "error": 6,
                 "fatal": 0,
@@ -13717,7 +13717,7 @@
                 "statement": 92,
                 "warning": 30
             },
-            "models.model_factory": {
+            "model_factory": {
                 "convention": 7,
                 "error": 8,
                 "fatal": 0,
@@ -13726,7 +13726,7 @@
                 "statement": 55,
                 "warning": 5
             },
-            "models.scikit_learn_models": {
+            "scikit_learn_models": {
                 "convention": 25,
                 "error": 13,
                 "fatal": 0,
@@ -13762,7 +13762,7 @@
                 "statement": 30,
                 "warning": 6
             },
-            "data_tuning_auto_config": {
+            "config.data_tuning_auto_config": {
                 "convention": 3,
                 "error": 2,
                 "fatal": 0,
@@ -13896,7 +13896,7 @@
         },
         "dependencies": {
             "packaging.version": [
-                "models.keras_models"
+                "keras_models"
             ]
         },
         "duplicated_lines": {

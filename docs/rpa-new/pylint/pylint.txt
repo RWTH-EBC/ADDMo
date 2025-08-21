@@ -650,7 +650,7 @@ addmo/s2_data_tuning/data_tuner_fixed.py:28:8: W0201: Attribute 'xy_raw' defined
 addmo/s2_data_tuning/data_tuner_fixed.py:33:8: W0201: Attribute 'xy_raw' defined outside __init__ (attribute-defined-outside-init)
 addmo/s2_data_tuning/data_tuner_fixed.py:5:0: W0611: Unused load_data imported from addmo.util.load_save (unused-import)
 addmo/s2_data_tuning/data_tuner_fixed.py:6:0: W0611: Unused ExperimentLogger imported from addmo.util.experiment_logger (unused-import)
-************* Module data_tuning_config
+************* Module config.data_tuning_config
 addmo/s2_data_tuning/config/data_tuning_config.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s2_data_tuning/config/data_tuning_config.py:2:0: E0401: Unable to import 'pydantic' (import-error)
 addmo/s2_data_tuning/config/data_tuning_config.py:3:0: E0401: Unable to import 'addmo.util.load_save_utils' (import-error)
@@ -1210,7 +1210,6 @@ addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
         plot_config = json.load(f)
 
     # Plot tuned data
-
     figures = plot_timeseries_combined(plot_config, data)
     for fig in figures:
         fig.show()
@@ -1219,9 +1218,11 @@ addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
         suffix = "_2weeks" if idx == 1 else ""
         plot_path = os.path.join(LocalLogger.directory, f"{file_name}{suffix}")
         save_pdf(fig, plot_path)
-    # Data tuning completed
     print("Finished")
- (duplicate-code)
+
+def default_config_exe_data_tuning_auto(user_input='y'):
+    """Execute the system_data tuning process with default config."""
+    # Initialize a default config (without loading JSON) (duplicate-code)
 addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
 ==carpet_plots:[174:199]
 ==plot_carpets_modelA:[133:157]
@@ -1293,6 +1294,7 @@ addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
 ==model_testing:[82:101]
     new_config = DataTuningAutoSetup(**saved_config_data)
 
+    # Configure the logger
     LocalLogger.directory = results_dir_data_tuning(new_config)
     LocalLogger.active = True
     WandbLogger.project = "addmo-test_data_auto_tuning"
@@ -1309,7 +1311,8 @@ addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
     y_new = new_tuner.y
 
     tuned_xy_new = pd.concat([y_new, tuned_x_new], axis=1, join="inner").bfill()
- (duplicate-code)
+
+    # Log the tuned system data (duplicate-code)
 addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
 ==exe_data_tuning_auto:[53:65]
 ==exe_data_tuning_fixed:[73:90]
@@ -1320,10 +1323,15 @@ addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
         suffix = "_2weeks" if idx == 1 else ""
         plot_path = os.path.join(LocalLogger.directory, f"{file_name}{suffix}")
         save_pdf(fig, plot_path)
+    # Data tuning completed
     print("Finished")
 
-def default_config_exe_data_tuning_auto(user_input='y'):
-    """Execute the system_data tuning process with default config."""
+def default_config_exe_data_tuning_fixed(user_input='y'):
+    """Execute the system_data tuning process with default config.
+    Parameters:
+        user_input : str, optional
+            If 'y', the contents of the target results directory will be overwritten.
+            If 'd', the directory contents will be deleted. Default is 'y'."""
     # Initialize a default config (without loading JSON) (duplicate-code)
 addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
 ==exe_recreate_data_tuning:[32:41]
@@ -1336,7 +1344,7 @@ addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
 
     ExperimentLogger.start_experiment(config=new_config)
 
-    # Create a new tuner instance with the same tuning parameters (duplicate-code)
+    #Using fixed config (duplicate-code)
 addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
 ==experiment_logger:[17:41]
 ==models.abstract_model:[143:196]

@@ -1,6 +1,0 @@
-addmo
-=====
-
-.. toctree::
-   :maxdepth: 4
-

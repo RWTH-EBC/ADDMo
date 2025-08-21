@@ -5,8 +5,6 @@ Welcome to ADDMo’s documentation
    :hidden:
    :maxdepth: 2
 
-   overview
    examples/index
-   api/index
 
 .. mdinclude:: ../../README.md

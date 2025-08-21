@@ -82,23 +82,25 @@ def _exe_data_tuning(config, user_input='y'):
         save_pdf(fig, plot_path)
 
     print("Finished")
+```
 
-def exe_data_tuning_fixed(user_input='y'):
-    """Execute the system_data tuning process from a config file."""
-    path_to_config = os.path.join(
-        root_dir(), 'addmo', 's2_data_tuning', 'config', 'data_tuning_config.json'
-    )
-    config = load_config_from_json(path_to_config, DataTuningFixedConfig)
-    _exe_data_tuning(config, user_input)
+Please define the missing TODOs in the section below according to the docstrings.
+
+```python
+"""
+Execute the system_data tuning process from a config file.
+"""
+user_input = 'y'
+
+path_to_config = os.path.join(
+    root_dir(), 'addmo', 's2_data_tuning', 'config', 'data_tuning_config.json'
+)
+config = load_config_from_json(path_to_config, DataTuningFixedConfig)
+_exe_data_tuning(config, user_input)
 
 
-def exe_data_tuning_on_default_config(user_input='y'):
-    """Execute the system_data tuning process with default config."""
-    config = DataTuningFixedConfig()
-    _exe_data_tuning(config, user_input)
-
-if __name__ == '__main__':
-    user_input = input("To overwrite the existing content type in 'data_tuning_experiment_fixed' results directory <y>, for deleting the current contents type <d>: ")
-
-    exe_data_tuning_fixed(user_input)
+default_config_exe_data_tuning_fixed(user_input='y'):
+"""Execute the system_data tuning process with default config."""
+config = DataTuningFixedConfig()
+_exe_data_tuning(config, user_input)
 ```

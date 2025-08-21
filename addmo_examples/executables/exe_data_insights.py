@@ -57,14 +57,16 @@ def exe_carpet_plots(dir, plot_name, plot_dir, save = True, bounds= None, defaul
     pred_func_1 = prediction_func_4_regressor(regressor)
     # Load target variable
     target = model_config["name_of_target"]
+    ask_data_path= True
 
     # No need to use input data if user provides bounds and default dictionary
     if bounds is not None and defaults_dict is not None:
         variables = regressor.metadata["features_ordered"]
         measurements_data = None
+        ask_data_path = False
 
     # Load the input data and fetch variables from it
-    else:
+    if ask_data_path:
         data_path = model_config['abs_path_to_data']
         if data_path.endswith(".xlsx"):
             data = pd.read_excel(data_path, index_col=0, header=0)  # change loading of data as per the input data file ext and delimiter
@@ -115,7 +117,6 @@ def exe_scatter_carpet_plots(dir, plot_name, plot_dir, save = True, bounds= None
         data = pd.read_excel(data_path, index_col=0, header=0)  # change loading of data as per the input data file ext and delimiter
     elif data_path.endswith(".csv"):
         data = pd.read_csv(data_path, delimiter=csv.Sniffer().sniff(open(data_path).read(1024), delimiters=";,").delimiter, index_col=0, encoding="latin1", header=0)
-
     else:
         print('No data file found.')
 

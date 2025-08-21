@@ -1,8 +1,8 @@
 ![Banner](staticfiles/logo.png)
-[![documentation](https://rwth-ebc.github.io/ADDMo//master//docs/doc.svg)](https://rwth-ebc.github.io/ADDMo//master//docs/index.html)
-[![coverage](https://rwth-ebc.github.io/ADDMo//master//coverage/badge.svg)](https://rwth-ebc.github.io/ADDMo//master//coverage)
+[![documentation](https://rwth-ebc.github.io/ADDMo//main//docs/doc.svg)](https://rwth-ebc.github.io/ADDMo//main//docs/index.html)
+[![coverage](https://rwth-ebc.github.io/ADDMo//main//coverage/badge.svg)](https://rwth-ebc.github.io/ADDMo//main//coverage)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
-[![pylint](https://rwth-ebc.github.io/ADDMo//master//pylint/pylint.svg )](https://rwth-ebc.github.io/ADDMo//master//pylint/pylint.html)
+[![pylint](https://rwth-ebc.github.io/ADDMo//main//pylint/pylint.svg )](https://rwth-ebc.github.io/ADDMo//main//pylint/pylint.html)
 # ADDMo functional overview
 
 __ADDMo is an automated machine learning tool for regression tasks__
@@ -17,16 +17,16 @@ __ADDMo faces the following challenges:__
 - Overfitting & underfitting 
 
 __The used methods for facing those challenges are:__
-
+### Data tuning
 Preprocessing:
 - Scaling and normalizing: RobustScaler, StandardScaler &
 no scaling.
 
 Period selection:
-- Time series plotting: Visualization of the signal’s time series
+- Time series plotting: Visualization of the target variable's time series
 for detecting extraordinary patterns or mistakes in the data
 via matplotlib.
-- Custom period selection*
+- Custom period selection
 
 Feature creation:
 
@@ -36,7 +36,7 @@ Feature creation:
 
 Feature selection:
 - Low variance filter: Deletes features with low variance.
-- Custom feature selection* of created features.
+- Custom feature selection of created features.
 - Independent component analysis: Separating of superimposed
 features.
 - Univariate filter: Several search and rating strategies for
@@ -44,8 +44,18 @@ univariate filters.
 - Embedded recursive feature selection: Embedded multivariate
 feature selection using Random Forest where the elimination criteria is set to score or count (features).
 
+ADDMo provides two tuning modes, both leveraging these preprocessing, feature creation, and selection options:
+#### Automated Data Tuning:
+Applies preprocessing steps (e.g., lag creation, difference features) and lets you choose between manual or automated feature selection strategies.
+#### Fixed Data Tuning:
+Uses the same general fields as Auto Tuning, but with manual, user-defined control over key feature construction and selection steps such as create_lag, create_diff, and create_squared.
 
-Model tuning:
+Detailed configuration guide available directly in the GUI tab.
+
+## Model tuning 
+Importing the previously tuned data, training the model with optimizing the hyperparameters and evaluate the model via out-of-sample predictions. Mention the tuned data path (default or custom) in the config to train model on tuned data.  
+
+Pipeline: 
 - Model selection: Exhaustive wrapper for selecting the best
 out of all implemented models.
 - Hyperparameter tuning: via bayesian optimization or grid search
@@ -55,8 +65,22 @@ All those methods are applied sequentially while each method
 is optional, thus ensuring that any combination can be selected.
 
 The implemented models are 
-- “multi layer perceptron” (ANN) 
-- “epsilon support vector regression” (SVR)
+- multi layer perceptron (ANN) 
+- epsilon support vector regression (SVR)
+
+
+## Insights
+Generate insightful visualizations based on the results of previously trained and saved models. One can generate insights on models trained by ADDMo or external frameworks (only `Scikit` and `Keras` models supported).
+One can define bounds and default values for the features manually or select the existing min and max of each feature as bound and mean (numerical features) or mode (categorical features) as default values.
+
+## Testing
+Test a previously trained and saved model using new or unseen input data and predict and evaluate the model with a more sophisticated evaluation method.\
+`Select Tuning Type`: This is critical if the model was trained on tuned data. Specify the tuning type and the path where the tuned data file is saved. The file is loaded to recreate the data tuning automatically. 
+This way the model is trained and tested on the same features and ensures the tuning type and input structure match the training phase.
+## Recreate Data Tuning
+Allows recreating the exact data tuning process applied during a previous experiment, using the saved tuning configuration.
+This step is handled already in the `Testing` tab. This tab only supports tuning configurations saved by this app.
+It cannot recreate tuning from externally trained models or configurations.
 
 The flowchart below depicts the workflow of the tool:  
 
@@ -111,60 +135,12 @@ It has no natively recurrent model, means it only uses ownlags as a regular inpu
 ### Plotting Caution:
 Some users might face matplotlib interface errors while executing plotting scripts in GUI, such as not being able to view the plots. If encountering such an error, try downgrading matplotlib to 3.9
 
-# How to use it- two options
+# How to use the tool
 
 #### Option 1: via the GUI
-#### Option 2: accessing the python files and run them directly 
-
-
-__How to use the GUI:__
-
 Executing this command in the terminal where your virtual environment is activated will launch the GUI: addmo-gui
 
-## Functionalities accessible via the GUI:
-
-## Data tuning
-### Auto Data Tuning:
-
-
-Toggle key preprocessing steps like lag creation and difference features and choose between manual or automated feature selection.
-
-Default saving path: `addmo-automated-ml-regression\addmo_examples\results\test_raw_data\data_tuning_experiment_auto`
-
-Detailed configuration guide available directly in the GUI tab.
-
-### Fixed Data Tuning:
-Uses the same general fields as the auto tuning tab and supports key feature construction options:
-create_lag, create_diff, create_squared
-
-Default saving path: `addmo-automated-ml-regression\addmo_examples\results\test_raw_data\data_tuning_experiment_fixed`
-
-Feature naming convention: Temperature__lag3, Power__diff
-
-Detailed configuration guide available directly in the GUI tab.
-
-## Model tuning 
-Importing the previously tuned data, training the model with optimizing the hyperparameters and evaluate the model via out-of-sample predictions. Mention the tuned data path (default or custom) in the config to train model on tuned data.
-One can select multiple models for training in the `Models` field under the `Model Tuning Configuration`
-
-Default saving path: `addmo-automated-ml-regression\addmo_examples\results\test_raw_data\test_data_tuning\test_model_tuning`
-
-## Insights
-Generate insightful visualizations based on the results of previously trained and saved models. One can generate insights on models trained by ADDMo or external frameworks (only `Scikit` and `Keras` models supported).
-One can define bounds and default values for the features manually or select the existing min and max of each feature as bound and mean (numerical features) or mode (categorical features) as default values.
-
-## Testing
-Test a previously trained and saved model using new or unseen input data and predict and evaluate the model with a more sophisticated evaluation method.\
-`Select Tuning Type`: This is critical if the model was trained on tuned data. Specify the tuning type and the path where the tuned data file is saved. The file is loaded to recreate the data tuning automatically. 
-This way the model is trained and tested on the same features and ensures the tuning type and input structure match the training phase!
-
-## Recreate Data Tuning
-Allows recreating the exact data tuning process applied during a previous experiment, using the saved tuning configuration.
-This step is handled already in the `Testing` tab. This tab only supports tuning configurations saved by this app.
-It cannot recreate tuning from externally trained models or configurations.
-
-## Running the scripts directly via the python console:
-
+#### Option 2: accessing the execution python files and run them directly from console
 These execution files works exactly like the GUI tabs. In order to perform specific functionalities, change the saved config.json file under
 each config tab in the ADDMo folder.  
 For example: For changing the config for `Auto Data Tuning`, change the file here: `addmo-automated-ml-regression\addmo\s1_data_tuning_auto\config\data_tuning_auto_config.json`
@@ -180,11 +156,9 @@ For example: For changing the config for `Auto Data Tuning`, change the file her
 -------------------------------------------
 
 __Information about the required input shape:__
-- Input ExcelFile has to be named: "InputData" and saved in the Folder `addmo_examples/raw_input_data`
-- Sheet to read in must be the first sheet, with time as first column and all signals and features thereafter (one per column)
+- Input CSVFile has to be named: "InputData" and saved in the Folder `addmo_examples/raw_input_data`
 - The time must be in the format of "pandas.datetimeindex". If the time is in seconds, convert it into DD-MM-YY format.
 - Columns must have different names
-- By default, the delimiter for csv files is `;`. Explicitly change it under the exe_data_insights in case of different delimiters.
 
 __Understanding the handling of saving the results:__\
 A folder called results is created within the directory (`addmo-automated-ml-regression\addmo_examples`) of the python files. Within that folder a four layered folder system is used, the next layer is a subfolder of the respective previous layer. The folder are created by the program, only their names must be defined:

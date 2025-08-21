@@ -101,12 +101,12 @@ def results_dir_data_tuning_fixed(name_of_raw_data='test_raw_data'):
     return dir
 
 
-def results_model_streamlit_testing(name_tuning_exp):
+def results_model_streamlit_testing(name_tuning_exp, user_input='y'):
     """
     Returns the path to the results directory for model tuning based on config.
     """
     path = os.path.join(results_dir(), 'model_streamlit_test', name_tuning_exp)
-    return path
+    return create_or_clean_directory(path, user_input)
 
 
 def load_model_config(dir):

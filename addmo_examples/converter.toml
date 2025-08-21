@@ -1,20 +1,24 @@
+md_root    = "docs/source/examples"
+ipynb_root = "docs/source/examples"
+
 [[ExampleFile]]
-filename = "addmo_examples/executables/exe_data_tuning_auto.py"
-func_name = "exe_data_tuning_auto"
-md_path = "addmo_examples/docs"
-ipynb_path = "addmo_examples/jupyter_notebooks"
+filename   = "addmo_examples/executables/exe_data_tuning_auto.py"
+func_name  = "exe_data_tuning_auto"
+md_path    = "docs/source/examples"
+ipynb_path = "docs/source/examples"
 docstrings = true
 
 [[ExampleFile]]
-filename = "addmo_examples/executables/exe_data_tuning_fixed.py"
-func_name = "exe_data_tuning_fixed"
-md_path = "addmo_examples/docs"
-ipynb_path = "addmo_examples/jupyter_notebooks"
+filename   = "addmo_examples/executables/exe_data_tuning_fixed.py"
+func_name  = "exe_data_tuning_fixed"
+md_path    = "docs/source/examples"
+ipynb_path = "docs/source/examples"
 docstrings = true
 
 [[ExampleFile]]
-filename = "addmo_examples/executables/exe_model_tuning.py"
-func_name = "exe_model_tuning"
-md_path = "addmo_examples/docs"
-ipynb_path = "addmo_examples/jupyter_notebooks"
+filename   = "addmo_examples/executables/exe_model_tuning.py"
+func_name  = "exe_model_tuning"
+md_path    = "docs/source/examples"
+ipynb_path = "docs/source/examples"
 docstrings = true
+

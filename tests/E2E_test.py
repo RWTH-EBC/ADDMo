@@ -5,7 +5,7 @@ import pandas as pd
 from pathlib import Path
 from addmo.util.load_save import load_config_from_json, load_data
 from addmo.util.definitions import results_dir_data_tuning, results_dir_model_tuning, return_best_model
-from addmo_examples.executables.exe_data_tuning_fixed import exe_data_tuning_on_default_config
+from addmo_examples.executables.exe_data_tuning_fixed import default_config_exe_data_tuning_fixed
 from addmo_examples.executables.exe_model_tuning import exe_model_tuning
 from addmo_examples.executables.exe_data_insights import exe_carpet_plots
 from addmo.s2_data_tuning.config.data_tuning_config import DataTuningFixedConfig
@@ -35,7 +35,7 @@ class TestAddmoEndToEnd(unittest.TestCase):
     def test_full_pipeline(self):
 
         # Test Data Tuning executable file
-        exe_data_tuning_on_default_config()
+        default_config_exe_data_tuning_fixed()
         data_dir = results_dir_data_tuning(self.data_config)
         tuned_csv = os.path.join(data_dir, "tuned_xy_fixed.csv")
         self.assertTrue(os.path.exists(tuned_csv), "Tuned data file missing.")

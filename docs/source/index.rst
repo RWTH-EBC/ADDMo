@@ -1,5 +1,10 @@
-Welcome to AddMo’s documentation
+Welcome to ADDMo’s documentation
 ================================
 
-.. mdinclude::  ../../README.md
+.. toctree::
+   :hidden:
+   :maxdepth: 2
 
+   examples/index
+
+.. mdinclude:: ../../README.md

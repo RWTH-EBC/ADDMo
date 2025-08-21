@@ -1,7 +1,7 @@
 import base64
 import streamlit as st
 import json
-import os
+import io, os, zipfile
 from streamlit_pydantic import pydantic_input, pydantic_output, pydantic_form
 from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from addmo_examples.executables.exe_data_tuning_auto import exe_data_tuning_auto
@@ -16,6 +16,17 @@ from addmo.util.definitions import results_dir_data_tuning_auto, results_dir_dat
 from addmo_examples.executables.exe_data_insights import exe_time_series_plot, exe_parallel_plot, exe_carpet_plots, exe_scatter_carpet_plots, exe_interactive_parallel_plot
 from addmo.s4_model_testing.model_testing import model_test, data_tuning_recreate_fixed, data_tuning_recreate_auto
 from addmo.util.load_save import load_data
+
+def _zipdir_to_bytes(dir_path: str):
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for root, _, files in os.walk(dir_path):
+            for f in files:
+                abs_path = os.path.join(root, f)
+                rel_path = os.path.relpath(abs_path, start=dir_path)
+                zf.write(abs_path, arcname=rel_path)
+    buf.seek(0)
+    return buf
 
 def check_missing_fields(config_dict):
     """Return list of empty or missing config fields."""
@@ -79,7 +90,7 @@ def exe_streamlit_data_tuning_auto():
     auto_tuning_config = pydantic_input("Auto", DataTuningAutoSetup)
     auto_tuning_config_obj = DataTuningAutoSetup(**auto_tuning_config)
     st.session_state.auto_tuning_config = auto_tuning_config_obj
-
+    st.session_state.output_dir = None
     st.subheader("Automatic feature selection")
     st.markdown("""
         This step performs **recursive feature elimination (RFE)** using Random Forest.
@@ -96,10 +107,10 @@ def exe_streamlit_data_tuning_auto():
         st.session_state.auto_tuning_config.filter_recursive_by_score = True
 
     output_dir = results_dir_data_tuning(auto_tuning_config_obj)
-
+    st.session_state.output_dir = output_dir
     st.subheader("Output Directory Strategy")
     st.write("The default directory for saving the tuned data is:")
-    st.code(output_dir)
+    st.code(st.session_state.output_dir)
 
     dir_strategy = st.selectbox(
         "Choose how to handle existing results:",
@@ -122,16 +133,23 @@ def exe_streamlit_data_tuning_auto():
 
         with st.spinner("Running data tuning..."):
             exe_data_tuning_auto(overwrite_strategy)
-            base_path = os.path.join(output_dir, "tuned_xy_auto.pdf")
+            base_path = os.path.join(st.session_state.output_dir, "tuned_xy_auto.pdf")
             pdf_viewer(base_path, width="80%", height=855)
 
-            zoomed_path = os.path.join(output_dir, "tuned_xy_auto_2weeks.pdf")
+            zoomed_path = os.path.join(st.session_state.output_dir, "tuned_xy_auto_2weeks.pdf")
             if os.path.exists(zoomed_path):
                 st.markdown("### Zoomed View: Time Series (2 Weeks)")
                 pdf_viewer(zoomed_path, width="80%", height=855)
             st.success("Data tuning completed!")
+            zip_bytes = _zipdir_to_bytes(st.session_state.output_dir)
+            st.download_button(
+                label="Download Data Tuning Auto results folder",
+                data=zip_bytes,
+                file_name=f"{os.path.basename(st.session_state.output_dir)}.zip",
+                mime="application/zip"
+            )
 
-    return output_dir
+    return st.session_state.output_dir
 
 def exe_streamlit_data_tuning_fixed():
     st.header("Data Tuning Fixed Configuration")
@@ -155,11 +173,12 @@ def exe_streamlit_data_tuning_fixed():
 
     fixed_tuning_config = pydantic_input("Config Setup", DataTuningFixedConfig)
     fixed_config_tuning_obj = DataTuningFixedConfig(**fixed_tuning_config)
-
+    st.session_state.output_dir = None
     output_dir = results_dir_data_tuning(fixed_config_tuning_obj)
+    st.session_state.output_dir = output_dir
     st.subheader("Output Directory Strategy")
     st.write("The default directory for saving the tuned data is:")
-    st.code(output_dir)
+    st.code(st.session_state.output_dir)
 
     dir_strategy = st.selectbox(
         "Choose how to handle existing results:",
@@ -182,16 +201,22 @@ def exe_streamlit_data_tuning_fixed():
 
         with st.spinner("Running data tuning.."):
             exe_data_tuning_fixed(overwrite_strategy)
-            base_path = os.path.join(output_dir, "tuned_xy_fixed.pdf")
+            base_path = os.path.join(st.session_state.output_dir, "tuned_xy_fixed.pdf")
             pdf_viewer(base_path, width="80%", height=855)
 
-            zoomed_path = os.path.join(output_dir, "tuned_xy_fixed_2weeks.pdf")
+            zoomed_path = os.path.join(st.session_state.output_dir, "tuned_xy_fixed_2weeks.pdf")
             if os.path.exists(zoomed_path):
                 st.markdown("### Zoomed View: Time Series (2 Weeks)")
                 pdf_viewer(zoomed_path, width="80%", height=855)
             st.success("Data tuning completed!")
-
-    return output_dir
+            zip_bytes = _zipdir_to_bytes(st.session_state.output_dir)
+            st.download_button(
+                label="Download Data Tuning Fixed results folder",
+                data=zip_bytes,
+                file_name=f"{os.path.basename(st.session_state.output_dir)}.zip",
+                mime="application/zip"
+            )
+    return st.session_state.output_dir
 
 def exe_streamlit_model_tuning():
     st.header("Model Tuning")
@@ -236,9 +261,7 @@ def exe_streamlit_model_tuning():
             if path_type == "Yes":
                 func = results_dir_data_tuning_auto if type_of_tuning == "Auto" else results_dir_data_tuning_fixed
                 model_config_data["abs_path_to_data"] = os.path.join(
-                    func(model_config_data['name_of_raw_data']),
-                    f"tuned_xy_{type_of_tuning.lower()}.csv"
-                )
+                    func(),f"tuned_xy_{type_of_tuning.lower()}.csv")
                 st.success("Tuned data path set in config.")
 
             elif path_type == "No":
@@ -286,7 +309,13 @@ def exe_streamlit_model_tuning():
             st.markdown("### Model Fit Plot")
             pdf_viewer(plot_image_path, width="80%", height=855)
             st.success("Model tuning completed!")
-
+            zip_bytes = _zipdir_to_bytes(st.session_state.output_dir)
+            st.download_button(
+                label="Download Model Tuning results folder",
+                data=zip_bytes,
+                file_name=f"{os.path.basename(st.session_state.output_dir)}.zip",
+                mime="application/zip"
+            )
     return st.session_state.output_dir
 
 def generate_external_insights(model_config, model_metadata_config):
@@ -423,6 +452,7 @@ def generate_external_insights(model_config, model_metadata_config):
             """
             st.markdown("### Interactive Parallel Plot")
             st.components.v1.html(scrollable_html, height=700)
+
     return st.session_state.output_dir
 
 
@@ -577,10 +607,7 @@ def generate_addmo_insights():
                 """
                 st.markdown("### Interactive Parallel Plot")
                 st.components.v1.html(scrollable_html, height=700)
-    # keys_to_preserve = {"output_dir"}
-    # for key in list(st.session_state.keys()):
-    #     if key not in keys_to_preserve:
-    #         del st.session_state[key]
+
     return st.session_state.output_dir
 
 def input_custom_model_config():
@@ -654,13 +681,19 @@ def exe_streamlit_data_insights():
     )
     if st.session_state.choose_plotting_type == "Generate insights for a model trained by this application":
         st.session_state.path = generate_addmo_insights()
+        zip_bytes = _zipdir_to_bytes(st.session_state.output_dir)
+        st.download_button(
+            label="Download Insights results folder",
+            data=zip_bytes,
+            file_name=f"{os.path.basename(st.session_state.output_dir)}.zip",
+            mime="application/zip"
+        )
     elif st.session_state.choose_plotting_type == "Generate insights for other models":
         if "external_config_submitted" not in st.session_state:
             result = input_custom_model_config()
             if result is not None:
                 config, model_metadata_config = result
                 st.session_state.config = config
-                # st.session_state.model_dir = model_dir
                 st.session_state.model_metadata_config = model_metadata_config
                 # st.session_state.output_dir = config.get("saving_dir")
                 st.session_state.external_config_submitted = True
@@ -669,6 +702,14 @@ def exe_streamlit_data_insights():
             st.session_state.path = generate_external_insights(
                 st.session_state.config,
                 st.session_state.model_metadata_config
+            )
+
+            zip_bytes = _zipdir_to_bytes(st.session_state.output_dir)
+            st.download_button(
+                label="Download Insights results folder",
+                data=zip_bytes,
+                file_name=f"{os.path.basename(st.session_state.output_dir)}.zip",
+                mime="application/zip"
             )
     return st.session_state.path
 
@@ -781,12 +822,13 @@ def exe_streamlit_model_testing():
                             results_dir_data_tuning_auto(model_config["name_of_raw_data"]),
                             "tuned_xy_auto.csv"
                         )
+                        path_set = True
                     elif st.session_state.tuning_type == "Fixed":
                         abs_path = os.path.join(
                             results_dir_data_tuning_fixed(model_config["name_of_raw_data"]),
                             "tuned_xy_fixed.csv"
                         )
-                    path_set = True
+                        path_set = True
 
                 elif path_type == "No":
                     custom_path = st.text_input("Enter custom path for tuned data:")
@@ -809,6 +851,8 @@ def exe_streamlit_model_testing():
 
         # Run model test when all inputs are gathered
         if st.session_state.tuning_submitted or st.session_state.tuning_path_confirmed:
+            # cfg = st.session_state.get("model_config", model_config)
+            # st.write('path of tuned data is: ', model_config["abs_path_to_data"])
             error, saving_dir = model_test(
                 st.session_state.model_dir,
                 model_config,
@@ -821,6 +865,14 @@ def exe_streamlit_model_testing():
             st.write("Results saved in:", saving_dir)
             st.write("Error is:", error)
             pdf_viewer(os.path.join(saving_dir, "model_fit_scatter.pdf"), width="80%")
+            st.success("Model testing completed!")
+            zip_bytes = _zipdir_to_bytes(saving_dir)
+            st.download_button(
+                label="Download Model Testing results folder",
+                data=zip_bytes,
+                file_name=f"{os.path.basename(saving_dir)}.zip",
+                mime="application/zip"
+            )
 
     return st.session_state.saving_dir
 
@@ -847,7 +899,12 @@ def exe_streamlit_data_tuning_recreate():
         st.session_state.tuning_submitted = False
         st.session_state.dir_submitted = False
         st.session_state.model_dir = None
-
+    if "tuning_submitted" not in st.session_state:
+        st.session_state.tuning_submitted = False
+    if "dir_submitted" not in st.session_state:
+        st.session_state.dir_submitted = False
+    if "model_dir" not in st.session_state:
+        st.session_state.model_dir = None
     if not st.session_state.tuning_submitted:
         st.subheader("Choose data tuning type")
         with st.form("Type of tuning"):
@@ -863,7 +920,7 @@ def exe_streamlit_data_tuning_recreate():
             st.session_state.tuning_submitted = True
 
     if st.session_state.tuning_submitted:
-        with st.form("Model Directory"):
+        with st.form("Data Directory"):
             option = st.radio(
                 "Select directory option for loading previously saved config for tuned data:",
                 ("Default", "Custom"))
@@ -886,17 +943,24 @@ def exe_streamlit_data_tuning_recreate():
             with open(config_path, 'r') as f:
                 data_config = json.load(f)
                 input_data_exp_name = data_config.get("name_of_raw_data")
-                data_config["name_of_raw_data"] = "model_streamlit_test"
 
             if st.session_state.tuning_type == "Auto":
-                tuned_x_new, y_new, new_config = data_tuning_recreate_auto(data_config, input_data_path, input_data_exp_name)
+                tuned_x_new, y_new, new_config, tuned_xy_new = data_tuning_recreate_auto(data_config, input_data_path, input_data_exp_name)
             else:
-                tuned_x_new, tuned_y_new, new_config = data_tuning_recreate_fixed(data_config, input_data_path, input_data_exp_name)
+                tuned_x_new, tuned_y_new, new_config, tuned_xy_new = data_tuning_recreate_fixed(data_config, input_data_path, input_data_exp_name)
 
             st.write(tuned_x_new)
             result_dir = results_model_streamlit_testing(input_data_exp_name)
+            tuned_xy_new.to_csv(os.path.join(result_dir, "tuned_data_recreated.csv"))
             st.write('The tuned data is saved at:', result_dir)
             st.session_state.saving_dir = result_dir
+            zip_bytes = _zipdir_to_bytes(result_dir)
+            st.download_button(
+                label="Download Data Tuning results folder",
+                data=zip_bytes,
+                file_name=f"{os.path.basename(result_dir)}.zip",
+                mime="application/zip"
+            )
 
     return st.session_state.saving_dir
 
@@ -912,50 +976,143 @@ st.set_page_config(
 st.markdown("""
     <style>.block-container { padding-top: 1rem; }</style>
 """, unsafe_allow_html=True)
+logo_path = os.path.join(root_dir(), "staticfiles", "logo.png")
+
+colL, colC, colR = st.columns([1, 3, 1], vertical_alignment="center")
+
+with colC:
+    st.image(logo_path, width=1000, caption=None)
 
 st.markdown(
-    f"""
-    <div style="display: flex; justify-content: center;">
-        <img src="data:image/png;base64,{base64.b64encode(open(os.path.join(root_dir(), 'staticfiles', 'logo.png'), 'rb').read()).decode()}" 
-             style="width: 1000px;" alt="Logo">
-    </div>
+    """
+    <style>
+    div[data-testid="stPopover"] button {
+        border: none !important;
+        background: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        font-size: 1rem !important;
+        color: #00000 !important; 
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
+with colR:
+    try:
+        with st.popover("Contact", use_container_width=True):
+            st.markdown(
+                """
+
+This tool is developed by **E.ON Energy Research Center**,  
+Institute for Energy Efficient Buildings and Indoor Climate at **RWTH Aachen University**, Germany.
+
+**Email:** [addmo@eonerc.rwth-aachen.de](mailto:addmo@eonerc.rwth-aachen.de)
+
+RWTH Aachen University  
+E.ON Energy Research Center  
+Institute for Energy Efficient Buildings and Indoor Climate  
+Mathieustr. 10  
+52074 Aachen  
+Germany
+                """
+            )
+    except Exception:
+        with st.expander("Contact", expanded=False):
+            st.markdown(
+                """
+
+This tool is developed by **E.ON Energy Research Center**,  
+Institute for Energy Efficient Buildings and Indoor Climate at **RWTH Aachen University**, Germany.
+
+**Email:** [addmo@eonerc.rwth-aachen.de](mailto:addmo@eonerc.rwth-aachen.de)
+
+RWTH Aachen University  
+E.ON Energy Research Center  
+Institute for Energy Efficient Buildings and Indoor Climate  
+Mathieustr. 10  
+52074 Aachen  
+Germany
+                """
+            )
 
 st.markdown("""
     <h1 style='margin: 0; padding-left: 0; padding-top: 12px; line-height: 1;'>
-        ADDMO - Automated Data & Model Optimization
+        ADDMo
     </h1>
 """, unsafe_allow_html=True)
 
-st.markdown("""
-Welcome to *ADDMO, a AutoML toolkit* designed for *time series regression tasks*.
+if 'last_saved_path' not in st.session_state:
+    st.session_state.last_saved_path = ""
 
-This application helps you configure, run, and analyze the full machine learning pipeline — from *data preprocessing* to *model tuning*, with full documentation and visualization at each step.
+tab = st.radio("Choose Tab", ["About the Tool","Data Tuning", "Model Tuning", "Insights", "Model Testing", "Data Tuning Recreate"], horizontal=True)
+if tab != "About the Tool":
+    st.write("📁 Last Saved Path")
+    st.code(st.session_state.get("last_saved_path", "No path saved yet."))
+if tab == "About the Tool":
+    st.markdown(
+        """
+    ## ADDMo: Automated data-driven modeling of building energy systems via machine learning algorithms
+    
+   Welcome to *ADDMo, an AutoML toolkit* designed for *time series regression tasks*.  
+This application helps you configure, run, and analyze the full machine learning pipeline, 
+from *data preprocessing* to *model tuning*, with full documentation and visualization at each step.
 
----
+For detailed information regarding input and output formats, functionalities, 
+and the methodology behind this web app, please consult the ADDMo repository:  """)
+    st.markdown("[View the ADDMo GitHub Repository](https://github.com/RWTH-EBC/ADDMo)")
 
-### Workflow Overview
-
+    
+    st.markdown("""Workflow Overview
+    
 1. *Data Tuning (Auto/Fixed)*  
 2. *Model Tuning*  
 3. *Data Insights*  
 4. *Model Testing*  
 5. *Data Tuning Recreate*  
+    
+    Each module is modular and optional, enabling flexible experimentation and analysis.
+    """)
 
-Each module is modular and optional, enabling flexible experimentation and analysis.
-""")
+    st.markdown(""" 
+    ## License
+    The ADDMo Web App is released by RWTH Aachen University, E.ON Energy Research Center, Institute for Energy Efficient Buildings and Indoor Climate and is available under a 3-clause BSD license.
+    
+    ## Disclaimer  
 
-if 'last_saved_path' not in st.session_state:
-    st.session_state.last_saved_path = ""
+    ### Limitation of liability for internal content  
+    The content of our website has been created with care and to the best of our knowledge. However, we cannot assume any liability for the currentness of data, totality or accuracy of any of the pages.  
 
-st.write("📁 Last Saved Path")
-st.code(st.session_state.get("last_saved_path", "No path saved yet."))
+    Pursuant to section 7, para. 1 of the TMG (Telemediengesetz – Tele Media Act by German law), we as service providers are liable for our own content on these pages in accordance with general laws. However, pursuant to sections 8 to 10 of the TMG, we as service providers are not under obligation to monitor external information provided or stored on our website.  
 
-tab = st.radio("Choose Tab", ["Data Tuning", "Model Tuning", "Insights", "Model Testing", "Data Tuning Recreate"], horizontal=True)
+    Once we have become aware of a specific infringement of the law, we will immediately remove the content in question. Any liability concerning this matter can only be assumed from the point in time at which the infringement becomes known to us.  
+    
+    ### Limitation of liability for external links
+    Our website contains links to the websites of third parties („external links“). As the content of these websites is not in our hand, we cannot take any responsibility for such external content. In all cases, the provider of information of the linked websites is liable for the content and accuracy of the information provided. At the time when the links were placed, no infringements of the law were identifable to us. As soon as an infringement of the law becomes known to us, we will instanly take the link in question off our website.
 
-if tab == "Data Tuning":
+    
+    ### Copyright
+    The content and works published on this website are governed by the copyright laws of Germany. Any duplication, processing, distribution or any form of utilisation beyond the scope of copyright law shall require the prior written consent of the author or authors in question.
+    
+    
+    ### Data protection
+    The use of our website can result in the storage on our server of information about the access (date, time, page accessed). This does not represent any analysis of personal data (e.g., name, address or e-mail address). If personal data are collected, this only occurs – to the extent possible – with the prior consent of the user of the website. Any forwarding of the data to third parties without the express consent of the user shall not take place. We would like to expressly point out that the transmission of data via the Internet (e.g., by e-mail) can offer security vulnerabilities. It is therefore impossible to safeguard the data completely against access by third parties. We cannot take any responsibility for damages arising as a result of such security vulnerabilities. The use by third parties of all published contact details for the purpose of advertising is expressly excluded. We reserve the right to take legal steps in the case of the unsolicited sending of advertising information; e.g., by means of spam mail.
+    
+    
+    ### Google Analytics Disclaimer and use of cookies
+    This website uses Google Analytics, a web analytics service applied by Google, Inc. ("Google"). Google Analytics uses "cookies", which are text files placed on your computer to help analyse how visitors use the site. The information created by the cookie about your use of the website (including your IP address) will be forwarded to and stored by Google on servers in the United States. Google will use this information for the purpose of assessing your use of the website, compiling reports on website activity for website operators and supplying other services relating to website activity and internet usage. Google may also transmit this information to third parties where required to do so by law, or where such third parties process the information on Google's behalf. Google will not associate your IP address with any other data kept by Google. You may refuse the use of cookies by selecting the responsible settings on your browser, however please note that if you do so the functonalities of this websited may be limited. By using this website, you consent to the processing of data about you by Google in the manner and for the purposes set out above. You can prevent Google’s collection and use of data (cookies and IP address) by downloading and installing the browser plug-in available under https://tools.google.com/dlpage/gaoptout?hl=en. Please note that this website initializes Google Analytics with the setting anonymizeIp. This guarantees anonymized data collection by masking the last part of your IP address. Further information concerning the terms and conditions of use and data privacy can be found at http://www.google.com/analytics/terms/gb.html or at http://www.google.com/intl/en_uk/analytics/privacyoverview.html. 
+            
+    © [Institute for Energy Efficient Buildings and Indoor Climate](http://www.ebc.eonerc.rwth-aachen.de/)
+    
+     RWTH Aachen University, 2025
+        
+    """
+    )
+
+
+elif tab == "Data Tuning":
     st.header("Choose Data Tuning type")
 
     if "tuning_type" not in st.session_state:

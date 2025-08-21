@@ -61,23 +61,32 @@ def _exe_data_tuning_auto(config, user_input='y'):
         plot_path = os.path.join(LocalLogger.directory, f"{file_name}{suffix}")
         save_pdf(fig, plot_path)
     print("Finished")
+```
 
-def exe_data_tuning_auto(user_input='y'):
-    """Execute the system_data tuning process with user defined config."""
-    # Path to the config file
-    path_to_config = os.path.join(root_dir(), 'addmo', 's1_data_tuning_auto', 'config',
-                                  'data_tuning_auto_config.json')
+Please define the missing TODOs in the section below according to the docstrings.
 
-    # Create the config object
-    config = load_config_from_json(path_to_config, DataTuningAutoSetup)
-    _exe_data_tuning_auto(config, user_input='y')
+```python
+"""
+Execute the system_data tuning process with user defined config.
+"""
+user_input = 'y'
+```
 
-def exe_data_tuning_auto_default_config(user_input='y'):
-    """Execute the system_data tuning process with default config."""
-    config = DataTuningAutoSetup()
-    _exe_data_tuning_auto(config, user_input='y')
+Path to the config file
 
-if __name__ == "__main__":
-    user_input = input("To overwrite the existing content type in 'data_tuning_experiment_auto' results directory <y>, for deleting the current contents type <d>: ")
-    exe_data_tuning_auto(user_input)
+```python
+path_to_config = os.path.join(root_dir(), 'addmo', 's1_data_tuning_auto', 'config',
+                              'data_tuning_auto_config.json')
+```
+
+Create the config object
+
+```python
+config = load_config_from_json(path_to_config, DataTuningAutoSetup)
+_exe_data_tuning_auto(config, user_input=user_input)
+
+default_config_exe_data_tuning_auto(user_input='y'):
+"""Execute the system_data tuning process with default config."""
+config = DataTuningAutoSetup()
+_exe_data_tuning_auto(config, user_input=user_input)
 ```

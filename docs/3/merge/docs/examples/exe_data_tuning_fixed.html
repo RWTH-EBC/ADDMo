@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;no title&gt; &mdash; addmo 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+
+  
+      <script src="../_static/jquery.js"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+      <script src="../_static/doctools.js"></script>
+      <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="exe_model_tuning.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="exe_data_tuning_auto.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            addmo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">addmo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Examples</a></li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/examples/exe_data_tuning_fixed.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.definitions</span><span class="w"> </span><span class="kn">import</span> <span class="n">results_dir_data_tuning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.load_save_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">root_dir</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.experiment_logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocalLogger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.experiment_logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">WandbLogger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.experiment_logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExperimentLogger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.s2_data_tuning.config.data_tuning_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataTuningFixedConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.s2_data_tuning.data_tuner_fixed</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataTunerByConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.load_save</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.plotting_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_pdf</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.data_handling</span><span class="w"> </span><span class="kn">import</span> <span class="n">split_target_features</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.s5_insights.model_plots.time_series</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_timeseries_combined</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.load_save</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_config_from_json</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_exe_data_tuning</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">user_input</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Execute the system_data tuning process in a fixed manner.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Configure the logger</span>
+    <span class="n">LocalLogger</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">LocalLogger</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+        <span class="n">LocalLogger</span><span class="o">.</span><span class="n">directory</span> <span class="o">=</span> <span class="n">results_dir_data_tuning</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="n">user_input</span><span class="p">)</span>
+
+    <span class="n">WandbLogger</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="s2">&quot;addmo-tests_data_tuning_fixed&quot;</span>
+    <span class="n">WandbLogger</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">WandbLogger</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+        <span class="n">WandbLogger</span><span class="o">.</span><span class="n">directory</span> <span class="o">=</span> <span class="n">results_dir_data_tuning</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="n">user_input</span><span class="p">)</span>
+
+    <span class="c1"># Initialize logging</span>
+    <span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">start_experiment</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c1"># Create the system_data tuner</span>
+    <span class="n">tuner</span> <span class="o">=</span> <span class="n">DataTunerByConfig</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c1"># Load the system_data</span>
+    <span class="n">xy_raw</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">abs_path_to_data</span><span class="p">)</span>
+    <span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;xy_testraw&quot;</span><span class="p">:</span> <span class="n">xy_raw</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
+
+    <span class="c1"># Split the system_data</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">split_target_features</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">name_of_target</span><span class="p">,</span> <span class="n">xy_raw</span><span class="p">)</span>
+
+    <span class="c1"># Tune the system_data</span>
+    <span class="n">tuned_x</span> <span class="o">=</span> <span class="n">tuner</span><span class="o">.</span><span class="n">tune_fixed</span><span class="p">(</span><span class="n">xy_raw</span><span class="p">)</span>
+    <span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;x_tuned&quot;</span><span class="p">:</span> <span class="n">tuned_x</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
+
+    <span class="c1"># Merge target and features</span>
+    <span class="n">xy_tuned</span> <span class="o">=</span> <span class="n">tuned_x</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;xy_tuned&quot;</span><span class="p">:</span> <span class="n">xy_tuned</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
+
+    <span class="c1"># Drop NaNs</span>
+    <span class="n">xy_tuned</span> <span class="o">=</span> <span class="n">xy_tuned</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+    <span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;xy_tuned&quot;</span><span class="p">:</span> <span class="n">xy_tuned</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
+
+    <span class="c1"># Log the tuned system_data</span>
+    <span class="n">file_name</span> <span class="o">=</span> <span class="s1">&#39;tuned_xy_fixed&#39;</span>
+    <span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log_artifact</span><span class="p">(</span><span class="n">xy_tuned</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">art_type</span><span class="o">=</span><span class="s1">&#39;system_data&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Finish logging</span>
+    <span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">finish_experiment</span><span class="p">()</span>
+
+    <span class="c1"># Return file paths for plotting data</span>
+    <span class="n">saved_data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LocalLogger</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">saved_data_path</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;latin1&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">config_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LocalLogger</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;config.json&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">plot_config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="c1"># Plot tuned data</span>
+
+    <span class="n">figures</span> <span class="o">=</span> <span class="n">plot_timeseries_combined</span><span class="p">(</span><span class="n">plot_config</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">fig</span> <span class="ow">in</span> <span class="n">figures</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">LocalLogger</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">fig</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">figures</span><span class="p">):</span>
+        <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;_2weeks&quot;</span> <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">plot_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LocalLogger</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">save_pdf</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">plot_path</span><span class="p">)</span>
+    <span class="c1"># Data tuning completed</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finished&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">default_config_exe_data_tuning_fixed</span><span class="p">(</span><span class="n">user_input</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute the system_data tuning process with default config.</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        user_input : str, optional</span>
+<span class="sd">            If &#39;y&#39;, the contents of the target results directory will be overwritten.</span>
+<span class="sd">            If &#39;d&#39;, the directory contents will be deleted. Default is &#39;y&#39;.&quot;&quot;&quot;</span>
+    <span class="c1"># Initialize a default config (without loading JSON)</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">DataTuningFixedConfig</span><span class="p">()</span>
+    <span class="c1"># Run data tuning execution</span>
+    <span class="n">_exe_data_tuning</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">user_input</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Please define the missing TODOs in the section below according to the docstrings.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Execute the system_data tuning process from a config file.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">user_input</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span>
+</pre></div>
+</div>
+<p>Path to the config file</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">path_to_config</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">root_dir</span><span class="p">(),</span> <span class="s1">&#39;addmo&#39;</span><span class="p">,</span> <span class="s1">&#39;s2_data_tuning&#39;</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;data_tuning_config.json&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Create the config object</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="n">load_config_from_json</span><span class="p">(</span><span class="n">path_to_config</span><span class="p">,</span> <span class="n">DataTuningFixedConfig</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Configure the logger</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">LocalLogger</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">LocalLogger</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+    <span class="n">LocalLogger</span><span class="o">.</span><span class="n">directory</span> <span class="o">=</span> <span class="n">results_dir_data_tuning</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">user_input</span><span class="p">)</span>
+
+<span class="n">WandbLogger</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="s2">&quot;addmo-tests_data_tuning_fixed&quot;</span>
+<span class="n">WandbLogger</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">if</span> <span class="n">WandbLogger</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+    <span class="n">WandbLogger</span><span class="o">.</span><span class="n">directory</span> <span class="o">=</span> <span class="n">results_dir_data_tuning</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">user_input</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Initialize logging</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">start_experiment</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create the system_data tuner</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tuner</span> <span class="o">=</span> <span class="n">DataTunerByConfig</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Load the system_data</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xy_raw</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">abs_path_to_data</span><span class="p">)</span>
+<span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;xy_testraw&quot;</span><span class="p">:</span> <span class="n">xy_raw</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
+</pre></div>
+</div>
+<p>Split the system_data</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">split_target_features</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">name_of_target</span><span class="p">,</span> <span class="n">xy_raw</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Tune the system_data</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tuned_x</span> <span class="o">=</span> <span class="n">tuner</span><span class="o">.</span><span class="n">tune_fixed</span><span class="p">(</span><span class="n">xy_raw</span><span class="p">)</span>
+<span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;x_tuned&quot;</span><span class="p">:</span> <span class="n">tuned_x</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
+</pre></div>
+</div>
+<p>Merge target and features</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xy_tuned</span> <span class="o">=</span> <span class="n">tuned_x</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;xy_tuned&quot;</span><span class="p">:</span> <span class="n">xy_tuned</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
+</pre></div>
+</div>
+<p>Drop NaNs</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xy_tuned</span> <span class="o">=</span> <span class="n">xy_tuned</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;xy_tuned&quot;</span><span class="p">:</span> <span class="n">xy_tuned</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
+</pre></div>
+</div>
+<p>Log the tuned system_data</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">file_name</span> <span class="o">=</span> <span class="s1">&#39;tuned_xy_fixed&#39;</span>
+<span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log_artifact</span><span class="p">(</span><span class="n">xy_tuned</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">art_type</span><span class="o">=</span><span class="s1">&#39;system_data&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finish logging</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">finish_experiment</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Return file paths for plotting data</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">saved_data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LocalLogger</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">saved_data_path</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;latin1&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">config_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LocalLogger</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;config.json&quot;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">plot_config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Plot tuned data</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">figures</span> <span class="o">=</span> <span class="n">plot_timeseries_combined</span><span class="p">(</span><span class="n">plot_config</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">fig</span> <span class="ow">in</span> <span class="n">figures</span><span class="p">:</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">LocalLogger</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">fig</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">figures</span><span class="p">):</span>
+    <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;_2weeks&quot;</span> <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">plot_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LocalLogger</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">save_pdf</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">plot_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Data tuning completed</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finished&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="exe_data_tuning_auto.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="exe_model_tuning.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, EON EBC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

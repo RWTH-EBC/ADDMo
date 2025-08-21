@@ -4,7 +4,7 @@ GUI/app.py:5:48: F401 [*] `streamlit_pydantic.pydantic_output` imported but unus
 GUI/app.py:5:65: F401 [*] `streamlit_pydantic.pydantic_form` imported but unused
 GUI/app.py:16:80: F401 [*] `addmo_examples.executables.exe_data_insights.exe_parallel_plot` imported but unused
 GUI/app.py:18:34: F401 [*] `addmo.util.load_save.load_data` imported but unused
-GUI/app.py:668:5: F841 Local variable `choose_plotting_type` is assigned to but never used
+GUI/app.py:677:5: F841 Local variable `choose_plotting_type` is assigned to but never used
 addmo/s1_data_tuning_auto/config/data_tuning_auto_config.py:2:40: F401 [*] `pydantic.PrivateAttr` imported but unused
 addmo/s1_data_tuning_auto/feature_construction.py:4:38: F401 [*] `addmo.util.data_handling.split_target_features` imported but unused
 addmo/s1_data_tuning_auto/feature_construction.py:5:61: F401 [*] `addmo.s3_model_tuning.scoring.validator_factory.ValidatorFactory` imported but unused
@@ -39,6 +39,8 @@ addmo/s3_model_tuning/models/model_factory.py:70:9: F811 Redefinition of unused 
 addmo/s3_model_tuning/models/scikit_learn_models.py:8:51: F401 [*] `sklearn.preprocessing.MaxAbsScaler` imported but unused
 addmo/s3_model_tuning/models/scikit_learn_models.py:82:30: F541 [*] f-string without any placeholders
 addmo/s3_model_tuning/scoring/validator.py:7:42: F401 [*] `addmo.util.experiment_logger.WandbLogger` imported but unused
+addmo/s4_model_testing/model_testing.py:9:37: F401 [*] `addmo.util.definitions.results_dir_data_tuning_fixed` imported but unused
+addmo/s4_model_testing/model_testing.py:9:86: F401 [*] `addmo.util.definitions.results_dir_data_tuning_auto` imported but unused
 addmo/s5_insights/model_plots/carpet_plots.py:6:21: F401 [*] `pathlib.Path` imported but unused
 addmo/s5_insights/model_plots/carpet_plots.py:8:37: F401 [*] `addmo.util.definitions.return_results_dir_model_tuning` imported but unused
 addmo/s5_insights/model_plots/carpet_plots.py:8:70: F401 [*] `addmo.util.definitions.return_best_model` imported but unused
@@ -74,6 +76,7 @@ addmo/util/plotting_utils.py:5:22: F401 [*] `pydantic.BaseModel` imported but un
 addmo/util/plotting_utils.py:5:33: F401 [*] `pydantic.Field` imported but unused
 addmo/util/plotting_utils.py:5:40: F401 [*] `pydantic.create_model` imported but unused
 addmo_examples/executables/exe_data_insights.py:2:1: E401 Multiple imports on one line
+addmo_examples/executables/exe_model_testing.py:5:37: F401 [*] `addmo.util.definitions.return_results_dir_model_tuning` imported but unused
 addmo_examples/executables/exe_model_tuning.py:4:62: F401 [*] `addmo.util.definitions.results_dir_data_tuning_auto` imported but unused
 addmo_examples/executables/exe_model_tuning.py:4:92: F401 [*] `addmo.util.definitions.results_dir_data_tuning_fixed` imported but unused
 tests/E2E_test.py:5:21: F401 [*] `pathlib.Path` imported but unused
@@ -87,6 +90,6 @@ tests/test_data_tuning.py:7:59: F401 [*] `addmo.util.experiment_logger.LocalLogg
 tests/test_data_tuning.py:7:72: F401 [*] `addmo.util.experiment_logger.WandbLogger` imported but unused
 tests/test_model_tuning.py:5:62: F401 [*] `addmo.s3_model_tuning.config.model_tuning_config.ModelTunerConfig` imported but unused
 tests/test_model_tuning.py:8:34: F401 [*] `addmo.util.load_save.load_config_from_json` imported but unused
-Found 88 errors.
-[*] 69 fixable with the `--fix` option (12 hidden fixes can be enabled with the `--unsafe-fixes` option).
+Found 91 errors.
+[*] 72 fixable with the `--fix` option (12 hidden fixes can be enabled with the `--unsafe-fixes` option).
 </pre></body></html>

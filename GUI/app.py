@@ -90,7 +90,7 @@ def exe_streamlit_data_tuning_auto():
     auto_tuning_config = pydantic_input("Auto", DataTuningAutoSetup)
     auto_tuning_config_obj = DataTuningAutoSetup(**auto_tuning_config)
     st.session_state.auto_tuning_config = auto_tuning_config_obj
-
+    st.session_state.output_dir = None
     st.subheader("Automatic feature selection")
     st.markdown("""
         This step performs **recursive feature elimination (RFE)** using Random Forest.
@@ -107,10 +107,10 @@ def exe_streamlit_data_tuning_auto():
         st.session_state.auto_tuning_config.filter_recursive_by_score = True
 
     output_dir = results_dir_data_tuning(auto_tuning_config_obj)
-
+    st.session_state.output_dir = output_dir
     st.subheader("Output Directory Strategy")
     st.write("The default directory for saving the tuned data is:")
-    st.code(output_dir)
+    st.code(st.session_state.output_dir)
 
     dir_strategy = st.selectbox(
         "Choose how to handle existing results:",
@@ -133,23 +133,23 @@ def exe_streamlit_data_tuning_auto():
 
         with st.spinner("Running data tuning..."):
             exe_data_tuning_auto(overwrite_strategy)
-            base_path = os.path.join(output_dir, "tuned_xy_auto.pdf")
+            base_path = os.path.join(st.session_state.output_dir, "tuned_xy_auto.pdf")
             pdf_viewer(base_path, width="80%", height=855)
 
-            zoomed_path = os.path.join(output_dir, "tuned_xy_auto_2weeks.pdf")
+            zoomed_path = os.path.join(st.session_state.output_dir, "tuned_xy_auto_2weeks.pdf")
             if os.path.exists(zoomed_path):
                 st.markdown("### Zoomed View: Time Series (2 Weeks)")
                 pdf_viewer(zoomed_path, width="80%", height=855)
             st.success("Data tuning completed!")
-            zip_bytes = _zipdir_to_bytes(output_dir)
+            zip_bytes = _zipdir_to_bytes(st.session_state.output_dir)
             st.download_button(
                 label="Download Data Tuning Auto results folder",
                 data=zip_bytes,
-                file_name=f"{os.path.basename(output_dir)}.zip",
+                file_name=f"{os.path.basename(st.session_state.output_dir)}.zip",
                 mime="application/zip"
             )
 
-    return output_dir
+    return st.session_state.output_dir
 
 def exe_streamlit_data_tuning_fixed():
     st.header("Data Tuning Fixed Configuration")
@@ -173,11 +173,12 @@ def exe_streamlit_data_tuning_fixed():
 
     fixed_tuning_config = pydantic_input("Config Setup", DataTuningFixedConfig)
     fixed_config_tuning_obj = DataTuningFixedConfig(**fixed_tuning_config)
-
+    st.session_state.output_dir = None
     output_dir = results_dir_data_tuning(fixed_config_tuning_obj)
+    st.session_state.output_dir = output_dir
     st.subheader("Output Directory Strategy")
     st.write("The default directory for saving the tuned data is:")
-    st.code(output_dir)
+    st.code(st.session_state.output_dir)
 
     dir_strategy = st.selectbox(
         "Choose how to handle existing results:",
@@ -200,16 +201,22 @@ def exe_streamlit_data_tuning_fixed():
 
         with st.spinner("Running data tuning.."):
             exe_data_tuning_fixed(overwrite_strategy)
-            base_path = os.path.join(output_dir, "tuned_xy_fixed.pdf")
+            base_path = os.path.join(st.session_state.output_dir, "tuned_xy_fixed.pdf")
             pdf_viewer(base_path, width="80%", height=855)
 
-            zoomed_path = os.path.join(output_dir, "tuned_xy_fixed_2weeks.pdf")
+            zoomed_path = os.path.join(st.session_state.output_dir, "tuned_xy_fixed_2weeks.pdf")
             if os.path.exists(zoomed_path):
                 st.markdown("### Zoomed View: Time Series (2 Weeks)")
                 pdf_viewer(zoomed_path, width="80%", height=855)
             st.success("Data tuning completed!")
-
-    return output_dir
+            zip_bytes = _zipdir_to_bytes(st.session_state.output_dir)
+            st.download_button(
+                label="Download Data Tuning Fixed results folder",
+                data=zip_bytes,
+                file_name=f"{os.path.basename(st.session_state.output_dir)}.zip",
+                mime="application/zip"
+            )
+    return st.session_state.output_dir
 
 def exe_streamlit_model_tuning():
     st.header("Model Tuning")
@@ -254,9 +261,7 @@ def exe_streamlit_model_tuning():
             if path_type == "Yes":
                 func = results_dir_data_tuning_auto if type_of_tuning == "Auto" else results_dir_data_tuning_fixed
                 model_config_data["abs_path_to_data"] = os.path.join(
-                    func(model_config_data['name_of_raw_data']),
-                    f"tuned_xy_{type_of_tuning.lower()}.csv"
-                )
+                    func(),f"tuned_xy_{type_of_tuning.lower()}.csv")
                 st.success("Tuned data path set in config.")
 
             elif path_type == "No":
@@ -304,7 +309,13 @@ def exe_streamlit_model_tuning():
             st.markdown("### Model Fit Plot")
             pdf_viewer(plot_image_path, width="80%", height=855)
             st.success("Model tuning completed!")
-
+            zip_bytes = _zipdir_to_bytes(st.session_state.output_dir)
+            st.download_button(
+                label="Download Model Tuning results folder",
+                data=zip_bytes,
+                file_name=f"{os.path.basename(st.session_state.output_dir)}.zip",
+                mime="application/zip"
+            )
     return st.session_state.output_dir
 
 def generate_external_insights(model_config, model_metadata_config):
@@ -441,6 +452,7 @@ def generate_external_insights(model_config, model_metadata_config):
             """
             st.markdown("### Interactive Parallel Plot")
             st.components.v1.html(scrollable_html, height=700)
+
     return st.session_state.output_dir
 
 
@@ -595,10 +607,7 @@ def generate_addmo_insights():
                 """
                 st.markdown("### Interactive Parallel Plot")
                 st.components.v1.html(scrollable_html, height=700)
-    # keys_to_preserve = {"output_dir"}
-    # for key in list(st.session_state.keys()):
-    #     if key not in keys_to_preserve:
-    #         del st.session_state[key]
+
     return st.session_state.output_dir
 
 def input_custom_model_config():
@@ -672,13 +681,19 @@ def exe_streamlit_data_insights():
     )
     if st.session_state.choose_plotting_type == "Generate insights for a model trained by this application":
         st.session_state.path = generate_addmo_insights()
+        zip_bytes = _zipdir_to_bytes(st.session_state.output_dir)
+        st.download_button(
+            label="Download Insights results folder",
+            data=zip_bytes,
+            file_name=f"{os.path.basename(st.session_state.output_dir)}.zip",
+            mime="application/zip"
+        )
     elif st.session_state.choose_plotting_type == "Generate insights for other models":
         if "external_config_submitted" not in st.session_state:
             result = input_custom_model_config()
             if result is not None:
                 config, model_metadata_config = result
                 st.session_state.config = config
-                # st.session_state.model_dir = model_dir
                 st.session_state.model_metadata_config = model_metadata_config
                 # st.session_state.output_dir = config.get("saving_dir")
                 st.session_state.external_config_submitted = True
@@ -687,6 +702,14 @@ def exe_streamlit_data_insights():
             st.session_state.path = generate_external_insights(
                 st.session_state.config,
                 st.session_state.model_metadata_config
+            )
+
+            zip_bytes = _zipdir_to_bytes(st.session_state.output_dir)
+            st.download_button(
+                label="Download Insights results folder",
+                data=zip_bytes,
+                file_name=f"{os.path.basename(st.session_state.output_dir)}.zip",
+                mime="application/zip"
             )
     return st.session_state.path
 
@@ -799,12 +822,13 @@ def exe_streamlit_model_testing():
                             results_dir_data_tuning_auto(model_config["name_of_raw_data"]),
                             "tuned_xy_auto.csv"
                         )
+                        path_set = True
                     elif st.session_state.tuning_type == "Fixed":
                         abs_path = os.path.join(
                             results_dir_data_tuning_fixed(model_config["name_of_raw_data"]),
                             "tuned_xy_fixed.csv"
                         )
-                    path_set = True
+                        path_set = True
 
                 elif path_type == "No":
                     custom_path = st.text_input("Enter custom path for tuned data:")
@@ -827,6 +851,8 @@ def exe_streamlit_model_testing():
 
         # Run model test when all inputs are gathered
         if st.session_state.tuning_submitted or st.session_state.tuning_path_confirmed:
+            # cfg = st.session_state.get("model_config", model_config)
+            # st.write('path of tuned data is: ', model_config["abs_path_to_data"])
             error, saving_dir = model_test(
                 st.session_state.model_dir,
                 model_config,
@@ -839,6 +865,14 @@ def exe_streamlit_model_testing():
             st.write("Results saved in:", saving_dir)
             st.write("Error is:", error)
             pdf_viewer(os.path.join(saving_dir, "model_fit_scatter.pdf"), width="80%")
+            st.success("Model testing completed!")
+            zip_bytes = _zipdir_to_bytes(saving_dir)
+            st.download_button(
+                label="Download Model Testing results folder",
+                data=zip_bytes,
+                file_name=f"{os.path.basename(saving_dir)}.zip",
+                mime="application/zip"
+            )
 
     return st.session_state.saving_dir
 
@@ -865,7 +899,12 @@ def exe_streamlit_data_tuning_recreate():
         st.session_state.tuning_submitted = False
         st.session_state.dir_submitted = False
         st.session_state.model_dir = None
-
+    if "tuning_submitted" not in st.session_state:
+        st.session_state.tuning_submitted = False
+    if "dir_submitted" not in st.session_state:
+        st.session_state.dir_submitted = False
+    if "model_dir" not in st.session_state:
+        st.session_state.model_dir = None
     if not st.session_state.tuning_submitted:
         st.subheader("Choose data tuning type")
         with st.form("Type of tuning"):
@@ -881,7 +920,7 @@ def exe_streamlit_data_tuning_recreate():
             st.session_state.tuning_submitted = True
 
     if st.session_state.tuning_submitted:
-        with st.form("Model Directory"):
+        with st.form("Data Directory"):
             option = st.radio(
                 "Select directory option for loading previously saved config for tuned data:",
                 ("Default", "Custom"))
@@ -904,17 +943,24 @@ def exe_streamlit_data_tuning_recreate():
             with open(config_path, 'r') as f:
                 data_config = json.load(f)
                 input_data_exp_name = data_config.get("name_of_raw_data")
-                data_config["name_of_raw_data"] = "model_streamlit_test"
 
             if st.session_state.tuning_type == "Auto":
-                tuned_x_new, y_new, new_config = data_tuning_recreate_auto(data_config, input_data_path, input_data_exp_name)
+                tuned_x_new, y_new, new_config, tuned_xy_new = data_tuning_recreate_auto(data_config, input_data_path, input_data_exp_name)
             else:
-                tuned_x_new, tuned_y_new, new_config = data_tuning_recreate_fixed(data_config, input_data_path, input_data_exp_name)
+                tuned_x_new, tuned_y_new, new_config, tuned_xy_new = data_tuning_recreate_fixed(data_config, input_data_path, input_data_exp_name)
 
             st.write(tuned_x_new)
             result_dir = results_model_streamlit_testing(input_data_exp_name)
+            tuned_xy_new.to_csv(os.path.join(result_dir, "tuned_data_recreated.csv"))
             st.write('The tuned data is saved at:', result_dir)
             st.session_state.saving_dir = result_dir
+            zip_bytes = _zipdir_to_bytes(result_dir)
+            st.download_button(
+                label="Download Data Tuning results folder",
+                data=zip_bytes,
+                file_name=f"{os.path.basename(result_dir)}.zip",
+                mime="application/zip"
+            )
 
     return st.session_state.saving_dir
 

@@ -68,12 +68,12 @@ def exe_data_tuning_auto(user_input='y'):
 
     # Create the config object
     config = load_config_from_json(path_to_config, DataTuningAutoSetup)
-    _exe_data_tuning_auto(config, user_input='y')
+    _exe_data_tuning_auto(config, user_input=user_input)
 
-def exe_data_tuning_auto_default_config(user_input='y'):
+def default_config_exe_data_tuning_auto(user_input='y'):
     """Execute the system_data tuning process with default config."""
     config = DataTuningAutoSetup()
-    _exe_data_tuning_auto(config, user_input='y')
+    _exe_data_tuning_auto(config, user_input=user_input)
 
 if __name__ == "__main__":
     user_input = input("To overwrite the existing content type in 'data_tuning_experiment_auto' results directory <y>, for deleting the current contents type <d>: ")

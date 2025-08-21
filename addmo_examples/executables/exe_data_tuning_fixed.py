@@ -90,7 +90,7 @@ def exe_data_tuning_fixed(user_input='y'):
     _exe_data_tuning(config, user_input)
 
 
-def exe_data_tuning_on_default_config(user_input='y'):
+def default_config_exe_data_tuning_fixed(user_input='y'):
     """Execute the system_data tuning process with default config."""
     config = DataTuningFixedConfig()
     _exe_data_tuning(config, user_input)

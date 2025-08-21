@@ -22,3 +22,23 @@ md_path    = "addmo_examples/docs"
 ipynb_path = "addmo_examples/jupyter_notebooks"
 docstrings = true
 
+[[ExampleFile]]
+filename   = "addmo_examples/executables/exe_data_insights.py"
+func_name  = "exe_scatter_carpet_plots"
+md_path    = "addmo_examples/docs"
+ipynb_path = "addmo_examples/jupyter_notebooks"
+docstrings = true
+
+[[ExampleFile]]
+filename   = "addmo_examples/executables/exe_data_insights.py"
+func_name  = "exe_time_series_plot"
+md_path    = "addmo_examples/docs"
+ipynb_path = "addmo_examples/jupyter_notebooks"
+docstrings = true
+
+[[ExampleFile]]
+filename   = "addmo_examples/executables/exe_data_insights.py"
+func_name  = "exe_parallel_plot"
+md_path    = "addmo_examples/docs"
+ipynb_path = "addmo_examples/jupyter_notebooks"
+docstrings = true

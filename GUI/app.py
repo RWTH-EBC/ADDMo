@@ -976,50 +976,143 @@ st.set_page_config(
 st.markdown("""
     <style>.block-container { padding-top: 1rem; }</style>
 """, unsafe_allow_html=True)
+logo_path = os.path.join(root_dir(), "staticfiles", "logo.png")
+
+colL, colC, colR = st.columns([1, 3, 1], vertical_alignment="center")
+
+with colC:
+    st.image(logo_path, width=1000, caption=None)
 
 st.markdown(
-    f"""
-    <div style="display: flex; justify-content: center;">
-        <img src="data:image/png;base64,{base64.b64encode(open(os.path.join(root_dir(), 'staticfiles', 'logo.png'), 'rb').read()).decode()}" 
-             style="width: 1000px;" alt="Logo">
-    </div>
+    """
+    <style>
+    div[data-testid="stPopover"] button {
+        border: none !important;
+        background: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        font-size: 1rem !important;
+        color: #00000 !important; 
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
+with colR:
+    try:
+        with st.popover("Contact", use_container_width=True):
+            st.markdown(
+                """
+
+This tool is developed by **E.ON Energy Research Center**,  
+Institute for Energy Efficient Buildings and Indoor Climate at **RWTH Aachen University**, Germany.
+
+**Email:** [addmo@eonerc.rwth-aachen.de](mailto:addmo@eonerc.rwth-aachen.de)
+
+RWTH Aachen University  
+E.ON Energy Research Center  
+Institute for Energy Efficient Buildings and Indoor Climate  
+Mathieustr. 10  
+52074 Aachen  
+Germany
+                """
+            )
+    except Exception:
+        with st.expander("Contact", expanded=False):
+            st.markdown(
+                """
+
+This tool is developed by **E.ON Energy Research Center**,  
+Institute for Energy Efficient Buildings and Indoor Climate at **RWTH Aachen University**, Germany.
+
+**Email:** [addmo@eonerc.rwth-aachen.de](mailto:addmo@eonerc.rwth-aachen.de)
+
+RWTH Aachen University  
+E.ON Energy Research Center  
+Institute for Energy Efficient Buildings and Indoor Climate  
+Mathieustr. 10  
+52074 Aachen  
+Germany
+                """
+            )
 
 st.markdown("""
     <h1 style='margin: 0; padding-left: 0; padding-top: 12px; line-height: 1;'>
-        ADDMO - Automated Data & Model Optimization
+        ADDMo
     </h1>
 """, unsafe_allow_html=True)
 
-st.markdown("""
-Welcome to *ADDMO, a AutoML toolkit* designed for *time series regression tasks*.
+if 'last_saved_path' not in st.session_state:
+    st.session_state.last_saved_path = ""
 
-This application helps you configure, run, and analyze the full machine learning pipeline — from *data preprocessing* to *model tuning*, with full documentation and visualization at each step.
+tab = st.radio("Choose Tab", ["About the Tool","Data Tuning", "Model Tuning", "Insights", "Model Testing", "Data Tuning Recreate"], horizontal=True)
+if tab != "About the Tool":
+    st.write("📁 Last Saved Path")
+    st.code(st.session_state.get("last_saved_path", "No path saved yet."))
+if tab == "About the Tool":
+    st.markdown(
+        """
+    ## ADDMo: Automated data-driven modeling of building energy systems via machine learning algorithms
+    
+   Welcome to *ADDMo, an AutoML toolkit* designed for *time series regression tasks*.  
+This application helps you configure, run, and analyze the full machine learning pipeline, 
+from *data preprocessing* to *model tuning*, with full documentation and visualization at each step.
 
----
+For detailed information regarding input and output formats, functionalities, 
+and the methodology behind this web app, please consult the ADDMo repository:  """)
+    st.markdown("[View the ADDMo GitHub Repository](https://github.com/RWTH-EBC/ADDMo)")
 
-### Workflow Overview
-
+    
+    st.markdown("""Workflow Overview
+    
 1. *Data Tuning (Auto/Fixed)*  
 2. *Model Tuning*  
 3. *Data Insights*  
 4. *Model Testing*  
 5. *Data Tuning Recreate*  
+    
+    Each module is modular and optional, enabling flexible experimentation and analysis.
+    """)
 
-Each module is modular and optional, enabling flexible experimentation and analysis.
-""")
+    st.markdown(""" 
+    ## License
+    The ADDMo Web App is released by RWTH Aachen University, E.ON Energy Research Center, Institute for Energy Efficient Buildings and Indoor Climate and is available under a 3-clause BSD license.
+    
+    ## Disclaimer  
 
-if 'last_saved_path' not in st.session_state:
-    st.session_state.last_saved_path = ""
+    ### Limitation of liability for internal content  
+    The content of our website has been created with care and to the best of our knowledge. However, we cannot assume any liability for the currentness of data, totality or accuracy of any of the pages.  
 
-st.write("📁 Last Saved Path")
-st.code(st.session_state.get("last_saved_path", "No path saved yet."))
+    Pursuant to section 7, para. 1 of the TMG (Telemediengesetz – Tele Media Act by German law), we as service providers are liable for our own content on these pages in accordance with general laws. However, pursuant to sections 8 to 10 of the TMG, we as service providers are not under obligation to monitor external information provided or stored on our website.  
 
-tab = st.radio("Choose Tab", ["Data Tuning", "Model Tuning", "Insights", "Model Testing", "Data Tuning Recreate"], horizontal=True)
+    Once we have become aware of a specific infringement of the law, we will immediately remove the content in question. Any liability concerning this matter can only be assumed from the point in time at which the infringement becomes known to us.  
+    
+    ### Limitation of liability for external links
+    Our website contains links to the websites of third parties („external links“). As the content of these websites is not in our hand, we cannot take any responsibility for such external content. In all cases, the provider of information of the linked websites is liable for the content and accuracy of the information provided. At the time when the links were placed, no infringements of the law were identifable to us. As soon as an infringement of the law becomes known to us, we will instanly take the link in question off our website.
 
-if tab == "Data Tuning":
+    
+    ### Copyright
+    The content and works published on this website are governed by the copyright laws of Germany. Any duplication, processing, distribution or any form of utilisation beyond the scope of copyright law shall require the prior written consent of the author or authors in question.
+    
+    
+    ### Data protection
+    The use of our website can result in the storage on our server of information about the access (date, time, page accessed). This does not represent any analysis of personal data (e.g., name, address or e-mail address). If personal data are collected, this only occurs – to the extent possible – with the prior consent of the user of the website. Any forwarding of the data to third parties without the express consent of the user shall not take place. We would like to expressly point out that the transmission of data via the Internet (e.g., by e-mail) can offer security vulnerabilities. It is therefore impossible to safeguard the data completely against access by third parties. We cannot take any responsibility for damages arising as a result of such security vulnerabilities. The use by third parties of all published contact details for the purpose of advertising is expressly excluded. We reserve the right to take legal steps in the case of the unsolicited sending of advertising information; e.g., by means of spam mail.
+    
+    
+    ### Google Analytics Disclaimer and use of cookies
+    This website uses Google Analytics, a web analytics service applied by Google, Inc. ("Google"). Google Analytics uses "cookies", which are text files placed on your computer to help analyse how visitors use the site. The information created by the cookie about your use of the website (including your IP address) will be forwarded to and stored by Google on servers in the United States. Google will use this information for the purpose of assessing your use of the website, compiling reports on website activity for website operators and supplying other services relating to website activity and internet usage. Google may also transmit this information to third parties where required to do so by law, or where such third parties process the information on Google's behalf. Google will not associate your IP address with any other data kept by Google. You may refuse the use of cookies by selecting the responsible settings on your browser, however please note that if you do so the functonalities of this websited may be limited. By using this website, you consent to the processing of data about you by Google in the manner and for the purposes set out above. You can prevent Google’s collection and use of data (cookies and IP address) by downloading and installing the browser plug-in available under https://tools.google.com/dlpage/gaoptout?hl=en. Please note that this website initializes Google Analytics with the setting anonymizeIp. This guarantees anonymized data collection by masking the last part of your IP address. Further information concerning the terms and conditions of use and data privacy can be found at http://www.google.com/analytics/terms/gb.html or at http://www.google.com/intl/en_uk/analytics/privacyoverview.html. 
+            
+    © [Institute for Energy Efficient Buildings and Indoor Climate](http://www.ebc.eonerc.rwth-aachen.de/)
+    
+     RWTH Aachen University, 2025
+        
+    """
+    )
+
+
+elif tab == "Data Tuning":
     st.header("Choose Data Tuning type")
 
     if "tuning_type" not in st.session_state:

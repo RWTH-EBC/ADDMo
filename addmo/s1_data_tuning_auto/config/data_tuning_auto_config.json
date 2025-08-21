@@ -20,6 +20,6 @@
     "sequential_direction": "forward",
     "filter_recursive_by_count": false,
     "recursive_embedded_number_features_to_select": 18,
-    "filter_recursive_by_score": false,
+    "filter_recursive_by_score": true,
     "min_increase_for_wrapper": 0.01
 }

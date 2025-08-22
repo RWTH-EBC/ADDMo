@@ -1106,7 +1106,7 @@ and the methodology behind this web app, please consult the ADDMo repository:  "
             
     © [Institute for Energy Efficient Buildings and Indoor Climate](http://www.ebc.eonerc.rwth-aachen.de/)
     
-     RWTH Aachen University, 2025
+     RWTH Aachen University 2025
         
     """
     )

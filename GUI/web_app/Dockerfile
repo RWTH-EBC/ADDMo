@@ -6,24 +6,20 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     STREAMLIT_SERVER_ADDRESS=0.0.0.0 \
     STREAMLIT_SERVER_PORT=8501
 
-RUN useradd -m -u 10001 appuser
+WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential git curl ca-certificates && \
-    rm -rf /var/lib/apt/lists/* \
+    build-essential git curl && \
+    rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
 COPY . /app
+
 RUN python -m pip install --upgrade pip && \
-    pip install --no-cache-dir . && \
-    pip install --no-cache-dir streamlit
-RUN chown -R appuser:appuser /app
-USER appuser
+    pip install . && \
+    pip install streamlit
 
 EXPOSE 8501
 
-
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health || exit 1
-
 
 ENTRYPOINT ["python", "GUI/launch_GUI.py"]

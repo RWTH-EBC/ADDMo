@@ -1,0 +1,192 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;no title&gt; &mdash; addmo 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+
+  
+      <script src="../_static/jquery.js"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+      <script src="../_static/doctools.js"></script>
+      <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            addmo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html#tutorial-and-example">Tutorial and Example</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">addmo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/examples/exe_model_tuning.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.definitions</span><span class="w"> </span><span class="kn">import</span> <span class="n">results_dir_model_tuning</span><span class="p">,</span> <span class="n">results_dir_data_tuning_auto</span><span class="p">,</span> <span class="n">results_dir_data_tuning_fixed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.load_save_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">root_dir</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.experiment_logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocalLogger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.experiment_logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">WandbLogger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.experiment_logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExperimentLogger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.s3_model_tuning.models.keras_models</span><span class="w"> </span><span class="kn">import</span> <span class="n">SciKerasSequential</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.s3_model_tuning.config.model_tuning_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelTuningExperimentConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.s3_model_tuning.config.model_tuning_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelTunerConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.s3_model_tuning.model_tuner</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelTuner</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.load_save</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.load_save</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_config_from_json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.data_handling</span><span class="w"> </span><span class="kn">import</span> <span class="n">split_target_features</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.s5_insights.model_plots.scatter_plot</span><span class="w"> </span><span class="kn">import</span> <span class="n">scatter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.plotting_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_pdf</span>
+</pre></div>
+</div>
+<p>Please define the missing TODOs in the section below according to the docstrings.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Executes model tuning process and returns the best model.</span>
+<span class="sd">Parameters:</span>
+<span class="sd">    user_input : str, optional</span>
+<span class="sd">        If &#39;y&#39;, the contents of the target results directory will be overwritten.</span>
+<span class="sd">        If &#39;d&#39;, the directory contents will be deleted. Default is &#39;y&#39;.</span>
+<span class="sd">    config_exp : DataTuningExperimentConfig</span>
+<span class="sd">    config_tuner : ModelTunerConfig</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">user_input</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span>
+<span class="n">config_exp</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">config_tuner</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Configure the logger</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">LocalLogger</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">LocalLogger</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+    <span class="n">LocalLogger</span><span class="o">.</span><span class="n">directory</span> <span class="o">=</span> <span class="n">results_dir_model_tuning</span><span class="p">(</span> <span class="n">config_exp</span><span class="p">,</span><span class="n">user_input</span><span class="p">)</span>
+<span class="n">WandbLogger</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="s2">&quot;addmo-test_model_tuning&quot;</span>
+<span class="n">WandbLogger</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">if</span> <span class="n">WandbLogger</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+    <span class="n">WandbLogger</span><span class="o">.</span><span class="n">directory</span> <span class="o">=</span> <span class="n">results_dir_model_tuning</span><span class="p">(</span><span class="n">config_exp</span><span class="p">,</span><span class="n">user_input</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Initialize logging</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">start_experiment</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config_exp</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create the model tuner</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_tuner</span> <span class="o">=</span> <span class="n">ModelTuner</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config_tuner</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Load the system_data</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xy_tuned</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="n">config_exp</span><span class="o">.</span><span class="n">abs_path_to_data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Select training and validation period</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xy_tuned_train_val</span> <span class="o">=</span> <span class="n">xy_tuned</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">config_exp</span><span class="o">.</span><span class="n">start_train_val</span><span class="p">:</span><span class="n">config_exp</span><span class="o">.</span><span class="n">stop_train_val</span><span class="p">]</span>
+<span class="n">x_train_val</span><span class="p">,</span> <span class="n">y_train_val</span> <span class="o">=</span> <span class="n">split_target_features</span><span class="p">(</span><span class="n">config_exp</span><span class="o">.</span><span class="n">name_of_target</span><span class="p">,</span> <span class="n">xy_tuned_train_val</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>log start and end of the system_data</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;xy_tuned_train_val&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">xy_tuned_train_val</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">xy_tuned_train_val</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">5</span><span class="p">)])})</span>
+</pre></div>
+</div>
+<p>Tune the models</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_dict</span> <span class="o">=</span> <span class="n">model_tuner</span><span class="o">.</span><span class="n">tune_all_models</span><span class="p">(</span><span class="n">x_train_val</span><span class="p">,</span> <span class="n">y_train_val</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Get the best model</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">best_model_name</span> <span class="o">=</span> <span class="n">model_tuner</span><span class="o">.</span><span class="n">get_best_model_name</span><span class="p">(</span><span class="n">model_dict</span><span class="p">)</span>
+<span class="n">best_model</span> <span class="o">=</span> <span class="n">model_tuner</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model_dict</span><span class="p">,</span> <span class="n">best_model_name</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">best_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_train_val</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Log the best model</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">best_model</span><span class="p">,</span> <span class="n">SciKerasSequential</span><span class="p">):</span>
+    <span class="n">art_type</span> <span class="o">=</span> <span class="s1">&#39;keras&#39;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">art_type</span> <span class="o">=</span> <span class="s1">&#39;joblib&#39;</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;best_model&#39;</span>
+<span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log_artifact</span><span class="p">(</span><span class="n">best_model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">art_type</span><span class="p">)</span>
+<span class="n">plt</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">(</span><span class="n">y_train_val</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">config_exp</span><span class="o">.</span><span class="n">name_of_target</span><span class="p">,</span> <span class="n">best_model</span><span class="o">.</span><span class="n">fit_error</span><span class="p">)</span>
+<span class="n">save_pdf</span><span class="p">(</span><span class="n">plt</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LocalLogger</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="s1">&#39;model_fit_scatter&#39;</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finished&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, EON EBC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -2850,7 +2850,7 @@
             
         </table>
         
-        <h3>Module <code>abstract_hyparam_tuner</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/abstract_hyparam_tuner.py</code>)</h3>
+        <h3>Module <code>hyperparameter_tuning.abstract_hyparam_tuner</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/abstract_hyparam_tuner.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -2914,7 +2914,7 @@
             
         </table>
         
-        <h3>Module <code>hyparam_tuning_factory</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/hyparam_tuning_factory.py</code>)</h3>
+        <h3>Module <code>hyperparameter_tuning.hyparam_tuning_factory</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/hyparam_tuning_factory.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -3028,7 +3028,7 @@
             
         </table>
         
-        <h3>Module <code>hyperparameter_tuner</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py</code>)</h3>
+        <h3>Module <code>hyperparameter_tuning.hyperparameter_tuner</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -5234,7 +5234,7 @@
             
         </table>
         
-        <h3>Module <code>abstract_splitter</code> (<code>addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py</code>)</h3>
+        <h3>Module <code>scoring.validation_splitting.abstract_splitter</code> (<code>addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -5378,7 +5378,7 @@
             
         </table>
         
-        <h3>Module <code>custom_splitters</code> (<code>addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py</code>)</h3>
+        <h3>Module <code>scoring.validation_splitting.custom_splitters</code> (<code>addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -5622,7 +5622,7 @@
             
         </table>
         
-        <h3>Module <code>splitter_factory</code> (<code>addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py</code>)</h3>
+        <h3>Module <code>scoring.validation_splitting.splitter_factory</code> (<code>addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -8303,9 +8303,7 @@ def execute(plot_name, plot_dir, path_to_regressor, save):
             surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)
             surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)
 
-
-        # Add this line to reverse the axis direction
-        # ax.set_xlim(ax.get_xlim()[::-1])</pre></td>
+        # Add this line to reverse the axis direction</pre></td>
             </tr>
             
             <tr>
@@ -8408,7 +8406,7 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
 
     ExperimentLogger.start_experiment(config=new_config)
 
-    # Create a new tuner instance with the same tuning parameters</pre></td>
+    #Using fixed config</pre></td>
             </tr>
             
             <tr>
@@ -8423,57 +8421,28 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
 ==models.abstract_model:[143:196]
         pass
 
+    @staticmethod
     @abstractmethod
-    def set_params(self, **params):
-        &#34;&#34;&#34;
-        Set the hyperparameters of the ML model.
-
-        Args:
-            **params: Variable length keyword arguments for hyperparameters.
-        &#34;&#34;&#34;
+    def finish_experiment():
         pass
 
+    @staticmethod
     @abstractmethod
-    def get_params(self):
-        &#34;&#34;&#34;
-        Get the hyperparameters of the ML model.
-
-        Returns:
-            A dictionary of the current hyperparameters.
-        &#34;&#34;&#34;
+    def log(log: dict):
         pass
 
+    @staticmethod
     @abstractmethod
-    def optuna_hyperparameter_suggest(self, trial):
-        &#34;&#34;&#34;
-        Suggest hyperparameters using Optuna for hyperparameter optimization.
-
-        Args:
-            trial: An Optuna trial object used to suggest hyperparameters.
-
-        Returns:
-            A dictionary of hyperparameters with Optuna distributions.
-        &#34;&#34;&#34;
+    def log_artifact(data, name: str, art_type: str):
         pass
 
+    @staticmethod
     @abstractmethod
-    def grid_search_hyperparameter(self):
-        &#34;&#34;&#34;
-        Define the hyperparameters for grid search.
-
-        Returns:
-            A dictionary representing a hyperparameter grid for grid search.
-        &#34;&#34;&#34;
+    def use_artifact(name: str, alias: str = &#34;latest&#34;):
         pass
 
-    @abstractmethod
-    def default_hyperparameter(self):
-        &#34;&#34;&#34;
-        Define the default hyperparameters of the model.
-
-        Returns:
-            A dictionary with a default set of hyperparameters.
-        &#34;&#34;&#34;</pre></td>
+    @staticmethod
+    def _handle_pkl(data,name,art_type, directory):</pre></td>
             </tr>
             
             <tr>
@@ -8492,7 +8461,8 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
     with open(config_path, &#39;r&#39;) as f:
         plot_config = json.load(f)
 
-    # Plot tuned data</pre></td>
+    # Plot tuned data
+</pre></td>
             </tr>
             
             <tr>
@@ -12958,17 +12928,17 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
             </tr>
             
             <tr>
-                <td>hyparam_tuning_factory</td>
+                <td>hyperparameter_tuning.hyparam_tuning_factory</td>
                 <td>10</td>
             </tr>
             
             <tr>
-                <td>abstract_hyparam_tuner</td>
+                <td>hyperparameter_tuning.abstract_hyparam_tuner</td>
                 <td>5</td>
             </tr>
             
             <tr>
-                <td>hyperparameter_tuner</td>
+                <td>hyperparameter_tuning.hyperparameter_tuner</td>
                 <td>19</td>
             </tr>
             
@@ -12998,17 +12968,17 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
             </tr>
             
             <tr>
-                <td>abstract_splitter</td>
+                <td>scoring.validation_splitting.abstract_splitter</td>
                 <td>13</td>
             </tr>
             
             <tr>
-                <td>custom_splitters</td>
+                <td>scoring.validation_splitting.custom_splitters</td>
                 <td>23</td>
             </tr>
             
             <tr>
-                <td>splitter_factory</td>
+                <td>scoring.validation_splitting.splitter_factory</td>
                 <td>8</td>
             </tr>
             

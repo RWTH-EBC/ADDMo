@@ -1,8 +1,10 @@
 ![Banner](staticfiles/logo.png)
-[![documentation](https://rwth-ebc.github.io/ADDMo//main//docs/doc.svg)](https://rwth-ebc.github.io/ADDMo//main//docs/index.html)
-[![coverage](https://rwth-ebc.github.io/ADDMo//main//coverage/badge.svg)](https://rwth-ebc.github.io/ADDMo//main//coverage)
+[![documentation](https://raw.githubusercontent.com/RWTH-EBC/ADDMo/gh-pages/docs/main/docs/doc.svg)](https://rwth-ebc.github.io/ADDMo/docs/main/docs/)
+[![Coverage](https://raw.githubusercontent.com/RWTH-EBC/ADDMo/gh-pages/docs/main/coverage/badge.svg)](https://rwth-ebc.github.io/ADDMo/docs/main/coverage/)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
-[![pylint](https://rwth-ebc.github.io/ADDMo//main//pylint/pylint.svg )](https://rwth-ebc.github.io/ADDMo//main//pylint/pylint.html)
+[![pylint](https://raw.githubusercontent.com/RWTH-EBC/ADDMo/gh-pages/docs/main/pylint/pylint.svg)](https://rwth-ebc.github.io/ADDMo/docs/main/pylint/)
+[![build](https://raw.githubusercontent.com/RWTH-EBC/ADDMo/gh-pages/docs/main/build/build.svg)](https://rwth-ebc.github.io/ADDMo/docs/main/build/)
+
 # ADDMo functional overview
 
 __ADDMo is an automated machine learning tool for regression tasks__

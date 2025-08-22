@@ -762,7 +762,7 @@ addmo/s3_model_tuning/scoring/metrics/metric_factory.py:6:0: E0401: Unable to im
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:19:8: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:38:20: W0212: Access to a protected member _score_func of a client class (protected-access)
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:9:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module scoring.validation_splitting.abstract_splitter
+************* Module abstract_splitter
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:27:0: C0301: Line too long (103/100) (line-too-long)
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:1:0: E0401: Unable to import 'numpy' (import-error)
@@ -776,7 +776,7 @@ addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:50:14: C
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:50:38: C0103: Argument name "y" doesn't conform to snake_case naming style (invalid-name)
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:62:14: C0103: Argument name "X" doesn't conform to snake_case naming style (invalid-name)
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:62:38: C0103: Argument name "y" doesn't conform to snake_case naming style (invalid-name)
-************* Module scoring.validation_splitting.custom_splitters
+************* Module custom_splitters
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:1:0: E0401: Unable to import 'addmo.s3_model_tuning.scoring.validation_splitting.abstract_splitter' (import-error)
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:5:0: W0105: String statement has no effect (pointless-string-statement)
@@ -800,7 +800,7 @@ addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:70:36: C0
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:70:36: W0613: Unused argument 'y' (unused-argument)
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:70:44: W0613: Unused argument 'groups' (unused-argument)
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:43:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module scoring.validation_splitting.splitter_factory
+************* Module splitter_factory
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:3:0: E0401: Unable to import 'sklearn' (import-error)
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:5:0: E0401: Unable to import 'addmo.s3_model_tuning.scoring.validation_splitting' (import-error)
@@ -809,7 +809,7 @@ addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:7:0: E040
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:26:12: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:36:12: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:12:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module model_tuning_config
+************* Module config.model_tuning_config
 addmo/s3_model_tuning/config/model_tuning_config.py:11:0: C0301: Line too long (209/100) (line-too-long)
 addmo/s3_model_tuning/config/model_tuning_config.py:64:0: C0301: Line too long (124/100) (line-too-long)
 addmo/s3_model_tuning/config/model_tuning_config.py:92:0: C0305: Trailing newlines (trailing-newlines)
@@ -821,7 +821,7 @@ addmo/s3_model_tuning/config/model_tuning_config.py:7:0: R0903: Too few public m
 addmo/s3_model_tuning/config/model_tuning_config.py:54:0: C0115: Missing class docstring (missing-class-docstring)
 addmo/s3_model_tuning/config/model_tuning_config.py:54:0: R0903: Too few public methods (0/2) (too-few-public-methods)
 addmo/s3_model_tuning/config/model_tuning_config.py:3:0: C0411: standard import "from typing import Optional" should be placed before "from pydantic import BaseModel, Field, PrivateAttr" (wrong-import-order)
-************* Module models.keras_models
+************* Module keras_models
 addmo/s3_model_tuning/models/keras_models.py:108:0: C0301: Line too long (110/100) (line-too-long)
 addmo/s3_model_tuning/models/keras_models.py:109:0: C0301: Line too long (109/100) (line-too-long)
 addmo/s3_model_tuning/models/keras_models.py:144:0: C0301: Line too long (103/100) (line-too-long)
@@ -860,7 +860,7 @@ addmo/s3_model_tuning/models/keras_models.py:50:8: W0201: Attribute 'y_fit' defi
 addmo/s3_model_tuning/models/keras_models.py:5:0: C0411: standard import "from abc import ABC" should be placed before "import keras" (wrong-import-order)
 addmo/s3_model_tuning/models/keras_models.py:9:0: W0611: Unused Normalization imported from keras.src.layers (unused-import)
 addmo/s3_model_tuning/models/keras_models.py:9:0: W0611: Unused Activation imported from keras.src.layers (unused-import)
-************* Module models.abstract_model
+************* Module abstract_model
 addmo/s3_model_tuning/models/abstract_model.py:116:0: C0301: Line too long (104/100) (line-too-long)
 addmo/s3_model_tuning/models/abstract_model.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/models/abstract_model.py:4:0: E0401: Unable to import 'onnxruntime' (import-error)
@@ -909,7 +909,7 @@ addmo/s3_model_tuning/models/abstract_model.py:249:22: W1309: Using an f-string 
 addmo/s3_model_tuning/models/abstract_model.py:6:0: C0411: standard import "import subprocess" should be placed before "import onnxruntime as rt" (wrong-import-order)
 addmo/s3_model_tuning/models/abstract_model.py:7:0: C0411: standard import "from abc import ABC, abstractmethod" should be placed before "import onnxruntime as rt" (wrong-import-order)
 addmo/s3_model_tuning/models/abstract_model.py:1:0: W0611: Unused import os (unused-import)
-************* Module models.model_factory
+************* Module model_factory
 addmo/s3_model_tuning/models/model_factory.py:32:0: W0311: Bad indentation. Found 13 spaces, expected 12 (bad-indentation)
 addmo/s3_model_tuning/models/model_factory.py:33:0: W0311: Bad indentation. Found 13 spaces, expected 12 (bad-indentation)
 addmo/s3_model_tuning/models/model_factory.py:44:0: C0301: Line too long (107/100) (line-too-long)
@@ -932,7 +932,7 @@ addmo/s3_model_tuning/models/model_factory.py:10:0: C0411: third party import "f
 addmo/s3_model_tuning/models/model_factory.py:11:0: C0411: third party import "from tensorflow.keras.models import load_model" should be placed before "from addmo.s3_model_tuning.models import scikit_learn_models" (wrong-import-order)
 addmo/s3_model_tuning/models/model_factory.py:2:0: W0611: Unused import sys (unused-import)
 addmo/s3_model_tuning/models/model_factory.py:11:0: W0611: Unused load_model imported from tensorflow.keras.models (unused-import)
-************* Module models.scikit_learn_models
+************* Module scikit_learn_models
 addmo/s3_model_tuning/models/scikit_learn_models.py:24:0: C0301: Line too long (102/100) (line-too-long)
 addmo/s3_model_tuning/models/scikit_learn_models.py:34:0: C0301: Line too long (102/100) (line-too-long)
 addmo/s3_model_tuning/models/scikit_learn_models.py:82:0: C0301: Line too long (101/100) (line-too-long)
@@ -1040,7 +1040,7 @@ addmo/s1_data_tuning_auto/feature_construction.py:6:0: W0611: Unused ModelFactor
 addmo/s1_data_tuning_auto/feature_construction.py:7:0: W0611: Unused ValidationScoring imported from addmo.s3_model_tuning.scoring.abstract_scorer (unused-import)
 addmo/s1_data_tuning_auto/feature_construction.py:8:0: W0611: Unused AbstractMLModel imported from addmo.s3_model_tuning.models.abstract_model (unused-import)
 addmo/s1_data_tuning_auto/feature_construction.py:10:0: W0611: Unused ModelTuner imported from addmo.s3_model_tuning.model_tuner (unused-import)
-************* Module data_tuning_auto_config
+************* Module config.data_tuning_auto_config
 addmo/s1_data_tuning_auto/config/data_tuning_auto_config.py:74:0: C0305: Trailing newlines (trailing-newlines)
 addmo/s1_data_tuning_auto/config/data_tuning_auto_config.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s1_data_tuning_auto/config/data_tuning_auto_config.py:2:0: E0401: Unable to import 'pydantic' (import-error)
@@ -1268,9 +1268,7 @@ addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
             surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)
             surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)
 
-
-        # Add this line to reverse the axis direction
-        # ax.set_xlim(ax.get_xlim()[::-1]) (duplicate-code)
+        # Add this line to reverse the axis direction (duplicate-code)
 addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
 ==carpet_plots:[89:104]
 ==plot_carpets_modelA:[50:65]
@@ -1321,15 +1319,10 @@ addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
         suffix = "_2weeks" if idx == 1 else ""
         plot_path = os.path.join(LocalLogger.directory, f"{file_name}{suffix}")
         save_pdf(fig, plot_path)
-    # Data tuning completed
     print("Finished")
 
-def default_config_exe_data_tuning_fixed(user_input='y'):
-    """Execute the system_data tuning process with default config.
-    Parameters:
-        user_input : str, optional
-            If 'y', the contents of the target results directory will be overwritten.
-            If 'd', the directory contents will be deleted. Default is 'y'."""
+def default_config_exe_data_tuning_auto(user_input='y'):
+    """Execute the system_data tuning process with default config."""
     # Initialize a default config (without loading JSON) (duplicate-code)
 addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
 ==exe_recreate_data_tuning:[32:41]
@@ -1342,63 +1335,34 @@ addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
 
     ExperimentLogger.start_experiment(config=new_config)
 
-    # Create a new tuner instance with the same tuning parameters (duplicate-code)
+    #Using fixed config (duplicate-code)
 addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
+==abstract_model:[143:196]
 ==experiment_logger:[17:41]
-==models.abstract_model:[143:196]
         pass
 
+    @staticmethod
     @abstractmethod
-    def set_params(self, **params):
-        """
-        Set the hyperparameters of the ML model.
-
-        Args:
-            **params: Variable length keyword arguments for hyperparameters.
-        """
+    def finish_experiment():
         pass
 
+    @staticmethod
     @abstractmethod
-    def get_params(self):
-        """
-        Get the hyperparameters of the ML model.
-
-        Returns:
-            A dictionary of the current hyperparameters.
-        """
+    def log(log: dict):
         pass
 
+    @staticmethod
     @abstractmethod
-    def optuna_hyperparameter_suggest(self, trial):
-        """
-        Suggest hyperparameters using Optuna for hyperparameter optimization.
-
-        Args:
-            trial: An Optuna trial object used to suggest hyperparameters.
-
-        Returns:
-            A dictionary of hyperparameters with Optuna distributions.
-        """
+    def log_artifact(data, name: str, art_type: str):
         pass
 
+    @staticmethod
     @abstractmethod
-    def grid_search_hyperparameter(self):
-        """
-        Define the hyperparameters for grid search.
-
-        Returns:
-            A dictionary representing a hyperparameter grid for grid search.
-        """
+    def use_artifact(name: str, alias: str = "latest"):
         pass
 
-    @abstractmethod
-    def default_hyperparameter(self):
-        """
-        Define the default hyperparameters of the model.
-
-        Returns:
-            A dictionary with a default set of hyperparameters.
-        """ (duplicate-code)
+    @staticmethod
+    def _handle_pkl(data,name,art_type, directory): (duplicate-code)
 addmo/util/data_handling.py:1:0: R0801: Similar lines in 2 files
 ==exe_data_tuning_auto:[45:52]
 ==exe_data_tuning_fixed:[64:72]

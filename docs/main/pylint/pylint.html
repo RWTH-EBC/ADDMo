@@ -1748,7 +1748,7 @@
             
         </table>
         
-        <h3>Module <code>config.data_tuning_auto_config</code> (<code>addmo/s1_data_tuning_auto/config/data_tuning_auto_config.py</code>)</h3>
+        <h3>Module <code>data_tuning_auto_config</code> (<code>addmo/s1_data_tuning_auto/config/data_tuning_auto_config.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -2726,7 +2726,7 @@
             
         </table>
         
-        <h3>Module <code>config.model_tuning_config</code> (<code>addmo/s3_model_tuning/config/model_tuning_config.py</code>)</h3>
+        <h3>Module <code>model_tuning_config</code> (<code>addmo/s3_model_tuning/config/model_tuning_config.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -2850,7 +2850,7 @@
             
         </table>
         
-        <h3>Module <code>hyperparameter_tuning.abstract_hyparam_tuner</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/abstract_hyparam_tuner.py</code>)</h3>
+        <h3>Module <code>abstract_hyparam_tuner</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/abstract_hyparam_tuner.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -2914,7 +2914,7 @@
             
         </table>
         
-        <h3>Module <code>hyperparameter_tuning.hyparam_tuning_factory</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/hyparam_tuning_factory.py</code>)</h3>
+        <h3>Module <code>hyparam_tuning_factory</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/hyparam_tuning_factory.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -3028,7 +3028,7 @@
             
         </table>
         
-        <h3>Module <code>hyperparameter_tuning.hyperparameter_tuner</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py</code>)</h3>
+        <h3>Module <code>hyperparameter_tuner</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -8305,7 +8305,9 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
             surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)
             surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)
 
-        # Add this line to reverse the axis direction</pre></td>
+
+        # Add this line to reverse the axis direction
+        # ax.set_xlim(ax.get_xlim()[::-1])</pre></td>
             </tr>
             
             <tr>
@@ -8383,10 +8385,15 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
         suffix = &#34;_2weeks&#34; if idx == 1 else &#34;&#34;
         plot_path = os.path.join(LocalLogger.directory, f&#34;{file_name}{suffix}&#34;)
         save_pdf(fig, plot_path)
+    # Data tuning completed
     print(&#34;Finished&#34;)
 
-def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
-    &#34;&#34;&#34;Execute the system_data tuning process with default config.&#34;&#34;&#34;
+def default_config_exe_data_tuning_fixed(user_input=&#39;y&#39;):
+    &#34;&#34;&#34;Execute the system_data tuning process with default config.
+    Parameters:
+        user_input : str, optional
+            If &#39;y&#39;, the contents of the target results directory will be overwritten.
+            If &#39;d&#39;, the directory contents will be deleted. Default is &#39;y&#39;.&#34;&#34;&#34;
     # Initialize a default config (without loading JSON)</pre></td>
             </tr>
             
@@ -12959,17 +12966,17 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
             </tr>
             
             <tr>
-                <td>hyperparameter_tuning.hyparam_tuning_factory</td>
+                <td>hyparam_tuning_factory</td>
                 <td>10</td>
             </tr>
             
             <tr>
-                <td>hyperparameter_tuning.abstract_hyparam_tuner</td>
+                <td>abstract_hyparam_tuner</td>
                 <td>5</td>
             </tr>
             
             <tr>
-                <td>hyperparameter_tuning.hyperparameter_tuner</td>
+                <td>hyperparameter_tuner</td>
                 <td>19</td>
             </tr>
             
@@ -13014,7 +13021,7 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
             </tr>
             
             <tr>
-                <td>config.model_tuning_config</td>
+                <td>model_tuning_config</td>
                 <td>11</td>
             </tr>
             
@@ -13054,7 +13061,7 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
             </tr>
             
             <tr>
-                <td>config.data_tuning_auto_config</td>
+                <td>data_tuning_auto_config</td>
                 <td>7</td>
             </tr>
             

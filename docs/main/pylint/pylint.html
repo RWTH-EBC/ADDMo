@@ -2726,7 +2726,7 @@
             
         </table>
         
-        <h3>Module <code>model_tuning_config</code> (<code>addmo/s3_model_tuning/config/model_tuning_config.py</code>)</h3>
+        <h3>Module <code>config.model_tuning_config</code> (<code>addmo/s3_model_tuning/config/model_tuning_config.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -2850,7 +2850,7 @@
             
         </table>
         
-        <h3>Module <code>abstract_hyparam_tuner</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/abstract_hyparam_tuner.py</code>)</h3>
+        <h3>Module <code>hyperparameter_tuning.abstract_hyparam_tuner</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/abstract_hyparam_tuner.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -2914,7 +2914,7 @@
             
         </table>
         
-        <h3>Module <code>hyparam_tuning_factory</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/hyparam_tuning_factory.py</code>)</h3>
+        <h3>Module <code>hyperparameter_tuning.hyparam_tuning_factory</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/hyparam_tuning_factory.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -3028,7 +3028,7 @@
             
         </table>
         
-        <h3>Module <code>hyperparameter_tuner</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py</code>)</h3>
+        <h3>Module <code>hyperparameter_tuning.hyperparameter_tuner</code> (<code>addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -4962,7 +4962,7 @@
             
         </table>
         
-        <h3>Module <code>scoring.abstract_scorer</code> (<code>addmo/s3_model_tuning/scoring/abstract_scorer.py</code>)</h3>
+        <h3>Module <code>abstract_scorer</code> (<code>addmo/s3_model_tuning/scoring/abstract_scorer.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -5116,7 +5116,7 @@
             
         </table>
         
-        <h3>Module <code>abstract_metric</code> (<code>addmo/s3_model_tuning/scoring/metrics/abstract_metric.py</code>)</h3>
+        <h3>Module <code>metrics.abstract_metric</code> (<code>addmo/s3_model_tuning/scoring/metrics/abstract_metric.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -5150,7 +5150,7 @@
             
         </table>
         
-        <h3>Module <code>metric_factory</code> (<code>addmo/s3_model_tuning/scoring/metrics/metric_factory.py</code>)</h3>
+        <h3>Module <code>metrics.metric_factory</code> (<code>addmo/s3_model_tuning/scoring/metrics/metric_factory.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -5234,7 +5234,7 @@
             
         </table>
         
-        <h3>Module <code>abstract_splitter</code> (<code>addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py</code>)</h3>
+        <h3>Module <code>validation_splitting.abstract_splitter</code> (<code>addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -5378,7 +5378,7 @@
             
         </table>
         
-        <h3>Module <code>custom_splitters</code> (<code>addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py</code>)</h3>
+        <h3>Module <code>validation_splitting.custom_splitters</code> (<code>addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -5622,7 +5622,7 @@
             
         </table>
         
-        <h3>Module <code>splitter_factory</code> (<code>addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py</code>)</h3>
+        <h3>Module <code>validation_splitting.splitter_factory</code> (<code>addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -5716,7 +5716,7 @@
             
         </table>
         
-        <h3>Module <code>scoring.validator</code> (<code>addmo/s3_model_tuning/scoring/validator.py</code>)</h3>
+        <h3>Module <code>validator</code> (<code>addmo/s3_model_tuning/scoring/validator.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -5920,7 +5920,7 @@
             
         </table>
         
-        <h3>Module <code>scoring.validator_factory</code> (<code>addmo/s3_model_tuning/scoring/validator_factory.py</code>)</h3>
+        <h3>Module <code>validator_factory</code> (<code>addmo/s3_model_tuning/scoring/validator_factory.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -8227,7 +8227,6 @@
         plot_config = json.load(f)
 
     # Plot tuned data
-
     figures = plot_timeseries_combined(plot_config, data)
     for fig in figures:
         fig.show()
@@ -8236,9 +8235,11 @@
         suffix = &#34;_2weeks&#34; if idx == 1 else &#34;&#34;
         plot_path = os.path.join(LocalLogger.directory, f&#34;{file_name}{suffix}&#34;)
         save_pdf(fig, plot_path)
-    # Data tuning completed
     print(&#34;Finished&#34;)
-</pre></td>
+
+def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
+    &#34;&#34;&#34;Execute the system_data tuning process with default config.&#34;&#34;&#34;
+    # Initialize a default config (without loading JSON)</pre></td>
             </tr>
             
             <tr>
@@ -8273,8 +8274,9 @@
 
     return pred_func
 
-def execute(plot_name, plot_dir, path_to_regressor, save):
-</pre></td>
+def plot_carpets_with_buckets(variables, measurements_data, target_values, regressor_func , bounds=None , combinations=None , defaults_dict=None ,num_buckets=4):
+
+    # Define bounds</pre></td>
             </tr>
             
             <tr>
@@ -8490,7 +8492,8 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
     with open(config_path, &#39;r&#39;) as f:
         plot_config = json.load(f)
 
-    # Plot tuned data</pre></td>
+    # Plot tuned data
+</pre></td>
             </tr>
             
             <tr>
@@ -12956,62 +12959,62 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
             </tr>
             
             <tr>
-                <td>hyparam_tuning_factory</td>
+                <td>hyperparameter_tuning.hyparam_tuning_factory</td>
                 <td>10</td>
             </tr>
             
             <tr>
-                <td>abstract_hyparam_tuner</td>
+                <td>hyperparameter_tuning.abstract_hyparam_tuner</td>
                 <td>5</td>
             </tr>
             
             <tr>
-                <td>hyperparameter_tuner</td>
+                <td>hyperparameter_tuning.hyperparameter_tuner</td>
                 <td>19</td>
             </tr>
             
             <tr>
-                <td>scoring.abstract_scorer</td>
+                <td>abstract_scorer</td>
                 <td>14</td>
             </tr>
             
             <tr>
-                <td>scoring.validator</td>
+                <td>validator</td>
                 <td>19</td>
             </tr>
             
             <tr>
-                <td>scoring.validator_factory</td>
+                <td>validator_factory</td>
                 <td>9</td>
             </tr>
             
             <tr>
-                <td>abstract_metric</td>
+                <td>metrics.abstract_metric</td>
                 <td>2</td>
             </tr>
             
             <tr>
-                <td>metric_factory</td>
+                <td>metrics.metric_factory</td>
                 <td>7</td>
             </tr>
             
             <tr>
-                <td>abstract_splitter</td>
+                <td>validation_splitting.abstract_splitter</td>
                 <td>13</td>
             </tr>
             
             <tr>
-                <td>custom_splitters</td>
+                <td>validation_splitting.custom_splitters</td>
                 <td>23</td>
             </tr>
             
             <tr>
-                <td>splitter_factory</td>
+                <td>validation_splitting.splitter_factory</td>
                 <td>8</td>
             </tr>
             
             <tr>
-                <td>model_tuning_config</td>
+                <td>config.model_tuning_config</td>
                 <td>11</td>
             </tr>
             

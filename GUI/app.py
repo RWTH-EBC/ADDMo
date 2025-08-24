@@ -19,6 +19,8 @@ from addmo.util.definitions import results_dir_data_tuning_auto, results_dir_dat
 from addmo_examples.executables.exe_data_insights import exe_time_series_plot, exe_parallel_plot, exe_carpet_plots, exe_scatter_carpet_plots, exe_interactive_parallel_plot
 from addmo.s4_model_testing.model_testing import model_test, data_tuning_recreate_fixed, data_tuning_recreate_auto
 from addmo.util.load_save import load_data
+from GUI.web_app.lease_guard import acquire_or_block, heartbeat, enforce_max_age, release_if_owner
+
 
 def _zipdir_to_bytes(dir_path: str):
     buf = io.BytesIO()
@@ -1172,10 +1174,24 @@ st.set_page_config(
     page_icon=os.path.join(root_dir(), 'staticfiles', '230718 Logo ADDMo-01.png'),
     layout="wide"
 )
-
+if "lease_token" not in st.query_params:
+    st.query_params["lease_token"] = str(uuid.uuid4())
+LEASE_TOKEN = st.query_params["lease_token"]
+if st.session_state.get("released", False):
+    st.warning("You terminated this session. Close this tab or open the GUI in another browser/window.")
+    st.stop()
 st.markdown("""
-    <style>.block-container { padding-top: 1rem; }</style>
+    <style>.block-container { padding-top: 1.6rem; }</style>
 """, unsafe_allow_html=True)
+lease = acquire_or_block(user_hint="", sid=LEASE_TOKEN)
+heartbeat(lease)
+enforce_max_age(lease)
+with st.sidebar:
+    if st.button("Terminate current session"):
+        release_if_owner(sid=LEASE_TOKEN)
+        st.session_state["released"] = True
+
+
 logo_path = os.path.join(root_dir(), "staticfiles", "logo.png")
 
 colL, colC, colR = st.columns([1, 3, 1], vertical_alignment="center")

@@ -6,8 +6,8 @@ from addmo.s5_insights.model_plots.parallel_plots import parallel_plots, paralle
 from addmo.util.plotting_utils import save_pdf
 from addmo.s5_insights.model_plots.carpet_plots import  plot_carpets, plot_carpets_with_buckets, prediction_func_4_regressor
 from addmo.util.definitions import  return_results_dir_model_tuning, return_best_model, load_model_config
-from addmo.util.load_save import ensure_datetime_index
 from addmo.s3_model_tuning.models.model_factory import ModelFactory
+from addmo.util.load_save import load_data
 
 def exe_time_series_plot(dir, plot_name, plot_dir, save=True):
     """
@@ -18,15 +18,7 @@ def exe_time_series_plot(dir, plot_name, plot_dir, save=True):
 
     # Load data
     data_path = model_config['abs_path_to_data']
-    if data_path.endswith(".xlsx"):
-        data = pd.read_excel(data_path, index_col=0,
-                             header=0)  # change loading of data as per the input data file ext and delimiter
-    elif data_path.endswith(".csv"):
-        data = pd.read_csv(data_path, delimiter=csv.Sniffer().sniff(open(data_path).read(1024), delimiters=";,").delimiter, index_col=0, encoding="latin1", header=0)
-    else:
-        print('No data file found.')
-
-    data = ensure_datetime_index(data,origin=datetime.datetime(2019, 1, 1), fmt="%Y-%m-%d %H:%M:%S")
+    data = load_data(data_path)
     # Execute plotting
     figures = plot_timeseries_combined(model_config, data)
 
@@ -68,15 +60,7 @@ def exe_carpet_plots(dir, plot_name, plot_dir, save = True, bounds= None, defaul
     # Load the input data and fetch variables from it
     if ask_data_path:
         data_path = model_config['abs_path_to_data']
-        if data_path.endswith(".xlsx"):
-            data = pd.read_excel(data_path, index_col=0, header=0)  # change loading of data as per the input data file ext and delimiter
-        elif data_path.endswith(".csv"):
-            data = pd.read_csv(data_path,
-                               delimiter=csv.Sniffer().sniff(open(data_path).read(1024), delimiters=";,").delimiter,
-                               index_col=0, encoding="latin1", header=0)
-
-        else:
-            print('No data file found.')
+        data = load_data(data_path)
 
         measurements_data = data.drop(target, axis=1)
         variables = list(measurements_data.columns)
@@ -113,12 +97,7 @@ def exe_scatter_carpet_plots(dir, plot_name, plot_dir, save = True, bounds= None
     # Load the input data and fetch variables from it
 
     data_path = model_config['abs_path_to_data']
-    if data_path.endswith(".xlsx"):
-        data = pd.read_excel(data_path, index_col=0, header=0)  # change loading of data as per the input data file ext and delimiter
-    elif data_path.endswith(".csv"):
-        data = pd.read_csv(data_path, delimiter=csv.Sniffer().sniff(open(data_path).read(1024), delimiters=";,").delimiter, index_col=0, encoding="latin1", header=0)
-    else:
-        print('No data file found.')
+    data = load_data(data_path)
 
     measurements_data = data.drop(target, axis=1)
     variables = list(measurements_data.columns)
@@ -150,14 +129,7 @@ def exe_parallel_plot(dir, plot_name, plot_dir, save = True, path_to_regressor=N
     # Load target and data
     target = model_config["name_of_target"]
     data_path = model_config['abs_path_to_data']
-    if data_path.endswith(".xlsx"):
-        data = pd.read_excel(data_path, index_col=0,
-                             header=0)  # change loading of data as per the input data file ext and delimiter
-    elif data_path.endswith(".csv"):
-        data = pd.read_csv(data_path, delimiter=csv.Sniffer().sniff(open(data_path).read(1024), delimiters=";,").delimiter, index_col=0, encoding="latin1", header=0)
-
-    else:
-        print('No data file found.')
+    data = load_data(data_path)
 
     # Execute plotting
     plt = parallel_plots(target, data, regressor)
@@ -182,14 +154,7 @@ def exe_interactive_parallel_plot(dir, plot_name, plot_dir, save = True, path_to
     # Load target and data
     target = model_config["name_of_target"]
     data_path = model_config['abs_path_to_data']
-    if data_path.endswith(".xlsx"):
-        data = pd.read_excel(data_path, index_col=0, header=0)  # change loading of data as per the input data file ext and delimiter
-    elif data_path.endswith(".csv"):
-        data = pd.read_csv(data_path, delimiter=csv.Sniffer().sniff(open(data_path).read(1024), delimiters=";,").delimiter, index_col=0, encoding="latin1", header=0)
-
-    else:
-        print('No data file found.')
-        return None
+    data = load_data(data_path)
     # Execute plotting
     plt = parallel_plots_interactive(target, data, regressor)
 
@@ -205,7 +170,7 @@ if __name__ == '__main__':
 
 
     # Define directory where the model config and regressor is saved:
-    _path_to_input_dir = return_results_dir_model_tuning('test_raw_data', 'test_data_tuning', 'test_model_tuning')
+    _path_to_input_dir = return_results_dir_model_tuning('raw_test', 'test_data_tuning', 'test_model_tuning')
 
     # Path for saving the model_plots
     plot_dir = os.path.join(_path_to_input_dir, 'plots')

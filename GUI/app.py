@@ -290,7 +290,8 @@ def exe_streamlit_model_tuning():
         This setup allows you to:
         - Select and train one or multiple machine learning models.
         - Tune their hyperparameters using Optuna or Grid Search.
-        - Use cross-validation or holdout splits to validate performance.
+        - Use cross-validation or holdout splits to validate performance.  
+        - Note: In case you need to train the model on custom data (either tuned or raw), ignore the abs path to data field below and upload the input data csv file directly.
     """)
     if "app_session_id" not in st.session_state:
         st.session_state.app_session_id = uuid.uuid4().hex[:8]
@@ -326,32 +327,47 @@ def exe_streamlit_model_tuning():
     model_config_data["_config_model_tuner"] = model_tuner
 
     st.subheader("Input data tuning type")
-    type_of_data = st.selectbox("Would you like to use tuned data for model tuning?", ["choose", "Yes", "No"])
+    type_of_data = st.selectbox(
+        "Would you like to use tuned data for model tuning?",
+        ["choose", "Yes", "No"]
+    )
     st.session_state.use_tuned_data = type_of_data
 
     if type_of_data == "Yes":
-        st.text("Upload your tuned CSV file** (it can be Auto or Fixed).")
+        st.markdown("Upload your tuned data file (CSV/XLSX). The path will be set automatically.")
         uploaded_csv = st.file_uploader(
-            "Upload input data",
+            "Upload tuned data (.csv/.xlsx)",
             type=["csv", "xlsx"],
-            key=f"tuned_data_uploader_{st.session_state.reset_token}"
+            key=f"upload_csv_{st.session_state.reset_token}"
         )
 
-        if uploaded_csv is None:
-            st.error("Please upload the input data file.")
-        else:
-            saved_input_path, _ = _save_once(uploaded_csv, "tune_data_model_tuning", "tuned_data_path")
-            st.session_state.uploaded_data_path = saved_input_path
-            model_config_data["abs_path_to_data"] = st.session_state.uploaded_data_path
+        if uploaded_csv is not None:
+            saved_input_path, digest = _save_once(
+                uploaded_csv,
+                digest_key="digest_data_tuned",
+                path_key="uploaded_path"
+            )
+            st.session_state.saved_digest = digest
+            model_config_data["abs_path_to_data"] = saved_input_path
 
-        if "auto" in uploaded_csv.name.lower():
-            detected_tuning = "Auto"
-        elif "fixed" in uploaded_csv.name.lower():
-            detected_tuning = "Fixed"
-        else:
-            detected_tuning = "Unknown"
+    elif type_of_data == "No":
+        st.markdown("Upload your raw input data file (CSV/XLSX). The path will be set automatically.")
+        uploaded_csv = st.file_uploader(
+            "Upload raw input data (.csv/.xlsx)",
+            type=["csv", "xlsx"],
+            key=f"raw_input_data_{st.session_state.reset_token}"
+        )
 
-        st.success(f"Tuned data detected: **{detected_tuning}** → {st.session_state.uploaded_data_path}")
+        if uploaded_csv is not None:
+            saved_input_path, digest = _save_once(
+                uploaded_csv,
+                digest_key="digest_input_raw",
+                path_key="uploaded_path"
+            )
+            st.session_state.saved_digest = digest
+            st.session_state.uploaded_path = saved_input_path
+            model_config_data["abs_path_to_data"] = st.session_state.uploaded_path
+            st.success(f"Raw input data set → {st.session_state.uploaded_path}")
 
     # Save config
     if st.button("Save Model Config"):
@@ -726,17 +742,25 @@ def input_custom_model_config():
     - You need to specify the data path for creating carpet plots if the bounds and default values for each feature are not known and need to be calculated automatically.
     - You need to provide the input data for the creation of other plots (e.g., Time Series Plot and Parallel Plot).
     """)
+    if "app_session_id" not in st.session_state:
+        st.session_state.app_session_id = uuid.uuid4().hex[:8]
+    if "reset_token" not in st.session_state:
+        st.session_state.reset_token = uuid.uuid4().hex[:8]
+
     with st.form("external_model_config_form"):
-        abs_path_to_data = st.text_input("Absolute path to the data file (e.g., .xlsx) (Not required for carpet plots)", key="abs_path_to_data")
         name_of_target = st.text_input("Name of the target variable", key="name_of_target")
         start_train_val = st.text_input("Start date/time for train/validation (e.g., 2016-08-01 00:00) (Not required for carpet plots)", key="start_train_val")
         stop_train_val = st.text_input("Stop date/time for test (e.g., 2016-08-14 23:45) (Not required for carpet plots)", key="end_test")
         features_ordered_input = st.text_input("Enter the list of ordered columns in the data, except the target column", key="features_ordered")
         base_class = st.selectbox("Base class of regressor", options=["ScikitMLP", "Keras"])
         model_file = st.file_uploader("Upload your trained model (.keras or .joblib)", type=["keras", "joblib"])
+        input_data_file = st.file_uploader("Upload your input data", type=["csv", "xlsx"])
+
         submitted = st.form_submit_button("Save Configuration")
         features_ordered = [feat.strip() for feat in features_ordered_input.split(",") if feat.strip()]
-        saving_dir = create_or_clean_directory(os.path.join(results_dir(), "model_plots"))
+        saving_dir = create_or_clean_directory(
+            os.path.join(results_dir(), "model_plots", f"external_insights_{st.session_state.app_session_id}")
+        )
         if base_class == "Keras":
             base_class = "SciKerasSequential"
 
@@ -745,8 +769,12 @@ def input_custom_model_config():
             "saving_dir": saving_dir,
             "name_of_target": name_of_target,
         }
-        if abs_path_to_data:
-            data_config["abs_path_to_data"] = abs_path_to_data
+        if input_data_file:
+            input_filename = f"{st.session_state.app_session_id}_external_input_{input_data_file.name}"
+            input_save_path = os.path.join(saving_dir, input_filename)
+            with open(input_save_path, "wb") as f:
+                f.write(input_data_file.getbuffer())
+            data_config["abs_path_to_data"] = input_save_path
         if start_train_val:
             data_config["start_train_val"] = start_train_val
         if stop_train_val:
@@ -759,17 +787,19 @@ def input_custom_model_config():
         }
         st.session_state["external_data_config"] = data_config
         st.session_state["model_metadata_config"] = model_metadata_config
-
-        base_name = os.path.splitext(model_file.name)[0]
+        if model_file is not None:
+            model_path = os.path.join(saving_dir, model_file.name)
+            with open(model_path, "wb") as f:
+                f.write(model_file.getbuffer())
+        base_name = os.path.splitext(model_file.name)[0] if model_file is not None else "best_model"
         metadata_config_path = os.path.join(saving_dir, base_name + "_metadata.json")
         with open(metadata_config_path, "w") as f:
             json.dump(model_metadata_config, f, indent=4)
+
         data_config_path = os.path.join(saving_dir, "config.json")
         with open(data_config_path, "w") as f:
             json.dump(data_config, f, indent=4)
-        model_path = os.path.join(saving_dir, model_file.name)
-        with open(model_path, "wb") as f:
-            f.write(model_file.getbuffer())
+
         st.success("Configuration saved successfully!")
         return data_config, model_metadata_config
     return None
@@ -789,13 +819,14 @@ def exe_streamlit_data_insights():
     )
     if st.session_state.choose_plotting_type == "Generate insights for a model trained by this application":
         st.session_state.path = generate_addmo_insights()
-        zip_bytes = _zipdir_to_bytes(st.session_state.output_dir)
-        st.download_button(
-            label="Download Insights results folder",
-            data=zip_bytes,
-            file_name=f"{os.path.basename(st.session_state.output_dir)}.zip",
-            mime="application/zip"
-        )
+        if st.session_state.path:
+            zip_bytes = _zipdir_to_bytes(st.session_state.path)
+            st.download_button(
+                label="Download Insights results folder",
+                data=zip_bytes,
+                file_name=f"{os.path.basename(st.session_state.path)}.zip",
+                mime="application/zip"
+            )
     elif st.session_state.choose_plotting_type == "Generate insights for other models":
         if "external_config_submitted" not in st.session_state:
             result = input_custom_model_config()
@@ -811,14 +842,14 @@ def exe_streamlit_data_insights():
                 st.session_state.config,
                 st.session_state.model_metadata_config
             )
-
-            zip_bytes = _zipdir_to_bytes(st.session_state.output_dir)
-            st.download_button(
-                label="Download Insights results folder",
-                data=zip_bytes,
-                file_name=f"{os.path.basename(st.session_state.output_dir)}.zip",
-                mime="application/zip"
-            )
+            if st.session_state.path:
+                zip_bytes = _zipdir_to_bytes(st.session_state.path)
+                st.download_button(
+                    label="Download Insights results folder",
+                    data=zip_bytes,
+                    file_name=f"{os.path.basename(st.session_state.path)}.zip",
+                    mime="application/zip"
+                )
     return st.session_state.path
 
 def exe_streamlit_model_testing():
@@ -1242,7 +1273,7 @@ and the methodology behind this web app, please consult the ADDMo repository:  "
 4. *Model Testing*  
 5. *Data Tuning Recreate*  
     
-    Each module is modular and optional, enabling flexible experimentation and analysis.
+    Each module is modular and optional, enabling flexible experimentation and analysis. Ensure to download the results at each step in order to execute the further steps!
     """)
 
     st.markdown(""" 

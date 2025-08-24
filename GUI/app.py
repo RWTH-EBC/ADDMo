@@ -1,7 +1,10 @@
 import base64
+from pathlib import Path
+
 import streamlit as st
 import json
 import io, os, zipfile
+import time, uuid, hashlib
 from streamlit_pydantic import pydantic_input, pydantic_output, pydantic_form
 from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from addmo_examples.executables.exe_data_tuning_auto import exe_data_tuning_auto
@@ -59,7 +62,7 @@ def exe_streamlit_data_tuning_auto():
     ####  General Setup
     - **`name_of_raw_data`**: Name of results data folder (used in output paths).
     - **`name_of_tuning`**: Name of the tuning experiment.
-    - **`abs_path_to_data`**: Full path to your input Excel file.
+    - **`abs_path_to_data`**: Full path to your input Excel file. **Note:** You can leave this as-is and upload a file below, we will **override** it automatically.
     - **`name_of_target`**: The name of your target column to be predicted.
 
     - The default results data folder is: `addmo-automated-ml-regression\\addmo_examples\\results\\test_raw_data`
@@ -86,8 +89,40 @@ def exe_streamlit_data_tuning_auto():
     - **`sequential_direction`**: `'forward'` or `'backward'`.
     - **`min_increase_for_wrapper`**: Threshold to accept feature.
     """)
+    if "app_session_id" not in st.session_state:
+        st.session_state.app_session_id = uuid.uuid4().hex[:8]
+
+    if "reset_token" not in st.session_state:
+        st.session_state.reset_token = uuid.uuid4().hex[:8]
+    def _save_once(uploaded_file, digest_key: str, path_key: str):
+        content = uploaded_file.getvalue()
+        digest = hashlib.md5(content).hexdigest()
+        if st.session_state.get(digest_key) != digest:
+            tmp_dir = os.path.join(root_dir(), "tmp")
+            os.makedirs(tmp_dir, exist_ok=True)
+            unique_name = f"{st.session_state.app_session_id}_{digest[:8]}_{uploaded_file.name}"
+            save_path = os.path.join(tmp_dir, unique_name)
+            with open(save_path, "wb") as f:
+                f.write(content)
+            st.session_state[digest_key] = digest
+            st.session_state[path_key] = save_path
+        return st.session_state[path_key], st.session_state[digest_key]
 
     auto_tuning_config = pydantic_input("Auto", DataTuningAutoSetup)
+    st.markdown("**Upload input data file** (Excel `.xlsx` or `.csv`). This will override `abs_path_to_data`.")
+    uploaded_input = st.file_uploader(
+        "Upload input data",
+        type=["xlsx", "csv"],
+        key=f"auto_input_uploader_{st.session_state.reset_token}"
+    )
+
+    if uploaded_input is not None:
+        saved_input_path, _ = _save_once(
+            uploaded_input, digest_key="auto_input_digest", path_key="auto_input_path")
+        # Override in the config dict
+        auto_tuning_config["abs_path_to_data"] = saved_input_path
+        st.success(f"Input data saved and set in config: {saved_input_path}")
+
     auto_tuning_config_obj = DataTuningAutoSetup(**auto_tuning_config)
     st.session_state.auto_tuning_config = auto_tuning_config_obj
     st.session_state.output_dir = None
@@ -140,7 +175,7 @@ def exe_streamlit_data_tuning_auto():
             if os.path.exists(zoomed_path):
                 st.markdown("### Zoomed View: Time Series (2 Weeks)")
                 pdf_viewer(zoomed_path, width="80%", height=855)
-            st.success("Data tuning completed!")
+            st.success("Data tuning completed! Note: download the results folder in case you need to use the tuned data later for training the model!")
             zip_bytes = _zipdir_to_bytes(st.session_state.output_dir)
             st.download_button(
                 label="Download Data Tuning Auto results folder",
@@ -152,6 +187,24 @@ def exe_streamlit_data_tuning_auto():
     return st.session_state.output_dir
 
 def exe_streamlit_data_tuning_fixed():
+    if "app_session_id" not in st.session_state:
+        st.session_state.app_session_id = uuid.uuid4().hex[:8]
+
+    if "reset_token" not in st.session_state:
+        st.session_state.reset_token = uuid.uuid4().hex[:8]
+    def _save_once(uploaded_file, digest_key: str, path_key: str):
+        content = uploaded_file.getvalue()
+        digest = hashlib.md5(content).hexdigest()
+        if st.session_state.get(digest_key) != digest:
+            tmp_dir = os.path.join(root_dir(), "tmp")
+            os.makedirs(tmp_dir, exist_ok=True)
+            unique_name = f"{st.session_state.app_session_id}_{digest[:10]}_{uploaded_file.name}"
+            save_path = os.path.join(tmp_dir, unique_name)
+            with open(save_path, "wb") as f:
+                f.write(content)
+            st.session_state[digest_key] = digest
+            st.session_state[path_key] = save_path
+        return st.session_state[path_key], st.session_state[digest_key]
     st.header("Data Tuning Fixed Configuration")
     st.markdown("""
         This setup allows you tune the system data in a fixed manner without randomness
@@ -172,6 +225,19 @@ def exe_streamlit_data_tuning_fixed():
     """)
 
     fixed_tuning_config = pydantic_input("Config Setup", DataTuningFixedConfig)
+    st.markdown("**Upload input data file** (Excel `.xlsx` or `.csv`). This will override `abs_path_to_data`.")
+    uploaded_input = st.file_uploader(
+        "Upload input data",
+        type=["xlsx", "csv"],
+        key=f"auto_input_uploader_{st.session_state.reset_token}"
+    )
+
+    if uploaded_input is not None:
+        saved_input_path, _ = _save_once(
+            uploaded_input, digest_key="input_raw_data_fixed", path_key="input_path_fixed")
+        # Override in the config dict
+        fixed_tuning_config["abs_path_to_data"] = saved_input_path
+        st.success(f"Input data saved and set in config: {saved_input_path}")
     fixed_config_tuning_obj = DataTuningFixedConfig(**fixed_tuning_config)
     st.session_state.output_dir = None
     output_dir = results_dir_data_tuning(fixed_config_tuning_obj)
@@ -208,7 +274,7 @@ def exe_streamlit_data_tuning_fixed():
             if os.path.exists(zoomed_path):
                 st.markdown("### Zoomed View: Time Series (2 Weeks)")
                 pdf_viewer(zoomed_path, width="80%", height=855)
-            st.success("Data tuning completed!")
+            st.success("Data tuning completed! Note: download the results folder in case you need to use the tuned data later for training the model!")
             zip_bytes = _zipdir_to_bytes(st.session_state.output_dir)
             st.download_button(
                 label="Download Data Tuning Fixed results folder",
@@ -226,12 +292,28 @@ def exe_streamlit_model_tuning():
         - Tune their hyperparameters using Optuna or Grid Search.
         - Use cross-validation or holdout splits to validate performance.
     """)
+    if "app_session_id" not in st.session_state:
+        st.session_state.app_session_id = uuid.uuid4().hex[:8]
 
+    if "reset_token" not in st.session_state:
+        st.session_state.reset_token = uuid.uuid4().hex[:8]
     # Session initialization
-    for key in ["model_config_data", "model_config_saved", "output_dir", "overwrite_strategy","model_tuner"]:
+    for key in ["model_config_data", "model_config_saved", "output_dir", "overwrite_strategy","model_tuner", "uploaded_path", "saved_digest"]:
         if key not in st.session_state:
             st.session_state[key] = None if key != "model_config_saved" else False
-
+    def _save_once(uploaded_file, digest_key: str, path_key: str):
+        content = uploaded_file.getvalue()
+        digest = hashlib.md5(content).hexdigest()
+        if st.session_state.get(digest_key) != digest:
+            tmp_dir = os.path.join(root_dir(), "tmp")
+            os.makedirs(tmp_dir, exist_ok=True)
+            unique_name = f"{st.session_state.app_session_id}_{digest[:8]}_{uploaded_file.name}"
+            save_path = os.path.join(tmp_dir, unique_name)
+            with open(save_path, "wb") as f:
+                f.write(content)
+            st.session_state[digest_key] = digest
+            st.session_state[path_key] = save_path
+        return st.session_state[path_key], st.session_state[digest_key]
     # Inputs
     st.subheader("Model Configuration")
     model_config_data = pydantic_input("ModelConfig", ModelTuningExperimentConfig)
@@ -248,25 +330,28 @@ def exe_streamlit_model_tuning():
     st.session_state.use_tuned_data = type_of_data
 
     if type_of_data == "Yes":
-        type_of_tuning = st.selectbox("Which tuning would you like to use?", ["choose", "Auto", "Fixed"])
+        st.text("Upload your tuned CSV file** (it can be Auto or Fixed).")
+        uploaded_csv = st.file_uploader(
+            "Upload input data",
+            type=["csv", "xlsx"],
+            key=f"tuned_data_uploader_{st.session_state.reset_token}"
+        )
 
-        if type_of_tuning in ["Auto", "Fixed"]:
-            default_text = f"The default directory used for loading the data is: addmo_examples/results/test_raw_data/data_tuning_experiment_{type_of_tuning.lower()}"
-            st.text(default_text)
-            path_type = st.selectbox(
-                "Use default saving path for input data?",
-                ["Select an option", "Yes", "No"]
-            )
+        if uploaded_csv is None:
+            st.error("Please upload the input data file.")
+        else:
+            saved_input_path, _ = _save_once(uploaded_csv, "tune_data_model_tuning", "tuned_data_path")
+            st.session_state.uploaded_data_path = saved_input_path
+            model_config_data["abs_path_to_data"] = st.session_state.uploaded_data_path
 
-            if path_type == "Yes":
-                func = results_dir_data_tuning_auto if type_of_tuning == "Auto" else results_dir_data_tuning_fixed
-                model_config_data["abs_path_to_data"] = os.path.join(
-                    func(),f"tuned_xy_{type_of_tuning.lower()}.csv")
-                st.success("Tuned data path set in config.")
+        if "auto" in uploaded_csv.name.lower():
+            detected_tuning = "Auto"
+        elif "fixed" in uploaded_csv.name.lower():
+            detected_tuning = "Fixed"
+        else:
+            detected_tuning = "Unknown"
 
-            elif path_type == "No":
-                model_config_data["abs_path_to_data"] = st.text_input('path')
-                st.success("Tuned data path set in config.")
+        st.success(f"Tuned data detected: **{detected_tuning}** → {st.session_state.uploaded_data_path}")
 
     # Save config
     if st.button("Save Model Config"):
@@ -463,26 +548,49 @@ def generate_addmo_insights():
         st.session_state.model_dir = None
     if "output_dir" not in st.session_state:
         st.session_state.output_dir = None
+    if "app_session_id" not in st.session_state:
+        st.session_state.app_session_id = uuid.uuid4().hex[:8]
+    if "reset_token" not in st.session_state:
+        st.session_state.reset_token = uuid.uuid4().hex[:8]
+
+    def _save_once(uploaded_file, digest_key: str, path_key: str):
+        content = uploaded_file.getvalue()
+        digest = hashlib.md5(content).hexdigest()
+        if st.session_state.get(digest_key) != digest:
+            tmp_dir = os.path.join(root_dir(), "tmp")
+            os.makedirs(tmp_dir, exist_ok=True)
+            unique_name = f"{st.session_state.app_session_id}_{uploaded_file.name}"
+            save_path = os.path.join(tmp_dir, unique_name)
+            with open(save_path, "wb") as f:
+                f.write(content)
+            st.session_state[digest_key] = digest
+            st.session_state[path_key] = save_path
+        return st.session_state[path_key], st.session_state[digest_key]
 
     if st.session_state.dir_submitted is False:
         st.subheader("Load previously saved Model for generating insights:")
         with st.form("Model Directory"):
-            option = st.radio(
-                "Select results directory option for loading previously saved model:",
-                ("Default", "Custom")
+            model_zip = st.file_uploader(
+                "Upload model directory results folder(.zip) for which you want to generate the insights. It should contain the saved model and the configs.",
+                type=["zip"],
+                key=f"model_zip_uploader_{st.session_state.reset_token}"
             )
-            if option == "Custom":
-                directory = st.text_input("Enter the custom results directory path")
-            else:
-                directory = return_results_dir_model_tuning()
             submitted = st.form_submit_button("Submit")
-            if submitted and directory:
-                st.session_state.model_dir = directory
-                st.session_state.dir_submitted = True
+
+        if submitted and model_zip is not None:
+            saved_zip_path, zip_digest = _save_once(model_zip, "model_zip_insights", "model_zip_path_insights")
+            extract_dir = os.path.join(
+                root_dir(), "tmp", f"model_dir_{st.session_state.app_session_id}_{zip_digest[:8]}"
+            )
+            if not os.path.exists(extract_dir):
+                os.makedirs(extract_dir, exist_ok=True)
+                with zipfile.ZipFile(saved_zip_path, "r") as zf:
+                    zf.extractall(extract_dir)
+            st.session_state.model_dir = extract_dir
+            st.session_state.dir_submitted = True
 
     if st.session_state.dir_submitted and st.session_state.model_dir is not None and st.session_state.model_dir!="":
         directory = st.session_state.model_dir
-        st.write(f"Using directory: {directory}")
         plot_dir = os.path.join(directory, 'plots')
         st.session_state.output_dir = plot_dir
         config_path = os.path.join(directory, "config.json")
@@ -734,9 +842,11 @@ def exe_streamlit_model_testing():
 
     ⚠️ *Make sure the tuning type and input structure match the training phase!*
 
-    The default results directory is:  
-    addmo-automated-ml-regression/addmo_examples/results/model_streamlit_test/model_testing
     """)
+    if "app_session_id" not in st.session_state:
+        st.session_state.app_session_id = uuid.uuid4().hex[:8]
+    if "reset_token" not in st.session_state:
+        st.session_state.reset_token = uuid.uuid4().hex[:8]
 
     for key in ["dir_submitted", "input_submitted", "tuning_path_confirmed", "tuning_submitted"]:
         if key not in st.session_state:
@@ -751,47 +861,69 @@ def exe_streamlit_model_testing():
         if key not in st.session_state:
             st.session_state[key] = ""
 
+    def _save_once(uploaded_file, digest_key: str, path_key: str):
+        content = uploaded_file.getvalue()
+        digest = hashlib.md5(content).hexdigest()
+        if st.session_state.get(digest_key) != digest:
+            tmp_dir = os.path.join(root_dir(), "tmp")
+            os.makedirs(tmp_dir, exist_ok=True)
+            unique_name = f"{st.session_state.app_session_id}_{digest[:8]}_{uploaded_file.name}"
+            save_path = os.path.join(tmp_dir, unique_name)
+            with open(save_path, "wb") as f:
+                f.write(content)
+            st.session_state[digest_key] = digest
+            st.session_state[path_key] = save_path
+        return st.session_state[path_key], st.session_state[digest_key]
+
     if not st.session_state.dir_submitted:
         with st.form("Model Directory"):
-            option = st.radio(
-                "Select directory option for loading previously saved model for testing:",
-                ("Default", "Custom")
+            model_zip = st.file_uploader(
+                "Upload model directory results folder(.zip). It should contain the saved model and the configs.",
+                type=["zip"],
+                key=f"model_zip_uploader_{st.session_state.reset_token}"
             )
-            if option == "Custom":
-                directory = st.text_input("Enter custom results directory (including experiment folder).")
             submitted = st.form_submit_button("Submit")
 
-            if submitted:
-                if option == "Default":
-                    st.session_state.model_dir = return_results_dir_model_tuning()
-                    st.session_state.dir_submitted = True
-                elif option == "Custom" and directory.strip():
-                    st.session_state.model_dir = directory
-                    st.session_state.dir_submitted = True
+        if submitted:
+            saved_zip_path, zip_digest = _save_once(model_zip, "model_zip_digest", "model_zip_path")
+            extract_dir = os.path.join(
+                root_dir(), "tmp", f"model_dir_{st.session_state.app_session_id}_{zip_digest[:8]}"
+            )
+            if not os.path.exists(extract_dir):
+                os.makedirs(extract_dir, exist_ok=True)
+                with zipfile.ZipFile(saved_zip_path, "r") as zf:
+                    zf.extractall(extract_dir)
+            st.session_state.model_dir = extract_dir
+
+            cfg_candidates = list(Path(extract_dir).rglob("config.json"))
+            if not cfg_candidates:
+                st.error("No 'config.json' found inside the uploaded model directory.")
+            else:
+                cfg_path = str(cfg_candidates[0])
+                with open(cfg_path, 'r') as f:
+                    model_config = json.load(f)
+                st.session_state.model_config = model_config
+                st.session_state.dir_submitted = True
 
     if st.session_state.dir_submitted:
-        directory = st.session_state.model_dir
-        st.write(f"Using directory: {directory}")
-
-        config_path = os.path.join(directory, "config.json")
-        with open(config_path, 'r') as f:
-            model_config = json.load(f)
-
+        model_config = st.session_state.model_config
         if not st.session_state.input_submitted:
             with st.form("Input Data"):
-                option = st.radio("Select raw input data path for testing the saved model:", ("Default", "Custom"))
-                st.text("Default raw data path: addmo_examples/raw_input_data/InputData.xlsx")
-
-                if option == "Default":
-                    input_data_path = os.path.join(root_dir(), 'addmo_examples', 'raw_input_data', 'InputData.xlsx')
-                else:
-                    input_data_path = st.text_input("Enter custom input data path:")
-
+                st.text("Upload raw input data for testing (.csv or .xlsx)")
+                input_file = st.file_uploader(
+                    "Upload input data",
+                    type=["csv", "xlsx"],
+                    key=f"input_data_uploader_{st.session_state.reset_token}"
+                )
                 submitted = st.form_submit_button("Submit")
 
                 if submitted:
-                    st.session_state.input_data = input_data_path
-                    st.session_state.input_submitted = True
+                    if input_file is None:
+                        st.error("Please upload the input data file.")
+                    else:
+                        saved_input_path, _ = _save_once(input_file, "input_digest_model_testing", "input_data_path")
+                        st.session_state.input_data = saved_input_path
+                        st.session_state.input_submitted = True
 
         if st.session_state.input_submitted and not st.session_state.tuning_type_selected:
             with st.form("Tuning Type"):
@@ -807,55 +939,42 @@ def exe_streamlit_model_testing():
 
         if st.session_state.tuning_type_selected and not st.session_state.tuning_path_confirmed:
             with st.form("Tuning Path"):
-                path_type = st.selectbox("Use default saving path for loading tuned data?",
-                                         ["Select an option", "Yes", "No"],
-                                         index=0)
-                st.session_state.tuning_path_type = path_type
-
-                abs_path = None
-                path_set = False
-                model_config["abs_path_to_data"] = ""
-
-                if path_type == "Yes":
-                    if st.session_state.tuning_type == "Auto":
-                        abs_path = os.path.join(
-                            results_dir_data_tuning_auto(model_config["name_of_raw_data"]),
-                            "tuned_xy_auto.csv"
-                        )
-                        path_set = True
-                    elif st.session_state.tuning_type == "Fixed":
-                        abs_path = os.path.join(
-                            results_dir_data_tuning_fixed(model_config["name_of_raw_data"]),
-                            "tuned_xy_fixed.csv"
-                        )
-                        path_set = True
-
-                elif path_type == "No":
-                    custom_path = st.text_input("Enter custom path for tuned data:")
-                    st.session_state.custom_tuning_path = custom_path
-                    if custom_path.strip():
-                        abs_path = custom_path
-                        path_set = True
-
+                st.markdown(
+                    "Upload the **tuned data directory (.zip)** that contains the tuned CSV **and** its config.")
+                tuned_zip = st.file_uploader(
+                    "Upload tuned-data directory (.zip)",
+                    type=["zip"],
+                    key=f"tuned_zip_uploader_{st.session_state.reset_token}"
+                )
                 confirm = st.form_submit_button("Confirm Path")
 
                 if confirm:
-                    if path_set and abs_path:
-                        model_config["abs_path_to_data"] = abs_path
+                    if tuned_zip is None:
+                        st.error("Please upload the tuned-data .zip before confirming.")
+                    else:
+                        saved_zip_path, zip_digest = _save_once(
+                            tuned_zip, digest_key="tuned_zip_digest", path_key="tuned_zip_path"
+                        )
+                        extract_dir = os.path.join(
+                            root_dir(), "tmp", f"tuned_dir_{st.session_state.app_session_id}_{zip_digest[:8]}"
+                        )
+                        if not os.path.exists(extract_dir):
+                            os.makedirs(extract_dir, exist_ok=True)
+                            with zipfile.ZipFile(saved_zip_path, "r") as zf:
+                                zf.extractall(extract_dir)
+                        csvs = list(Path(extract_dir).rglob("*.csv"))
+                        chosen_csv = csvs[0]
+                        model_config["abs_path_to_data"] = str(chosen_csv)
                         st.session_state.model_config = model_config
                         st.session_state.tuning_submitted = True
                         st.session_state.tuning_path_confirmed = True
-                        st.success("Tuned data path confirmed!")
-                    else:
-                        st.error("Please provide a valid path before confirming.")
+                        st.success(f"Tuned data detected → {chosen_csv}")
 
         # Run model test when all inputs are gathered
         if st.session_state.tuning_submitted or st.session_state.tuning_path_confirmed:
-            # cfg = st.session_state.get("model_config", model_config)
-            # st.write('path of tuned data is: ', model_config["abs_path_to_data"])
             error, saving_dir = model_test(
                 st.session_state.model_dir,
-                model_config,
+                st.session_state.model_config,
                 st.session_state.input_data,
                 "model_streamlit_test",
                 st.session_state.tuning_type
@@ -890,6 +1009,10 @@ def exe_streamlit_data_tuning_recreate():
     > ⚠️ This tab *only supports tuning configurations saved by this app*.  
     > It cannot recreate tuning from externally trained models or configurations.
     ---""")
+    if "app_session_id" not in st.session_state:
+        st.session_state.app_session_id = uuid.uuid4().hex[:8]
+    if "reset_token" not in st.session_state:
+        st.session_state.reset_token = uuid.uuid4().hex[:8]
 
     if "tuning_type" not in st.session_state:
         st.session_state.tuning_type = None
@@ -905,6 +1028,21 @@ def exe_streamlit_data_tuning_recreate():
         st.session_state.dir_submitted = False
     if "model_dir" not in st.session_state:
         st.session_state.model_dir = None
+
+    def _save_once(uploaded_file, digest_key: str, path_key: str):
+        content = uploaded_file.getvalue()
+        digest = hashlib.md5(content).hexdigest()
+        if st.session_state.get(digest_key) != digest:
+            tmp_dir = os.path.join(root_dir(), "tmp")
+            os.makedirs(tmp_dir, exist_ok=True)
+            unique_name = f"{st.session_state.app_session_id}_{digest[:8]}_{uploaded_file.name}"
+            save_path = os.path.join(tmp_dir, unique_name)
+            with open(save_path, "wb") as f:
+                f.write(content)
+            st.session_state[digest_key] = digest
+            st.session_state[path_key] = save_path
+        return st.session_state[path_key], st.session_state[digest_key]
+
     if not st.session_state.tuning_submitted:
         st.subheader("Choose data tuning type")
         with st.form("Type of tuning"):
@@ -921,33 +1059,64 @@ def exe_streamlit_data_tuning_recreate():
 
     if st.session_state.tuning_submitted:
         with st.form("Data Directory"):
-            option = st.radio(
-                "Select directory option for loading previously saved config for tuned data:",
-                ("Default", "Custom"))
-            directory = st.text_input("Enter the custom results directory path. The path should contain the experiment folder as well.") if option == "Custom" else None
+            st.markdown(
+                "Upload the **tuned data directory (.zip)** that contains the tuned CSV **and** its config.")
+            tuned_zip = st.file_uploader(
+                "Upload tuned-data directory (.zip) that contains config.json (and files)",
+                type=["zip"],
+                key=f"tuned_dir_zip_uploader_{st.session_state.reset_token}"
+            )
             submitted = st.form_submit_button("Submit")
 
         if submitted:
-            if option == "Default":
-                st.session_state.model_dir = results_dir_data_tuning_auto() if st.session_state.tuning_type == "Auto" else results_dir_data_tuning_fixed()
-            else:
-                st.session_state.model_dir = directory
             st.session_state.dir_submitted = True
+            if tuned_zip is None:
+                st.error("Please upload the tuned-data directory (.zip).")
+            else:
+                saved_zip_path, zip_digest = _save_once(tuned_zip, "recreate_tuned_zip_digest",
+                                                        "recreate_tuned_zip_path")
+                extract_dir = os.path.join(
+                    root_dir(), "tmp", f"recreate_tuned_dir_{st.session_state.app_session_id}_{zip_digest[:8]}"
+                )
+                if not os.path.exists(extract_dir):
+                    os.makedirs(extract_dir, exist_ok=True)
+                    with zipfile.ZipFile(saved_zip_path, "r") as zf:
+                        zf.extractall(extract_dir)
+
+                    cfg_candidates = list(Path(extract_dir).rglob("config.json"))
+                    if not cfg_candidates:
+                        st.error("No 'config.json' found inside the uploaded tuned-data directory.")
+                    else:
+                        st.session_state.model_dir = str(cfg_candidates[0].parent)
+                        st.session_state.dir_submitted = True
+
 
     if st.session_state.dir_submitted:
-        with st.form("Raw Input data"):
-            input_data_path = st.text_input("Enter the raw input data path:")
+        with st.form("Input Data"):
+            st.text("Upload raw input data for tuning (.csv or .xlsx)")
+            input_file = st.file_uploader(
+                "Upload input data",
+                type=["csv", "xlsx"],
+                key=f"input_data_uploader_{st.session_state.reset_token}"
+            )
             submitted = st.form_submit_button("Submit")
+
         if submitted:
+            if input_file is None:
+                st.error("Please upload the input data file.")
+            else:
+                saved_input_path, _ = _save_once(input_file, "input_digest_recreating", "input_data_path")
+                st.session_state.input_data = saved_input_path
+                st.session_state.input_submitted = True
             config_path = os.path.join(st.session_state.model_dir, "config.json")
             with open(config_path, 'r') as f:
                 data_config = json.load(f)
                 input_data_exp_name = data_config.get("name_of_raw_data")
 
             if st.session_state.tuning_type == "Auto":
-                tuned_x_new, y_new, new_config, tuned_xy_new = data_tuning_recreate_auto(data_config, input_data_path, input_data_exp_name)
+                tuned_x_new, y_new, new_config, tuned_xy_new = data_tuning_recreate_auto(data_config, st.session_state.input_data, input_data_exp_name)
             else:
-                tuned_x_new, tuned_y_new, new_config, tuned_xy_new = data_tuning_recreate_fixed(data_config, input_data_path, input_data_exp_name)
+                tuned_x_new, tuned_y_new, new_config, tuned_xy_new = data_tuning_recreate_fixed(data_config, st.session_state.input_data, input_data_exp_name)
 
             st.write(tuned_x_new)
             result_dir = results_model_streamlit_testing(input_data_exp_name)

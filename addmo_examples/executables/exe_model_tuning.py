@@ -67,6 +67,8 @@ def exe_model_tuning(user_input='y', config_exp=None, config_tuner=None):
         art_type = 'joblib'
     name = 'best_model'
     ExperimentLogger.log_artifact(best_model, name, art_type)
+    saved_data_name = config_exp.abs_path_to_data.split(".")[0]
+    ExperimentLogger.log_artifact(xy_tuned,saved_data_name , "system_data")
     plt = scatter(y_train_val, y_pred, config_exp.name_of_target, best_model.fit_error)
     save_pdf(plt, os.path.join(LocalLogger.directory, 'model_fit_scatter'))
     plt.show()

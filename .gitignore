@@ -61,3 +61,5 @@ doc/_build
 
 extrapolation_detection/aixtra_use_case/results/RISHIKA_TEST/local_logger/config.json
 build/*
+tmp/*
+addmo_examples/raw_input_data/InputData.csv

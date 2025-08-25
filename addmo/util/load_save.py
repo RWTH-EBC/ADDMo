@@ -1,3 +1,5 @@
+import csv
+
 import pandas as pd
 import json
 import datetime
@@ -44,26 +46,31 @@ def save_config_to_json(config: ConfigT, path: str):
         f.write(config_json)
 
 
-def load_data(abs_path: str) -> pd.DataFrame:
+def load_data(abs_path: str, origin: datetime.datetime = datetime.datetime(2019, 1, 1),
+              fmt: str = "%Y-%m-%d %H:%M:%S") -> pd.DataFrame:
     """
     Load data from absolute file path.
     """
 
     if abs_path.endswith(".csv"):
         # Read the CSV file
-        try:
-            df = pd.read_csv(abs_path, delimiter=",", index_col=0, encoding="latin1", header=0)
-        except Exception:
-            df = pd.read_csv(
-                abs_path, delimiter=";", index_col=0, encoding="latin1", header=0
-            )
+        df = pd.read_csv(abs_path, delimiter=csv.Sniffer().sniff(open(abs_path).read(1024), delimiters=";,").delimiter, index_col=0, encoding="latin1", header=0)
     elif abs_path.endswith(".xlsx"):
         df = pd.read_excel(abs_path, index_col=0, header=0)
     else:
         raise ValueError("Unsupported file format: must be .csv or .xlsx")
 
     # Convert the index to datetime
-    df.index = pd.to_datetime(df.index, format="%Y-%m-%d %H:%M:%S")
+    if not pd.api.types.is_datetime64_any_dtype(df.index):
+        try:
+            df.index = pd.to_datetime(df.index, format=fmt)
+        except (ValueError, TypeError):
+            try:
+                secs = pd.to_numeric(df.index, errors="coerce")
+                df.index = pd.to_datetime(secs, unit="s", origin=origin)
+            except Exception:
+                # Final fallback: simple range-based datetime index
+                df.index = pd.date_range(start=origin, periods=len(df), freq="D")
     return df
 
 
@@ -79,22 +86,3 @@ def write_data(df: pd.DataFrame, abs_path: str):
         df.to_excel(abs_path)
 
 
-def ensure_datetime_index(
-    df: pd.DataFrame,
-    origin: datetime.datetime = datetime.datetime(2019, 1, 1),
-    fmt: str = "%Y-%m-%d %H:%M:%S"):
-
-
-    if pd.api.types.is_datetime64_any_dtype(df.index):
-        return df
-
-    idx = df.index
-    try:
-        df.index = pd.to_datetime(idx, format=fmt)
-        return df
-    except (ValueError, TypeError):
-        pass
-
-    secs = pd.to_numeric(idx, errors="coerce")
-    df.index = pd.to_datetime(secs, unit="s", origin=origin)
-    return df

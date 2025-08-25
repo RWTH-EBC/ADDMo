@@ -37,22 +37,18 @@ def _exe_data_tuning(config, user_input='y'):
 
     # Load the system_data
     xy_raw = load_data(config.abs_path_to_data)
-    ExperimentLogger.log({"xy_testraw": xy_raw.iloc[[0, 1, 2, -3, -2, -1]]})
 
     # Split the system_data
     x, y = split_target_features(config.name_of_target, xy_raw)
 
     # Tune the system_data
     tuned_x = tuner.tune_fixed(xy_raw)
-    ExperimentLogger.log({"x_tuned": tuned_x.iloc[[0, 1, 2, -3, -2, -1]]})
 
     # Merge target and features
     xy_tuned = tuned_x.join(y)
-    ExperimentLogger.log({"xy_tuned": xy_tuned.iloc[[0, 1, 2, -3, -2, -1]]})
 
     # Drop NaNs
     xy_tuned = xy_tuned.dropna()
-    ExperimentLogger.log({"xy_tuned": xy_tuned.iloc[[0, 1, 2, -3, -2, -1]]})
 
     # Log the tuned system_data
     file_name = 'tuned_xy_fixed'
@@ -118,22 +114,18 @@ def exe_data_tuning_fixed(user_input='y'):
 
     # Load the system_data
     xy_raw = load_data(config.abs_path_to_data)
-    ExperimentLogger.log({"xy_testraw": xy_raw.iloc[[0, 1, 2, -3, -2, -1]]})
 
     # Split the system_data
     x, y = split_target_features(config.name_of_target, xy_raw)
 
     # Tune the system_data
     tuned_x = tuner.tune_fixed(xy_raw)
-    ExperimentLogger.log({"x_tuned": tuned_x.iloc[[0, 1, 2, -3, -2, -1]]})
 
     # Merge target and features
     xy_tuned = tuned_x.join(y)
-    ExperimentLogger.log({"xy_tuned": xy_tuned.iloc[[0, 1, 2, -3, -2, -1]]})
 
     # Drop NaNs
     xy_tuned = xy_tuned.dropna()
-    ExperimentLogger.log({"xy_tuned": xy_tuned.iloc[[0, 1, 2, -3, -2, -1]]})
 
     # Log the tuned system_data
     file_name = 'tuned_xy_fixed'

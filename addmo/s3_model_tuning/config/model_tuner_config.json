@@ -1,6 +1,6 @@
 {
     "models": [
-        "ScikitMLP_TargetTransformed"
+        "ScikitMLP"
     ],
     "trainings_per_model": 1,
     "hyperparameter_tuning_type": "OptunaTuner",

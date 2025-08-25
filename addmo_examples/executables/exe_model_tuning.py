@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-
 from addmo.util.definitions import results_dir_model_tuning, results_dir_data_tuning_auto, results_dir_data_tuning_fixed
 from addmo.util.load_save_utils import root_dir
 from addmo.util.experiment_logger import LocalLogger
@@ -47,7 +46,10 @@ def exe_model_tuning(user_input='y', config_exp=None, config_tuner=None):
     xy_tuned = load_data(config_exp.abs_path_to_data)
 
     # Select training and validation period
-    xy_tuned_train_val = xy_tuned.loc[config_exp.start_train_val:config_exp.stop_train_val]
+    if config_exp.start_train_val and config_exp.stop_train_val:
+        xy_tuned_train_val = xy_tuned.loc[config_exp.start_train_val:config_exp.stop_train_val]
+    else:
+        xy_tuned_train_val = xy_tuned
     x_train_val, y_train_val = split_target_features(config_exp.name_of_target, xy_tuned_train_val)
 
     # log start and end of the system_data
@@ -67,6 +69,8 @@ def exe_model_tuning(user_input='y', config_exp=None, config_tuner=None):
         art_type = 'joblib'
     name = 'best_model'
     ExperimentLogger.log_artifact(best_model, name, art_type)
+    saved_data_name = config_exp.abs_path_to_data.split(".")[0]
+    ExperimentLogger.log_artifact(xy_tuned,saved_data_name , "system_data")
     plt = scatter(y_train_val, y_pred, config_exp.name_of_target, best_model.fit_error)
     save_pdf(plt, os.path.join(LocalLogger.directory, 'model_fit_scatter'))
     plt.show()

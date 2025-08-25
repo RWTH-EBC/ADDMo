@@ -1,11 +1,11 @@
 {
-    "name_of_raw_data": "test_raw_data_auto",
-    "name_of_data_tuning_experiment": "test_data_tuning",
+    "name_of_raw_data": "test_index",
+    "name_of_data_tuning_experiment": "TEST",
     "name_of_model_tuning_experiment": "test_model_tuning",
-    "abs_path_to_data": "C:\\Users\\mre-rpa\\PycharmProjects\\ADDMo\\addmo_examples\\results\\test_raw_data\\data_tuning_experiment_auto\\tuned_xy_auto.csv",
+    "abs_path_to_data": "C:\\Users\\mre-rpa\\PycharmProjects\\ADDMo\\tmp\\efe2e4b5_42b79392_InputData.xlsx",
     "name_of_target": "FreshAir Temperature",
-    "start_train_val": "2016-08-01 00:00",
-    "stop_train_val": "2016-08-14 23:45",
-    "start_test": "2016-08-15 00:00",
-    "end_test": "2016-08-16 23:45"
+    "start_train_val": "",
+    "stop_train_val": "",
+    "start_test": "",
+    "end_test": ""
 }

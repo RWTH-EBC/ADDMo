@@ -23,7 +23,6 @@ def model_test(dir, model_config, input_data_path, input_data_exp_name, data_tun
     path_to_regressor = return_best_model(dir)
     regressor = ModelFactory.load_model(path_to_regressor)
 
-
     if data_tuning_type.lower()== 'auto':
         # Load data tuning config used for the model
         config_dir  = os.path.dirname(model_config['abs_path_to_data'])

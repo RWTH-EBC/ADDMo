@@ -7383,7 +7383,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -7394,7 +7394,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -7405,7 +7405,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -7416,7 +7416,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -7427,7 +7427,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "DataTuningFixedConfig",
             "line": 6,
             "column": 0,
@@ -7438,7 +7438,7 @@
         },
         {
             "type": "refactor",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "DataTuningFixedConfig",
             "line": 6,
             "column": 0,
@@ -7449,7 +7449,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -7460,7 +7460,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -7471,7 +7471,7 @@
         },
         {
             "type": "warning",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -13164,7 +13164,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_recreate_data_tuning:[29:50]\n==model_testing:[81:100]\n    new_config = DataTuningAutoSetup(**saved_config_data)\n\n    # Configure the logger\n    LocalLogger.directory = results_dir_data_tuning(new_config)\n    LocalLogger.active = True\n    WandbLogger.project = \"addmo-test_data_auto_tuning\"\n    WandbLogger.directory = results_dir_data_tuning(new_config)\n    WandbLogger.active = False\n\n    ExperimentLogger.start_experiment(config=new_config)\n\n    # Create a new tuner instance with the same tuning parameters\n    new_tuner = DataTunerAuto(config=new_config)\n\n    # Apply the same tuning process to the new data\n    tuned_x_new = new_tuner.tune_auto()\n    y_new = new_tuner.y\n\n    tuned_xy_new = pd.concat([y_new, tuned_x_new], axis=1, join=\"inner\").bfill()\n\n    # Log the tuned system data",
+            "message": "Similar lines in 2 files\n==exe_recreate_data_tuning:[29:50]\n==model_testing:[81:100]\n    new_config = DataTuningAutoSetup(**saved_config_data)\n\n    LocalLogger.directory = results_dir_data_tuning(new_config)\n    LocalLogger.active = True\n    WandbLogger.project = \"addmo-test_data_auto_tuning\"\n    WandbLogger.directory = results_dir_data_tuning(new_config)\n    WandbLogger.active = False\n\n    ExperimentLogger.start_experiment(config=new_config)\n\n    # Create a new tuner instance with the same tuning parameters\n    new_tuner = DataTunerAuto(config=new_config)\n\n    # Apply the same tuning process to the new data\n    tuned_x_new = new_tuner.tune_auto()\n    y_new = new_tuner.y\n\n    tuned_xy_new = pd.concat([y_new, tuned_x_new], axis=1, join=\"inner\").bfill()\n",
             "message-id": "R0801"
         },
         {
@@ -13175,7 +13175,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[53:65]\n==exe_data_tuning_fixed:[69:86]\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    print(\"Finished\")\n\ndef default_config_exe_data_tuning_auto(user_input='y'):\n    \"\"\"Execute the system_data tuning process with default config.\"\"\"\n    # Initialize a default config (without loading JSON)",
+            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[53:65]\n==exe_data_tuning_fixed:[69:86]\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    # Data tuning completed\n    print(\"Finished\")\n\ndef default_config_exe_data_tuning_fixed(user_input='y'):\n    \"\"\"Execute the system_data tuning process with default config.\n    Parameters:\n        user_input : str, optional\n            If 'y', the contents of the target results directory will be overwritten.\n            If 'd', the directory contents will be deleted. Default is 'y'.\"\"\"\n    # Initialize a default config (without loading JSON)",
             "message-id": "R0801"
         },
         {
@@ -13186,7 +13186,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_recreate_data_tuning:[32:41]\n==model_testing:[112:121]\n    LocalLogger.directory = results_dir_data_tuning(new_config)\n    LocalLogger.active = True\n    WandbLogger.project = \"addmo-test_data_auto_tuning\"\n    WandbLogger.directory = results_dir_data_tuning(new_config)\n    WandbLogger.active = False\n\n    ExperimentLogger.start_experiment(config=new_config)\n\n    # Create a new tuner instance with the same tuning parameters",
+            "message": "Similar lines in 2 files\n==exe_recreate_data_tuning:[32:41]\n==model_testing:[112:121]\n    LocalLogger.directory = results_dir_data_tuning(new_config)\n    LocalLogger.active = True\n    WandbLogger.project = \"addmo-test_data_auto_tuning\"\n    WandbLogger.directory = results_dir_data_tuning(new_config)\n    WandbLogger.active = False\n\n    ExperimentLogger.start_experiment(config=new_config)\n\n    #Using fixed config",
             "message-id": "R0801"
         },
         {
@@ -13197,7 +13197,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==abstract_model:[143:196]\n==experiment_logger:[17:41]\n        pass\n\n    @staticmethod\n    @abstractmethod\n    def finish_experiment():\n        pass\n\n    @staticmethod\n    @abstractmethod\n    def log(log: dict):\n        pass\n\n    @staticmethod\n    @abstractmethod\n    def log_artifact(data, name: str, art_type: str):\n        pass\n\n    @staticmethod\n    @abstractmethod\n    def use_artifact(name: str, alias: str = \"latest\"):\n        pass\n\n    @staticmethod\n    def _handle_pkl(data,name,art_type, directory):",
+            "message": "Similar lines in 2 files\n==abstract_model:[143:196]\n==experiment_logger:[17:41]\n        pass\n\n    @abstractmethod\n    def set_params(self, **params):\n        \"\"\"\n        Set the hyperparameters of the ML model.\n\n        Args:\n            **params: Variable length keyword arguments for hyperparameters.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def get_params(self):\n        \"\"\"\n        Get the hyperparameters of the ML model.\n\n        Returns:\n            A dictionary of the current hyperparameters.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def optuna_hyperparameter_suggest(self, trial):\n        \"\"\"\n        Suggest hyperparameters using Optuna for hyperparameter optimization.\n\n        Args:\n            trial: An Optuna trial object used to suggest hyperparameters.\n\n        Returns:\n            A dictionary of hyperparameters with Optuna distributions.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def grid_search_hyperparameter(self):\n        \"\"\"\n        Define the hyperparameters for grid search.\n\n        Returns:\n            A dictionary representing a hyperparameter grid for grid search.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def default_hyperparameter(self):\n        \"\"\"\n        Define the default hyperparameters of the model.\n\n        Returns:\n            A dictionary with a default set of hyperparameters.\n        \"\"\"",
             "message-id": "R0801"
         },
         {
@@ -13208,7 +13208,7 @@
             "column": 0,
             "path": "addmo/util/data_handling.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[45:52]\n==exe_data_tuning_fixed:[60:68]\n    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')\n    data = pd.read_csv(saved_data_path, delimiter=\",\", index_col=0, encoding=\"latin1\", header=0)\n    config_path = os.path.join(LocalLogger.directory, \"config.json\")\n    with open(config_path, 'r') as f:\n        plot_config = json.load(f)\n\n    # Plot tuned data",
+            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[45:52]\n==exe_data_tuning_fixed:[60:68]\n    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')\n    data = pd.read_csv(saved_data_path, delimiter=\",\", index_col=0, encoding=\"latin1\", header=0)\n    config_path = os.path.join(LocalLogger.directory, \"config.json\")\n    with open(config_path, 'r') as f:\n        plot_config = json.load(f)\n\n    # Plot tuned data\n",
             "message-id": "R0801"
         }
     ],
@@ -13436,7 +13436,7 @@
                 "statement": 29,
                 "warning": 6
             },
-            "config.data_tuning_config": {
+            "data_tuning_config": {
                 "convention": 4,
                 "error": 3,
                 "fatal": 0,
@@ -13951,7 +13951,7 @@
                 "statement": 9,
                 "warning": 1
             },
-            "lease_guard": {
+            "web_app.lease_guard": {
                 "convention": 21,
                 "error": 1,
                 "fatal": 0,
@@ -14068,7 +14068,7 @@
                 "statement": 42,
                 "warning": 6
             },
-            "abstract_scorer": {
+            "scoring.abstract_scorer": {
                 "convention": 6,
                 "error": 5,
                 "fatal": 0,
@@ -14077,7 +14077,7 @@
                 "statement": 17,
                 "warning": 1
             },
-            "validator": {
+            "scoring.validator": {
                 "convention": 8,
                 "error": 5,
                 "fatal": 0,
@@ -14086,7 +14086,7 @@
                 "statement": 15,
                 "warning": 4
             },
-            "validator_factory": {
+            "scoring.validator_factory": {
                 "convention": 3,
                 "error": 4,
                 "fatal": 0,
@@ -14095,7 +14095,7 @@
                 "statement": 11,
                 "warning": 0
             },
-            "metrics.custom_metrics": {
+            "custom_metrics": {
                 "convention": 0,
                 "error": 0,
                 "fatal": 0,
@@ -14104,7 +14104,7 @@
                 "statement": 0,
                 "warning": 0
             },
-            "metrics.abstract_metric": {
+            "abstract_metric": {
                 "convention": 1,
                 "error": 0,
                 "fatal": 0,
@@ -14113,7 +14113,7 @@
                 "statement": 2,
                 "warning": 0
             },
-            "metrics.metric_factory": {
+            "metric_factory": {
                 "convention": 1,
                 "error": 3,
                 "fatal": 0,
@@ -14122,7 +14122,7 @@
                 "statement": 16,
                 "warning": 1
             },
-            "validation_splitting.abstract_splitter": {
+            "abstract_splitter": {
                 "convention": 10,
                 "error": 3,
                 "fatal": 0,
@@ -14131,7 +14131,7 @@
                 "statement": 25,
                 "warning": 0
             },
-            "validation_splitting.custom_splitters": {
+            "custom_splitters": {
                 "convention": 10,
                 "error": 1,
                 "fatal": 0,
@@ -14140,7 +14140,7 @@
                 "statement": 43,
                 "warning": 10
             },
-            "validation_splitting.splitter_factory": {
+            "splitter_factory": {
                 "convention": 1,
                 "error": 4,
                 "fatal": 0,
@@ -14221,7 +14221,7 @@
                 "statement": 30,
                 "warning": 6
             },
-            "config.data_tuning_auto_config": {
+            "data_tuning_auto_config": {
                 "convention": 3,
                 "error": 2,
                 "fatal": 0,

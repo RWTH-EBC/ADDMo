@@ -2998,7 +2998,7 @@
             
         </table>
         
-        <h3>Module <code>config.data_tuning_config</code> (<code>addmo/s2_data_tuning/config/data_tuning_config.py</code>)</h3>
+        <h3>Module <code>data_tuning_config</code> (<code>addmo/s2_data_tuning/config/data_tuning_config.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -8932,7 +8932,6 @@ def execute(plot_name, plot_dir, path_to_regressor, save):
 ==model_testing:[81:100]
     new_config = DataTuningAutoSetup(**saved_config_data)
 
-    # Configure the logger
     LocalLogger.directory = results_dir_data_tuning(new_config)
     LocalLogger.active = True
     WandbLogger.project = &#34;addmo-test_data_auto_tuning&#34;
@@ -8949,8 +8948,7 @@ def execute(plot_name, plot_dir, path_to_regressor, save):
     y_new = new_tuner.y
 
     tuned_xy_new = pd.concat([y_new, tuned_x_new], axis=1, join=&#34;inner&#34;).bfill()
-
-    # Log the tuned system data</pre></td>
+</pre></td>
             </tr>
             
             <tr>
@@ -8970,10 +8968,15 @@ def execute(plot_name, plot_dir, path_to_regressor, save):
         suffix = &#34;_2weeks&#34; if idx == 1 else &#34;&#34;
         plot_path = os.path.join(LocalLogger.directory, f&#34;{file_name}{suffix}&#34;)
         save_pdf(fig, plot_path)
+    # Data tuning completed
     print(&#34;Finished&#34;)
 
-def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
-    &#34;&#34;&#34;Execute the system_data tuning process with default config.&#34;&#34;&#34;
+def default_config_exe_data_tuning_fixed(user_input=&#39;y&#39;):
+    &#34;&#34;&#34;Execute the system_data tuning process with default config.
+    Parameters:
+        user_input : str, optional
+            If &#39;y&#39;, the contents of the target results directory will be overwritten.
+            If &#39;d&#39;, the directory contents will be deleted. Default is &#39;y&#39;.&#34;&#34;&#34;
     # Initialize a default config (without loading JSON)</pre></td>
             </tr>
             
@@ -8995,7 +8998,7 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
 
     ExperimentLogger.start_experiment(config=new_config)
 
-    # Create a new tuner instance with the same tuning parameters</pre></td>
+    #Using fixed config</pre></td>
             </tr>
             
             <tr>
@@ -9010,28 +9013,57 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
 ==experiment_logger:[17:41]
         pass
 
-    @staticmethod
     @abstractmethod
-    def finish_experiment():
+    def set_params(self, **params):
+        &#34;&#34;&#34;
+        Set the hyperparameters of the ML model.
+
+        Args:
+            **params: Variable length keyword arguments for hyperparameters.
+        &#34;&#34;&#34;
         pass
 
-    @staticmethod
     @abstractmethod
-    def log(log: dict):
+    def get_params(self):
+        &#34;&#34;&#34;
+        Get the hyperparameters of the ML model.
+
+        Returns:
+            A dictionary of the current hyperparameters.
+        &#34;&#34;&#34;
         pass
 
-    @staticmethod
     @abstractmethod
-    def log_artifact(data, name: str, art_type: str):
+    def optuna_hyperparameter_suggest(self, trial):
+        &#34;&#34;&#34;
+        Suggest hyperparameters using Optuna for hyperparameter optimization.
+
+        Args:
+            trial: An Optuna trial object used to suggest hyperparameters.
+
+        Returns:
+            A dictionary of hyperparameters with Optuna distributions.
+        &#34;&#34;&#34;
         pass
 
-    @staticmethod
     @abstractmethod
-    def use_artifact(name: str, alias: str = &#34;latest&#34;):
+    def grid_search_hyperparameter(self):
+        &#34;&#34;&#34;
+        Define the hyperparameters for grid search.
+
+        Returns:
+            A dictionary representing a hyperparameter grid for grid search.
+        &#34;&#34;&#34;
         pass
 
-    @staticmethod
-    def _handle_pkl(data,name,art_type, directory):</pre></td>
+    @abstractmethod
+    def default_hyperparameter(self):
+        &#34;&#34;&#34;
+        Define the default hyperparameters of the model.
+
+        Returns:
+            A dictionary with a default set of hyperparameters.
+        &#34;&#34;&#34;</pre></td>
             </tr>
             
             <tr>
@@ -9050,7 +9082,8 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
     with open(config_path, &#39;r&#39;) as f:
         plot_config = json.load(f)
 
-    # Plot tuned data</pre></td>
+    # Plot tuned data
+</pre></td>
             </tr>
             
             <tr>
@@ -13346,7 +13379,7 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
             </tr>
             
             <tr>
-                <td>config.data_tuning_config</td>
+                <td>data_tuning_config</td>
                 <td>9</td>
             </tr>
             

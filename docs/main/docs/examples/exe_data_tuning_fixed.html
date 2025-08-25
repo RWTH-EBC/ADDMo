@@ -111,22 +111,18 @@
 
     <span class="c1"># Load the system_data</span>
     <span class="n">xy_raw</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">abs_path_to_data</span><span class="p">)</span>
-    <span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;xy_testraw&quot;</span><span class="p">:</span> <span class="n">xy_raw</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
 
     <span class="c1"># Split the system_data</span>
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">split_target_features</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">name_of_target</span><span class="p">,</span> <span class="n">xy_raw</span><span class="p">)</span>
 
     <span class="c1"># Tune the system_data</span>
     <span class="n">tuned_x</span> <span class="o">=</span> <span class="n">tuner</span><span class="o">.</span><span class="n">tune_fixed</span><span class="p">(</span><span class="n">xy_raw</span><span class="p">)</span>
-    <span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;x_tuned&quot;</span><span class="p">:</span> <span class="n">tuned_x</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
 
     <span class="c1"># Merge target and features</span>
     <span class="n">xy_tuned</span> <span class="o">=</span> <span class="n">tuned_x</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-    <span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;xy_tuned&quot;</span><span class="p">:</span> <span class="n">xy_tuned</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
 
     <span class="c1"># Drop NaNs</span>
     <span class="n">xy_tuned</span> <span class="o">=</span> <span class="n">xy_tuned</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-    <span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;xy_tuned&quot;</span><span class="p">:</span> <span class="n">xy_tuned</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
 
     <span class="c1"># Log the tuned system_data</span>
     <span class="n">file_name</span> <span class="o">=</span> <span class="s1">&#39;tuned_xy_fixed&#39;</span>
@@ -205,7 +201,6 @@
 </div>
 <p>Load the system_data</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xy_raw</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">abs_path_to_data</span><span class="p">)</span>
-<span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;xy_testraw&quot;</span><span class="p">:</span> <span class="n">xy_raw</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
 </pre></div>
 </div>
 <p>Split the system_data</p>
@@ -214,17 +209,14 @@
 </div>
 <p>Tune the system_data</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tuned_x</span> <span class="o">=</span> <span class="n">tuner</span><span class="o">.</span><span class="n">tune_fixed</span><span class="p">(</span><span class="n">xy_raw</span><span class="p">)</span>
-<span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;x_tuned&quot;</span><span class="p">:</span> <span class="n">tuned_x</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
 </pre></div>
 </div>
 <p>Merge target and features</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xy_tuned</span> <span class="o">=</span> <span class="n">tuned_x</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-<span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;xy_tuned&quot;</span><span class="p">:</span> <span class="n">xy_tuned</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
 </pre></div>
 </div>
 <p>Drop NaNs</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xy_tuned</span> <span class="o">=</span> <span class="n">xy_tuned</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-<span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;xy_tuned&quot;</span><span class="p">:</span> <span class="n">xy_tuned</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]})</span>
 </pre></div>
 </div>
 <p>Log the tuned system_data</p>

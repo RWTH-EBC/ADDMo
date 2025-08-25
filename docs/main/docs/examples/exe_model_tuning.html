@@ -72,7 +72,6 @@
              
   <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-
 <span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.definitions</span><span class="w"> </span><span class="kn">import</span> <span class="n">results_dir_model_tuning</span><span class="p">,</span> <span class="n">results_dir_data_tuning_auto</span><span class="p">,</span> <span class="n">results_dir_data_tuning_fixed</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.load_save_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">root_dir</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.experiment_logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocalLogger</span>
@@ -127,7 +126,10 @@
 </pre></div>
 </div>
 <p>Select training and validation period</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xy_tuned_train_val</span> <span class="o">=</span> <span class="n">xy_tuned</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">config_exp</span><span class="o">.</span><span class="n">start_train_val</span><span class="p">:</span><span class="n">config_exp</span><span class="o">.</span><span class="n">stop_train_val</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">config_exp</span><span class="o">.</span><span class="n">start_train_val</span> <span class="ow">and</span> <span class="n">config_exp</span><span class="o">.</span><span class="n">stop_train_val</span><span class="p">:</span>
+    <span class="n">xy_tuned_train_val</span> <span class="o">=</span> <span class="n">xy_tuned</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">config_exp</span><span class="o">.</span><span class="n">start_train_val</span><span class="p">:</span><span class="n">config_exp</span><span class="o">.</span><span class="n">stop_train_val</span><span class="p">]</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">xy_tuned_train_val</span> <span class="o">=</span> <span class="n">xy_tuned</span>
 <span class="n">x_train_val</span><span class="p">,</span> <span class="n">y_train_val</span> <span class="o">=</span> <span class="n">split_target_features</span><span class="p">(</span><span class="n">config_exp</span><span class="o">.</span><span class="n">name_of_target</span><span class="p">,</span> <span class="n">xy_tuned_train_val</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -152,6 +154,8 @@
     <span class="n">art_type</span> <span class="o">=</span> <span class="s1">&#39;joblib&#39;</span>
 <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;best_model&#39;</span>
 <span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log_artifact</span><span class="p">(</span><span class="n">best_model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">art_type</span><span class="p">)</span>
+<span class="n">saved_data_name</span> <span class="o">=</span> <span class="n">config_exp</span><span class="o">.</span><span class="n">abs_path_to_data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">ExperimentLogger</span><span class="o">.</span><span class="n">log_artifact</span><span class="p">(</span><span class="n">xy_tuned</span><span class="p">,</span><span class="n">saved_data_name</span> <span class="p">,</span> <span class="s2">&quot;system_data&quot;</span><span class="p">)</span>
 <span class="n">plt</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">(</span><span class="n">y_train_val</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">config_exp</span><span class="o">.</span><span class="n">name_of_target</span><span class="p">,</span> <span class="n">best_model</span><span class="o">.</span><span class="n">fit_error</span><span class="p">)</span>
 <span class="n">save_pdf</span><span class="p">(</span><span class="n">plt</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">LocalLogger</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="s1">&#39;model_fit_scatter&#39;</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>

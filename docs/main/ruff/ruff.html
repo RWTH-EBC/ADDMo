@@ -1,11 +1,23 @@
 <html><body><pre>
 GUI/app.py:1:8: F401 [*] `base64` imported but unused
-GUI/app.py:4:1: E401 Multiple imports on one line
-GUI/app.py:5:48: F401 [*] `streamlit_pydantic.pydantic_output` imported but unused
-GUI/app.py:5:65: F401 [*] `streamlit_pydantic.pydantic_form` imported but unused
-GUI/app.py:16:80: F401 [*] `addmo_examples.executables.exe_data_insights.exe_parallel_plot` imported but unused
-GUI/app.py:18:34: F401 [*] `addmo.util.load_save.load_data` imported but unused
-GUI/app.py:677:5: F841 Local variable `choose_plotting_type` is assigned to but never used
+GUI/app.py:6:1: E401 Multiple imports on one line
+GUI/app.py:7:1: E401 Multiple imports on one line
+GUI/app.py:7:8: F401 [*] `time` imported but unused
+GUI/app.py:8:48: F401 [*] `streamlit_pydantic.pydantic_output` imported but unused
+GUI/app.py:8:65: F401 [*] `streamlit_pydantic.pydantic_form` imported but unused
+GUI/app.py:18:36: F401 [*] `addmo.util.definitions.results_dir_data_tuning_auto` imported but unused
+GUI/app.py:18:66: F401 [*] `addmo.util.definitions.results_dir_data_tuning_fixed` imported but unused
+GUI/app.py:19:80: F401 [*] `addmo_examples.executables.exe_data_insights.exe_parallel_plot` imported but unused
+GUI/app.py:21:34: F401 [*] `addmo.util.load_save.load_data` imported but unused
+GUI/app.py:817:5: F841 Local variable `choose_plotting_type` is assigned to but never used
+GUI/web_app/lease_guard.py:1:1: E401 Multiple imports on one line
+GUI/web_app/lease_guard.py:1:18: F401 [*] `uuid` imported but unused
+GUI/web_app/lease_guard.py:16:58: E701 Multiple statements on one line (colon)
+GUI/web_app/lease_guard.py:22:47: E701 Multiple statements on one line (colon)
+GUI/web_app/lease_guard.py:26:8: E701 Multiple statements on one line (colon)
+GUI/web_app/lease_guard.py:27:29: E701 Multiple statements on one line (colon)
+GUI/web_app/lease_guard.py:50:20: F811 Redefinition of unused `uuid` from line 1
+GUI/web_app/lease_guard.py:97:17: E701 Multiple statements on one line (colon)
 addmo/s1_data_tuning_auto/config/data_tuning_auto_config.py:2:40: F401 [*] `pydantic.PrivateAttr` imported but unused
 addmo/s1_data_tuning_auto/feature_construction.py:4:38: F401 [*] `addmo.util.data_handling.split_target_features` imported but unused
 addmo/s1_data_tuning_auto/feature_construction.py:5:61: F401 [*] `addmo.s3_model_tuning.scoring.validator_factory.ValidatorFactory` imported but unused
@@ -69,7 +81,7 @@ addmo/util/definitions.py:2:8: F401 [*] `glob` imported but unused
 addmo/util/experiment_logger.py:5:20: F401 [*] `pandas.ExcelWriter` imported but unused
 addmo/util/experiment_logger.py:9:40: F401 [*] `addmo.util.load_save_utils.create_or_clean_directory` imported but unused
 addmo/util/experiment_logger.py:273:9: F841 Local variable `data_local` is assigned to but never used
-addmo/util/load_save.py:7:8: F811 Redefinition of unused `datetime` from line 3
+addmo/util/load_save.py:9:8: F811 Redefinition of unused `datetime` from line 5
 addmo/util/plotting_utils.py:2:8: F401 [*] `re` imported but unused
 addmo/util/plotting_utils.py:3:18: F401 [*] `pandas` imported but unused
 addmo/util/plotting_utils.py:4:20: F401 [*] `typing.Optional` imported but unused
@@ -77,9 +89,11 @@ addmo/util/plotting_utils.py:5:22: F401 [*] `pydantic.BaseModel` imported but un
 addmo/util/plotting_utils.py:5:33: F401 [*] `pydantic.Field` imported but unused
 addmo/util/plotting_utils.py:5:40: F401 [*] `pydantic.create_model` imported but unused
 addmo_examples/executables/exe_data_insights.py:2:1: E401 Multiple imports on one line
+addmo_examples/executables/exe_data_insights.py:2:22: F401 [*] `csv` imported but unused
+addmo_examples/executables/exe_data_insights.py:3:8: F401 [*] `datetime` imported but unused
 addmo_examples/executables/exe_model_testing.py:5:37: F401 [*] `addmo.util.definitions.return_results_dir_model_tuning` imported but unused
-addmo_examples/executables/exe_model_tuning.py:4:62: F401 [*] `addmo.util.definitions.results_dir_data_tuning_auto` imported but unused
-addmo_examples/executables/exe_model_tuning.py:4:92: F401 [*] `addmo.util.definitions.results_dir_data_tuning_fixed` imported but unused
+addmo_examples/executables/exe_model_tuning.py:3:62: F401 [*] `addmo.util.definitions.results_dir_data_tuning_auto` imported but unused
+addmo_examples/executables/exe_model_tuning.py:3:92: F401 [*] `addmo.util.definitions.results_dir_data_tuning_fixed` imported but unused
 tests/E2E_test.py:5:21: F401 [*] `pathlib.Path` imported but unused
 tests/test_abstractmodel.py:7:55: F401 [*] `addmo.s3_model_tuning.models.keras_models.BaseKerasModel` imported but unused
 tests/test_data_tuning.py:1:8: F401 [*] `os` imported but unused
@@ -91,6 +105,6 @@ tests/test_data_tuning.py:7:59: F401 [*] `addmo.util.experiment_logger.LocalLogg
 tests/test_data_tuning.py:7:72: F401 [*] `addmo.util.experiment_logger.WandbLogger` imported but unused
 tests/test_model_tuning.py:5:62: F401 [*] `addmo.s3_model_tuning.config.model_tuning_config.ModelTunerConfig` imported but unused
 tests/test_model_tuning.py:8:34: F401 [*] `addmo.util.load_save.load_config_from_json` imported but unused
-Found 92 errors.
-[*] 73 fixable with the `--fix` option (12 hidden fixes can be enabled with the `--unsafe-fixes` option).
+Found 106 errors.
+[*] 79 fixable with the `--fix` option (12 hidden fixes can be enabled with the `--unsafe-fixes` option).
 </pre></body></html>

@@ -1,4 +1,8 @@
 
+# Data Tuning (Auto) Tutorial
+
+Importing of necessary libraries and walk through of internal data tuning, created with default config
+
 ```python
 import os
 import json
@@ -70,6 +74,7 @@ def default_config_exe_data_tuning_auto(user_input='y'):
     _exe_data_tuning_auto(config, user_input=user_input)
 ```
 
+Tutorial for executing data tuning on user defined config
 Please define the missing TODOs in the section below according to the docstrings.
 
 ```python

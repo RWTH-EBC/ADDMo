@@ -1,4 +1,8 @@
 
+# Data Tuning (Fixed) Tutorial
+
+Importing of necessary libraries and walk through of internal data tuning, created with default config
+
 ```python
 import os
 import json
@@ -90,6 +94,8 @@ def default_config_exe_data_tuning_fixed(user_input='y'):
     # Run data tuning execution
     _exe_data_tuning(config, user_input)
 ```
+
+Tutorial for executing data tuning on user defined config
 
 Please define the missing TODOs in the section below according to the docstrings.
 

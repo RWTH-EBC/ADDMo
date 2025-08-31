@@ -1,4 +1,4 @@
-![Banner](staticfiles/logo.png)
+![Banner](https://raw.githubusercontent.com/RWTH-EBC/ADDMo/main/staticfiles/logo.png)
 [![documentation](https://raw.githubusercontent.com/RWTH-EBC/ADDMo/gh-pages/docs/main/docs/doc.svg)](https://rwth-ebc.github.io/ADDMo/docs/main/docs/)
 [![Coverage](https://raw.githubusercontent.com/RWTH-EBC/ADDMo/gh-pages/docs/main/coverage/badge.svg)](https://rwth-ebc.github.io/ADDMo/docs/main/coverage/)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
@@ -86,7 +86,7 @@ It cannot recreate tuning from externally trained models or configurations.
 
 The flowchart below depicts the workflow of the tool:  
 
-![Pipeline Diagram](staticfiles/flowchart_addmo.png)  
+![Pipeline Diagram](https://raw.githubusercontent.com/RWTH-EBC/ADDMo/main/staticfiles/flowchart_addmo.png)  
 
 The tool is mainly designed to perform modelling on time series data,
 via regression and time series analysis.

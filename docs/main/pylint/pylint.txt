@@ -9,7 +9,7 @@ addmo/s3_model_tuning/model_tuner.py:6:0: E0401: Unable to import 'addmo.s3_mode
 addmo/s3_model_tuning/model_tuner.py:7:0: E0401: Unable to import 'addmo.s3_model_tuning.hyperparameter_tuning.hyparam_tuning_factory' (import-error)
 addmo/s3_model_tuning/model_tuner.py:10:0: E0401: Unable to import 'addmo.s3_model_tuning.scoring.validator_factory' (import-error)
 addmo/s3_model_tuning/model_tuner.py:13:0: C0115: Missing class docstring (missing-class-docstring)
-************* Module config.model_tuning_config
+************* Module model_tuning_config
 addmo/s3_model_tuning/config/model_tuning_config.py:11:0: C0301: Line too long (209/100) (line-too-long)
 addmo/s3_model_tuning/config/model_tuning_config.py:64:0: C0301: Line too long (124/100) (line-too-long)
 addmo/s3_model_tuning/config/model_tuning_config.py:92:0: C0305: Trailing newlines (trailing-newlines)
@@ -150,7 +150,7 @@ addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:70:36: C0
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:70:36: W0613: Unused argument 'y' (unused-argument)
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:70:44: W0613: Unused argument 'groups' (unused-argument)
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:43:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module scoring.metrics.metric_factory
+************* Module metric_factory
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:3:0: E0401: Unable to import 'sklearn' (import-error)
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:5:0: E0401: Unable to import 'addmo.s3_model_tuning.scoring.metrics' (import-error)
@@ -158,7 +158,7 @@ addmo/s3_model_tuning/scoring/metrics/metric_factory.py:6:0: E0401: Unable to im
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:19:8: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:38:20: W0212: Access to a protected member _score_func of a client class (protected-access)
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:9:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module scoring.metrics.abstract_metric
+************* Module abstract_metric
 addmo/s3_model_tuning/scoring/metrics/abstract_metric.py:10:0: C0115: Missing class docstring (missing-class-docstring)
 addmo/s3_model_tuning/scoring/metrics/abstract_metric.py:10:0: R0903: Too few public methods (0/2) (too-few-public-methods)
 ************* Module models.model_factory
@@ -867,58 +867,59 @@ addmo_examples/executables/exe_model_testing.py:33:4: C0103: Constant name "data
 addmo_examples/executables/exe_model_testing.py:34:4: C0103: Constant name "input_tuned_data_path" doesn't conform to UPPER_CASE naming style (invalid-name)
 addmo_examples/executables/exe_model_testing.py:5:0: W0611: Unused return_results_dir_model_tuning imported from addmo.util.definitions (unused-import)
 ************* Module exe_data_tuning_auto
-addmo_examples/executables/exe_data_tuning_auto.py:129:0: C0301: Line too long (165/100) (line-too-long)
-addmo_examples/executables/exe_data_tuning_auto.py:131:0: C0304: Final newline missing (missing-final-newline)
+addmo_examples/executables/exe_data_tuning_auto.py:3:0: C0301: Line too long (104/100) (line-too-long)
+addmo_examples/executables/exe_data_tuning_auto.py:133:0: C0301: Line too long (165/100) (line-too-long)
+addmo_examples/executables/exe_data_tuning_auto.py:135:0: C0304: Final newline missing (missing-final-newline)
 addmo_examples/executables/exe_data_tuning_auto.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-addmo_examples/executables/exe_data_tuning_auto.py:3:0: E0401: Unable to import 'pandas' (import-error)
-addmo_examples/executables/exe_data_tuning_auto.py:4:0: E0401: Unable to import 'addmo.util.plotting_utils' (import-error)
-addmo_examples/executables/exe_data_tuning_auto.py:5:0: E0401: Unable to import 'addmo.util.definitions' (import-error)
-addmo_examples/executables/exe_data_tuning_auto.py:6:0: E0401: Unable to import 'addmo.util.load_save_utils' (import-error)
-addmo_examples/executables/exe_data_tuning_auto.py:7:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
-addmo_examples/executables/exe_data_tuning_auto.py:8:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
-addmo_examples/executables/exe_data_tuning_auto.py:9:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
-addmo_examples/executables/exe_data_tuning_auto.py:10:0: E0401: Unable to import 'addmo.s1_data_tuning_auto.config.data_tuning_auto_config' (import-error)
-addmo_examples/executables/exe_data_tuning_auto.py:11:0: E0401: Unable to import 'addmo.s1_data_tuning_auto.data_tuner_auto' (import-error)
-addmo_examples/executables/exe_data_tuning_auto.py:12:0: E0401: Unable to import 'addmo.s5_insights.model_plots.time_series' (import-error)
-addmo_examples/executables/exe_data_tuning_auto.py:13:0: E0401: Unable to import 'addmo.util.load_save' (import-error)
-addmo_examples/executables/exe_data_tuning_auto.py:15:0: R0914: Too many local variables (17/15) (too-many-locals)
-addmo_examples/executables/exe_data_tuning_auto.py:15:34: W0621: Redefining name 'user_input' from outer scope (line 129) (redefined-outer-name)
-addmo_examples/executables/exe_data_tuning_auto.py:37:4: C0103: Variable name "y" doesn't conform to snake_case naming style (invalid-name)
-addmo_examples/executables/exe_data_tuning_auto.py:49:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
-addmo_examples/executables/exe_data_tuning_auto.py:49:35: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
-addmo_examples/executables/exe_data_tuning_auto.py:63:40: W0621: Redefining name 'user_input' from outer scope (line 129) (redefined-outer-name)
-addmo_examples/executables/exe_data_tuning_auto.py:70:0: R0914: Too many local variables (18/15) (too-many-locals)
-addmo_examples/executables/exe_data_tuning_auto.py:70:25: W0621: Redefining name 'user_input' from outer scope (line 129) (redefined-outer-name)
-addmo_examples/executables/exe_data_tuning_auto.py:100:4: C0103: Variable name "y" doesn't conform to snake_case naming style (invalid-name)
-addmo_examples/executables/exe_data_tuning_auto.py:112:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
-addmo_examples/executables/exe_data_tuning_auto.py:112:35: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
+addmo_examples/executables/exe_data_tuning_auto.py:6:0: E0401: Unable to import 'pandas' (import-error)
+addmo_examples/executables/exe_data_tuning_auto.py:7:0: E0401: Unable to import 'addmo.util.plotting_utils' (import-error)
+addmo_examples/executables/exe_data_tuning_auto.py:8:0: E0401: Unable to import 'addmo.util.definitions' (import-error)
+addmo_examples/executables/exe_data_tuning_auto.py:9:0: E0401: Unable to import 'addmo.util.load_save_utils' (import-error)
+addmo_examples/executables/exe_data_tuning_auto.py:10:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
+addmo_examples/executables/exe_data_tuning_auto.py:11:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
+addmo_examples/executables/exe_data_tuning_auto.py:12:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
+addmo_examples/executables/exe_data_tuning_auto.py:13:0: E0401: Unable to import 'addmo.s1_data_tuning_auto.config.data_tuning_auto_config' (import-error)
+addmo_examples/executables/exe_data_tuning_auto.py:14:0: E0401: Unable to import 'addmo.s1_data_tuning_auto.data_tuner_auto' (import-error)
+addmo_examples/executables/exe_data_tuning_auto.py:15:0: E0401: Unable to import 'addmo.s5_insights.model_plots.time_series' (import-error)
+addmo_examples/executables/exe_data_tuning_auto.py:16:0: E0401: Unable to import 'addmo.util.load_save' (import-error)
+addmo_examples/executables/exe_data_tuning_auto.py:18:0: R0914: Too many local variables (17/15) (too-many-locals)
+addmo_examples/executables/exe_data_tuning_auto.py:18:34: W0621: Redefining name 'user_input' from outer scope (line 133) (redefined-outer-name)
+addmo_examples/executables/exe_data_tuning_auto.py:40:4: C0103: Variable name "y" doesn't conform to snake_case naming style (invalid-name)
+addmo_examples/executables/exe_data_tuning_auto.py:52:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+addmo_examples/executables/exe_data_tuning_auto.py:52:35: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
+addmo_examples/executables/exe_data_tuning_auto.py:66:40: W0621: Redefining name 'user_input' from outer scope (line 133) (redefined-outer-name)
+addmo_examples/executables/exe_data_tuning_auto.py:74:0: R0914: Too many local variables (18/15) (too-many-locals)
+addmo_examples/executables/exe_data_tuning_auto.py:74:25: W0621: Redefining name 'user_input' from outer scope (line 133) (redefined-outer-name)
+addmo_examples/executables/exe_data_tuning_auto.py:104:4: C0103: Variable name "y" doesn't conform to snake_case naming style (invalid-name)
+addmo_examples/executables/exe_data_tuning_auto.py:116:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+addmo_examples/executables/exe_data_tuning_auto.py:116:35: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
 ************* Module exe_model_tuning
-addmo_examples/executables/exe_model_tuning.py:3:0: C0301: Line too long (120/100) (line-too-long)
-addmo_examples/executables/exe_model_tuning.py:56:0: C0301: Line too long (117/100) (line-too-long)
-addmo_examples/executables/exe_model_tuning.py:91:0: C0301: Line too long (194/100) (line-too-long)
-addmo_examples/executables/exe_model_tuning.py:93:0: C0304: Final newline missing (missing-final-newline)
+addmo_examples/executables/exe_model_tuning.py:4:0: C0301: Line too long (120/100) (line-too-long)
+addmo_examples/executables/exe_model_tuning.py:57:0: C0301: Line too long (117/100) (line-too-long)
+addmo_examples/executables/exe_model_tuning.py:92:0: C0301: Line too long (194/100) (line-too-long)
+addmo_examples/executables/exe_model_tuning.py:94:0: C0304: Final newline missing (missing-final-newline)
 addmo_examples/executables/exe_model_tuning.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-addmo_examples/executables/exe_model_tuning.py:2:0: E0401: Unable to import 'pandas' (import-error)
-addmo_examples/executables/exe_model_tuning.py:3:0: E0401: Unable to import 'addmo.util.definitions' (import-error)
-addmo_examples/executables/exe_model_tuning.py:4:0: E0401: Unable to import 'addmo.util.load_save_utils' (import-error)
-addmo_examples/executables/exe_model_tuning.py:5:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
+addmo_examples/executables/exe_model_tuning.py:3:0: E0401: Unable to import 'pandas' (import-error)
+addmo_examples/executables/exe_model_tuning.py:4:0: E0401: Unable to import 'addmo.util.definitions' (import-error)
+addmo_examples/executables/exe_model_tuning.py:5:0: E0401: Unable to import 'addmo.util.load_save_utils' (import-error)
 addmo_examples/executables/exe_model_tuning.py:6:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
 addmo_examples/executables/exe_model_tuning.py:7:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
-addmo_examples/executables/exe_model_tuning.py:8:0: E0401: Unable to import 'addmo.s3_model_tuning.models.keras_models' (import-error)
-addmo_examples/executables/exe_model_tuning.py:9:0: E0401: Unable to import 'addmo.s3_model_tuning.config.model_tuning_config' (import-error)
+addmo_examples/executables/exe_model_tuning.py:8:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
+addmo_examples/executables/exe_model_tuning.py:9:0: E0401: Unable to import 'addmo.s3_model_tuning.models.keras_models' (import-error)
 addmo_examples/executables/exe_model_tuning.py:10:0: E0401: Unable to import 'addmo.s3_model_tuning.config.model_tuning_config' (import-error)
-addmo_examples/executables/exe_model_tuning.py:11:0: E0401: Unable to import 'addmo.s3_model_tuning.model_tuner' (import-error)
-addmo_examples/executables/exe_model_tuning.py:12:0: E0401: Unable to import 'addmo.util.load_save' (import-error)
+addmo_examples/executables/exe_model_tuning.py:11:0: E0401: Unable to import 'addmo.s3_model_tuning.config.model_tuning_config' (import-error)
+addmo_examples/executables/exe_model_tuning.py:12:0: E0401: Unable to import 'addmo.s3_model_tuning.model_tuner' (import-error)
 addmo_examples/executables/exe_model_tuning.py:13:0: E0401: Unable to import 'addmo.util.load_save' (import-error)
-addmo_examples/executables/exe_model_tuning.py:14:0: E0401: Unable to import 'addmo.util.data_handling' (import-error)
-addmo_examples/executables/exe_model_tuning.py:15:0: E0401: Unable to import 'addmo.s5_insights.model_plots.scatter_plot' (import-error)
-addmo_examples/executables/exe_model_tuning.py:16:0: E0401: Unable to import 'addmo.util.plotting_utils' (import-error)
-addmo_examples/executables/exe_model_tuning.py:19:0: R0914: Too many local variables (16/15) (too-many-locals)
-addmo_examples/executables/exe_model_tuning.py:19:21: W0621: Redefining name 'user_input' from outer scope (line 90) (redefined-outer-name)
-addmo_examples/executables/exe_model_tuning.py:19:37: W0621: Redefining name 'config_exp' from outer scope (line 87) (redefined-outer-name)
-addmo_examples/executables/exe_model_tuning.py:19:54: W0621: Redefining name 'config_tuner' from outer scope (line 88) (redefined-outer-name)
-addmo_examples/executables/exe_model_tuning.py:3:0: W0611: Unused results_dir_data_tuning_auto imported from addmo.util.definitions (unused-import)
-addmo_examples/executables/exe_model_tuning.py:3:0: W0611: Unused results_dir_data_tuning_fixed imported from addmo.util.definitions (unused-import)
+addmo_examples/executables/exe_model_tuning.py:14:0: E0401: Unable to import 'addmo.util.load_save' (import-error)
+addmo_examples/executables/exe_model_tuning.py:15:0: E0401: Unable to import 'addmo.util.data_handling' (import-error)
+addmo_examples/executables/exe_model_tuning.py:16:0: E0401: Unable to import 'addmo.s5_insights.model_plots.scatter_plot' (import-error)
+addmo_examples/executables/exe_model_tuning.py:17:0: E0401: Unable to import 'addmo.util.plotting_utils' (import-error)
+addmo_examples/executables/exe_model_tuning.py:20:0: R0914: Too many local variables (16/15) (too-many-locals)
+addmo_examples/executables/exe_model_tuning.py:20:21: W0621: Redefining name 'user_input' from outer scope (line 91) (redefined-outer-name)
+addmo_examples/executables/exe_model_tuning.py:20:37: W0621: Redefining name 'config_exp' from outer scope (line 88) (redefined-outer-name)
+addmo_examples/executables/exe_model_tuning.py:20:54: W0621: Redefining name 'config_tuner' from outer scope (line 89) (redefined-outer-name)
+addmo_examples/executables/exe_model_tuning.py:4:0: W0611: Unused results_dir_data_tuning_auto imported from addmo.util.definitions (unused-import)
+addmo_examples/executables/exe_model_tuning.py:4:0: W0611: Unused results_dir_data_tuning_fixed imported from addmo.util.definitions (unused-import)
 ************* Module exe_data_insights
 addmo_examples/executables/exe_data_insights.py:7:0: C0301: Line too long (124/100) (line-too-long)
 addmo_examples/executables/exe_data_insights.py:8:0: C0301: Line too long (105/100) (line-too-long)
@@ -984,37 +985,38 @@ addmo_examples/executables/exe_recreate_data_tuning.py:59:4: C0103: Constant nam
 addmo_examples/executables/exe_recreate_data_tuning.py:60:4: C0103: Constant name "name_of_tuning" doesn't conform to UPPER_CASE naming style (invalid-name)
 addmo_examples/executables/exe_recreate_data_tuning.py:62:4: C0103: Constant name "name_new_config" doesn't conform to UPPER_CASE naming style (invalid-name)
 ************* Module exe_data_tuning_fixed
-addmo_examples/executables/exe_data_tuning_fixed.py:159:0: C0301: Line too long (166/100) (line-too-long)
-addmo_examples/executables/exe_data_tuning_fixed.py:162:0: C0305: Trailing newlines (trailing-newlines)
+addmo_examples/executables/exe_data_tuning_fixed.py:3:0: C0301: Line too long (104/100) (line-too-long)
+addmo_examples/executables/exe_data_tuning_fixed.py:164:0: C0301: Line too long (166/100) (line-too-long)
+addmo_examples/executables/exe_data_tuning_fixed.py:167:0: C0305: Trailing newlines (trailing-newlines)
 addmo_examples/executables/exe_data_tuning_fixed.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-addmo_examples/executables/exe_data_tuning_fixed.py:3:0: E0401: Unable to import 'pandas' (import-error)
-addmo_examples/executables/exe_data_tuning_fixed.py:4:0: E0401: Unable to import 'addmo.util.definitions' (import-error)
-addmo_examples/executables/exe_data_tuning_fixed.py:5:0: E0401: Unable to import 'addmo.util.load_save_utils' (import-error)
-addmo_examples/executables/exe_data_tuning_fixed.py:6:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
-addmo_examples/executables/exe_data_tuning_fixed.py:7:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
-addmo_examples/executables/exe_data_tuning_fixed.py:8:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
-addmo_examples/executables/exe_data_tuning_fixed.py:9:0: E0401: Unable to import 'addmo.s2_data_tuning.config.data_tuning_config' (import-error)
-addmo_examples/executables/exe_data_tuning_fixed.py:10:0: E0401: Unable to import 'addmo.s2_data_tuning.data_tuner_fixed' (import-error)
-addmo_examples/executables/exe_data_tuning_fixed.py:11:0: E0401: Unable to import 'addmo.util.load_save' (import-error)
-addmo_examples/executables/exe_data_tuning_fixed.py:12:0: E0401: Unable to import 'addmo.util.plotting_utils' (import-error)
-addmo_examples/executables/exe_data_tuning_fixed.py:13:0: E0401: Unable to import 'addmo.util.data_handling' (import-error)
-addmo_examples/executables/exe_data_tuning_fixed.py:14:0: E0401: Unable to import 'addmo.s5_insights.model_plots.time_series' (import-error)
-addmo_examples/executables/exe_data_tuning_fixed.py:15:0: E0401: Unable to import 'addmo.util.load_save' (import-error)
-addmo_examples/executables/exe_data_tuning_fixed.py:17:0: R0914: Too many local variables (19/15) (too-many-locals)
-addmo_examples/executables/exe_data_tuning_fixed.py:17:29: W0621: Redefining name 'user_input' from outer scope (line 159) (redefined-outer-name)
-addmo_examples/executables/exe_data_tuning_fixed.py:42:4: C0103: Variable name "x" doesn't conform to snake_case naming style (invalid-name)
-addmo_examples/executables/exe_data_tuning_fixed.py:42:7: C0103: Variable name "y" doesn't conform to snake_case naming style (invalid-name)
-addmo_examples/executables/exe_data_tuning_fixed.py:64:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
-addmo_examples/executables/exe_data_tuning_fixed.py:64:35: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
-addmo_examples/executables/exe_data_tuning_fixed.py:42:4: W0612: Unused variable 'x' (unused-variable)
-addmo_examples/executables/exe_data_tuning_fixed.py:80:41: W0621: Redefining name 'user_input' from outer scope (line 159) (redefined-outer-name)
-addmo_examples/executables/exe_data_tuning_fixed.py:91:0: R0914: Too many local variables (20/15) (too-many-locals)
-addmo_examples/executables/exe_data_tuning_fixed.py:91:26: W0621: Redefining name 'user_input' from outer scope (line 159) (redefined-outer-name)
-addmo_examples/executables/exe_data_tuning_fixed.py:119:4: C0103: Variable name "x" doesn't conform to snake_case naming style (invalid-name)
-addmo_examples/executables/exe_data_tuning_fixed.py:119:7: C0103: Variable name "y" doesn't conform to snake_case naming style (invalid-name)
-addmo_examples/executables/exe_data_tuning_fixed.py:141:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
-addmo_examples/executables/exe_data_tuning_fixed.py:141:35: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
-addmo_examples/executables/exe_data_tuning_fixed.py:119:4: W0612: Unused variable 'x' (unused-variable)
+addmo_examples/executables/exe_data_tuning_fixed.py:6:0: E0401: Unable to import 'pandas' (import-error)
+addmo_examples/executables/exe_data_tuning_fixed.py:7:0: E0401: Unable to import 'addmo.util.definitions' (import-error)
+addmo_examples/executables/exe_data_tuning_fixed.py:8:0: E0401: Unable to import 'addmo.util.load_save_utils' (import-error)
+addmo_examples/executables/exe_data_tuning_fixed.py:9:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
+addmo_examples/executables/exe_data_tuning_fixed.py:10:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
+addmo_examples/executables/exe_data_tuning_fixed.py:11:0: E0401: Unable to import 'addmo.util.experiment_logger' (import-error)
+addmo_examples/executables/exe_data_tuning_fixed.py:12:0: E0401: Unable to import 'addmo.s2_data_tuning.config.data_tuning_config' (import-error)
+addmo_examples/executables/exe_data_tuning_fixed.py:13:0: E0401: Unable to import 'addmo.s2_data_tuning.data_tuner_fixed' (import-error)
+addmo_examples/executables/exe_data_tuning_fixed.py:14:0: E0401: Unable to import 'addmo.util.load_save' (import-error)
+addmo_examples/executables/exe_data_tuning_fixed.py:15:0: E0401: Unable to import 'addmo.util.plotting_utils' (import-error)
+addmo_examples/executables/exe_data_tuning_fixed.py:16:0: E0401: Unable to import 'addmo.util.data_handling' (import-error)
+addmo_examples/executables/exe_data_tuning_fixed.py:17:0: E0401: Unable to import 'addmo.s5_insights.model_plots.time_series' (import-error)
+addmo_examples/executables/exe_data_tuning_fixed.py:18:0: E0401: Unable to import 'addmo.util.load_save' (import-error)
+addmo_examples/executables/exe_data_tuning_fixed.py:20:0: R0914: Too many local variables (19/15) (too-many-locals)
+addmo_examples/executables/exe_data_tuning_fixed.py:20:29: W0621: Redefining name 'user_input' from outer scope (line 164) (redefined-outer-name)
+addmo_examples/executables/exe_data_tuning_fixed.py:45:4: C0103: Variable name "x" doesn't conform to snake_case naming style (invalid-name)
+addmo_examples/executables/exe_data_tuning_fixed.py:45:7: C0103: Variable name "y" doesn't conform to snake_case naming style (invalid-name)
+addmo_examples/executables/exe_data_tuning_fixed.py:67:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+addmo_examples/executables/exe_data_tuning_fixed.py:67:35: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
+addmo_examples/executables/exe_data_tuning_fixed.py:45:4: W0612: Unused variable 'x' (unused-variable)
+addmo_examples/executables/exe_data_tuning_fixed.py:83:41: W0621: Redefining name 'user_input' from outer scope (line 164) (redefined-outer-name)
+addmo_examples/executables/exe_data_tuning_fixed.py:96:0: R0914: Too many local variables (20/15) (too-many-locals)
+addmo_examples/executables/exe_data_tuning_fixed.py:96:26: W0621: Redefining name 'user_input' from outer scope (line 164) (redefined-outer-name)
+addmo_examples/executables/exe_data_tuning_fixed.py:124:4: C0103: Variable name "x" doesn't conform to snake_case naming style (invalid-name)
+addmo_examples/executables/exe_data_tuning_fixed.py:124:7: C0103: Variable name "y" doesn't conform to snake_case naming style (invalid-name)
+addmo_examples/executables/exe_data_tuning_fixed.py:146:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+addmo_examples/executables/exe_data_tuning_fixed.py:146:35: C0103: Variable name "f" doesn't conform to snake_case naming style (invalid-name)
+addmo_examples/executables/exe_data_tuning_fixed.py:124:4: W0612: Unused variable 'x' (unused-variable)
 ************* Module launch_GUI
 GUI/launch_GUI.py:11:0: C0304: Final newline missing (missing-final-newline)
 GUI/launch_GUI.py:1:0: C0114: Missing module docstring (missing-module-docstring)
@@ -1218,7 +1220,7 @@ GUI/app.py:18:0: W0611: Unused results_dir_data_tuning_auto imported from addmo.
 GUI/app.py:18:0: W0611: Unused results_dir_data_tuning_fixed imported from addmo.util.definitions (unused-import)
 GUI/app.py:19:0: W0611: Unused exe_parallel_plot imported from addmo_examples.executables.exe_data_insights (unused-import)
 GUI/app.py:21:0: W0611: Unused load_data imported from addmo.util.load_save (unused-import)
-************* Module web_app.lease_guard
+************* Module lease_guard
 GUI/web_app/lease_guard.py:9:0: C0301: Line too long (101/100) (line-too-long)
 GUI/web_app/lease_guard.py:10:0: C0301: Line too long (103/100) (line-too-long)
 GUI/web_app/lease_guard.py:159:0: C0304: Final newline missing (missing-final-newline)
@@ -1255,8 +1257,8 @@ GUI/web_app/lease_guard.py:147:4: C0103: Variable name "t" doesn't conform to sn
 GUI/web_app/lease_guard.py:117:0: C0411: standard import "from contextlib import contextmanager" should be placed before "import streamlit as st" (wrong-import-order)
 GUI/web_app/lease_guard.py:1:0: W0611: Unused import uuid (unused-import)
 GUI/web_app/lease_guard.py:1:0: R0801: Similar lines in 2 files
-==exe_data_tuning_auto:[45:65]
-==exe_data_tuning_fixed:[137:156]
+==exe_data_tuning_auto:[48:68]
+==exe_data_tuning_fixed:[142:161]
     saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')
     data = pd.read_csv(saved_data_path, delimiter=",", index_col=0, encoding="latin1", header=0)
     config_path = os.path.join(LocalLogger.directory, "config.json")
@@ -1302,9 +1304,8 @@ GUI/web_app/lease_guard.py:1:0: R0801: Similar lines in 2 files
 
     return pred_func
 
-def plot_carpets_with_buckets(variables, measurements_data, target_values, regressor_func , bounds=None , combinations=None , defaults_dict=None ,num_buckets=4):
-
-    # Define bounds (duplicate-code)
+def execute(plot_name, plot_dir, path_to_regressor, save):
+ (duplicate-code)
 GUI/web_app/lease_guard.py:1:0: R0801: Similar lines in 2 files
 ==carpet_plots:[113:130]
 ==plot_carpets_modelA:[74:93]
@@ -1324,9 +1325,7 @@ GUI/web_app/lease_guard.py:1:0: R0801: Similar lines in 2 files
             surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)
             surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)
 
-
-        # Add this line to reverse the axis direction
-        # ax.set_xlim(ax.get_xlim()[::-1]) (duplicate-code)
+        # Add this line to reverse the axis direction (duplicate-code)
 GUI/web_app/lease_guard.py:1:0: R0801: Similar lines in 2 files
 ==carpet_plots:[89:104]
 ==plot_carpets_modelA:[50:65]
@@ -1368,8 +1367,8 @@ GUI/web_app/lease_guard.py:1:0: R0801: Similar lines in 2 files
     tuned_xy_new = pd.concat([y_new, tuned_x_new], axis=1, join="inner").bfill()
  (duplicate-code)
 GUI/web_app/lease_guard.py:1:0: R0801: Similar lines in 2 files
-==exe_data_tuning_auto:[53:65]
-==exe_data_tuning_fixed:[69:86]
+==exe_data_tuning_auto:[56:68]
+==exe_data_tuning_fixed:[72:89]
     for fig in figures:
         fig.show()
     os.makedirs(LocalLogger.directory, exist_ok=True)
@@ -1395,8 +1394,8 @@ GUI/web_app/lease_guard.py:1:0: R0801: Similar lines in 2 files
 
     #Using fixed config (duplicate-code)
 GUI/web_app/lease_guard.py:1:0: R0801: Similar lines in 2 files
-==exe_data_tuning_auto:[45:52]
-==exe_data_tuning_fixed:[60:68]
+==exe_data_tuning_auto:[48:55]
+==exe_data_tuning_fixed:[63:71]
     saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')
     data = pd.read_csv(saved_data_path, delimiter=",", index_col=0, encoding="latin1", header=0)
     config_path = os.path.join(LocalLogger.directory, "config.json")
@@ -1434,5 +1433,5 @@ GUI/web_app/lease_guard.py:1:0: R0801: Similar lines in 2 files
     def _handle_pkl(data,name,art_type, directory): (duplicate-code)
 
 -----------------------------------
-Your code has been rated at 2.64/10
+Your code has been rated at 2.63/10
 

@@ -101,7 +101,7 @@
         },
         {
             "type": "convention",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -112,7 +112,7 @@
         },
         {
             "type": "convention",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "",
             "line": 64,
             "column": 0,
@@ -123,7 +123,7 @@
         },
         {
             "type": "convention",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "",
             "line": 92,
             "column": 0,
@@ -134,7 +134,7 @@
         },
         {
             "type": "convention",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -145,7 +145,7 @@
         },
         {
             "type": "error",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -156,7 +156,7 @@
         },
         {
             "type": "error",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -167,7 +167,7 @@
         },
         {
             "type": "convention",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "ModelTunerConfig",
             "line": 7,
             "column": 0,
@@ -178,7 +178,7 @@
         },
         {
             "type": "refactor",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "ModelTunerConfig",
             "line": 7,
             "column": 0,
@@ -189,7 +189,7 @@
         },
         {
             "type": "convention",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "ModelTuningExperimentConfig",
             "line": 54,
             "column": 0,
@@ -200,7 +200,7 @@
         },
         {
             "type": "refactor",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "ModelTuningExperimentConfig",
             "line": 54,
             "column": 0,
@@ -211,7 +211,7 @@
         },
         {
             "type": "convention",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -222,7 +222,7 @@
         },
         {
             "type": "convention",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -233,7 +233,7 @@
         },
         {
             "type": "error",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -244,7 +244,7 @@
         },
         {
             "type": "error",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -255,7 +255,7 @@
         },
         {
             "type": "error",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -266,7 +266,7 @@
         },
         {
             "type": "error",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -277,7 +277,7 @@
         },
         {
             "type": "error",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -288,7 +288,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "HyperparameterTunerFactory.tuner_factory",
             "line": 30,
             "column": 8,
@@ -299,7 +299,7 @@
         },
         {
             "type": "convention",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "HyperparameterTunerFactory.tuner_factory",
             "line": 37,
             "column": 29,
@@ -310,7 +310,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "HyperparameterTunerFactory",
             "line": 14,
             "column": 0,
@@ -321,7 +321,7 @@
         },
         {
             "type": "warning",
-            "module": "hyparam_tuning_factory",
+            "module": "hyperparameter_tuning.hyparam_tuning_factory",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -332,7 +332,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_hyparam_tuner",
+            "module": "hyperparameter_tuning.abstract_hyparam_tuner",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -343,7 +343,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_hyparam_tuner",
+            "module": "hyperparameter_tuning.abstract_hyparam_tuner",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -354,7 +354,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_hyparam_tuner",
+            "module": "hyperparameter_tuning.abstract_hyparam_tuner",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -365,7 +365,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_hyparam_tuner",
+            "module": "hyperparameter_tuning.abstract_hyparam_tuner",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -376,7 +376,7 @@
         },
         {
             "type": "refactor",
-            "module": "abstract_hyparam_tuner",
+            "module": "hyperparameter_tuning.abstract_hyparam_tuner",
             "obj": "AbstractHyParamTuner",
             "line": 7,
             "column": 0,
@@ -387,7 +387,7 @@
         },
         {
             "type": "convention",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 39,
             "column": 0,
@@ -398,7 +398,7 @@
         },
         {
             "type": "convention",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -409,7 +409,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -420,7 +420,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -431,7 +431,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -442,7 +442,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -453,7 +453,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -464,7 +464,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -475,7 +475,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -486,7 +486,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "NoTuningTuner.tune",
             "line": 18,
             "column": 43,
@@ -497,7 +497,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "NoTuningTuner.tune",
             "line": 18,
             "column": 56,
@@ -508,7 +508,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "NoTuningTuner",
             "line": 13,
             "column": 0,
@@ -519,7 +519,7 @@
         },
         {
             "type": "convention",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "OptunaTuner",
             "line": 31,
             "column": 0,
@@ -530,7 +530,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "OptunaTuner.tune",
             "line": 32,
             "column": 0,
@@ -541,7 +541,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "OptunaTuner",
             "line": 31,
             "column": 0,
@@ -552,7 +552,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "GridSearchTuner.tune",
             "line": 96,
             "column": 0,
@@ -563,7 +563,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "GridSearchTuner",
             "line": 91,
             "column": 0,
@@ -574,7 +574,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -585,7 +585,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuner",
+            "module": "hyperparameter_tuning.hyperparameter_tuner",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -596,7 +596,7 @@
         },
         {
             "type": "convention",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -607,7 +607,7 @@
         },
         {
             "type": "error",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -618,7 +618,7 @@
         },
         {
             "type": "error",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -629,7 +629,7 @@
         },
         {
             "type": "error",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -640,7 +640,7 @@
         },
         {
             "type": "error",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -651,7 +651,7 @@
         },
         {
             "type": "convention",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "ValidatorFactory.ValidatorFactory",
             "line": 12,
             "column": 4,
@@ -662,7 +662,7 @@
         },
         {
             "type": "convention",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "ValidatorFactory.ValidatorFactory",
             "line": 12,
             "column": 4,
@@ -673,7 +673,7 @@
         },
         {
             "type": "refactor",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "ValidatorFactory.ValidatorFactory",
             "line": 15,
             "column": 8,
@@ -684,7 +684,7 @@
         },
         {
             "type": "refactor",
-            "module": "validator_factory",
+            "module": "scoring.validator_factory",
             "obj": "ValidatorFactory",
             "line": 6,
             "column": 0,
@@ -695,7 +695,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -706,7 +706,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -717,7 +717,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -728,7 +728,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -739,7 +739,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -750,7 +750,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -761,7 +761,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "Scoring.score_test",
             "line": 20,
             "column": 49,
@@ -772,7 +772,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "Scoring.score_test",
             "line": 20,
             "column": 52,
@@ -783,7 +783,7 @@
         },
         {
             "type": "refactor",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "Scoring",
             "line": 12,
             "column": 0,
@@ -794,7 +794,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "ValidationScoring",
             "line": 26,
             "column": 0,
@@ -805,7 +805,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "ValidationScoring.score_validation",
             "line": 35,
             "column": 49,
@@ -816,7 +816,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "ValidationScoring.score_validation",
             "line": 35,
             "column": 52,
@@ -827,7 +827,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "ValidationScoring.score_validation",
             "line": 39,
             "column": 8,
@@ -838,7 +838,7 @@
         },
         {
             "type": "refactor",
-            "module": "abstract_scorer",
+            "module": "scoring.abstract_scorer",
             "obj": "ValidationScoring",
             "line": 26,
             "column": 0,
@@ -849,7 +849,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 49,
             "column": 0,
@@ -860,7 +860,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -871,7 +871,7 @@
         },
         {
             "type": "error",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -882,7 +882,7 @@
         },
         {
             "type": "error",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -893,7 +893,7 @@
         },
         {
             "type": "error",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -904,7 +904,7 @@
         },
         {
             "type": "error",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -915,7 +915,7 @@
         },
         {
             "type": "error",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -926,7 +926,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "NoValidation",
             "line": 9,
             "column": 0,
@@ -937,7 +937,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "NoValidation.score_validation",
             "line": 13,
             "column": 55,
@@ -948,7 +948,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "NoValidation.score_validation",
             "line": 13,
             "column": 58,
@@ -959,7 +959,7 @@
         },
         {
             "type": "warning",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "NoValidation.score_validation",
             "line": 13,
             "column": 31,
@@ -970,7 +970,7 @@
         },
         {
             "type": "warning",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "NoValidation.score_validation",
             "line": 13,
             "column": 55,
@@ -981,7 +981,7 @@
         },
         {
             "type": "warning",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "NoValidation.score_validation",
             "line": 13,
             "column": 58,
@@ -992,7 +992,7 @@
         },
         {
             "type": "refactor",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "NoValidation",
             "line": 9,
             "column": 0,
@@ -1003,7 +1003,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "CrossValidation",
             "line": 17,
             "column": 0,
@@ -1014,7 +1014,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "CrossValidation.score_validation",
             "line": 18,
             "column": 55,
@@ -1025,7 +1025,7 @@
         },
         {
             "type": "convention",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "CrossValidation.score_validation",
             "line": 18,
             "column": 58,
@@ -1036,7 +1036,7 @@
         },
         {
             "type": "refactor",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "CrossValidation",
             "line": 17,
             "column": 0,
@@ -1047,7 +1047,7 @@
         },
         {
             "type": "warning",
-            "module": "validator",
+            "module": "scoring.validator",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -1058,7 +1058,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.splitter_factory",
+            "module": "scoring.validation_splitting.splitter_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -1069,7 +1069,7 @@
         },
         {
             "type": "error",
-            "module": "validation_splitting.splitter_factory",
+            "module": "scoring.validation_splitting.splitter_factory",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -1080,7 +1080,7 @@
         },
         {
             "type": "error",
-            "module": "validation_splitting.splitter_factory",
+            "module": "scoring.validation_splitting.splitter_factory",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -1091,7 +1091,7 @@
         },
         {
             "type": "error",
-            "module": "validation_splitting.splitter_factory",
+            "module": "scoring.validation_splitting.splitter_factory",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -1102,7 +1102,7 @@
         },
         {
             "type": "error",
-            "module": "validation_splitting.splitter_factory",
+            "module": "scoring.validation_splitting.splitter_factory",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -1113,7 +1113,7 @@
         },
         {
             "type": "refactor",
-            "module": "validation_splitting.splitter_factory",
+            "module": "scoring.validation_splitting.splitter_factory",
             "obj": "SplitterFactory.splitter_factory",
             "line": 26,
             "column": 12,
@@ -1124,7 +1124,7 @@
         },
         {
             "type": "refactor",
-            "module": "validation_splitting.splitter_factory",
+            "module": "scoring.validation_splitting.splitter_factory",
             "obj": "SplitterFactory.splitter_factory",
             "line": 36,
             "column": 12,
@@ -1135,7 +1135,7 @@
         },
         {
             "type": "refactor",
-            "module": "validation_splitting.splitter_factory",
+            "module": "scoring.validation_splitting.splitter_factory",
             "obj": "SplitterFactory",
             "line": 12,
             "column": 0,
@@ -1146,7 +1146,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.abstract_splitter",
+            "module": "scoring.validation_splitting.abstract_splitter",
             "obj": "",
             "line": 27,
             "column": 0,
@@ -1157,7 +1157,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.abstract_splitter",
+            "module": "scoring.validation_splitting.abstract_splitter",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -1168,7 +1168,7 @@
         },
         {
             "type": "error",
-            "module": "validation_splitting.abstract_splitter",
+            "module": "scoring.validation_splitting.abstract_splitter",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -1179,7 +1179,7 @@
         },
         {
             "type": "error",
-            "module": "validation_splitting.abstract_splitter",
+            "module": "scoring.validation_splitting.abstract_splitter",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -1190,7 +1190,7 @@
         },
         {
             "type": "error",
-            "module": "validation_splitting.abstract_splitter",
+            "module": "scoring.validation_splitting.abstract_splitter",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -1201,7 +1201,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.abstract_splitter",
+            "module": "scoring.validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter.split",
             "line": 26,
             "column": 20,
@@ -1212,7 +1212,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.abstract_splitter",
+            "module": "scoring.validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter.split",
             "line": 26,
             "column": 44,
@@ -1223,7 +1223,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.abstract_splitter",
+            "module": "scoring.validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter.get_n_splits",
             "line": 45,
             "column": 27,
@@ -1234,7 +1234,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.abstract_splitter",
+            "module": "scoring.validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter.get_n_splits",
             "line": 45,
             "column": 51,
@@ -1245,7 +1245,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.abstract_splitter",
+            "module": "scoring.validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter._iter_test_masks",
             "line": 50,
             "column": 14,
@@ -1256,7 +1256,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.abstract_splitter",
+            "module": "scoring.validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter._iter_test_masks",
             "line": 50,
             "column": 38,
@@ -1267,7 +1267,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.abstract_splitter",
+            "module": "scoring.validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter._iter_test_indices",
             "line": 62,
             "column": 14,
@@ -1278,7 +1278,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.abstract_splitter",
+            "module": "scoring.validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter._iter_test_indices",
             "line": 62,
             "column": 38,
@@ -1289,7 +1289,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -1300,7 +1300,7 @@
         },
         {
             "type": "error",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -1311,7 +1311,7 @@
         },
         {
             "type": "warning",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -1322,7 +1322,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter.get_n_splits",
             "line": 21,
             "column": 27,
@@ -1333,7 +1333,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter.get_n_splits",
             "line": 21,
             "column": 35,
@@ -1344,7 +1344,7 @@
         },
         {
             "type": "warning",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter.get_n_splits",
             "line": 21,
             "column": 27,
@@ -1355,7 +1355,7 @@
         },
         {
             "type": "warning",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter.get_n_splits",
             "line": 21,
             "column": 35,
@@ -1366,7 +1366,7 @@
         },
         {
             "type": "warning",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter.get_n_splits",
             "line": 21,
             "column": 43,
@@ -1377,7 +1377,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter._iter_test_indices",
             "line": 25,
             "column": 33,
@@ -1388,7 +1388,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter._iter_test_indices",
             "line": 25,
             "column": 36,
@@ -1399,7 +1399,7 @@
         },
         {
             "type": "warning",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter._iter_test_indices",
             "line": 25,
             "column": 36,
@@ -1410,7 +1410,7 @@
         },
         {
             "type": "warning",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter._iter_test_indices",
             "line": 25,
             "column": 44,
@@ -1421,7 +1421,7 @@
         },
         {
             "type": "refactor",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter",
             "line": 9,
             "column": 0,
@@ -1432,7 +1432,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter.get_n_splits",
             "line": 65,
             "column": 4,
@@ -1443,7 +1443,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter.get_n_splits",
             "line": 65,
             "column": 27,
@@ -1454,7 +1454,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter.get_n_splits",
             "line": 65,
             "column": 30,
@@ -1465,7 +1465,7 @@
         },
         {
             "type": "warning",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter.get_n_splits",
             "line": 65,
             "column": 30,
@@ -1476,7 +1476,7 @@
         },
         {
             "type": "warning",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter.get_n_splits",
             "line": 65,
             "column": 38,
@@ -1487,7 +1487,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter._iter_test_indices",
             "line": 70,
             "column": 33,
@@ -1498,7 +1498,7 @@
         },
         {
             "type": "convention",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter._iter_test_indices",
             "line": 70,
             "column": 36,
@@ -1509,7 +1509,7 @@
         },
         {
             "type": "warning",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter._iter_test_indices",
             "line": 70,
             "column": 36,
@@ -1520,7 +1520,7 @@
         },
         {
             "type": "warning",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter._iter_test_indices",
             "line": 70,
             "column": 44,
@@ -1531,7 +1531,7 @@
         },
         {
             "type": "refactor",
-            "module": "validation_splitting.custom_splitters",
+            "module": "scoring.validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter",
             "line": 43,
             "column": 0,
@@ -1542,7 +1542,7 @@
         },
         {
             "type": "convention",
-            "module": "metrics.metric_factory",
+            "module": "metric_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -1553,7 +1553,7 @@
         },
         {
             "type": "error",
-            "module": "metrics.metric_factory",
+            "module": "metric_factory",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -1564,7 +1564,7 @@
         },
         {
             "type": "error",
-            "module": "metrics.metric_factory",
+            "module": "metric_factory",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -1575,7 +1575,7 @@
         },
         {
             "type": "error",
-            "module": "metrics.metric_factory",
+            "module": "metric_factory",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -1586,7 +1586,7 @@
         },
         {
             "type": "refactor",
-            "module": "metrics.metric_factory",
+            "module": "metric_factory",
             "obj": "MetricFactory.metric_factory",
             "line": 19,
             "column": 8,
@@ -1597,7 +1597,7 @@
         },
         {
             "type": "warning",
-            "module": "metrics.metric_factory",
+            "module": "metric_factory",
             "obj": "MetricFactory.metric_factory",
             "line": 38,
             "column": 20,
@@ -1608,7 +1608,7 @@
         },
         {
             "type": "refactor",
-            "module": "metrics.metric_factory",
+            "module": "metric_factory",
             "obj": "MetricFactory",
             "line": 9,
             "column": 0,
@@ -1619,7 +1619,7 @@
         },
         {
             "type": "convention",
-            "module": "metrics.abstract_metric",
+            "module": "abstract_metric",
             "obj": "AbstractMetric",
             "line": 10,
             "column": 0,
@@ -1630,7 +1630,7 @@
         },
         {
             "type": "refactor",
-            "module": "metrics.abstract_metric",
+            "module": "abstract_metric",
             "obj": "AbstractMetric",
             "line": 10,
             "column": 0,
@@ -1641,7 +1641,7 @@
         },
         {
             "type": "warning",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 32,
             "column": 0,
@@ -1652,7 +1652,7 @@
         },
         {
             "type": "warning",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 33,
             "column": 0,
@@ -1663,7 +1663,7 @@
         },
         {
             "type": "convention",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 44,
             "column": 0,
@@ -1674,7 +1674,7 @@
         },
         {
             "type": "convention",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 66,
             "column": 0,
@@ -1685,7 +1685,7 @@
         },
         {
             "type": "convention",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -1696,7 +1696,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -1707,7 +1707,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -1718,7 +1718,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -1729,7 +1729,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -1740,7 +1740,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -1751,7 +1751,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -1762,7 +1762,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -1773,7 +1773,7 @@
         },
         {
             "type": "refactor",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "ModelFactory.model_factory",
             "line": 36,
             "column": 8,
@@ -1784,7 +1784,7 @@
         },
         {
             "type": "error",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "ModelFactory._load_metadata",
             "line": 55,
             "column": 4,
@@ -1795,7 +1795,7 @@
         },
         {
             "type": "refactor",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "ModelFactory._load_metadata",
             "line": 61,
             "column": 8,
@@ -1806,7 +1806,7 @@
         },
         {
             "type": "warning",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "ModelFactory._load_metadata",
             "line": 62,
             "column": 17,
@@ -1817,7 +1817,7 @@
         },
         {
             "type": "convention",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "ModelFactory._load_metadata",
             "line": 62,
             "column": 40,
@@ -1828,7 +1828,7 @@
         },
         {
             "type": "convention",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -1839,7 +1839,7 @@
         },
         {
             "type": "convention",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -1850,7 +1850,7 @@
         },
         {
             "type": "convention",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -1861,7 +1861,7 @@
         },
         {
             "type": "warning",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -1872,7 +1872,7 @@
         },
         {
             "type": "warning",
-            "module": "model_factory",
+            "module": "models.model_factory",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -1883,7 +1883,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 116,
             "column": 0,
@@ -1894,7 +1894,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -1905,7 +1905,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -1916,7 +1916,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -1927,7 +1927,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -1938,7 +1938,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -1949,7 +1949,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -1960,7 +1960,7 @@
         },
         {
             "type": "refactor",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "ModelMetadata",
             "line": 13,
             "column": 0,
@@ -1971,7 +1971,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.fit",
             "line": 66,
             "column": 18,
@@ -1982,7 +1982,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.fit",
             "line": 66,
             "column": 35,
@@ -1993,7 +1993,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.fit",
             "line": 74,
             "column": 8,
@@ -2004,7 +2004,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.predict",
             "line": 77,
             "column": 22,
@@ -2015,7 +2015,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.predict",
             "line": 87,
             "column": 8,
@@ -2026,7 +2026,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.save_regressor",
             "line": 99,
             "column": 8,
@@ -2037,7 +2037,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel._define_metadata",
             "line": 106,
             "column": 8,
@@ -2048,7 +2048,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel._save_metadata",
             "line": 117,
             "column": 13,
@@ -2059,7 +2059,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel._save_metadata",
             "line": 117,
             "column": 41,
@@ -2070,7 +2070,7 @@
         },
         {
             "type": "error",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel._save_metadata",
             "line": 118,
             "column": 22,
@@ -2081,7 +2081,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.load_regressor",
             "line": 120,
             "column": 45,
@@ -2092,7 +2092,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.to_scikit_learn",
             "line": 131,
             "column": 30,
@@ -2103,7 +2103,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.to_scikit_learn",
             "line": 144,
             "column": 8,
@@ -2114,7 +2114,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.set_params",
             "line": 154,
             "column": 8,
@@ -2125,7 +2125,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.get_params",
             "line": 164,
             "column": 8,
@@ -2136,7 +2136,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.optuna_hyperparameter_suggest",
             "line": 177,
             "column": 8,
@@ -2147,7 +2147,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.grid_search_hyperparameter",
             "line": 187,
             "column": 8,
@@ -2158,7 +2158,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "AbstractMLModel.default_hyperparameter",
             "line": 197,
             "column": 8,
@@ -2169,7 +2169,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.load_regressor",
             "line": 209,
             "column": 4,
@@ -2180,7 +2180,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.predict",
             "line": 215,
             "column": 8,
@@ -2191,7 +2191,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.default_hyperparameter",
             "line": 219,
             "column": 22,
@@ -2202,7 +2202,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.fit",
             "line": 222,
             "column": 22,
@@ -2213,7 +2213,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.get_params",
             "line": 225,
             "column": 22,
@@ -2224,7 +2224,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.grid_search_hyperparameter",
             "line": 228,
             "column": 22,
@@ -2235,7 +2235,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.optuna_hyperparameter_suggest",
             "line": 231,
             "column": 22,
@@ -2246,7 +2246,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.save_regressor",
             "line": 233,
             "column": 4,
@@ -2257,7 +2257,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.save_regressor",
             "line": 234,
             "column": 22,
@@ -2268,7 +2268,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.save_regressor",
             "line": 233,
             "column": 29,
@@ -2279,7 +2279,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.set_params",
             "line": 237,
             "column": 22,
@@ -2290,7 +2290,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.to_scikit_learn",
             "line": 239,
             "column": 4,
@@ -2301,7 +2301,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.to_scikit_learn",
             "line": 240,
             "column": 22,
@@ -2312,7 +2312,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx._define_metadata",
             "line": 243,
             "column": 22,
@@ -2323,7 +2323,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx._save_regressor",
             "line": 246,
             "column": 22,
@@ -2334,7 +2334,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx._save_regressor",
             "line": 245,
             "column": 30,
@@ -2345,7 +2345,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx._save_regressor",
             "line": 245,
             "column": 36,
@@ -2356,7 +2356,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.default_file_type",
             "line": 248,
             "column": 4,
@@ -2367,7 +2367,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "PredictorOnnx.default_file_type",
             "line": 249,
             "column": 22,
@@ -2378,7 +2378,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -2389,7 +2389,7 @@
         },
         {
             "type": "convention",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -2400,7 +2400,7 @@
         },
         {
             "type": "warning",
-            "module": "abstract_model",
+            "module": "models.abstract_model",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -2411,7 +2411,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 24,
             "column": 0,
@@ -2422,7 +2422,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 34,
             "column": 0,
@@ -2433,7 +2433,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 82,
             "column": 0,
@@ -2444,7 +2444,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 102,
             "column": 0,
@@ -2455,7 +2455,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 176,
             "column": 0,
@@ -2466,7 +2466,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 286,
             "column": 0,
@@ -2477,7 +2477,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 287,
             "column": 0,
@@ -2488,7 +2488,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 327,
             "column": 0,
@@ -2499,7 +2499,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -2510,7 +2510,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -2521,7 +2521,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -2532,7 +2532,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -2543,7 +2543,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -2554,7 +2554,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -2565,7 +2565,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -2576,7 +2576,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -2587,7 +2587,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -2598,7 +2598,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -2609,7 +2609,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -2620,7 +2620,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 12,
             "column": 0,
@@ -2631,7 +2631,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 13,
             "column": 0,
@@ -2642,7 +2642,7 @@
         },
         {
             "type": "error",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 14,
             "column": 0,
@@ -2653,7 +2653,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.fit",
             "line": 39,
             "column": 18,
@@ -2664,7 +2664,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.fit",
             "line": 39,
             "column": 21,
@@ -2675,7 +2675,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.predict",
             "line": 47,
             "column": 22,
@@ -2686,7 +2686,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.save_regressor",
             "line": 79,
             "column": 37,
@@ -2697,7 +2697,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.save_regressor",
             "line": 82,
             "column": 29,
@@ -2708,7 +2708,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.to_scikit_learn",
             "line": 97,
             "column": 4,
@@ -2719,7 +2719,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.to_scikit_learn",
             "line": 97,
             "column": 30,
@@ -2730,7 +2730,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.to_scikit_learn",
             "line": 97,
             "column": 30,
@@ -2741,7 +2741,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.fit",
             "line": 43,
             "column": 8,
@@ -2752,7 +2752,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel.fit",
             "line": 44,
             "column": 8,
@@ -2763,7 +2763,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "BaseScikitLearnModel._define_metadata",
             "line": 57,
             "column": 8,
@@ -2774,7 +2774,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitMLP_TargetTransformed",
             "line": 159,
             "column": 0,
@@ -2785,7 +2785,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitMLP_TargetTransformed",
             "line": 159,
             "column": 0,
@@ -2796,7 +2796,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitMLP_TargetTransformed.__init__",
             "line": 160,
             "column": 4,
@@ -2807,7 +2807,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitLinearReg.grid_search_hyperparameter",
             "line": 193,
             "column": 4,
@@ -2818,7 +2818,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitLinearReg.optuna_hyperparameter_suggest",
             "line": 196,
             "column": 4,
@@ -2829,7 +2829,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitLinearRegNoScaler",
             "line": 205,
             "column": 0,
@@ -2840,7 +2840,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitLinearRegNoScaler.__init__",
             "line": 206,
             "column": 4,
@@ -2851,7 +2851,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitLinearRegNoScaler.fit",
             "line": 220,
             "column": 8,
@@ -2862,7 +2862,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitLinearRegNoScaler.fit",
             "line": 221,
             "column": 8,
@@ -2873,7 +2873,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitLinearRegNoScaler._define_metadata",
             "line": 246,
             "column": 8,
@@ -2884,7 +2884,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitSVR.grid_search_hyperparameter",
             "line": 276,
             "column": 4,
@@ -2895,7 +2895,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "ScikitSVR._define_metadata",
             "line": 266,
             "column": 8,
@@ -2906,7 +2906,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -2917,7 +2917,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 13,
             "column": 0,
@@ -2928,7 +2928,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 13,
             "column": 0,
@@ -2939,7 +2939,7 @@
         },
         {
             "type": "convention",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 14,
             "column": 0,
@@ -2950,7 +2950,7 @@
         },
         {
             "type": "warning",
-            "module": "scikit_learn_models",
+            "module": "models.scikit_learn_models",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -2961,7 +2961,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 108,
             "column": 0,
@@ -2972,7 +2972,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 109,
             "column": 0,
@@ -2983,7 +2983,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 144,
             "column": 0,
@@ -2994,7 +2994,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 157,
             "column": 0,
@@ -3005,7 +3005,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 192,
             "column": 0,
@@ -3016,7 +3016,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 204,
             "column": 0,
@@ -3027,7 +3027,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 206,
             "column": 0,
@@ -3038,7 +3038,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 211,
             "column": 0,
@@ -3049,7 +3049,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -3060,7 +3060,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -3071,7 +3071,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -3082,7 +3082,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -3093,7 +3093,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -3104,7 +3104,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -3115,7 +3115,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -3126,7 +3126,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -3137,7 +3137,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -3148,7 +3148,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 12,
             "column": 0,
@@ -3159,7 +3159,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 13,
             "column": 0,
@@ -3170,7 +3170,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 14,
             "column": 0,
@@ -3181,7 +3181,7 @@
         },
         {
             "type": "error",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 15,
             "column": 0,
@@ -3192,7 +3192,7 @@
         },
         {
             "type": "warning",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "BaseKerasModel._define_metadata",
             "line": 27,
             "column": 8,
@@ -3203,7 +3203,7 @@
         },
         {
             "type": "refactor",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "BaseKerasModel",
             "line": 18,
             "column": 0,
@@ -3214,7 +3214,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.fit",
             "line": 45,
             "column": 18,
@@ -3225,7 +3225,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.fit",
             "line": 45,
             "column": 21,
@@ -3236,7 +3236,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.predict",
             "line": 54,
             "column": 22,
@@ -3247,7 +3247,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.save_regressor",
             "line": 103,
             "column": 16,
@@ -3258,7 +3258,7 @@
         },
         {
             "type": "warning",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.save_regressor",
             "line": 105,
             "column": 16,
@@ -3269,7 +3269,7 @@
         },
         {
             "type": "warning",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.save_regressor",
             "line": 113,
             "column": 29,
@@ -3280,7 +3280,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.load_regressor",
             "line": 128,
             "column": 8,
@@ -3291,7 +3291,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.load_regressor",
             "line": 129,
             "column": 8,
@@ -3302,7 +3302,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential._build_regressor",
             "line": 149,
             "column": 31,
@@ -3313,7 +3313,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.to_scikit_learn",
             "line": 166,
             "column": 30,
@@ -3324,7 +3324,7 @@
         },
         {
             "type": "warning",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.fit",
             "line": 49,
             "column": 8,
@@ -3335,7 +3335,7 @@
         },
         {
             "type": "warning",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "SciKerasSequential.fit",
             "line": 50,
             "column": 8,
@@ -3346,7 +3346,7 @@
         },
         {
             "type": "convention",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -3357,7 +3357,7 @@
         },
         {
             "type": "warning",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -3368,7 +3368,7 @@
         },
         {
             "type": "warning",
-            "module": "keras_models",
+            "module": "models.keras_models",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -6998,7 +6998,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -7009,7 +7009,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -7020,7 +7020,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -7031,7 +7031,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -7042,7 +7042,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "DataTuningFixedConfig",
             "line": 6,
             "column": 0,
@@ -7053,7 +7053,7 @@
         },
         {
             "type": "refactor",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "DataTuningFixedConfig",
             "line": 6,
             "column": 0,
@@ -7064,7 +7064,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -7075,7 +7075,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -7086,7 +7086,7 @@
         },
         {
             "type": "warning",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -9079,7 +9079,18 @@
             "type": "convention",
             "module": "exe_data_tuning_auto",
             "obj": "",
-            "line": 129,
+            "line": 3,
+            "column": 0,
+            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
+            "symbol": "line-too-long",
+            "message": "Line too long (104/100)",
+            "message-id": "C0301"
+        },
+        {
+            "type": "convention",
+            "module": "exe_data_tuning_auto",
+            "obj": "",
+            "line": 133,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "line-too-long",
@@ -9090,7 +9101,7 @@
             "type": "convention",
             "module": "exe_data_tuning_auto",
             "obj": "",
-            "line": 131,
+            "line": 135,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "missing-final-newline",
@@ -9112,7 +9123,7 @@
             "type": "error",
             "module": "exe_data_tuning_auto",
             "obj": "",
-            "line": 3,
+            "line": 6,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "import-error",
@@ -9123,7 +9134,7 @@
             "type": "error",
             "module": "exe_data_tuning_auto",
             "obj": "",
-            "line": 4,
+            "line": 7,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "import-error",
@@ -9134,7 +9145,7 @@
             "type": "error",
             "module": "exe_data_tuning_auto",
             "obj": "",
-            "line": 5,
+            "line": 8,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "import-error",
@@ -9145,7 +9156,7 @@
             "type": "error",
             "module": "exe_data_tuning_auto",
             "obj": "",
-            "line": 6,
+            "line": 9,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "import-error",
@@ -9156,44 +9167,11 @@
             "type": "error",
             "module": "exe_data_tuning_auto",
             "obj": "",
-            "line": 7,
-            "column": 0,
-            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
-            "symbol": "import-error",
-            "message": "Unable to import 'addmo.util.experiment_logger'",
-            "message-id": "E0401"
-        },
-        {
-            "type": "error",
-            "module": "exe_data_tuning_auto",
-            "obj": "",
-            "line": 8,
-            "column": 0,
-            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
-            "symbol": "import-error",
-            "message": "Unable to import 'addmo.util.experiment_logger'",
-            "message-id": "E0401"
-        },
-        {
-            "type": "error",
-            "module": "exe_data_tuning_auto",
-            "obj": "",
-            "line": 9,
-            "column": 0,
-            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
-            "symbol": "import-error",
-            "message": "Unable to import 'addmo.util.experiment_logger'",
-            "message-id": "E0401"
-        },
-        {
-            "type": "error",
-            "module": "exe_data_tuning_auto",
-            "obj": "",
             "line": 10,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.s1_data_tuning_auto.config.data_tuning_auto_config'",
+            "message": "Unable to import 'addmo.util.experiment_logger'",
             "message-id": "E0401"
         },
         {
@@ -9204,7 +9182,7 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.s1_data_tuning_auto.data_tuner_auto'",
+            "message": "Unable to import 'addmo.util.experiment_logger'",
             "message-id": "E0401"
         },
         {
@@ -9215,7 +9193,7 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.s5_insights.model_plots.time_series'",
+            "message": "Unable to import 'addmo.util.experiment_logger'",
             "message-id": "E0401"
         },
         {
@@ -9226,6 +9204,39 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "import-error",
+            "message": "Unable to import 'addmo.s1_data_tuning_auto.config.data_tuning_auto_config'",
+            "message-id": "E0401"
+        },
+        {
+            "type": "error",
+            "module": "exe_data_tuning_auto",
+            "obj": "",
+            "line": 14,
+            "column": 0,
+            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
+            "symbol": "import-error",
+            "message": "Unable to import 'addmo.s1_data_tuning_auto.data_tuner_auto'",
+            "message-id": "E0401"
+        },
+        {
+            "type": "error",
+            "module": "exe_data_tuning_auto",
+            "obj": "",
+            "line": 15,
+            "column": 0,
+            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
+            "symbol": "import-error",
+            "message": "Unable to import 'addmo.s5_insights.model_plots.time_series'",
+            "message-id": "E0401"
+        },
+        {
+            "type": "error",
+            "module": "exe_data_tuning_auto",
+            "obj": "",
+            "line": 16,
+            "column": 0,
+            "path": "addmo_examples/executables/exe_data_tuning_auto.py",
+            "symbol": "import-error",
             "message": "Unable to import 'addmo.util.load_save'",
             "message-id": "E0401"
         },
@@ -9233,7 +9244,7 @@
             "type": "refactor",
             "module": "exe_data_tuning_auto",
             "obj": "_exe_data_tuning_auto",
-            "line": 15,
+            "line": 18,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "too-many-locals",
@@ -9244,18 +9255,18 @@
             "type": "warning",
             "module": "exe_data_tuning_auto",
             "obj": "_exe_data_tuning_auto",
-            "line": 15,
+            "line": 18,
             "column": 34,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "redefined-outer-name",
-            "message": "Redefining name 'user_input' from outer scope (line 129)",
+            "message": "Redefining name 'user_input' from outer scope (line 133)",
             "message-id": "W0621"
         },
         {
             "type": "convention",
             "module": "exe_data_tuning_auto",
             "obj": "_exe_data_tuning_auto",
-            "line": 37,
+            "line": 40,
             "column": 4,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "invalid-name",
@@ -9266,7 +9277,7 @@
             "type": "warning",
             "module": "exe_data_tuning_auto",
             "obj": "_exe_data_tuning_auto",
-            "line": 49,
+            "line": 52,
             "column": 9,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "unspecified-encoding",
@@ -9277,7 +9288,7 @@
             "type": "convention",
             "module": "exe_data_tuning_auto",
             "obj": "_exe_data_tuning_auto",
-            "line": 49,
+            "line": 52,
             "column": 35,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "invalid-name",
@@ -9288,18 +9299,18 @@
             "type": "warning",
             "module": "exe_data_tuning_auto",
             "obj": "default_config_exe_data_tuning_auto",
-            "line": 63,
+            "line": 66,
             "column": 40,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "redefined-outer-name",
-            "message": "Redefining name 'user_input' from outer scope (line 129)",
+            "message": "Redefining name 'user_input' from outer scope (line 133)",
             "message-id": "W0621"
         },
         {
             "type": "refactor",
             "module": "exe_data_tuning_auto",
             "obj": "exe_data_tuning_auto",
-            "line": 70,
+            "line": 74,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "too-many-locals",
@@ -9310,18 +9321,18 @@
             "type": "warning",
             "module": "exe_data_tuning_auto",
             "obj": "exe_data_tuning_auto",
-            "line": 70,
+            "line": 74,
             "column": 25,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "redefined-outer-name",
-            "message": "Redefining name 'user_input' from outer scope (line 129)",
+            "message": "Redefining name 'user_input' from outer scope (line 133)",
             "message-id": "W0621"
         },
         {
             "type": "convention",
             "module": "exe_data_tuning_auto",
             "obj": "exe_data_tuning_auto",
-            "line": 100,
+            "line": 104,
             "column": 4,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "invalid-name",
@@ -9332,7 +9343,7 @@
             "type": "warning",
             "module": "exe_data_tuning_auto",
             "obj": "exe_data_tuning_auto",
-            "line": 112,
+            "line": 116,
             "column": 9,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "unspecified-encoding",
@@ -9343,7 +9354,7 @@
             "type": "convention",
             "module": "exe_data_tuning_auto",
             "obj": "exe_data_tuning_auto",
-            "line": 112,
+            "line": 116,
             "column": 35,
             "path": "addmo_examples/executables/exe_data_tuning_auto.py",
             "symbol": "invalid-name",
@@ -9354,7 +9365,7 @@
             "type": "convention",
             "module": "exe_model_tuning",
             "obj": "",
-            "line": 3,
+            "line": 4,
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "line-too-long",
@@ -9365,7 +9376,7 @@
             "type": "convention",
             "module": "exe_model_tuning",
             "obj": "",
-            "line": 56,
+            "line": 57,
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "line-too-long",
@@ -9376,7 +9387,7 @@
             "type": "convention",
             "module": "exe_model_tuning",
             "obj": "",
-            "line": 91,
+            "line": 92,
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "line-too-long",
@@ -9387,7 +9398,7 @@
             "type": "convention",
             "module": "exe_model_tuning",
             "obj": "",
-            "line": 93,
+            "line": 94,
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "missing-final-newline",
@@ -9409,7 +9420,7 @@
             "type": "error",
             "module": "exe_model_tuning",
             "obj": "",
-            "line": 2,
+            "line": 3,
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "import-error",
@@ -9420,7 +9431,7 @@
             "type": "error",
             "module": "exe_model_tuning",
             "obj": "",
-            "line": 3,
+            "line": 4,
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "import-error",
@@ -9431,22 +9442,11 @@
             "type": "error",
             "module": "exe_model_tuning",
             "obj": "",
-            "line": 4,
-            "column": 0,
-            "path": "addmo_examples/executables/exe_model_tuning.py",
-            "symbol": "import-error",
-            "message": "Unable to import 'addmo.util.load_save_utils'",
-            "message-id": "E0401"
-        },
-        {
-            "type": "error",
-            "module": "exe_model_tuning",
-            "obj": "",
             "line": 5,
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.util.experiment_logger'",
+            "message": "Unable to import 'addmo.util.load_save_utils'",
             "message-id": "E0401"
         },
         {
@@ -9479,7 +9479,7 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.s3_model_tuning.models.keras_models'",
+            "message": "Unable to import 'addmo.util.experiment_logger'",
             "message-id": "E0401"
         },
         {
@@ -9490,7 +9490,7 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.s3_model_tuning.config.model_tuning_config'",
+            "message": "Unable to import 'addmo.s3_model_tuning.models.keras_models'",
             "message-id": "E0401"
         },
         {
@@ -9512,7 +9512,7 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.s3_model_tuning.model_tuner'",
+            "message": "Unable to import 'addmo.s3_model_tuning.config.model_tuning_config'",
             "message-id": "E0401"
         },
         {
@@ -9523,7 +9523,7 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.util.load_save'",
+            "message": "Unable to import 'addmo.s3_model_tuning.model_tuner'",
             "message-id": "E0401"
         },
         {
@@ -9545,7 +9545,7 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.util.data_handling'",
+            "message": "Unable to import 'addmo.util.load_save'",
             "message-id": "E0401"
         },
         {
@@ -9556,7 +9556,7 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.s5_insights.model_plots.scatter_plot'",
+            "message": "Unable to import 'addmo.util.data_handling'",
             "message-id": "E0401"
         },
         {
@@ -9567,6 +9567,17 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "import-error",
+            "message": "Unable to import 'addmo.s5_insights.model_plots.scatter_plot'",
+            "message-id": "E0401"
+        },
+        {
+            "type": "error",
+            "module": "exe_model_tuning",
+            "obj": "",
+            "line": 17,
+            "column": 0,
+            "path": "addmo_examples/executables/exe_model_tuning.py",
+            "symbol": "import-error",
             "message": "Unable to import 'addmo.util.plotting_utils'",
             "message-id": "E0401"
         },
@@ -9574,7 +9585,7 @@
             "type": "refactor",
             "module": "exe_model_tuning",
             "obj": "exe_model_tuning",
-            "line": 19,
+            "line": 20,
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "too-many-locals",
@@ -9585,40 +9596,40 @@
             "type": "warning",
             "module": "exe_model_tuning",
             "obj": "exe_model_tuning",
-            "line": 19,
+            "line": 20,
             "column": 21,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "redefined-outer-name",
-            "message": "Redefining name 'user_input' from outer scope (line 90)",
+            "message": "Redefining name 'user_input' from outer scope (line 91)",
             "message-id": "W0621"
         },
         {
             "type": "warning",
             "module": "exe_model_tuning",
             "obj": "exe_model_tuning",
-            "line": 19,
+            "line": 20,
             "column": 37,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "redefined-outer-name",
-            "message": "Redefining name 'config_exp' from outer scope (line 87)",
+            "message": "Redefining name 'config_exp' from outer scope (line 88)",
             "message-id": "W0621"
         },
         {
             "type": "warning",
             "module": "exe_model_tuning",
             "obj": "exe_model_tuning",
-            "line": 19,
+            "line": 20,
             "column": 54,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "redefined-outer-name",
-            "message": "Redefining name 'config_tuner' from outer scope (line 88)",
+            "message": "Redefining name 'config_tuner' from outer scope (line 89)",
             "message-id": "W0621"
         },
         {
             "type": "warning",
             "module": "exe_model_tuning",
             "obj": "",
-            "line": 3,
+            "line": 4,
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "unused-import",
@@ -9629,7 +9640,7 @@
             "type": "warning",
             "module": "exe_model_tuning",
             "obj": "",
-            "line": 3,
+            "line": 4,
             "column": 0,
             "path": "addmo_examples/executables/exe_model_tuning.py",
             "symbol": "unused-import",
@@ -10322,7 +10333,18 @@
             "type": "convention",
             "module": "exe_data_tuning_fixed",
             "obj": "",
-            "line": 159,
+            "line": 3,
+            "column": 0,
+            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
+            "symbol": "line-too-long",
+            "message": "Line too long (104/100)",
+            "message-id": "C0301"
+        },
+        {
+            "type": "convention",
+            "module": "exe_data_tuning_fixed",
+            "obj": "",
+            "line": 164,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "line-too-long",
@@ -10333,7 +10355,7 @@
             "type": "convention",
             "module": "exe_data_tuning_fixed",
             "obj": "",
-            "line": 162,
+            "line": 167,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "trailing-newlines",
@@ -10355,7 +10377,7 @@
             "type": "error",
             "module": "exe_data_tuning_fixed",
             "obj": "",
-            "line": 3,
+            "line": 6,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "import-error",
@@ -10366,7 +10388,7 @@
             "type": "error",
             "module": "exe_data_tuning_fixed",
             "obj": "",
-            "line": 4,
+            "line": 7,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "import-error",
@@ -10377,7 +10399,7 @@
             "type": "error",
             "module": "exe_data_tuning_fixed",
             "obj": "",
-            "line": 5,
+            "line": 8,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "import-error",
@@ -10388,44 +10410,11 @@
             "type": "error",
             "module": "exe_data_tuning_fixed",
             "obj": "",
-            "line": 6,
-            "column": 0,
-            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
-            "symbol": "import-error",
-            "message": "Unable to import 'addmo.util.experiment_logger'",
-            "message-id": "E0401"
-        },
-        {
-            "type": "error",
-            "module": "exe_data_tuning_fixed",
-            "obj": "",
-            "line": 7,
-            "column": 0,
-            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
-            "symbol": "import-error",
-            "message": "Unable to import 'addmo.util.experiment_logger'",
-            "message-id": "E0401"
-        },
-        {
-            "type": "error",
-            "module": "exe_data_tuning_fixed",
-            "obj": "",
-            "line": 8,
-            "column": 0,
-            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
-            "symbol": "import-error",
-            "message": "Unable to import 'addmo.util.experiment_logger'",
-            "message-id": "E0401"
-        },
-        {
-            "type": "error",
-            "module": "exe_data_tuning_fixed",
-            "obj": "",
             "line": 9,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.s2_data_tuning.config.data_tuning_config'",
+            "message": "Unable to import 'addmo.util.experiment_logger'",
             "message-id": "E0401"
         },
         {
@@ -10436,7 +10425,7 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.s2_data_tuning.data_tuner_fixed'",
+            "message": "Unable to import 'addmo.util.experiment_logger'",
             "message-id": "E0401"
         },
         {
@@ -10447,7 +10436,7 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.util.load_save'",
+            "message": "Unable to import 'addmo.util.experiment_logger'",
             "message-id": "E0401"
         },
         {
@@ -10458,7 +10447,7 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.util.plotting_utils'",
+            "message": "Unable to import 'addmo.s2_data_tuning.config.data_tuning_config'",
             "message-id": "E0401"
         },
         {
@@ -10469,7 +10458,7 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.util.data_handling'",
+            "message": "Unable to import 'addmo.s2_data_tuning.data_tuner_fixed'",
             "message-id": "E0401"
         },
         {
@@ -10480,7 +10469,7 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "import-error",
-            "message": "Unable to import 'addmo.s5_insights.model_plots.time_series'",
+            "message": "Unable to import 'addmo.util.load_save'",
             "message-id": "E0401"
         },
         {
@@ -10491,6 +10480,39 @@
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "import-error",
+            "message": "Unable to import 'addmo.util.plotting_utils'",
+            "message-id": "E0401"
+        },
+        {
+            "type": "error",
+            "module": "exe_data_tuning_fixed",
+            "obj": "",
+            "line": 16,
+            "column": 0,
+            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
+            "symbol": "import-error",
+            "message": "Unable to import 'addmo.util.data_handling'",
+            "message-id": "E0401"
+        },
+        {
+            "type": "error",
+            "module": "exe_data_tuning_fixed",
+            "obj": "",
+            "line": 17,
+            "column": 0,
+            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
+            "symbol": "import-error",
+            "message": "Unable to import 'addmo.s5_insights.model_plots.time_series'",
+            "message-id": "E0401"
+        },
+        {
+            "type": "error",
+            "module": "exe_data_tuning_fixed",
+            "obj": "",
+            "line": 18,
+            "column": 0,
+            "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
+            "symbol": "import-error",
             "message": "Unable to import 'addmo.util.load_save'",
             "message-id": "E0401"
         },
@@ -10498,7 +10520,7 @@
             "type": "refactor",
             "module": "exe_data_tuning_fixed",
             "obj": "_exe_data_tuning",
-            "line": 17,
+            "line": 20,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "too-many-locals",
@@ -10509,18 +10531,18 @@
             "type": "warning",
             "module": "exe_data_tuning_fixed",
             "obj": "_exe_data_tuning",
-            "line": 17,
+            "line": 20,
             "column": 29,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "redefined-outer-name",
-            "message": "Redefining name 'user_input' from outer scope (line 159)",
+            "message": "Redefining name 'user_input' from outer scope (line 164)",
             "message-id": "W0621"
         },
         {
             "type": "convention",
             "module": "exe_data_tuning_fixed",
             "obj": "_exe_data_tuning",
-            "line": 42,
+            "line": 45,
             "column": 4,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "invalid-name",
@@ -10531,7 +10553,7 @@
             "type": "convention",
             "module": "exe_data_tuning_fixed",
             "obj": "_exe_data_tuning",
-            "line": 42,
+            "line": 45,
             "column": 7,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "invalid-name",
@@ -10542,7 +10564,7 @@
             "type": "warning",
             "module": "exe_data_tuning_fixed",
             "obj": "_exe_data_tuning",
-            "line": 64,
+            "line": 67,
             "column": 9,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "unspecified-encoding",
@@ -10553,7 +10575,7 @@
             "type": "convention",
             "module": "exe_data_tuning_fixed",
             "obj": "_exe_data_tuning",
-            "line": 64,
+            "line": 67,
             "column": 35,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "invalid-name",
@@ -10564,7 +10586,7 @@
             "type": "warning",
             "module": "exe_data_tuning_fixed",
             "obj": "_exe_data_tuning",
-            "line": 42,
+            "line": 45,
             "column": 4,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "unused-variable",
@@ -10575,18 +10597,18 @@
             "type": "warning",
             "module": "exe_data_tuning_fixed",
             "obj": "default_config_exe_data_tuning_fixed",
-            "line": 80,
+            "line": 83,
             "column": 41,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "redefined-outer-name",
-            "message": "Redefining name 'user_input' from outer scope (line 159)",
+            "message": "Redefining name 'user_input' from outer scope (line 164)",
             "message-id": "W0621"
         },
         {
             "type": "refactor",
             "module": "exe_data_tuning_fixed",
             "obj": "exe_data_tuning_fixed",
-            "line": 91,
+            "line": 96,
             "column": 0,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "too-many-locals",
@@ -10597,18 +10619,18 @@
             "type": "warning",
             "module": "exe_data_tuning_fixed",
             "obj": "exe_data_tuning_fixed",
-            "line": 91,
+            "line": 96,
             "column": 26,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "redefined-outer-name",
-            "message": "Redefining name 'user_input' from outer scope (line 159)",
+            "message": "Redefining name 'user_input' from outer scope (line 164)",
             "message-id": "W0621"
         },
         {
             "type": "convention",
             "module": "exe_data_tuning_fixed",
             "obj": "exe_data_tuning_fixed",
-            "line": 119,
+            "line": 124,
             "column": 4,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "invalid-name",
@@ -10619,7 +10641,7 @@
             "type": "convention",
             "module": "exe_data_tuning_fixed",
             "obj": "exe_data_tuning_fixed",
-            "line": 119,
+            "line": 124,
             "column": 7,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "invalid-name",
@@ -10630,7 +10652,7 @@
             "type": "warning",
             "module": "exe_data_tuning_fixed",
             "obj": "exe_data_tuning_fixed",
-            "line": 141,
+            "line": 146,
             "column": 9,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "unspecified-encoding",
@@ -10641,7 +10663,7 @@
             "type": "convention",
             "module": "exe_data_tuning_fixed",
             "obj": "exe_data_tuning_fixed",
-            "line": 141,
+            "line": 146,
             "column": 35,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "invalid-name",
@@ -10652,7 +10674,7 @@
             "type": "warning",
             "module": "exe_data_tuning_fixed",
             "obj": "exe_data_tuning_fixed",
-            "line": 119,
+            "line": 124,
             "column": 4,
             "path": "addmo_examples/executables/exe_data_tuning_fixed.py",
             "symbol": "unused-variable",
@@ -12872,7 +12894,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -12883,7 +12905,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -12894,7 +12916,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 159,
             "column": 0,
@@ -12905,7 +12927,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -12916,7 +12938,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -12927,7 +12949,7 @@
         },
         {
             "type": "error",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -12938,7 +12960,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "_now",
             "line": 12,
             "column": 12,
@@ -12949,7 +12971,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "_iso",
             "line": 13,
             "column": 9,
@@ -12960,7 +12982,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "_iso",
             "line": 13,
             "column": 14,
@@ -12971,7 +12993,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "_parse",
             "line": 14,
             "column": 11,
@@ -12982,7 +13004,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "_parse",
             "line": 14,
             "column": 15,
@@ -12993,7 +13015,7 @@
         },
         {
             "type": "warning",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "_read",
             "line": 19,
             "column": 11,
@@ -13004,7 +13026,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "_read",
             "line": 18,
             "column": 56,
@@ -13015,7 +13037,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "_read",
             "line": 18,
             "column": 59,
@@ -13026,7 +13048,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "_write",
             "line": 22,
             "column": 11,
@@ -13037,7 +13059,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "_write",
             "line": 24,
             "column": 45,
@@ -13048,7 +13070,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "_write",
             "line": 24,
             "column": 48,
@@ -13059,7 +13081,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "_remove",
             "line": 28,
             "column": 9,
@@ -13070,7 +13092,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "_remove",
             "line": 29,
             "column": 30,
@@ -13081,7 +13103,7 @@
         },
         {
             "type": "warning",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "_stale",
             "line": 50,
             "column": 11,
@@ -13092,7 +13114,7 @@
         },
         {
             "type": "warning",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "acquire_or_block",
             "line": 58,
             "column": 12,
@@ -13103,7 +13125,7 @@
         },
         {
             "type": "warning",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "acquire_or_block",
             "line": 58,
             "column": 12,
@@ -13114,7 +13136,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "acquire_or_block",
             "line": 58,
             "column": 12,
@@ -13125,7 +13147,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "acquire_or_block",
             "line": 64,
             "column": 56,
@@ -13136,7 +13158,7 @@
         },
         {
             "type": "refactor",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "acquire_or_block",
             "line": 54,
             "column": 0,
@@ -13147,7 +13169,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "heartbeat",
             "line": 84,
             "column": 0,
@@ -13158,7 +13180,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "mark_job_start",
             "line": 110,
             "column": 0,
@@ -13169,7 +13191,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "mark_job_done",
             "line": 113,
             "column": 0,
@@ -13180,7 +13202,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 117,
             "column": 0,
@@ -13191,7 +13213,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "job_guard",
             "line": 119,
             "column": 0,
@@ -13202,7 +13224,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "release_if_owner",
             "line": 126,
             "column": 0,
@@ -13213,7 +13235,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "enforce_max_age",
             "line": 139,
             "column": 18,
@@ -13224,7 +13246,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "_new_lease",
             "line": 147,
             "column": 4,
@@ -13235,7 +13257,7 @@
         },
         {
             "type": "convention",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 117,
             "column": 0,
@@ -13246,7 +13268,7 @@
         },
         {
             "type": "warning",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -13257,18 +13279,18 @@
         },
         {
             "type": "refactor",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
             "path": "GUI/web_app/lease_guard.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[45:65]\n==exe_data_tuning_fixed:[137:156]\n    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')\n    data = pd.read_csv(saved_data_path, delimiter=\",\", index_col=0, encoding=\"latin1\", header=0)\n    config_path = os.path.join(LocalLogger.directory, \"config.json\")\n    with open(config_path, 'r') as f:\n        plot_config = json.load(f)\n\n    # Plot tuned data\n\n    figures = plot_timeseries_combined(plot_config, data)\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    # Data tuning completed\n    print(\"Finished\")\n",
+            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[48:68]\n==exe_data_tuning_fixed:[142:161]\n    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')\n    data = pd.read_csv(saved_data_path, delimiter=\",\", index_col=0, encoding=\"latin1\", header=0)\n    config_path = os.path.join(LocalLogger.directory, \"config.json\")\n    with open(config_path, 'r') as f:\n        plot_config = json.load(f)\n\n    # Plot tuned data\n\n    figures = plot_timeseries_combined(plot_config, data)\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    # Data tuning completed\n    print(\"Finished\")\n",
             "message-id": "R0801"
         },
         {
             "type": "refactor",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -13279,18 +13301,18 @@
         },
         {
             "type": "refactor",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
             "path": "GUI/web_app/lease_guard.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==carpet_plots:[113:130]\n==plot_carpets_modelA:[74:93]\n            norm1 = colors.Normalize(vmin=np.nanmin(Z1), vmax=np.nanmax(Z1))\n            norm2 = colors.Normalize(vmin=np.nanmin(Z2), vmax=np.nanmax(Z2))\n\n            Z1_greater = np.where(Z1 >= Z2, Z1, np.nan)\n            Z1_smaller = np.where(Z1 <= Z2, Z1, np.nan)\n            Z2_greater = np.where(Z2 >= Z1, Z2, np.nan)\n            Z2_smaller = np.where(Z2 <= Z1, Z2, np.nan)\n\n            # surface plots in correct order and normalization\n            surf1 = ax.plot_surface(X, Y, Z1, cmap=surf1_cmap, visible=False, norm=norm1)\n            surf2 = ax.plot_surface(X, Y, Z2, cmap=surf2_cmap, visible=False, norm=norm2)\n            surf2_smaller = ax.plot_surface(X, Y, Z2_smaller, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_smaller = ax.plot_surface(X, Y, Z1_smaller, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n            surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n\n        # Add this line to reverse the axis direction",
+            "message": "Similar lines in 2 files\n==carpet_plots:[113:130]\n==plot_carpets_modelA:[74:93]\n            norm1 = colors.Normalize(vmin=np.nanmin(Z1), vmax=np.nanmax(Z1))\n            norm2 = colors.Normalize(vmin=np.nanmin(Z2), vmax=np.nanmax(Z2))\n\n            Z1_greater = np.where(Z1 >= Z2, Z1, np.nan)\n            Z1_smaller = np.where(Z1 <= Z2, Z1, np.nan)\n            Z2_greater = np.where(Z2 >= Z1, Z2, np.nan)\n            Z2_smaller = np.where(Z2 <= Z1, Z2, np.nan)\n\n            # surface plots in correct order and normalization\n            surf1 = ax.plot_surface(X, Y, Z1, cmap=surf1_cmap, visible=False, norm=norm1)\n            surf2 = ax.plot_surface(X, Y, Z2, cmap=surf2_cmap, visible=False, norm=norm2)\n            surf2_smaller = ax.plot_surface(X, Y, Z2_smaller, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_smaller = ax.plot_surface(X, Y, Z1_smaller, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n            surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n\n\n        # Add this line to reverse the axis direction\n        # ax.set_xlim(ax.get_xlim()[::-1])",
             "message-id": "R0801"
         },
         {
             "type": "refactor",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -13301,7 +13323,7 @@
         },
         {
             "type": "refactor",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -13312,18 +13334,18 @@
         },
         {
             "type": "refactor",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
             "path": "GUI/web_app/lease_guard.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[53:65]\n==exe_data_tuning_fixed:[69:86]\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    # Data tuning completed\n    print(\"Finished\")\n\ndef default_config_exe_data_tuning_fixed(user_input='y'):\n    \"\"\"Execute the system_data tuning process with default config.\n    Parameters:\n        user_input : str, optional\n            If 'y', the contents of the target results directory will be overwritten.\n            If 'd', the directory contents will be deleted. Default is 'y'.\"\"\"\n    # Initialize a default config (without loading JSON)",
+            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[56:68]\n==exe_data_tuning_fixed:[72:89]\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    print(\"Finished\")\n\ndef default_config_exe_data_tuning_auto(user_input='y'):\n    \"\"\"Execute the system_data tuning process with default config.\"\"\"\n    # Initialize a default config (without loading JSON)",
             "message-id": "R0801"
         },
         {
             "type": "refactor",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -13334,24 +13356,24 @@
         },
         {
             "type": "refactor",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
             "path": "GUI/web_app/lease_guard.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[45:52]\n==exe_data_tuning_fixed:[60:68]\n    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')\n    data = pd.read_csv(saved_data_path, delimiter=\",\", index_col=0, encoding=\"latin1\", header=0)\n    config_path = os.path.join(LocalLogger.directory, \"config.json\")\n    with open(config_path, 'r') as f:\n        plot_config = json.load(f)\n\n    # Plot tuned data",
+            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[48:55]\n==exe_data_tuning_fixed:[63:71]\n    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')\n    data = pd.read_csv(saved_data_path, delimiter=\",\", index_col=0, encoding=\"latin1\", header=0)\n    config_path = os.path.join(LocalLogger.directory, \"config.json\")\n    with open(config_path, 'r') as f:\n        plot_config = json.load(f)\n\n    # Plot tuned data\n",
             "message-id": "R0801"
         },
         {
             "type": "refactor",
-            "module": "web_app.lease_guard",
+            "module": "lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
             "path": "GUI/web_app/lease_guard.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==abstract_model:[143:196]\n==experiment_logger:[17:41]\n        pass\n\n    @staticmethod\n    @abstractmethod\n    def finish_experiment():\n        pass\n\n    @staticmethod\n    @abstractmethod\n    def log(log: dict):\n        pass\n\n    @staticmethod\n    @abstractmethod\n    def log_artifact(data, name: str, art_type: str):\n        pass\n\n    @staticmethod\n    @abstractmethod\n    def use_artifact(name: str, alias: str = \"latest\"):\n        pass\n\n    @staticmethod\n    def _handle_pkl(data,name,art_type, directory):",
+            "message": "Similar lines in 2 files\n==experiment_logger:[17:41]\n==models.abstract_model:[143:196]\n        pass\n\n    @abstractmethod\n    def set_params(self, **params):\n        \"\"\"\n        Set the hyperparameters of the ML model.\n\n        Args:\n            **params: Variable length keyword arguments for hyperparameters.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def get_params(self):\n        \"\"\"\n        Get the hyperparameters of the ML model.\n\n        Returns:\n            A dictionary of the current hyperparameters.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def optuna_hyperparameter_suggest(self, trial):\n        \"\"\"\n        Suggest hyperparameters using Optuna for hyperparameter optimization.\n\n        Args:\n            trial: An Optuna trial object used to suggest hyperparameters.\n\n        Returns:\n            A dictionary of hyperparameters with Optuna distributions.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def grid_search_hyperparameter(self):\n        \"\"\"\n        Define the hyperparameters for grid search.\n\n        Returns:\n            A dictionary representing a hyperparameter grid for grid search.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def default_hyperparameter(self):\n        \"\"\"\n        Define the default hyperparameters of the model.\n\n        Returns:\n            A dictionary with a default set of hyperparameters.\n        \"\"\"",
             "message-id": "R0801"
         }
     ],
@@ -13390,7 +13412,7 @@
                 "statement": 39,
                 "warning": 0
             },
-            "model_tuning_config": {
+            "config.model_tuning_config": {
                 "convention": 7,
                 "error": 2,
                 "fatal": 0,
@@ -13399,7 +13421,7 @@
                 "statement": 29,
                 "warning": 0
             },
-            "hyparam_tuning_factory": {
+            "hyperparameter_tuning.hyparam_tuning_factory": {
                 "convention": 2,
                 "error": 5,
                 "fatal": 0,
@@ -13408,7 +13430,7 @@
                 "statement": 14,
                 "warning": 1
             },
-            "abstract_hyparam_tuner": {
+            "hyperparameter_tuning.abstract_hyparam_tuner": {
                 "convention": 1,
                 "error": 3,
                 "fatal": 0,
@@ -13417,7 +13439,7 @@
                 "statement": 10,
                 "warning": 0
             },
-            "hyperparameter_tuner": {
+            "hyperparameter_tuning.hyperparameter_tuner": {
                 "convention": 3,
                 "error": 7,
                 "fatal": 0,
@@ -13426,7 +13448,7 @@
                 "statement": 42,
                 "warning": 6
             },
-            "validator_factory": {
+            "scoring.validator_factory": {
                 "convention": 3,
                 "error": 4,
                 "fatal": 0,
@@ -13435,7 +13457,7 @@
                 "statement": 11,
                 "warning": 0
             },
-            "abstract_scorer": {
+            "scoring.abstract_scorer": {
                 "convention": 6,
                 "error": 5,
                 "fatal": 0,
@@ -13444,7 +13466,7 @@
                 "statement": 17,
                 "warning": 1
             },
-            "validator": {
+            "scoring.validator": {
                 "convention": 8,
                 "error": 5,
                 "fatal": 0,
@@ -13453,7 +13475,7 @@
                 "statement": 15,
                 "warning": 4
             },
-            "validation_splitting.splitter_factory": {
+            "scoring.validation_splitting.splitter_factory": {
                 "convention": 1,
                 "error": 4,
                 "fatal": 0,
@@ -13462,7 +13484,7 @@
                 "statement": 19,
                 "warning": 0
             },
-            "validation_splitting.abstract_splitter": {
+            "scoring.validation_splitting.abstract_splitter": {
                 "convention": 10,
                 "error": 3,
                 "fatal": 0,
@@ -13471,7 +13493,7 @@
                 "statement": 25,
                 "warning": 0
             },
-            "validation_splitting.custom_splitters": {
+            "scoring.validation_splitting.custom_splitters": {
                 "convention": 10,
                 "error": 1,
                 "fatal": 0,
@@ -13480,7 +13502,7 @@
                 "statement": 43,
                 "warning": 10
             },
-            "metrics.metric_factory": {
+            "metric_factory": {
                 "convention": 1,
                 "error": 3,
                 "fatal": 0,
@@ -13489,7 +13511,7 @@
                 "statement": 16,
                 "warning": 1
             },
-            "metrics.custom_metrics": {
+            "custom_metrics": {
                 "convention": 0,
                 "error": 0,
                 "fatal": 0,
@@ -13498,7 +13520,7 @@
                 "statement": 0,
                 "warning": 0
             },
-            "metrics.abstract_metric": {
+            "abstract_metric": {
                 "convention": 1,
                 "error": 0,
                 "fatal": 0,
@@ -13507,7 +13529,7 @@
                 "statement": 2,
                 "warning": 0
             },
-            "model_factory": {
+            "models.model_factory": {
                 "convention": 7,
                 "error": 8,
                 "fatal": 0,
@@ -13516,7 +13538,7 @@
                 "statement": 55,
                 "warning": 5
             },
-            "abstract_model": {
+            "models.abstract_model": {
                 "convention": 11,
                 "error": 6,
                 "fatal": 0,
@@ -13525,7 +13547,7 @@
                 "statement": 92,
                 "warning": 30
             },
-            "scikit_learn_models": {
+            "models.scikit_learn_models": {
                 "convention": 25,
                 "error": 13,
                 "fatal": 0,
@@ -13534,7 +13556,7 @@
                 "statement": 131,
                 "warning": 12
             },
-            "keras_models": {
+            "models.keras_models": {
                 "convention": 18,
                 "error": 12,
                 "fatal": 0,
@@ -13669,7 +13691,7 @@
                 "statement": 29,
                 "warning": 6
             },
-            "config.data_tuning_config": {
+            "data_tuning_config": {
                 "convention": 4,
                 "error": 3,
                 "fatal": 0,
@@ -13778,7 +13800,7 @@
                 "warning": 7
             },
             "exe_data_tuning_auto": {
-                "convention": 7,
+                "convention": 8,
                 "error": 11,
                 "fatal": 0,
                 "info": 0,
@@ -13814,7 +13836,7 @@
                 "warning": 5
             },
             "exe_data_tuning_fixed": {
-                "convention": 9,
+                "convention": 10,
                 "error": 13,
                 "fatal": 0,
                 "info": 0,
@@ -13840,7 +13862,7 @@
                 "statement": 832,
                 "warning": 31
             },
-            "web_app.lease_guard": {
+            "lease_guard": {
                 "convention": 28,
                 "error": 1,
                 "fatal": 0,
@@ -13856,7 +13878,7 @@
             "missing-module-docstring": 49,
             "import-error": 299,
             "missing-class-docstring": 16,
-            "line-too-long": 193,
+            "line-too-long": 195,
             "too-few-public-methods": 21,
             "wrong-import-order": 41,
             "no-else-return": 11,
@@ -13914,7 +13936,7 @@
         },
         "dependencies": {
             "packaging.version": [
-                "keras_models"
+                "models.keras_models"
             ]
         },
         "duplicated_lines": {
@@ -13933,7 +13955,7 @@
             "method": 16,
             "module": 49
         },
-        "convention": 576,
+        "convention": 578,
         "error": 305,
         "fatal": 0,
         "info": 0,
@@ -13942,7 +13964,7 @@
         "warning": 239,
         "global_note": 0,
         "nb_duplicated_lines": 85,
-        "percent_duplicated_lines": 1.3460015835312746
+        "percent_duplicated_lines": 1.3438735177865613
     },
     "previous": {
         "bad_names": {
@@ -13979,7 +14001,7 @@
                 "statement": 39,
                 "warning": 0
             },
-            "config.model_tuning_config": {
+            "model_tuning_config": {
                 "convention": 7,
                 "error": 2,
                 "fatal": 0,
@@ -14069,7 +14091,7 @@
                 "statement": 43,
                 "warning": 10
             },
-            "scoring.metrics.metric_factory": {
+            "metric_factory": {
                 "convention": 1,
                 "error": 3,
                 "fatal": 0,
@@ -14078,7 +14100,7 @@
                 "statement": 16,
                 "warning": 1
             },
-            "scoring.metrics.custom_metrics": {
+            "custom_metrics": {
                 "convention": 0,
                 "error": 0,
                 "fatal": 0,
@@ -14087,7 +14109,7 @@
                 "statement": 0,
                 "warning": 0
             },
-            "scoring.metrics.abstract_metric": {
+            "abstract_metric": {
                 "convention": 1,
                 "error": 0,
                 "fatal": 0,
@@ -14367,7 +14389,7 @@
                 "warning": 7
             },
             "exe_data_tuning_auto": {
-                "convention": 7,
+                "convention": 8,
                 "error": 11,
                 "fatal": 0,
                 "info": 0,
@@ -14403,7 +14425,7 @@
                 "warning": 5
             },
             "exe_data_tuning_fixed": {
-                "convention": 9,
+                "convention": 10,
                 "error": 13,
                 "fatal": 0,
                 "info": 0,
@@ -14429,7 +14451,7 @@
                 "statement": 832,
                 "warning": 31
             },
-            "web_app.lease_guard": {
+            "lease_guard": {
                 "convention": 28,
                 "error": 1,
                 "fatal": 0,
@@ -14445,7 +14467,7 @@
             "missing-module-docstring": 49,
             "import-error": 299,
             "missing-class-docstring": 16,
-            "line-too-long": 193,
+            "line-too-long": 195,
             "too-few-public-methods": 21,
             "wrong-import-order": 41,
             "no-else-return": 11,
@@ -14522,15 +14544,15 @@
             "method": 16,
             "module": 49
         },
-        "convention": 576,
+        "convention": 578,
         "error": 305,
         "fatal": 0,
         "info": 0,
         "refactor": 94,
         "statement": 3305,
         "warning": 239,
-        "global_note": 2.6354009077155824,
+        "global_note": 2.6293494704992435,
         "nb_duplicated_lines": 85,
-        "percent_duplicated_lines": 1.3460015835312746
+        "percent_duplicated_lines": 1.3438735177865613
     }
 }

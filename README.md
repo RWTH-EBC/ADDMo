@@ -76,12 +76,11 @@ Generate insightful visualizations based on the results of previously trained an
 One can define bounds and default values for the features manually or select the existing min and max of each feature as bound and mean (numerical features) or mode (categorical features) as default values.
 
 ## Testing
-Test a previously trained and saved model using new or unseen input data and predict and evaluate the model with a more sophisticated evaluation method.\
-`Select Tuning Type`: This is critical if the model was trained on tuned data. Specify the tuning type and the path where the tuned data file is saved. The file is loaded to recreate the data tuning automatically. 
+Test a previously trained and saved model using new or unseen input data and predict and evaluate the model with a more sophisticated evaluation method. While using the GUI, `Select Tuning Type` is critical if the model was trained on tuned data. Specify the tuning type and the path where the tuned data file is saved. The file is loaded to recreate the data tuning automatically. 
 This way the model is trained and tested on the same features and ensures the tuning type and input structure match the training phase.
 ## Recreate Data Tuning
 Allows recreating the exact data tuning process applied during a previous experiment, using the saved tuning configuration.
-This step is handled already in the `Testing` tab. This tab only supports tuning configurations saved by this app.
+This step is already handled in the `Testing` phase. This functionality only supports tuning configurations saved by this app.
 It cannot recreate tuning from externally trained models or configurations.
 
 The flowchart below depicts the workflow of the tool:  

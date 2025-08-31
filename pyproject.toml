@@ -24,6 +24,7 @@ dependencies = [ "pandas",
     "openpyxl",
     "streamlit",
     "streamlit_pdf_viewer",
+    "streamlit_autorefresh",
     "streamlit-pydantic @ git+https://github.com/RWTH-EBC/streamlit-pydantic.git@main"
     ]
 

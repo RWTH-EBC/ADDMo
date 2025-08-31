@@ -19,3 +19,4 @@ openpyxl
 streamlit
 streamlit_pdf_viewer
 streamlit-pydantic @ git+https://github.com/RWTH-EBC/streamlit-pydantic.git@main
+streamlit_autorefresh

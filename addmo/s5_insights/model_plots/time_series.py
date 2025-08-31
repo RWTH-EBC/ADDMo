@@ -79,5 +79,5 @@ def plot_timeseries_combined(config,data):
 
         figures.append(fig_2weeks)
 
-    return figures if len(figures) > 1 else figures[0]
+    return figures
 

@@ -5,6 +5,7 @@ import streamlit as st
 import json
 import io, os, zipfile
 import time, uuid, hashlib
+from streamlit_autorefresh import st_autorefresh
 from streamlit_pydantic import pydantic_input, pydantic_output, pydantic_form
 from addmo.s1_data_tuning_auto.config.data_tuning_auto_config import DataTuningAutoSetup
 from addmo_examples.executables.exe_data_tuning_auto import exe_data_tuning_auto
@@ -19,7 +20,7 @@ from addmo.util.definitions import results_dir_data_tuning_auto, results_dir_dat
 from addmo_examples.executables.exe_data_insights import exe_time_series_plot, exe_parallel_plot, exe_carpet_plots, exe_scatter_carpet_plots, exe_interactive_parallel_plot
 from addmo.s4_model_testing.model_testing import model_test, data_tuning_recreate_fixed, data_tuning_recreate_auto
 from addmo.util.load_save import load_data
-from GUI.web_app.lease_guard import acquire_or_block, heartbeat, enforce_max_age, release_if_owner
+from GUI.web_app.lease_guard import *
 
 
 def _zipdir_to_bytes(dir_path: str):
@@ -558,7 +559,6 @@ def generate_external_insights(model_config, model_metadata_config):
 
     return st.session_state.output_dir
 
-
 def generate_addmo_insights():
     if "dir_submitted" not in st.session_state:
         st.session_state.dir_submitted = False
@@ -1050,7 +1050,6 @@ def exe_streamlit_data_tuning_recreate():
     if "tuning_type" not in st.session_state:
         st.session_state.tuning_type = None
         st.session_state.saving_dir = None
-
     if "tuning_submitted" not in st.session_state:
         st.session_state.tuning_submitted = False
         st.session_state.dir_submitted = False
@@ -1174,23 +1173,37 @@ st.set_page_config(
     page_icon=os.path.join(root_dir(), 'staticfiles', '230718 Logo ADDMo-01.png'),
     layout="wide"
 )
+st_autorefresh(interval=30_000, key="__ui_autorefresh__")
+
+
 if "lease_token" not in st.query_params:
     st.query_params["lease_token"] = str(uuid.uuid4())
 LEASE_TOKEN = st.query_params["lease_token"]
+
 if st.session_state.get("released", False):
     st.warning("You terminated this session. Close this tab or open the GUI in another browser/window.")
     st.stop()
+
 st.markdown("""
-    <style>.block-container { padding-top: 1.6rem; }</style>
+    <style>
+    .block-container {
+        padding-top: 0.1rem;   
+    }
+    .stImage img {
+        margin-top: 0 !important;
+    }
+    </style>
 """, unsafe_allow_html=True)
+
 lease = acquire_or_block(user_hint="", sid=LEASE_TOKEN)
-heartbeat(lease)
+heartbeat(lease, sid=LEASE_TOKEN)
 enforce_max_age(lease)
+
 with st.sidebar:
     if st.button("Terminate current session"):
         release_if_owner(sid=LEASE_TOKEN)
         st.session_state["released"] = True
-
+        st.stop()
 
 logo_path = os.path.join(root_dir(), "staticfiles", "logo.png")
 

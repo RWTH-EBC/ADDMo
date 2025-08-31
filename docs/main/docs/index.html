@@ -158,13 +158,13 @@ One can define bounds and default values for the features manually or select the
 </section>
 <section id="testing">
 <h4>Testing<a class="headerlink" href="#testing" title="Permalink to this heading"></a></h4>
-<p>Test a previously trained and saved model using new or unseen input data and predict and evaluate the model with a more sophisticated evaluation method.<code class="docutils literal notranslate"><span class="pre">Select</span> <span class="pre">Tuning</span> <span class="pre">Type</span></code>: This is critical if the model was trained on tuned data. Specify the tuning type and the path where the tuned data file is saved. The file is loaded to recreate the data tuning automatically.
+<p>Test a previously trained and saved model using new or unseen input data and predict and evaluate the model with a more sophisticated evaluation method. While using the GUI, <code class="docutils literal notranslate"><span class="pre">Select</span> <span class="pre">Tuning</span> <span class="pre">Type</span></code> is critical if the model was trained on tuned data. Specify the tuning type and the path where the tuned data file is saved. The file is loaded to recreate the data tuning automatically.
 This way the model is trained and tested on the same features and ensures the tuning type and input structure match the training phase.</p>
 </section>
 <section id="recreate-data-tuning">
 <h4>Recreate Data Tuning<a class="headerlink" href="#recreate-data-tuning" title="Permalink to this heading"></a></h4>
 <p>Allows recreating the exact data tuning process applied during a previous experiment, using the saved tuning configuration.
-This step is handled already in the <code class="docutils literal notranslate"><span class="pre">Testing</span></code> tab. This tab only supports tuning configurations saved by this app.
+This step is already handled in the <code class="docutils literal notranslate"><span class="pre">Testing</span></code> phase. This functionality only supports tuning configurations saved by this app.
 It cannot recreate tuning from externally trained models or configurations.</p>
 <p>The flowchart below depicts the workflow of the tool:</p>
 <a class="reference external image-reference" href="https://raw.githubusercontent.com/RWTH-EBC/ADDMo/main/staticfiles/flowchart_addmo.png"><img alt="Pipeline Diagram" src="https://raw.githubusercontent.com/RWTH-EBC/ADDMo/main/staticfiles/flowchart_addmo.png" /></a>

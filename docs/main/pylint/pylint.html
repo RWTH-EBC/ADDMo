@@ -2072,7 +2072,7 @@
             
         </table>
         
-        <h3>Module <code>lease_guard</code> (<code>GUI/web_app/lease_guard.py</code>)</h3>
+        <h3>Module <code>web_app.lease_guard</code> (<code>GUI/web_app/lease_guard.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -2208,9 +2208,7 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
             surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)
             surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)
 
-
-        # Add this line to reverse the axis direction
-        # ax.set_xlim(ax.get_xlim()[::-1])</pre></td>
+        # Add this line to reverse the axis direction</pre></td>
             </tr>
             
             <tr>
@@ -2252,6 +2250,7 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
 ==model_testing:[81:100]
     new_config = DataTuningAutoSetup(**saved_config_data)
 
+    # Configure the logger
     LocalLogger.directory = results_dir_data_tuning(new_config)
     LocalLogger.active = True
     WandbLogger.project = &#34;addmo-test_data_auto_tuning&#34;
@@ -2268,7 +2267,8 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
     y_new = new_tuner.y
 
     tuned_xy_new = pd.concat([y_new, tuned_x_new], axis=1, join=&#34;inner&#34;).bfill()
-</pre></td>
+
+    # Log the tuned system data</pre></td>
             </tr>
             
             <tr>
@@ -2288,10 +2288,15 @@ def plot_carpets_with_buckets(variables, measurements_data, target_values, regre
         suffix = &#34;_2weeks&#34; if idx == 1 else &#34;&#34;
         plot_path = os.path.join(LocalLogger.directory, f&#34;{file_name}{suffix}&#34;)
         save_pdf(fig, plot_path)
+    # Data tuning completed
     print(&#34;Finished&#34;)
 
-def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
-    &#34;&#34;&#34;Execute the system_data tuning process with default config.&#34;&#34;&#34;
+def default_config_exe_data_tuning_fixed(user_input=&#39;y&#39;):
+    &#34;&#34;&#34;Execute the system_data tuning process with default config.
+    Parameters:
+        user_input : str, optional
+            If &#39;y&#39;, the contents of the target results directory will be overwritten.
+            If &#39;d&#39;, the directory contents will be deleted. Default is &#39;y&#39;.&#34;&#34;&#34;
     # Initialize a default config (without loading JSON)</pre></td>
             </tr>
             
@@ -3695,7 +3700,7 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
             
         </table>
         
-        <h3>Module <code>config.model_tuning_config</code> (<code>addmo/s3_model_tuning/config/model_tuning_config.py</code>)</h3>
+        <h3>Module <code>model_tuning_config</code> (<code>addmo/s3_model_tuning/config/model_tuning_config.py</code>)</h3>
         <table>
             <tr>
                 <th>Line</th>
@@ -13382,7 +13387,7 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
             </tr>
             
             <tr>
-                <td>config.model_tuning_config</td>
+                <td>model_tuning_config</td>
                 <td>11</td>
             </tr>
             
@@ -13622,7 +13627,7 @@ def default_config_exe_data_tuning_auto(user_input=&#39;y&#39;):
             </tr>
             
             <tr>
-                <td>lease_guard</td>
+                <td>web_app.lease_guard</td>
                 <td>44</td>
             </tr>
             

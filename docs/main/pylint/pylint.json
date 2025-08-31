@@ -101,7 +101,7 @@
         },
         {
             "type": "convention",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -112,7 +112,7 @@
         },
         {
             "type": "convention",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "",
             "line": 64,
             "column": 0,
@@ -123,7 +123,7 @@
         },
         {
             "type": "convention",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "",
             "line": 92,
             "column": 0,
@@ -134,7 +134,7 @@
         },
         {
             "type": "convention",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -145,7 +145,7 @@
         },
         {
             "type": "error",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -156,7 +156,7 @@
         },
         {
             "type": "error",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -167,7 +167,7 @@
         },
         {
             "type": "convention",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "ModelTunerConfig",
             "line": 7,
             "column": 0,
@@ -178,7 +178,7 @@
         },
         {
             "type": "refactor",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "ModelTunerConfig",
             "line": 7,
             "column": 0,
@@ -189,7 +189,7 @@
         },
         {
             "type": "convention",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "ModelTuningExperimentConfig",
             "line": 54,
             "column": 0,
@@ -200,7 +200,7 @@
         },
         {
             "type": "refactor",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "ModelTuningExperimentConfig",
             "line": 54,
             "column": 0,
@@ -211,7 +211,7 @@
         },
         {
             "type": "convention",
-            "module": "config.model_tuning_config",
+            "module": "model_tuning_config",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -12872,7 +12872,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -12883,7 +12883,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -12894,7 +12894,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 159,
             "column": 0,
@@ -12905,7 +12905,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -12916,7 +12916,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -12927,7 +12927,7 @@
         },
         {
             "type": "error",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -12938,7 +12938,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_now",
             "line": 12,
             "column": 12,
@@ -12949,7 +12949,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_iso",
             "line": 13,
             "column": 9,
@@ -12960,7 +12960,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_iso",
             "line": 13,
             "column": 14,
@@ -12971,7 +12971,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_parse",
             "line": 14,
             "column": 11,
@@ -12982,7 +12982,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_parse",
             "line": 14,
             "column": 15,
@@ -12993,7 +12993,7 @@
         },
         {
             "type": "warning",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_read",
             "line": 19,
             "column": 11,
@@ -13004,7 +13004,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_read",
             "line": 18,
             "column": 56,
@@ -13015,7 +13015,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_read",
             "line": 18,
             "column": 59,
@@ -13026,7 +13026,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_write",
             "line": 22,
             "column": 11,
@@ -13037,7 +13037,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_write",
             "line": 24,
             "column": 45,
@@ -13048,7 +13048,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_write",
             "line": 24,
             "column": 48,
@@ -13059,7 +13059,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_remove",
             "line": 28,
             "column": 9,
@@ -13070,7 +13070,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_remove",
             "line": 29,
             "column": 30,
@@ -13081,7 +13081,7 @@
         },
         {
             "type": "warning",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_stale",
             "line": 50,
             "column": 11,
@@ -13092,7 +13092,7 @@
         },
         {
             "type": "warning",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "acquire_or_block",
             "line": 58,
             "column": 12,
@@ -13103,7 +13103,7 @@
         },
         {
             "type": "warning",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "acquire_or_block",
             "line": 58,
             "column": 12,
@@ -13114,7 +13114,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "acquire_or_block",
             "line": 58,
             "column": 12,
@@ -13125,7 +13125,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "acquire_or_block",
             "line": 64,
             "column": 56,
@@ -13136,7 +13136,7 @@
         },
         {
             "type": "refactor",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "acquire_or_block",
             "line": 54,
             "column": 0,
@@ -13147,7 +13147,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "heartbeat",
             "line": 84,
             "column": 0,
@@ -13158,7 +13158,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "mark_job_start",
             "line": 110,
             "column": 0,
@@ -13169,7 +13169,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "mark_job_done",
             "line": 113,
             "column": 0,
@@ -13180,7 +13180,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 117,
             "column": 0,
@@ -13191,7 +13191,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "job_guard",
             "line": 119,
             "column": 0,
@@ -13202,7 +13202,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "release_if_owner",
             "line": 126,
             "column": 0,
@@ -13213,7 +13213,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "enforce_max_age",
             "line": 139,
             "column": 18,
@@ -13224,7 +13224,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_new_lease",
             "line": 147,
             "column": 4,
@@ -13235,7 +13235,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 117,
             "column": 0,
@@ -13246,7 +13246,7 @@
         },
         {
             "type": "warning",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -13257,7 +13257,7 @@
         },
         {
             "type": "refactor",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -13268,7 +13268,7 @@
         },
         {
             "type": "refactor",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -13279,18 +13279,18 @@
         },
         {
             "type": "refactor",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
             "path": "GUI/web_app/lease_guard.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==carpet_plots:[113:130]\n==plot_carpets_modelA:[74:93]\n            norm1 = colors.Normalize(vmin=np.nanmin(Z1), vmax=np.nanmax(Z1))\n            norm2 = colors.Normalize(vmin=np.nanmin(Z2), vmax=np.nanmax(Z2))\n\n            Z1_greater = np.where(Z1 >= Z2, Z1, np.nan)\n            Z1_smaller = np.where(Z1 <= Z2, Z1, np.nan)\n            Z2_greater = np.where(Z2 >= Z1, Z2, np.nan)\n            Z2_smaller = np.where(Z2 <= Z1, Z2, np.nan)\n\n            # surface plots in correct order and normalization\n            surf1 = ax.plot_surface(X, Y, Z1, cmap=surf1_cmap, visible=False, norm=norm1)\n            surf2 = ax.plot_surface(X, Y, Z2, cmap=surf2_cmap, visible=False, norm=norm2)\n            surf2_smaller = ax.plot_surface(X, Y, Z2_smaller, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_smaller = ax.plot_surface(X, Y, Z1_smaller, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n            surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n\n\n        # Add this line to reverse the axis direction\n        # ax.set_xlim(ax.get_xlim()[::-1])",
+            "message": "Similar lines in 2 files\n==carpet_plots:[113:130]\n==plot_carpets_modelA:[74:93]\n            norm1 = colors.Normalize(vmin=np.nanmin(Z1), vmax=np.nanmax(Z1))\n            norm2 = colors.Normalize(vmin=np.nanmin(Z2), vmax=np.nanmax(Z2))\n\n            Z1_greater = np.where(Z1 >= Z2, Z1, np.nan)\n            Z1_smaller = np.where(Z1 <= Z2, Z1, np.nan)\n            Z2_greater = np.where(Z2 >= Z1, Z2, np.nan)\n            Z2_smaller = np.where(Z2 <= Z1, Z2, np.nan)\n\n            # surface plots in correct order and normalization\n            surf1 = ax.plot_surface(X, Y, Z1, cmap=surf1_cmap, visible=False, norm=norm1)\n            surf2 = ax.plot_surface(X, Y, Z2, cmap=surf2_cmap, visible=False, norm=norm2)\n            surf2_smaller = ax.plot_surface(X, Y, Z2_smaller, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_smaller = ax.plot_surface(X, Y, Z1_smaller, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n            surf2_greater = ax.plot_surface(X, Y, Z2_greater, cmap=surf2_cmap, alpha=0.5, norm=norm2)\n            surf1_greater = ax.plot_surface(X, Y, Z1_greater, cmap=surf1_cmap, alpha=0.5, norm=norm1)\n\n        # Add this line to reverse the axis direction",
             "message-id": "R0801"
         },
         {
             "type": "refactor",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -13301,29 +13301,29 @@
         },
         {
             "type": "refactor",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
             "path": "GUI/web_app/lease_guard.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_recreate_data_tuning:[29:50]\n==model_testing:[81:100]\n    new_config = DataTuningAutoSetup(**saved_config_data)\n\n    LocalLogger.directory = results_dir_data_tuning(new_config)\n    LocalLogger.active = True\n    WandbLogger.project = \"addmo-test_data_auto_tuning\"\n    WandbLogger.directory = results_dir_data_tuning(new_config)\n    WandbLogger.active = False\n\n    ExperimentLogger.start_experiment(config=new_config)\n\n    # Create a new tuner instance with the same tuning parameters\n    new_tuner = DataTunerAuto(config=new_config)\n\n    # Apply the same tuning process to the new data\n    tuned_x_new = new_tuner.tune_auto()\n    y_new = new_tuner.y\n\n    tuned_xy_new = pd.concat([y_new, tuned_x_new], axis=1, join=\"inner\").bfill()\n",
+            "message": "Similar lines in 2 files\n==exe_recreate_data_tuning:[29:50]\n==model_testing:[81:100]\n    new_config = DataTuningAutoSetup(**saved_config_data)\n\n    # Configure the logger\n    LocalLogger.directory = results_dir_data_tuning(new_config)\n    LocalLogger.active = True\n    WandbLogger.project = \"addmo-test_data_auto_tuning\"\n    WandbLogger.directory = results_dir_data_tuning(new_config)\n    WandbLogger.active = False\n\n    ExperimentLogger.start_experiment(config=new_config)\n\n    # Create a new tuner instance with the same tuning parameters\n    new_tuner = DataTunerAuto(config=new_config)\n\n    # Apply the same tuning process to the new data\n    tuned_x_new = new_tuner.tune_auto()\n    y_new = new_tuner.y\n\n    tuned_xy_new = pd.concat([y_new, tuned_x_new], axis=1, join=\"inner\").bfill()\n\n    # Log the tuned system data",
             "message-id": "R0801"
         },
         {
             "type": "refactor",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
             "path": "GUI/web_app/lease_guard.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[53:65]\n==exe_data_tuning_fixed:[69:86]\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    print(\"Finished\")\n\ndef default_config_exe_data_tuning_auto(user_input='y'):\n    \"\"\"Execute the system_data tuning process with default config.\"\"\"\n    # Initialize a default config (without loading JSON)",
+            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[53:65]\n==exe_data_tuning_fixed:[69:86]\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    # Data tuning completed\n    print(\"Finished\")\n\ndef default_config_exe_data_tuning_fixed(user_input='y'):\n    \"\"\"Execute the system_data tuning process with default config.\n    Parameters:\n        user_input : str, optional\n            If 'y', the contents of the target results directory will be overwritten.\n            If 'd', the directory contents will be deleted. Default is 'y'.\"\"\"\n    # Initialize a default config (without loading JSON)",
             "message-id": "R0801"
         },
         {
             "type": "refactor",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -13334,7 +13334,7 @@
         },
         {
             "type": "refactor",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -13345,7 +13345,7 @@
         },
         {
             "type": "refactor",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -13390,7 +13390,7 @@
                 "statement": 39,
                 "warning": 0
             },
-            "config.model_tuning_config": {
+            "model_tuning_config": {
                 "convention": 7,
                 "error": 2,
                 "fatal": 0,
@@ -13840,7 +13840,7 @@
                 "statement": 832,
                 "warning": 31
             },
-            "lease_guard": {
+            "web_app.lease_guard": {
                 "convention": 28,
                 "error": 1,
                 "fatal": 0,

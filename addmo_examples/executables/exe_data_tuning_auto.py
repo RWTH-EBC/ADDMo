@@ -1,3 +1,6 @@
+# # Data Tuning (Auto) Tutorial
+
+# Importing of necessary libraries and walk through of internal data tuning, created with default config
 import os
 import json
 import pandas as pd
@@ -67,6 +70,7 @@ def default_config_exe_data_tuning_auto(user_input='y'):
     # Run data tuning execution
     _exe_data_tuning_auto(config, user_input=user_input)
 
+# Tutorial for executing data tuning on user defined config
 def exe_data_tuning_auto(user_input='y'):
     """Execute the system_data tuning process with user defined config.
      Parameters:

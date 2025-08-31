@@ -1,23 +1,29 @@
 <html><body><pre>
 GUI/app.py:1:8: F401 [*] `base64` imported but unused
+GUI/app.py:5:1: E401 Multiple imports on one line
 GUI/app.py:6:1: E401 Multiple imports on one line
-GUI/app.py:7:1: E401 Multiple imports on one line
-GUI/app.py:7:8: F401 [*] `time` imported but unused
+GUI/app.py:6:8: F401 [*] `time` imported but unused
 GUI/app.py:8:48: F401 [*] `streamlit_pydantic.pydantic_output` imported but unused
 GUI/app.py:8:65: F401 [*] `streamlit_pydantic.pydantic_form` imported but unused
 GUI/app.py:18:36: F401 [*] `addmo.util.definitions.results_dir_data_tuning_auto` imported but unused
 GUI/app.py:18:66: F401 [*] `addmo.util.definitions.results_dir_data_tuning_fixed` imported but unused
 GUI/app.py:19:80: F401 [*] `addmo_examples.executables.exe_data_insights.exe_parallel_plot` imported but unused
 GUI/app.py:21:34: F401 [*] `addmo.util.load_save.load_data` imported but unused
-GUI/app.py:817:5: F841 Local variable `choose_plotting_type` is assigned to but never used
+GUI/app.py:22:1: F403 `from GUI.web_app.lease_guard import *` used; unable to detect undefined names
+GUI/app.py:816:5: F841 Local variable `choose_plotting_type` is assigned to but never used
+GUI/app.py:1197:9: F405 `acquire_or_block` may be undefined, or defined from star imports
+GUI/app.py:1198:1: F405 `heartbeat` may be undefined, or defined from star imports
+GUI/app.py:1199:1: F405 `enforce_max_age` may be undefined, or defined from star imports
+GUI/app.py:1203:9: F405 `release_if_owner` may be undefined, or defined from star imports
 GUI/web_app/lease_guard.py:1:1: E401 Multiple imports on one line
 GUI/web_app/lease_guard.py:1:18: F401 [*] `uuid` imported but unused
-GUI/web_app/lease_guard.py:16:58: E701 Multiple statements on one line (colon)
-GUI/web_app/lease_guard.py:22:47: E701 Multiple statements on one line (colon)
-GUI/web_app/lease_guard.py:26:8: E701 Multiple statements on one line (colon)
-GUI/web_app/lease_guard.py:27:29: E701 Multiple statements on one line (colon)
-GUI/web_app/lease_guard.py:50:20: F811 Redefinition of unused `uuid` from line 1
-GUI/web_app/lease_guard.py:97:17: E701 Multiple statements on one line (colon)
+GUI/web_app/lease_guard.py:18:58: E701 Multiple statements on one line (colon)
+GUI/web_app/lease_guard.py:24:47: E701 Multiple statements on one line (colon)
+GUI/web_app/lease_guard.py:28:8: E701 Multiple statements on one line (colon)
+GUI/web_app/lease_guard.py:29:29: E701 Multiple statements on one line (colon)
+GUI/web_app/lease_guard.py:58:20: F811 Redefinition of unused `uuid` from line 1
+GUI/web_app/lease_guard.py:117:1: E402 Module level import not at top of file
+GUI/web_app/lease_guard.py:139:17: E701 Multiple statements on one line (colon)
 addmo/s1_data_tuning_auto/config/data_tuning_auto_config.py:2:40: F401 [*] `pydantic.PrivateAttr` imported but unused
 addmo/s1_data_tuning_auto/feature_construction.py:4:38: F401 [*] `addmo.util.data_handling.split_target_features` imported but unused
 addmo/s1_data_tuning_auto/feature_construction.py:5:61: F401 [*] `addmo.s3_model_tuning.scoring.validator_factory.ValidatorFactory` imported but unused
@@ -105,6 +111,6 @@ tests/test_data_tuning.py:7:59: F401 [*] `addmo.util.experiment_logger.LocalLogg
 tests/test_data_tuning.py:7:72: F401 [*] `addmo.util.experiment_logger.WandbLogger` imported but unused
 tests/test_model_tuning.py:5:62: F401 [*] `addmo.s3_model_tuning.config.model_tuning_config.ModelTunerConfig` imported but unused
 tests/test_model_tuning.py:8:34: F401 [*] `addmo.util.load_save.load_config_from_json` imported but unused
-Found 106 errors.
+Found 112 errors.
 [*] 79 fixable with the `--fix` option (12 hidden fixes can be enabled with the `--unsafe-fixes` option).
 </pre></body></html>

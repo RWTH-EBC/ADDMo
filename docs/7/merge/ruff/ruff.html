@@ -1,0 +1,116 @@
+<html><body><pre>
+GUI/app.py:1:8: F401 [*] `base64` imported but unused
+GUI/app.py:5:1: E401 Multiple imports on one line
+GUI/app.py:6:1: E401 Multiple imports on one line
+GUI/app.py:6:8: F401 [*] `time` imported but unused
+GUI/app.py:8:48: F401 [*] `streamlit_pydantic.pydantic_output` imported but unused
+GUI/app.py:8:65: F401 [*] `streamlit_pydantic.pydantic_form` imported but unused
+GUI/app.py:18:36: F401 [*] `addmo.util.definitions.results_dir_data_tuning_auto` imported but unused
+GUI/app.py:18:66: F401 [*] `addmo.util.definitions.results_dir_data_tuning_fixed` imported but unused
+GUI/app.py:19:80: F401 [*] `addmo_examples.executables.exe_data_insights.exe_parallel_plot` imported but unused
+GUI/app.py:21:34: F401 [*] `addmo.util.load_save.load_data` imported but unused
+GUI/app.py:22:1: F403 `from GUI.web_app.lease_guard import *` used; unable to detect undefined names
+GUI/app.py:816:5: F841 Local variable `choose_plotting_type` is assigned to but never used
+GUI/app.py:1197:9: F405 `acquire_or_block` may be undefined, or defined from star imports
+GUI/app.py:1198:1: F405 `heartbeat` may be undefined, or defined from star imports
+GUI/app.py:1199:1: F405 `enforce_max_age` may be undefined, or defined from star imports
+GUI/app.py:1203:9: F405 `release_if_owner` may be undefined, or defined from star imports
+GUI/web_app/lease_guard.py:1:1: E401 Multiple imports on one line
+GUI/web_app/lease_guard.py:1:18: F401 [*] `uuid` imported but unused
+GUI/web_app/lease_guard.py:18:58: E701 Multiple statements on one line (colon)
+GUI/web_app/lease_guard.py:24:47: E701 Multiple statements on one line (colon)
+GUI/web_app/lease_guard.py:28:8: E701 Multiple statements on one line (colon)
+GUI/web_app/lease_guard.py:29:29: E701 Multiple statements on one line (colon)
+GUI/web_app/lease_guard.py:58:20: F811 Redefinition of unused `uuid` from line 1
+GUI/web_app/lease_guard.py:117:1: E402 Module level import not at top of file
+GUI/web_app/lease_guard.py:139:17: E701 Multiple statements on one line (colon)
+addmo/s1_data_tuning_auto/config/data_tuning_auto_config.py:2:40: F401 [*] `pydantic.PrivateAttr` imported but unused
+addmo/s1_data_tuning_auto/feature_construction.py:4:38: F401 [*] `addmo.util.data_handling.split_target_features` imported but unused
+addmo/s1_data_tuning_auto/feature_construction.py:5:61: F401 [*] `addmo.s3_model_tuning.scoring.validator_factory.ValidatorFactory` imported but unused
+addmo/s1_data_tuning_auto/feature_construction.py:6:56: F401 [*] `addmo.s3_model_tuning.models.model_factory.ModelFactory` imported but unused
+addmo/s1_data_tuning_auto/feature_construction.py:7:59: F401 [*] `addmo.s3_model_tuning.scoring.abstract_scorer.ValidationScoring` imported but unused
+addmo/s1_data_tuning_auto/feature_construction.py:8:57: F401 [*] `addmo.s3_model_tuning.models.abstract_model.AbstractMLModel` imported but unused
+addmo/s1_data_tuning_auto/feature_construction.py:10:47: F401 [*] `addmo.s3_model_tuning.model_tuner.ModelTuner` imported but unused
+addmo/s2_data_tuning/config/data_tuning_config.py:4:22: F401 [*] `pydantic.conlist` imported but unused
+addmo/s2_data_tuning/data_tuner_fixed.py:5:34: F401 [*] `addmo.util.load_save.load_data` imported but unused
+addmo/s2_data_tuning/data_tuner_fixed.py:6:42: F401 [*] `addmo.util.experiment_logger.ExperimentLogger` imported but unused
+addmo/s3_model_tuning/hyperparameter_tuning/hyparam_tuning_factory.py:6:57: F401 [*] `addmo.s3_model_tuning.models.abstract_model.AbstractMLModel` imported but unused
+addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py:3:8: F401 [*] `wandb` imported but unused
+addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py:10:42: F401 [*] `addmo.util.experiment_logger.WandbLogger` imported but unused
+addmo/s3_model_tuning/models/abstract_model.py:1:8: F401 [*] `os` imported but unused
+addmo/s3_model_tuning/models/abstract_model.py:219:23: F541 [*] f-string without any placeholders
+addmo/s3_model_tuning/models/abstract_model.py:222:23: F541 [*] f-string without any placeholders
+addmo/s3_model_tuning/models/abstract_model.py:225:23: F541 [*] f-string without any placeholders
+addmo/s3_model_tuning/models/abstract_model.py:228:23: F541 [*] f-string without any placeholders
+addmo/s3_model_tuning/models/abstract_model.py:231:23: F541 [*] f-string without any placeholders
+addmo/s3_model_tuning/models/abstract_model.py:234:23: F541 [*] f-string without any placeholders
+addmo/s3_model_tuning/models/abstract_model.py:237:23: F541 [*] f-string without any placeholders
+addmo/s3_model_tuning/models/abstract_model.py:240:23: F541 [*] f-string without any placeholders
+addmo/s3_model_tuning/models/abstract_model.py:243:23: F541 [*] f-string without any placeholders
+addmo/s3_model_tuning/models/abstract_model.py:246:23: F541 [*] f-string without any placeholders
+addmo/s3_model_tuning/models/abstract_model.py:249:23: F541 [*] f-string without any placeholders
+addmo/s3_model_tuning/models/keras_models.py:9:44: F401 [*] `keras.src.layers.Normalization` imported but unused
+addmo/s3_model_tuning/models/keras_models.py:9:59: F401 [*] `keras.src.layers.Activation` imported but unused
+addmo/s3_model_tuning/models/keras_models.py:113:30: F541 [*] f-string without any placeholders
+addmo/s3_model_tuning/models/model_factory.py:2:8: F401 [*] `sys` imported but unused
+addmo/s3_model_tuning/models/model_factory.py:11:37: F401 [*] `tensorflow.keras.models.load_model` imported but unused
+addmo/s3_model_tuning/models/model_factory.py:70:9: F811 Redefinition of unused `load_model` from line 11
+addmo/s3_model_tuning/models/scikit_learn_models.py:8:51: F401 [*] `sklearn.preprocessing.MaxAbsScaler` imported but unused
+addmo/s3_model_tuning/models/scikit_learn_models.py:82:30: F541 [*] f-string without any placeholders
+addmo/s3_model_tuning/scoring/validator.py:7:42: F401 [*] `addmo.util.experiment_logger.WandbLogger` imported but unused
+addmo/s4_model_testing/model_testing.py:9:37: F401 [*] `addmo.util.definitions.results_dir_data_tuning_fixed` imported but unused
+addmo/s4_model_testing/model_testing.py:9:86: F401 [*] `addmo.util.definitions.results_dir_data_tuning_auto` imported but unused
+addmo/s5_insights/model_plots/carpet_plots.py:6:21: F401 [*] `pathlib.Path` imported but unused
+addmo/s5_insights/model_plots/carpet_plots.py:8:37: F401 [*] `addmo.util.definitions.return_results_dir_model_tuning` imported but unused
+addmo/s5_insights/model_plots/carpet_plots.py:8:70: F401 [*] `addmo.util.definitions.return_best_model` imported but unused
+addmo/s5_insights/model_plots/carpet_plots.py:9:56: F401 [*] `addmo.s3_model_tuning.models.model_factory.ModelFactory` imported but unused
+addmo/s5_insights/model_plots/carpet_plots.py:10:34: F401 [*] `addmo.util.load_save.load_data` imported but unused
+addmo/s5_insights/model_plots/carpet_plots.py:11:29: F811 Redefinition of unused `plt` from line 4
+addmo/s5_insights/model_plots/carpet_plots.py:12:23: F401 [*] `itertools.product` imported but unused
+addmo/s5_insights/model_plots/carpet_plots.py:13:34: F401 [*] `mpl_toolkits.mplot3d.Axes3D` imported but unused
+addmo/s5_insights/model_plots/carpet_plots.py:15:31: F401 [*] `matplotlib.colors.ListedColormap` imported but unused
+addmo/s5_insights/model_plots/carpet_plots.py:16:1: F403 `from addmo.util.plotting_utils import *` used; unable to detect undefined names
+addmo/s5_insights/model_plots/carpet_plots.py:19:24: F811 Redefinition of unused `cm` from line 14
+addmo/s5_insights/model_plots/carpet_plots.py:100:37: E711 Comparison to `None` should be `cond is None`
+addmo/s5_insights/model_plots/carpet_plots.py:125:13: F841 Local variable `surf2_smaller` is assigned to but never used
+addmo/s5_insights/model_plots/carpet_plots.py:126:13: F841 Local variable `surf1_smaller` is assigned to but never used
+addmo/s5_insights/model_plots/carpet_plots.py:127:13: F841 Local variable `surf2_greater` is assigned to but never used
+addmo/s5_insights/model_plots/carpet_plots.py:128:13: F841 Local variable `surf1_greater` is assigned to but never used
+addmo/s5_insights/model_plots/parallel_plots.py:6:34: F401 [*] `addmo.util.load_save.load_data` imported but unused
+addmo/s5_insights/model_plots/plot_carpets_modelA.py:61:37: E711 Comparison to `None` should be `cond is None`
+addmo/s5_insights/model_plots/plot_carpets_modelA.py:86:13: F841 Local variable `surf2_smaller` is assigned to but never used
+addmo/s5_insights/model_plots/plot_carpets_modelA.py:87:13: F841 Local variable `surf1_smaller` is assigned to but never used
+addmo/s5_insights/model_plots/plot_carpets_modelA.py:88:13: F841 Local variable `surf2_greater` is assigned to but never used
+addmo/s5_insights/model_plots/plot_carpets_modelA.py:89:13: F841 Local variable `surf1_greater` is assigned to but never used
+addmo/s5_insights/model_plots/time_series.py:5:34: F401 [*] `addmo.util.load_save.load_data` imported but unused
+addmo/util/definitions.py:2:8: F401 [*] `glob` imported but unused
+addmo/util/experiment_logger.py:5:20: F401 [*] `pandas.ExcelWriter` imported but unused
+addmo/util/experiment_logger.py:9:40: F401 [*] `addmo.util.load_save_utils.create_or_clean_directory` imported but unused
+addmo/util/experiment_logger.py:273:9: F841 Local variable `data_local` is assigned to but never used
+addmo/util/load_save.py:9:8: F811 Redefinition of unused `datetime` from line 5
+addmo/util/plotting_utils.py:2:8: F401 [*] `re` imported but unused
+addmo/util/plotting_utils.py:3:18: F401 [*] `pandas` imported but unused
+addmo/util/plotting_utils.py:4:20: F401 [*] `typing.Optional` imported but unused
+addmo/util/plotting_utils.py:5:22: F401 [*] `pydantic.BaseModel` imported but unused
+addmo/util/plotting_utils.py:5:33: F401 [*] `pydantic.Field` imported but unused
+addmo/util/plotting_utils.py:5:40: F401 [*] `pydantic.create_model` imported but unused
+addmo_examples/executables/exe_data_insights.py:2:1: E401 Multiple imports on one line
+addmo_examples/executables/exe_data_insights.py:2:22: F401 [*] `csv` imported but unused
+addmo_examples/executables/exe_data_insights.py:3:8: F401 [*] `datetime` imported but unused
+addmo_examples/executables/exe_model_testing.py:5:37: F401 [*] `addmo.util.definitions.return_results_dir_model_tuning` imported but unused
+addmo_examples/executables/exe_model_tuning.py:3:62: F401 [*] `addmo.util.definitions.results_dir_data_tuning_auto` imported but unused
+addmo_examples/executables/exe_model_tuning.py:3:92: F401 [*] `addmo.util.definitions.results_dir_data_tuning_fixed` imported but unused
+tests/E2E_test.py:5:21: F401 [*] `pathlib.Path` imported but unused
+tests/test_abstractmodel.py:7:55: F401 [*] `addmo.s3_model_tuning.models.keras_models.BaseKerasModel` imported but unused
+tests/test_data_tuning.py:1:8: F401 [*] `os` imported but unused
+tests/test_data_tuning.py:4:8: F401 [*] `tempfile` imported but unused
+tests/test_data_tuning.py:6:28: F401 [*] `unittest.mock.patch` imported but unused
+tests/test_data_tuning.py:6:35: F401 [*] `unittest.mock.MagicMock` imported but unused
+tests/test_data_tuning.py:7:42: F401 [*] `addmo.util.experiment_logger.ExperimentLogger` imported but unused
+tests/test_data_tuning.py:7:59: F401 [*] `addmo.util.experiment_logger.LocalLogger` imported but unused
+tests/test_data_tuning.py:7:72: F401 [*] `addmo.util.experiment_logger.WandbLogger` imported but unused
+tests/test_model_tuning.py:5:62: F401 [*] `addmo.s3_model_tuning.config.model_tuning_config.ModelTunerConfig` imported but unused
+tests/test_model_tuning.py:8:34: F401 [*] `addmo.util.load_save.load_config_from_json` imported but unused
+Found 112 errors.
+[*] 79 fixable with the `--fix` option (12 hidden fixes can be enabled with the `--unsafe-fixes` option).
+</pre></body></html>

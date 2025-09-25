@@ -379,7 +379,7 @@ GUI/app.py:18:0: W0611: Unused results_dir_data_tuning_auto imported from addmo.
 GUI/app.py:18:0: W0611: Unused results_dir_data_tuning_fixed imported from addmo.util.definitions (unused-import)
 GUI/app.py:19:0: W0611: Unused exe_parallel_plot imported from addmo_examples.executables.exe_data_insights (unused-import)
 GUI/app.py:21:0: W0611: Unused load_data imported from addmo.util.load_save (unused-import)
-************* Module web_app.lease_guard
+************* Module lease_guard
 GUI/web_app/lease_guard.py:9:0: C0301: Line too long (101/100) (line-too-long)
 GUI/web_app/lease_guard.py:10:0: C0301: Line too long (103/100) (line-too-long)
 GUI/web_app/lease_guard.py:159:0: C0304: Final newline missing (missing-final-newline)
@@ -572,7 +572,7 @@ addmo/s1_data_tuning_auto/data_tuner_auto.py:5:0: E0401: Unable to import 'addmo
 addmo/s1_data_tuning_auto/data_tuner_auto.py:6:0: E0401: Unable to import 'addmo.util.data_handling' (import-error)
 addmo/s1_data_tuning_auto/data_tuner_auto.py:17:8: C0103: Attribute name "x" doesn't conform to snake_case naming style (invalid-name)
 addmo/s1_data_tuning_auto/data_tuner_auto.py:17:16: C0103: Attribute name "y" doesn't conform to snake_case naming style (invalid-name)
-************* Module config.data_tuning_auto_config
+************* Module data_tuning_auto_config
 addmo/s1_data_tuning_auto/config/data_tuning_auto_config.py:74:0: C0305: Trailing newlines (trailing-newlines)
 addmo/s1_data_tuning_auto/config/data_tuning_auto_config.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s1_data_tuning_auto/config/data_tuning_auto_config.py:2:0: E0401: Unable to import 'pydantic' (import-error)
@@ -801,7 +801,7 @@ addmo/s3_model_tuning/model_tuner.py:6:0: E0401: Unable to import 'addmo.s3_mode
 addmo/s3_model_tuning/model_tuner.py:7:0: E0401: Unable to import 'addmo.s3_model_tuning.hyperparameter_tuning.hyparam_tuning_factory' (import-error)
 addmo/s3_model_tuning/model_tuner.py:10:0: E0401: Unable to import 'addmo.s3_model_tuning.scoring.validator_factory' (import-error)
 addmo/s3_model_tuning/model_tuner.py:13:0: C0115: Missing class docstring (missing-class-docstring)
-************* Module keras_models
+************* Module models.keras_models
 addmo/s3_model_tuning/models/keras_models.py:108:0: C0301: Line too long (110/100) (line-too-long)
 addmo/s3_model_tuning/models/keras_models.py:109:0: C0301: Line too long (109/100) (line-too-long)
 addmo/s3_model_tuning/models/keras_models.py:144:0: C0301: Line too long (103/100) (line-too-long)
@@ -840,7 +840,7 @@ addmo/s3_model_tuning/models/keras_models.py:50:8: W0201: Attribute 'y_fit' defi
 addmo/s3_model_tuning/models/keras_models.py:5:0: C0411: standard import "from abc import ABC" should be placed before "import keras" (wrong-import-order)
 addmo/s3_model_tuning/models/keras_models.py:9:0: W0611: Unused Normalization imported from keras.src.layers (unused-import)
 addmo/s3_model_tuning/models/keras_models.py:9:0: W0611: Unused Activation imported from keras.src.layers (unused-import)
-************* Module model_factory
+************* Module models.model_factory
 addmo/s3_model_tuning/models/model_factory.py:32:0: W0311: Bad indentation. Found 13 spaces, expected 12 (bad-indentation)
 addmo/s3_model_tuning/models/model_factory.py:33:0: W0311: Bad indentation. Found 13 spaces, expected 12 (bad-indentation)
 addmo/s3_model_tuning/models/model_factory.py:44:0: C0301: Line too long (107/100) (line-too-long)
@@ -863,7 +863,7 @@ addmo/s3_model_tuning/models/model_factory.py:10:0: C0411: third party import "f
 addmo/s3_model_tuning/models/model_factory.py:11:0: C0411: third party import "from tensorflow.keras.models import load_model" should be placed before "from addmo.s3_model_tuning.models import scikit_learn_models" (wrong-import-order)
 addmo/s3_model_tuning/models/model_factory.py:2:0: W0611: Unused import sys (unused-import)
 addmo/s3_model_tuning/models/model_factory.py:11:0: W0611: Unused load_model imported from tensorflow.keras.models (unused-import)
-************* Module scikit_learn_models
+************* Module models.scikit_learn_models
 addmo/s3_model_tuning/models/scikit_learn_models.py:24:0: C0301: Line too long (102/100) (line-too-long)
 addmo/s3_model_tuning/models/scikit_learn_models.py:34:0: C0301: Line too long (102/100) (line-too-long)
 addmo/s3_model_tuning/models/scikit_learn_models.py:82:0: C0301: Line too long (101/100) (line-too-long)
@@ -914,7 +914,7 @@ addmo/s3_model_tuning/models/scikit_learn_models.py:13:0: C0411: third party imp
 addmo/s3_model_tuning/models/scikit_learn_models.py:13:0: C0412: Imports from package sklearn are not grouped (ungrouped-imports)
 addmo/s3_model_tuning/models/scikit_learn_models.py:14:0: C0412: Imports from package addmo are not grouped (ungrouped-imports)
 addmo/s3_model_tuning/models/scikit_learn_models.py:8:0: W0611: Unused MaxAbsScaler imported from sklearn.preprocessing (unused-import)
-************* Module abstract_model
+************* Module models.abstract_model
 addmo/s3_model_tuning/models/abstract_model.py:116:0: C0301: Line too long (104/100) (line-too-long)
 addmo/s3_model_tuning/models/abstract_model.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/models/abstract_model.py:4:0: E0401: Unable to import 'onnxruntime' (import-error)
@@ -1008,7 +1008,7 @@ addmo/s3_model_tuning/scoring/abstract_scorer.py:35:49: C0103: Argument name "x"
 addmo/s3_model_tuning/scoring/abstract_scorer.py:35:52: C0103: Argument name "y" doesn't conform to snake_case naming style (invalid-name)
 addmo/s3_model_tuning/scoring/abstract_scorer.py:39:8: W0107: Unnecessary pass statement (unnecessary-pass)
 addmo/s3_model_tuning/scoring/abstract_scorer.py:26:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module abstract_splitter
+************* Module scoring.validation_splitting.abstract_splitter
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:27:0: C0301: Line too long (103/100) (line-too-long)
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:1:0: E0401: Unable to import 'numpy' (import-error)
@@ -1022,7 +1022,7 @@ addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:50:14: C
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:50:38: C0103: Argument name "y" doesn't conform to snake_case naming style (invalid-name)
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:62:14: C0103: Argument name "X" doesn't conform to snake_case naming style (invalid-name)
 addmo/s3_model_tuning/scoring/validation_splitting/abstract_splitter.py:62:38: C0103: Argument name "y" doesn't conform to snake_case naming style (invalid-name)
-************* Module splitter_factory
+************* Module scoring.validation_splitting.splitter_factory
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:3:0: E0401: Unable to import 'sklearn' (import-error)
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:5:0: E0401: Unable to import 'addmo.s3_model_tuning.scoring.validation_splitting' (import-error)
@@ -1031,7 +1031,7 @@ addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:7:0: E040
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:26:12: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:36:12: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
 addmo/s3_model_tuning/scoring/validation_splitting/splitter_factory.py:12:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module custom_splitters
+************* Module scoring.validation_splitting.custom_splitters
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:1:0: E0401: Unable to import 'addmo.s3_model_tuning.scoring.validation_splitting.abstract_splitter' (import-error)
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:5:0: W0105: String statement has no effect (pointless-string-statement)
@@ -1055,7 +1055,7 @@ addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:70:36: C0
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:70:36: W0613: Unused argument 'y' (unused-argument)
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:70:44: W0613: Unused argument 'groups' (unused-argument)
 addmo/s3_model_tuning/scoring/validation_splitting/custom_splitters.py:43:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module metric_factory
+************* Module scoring.metrics.metric_factory
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:3:0: E0401: Unable to import 'sklearn' (import-error)
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:5:0: E0401: Unable to import 'addmo.s3_model_tuning.scoring.metrics' (import-error)
@@ -1063,10 +1063,10 @@ addmo/s3_model_tuning/scoring/metrics/metric_factory.py:6:0: E0401: Unable to im
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:19:8: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:38:20: W0212: Access to a protected member _score_func of a client class (protected-access)
 addmo/s3_model_tuning/scoring/metrics/metric_factory.py:9:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module abstract_metric
+************* Module scoring.metrics.abstract_metric
 addmo/s3_model_tuning/scoring/metrics/abstract_metric.py:10:0: C0115: Missing class docstring (missing-class-docstring)
 addmo/s3_model_tuning/scoring/metrics/abstract_metric.py:10:0: R0903: Too few public methods (0/2) (too-few-public-methods)
-************* Module hyperparameter_tuner
+************* Module hyperparameter_tuning.hyperparameter_tuner
 addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py:39:0: C0301: Line too long (111/100) (line-too-long)
 addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py:2:0: E0401: Unable to import 'optuna' (import-error)
@@ -1086,13 +1086,13 @@ addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py:96:0: W0613:
 addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py:91:0: R0903: Too few public methods (1/2) (too-few-public-methods)
 addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py:3:0: W0611: Unused import wandb (unused-import)
 addmo/s3_model_tuning/hyperparameter_tuning/hyperparameter_tuner.py:10:0: W0611: Unused WandbLogger imported from addmo.util.experiment_logger (unused-import)
-************* Module abstract_hyparam_tuner
+************* Module hyperparameter_tuning.abstract_hyparam_tuner
 addmo/s3_model_tuning/hyperparameter_tuning/abstract_hyparam_tuner.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/hyperparameter_tuning/abstract_hyparam_tuner.py:2:0: E0401: Unable to import 'addmo.s3_model_tuning.models.abstract_model' (import-error)
 addmo/s3_model_tuning/hyperparameter_tuning/abstract_hyparam_tuner.py:3:0: E0401: Unable to import 'addmo.s3_model_tuning.config.model_tuning_config' (import-error)
 addmo/s3_model_tuning/hyperparameter_tuning/abstract_hyparam_tuner.py:4:0: E0401: Unable to import 'addmo.s3_model_tuning.scoring.abstract_scorer' (import-error)
 addmo/s3_model_tuning/hyperparameter_tuning/abstract_hyparam_tuner.py:7:0: R0903: Too few public methods (1/2) (too-few-public-methods)
-************* Module hyparam_tuning_factory
+************* Module hyperparameter_tuning.hyparam_tuning_factory
 addmo/s3_model_tuning/hyperparameter_tuning/hyparam_tuning_factory.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s3_model_tuning/hyperparameter_tuning/hyparam_tuning_factory.py:1:0: E0401: Unable to import 'addmo.s3_model_tuning.hyperparameter_tuning.hyperparameter_tuner' (import-error)
 addmo/s3_model_tuning/hyperparameter_tuning/hyparam_tuning_factory.py:6:0: E0401: Unable to import 'addmo.s3_model_tuning.models.abstract_model' (import-error)
@@ -1135,7 +1135,7 @@ addmo/s2_data_tuning/feature_constructor.py:28:0: C0304: Final newline missing (
 addmo/s2_data_tuning/feature_constructor.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s2_data_tuning/feature_constructor.py:1:0: E0401: Unable to import 'pandas' (import-error)
 addmo/s2_data_tuning/feature_constructor.py:3:0: W0105: String statement has no effect (pointless-string-statement)
-************* Module data_tuning_config
+************* Module config.data_tuning_config
 addmo/s2_data_tuning/config/data_tuning_config.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 addmo/s2_data_tuning/config/data_tuning_config.py:2:0: E0401: Unable to import 'pydantic' (import-error)
 addmo/s2_data_tuning/config/data_tuning_config.py:3:0: E0401: Unable to import 'addmo.util.load_save_utils' (import-error)
@@ -1394,10 +1394,10 @@ addmo/util/load_save.py:1:0: R0801: Similar lines in 2 files
 
     ExperimentLogger.start_experiment(config=new_config)
 
-    # Create a new tuner instance with the same tuning parameters (duplicate-code)
+    #Using fixed config (duplicate-code)
 addmo/util/load_save.py:1:0: R0801: Similar lines in 2 files
-==abstract_model:[143:196]
 ==experiment_logger:[17:41]
+==models.abstract_model:[143:196]
         pass
 
     @abstractmethod

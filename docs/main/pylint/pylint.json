@@ -4094,7 +4094,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -4105,7 +4105,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -4116,7 +4116,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 159,
             "column": 0,
@@ -4127,7 +4127,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -4138,7 +4138,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -4149,7 +4149,7 @@
         },
         {
             "type": "error",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -4160,7 +4160,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_now",
             "line": 12,
             "column": 12,
@@ -4171,7 +4171,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_iso",
             "line": 13,
             "column": 9,
@@ -4182,7 +4182,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_iso",
             "line": 13,
             "column": 14,
@@ -4193,7 +4193,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_parse",
             "line": 14,
             "column": 11,
@@ -4204,7 +4204,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_parse",
             "line": 14,
             "column": 15,
@@ -4215,7 +4215,7 @@
         },
         {
             "type": "warning",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_read",
             "line": 19,
             "column": 11,
@@ -4226,7 +4226,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_read",
             "line": 18,
             "column": 56,
@@ -4237,7 +4237,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_read",
             "line": 18,
             "column": 59,
@@ -4248,7 +4248,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_write",
             "line": 22,
             "column": 11,
@@ -4259,7 +4259,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_write",
             "line": 24,
             "column": 45,
@@ -4270,7 +4270,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_write",
             "line": 24,
             "column": 48,
@@ -4281,7 +4281,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_remove",
             "line": 28,
             "column": 9,
@@ -4292,7 +4292,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_remove",
             "line": 29,
             "column": 30,
@@ -4303,7 +4303,7 @@
         },
         {
             "type": "warning",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_stale",
             "line": 50,
             "column": 11,
@@ -4314,7 +4314,7 @@
         },
         {
             "type": "warning",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "acquire_or_block",
             "line": 58,
             "column": 12,
@@ -4325,7 +4325,7 @@
         },
         {
             "type": "warning",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "acquire_or_block",
             "line": 58,
             "column": 12,
@@ -4336,7 +4336,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "acquire_or_block",
             "line": 58,
             "column": 12,
@@ -4347,7 +4347,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "acquire_or_block",
             "line": 64,
             "column": 56,
@@ -4358,7 +4358,7 @@
         },
         {
             "type": "refactor",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "acquire_or_block",
             "line": 54,
             "column": 0,
@@ -4369,7 +4369,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "heartbeat",
             "line": 84,
             "column": 0,
@@ -4380,7 +4380,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "mark_job_start",
             "line": 110,
             "column": 0,
@@ -4391,7 +4391,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "mark_job_done",
             "line": 113,
             "column": 0,
@@ -4402,7 +4402,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 117,
             "column": 0,
@@ -4413,7 +4413,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "job_guard",
             "line": 119,
             "column": 0,
@@ -4424,7 +4424,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "release_if_owner",
             "line": 126,
             "column": 0,
@@ -4435,7 +4435,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "enforce_max_age",
             "line": 139,
             "column": 18,
@@ -4446,7 +4446,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "_new_lease",
             "line": 147,
             "column": 4,
@@ -4457,7 +4457,7 @@
         },
         {
             "type": "convention",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 117,
             "column": 0,
@@ -4468,7 +4468,7 @@
         },
         {
             "type": "warning",
-            "module": "lease_guard",
+            "module": "web_app.lease_guard",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -6118,7 +6118,7 @@
         },
         {
             "type": "convention",
-            "module": "data_tuning_auto_config",
+            "module": "config.data_tuning_auto_config",
             "obj": "",
             "line": 74,
             "column": 0,
@@ -6129,7 +6129,7 @@
         },
         {
             "type": "convention",
-            "module": "data_tuning_auto_config",
+            "module": "config.data_tuning_auto_config",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -6140,7 +6140,7 @@
         },
         {
             "type": "error",
-            "module": "data_tuning_auto_config",
+            "module": "config.data_tuning_auto_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -6151,7 +6151,7 @@
         },
         {
             "type": "error",
-            "module": "data_tuning_auto_config",
+            "module": "config.data_tuning_auto_config",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -6162,7 +6162,7 @@
         },
         {
             "type": "convention",
-            "module": "data_tuning_auto_config",
+            "module": "config.data_tuning_auto_config",
             "obj": "DataTuningAutoSetup",
             "line": 5,
             "column": 0,
@@ -6173,7 +6173,7 @@
         },
         {
             "type": "refactor",
-            "module": "data_tuning_auto_config",
+            "module": "config.data_tuning_auto_config",
             "obj": "DataTuningAutoSetup",
             "line": 5,
             "column": 0,
@@ -6184,7 +6184,7 @@
         },
         {
             "type": "warning",
-            "module": "data_tuning_auto_config",
+            "module": "config.data_tuning_auto_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -8549,7 +8549,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 108,
             "column": 0,
@@ -8560,7 +8560,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 109,
             "column": 0,
@@ -8571,7 +8571,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 144,
             "column": 0,
@@ -8582,7 +8582,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 157,
             "column": 0,
@@ -8593,7 +8593,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 192,
             "column": 0,
@@ -8604,7 +8604,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 204,
             "column": 0,
@@ -8615,7 +8615,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 206,
             "column": 0,
@@ -8626,7 +8626,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 211,
             "column": 0,
@@ -8637,7 +8637,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -8648,7 +8648,7 @@
         },
         {
             "type": "error",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -8659,7 +8659,7 @@
         },
         {
             "type": "error",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -8670,7 +8670,7 @@
         },
         {
             "type": "error",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -8681,7 +8681,7 @@
         },
         {
             "type": "error",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -8692,7 +8692,7 @@
         },
         {
             "type": "error",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -8703,7 +8703,7 @@
         },
         {
             "type": "error",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -8714,7 +8714,7 @@
         },
         {
             "type": "error",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -8725,7 +8725,7 @@
         },
         {
             "type": "error",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -8736,7 +8736,7 @@
         },
         {
             "type": "error",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 12,
             "column": 0,
@@ -8747,7 +8747,7 @@
         },
         {
             "type": "error",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 13,
             "column": 0,
@@ -8758,7 +8758,7 @@
         },
         {
             "type": "error",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 14,
             "column": 0,
@@ -8769,7 +8769,7 @@
         },
         {
             "type": "error",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 15,
             "column": 0,
@@ -8780,7 +8780,7 @@
         },
         {
             "type": "warning",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "BaseKerasModel._define_metadata",
             "line": 27,
             "column": 8,
@@ -8791,7 +8791,7 @@
         },
         {
             "type": "refactor",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "BaseKerasModel",
             "line": 18,
             "column": 0,
@@ -8802,7 +8802,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "SciKerasSequential.fit",
             "line": 45,
             "column": 18,
@@ -8813,7 +8813,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "SciKerasSequential.fit",
             "line": 45,
             "column": 21,
@@ -8824,7 +8824,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "SciKerasSequential.predict",
             "line": 54,
             "column": 22,
@@ -8835,7 +8835,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "SciKerasSequential.save_regressor",
             "line": 103,
             "column": 16,
@@ -8846,7 +8846,7 @@
         },
         {
             "type": "warning",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "SciKerasSequential.save_regressor",
             "line": 105,
             "column": 16,
@@ -8857,7 +8857,7 @@
         },
         {
             "type": "warning",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "SciKerasSequential.save_regressor",
             "line": 113,
             "column": 29,
@@ -8868,7 +8868,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "SciKerasSequential.load_regressor",
             "line": 128,
             "column": 8,
@@ -8879,7 +8879,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "SciKerasSequential.load_regressor",
             "line": 129,
             "column": 8,
@@ -8890,7 +8890,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "SciKerasSequential._build_regressor",
             "line": 149,
             "column": 31,
@@ -8901,7 +8901,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "SciKerasSequential.to_scikit_learn",
             "line": 166,
             "column": 30,
@@ -8912,7 +8912,7 @@
         },
         {
             "type": "warning",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "SciKerasSequential.fit",
             "line": 49,
             "column": 8,
@@ -8923,7 +8923,7 @@
         },
         {
             "type": "warning",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "SciKerasSequential.fit",
             "line": 50,
             "column": 8,
@@ -8934,7 +8934,7 @@
         },
         {
             "type": "convention",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -8945,7 +8945,7 @@
         },
         {
             "type": "warning",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -8956,7 +8956,7 @@
         },
         {
             "type": "warning",
-            "module": "models.keras_models",
+            "module": "keras_models",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -8967,7 +8967,7 @@
         },
         {
             "type": "warning",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 32,
             "column": 0,
@@ -8978,7 +8978,7 @@
         },
         {
             "type": "warning",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 33,
             "column": 0,
@@ -8989,7 +8989,7 @@
         },
         {
             "type": "convention",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 44,
             "column": 0,
@@ -9000,7 +9000,7 @@
         },
         {
             "type": "convention",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 66,
             "column": 0,
@@ -9011,7 +9011,7 @@
         },
         {
             "type": "convention",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -9022,7 +9022,7 @@
         },
         {
             "type": "error",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -9033,7 +9033,7 @@
         },
         {
             "type": "error",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -9044,7 +9044,7 @@
         },
         {
             "type": "error",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -9055,7 +9055,7 @@
         },
         {
             "type": "error",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -9066,7 +9066,7 @@
         },
         {
             "type": "error",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -9077,7 +9077,7 @@
         },
         {
             "type": "error",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -9088,7 +9088,7 @@
         },
         {
             "type": "error",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -9099,7 +9099,7 @@
         },
         {
             "type": "refactor",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "ModelFactory.model_factory",
             "line": 36,
             "column": 8,
@@ -9110,7 +9110,7 @@
         },
         {
             "type": "error",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "ModelFactory._load_metadata",
             "line": 55,
             "column": 4,
@@ -9121,7 +9121,7 @@
         },
         {
             "type": "refactor",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "ModelFactory._load_metadata",
             "line": 61,
             "column": 8,
@@ -9132,7 +9132,7 @@
         },
         {
             "type": "warning",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "ModelFactory._load_metadata",
             "line": 62,
             "column": 17,
@@ -9143,7 +9143,7 @@
         },
         {
             "type": "convention",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "ModelFactory._load_metadata",
             "line": 62,
             "column": 40,
@@ -9154,7 +9154,7 @@
         },
         {
             "type": "convention",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -9165,7 +9165,7 @@
         },
         {
             "type": "convention",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -9176,7 +9176,7 @@
         },
         {
             "type": "convention",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -9187,7 +9187,7 @@
         },
         {
             "type": "warning",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -9198,7 +9198,7 @@
         },
         {
             "type": "warning",
-            "module": "models.model_factory",
+            "module": "model_factory",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -9209,7 +9209,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 24,
             "column": 0,
@@ -9220,7 +9220,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 34,
             "column": 0,
@@ -9231,7 +9231,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 82,
             "column": 0,
@@ -9242,7 +9242,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 102,
             "column": 0,
@@ -9253,7 +9253,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 176,
             "column": 0,
@@ -9264,7 +9264,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 286,
             "column": 0,
@@ -9275,7 +9275,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 287,
             "column": 0,
@@ -9286,7 +9286,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 327,
             "column": 0,
@@ -9297,7 +9297,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -9308,7 +9308,7 @@
         },
         {
             "type": "error",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -9319,7 +9319,7 @@
         },
         {
             "type": "error",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -9330,7 +9330,7 @@
         },
         {
             "type": "error",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -9341,7 +9341,7 @@
         },
         {
             "type": "error",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -9352,7 +9352,7 @@
         },
         {
             "type": "error",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -9363,7 +9363,7 @@
         },
         {
             "type": "error",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -9374,7 +9374,7 @@
         },
         {
             "type": "error",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -9385,7 +9385,7 @@
         },
         {
             "type": "error",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -9396,7 +9396,7 @@
         },
         {
             "type": "error",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -9407,7 +9407,7 @@
         },
         {
             "type": "error",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -9418,7 +9418,7 @@
         },
         {
             "type": "error",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 12,
             "column": 0,
@@ -9429,7 +9429,7 @@
         },
         {
             "type": "error",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 13,
             "column": 0,
@@ -9440,7 +9440,7 @@
         },
         {
             "type": "error",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 14,
             "column": 0,
@@ -9451,7 +9451,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "BaseScikitLearnModel.fit",
             "line": 39,
             "column": 18,
@@ -9462,7 +9462,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "BaseScikitLearnModel.fit",
             "line": 39,
             "column": 21,
@@ -9473,7 +9473,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "BaseScikitLearnModel.predict",
             "line": 47,
             "column": 22,
@@ -9484,7 +9484,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "BaseScikitLearnModel.save_regressor",
             "line": 79,
             "column": 37,
@@ -9495,7 +9495,7 @@
         },
         {
             "type": "warning",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "BaseScikitLearnModel.save_regressor",
             "line": 82,
             "column": 29,
@@ -9506,7 +9506,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "BaseScikitLearnModel.to_scikit_learn",
             "line": 97,
             "column": 4,
@@ -9517,7 +9517,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "BaseScikitLearnModel.to_scikit_learn",
             "line": 97,
             "column": 30,
@@ -9528,7 +9528,7 @@
         },
         {
             "type": "warning",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "BaseScikitLearnModel.to_scikit_learn",
             "line": 97,
             "column": 30,
@@ -9539,7 +9539,7 @@
         },
         {
             "type": "warning",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "BaseScikitLearnModel.fit",
             "line": 43,
             "column": 8,
@@ -9550,7 +9550,7 @@
         },
         {
             "type": "warning",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "BaseScikitLearnModel.fit",
             "line": 44,
             "column": 8,
@@ -9561,7 +9561,7 @@
         },
         {
             "type": "warning",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "BaseScikitLearnModel._define_metadata",
             "line": 57,
             "column": 8,
@@ -9572,7 +9572,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "ScikitMLP_TargetTransformed",
             "line": 159,
             "column": 0,
@@ -9583,7 +9583,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "ScikitMLP_TargetTransformed",
             "line": 159,
             "column": 0,
@@ -9594,7 +9594,7 @@
         },
         {
             "type": "warning",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "ScikitMLP_TargetTransformed.__init__",
             "line": 160,
             "column": 4,
@@ -9605,7 +9605,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "ScikitLinearReg.grid_search_hyperparameter",
             "line": 193,
             "column": 4,
@@ -9616,7 +9616,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "ScikitLinearReg.optuna_hyperparameter_suggest",
             "line": 196,
             "column": 4,
@@ -9627,7 +9627,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "ScikitLinearRegNoScaler",
             "line": 205,
             "column": 0,
@@ -9638,7 +9638,7 @@
         },
         {
             "type": "warning",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "ScikitLinearRegNoScaler.__init__",
             "line": 206,
             "column": 4,
@@ -9649,7 +9649,7 @@
         },
         {
             "type": "warning",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "ScikitLinearRegNoScaler.fit",
             "line": 220,
             "column": 8,
@@ -9660,7 +9660,7 @@
         },
         {
             "type": "warning",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "ScikitLinearRegNoScaler.fit",
             "line": 221,
             "column": 8,
@@ -9671,7 +9671,7 @@
         },
         {
             "type": "warning",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "ScikitLinearRegNoScaler._define_metadata",
             "line": 246,
             "column": 8,
@@ -9682,7 +9682,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "ScikitSVR.grid_search_hyperparameter",
             "line": 276,
             "column": 4,
@@ -9693,7 +9693,7 @@
         },
         {
             "type": "warning",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "ScikitSVR._define_metadata",
             "line": 266,
             "column": 8,
@@ -9704,7 +9704,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -9715,7 +9715,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 13,
             "column": 0,
@@ -9726,7 +9726,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 13,
             "column": 0,
@@ -9737,7 +9737,7 @@
         },
         {
             "type": "convention",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 14,
             "column": 0,
@@ -9748,7 +9748,7 @@
         },
         {
             "type": "warning",
-            "module": "models.scikit_learn_models",
+            "module": "scikit_learn_models",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -9759,7 +9759,7 @@
         },
         {
             "type": "convention",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "",
             "line": 116,
             "column": 0,
@@ -9770,7 +9770,7 @@
         },
         {
             "type": "convention",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -9781,7 +9781,7 @@
         },
         {
             "type": "error",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -9792,7 +9792,7 @@
         },
         {
             "type": "error",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -9803,7 +9803,7 @@
         },
         {
             "type": "error",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -9814,7 +9814,7 @@
         },
         {
             "type": "error",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -9825,7 +9825,7 @@
         },
         {
             "type": "error",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -9836,7 +9836,7 @@
         },
         {
             "type": "refactor",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "ModelMetadata",
             "line": 13,
             "column": 0,
@@ -9847,7 +9847,7 @@
         },
         {
             "type": "convention",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel.fit",
             "line": 66,
             "column": 18,
@@ -9858,7 +9858,7 @@
         },
         {
             "type": "convention",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel.fit",
             "line": 66,
             "column": 35,
@@ -9869,7 +9869,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel.fit",
             "line": 74,
             "column": 8,
@@ -9880,7 +9880,7 @@
         },
         {
             "type": "convention",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel.predict",
             "line": 77,
             "column": 22,
@@ -9891,7 +9891,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel.predict",
             "line": 87,
             "column": 8,
@@ -9902,7 +9902,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel.save_regressor",
             "line": 99,
             "column": 8,
@@ -9913,7 +9913,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel._define_metadata",
             "line": 106,
             "column": 8,
@@ -9924,7 +9924,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel._save_metadata",
             "line": 117,
             "column": 13,
@@ -9935,7 +9935,7 @@
         },
         {
             "type": "convention",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel._save_metadata",
             "line": 117,
             "column": 41,
@@ -9946,7 +9946,7 @@
         },
         {
             "type": "error",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel._save_metadata",
             "line": 118,
             "column": 22,
@@ -9957,7 +9957,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel.load_regressor",
             "line": 120,
             "column": 45,
@@ -9968,7 +9968,7 @@
         },
         {
             "type": "convention",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel.to_scikit_learn",
             "line": 131,
             "column": 30,
@@ -9979,7 +9979,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel.to_scikit_learn",
             "line": 144,
             "column": 8,
@@ -9990,7 +9990,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel.set_params",
             "line": 154,
             "column": 8,
@@ -10001,7 +10001,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel.get_params",
             "line": 164,
             "column": 8,
@@ -10012,7 +10012,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel.optuna_hyperparameter_suggest",
             "line": 177,
             "column": 8,
@@ -10023,7 +10023,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel.grid_search_hyperparameter",
             "line": 187,
             "column": 8,
@@ -10034,7 +10034,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "AbstractMLModel.default_hyperparameter",
             "line": 197,
             "column": 8,
@@ -10045,7 +10045,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx.load_regressor",
             "line": 209,
             "column": 4,
@@ -10056,7 +10056,7 @@
         },
         {
             "type": "convention",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx.predict",
             "line": 215,
             "column": 8,
@@ -10067,7 +10067,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx.default_hyperparameter",
             "line": 219,
             "column": 22,
@@ -10078,7 +10078,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx.fit",
             "line": 222,
             "column": 22,
@@ -10089,7 +10089,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx.get_params",
             "line": 225,
             "column": 22,
@@ -10100,7 +10100,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx.grid_search_hyperparameter",
             "line": 228,
             "column": 22,
@@ -10111,7 +10111,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx.optuna_hyperparameter_suggest",
             "line": 231,
             "column": 22,
@@ -10122,7 +10122,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx.save_regressor",
             "line": 233,
             "column": 4,
@@ -10133,7 +10133,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx.save_regressor",
             "line": 234,
             "column": 22,
@@ -10144,7 +10144,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx.save_regressor",
             "line": 233,
             "column": 29,
@@ -10155,7 +10155,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx.set_params",
             "line": 237,
             "column": 22,
@@ -10166,7 +10166,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx.to_scikit_learn",
             "line": 239,
             "column": 4,
@@ -10177,7 +10177,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx.to_scikit_learn",
             "line": 240,
             "column": 22,
@@ -10188,7 +10188,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx._define_metadata",
             "line": 243,
             "column": 22,
@@ -10199,7 +10199,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx._save_regressor",
             "line": 246,
             "column": 22,
@@ -10210,7 +10210,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx._save_regressor",
             "line": 245,
             "column": 30,
@@ -10221,7 +10221,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx._save_regressor",
             "line": 245,
             "column": 36,
@@ -10232,7 +10232,7 @@
         },
         {
             "type": "convention",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx.default_file_type",
             "line": 248,
             "column": 4,
@@ -10243,7 +10243,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "PredictorOnnx.default_file_type",
             "line": 249,
             "column": 22,
@@ -10254,7 +10254,7 @@
         },
         {
             "type": "convention",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -10265,7 +10265,7 @@
         },
         {
             "type": "convention",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -10276,7 +10276,7 @@
         },
         {
             "type": "warning",
-            "module": "models.abstract_model",
+            "module": "abstract_model",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -10287,7 +10287,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "",
             "line": 49,
             "column": 0,
@@ -10298,7 +10298,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -10309,7 +10309,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -10320,7 +10320,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -10331,7 +10331,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -10342,7 +10342,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -10353,7 +10353,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -10364,7 +10364,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "NoValidation",
             "line": 9,
             "column": 0,
@@ -10375,7 +10375,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "NoValidation.score_validation",
             "line": 13,
             "column": 55,
@@ -10386,7 +10386,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "NoValidation.score_validation",
             "line": 13,
             "column": 58,
@@ -10397,7 +10397,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "NoValidation.score_validation",
             "line": 13,
             "column": 31,
@@ -10408,7 +10408,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "NoValidation.score_validation",
             "line": 13,
             "column": 55,
@@ -10419,7 +10419,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "NoValidation.score_validation",
             "line": 13,
             "column": 58,
@@ -10430,7 +10430,7 @@
         },
         {
             "type": "refactor",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "NoValidation",
             "line": 9,
             "column": 0,
@@ -10441,7 +10441,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "CrossValidation",
             "line": 17,
             "column": 0,
@@ -10452,7 +10452,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "CrossValidation.score_validation",
             "line": 18,
             "column": 55,
@@ -10463,7 +10463,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "CrossValidation.score_validation",
             "line": 18,
             "column": 58,
@@ -10474,7 +10474,7 @@
         },
         {
             "type": "refactor",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "CrossValidation",
             "line": 17,
             "column": 0,
@@ -10485,7 +10485,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.validator",
+            "module": "validator",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -10496,7 +10496,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validator_factory",
+            "module": "validator_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -10507,7 +10507,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validator_factory",
+            "module": "validator_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -10518,7 +10518,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validator_factory",
+            "module": "validator_factory",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -10529,7 +10529,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validator_factory",
+            "module": "validator_factory",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -10540,7 +10540,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validator_factory",
+            "module": "validator_factory",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -10551,7 +10551,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validator_factory",
+            "module": "validator_factory",
             "obj": "ValidatorFactory.ValidatorFactory",
             "line": 12,
             "column": 4,
@@ -10562,7 +10562,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validator_factory",
+            "module": "validator_factory",
             "obj": "ValidatorFactory.ValidatorFactory",
             "line": 12,
             "column": 4,
@@ -10573,7 +10573,7 @@
         },
         {
             "type": "refactor",
-            "module": "scoring.validator_factory",
+            "module": "validator_factory",
             "obj": "ValidatorFactory.ValidatorFactory",
             "line": 15,
             "column": 8,
@@ -10584,7 +10584,7 @@
         },
         {
             "type": "refactor",
-            "module": "scoring.validator_factory",
+            "module": "validator_factory",
             "obj": "ValidatorFactory",
             "line": 6,
             "column": 0,
@@ -10595,7 +10595,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.abstract_scorer",
+            "module": "abstract_scorer",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -10606,7 +10606,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.abstract_scorer",
+            "module": "abstract_scorer",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -10617,7 +10617,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.abstract_scorer",
+            "module": "abstract_scorer",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -10628,7 +10628,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.abstract_scorer",
+            "module": "abstract_scorer",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -10639,7 +10639,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.abstract_scorer",
+            "module": "abstract_scorer",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -10650,7 +10650,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.abstract_scorer",
+            "module": "abstract_scorer",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -10661,7 +10661,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.abstract_scorer",
+            "module": "abstract_scorer",
             "obj": "Scoring.score_test",
             "line": 20,
             "column": 49,
@@ -10672,7 +10672,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.abstract_scorer",
+            "module": "abstract_scorer",
             "obj": "Scoring.score_test",
             "line": 20,
             "column": 52,
@@ -10683,7 +10683,7 @@
         },
         {
             "type": "refactor",
-            "module": "scoring.abstract_scorer",
+            "module": "abstract_scorer",
             "obj": "Scoring",
             "line": 12,
             "column": 0,
@@ -10694,7 +10694,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.abstract_scorer",
+            "module": "abstract_scorer",
             "obj": "ValidationScoring",
             "line": 26,
             "column": 0,
@@ -10705,7 +10705,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.abstract_scorer",
+            "module": "abstract_scorer",
             "obj": "ValidationScoring.score_validation",
             "line": 35,
             "column": 49,
@@ -10716,7 +10716,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.abstract_scorer",
+            "module": "abstract_scorer",
             "obj": "ValidationScoring.score_validation",
             "line": 35,
             "column": 52,
@@ -10727,7 +10727,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.abstract_scorer",
+            "module": "abstract_scorer",
             "obj": "ValidationScoring.score_validation",
             "line": 39,
             "column": 8,
@@ -10738,7 +10738,7 @@
         },
         {
             "type": "refactor",
-            "module": "scoring.abstract_scorer",
+            "module": "abstract_scorer",
             "obj": "ValidationScoring",
             "line": 26,
             "column": 0,
@@ -10749,7 +10749,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "",
             "line": 27,
             "column": 0,
@@ -10760,7 +10760,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -10771,7 +10771,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validation_splitting.abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -10782,7 +10782,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validation_splitting.abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -10793,7 +10793,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validation_splitting.abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -10804,7 +10804,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter.split",
             "line": 26,
             "column": 20,
@@ -10815,7 +10815,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter.split",
             "line": 26,
             "column": 44,
@@ -10826,7 +10826,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter.get_n_splits",
             "line": 45,
             "column": 27,
@@ -10837,7 +10837,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter.get_n_splits",
             "line": 45,
             "column": 51,
@@ -10848,7 +10848,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter._iter_test_masks",
             "line": 50,
             "column": 14,
@@ -10859,7 +10859,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter._iter_test_masks",
             "line": 50,
             "column": 38,
@@ -10870,7 +10870,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter._iter_test_indices",
             "line": 62,
             "column": 14,
@@ -10881,7 +10881,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.abstract_splitter",
+            "module": "validation_splitting.abstract_splitter",
             "obj": "AbstractSplitter._iter_test_indices",
             "line": 62,
             "column": 38,
@@ -10892,7 +10892,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -10903,7 +10903,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validation_splitting.splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -10914,7 +10914,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validation_splitting.splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -10925,7 +10925,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validation_splitting.splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -10936,7 +10936,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validation_splitting.splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -10947,7 +10947,7 @@
         },
         {
             "type": "refactor",
-            "module": "scoring.validation_splitting.splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "SplitterFactory.splitter_factory",
             "line": 26,
             "column": 12,
@@ -10958,7 +10958,7 @@
         },
         {
             "type": "refactor",
-            "module": "scoring.validation_splitting.splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "SplitterFactory.splitter_factory",
             "line": 36,
             "column": 12,
@@ -10969,7 +10969,7 @@
         },
         {
             "type": "refactor",
-            "module": "scoring.validation_splitting.splitter_factory",
+            "module": "validation_splitting.splitter_factory",
             "obj": "SplitterFactory",
             "line": 12,
             "column": 0,
@@ -10980,7 +10980,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -10991,7 +10991,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -11002,7 +11002,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -11013,7 +11013,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter.get_n_splits",
             "line": 21,
             "column": 27,
@@ -11024,7 +11024,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter.get_n_splits",
             "line": 21,
             "column": 35,
@@ -11035,7 +11035,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter.get_n_splits",
             "line": 21,
             "column": 27,
@@ -11046,7 +11046,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter.get_n_splits",
             "line": 21,
             "column": 35,
@@ -11057,7 +11057,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter.get_n_splits",
             "line": 21,
             "column": 43,
@@ -11068,7 +11068,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter._iter_test_indices",
             "line": 25,
             "column": 33,
@@ -11079,7 +11079,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter._iter_test_indices",
             "line": 25,
             "column": 36,
@@ -11090,7 +11090,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter._iter_test_indices",
             "line": 25,
             "column": 36,
@@ -11101,7 +11101,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter._iter_test_indices",
             "line": 25,
             "column": 44,
@@ -11112,7 +11112,7 @@
         },
         {
             "type": "refactor",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "TrialCustomSplitter",
             "line": 9,
             "column": 0,
@@ -11123,7 +11123,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter.get_n_splits",
             "line": 65,
             "column": 4,
@@ -11134,7 +11134,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter.get_n_splits",
             "line": 65,
             "column": 27,
@@ -11145,7 +11145,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter.get_n_splits",
             "line": 65,
             "column": 30,
@@ -11156,7 +11156,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter.get_n_splits",
             "line": 65,
             "column": 30,
@@ -11167,7 +11167,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter.get_n_splits",
             "line": 65,
             "column": 38,
@@ -11178,7 +11178,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter._iter_test_indices",
             "line": 70,
             "column": 33,
@@ -11189,7 +11189,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter._iter_test_indices",
             "line": 70,
             "column": 36,
@@ -11200,7 +11200,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter._iter_test_indices",
             "line": 70,
             "column": 36,
@@ -11211,7 +11211,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter._iter_test_indices",
             "line": 70,
             "column": 44,
@@ -11222,7 +11222,7 @@
         },
         {
             "type": "refactor",
-            "module": "scoring.validation_splitting.custom_splitters",
+            "module": "validation_splitting.custom_splitters",
             "obj": "UnivariateSplitter",
             "line": 43,
             "column": 0,
@@ -11233,7 +11233,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.metrics.metric_factory",
+            "module": "metrics.metric_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -11244,7 +11244,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.metrics.metric_factory",
+            "module": "metrics.metric_factory",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -11255,7 +11255,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.metrics.metric_factory",
+            "module": "metrics.metric_factory",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -11266,7 +11266,7 @@
         },
         {
             "type": "error",
-            "module": "scoring.metrics.metric_factory",
+            "module": "metrics.metric_factory",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -11277,7 +11277,7 @@
         },
         {
             "type": "refactor",
-            "module": "scoring.metrics.metric_factory",
+            "module": "metrics.metric_factory",
             "obj": "MetricFactory.metric_factory",
             "line": 19,
             "column": 8,
@@ -11288,7 +11288,7 @@
         },
         {
             "type": "warning",
-            "module": "scoring.metrics.metric_factory",
+            "module": "metrics.metric_factory",
             "obj": "MetricFactory.metric_factory",
             "line": 38,
             "column": 20,
@@ -11299,7 +11299,7 @@
         },
         {
             "type": "refactor",
-            "module": "scoring.metrics.metric_factory",
+            "module": "metrics.metric_factory",
             "obj": "MetricFactory",
             "line": 9,
             "column": 0,
@@ -11310,7 +11310,7 @@
         },
         {
             "type": "convention",
-            "module": "scoring.metrics.abstract_metric",
+            "module": "metrics.abstract_metric",
             "obj": "AbstractMetric",
             "line": 10,
             "column": 0,
@@ -11321,7 +11321,7 @@
         },
         {
             "type": "refactor",
-            "module": "scoring.metrics.abstract_metric",
+            "module": "metrics.abstract_metric",
             "obj": "AbstractMetric",
             "line": 10,
             "column": 0,
@@ -11332,7 +11332,7 @@
         },
         {
             "type": "convention",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "",
             "line": 39,
             "column": 0,
@@ -11343,7 +11343,7 @@
         },
         {
             "type": "convention",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -11354,7 +11354,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -11365,7 +11365,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -11376,7 +11376,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -11387,7 +11387,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "",
             "line": 5,
             "column": 0,
@@ -11398,7 +11398,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -11409,7 +11409,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "",
             "line": 9,
             "column": 0,
@@ -11420,7 +11420,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -11431,7 +11431,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "NoTuningTuner.tune",
             "line": 18,
             "column": 43,
@@ -11442,7 +11442,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "NoTuningTuner.tune",
             "line": 18,
             "column": 56,
@@ -11453,7 +11453,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "NoTuningTuner",
             "line": 13,
             "column": 0,
@@ -11464,7 +11464,7 @@
         },
         {
             "type": "convention",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "OptunaTuner",
             "line": 31,
             "column": 0,
@@ -11475,7 +11475,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "OptunaTuner.tune",
             "line": 32,
             "column": 0,
@@ -11486,7 +11486,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "OptunaTuner",
             "line": 31,
             "column": 0,
@@ -11497,7 +11497,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "GridSearchTuner.tune",
             "line": 96,
             "column": 0,
@@ -11508,7 +11508,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "GridSearchTuner",
             "line": 91,
             "column": 0,
@@ -11519,7 +11519,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -11530,7 +11530,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuning.hyperparameter_tuner",
+            "module": "hyperparameter_tuner",
             "obj": "",
             "line": 10,
             "column": 0,
@@ -11541,7 +11541,7 @@
         },
         {
             "type": "convention",
-            "module": "hyperparameter_tuning.abstract_hyparam_tuner",
+            "module": "abstract_hyparam_tuner",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -11552,7 +11552,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuning.abstract_hyparam_tuner",
+            "module": "abstract_hyparam_tuner",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -11563,7 +11563,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuning.abstract_hyparam_tuner",
+            "module": "abstract_hyparam_tuner",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -11574,7 +11574,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuning.abstract_hyparam_tuner",
+            "module": "abstract_hyparam_tuner",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -11585,7 +11585,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyperparameter_tuning.abstract_hyparam_tuner",
+            "module": "abstract_hyparam_tuner",
             "obj": "AbstractHyParamTuner",
             "line": 7,
             "column": 0,
@@ -11596,7 +11596,7 @@
         },
         {
             "type": "convention",
-            "module": "hyperparameter_tuning.hyparam_tuning_factory",
+            "module": "hyparam_tuning_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -11607,7 +11607,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuning.hyparam_tuning_factory",
+            "module": "hyparam_tuning_factory",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -11618,7 +11618,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuning.hyparam_tuning_factory",
+            "module": "hyparam_tuning_factory",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -11629,7 +11629,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuning.hyparam_tuning_factory",
+            "module": "hyparam_tuning_factory",
             "obj": "",
             "line": 7,
             "column": 0,
@@ -11640,7 +11640,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuning.hyparam_tuning_factory",
+            "module": "hyparam_tuning_factory",
             "obj": "",
             "line": 8,
             "column": 0,
@@ -11651,7 +11651,7 @@
         },
         {
             "type": "error",
-            "module": "hyperparameter_tuning.hyparam_tuning_factory",
+            "module": "hyparam_tuning_factory",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -11662,7 +11662,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyperparameter_tuning.hyparam_tuning_factory",
+            "module": "hyparam_tuning_factory",
             "obj": "HyperparameterTunerFactory.tuner_factory",
             "line": 30,
             "column": 8,
@@ -11673,7 +11673,7 @@
         },
         {
             "type": "convention",
-            "module": "hyperparameter_tuning.hyparam_tuning_factory",
+            "module": "hyparam_tuning_factory",
             "obj": "HyperparameterTunerFactory.tuner_factory",
             "line": 37,
             "column": 29,
@@ -11684,7 +11684,7 @@
         },
         {
             "type": "refactor",
-            "module": "hyperparameter_tuning.hyparam_tuning_factory",
+            "module": "hyparam_tuning_factory",
             "obj": "HyperparameterTunerFactory",
             "line": 14,
             "column": 0,
@@ -11695,7 +11695,7 @@
         },
         {
             "type": "warning",
-            "module": "hyperparameter_tuning.hyparam_tuning_factory",
+            "module": "hyparam_tuning_factory",
             "obj": "",
             "line": 6,
             "column": 0,
@@ -11706,7 +11706,7 @@
         },
         {
             "type": "convention",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "",
             "line": 11,
             "column": 0,
@@ -11717,7 +11717,7 @@
         },
         {
             "type": "convention",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "",
             "line": 64,
             "column": 0,
@@ -11728,7 +11728,7 @@
         },
         {
             "type": "convention",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "",
             "line": 92,
             "column": 0,
@@ -11739,7 +11739,7 @@
         },
         {
             "type": "convention",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -11750,7 +11750,7 @@
         },
         {
             "type": "error",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -11761,7 +11761,7 @@
         },
         {
             "type": "error",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -11772,7 +11772,7 @@
         },
         {
             "type": "convention",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "ModelTunerConfig",
             "line": 7,
             "column": 0,
@@ -11783,7 +11783,7 @@
         },
         {
             "type": "refactor",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "ModelTunerConfig",
             "line": 7,
             "column": 0,
@@ -11794,7 +11794,7 @@
         },
         {
             "type": "convention",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "ModelTuningExperimentConfig",
             "line": 54,
             "column": 0,
@@ -11805,7 +11805,7 @@
         },
         {
             "type": "refactor",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "ModelTuningExperimentConfig",
             "line": 54,
             "column": 0,
@@ -11816,7 +11816,7 @@
         },
         {
             "type": "convention",
-            "module": "model_tuning_config",
+            "module": "config.model_tuning_config",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -12025,7 +12025,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 1,
             "column": 0,
@@ -12036,7 +12036,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 2,
             "column": 0,
@@ -12047,7 +12047,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 3,
             "column": 0,
@@ -12058,7 +12058,7 @@
         },
         {
             "type": "error",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -12069,7 +12069,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "DataTuningFixedConfig",
             "line": 6,
             "column": 0,
@@ -12080,7 +12080,7 @@
         },
         {
             "type": "refactor",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "DataTuningFixedConfig",
             "line": 6,
             "column": 0,
@@ -12091,7 +12091,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -12102,7 +12102,7 @@
         },
         {
             "type": "convention",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -12113,7 +12113,7 @@
         },
         {
             "type": "warning",
-            "module": "config.data_tuning_config",
+            "module": "data_tuning_config",
             "obj": "",
             "line": 4,
             "column": 0,
@@ -13285,7 +13285,7 @@
             "column": 0,
             "path": "addmo/util/load_save.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[48:68]\n==exe_data_tuning_fixed:[142:161]\n    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')\n    data = pd.read_csv(saved_data_path, delimiter=\",\", index_col=0, encoding=\"latin1\", header=0)\n    config_path = os.path.join(LocalLogger.directory, \"config.json\")\n    with open(config_path, 'r') as f:\n        plot_config = json.load(f)\n\n    # Plot tuned data\n\n    figures = plot_timeseries_combined(plot_config, data)\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    # Data tuning completed\n    print(\"Finished\")\n",
+            "message": "Similar lines in 2 files\n==exe_data_tuning_auto:[48:68]\n==exe_data_tuning_fixed:[142:161]\n    saved_data_path = os.path.join(LocalLogger.directory, file_name + '.csv')\n    data = pd.read_csv(saved_data_path, delimiter=\",\", index_col=0, encoding=\"latin1\", header=0)\n    config_path = os.path.join(LocalLogger.directory, \"config.json\")\n    with open(config_path, 'r') as f:\n        plot_config = json.load(f)\n\n    # Plot tuned data\n    figures = plot_timeseries_combined(plot_config, data)\n    for fig in figures:\n        fig.show()\n    os.makedirs(LocalLogger.directory, exist_ok=True)\n    for idx, fig in enumerate(figures):\n        suffix = \"_2weeks\" if idx == 1 else \"\"\n        plot_path = os.path.join(LocalLogger.directory, f\"{file_name}{suffix}\")\n        save_pdf(fig, plot_path)\n    print(\"Finished\")\n\ndef default_config_exe_data_tuning_auto(user_input='y'):\n    \"\"\"Execute the system_data tuning process with default config.\"\"\"\n    # Initialize a default config (without loading JSON)",
             "message-id": "R0801"
         },
         {
@@ -13296,7 +13296,7 @@
             "column": 0,
             "path": "addmo/util/load_save.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==carpet_plots:[174:199]\n==plot_carpets_modelA:[133:157]\n        features = regressor.metadata[\"features_ordered\"]\n        if rename_dict is not None:\n            features = [rename_dict[feature] for feature in features]\n\n        # Determine the shape of the output\n        shape = next(\n            arr.shape for arr in kwargs.values() if isinstance(arr, np.ndarray)\n        )\n\n        # Prepare input saved_plots\n        input_data = pd.DataFrame(\n            {feature: np.ravel(kwargs[feature]) for feature in features}\n        )\n\n        # Make prediction\n        prediction = regressor.predict(input_data)\n\n        # Reshape the prediction to match the input shape\n        return prediction.reshape(shape)\n\n    return pred_func\n\ndef execute(plot_name, plot_dir, path_to_regressor, save):\n",
+            "message": "Similar lines in 2 files\n==carpet_plots:[174:199]\n==plot_carpets_modelA:[133:157]\n        features = regressor.metadata[\"features_ordered\"]\n        if rename_dict is not None:\n            features = [rename_dict[feature] for feature in features]\n\n        # Determine the shape of the output\n        shape = next(\n            arr.shape for arr in kwargs.values() if isinstance(arr, np.ndarray)\n        )\n\n        # Prepare input saved_plots\n        input_data = pd.DataFrame(\n            {feature: np.ravel(kwargs[feature]) for feature in features}\n        )\n\n        # Make prediction\n        prediction = regressor.predict(input_data)\n\n        # Reshape the prediction to match the input shape\n        return prediction.reshape(shape)\n\n    return pred_func\n\ndef plot_carpets_with_buckets(variables, measurements_data, target_values, regressor_func , bounds=None , combinations=None , defaults_dict=None ,num_buckets=4):\n\n    # Define bounds",
             "message-id": "R0801"
         },
         {
@@ -13329,7 +13329,7 @@
             "column": 0,
             "path": "addmo/util/load_save.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==exe_recreate_data_tuning:[29:50]\n==model_testing:[81:100]\n    new_config = DataTuningAutoSetup(**saved_config_data)\n\n    LocalLogger.directory = results_dir_data_tuning(new_config)\n    LocalLogger.active = True\n    WandbLogger.project = \"addmo-test_data_auto_tuning\"\n    WandbLogger.directory = results_dir_data_tuning(new_config)\n    WandbLogger.active = False\n\n    ExperimentLogger.start_experiment(config=new_config)\n\n    # Create a new tuner instance with the same tuning parameters\n    new_tuner = DataTunerAuto(config=new_config)\n\n    # Apply the same tuning process to the new data\n    tuned_x_new = new_tuner.tune_auto()\n    y_new = new_tuner.y\n\n    tuned_xy_new = pd.concat([y_new, tuned_x_new], axis=1, join=\"inner\").bfill()\n",
+            "message": "Similar lines in 2 files\n==exe_recreate_data_tuning:[29:50]\n==model_testing:[81:100]\n    new_config = DataTuningAutoSetup(**saved_config_data)\n\n    # Configure the logger\n    LocalLogger.directory = results_dir_data_tuning(new_config)\n    LocalLogger.active = True\n    WandbLogger.project = \"addmo-test_data_auto_tuning\"\n    WandbLogger.directory = results_dir_data_tuning(new_config)\n    WandbLogger.active = False\n\n    ExperimentLogger.start_experiment(config=new_config)\n\n    # Create a new tuner instance with the same tuning parameters\n    new_tuner = DataTunerAuto(config=new_config)\n\n    # Apply the same tuning process to the new data\n    tuned_x_new = new_tuner.tune_auto()\n    y_new = new_tuner.y\n\n    tuned_xy_new = pd.concat([y_new, tuned_x_new], axis=1, join=\"inner\").bfill()\n\n    # Log the tuned system data",
             "message-id": "R0801"
         },
         {
@@ -13362,7 +13362,7 @@
             "column": 0,
             "path": "addmo/util/load_save.py",
             "symbol": "duplicate-code",
-            "message": "Similar lines in 2 files\n==experiment_logger:[17:41]\n==models.abstract_model:[143:196]\n        pass\n\n    @abstractmethod\n    def set_params(self, **params):\n        \"\"\"\n        Set the hyperparameters of the ML model.\n\n        Args:\n            **params: Variable length keyword arguments for hyperparameters.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def get_params(self):\n        \"\"\"\n        Get the hyperparameters of the ML model.\n\n        Returns:\n            A dictionary of the current hyperparameters.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def optuna_hyperparameter_suggest(self, trial):\n        \"\"\"\n        Suggest hyperparameters using Optuna for hyperparameter optimization.\n\n        Args:\n            trial: An Optuna trial object used to suggest hyperparameters.\n\n        Returns:\n            A dictionary of hyperparameters with Optuna distributions.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def grid_search_hyperparameter(self):\n        \"\"\"\n        Define the hyperparameters for grid search.\n\n        Returns:\n            A dictionary representing a hyperparameter grid for grid search.\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def default_hyperparameter(self):\n        \"\"\"\n        Define the default hyperparameters of the model.\n\n        Returns:\n            A dictionary with a default set of hyperparameters.\n        \"\"\"",
+            "message": "Similar lines in 2 files\n==abstract_model:[143:196]\n==experiment_logger:[17:41]\n        pass\n\n    @staticmethod\n    @abstractmethod\n    def finish_experiment():\n        pass\n\n    @staticmethod\n    @abstractmethod\n    def log(log: dict):\n        pass\n\n    @staticmethod\n    @abstractmethod\n    def log_artifact(data, name: str, art_type: str):\n        pass\n\n    @staticmethod\n    @abstractmethod\n    def use_artifact(name: str, alias: str = \"latest\"):\n        pass\n\n    @staticmethod\n    def _handle_pkl(data,name,art_type, directory):",
             "message-id": "R0801"
         },
         {
@@ -13378,6 +13378,595 @@
         }
     ],
     "stats": {
+        "bad_names": {
+            "argument": 55,
+            "attr": 2,
+            "klass": 1,
+            "class_attribute": 0,
+            "class_const": 0,
+            "const": 9,
+            "inlinevar": 0,
+            "function": 0,
+            "method": 1,
+            "module": 4,
+            "variable": 95,
+            "typevar": 0,
+            "typealias": 0
+        },
+        "by_module": {
+            "ADDMo.__init__": {
+                "convention": 1,
+                "error": 0,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 0,
+                "warning": 0
+            },
+            "exe_data_tuning_fixed": {
+                "convention": 10,
+                "error": 13,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 2,
+                "statement": 87,
+                "warning": 7
+            },
+            "exe_recreate_data_tuning": {
+                "convention": 7,
+                "error": 8,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 36,
+                "warning": 5
+            },
+            "exe_model_testing": {
+                "convention": 14,
+                "error": 3,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 20,
+                "warning": 7
+            },
+            "exe_data_insights": {
+                "convention": 17,
+                "error": 8,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 4,
+                "statement": 103,
+                "warning": 13
+            },
+            "exe_model_tuning": {
+                "convention": 5,
+                "error": 15,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 1,
+                "statement": 54,
+                "warning": 5
+            },
+            "exe_data_tuning_auto": {
+                "convention": 8,
+                "error": 11,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 2,
+                "statement": 79,
+                "warning": 5
+            },
+            "launch_GUI": {
+                "convention": 4,
+                "error": 1,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 9,
+                "warning": 1
+            },
+            "app": {
+                "convention": 124,
+                "error": 21,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 19,
+                "statement": 832,
+                "warning": 31
+            },
+            "web_app.lease_guard": {
+                "convention": 28,
+                "error": 1,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 1,
+                "statement": 121,
+                "warning": 5
+            },
+            "conf": {
+                "convention": 0,
+                "error": 0,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 0,
+                "warning": 0
+            },
+            "E2E_test": {
+                "convention": 15,
+                "error": 9,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 41,
+                "warning": 1
+            },
+            "test_data_tuning": {
+                "convention": 9,
+                "error": 8,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 52,
+                "warning": 7
+            },
+            "test_model_tuning": {
+                "convention": 8,
+                "error": 8,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 35,
+                "warning": 3
+            },
+            "test_abstractmodel": {
+                "convention": 5,
+                "error": 7,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 1,
+                "statement": 51,
+                "warning": 1
+            },
+            "test_config_loading": {
+                "convention": 9,
+                "error": 4,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 43,
+                "warning": 0
+            },
+            "feature_selection": {
+                "convention": 14,
+                "error": 9,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 1,
+                "statement": 71,
+                "warning": 1
+            },
+            "feature_construction": {
+                "convention": 4,
+                "error": 9,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 30,
+                "warning": 6
+            },
+            "data_tuner_auto": {
+                "convention": 4,
+                "error": 6,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 32,
+                "warning": 0
+            },
+            "config.data_tuning_auto_config": {
+                "convention": 3,
+                "error": 2,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 1,
+                "statement": 21,
+                "warning": 1
+            },
+            "model_testing": {
+                "convention": 17,
+                "error": 16,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 1,
+                "statement": 97,
+                "warning": 6
+            },
+            "parallel_plots": {
+                "convention": 6,
+                "error": 6,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 1,
+                "statement": 63,
+                "warning": 1
+            },
+            "scatter_plot": {
+                "convention": 5,
+                "error": 2,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 1,
+                "statement": 17,
+                "warning": 0
+            },
+            "carpet_plots": {
+                "convention": 48,
+                "error": 15,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 9,
+                "statement": 223,
+                "warning": 16
+            },
+            "time_series": {
+                "convention": 5,
+                "error": 5,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 1,
+                "statement": 51,
+                "warning": 1
+            },
+            "plot_carpets_modelA": {
+                "convention": 25,
+                "error": 7,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 3,
+                "statement": 103,
+                "warning": 9
+            },
+            "model_tuner": {
+                "convention": 3,
+                "error": 5,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 39,
+                "warning": 0
+            },
+            "keras_models": {
+                "convention": 18,
+                "error": 12,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 1,
+                "statement": 104,
+                "warning": 7
+            },
+            "model_factory": {
+                "convention": 7,
+                "error": 8,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 2,
+                "statement": 55,
+                "warning": 5
+            },
+            "scikit_learn_models": {
+                "convention": 25,
+                "error": 13,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 131,
+                "warning": 12
+            },
+            "abstract_model": {
+                "convention": 11,
+                "error": 6,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 1,
+                "statement": 92,
+                "warning": 30
+            },
+            "validator": {
+                "convention": 8,
+                "error": 5,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 2,
+                "statement": 15,
+                "warning": 4
+            },
+            "validator_factory": {
+                "convention": 3,
+                "error": 4,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 2,
+                "statement": 11,
+                "warning": 0
+            },
+            "abstract_scorer": {
+                "convention": 6,
+                "error": 5,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 2,
+                "statement": 17,
+                "warning": 1
+            },
+            "validation_splitting.abstract_splitter": {
+                "convention": 10,
+                "error": 3,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 25,
+                "warning": 0
+            },
+            "validation_splitting.splitter_factory": {
+                "convention": 1,
+                "error": 4,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 3,
+                "statement": 19,
+                "warning": 0
+            },
+            "validation_splitting.custom_splitters": {
+                "convention": 10,
+                "error": 1,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 2,
+                "statement": 43,
+                "warning": 10
+            },
+            "metrics.metric_factory": {
+                "convention": 1,
+                "error": 3,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 2,
+                "statement": 16,
+                "warning": 1
+            },
+            "metrics.custom_metrics": {
+                "convention": 0,
+                "error": 0,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 0,
+                "warning": 0
+            },
+            "metrics.abstract_metric": {
+                "convention": 1,
+                "error": 0,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 1,
+                "statement": 2,
+                "warning": 0
+            },
+            "hyperparameter_tuner": {
+                "convention": 3,
+                "error": 7,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 3,
+                "statement": 42,
+                "warning": 6
+            },
+            "abstract_hyparam_tuner": {
+                "convention": 1,
+                "error": 3,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 1,
+                "statement": 10,
+                "warning": 0
+            },
+            "hyparam_tuning_factory": {
+                "convention": 2,
+                "error": 5,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 2,
+                "statement": 14,
+                "warning": 1
+            },
+            "config.model_tuning_config": {
+                "convention": 7,
+                "error": 2,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 2,
+                "statement": 29,
+                "warning": 0
+            },
+            "data_tuner_fixed": {
+                "convention": 3,
+                "error": 5,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 29,
+                "warning": 6
+            },
+            "feature_constructor": {
+                "convention": 2,
+                "error": 1,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 14,
+                "warning": 1
+            },
+            "data_tuning_config": {
+                "convention": 4,
+                "error": 3,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 1,
+                "statement": 10,
+                "warning": 1
+            },
+            "experiment_logger": {
+                "convention": 22,
+                "error": 8,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 5,
+                "statement": 140,
+                "warning": 5
+            },
+            "definitions": {
+                "convention": 7,
+                "error": 4,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 1,
+                "statement": 55,
+                "warning": 6
+            },
+            "plotting_utils": {
+                "convention": 5,
+                "error": 2,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 23,
+                "warning": 6
+            },
+            "load_save_utils": {
+                "convention": 2,
+                "error": 0,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 3,
+                "statement": 51,
+                "warning": 0
+            },
+            "data_handling": {
+                "convention": 6,
+                "error": 0,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 0,
+                "statement": 4,
+                "warning": 0
+            },
+            "load_save": {
+                "convention": 15,
+                "error": 2,
+                "fatal": 0,
+                "info": 0,
+                "refactor": 10,
+                "statement": 44,
+                "warning": 5
+            }
+        },
+        "by_msg": {
+            "invalid-name": 167,
+            "line-too-long": 195,
+            "trailing-newlines": 14,
+            "missing-module-docstring": 49,
+            "import-error": 299,
+            "too-many-locals": 20,
+            "redefined-outer-name": 37,
+            "unspecified-encoding": 21,
+            "unused-variable": 16,
+            "redefined-builtin": 13,
+            "missing-function-docstring": 43,
+            "unused-import": 66,
+            "fixme": 4,
+            "multiple-imports": 4,
+            "too-many-arguments": 4,
+            "wrong-import-order": 41,
+            "missing-final-newline": 15,
+            "subprocess-run-check": 1,
+            "trailing-whitespace": 2,
+            "too-many-lines": 1,
+            "wildcard-import": 2,
+            "too-many-statements": 10,
+            "inconsistent-return-statements": 7,
+            "too-many-branches": 7,
+            "undefined-variable": 4,
+            "broad-exception-caught": 4,
+            "ungrouped-imports": 15,
+            "multiple-statements": 8,
+            "reimported": 4,
+            "import-outside-toplevel": 2,
+            "wrong-import-position": 1,
+            "missing-class-docstring": 16,
+            "protected-access": 2,
+            "consider-using-with": 2,
+            "too-few-public-methods": 21,
+            "use-dict-literal": 1,
+            "consider-using-from-import": 2,
+            "consider-using-f-string": 3,
+            "singleton-comparison": 2,
+            "attribute-defined-outside-init": 13,
+            "raise-missing-from": 1,
+            "f-string-without-interpolation": 13,
+            "bad-indentation": 2,
+            "no-else-return": 11,
+            "no-self-argument": 1,
+            "unused-argument": 21,
+            "super-init-not-called": 2,
+            "unnecessary-pass": 11,
+            "no-member": 1,
+            "arguments-differ": 3,
+            "pointless-string-statement": 2,
+            "signature-differs": 1,
+            "duplicate-code": 9
+        },
+        "code_type_count": {
+            "code": 0,
+            "comment": 0,
+            "docstring": 0,
+            "empty": 0,
+            "total": 0
+        },
+        "dependencies": {
+            "packaging.version": [
+                "keras_models"
+            ]
+        },
+        "duplicated_lines": {
+            "nb_duplicated_lines": 0,
+            "percent_duplicated_lines": 0.0
+        },
+        "node_count": {
+            "function": 106,
+            "klass": 44,
+            "method": 156,
+            "module": 52
+        },
+        "undocumented": {
+            "function": 27,
+            "klass": 16,
+            "method": 16,
+            "module": 49
+        },
+        "convention": 578,
+        "error": 305,
+        "fatal": 0,
+        "info": 0,
+        "refactor": 94,
+        "statement": 3305,
+        "warning": 239,
+        "global_note": 0,
+        "nb_duplicated_lines": 85,
+        "percent_duplicated_lines": 1.3438735177865613
+    },
+    "previous": {
         "bad_names": {
             "argument": 55,
             "attr": 2,
@@ -13781,7 +14370,7 @@
                 "statement": 14,
                 "warning": 1
             },
-            "model_tuning_config": {
+            "config.model_tuning_config": {
                 "convention": 7,
                 "error": 2,
                 "fatal": 0,
@@ -13937,595 +14526,6 @@
         "dependencies": {
             "packaging.version": [
                 "models.keras_models"
-            ]
-        },
-        "duplicated_lines": {
-            "nb_duplicated_lines": 0,
-            "percent_duplicated_lines": 0.0
-        },
-        "node_count": {
-            "function": 106,
-            "klass": 44,
-            "method": 156,
-            "module": 52
-        },
-        "undocumented": {
-            "function": 27,
-            "klass": 16,
-            "method": 16,
-            "module": 49
-        },
-        "convention": 578,
-        "error": 305,
-        "fatal": 0,
-        "info": 0,
-        "refactor": 94,
-        "statement": 3305,
-        "warning": 239,
-        "global_note": 0,
-        "nb_duplicated_lines": 85,
-        "percent_duplicated_lines": 1.3438735177865613
-    },
-    "previous": {
-        "bad_names": {
-            "argument": 55,
-            "attr": 2,
-            "klass": 1,
-            "class_attribute": 0,
-            "class_const": 0,
-            "const": 9,
-            "inlinevar": 0,
-            "function": 0,
-            "method": 1,
-            "module": 4,
-            "variable": 95,
-            "typevar": 0,
-            "typealias": 0
-        },
-        "by_module": {
-            "ADDMo.__init__": {
-                "convention": 1,
-                "error": 0,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 0,
-                "warning": 0
-            },
-            "exe_data_tuning_fixed": {
-                "convention": 10,
-                "error": 13,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 2,
-                "statement": 87,
-                "warning": 7
-            },
-            "exe_recreate_data_tuning": {
-                "convention": 7,
-                "error": 8,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 36,
-                "warning": 5
-            },
-            "exe_model_testing": {
-                "convention": 14,
-                "error": 3,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 20,
-                "warning": 7
-            },
-            "exe_data_insights": {
-                "convention": 17,
-                "error": 8,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 4,
-                "statement": 103,
-                "warning": 13
-            },
-            "exe_model_tuning": {
-                "convention": 5,
-                "error": 15,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 1,
-                "statement": 54,
-                "warning": 5
-            },
-            "exe_data_tuning_auto": {
-                "convention": 8,
-                "error": 11,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 2,
-                "statement": 79,
-                "warning": 5
-            },
-            "launch_GUI": {
-                "convention": 4,
-                "error": 1,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 9,
-                "warning": 1
-            },
-            "app": {
-                "convention": 124,
-                "error": 21,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 19,
-                "statement": 832,
-                "warning": 31
-            },
-            "web_app.lease_guard": {
-                "convention": 28,
-                "error": 1,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 1,
-                "statement": 121,
-                "warning": 5
-            },
-            "conf": {
-                "convention": 0,
-                "error": 0,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 0,
-                "warning": 0
-            },
-            "E2E_test": {
-                "convention": 15,
-                "error": 9,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 41,
-                "warning": 1
-            },
-            "test_data_tuning": {
-                "convention": 9,
-                "error": 8,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 52,
-                "warning": 7
-            },
-            "test_model_tuning": {
-                "convention": 8,
-                "error": 8,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 35,
-                "warning": 3
-            },
-            "test_abstractmodel": {
-                "convention": 5,
-                "error": 7,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 1,
-                "statement": 51,
-                "warning": 1
-            },
-            "test_config_loading": {
-                "convention": 9,
-                "error": 4,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 43,
-                "warning": 0
-            },
-            "feature_selection": {
-                "convention": 14,
-                "error": 9,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 1,
-                "statement": 71,
-                "warning": 1
-            },
-            "feature_construction": {
-                "convention": 4,
-                "error": 9,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 30,
-                "warning": 6
-            },
-            "data_tuner_auto": {
-                "convention": 4,
-                "error": 6,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 32,
-                "warning": 0
-            },
-            "config.data_tuning_auto_config": {
-                "convention": 3,
-                "error": 2,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 1,
-                "statement": 21,
-                "warning": 1
-            },
-            "model_testing": {
-                "convention": 17,
-                "error": 16,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 1,
-                "statement": 97,
-                "warning": 6
-            },
-            "parallel_plots": {
-                "convention": 6,
-                "error": 6,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 1,
-                "statement": 63,
-                "warning": 1
-            },
-            "scatter_plot": {
-                "convention": 5,
-                "error": 2,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 1,
-                "statement": 17,
-                "warning": 0
-            },
-            "carpet_plots": {
-                "convention": 48,
-                "error": 15,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 9,
-                "statement": 223,
-                "warning": 16
-            },
-            "time_series": {
-                "convention": 5,
-                "error": 5,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 1,
-                "statement": 51,
-                "warning": 1
-            },
-            "plot_carpets_modelA": {
-                "convention": 25,
-                "error": 7,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 3,
-                "statement": 103,
-                "warning": 9
-            },
-            "model_tuner": {
-                "convention": 3,
-                "error": 5,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 39,
-                "warning": 0
-            },
-            "keras_models": {
-                "convention": 18,
-                "error": 12,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 1,
-                "statement": 104,
-                "warning": 7
-            },
-            "model_factory": {
-                "convention": 7,
-                "error": 8,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 2,
-                "statement": 55,
-                "warning": 5
-            },
-            "scikit_learn_models": {
-                "convention": 25,
-                "error": 13,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 131,
-                "warning": 12
-            },
-            "abstract_model": {
-                "convention": 11,
-                "error": 6,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 1,
-                "statement": 92,
-                "warning": 30
-            },
-            "scoring.validator": {
-                "convention": 8,
-                "error": 5,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 2,
-                "statement": 15,
-                "warning": 4
-            },
-            "scoring.validator_factory": {
-                "convention": 3,
-                "error": 4,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 2,
-                "statement": 11,
-                "warning": 0
-            },
-            "scoring.abstract_scorer": {
-                "convention": 6,
-                "error": 5,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 2,
-                "statement": 17,
-                "warning": 1
-            },
-            "abstract_splitter": {
-                "convention": 10,
-                "error": 3,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 25,
-                "warning": 0
-            },
-            "splitter_factory": {
-                "convention": 1,
-                "error": 4,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 3,
-                "statement": 19,
-                "warning": 0
-            },
-            "custom_splitters": {
-                "convention": 10,
-                "error": 1,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 2,
-                "statement": 43,
-                "warning": 10
-            },
-            "metric_factory": {
-                "convention": 1,
-                "error": 3,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 2,
-                "statement": 16,
-                "warning": 1
-            },
-            "custom_metrics": {
-                "convention": 0,
-                "error": 0,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 0,
-                "warning": 0
-            },
-            "abstract_metric": {
-                "convention": 1,
-                "error": 0,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 1,
-                "statement": 2,
-                "warning": 0
-            },
-            "hyperparameter_tuner": {
-                "convention": 3,
-                "error": 7,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 3,
-                "statement": 42,
-                "warning": 6
-            },
-            "abstract_hyparam_tuner": {
-                "convention": 1,
-                "error": 3,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 1,
-                "statement": 10,
-                "warning": 0
-            },
-            "hyparam_tuning_factory": {
-                "convention": 2,
-                "error": 5,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 2,
-                "statement": 14,
-                "warning": 1
-            },
-            "config.model_tuning_config": {
-                "convention": 7,
-                "error": 2,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 2,
-                "statement": 29,
-                "warning": 0
-            },
-            "data_tuner_fixed": {
-                "convention": 3,
-                "error": 5,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 29,
-                "warning": 6
-            },
-            "feature_constructor": {
-                "convention": 2,
-                "error": 1,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 14,
-                "warning": 1
-            },
-            "data_tuning_config": {
-                "convention": 4,
-                "error": 3,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 1,
-                "statement": 10,
-                "warning": 1
-            },
-            "experiment_logger": {
-                "convention": 22,
-                "error": 8,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 5,
-                "statement": 140,
-                "warning": 5
-            },
-            "definitions": {
-                "convention": 7,
-                "error": 4,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 1,
-                "statement": 55,
-                "warning": 6
-            },
-            "plotting_utils": {
-                "convention": 5,
-                "error": 2,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 23,
-                "warning": 6
-            },
-            "load_save_utils": {
-                "convention": 2,
-                "error": 0,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 3,
-                "statement": 51,
-                "warning": 0
-            },
-            "data_handling": {
-                "convention": 6,
-                "error": 0,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 0,
-                "statement": 4,
-                "warning": 0
-            },
-            "load_save": {
-                "convention": 15,
-                "error": 2,
-                "fatal": 0,
-                "info": 0,
-                "refactor": 10,
-                "statement": 44,
-                "warning": 5
-            }
-        },
-        "by_msg": {
-            "invalid-name": 167,
-            "line-too-long": 195,
-            "trailing-newlines": 14,
-            "missing-module-docstring": 49,
-            "import-error": 299,
-            "too-many-locals": 20,
-            "redefined-outer-name": 37,
-            "unspecified-encoding": 21,
-            "unused-variable": 16,
-            "redefined-builtin": 13,
-            "missing-function-docstring": 43,
-            "unused-import": 66,
-            "fixme": 4,
-            "multiple-imports": 4,
-            "too-many-arguments": 4,
-            "wrong-import-order": 41,
-            "missing-final-newline": 15,
-            "subprocess-run-check": 1,
-            "trailing-whitespace": 2,
-            "too-many-lines": 1,
-            "wildcard-import": 2,
-            "too-many-statements": 10,
-            "inconsistent-return-statements": 7,
-            "too-many-branches": 7,
-            "undefined-variable": 4,
-            "broad-exception-caught": 4,
-            "ungrouped-imports": 15,
-            "multiple-statements": 8,
-            "reimported": 4,
-            "import-outside-toplevel": 2,
-            "wrong-import-position": 1,
-            "missing-class-docstring": 16,
-            "protected-access": 2,
-            "consider-using-with": 2,
-            "too-few-public-methods": 21,
-            "use-dict-literal": 1,
-            "consider-using-from-import": 2,
-            "consider-using-f-string": 3,
-            "singleton-comparison": 2,
-            "attribute-defined-outside-init": 13,
-            "raise-missing-from": 1,
-            "f-string-without-interpolation": 13,
-            "bad-indentation": 2,
-            "no-else-return": 11,
-            "no-self-argument": 1,
-            "unused-argument": 21,
-            "super-init-not-called": 2,
-            "unnecessary-pass": 11,
-            "no-member": 1,
-            "arguments-differ": 3,
-            "pointless-string-statement": 2,
-            "signature-differs": 1,
-            "duplicate-code": 9
-        },
-        "code_type_count": {
-            "code": 0,
-            "comment": 0,
-            "docstring": 0,
-            "empty": 0,
-            "total": 0
-        },
-        "dependencies": {
-            "packaging.version": [
-                "keras_models"
             ]
         },
         "duplicated_lines": {

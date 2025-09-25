@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; addmo 1.0.0 documentation</title>
+  <title>Data Tuning (Fixed) Tutorial &mdash; addmo 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
 
@@ -19,7 +19,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="exe_data_tuning_auto.html" /> 
+    <link rel="prev" title="Data Tuning (Auto) Tutorial" href="exe_data_tuning_auto.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,9 +42,18 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../examples.html#tutorial-and-example">Tutorial and Example</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../examples.html#tutorial-and-example">Tutorial and Example</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#addmo-docs-source-examples-exe-data-tuning-auto-ipynb"><code class="docutils literal notranslate"><span class="pre">ADDMo\docs\source\examples\exe_data_tuning_auto.ipynb</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#addmo-docs-source-examples-exe-data-tuning-fixed-ipynb"><code class="docutils literal notranslate"><span class="pre">ADDMo\docs\source\examples\exe_data_tuning_fixed.ipynb</span></code></a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../examples.html#addmo-docs-source-examples-exe-model-tuning-ipynb"><code class="docutils literal notranslate"><span class="pre">ADDMo\docs\source\examples\exe_model_tuning.ipynb</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="exe_data_tuning_auto.html">Data Tuning (Auto) Tutorial</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Data Tuning (Fixed) Tutorial</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -62,7 +71,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
-      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="breadcrumb-item active">Data Tuning (Fixed) Tutorial</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/examples/exe_data_tuning_fixed.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -72,7 +81,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+  <section id="data-tuning-fixed-tutorial">
+<h1>Data Tuning (Fixed) Tutorial<a class="headerlink" href="#data-tuning-fixed-tutorial" title="Permalink to this heading"></a></h1>
+<p>Importing of necessary libraries and walk through of internal data tuning, created with default config</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">addmo.util.definitions</span><span class="w"> </span><span class="kn">import</span> <span class="n">results_dir_data_tuning</span>
@@ -163,6 +175,7 @@
     <span class="n">_exe_data_tuning</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">user_input</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>Tutorial for executing data tuning on user defined config</p>
 <p>Please define the missing TODOs in the section below according to the docstrings.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Execute the system_data tuning process from a config file.</span>
@@ -251,12 +264,13 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finished&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="exe_data_tuning_auto.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="exe_data_tuning_auto.html" class="btn btn-neutral float-left" title="Data Tuning (Auto) Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
